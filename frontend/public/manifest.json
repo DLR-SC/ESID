@@ -1,0 +1,7 @@
+{
+  "short_name": "ESID",
+  "name": "Epidemiologisches Simulationstool für den Infektionsschutz in Deutschland",
+  "icons": ["assets/logo-200x66.svg"],
+  "start_url": ".",
+  "display": "standalone"
+}
