@@ -6,7 +6,7 @@
     "build": "webpack --config ./webpack/webpack.prod.js",
     "start": "webpack serve --open --config ./webpack/webpack.dev.js",
     "test": "jest",
-    "make-pretty": "prettier --write .",
+    "format": "prettier --write .",
     "lint": "eslint src"
   },
   "repository": {
