@@ -4,7 +4,7 @@ const CopyPlugin = require('copy-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 
 module.exports = {
-  entry: './src/App.tsx',
+  entry: './src/main.tsx',
   plugins: [
     new HtmlWebpackPlugin({
       template: './public/index.html',

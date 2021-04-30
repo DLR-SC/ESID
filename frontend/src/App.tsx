@@ -1,4 +1,3 @@
-import ReactDOM from 'react-dom';
 import React from 'react';
 
 import './App.scss';
@@ -9,17 +8,14 @@ import TopBar from './components/TopBar';
 import Sidebar from './components/Sidebar';
 import MainContent from './components/MainContent';
 
-if (process.env.NODE_ENV !== 'production') {
-  console.warn('This is a development version. Do not release this!');
-}
-
-ReactDOM.render(
-  <Box id={'root'} display={'flex'} flexDirection={'column'}>
-    <TopBar />
-    <Box display={'flex'} flexDirection={'row'} flexGrow={1}>
-      <Sidebar />
-      <MainContent />
+export default function App(): JSX.Element {
+  return (
+    <Box id="app" display="flex" flexDirection="column">
+      <TopBar />
+      <Box display="flex" flexDirection="row" flexGrow={1}>
+        <Sidebar />
+        <MainContent />
+      </Box>
     </Box>
-  </Box>,
-  document.body
-);
+  );
+}

@@ -22,12 +22,17 @@ export default function TopBar(): JSX.Element {
   const classes = useStyles();
 
   return (
-    <Grid className={classes.gridStyle} container direction={'row'} alignItems={'center'}>
-      <Grid container item alignItems={'center'} xs={2}>
-        <img className={classes.iconStyle} src={'assets/logo/logo-200x66.svg'} alt={''} />
+    <Grid className={classes.gridStyle} container direction="row" alignItems="center">
+      <Grid container item alignItems="center" xs={2}>
+        <img
+          id="application-icon"
+          className={classes.iconStyle}
+          src="assets/logo/logo-200x66.svg"
+          alt="ESID Application Icon"
+        />
       </Grid>
       <Grid item xs={8} />
-      <Grid container item alignItems={'center'} justify={'flex-end'} xs={2}>
+      <Grid container item alignItems="center" justify="flex-end" xs={2}>
         <Button aria-controls="simple-menu" aria-haspopup="true">
           <MenuIcon className={classes.menuStyle} />
         </Button>
