@@ -8,6 +8,10 @@ import TopBar from './components/TopBar';
 import Sidebar from './components/Sidebar';
 import MainContent from './components/MainContent';
 
+/**
+ * This is the root element of the React application. It divides the main screen area into the three main components.
+ * The top bar, the side bar and the main content area.
+ */
 export default function App(): JSX.Element {
   return (
     <Box id="app" display="flex" flexDirection="column" style={{height: "100%"}}>

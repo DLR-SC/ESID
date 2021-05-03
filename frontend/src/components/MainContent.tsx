@@ -8,6 +8,9 @@ const useStyles = makeStyles({
   },
 });
 
+/**
+ * This is currently a placeholder. It will contain the scenario cards and graphs for evaluation.
+ */
 export default function MainContent(): JSX.Element {
   const classes = useStyles();
   return (
