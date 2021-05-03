@@ -6,4 +6,4 @@ if (process.env.NODE_ENV !== 'production') {
   console.warn('This is a development version. Do not release this!');
 }
 
-ReactDOM.render(<App />, document.getElementById('#root'));
+ReactDOM.render(<App />, document.getElementById('root'));
