@@ -9,10 +9,13 @@ const useStyles = makeStyles({
   },
 });
 
+/**
+ * This is currently a placeholder. It will contain the map view and the events view.
+ */
 export default function Sidebar(): JSX.Element {
   const classes = useStyles();
   return (
-    <Grid container direction={'column'} alignItems={'center'} justify={'center'} className={classes.sideBar}>
+    <Grid container direction="column" alignItems="center" justify="center" className={classes.sideBar}>
       <Typography>Sidebar Content</Typography>
     </Grid>
   );

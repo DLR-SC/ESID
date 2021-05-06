@@ -1,4 +1,3 @@
-import ReactDOM from 'react-dom';
 import React from 'react';
 
 import './App.scss';
@@ -9,17 +8,18 @@ import TopBar from './components/TopBar';
 import Sidebar from './components/Sidebar';
 import MainContent from './components/MainContent';
 
-if (process.env.NODE_ENV !== 'production') {
-  console.warn('This is a development version. Do not release this!');
-}
-
-ReactDOM.render(
-  <Box id={'root'} display={'flex'} flexDirection={'column'}>
-    <TopBar />
-    <Box display={'flex'} flexDirection={'row'} flexGrow={1}>
-      <Sidebar />
-      <MainContent />
+/**
+ * This is the root element of the React application. It divides the main screen area into the three main components.
+ * The top bar, the side bar and the main content area.
+ */
+export default function App(): JSX.Element {
+  return (
+    <Box id="app" display="flex" flexDirection="column" style={{height: "100%"}}>
+      <TopBar />
+      <Box display="flex" flexDirection="row" flexGrow={1}>
+        <Sidebar />
+        <MainContent />
+      </Box>
     </Box>
-  </Box>,
-  document.body
-);
+  );
+}
