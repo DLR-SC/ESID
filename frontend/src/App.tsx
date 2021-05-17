@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Suspense} from 'react';
 
 import './App.scss';
 
@@ -14,12 +14,14 @@ import MainContent from './components/MainContent';
  */
 export default function App(): JSX.Element {
   return (
-    <Box id="app" display="flex" flexDirection="column" style={{height: "100%"}}>
-      <TopBar />
-      <Box display="flex" flexDirection="row" flexGrow={1}>
-        <Sidebar />
-        <MainContent />
+    <Suspense fallback='loading'>
+      <Box id='app' display='flex' flexDirection='column' style={{height: '100%'}}>
+        <TopBar />
+        <Box display='flex' flexDirection='row' flexGrow={1}>
+          <Sidebar />
+          <MainContent />
+        </Box>
       </Box>
-    </Box>
+    </Suspense>
   );
 }
