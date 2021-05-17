@@ -21,17 +21,23 @@ jobs:
           npm install
 
       - name: Build
-        run: npm run build
+        run: |
+          cd frontend
+          npm run build
 
       - name: Test
-        run: npm run test
+        run:  |
+          cd frontend
+          npm run test
       - name: Upload Test Results
         uses: mikepenz/action-junit-report@v2
         with:
           report_paths: ./reports/jest-junit.xml
 
       - name: Coverage
-        run: npm run coverage
+        run:  |
+          cd frontend
+          npm run coverage
       - name: Upload Coverage
         uses: danhunsaker/clover-reporter-action@v0.2.17-clover
         with:
