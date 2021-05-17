@@ -11,35 +11,33 @@ on:
 jobs:
   frontend:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v1
 
       - name: Setup
-        run: |
-          cd frontend
-          npm install
+        run: npm install
 
       - name: Build
-        run: |
-          cd frontend
-          npm run build
+        run: npm run build
 
       - name: Test
-        run:  |
-          cd frontend
-          npm run test
+        run: npm run test
       - name: Upload Test Results
         uses: mikepenz/action-junit-report@v2
         with:
-          report_paths: ./frontend/reports/jest-junit.xml
+          report_paths: frontend/reports/jest-junit.xml
 
       - name: Coverage
-        run:  |
-          cd frontend
-          npm run coverage
+        run: npm run coverage
       - name: Upload Coverage
-        uses: danhunsaker/clover-reporter-action@v0.2.17-clover
+        uses: slavcodev/coverage-monitor-action@1.2.0
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          clover-file: ./frontend/reports/clover.xml
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          clover_file: frontend/reports/clover.xml
+          threshold_alert: 75
+          threshold_warning: 90
