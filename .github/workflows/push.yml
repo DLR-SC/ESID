@@ -35,9 +35,7 @@ jobs:
       - name: Coverage
         run: npm run coverage
       - name: Upload Coverage
-        uses: slavcodev/coverage-monitor-action@1.2.0
+        uses: johanvanhelden/gha-clover-test-coverage-check@v1
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          clover_file: frontend/reports/clover.xml
-          threshold_alert: 75
-          threshold_warning: 90
+          percentage: "95"
+          filename: frontend/reports/clover.xml
