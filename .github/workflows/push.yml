@@ -28,14 +28,18 @@ jobs:
       - name: Test
         run: npm run test
       - name: Upload Test Results
-        uses: mikepenz/action-junit-report@v2
+        uses: EnricoMi/publish-unit-test-result-action@v1
+        if: always()
         with:
-          report_paths: frontend/reports/jest-junit.xml
+          files: frontend/reports/jest-junit.xml
 
       - name: Coverage
         run: npm run coverage
       - name: Upload Coverage
-        uses: johanvanhelden/gha-clover-test-coverage-check@v1
+        uses: zgosalvez/github-actions-report-lcov@v1
         with:
-          percentage: "95"
-          filename: frontend/reports/clover.xml
+          working-directory: frontend
+          coverage-files: reports/lcov.*.info
+          minimum-coverage: 95
+          artifact-name: frontend-coverage-report
+          github-token: ${{ secrets.GITHUB_TOKEN }}
