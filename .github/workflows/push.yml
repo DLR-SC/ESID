@@ -1,0 +1,37 @@
+name: Push
+
+on: ["push", "pull_request"]
+
+jobs:
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v1
+
+      - name: Setup
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: Test
+        run: npm run test
+      - name: Upload Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1
+        if: always()
+        with:
+          files: frontend/reports/jest-junit.xml
+
+      - name: Coverage
+        run: npm run coverage
+      - name: Upload Coverage
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: frontend/reports/lcov.info
+          base-path: frontend
