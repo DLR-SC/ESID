@@ -1,6 +1,7 @@
 import React from 'react';
 import {Button, Grid, makeStyles} from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
+import {useTranslation} from 'react-i18next';
 
 const useStyles = makeStyles({
   gridStyle: {
@@ -23,6 +24,7 @@ const useStyles = makeStyles({
  * information.
  */
 export default function TopBar(): JSX.Element {
+  const { t } = useTranslation();
   const classes = useStyles();
 
   return (
@@ -32,7 +34,7 @@ export default function TopBar(): JSX.Element {
           id='application-icon'
           className={classes.iconStyle}
           src='assets/logo/logo-200x66.svg'
-          alt='ESID Application Icon'
+          alt={t('topBar.icon-alt')}
         />
       </Grid>
       <Grid item xs={8} />

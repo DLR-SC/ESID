@@ -19,6 +19,7 @@
     - [Design and Layout](#design-and-layout)
     - [Testing](#testing)
     - [Documentation](#documentation)
+    - [Internationalization](#internationalization)
     - [Code Style](#code-style)
 
 ## Getting Started
@@ -156,6 +157,42 @@ All code should be tested:
 Code should be documented as much as possible. Each class and function should contain a detailed description of what it
 does, what inputs it gets and what outputs it produces. Document only functions that require it. Getters and setters for
 example don't to be documented unless they do something unconventional.
+
+### Internationalization
+
+All text in the application should be internationalized with at least German and English support. To internationalize
+texts the [react-i18next](https://react.i18next.com/) framework is used.
+
+You can add translations in the `public/locales/<language>/translation.json` files. The following code snippets show how
+to use a translation in a React-Hook.
+
+`public/locales/en/translation.json`:
+```json
+{
+  "helloWorld": "Hello, World!"
+}
+```
+`public/locales/de/translation.json`:
+```json
+{
+  "helloWorld": "Hallo, Welt!"
+}
+```
+
+`HelloWorld.tsx`:
+```tsx
+import React from 'react';
+import {useTranslation} from 'react-i18next';
+
+export default function HelloWorld(): JSX.Element {
+  const { t } = useTranslation();
+  return (
+    <h1>
+      {t('helloWorld')}
+    </h1>
+  );
+}
+```
 
 ### Code Style
 

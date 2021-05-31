@@ -10,7 +10,7 @@ module.exports = {
       template: './public/index.html',
     }),
     new CopyPlugin({
-      patterns: ['./public/manifest.json', {from: './public/assets', to: 'assets'}],
+      patterns: ['./public/manifest.json', {from: './public/assets', to: 'assets'}, {from: './public/locales', to: 'locales'}],
     }),
     new ESLintPlugin({
       extensions: ['js', 'jsx', 'ts', 'tsx'],

@@ -1,5 +1,6 @@
 import {Grid, makeStyles, Typography} from '@material-ui/core';
 import React from 'react';
+import {useTranslation} from 'react-i18next';
 
 const useStyles = makeStyles({
   sideBar: {
@@ -13,10 +14,11 @@ const useStyles = makeStyles({
  * This is currently a placeholder. It will contain the map view and the events view.
  */
 export default function Sidebar(): JSX.Element {
+  const { t } = useTranslation();
   const classes = useStyles();
   return (
     <Grid container direction="column" alignItems="center" justify="center" className={classes.sideBar}>
-      <Typography>Sidebar Content</Typography>
+      <Typography>{t('sideBar.placeholder')}</Typography>
     </Grid>
   );
 }
