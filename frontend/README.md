@@ -3,24 +3,24 @@
 ## Table of Contents
 
 - [Getting Started](#getting-started)
-    - [Prerequisites](#prerequisites)
-    - [Initializing](#initializing)
-    - [Develop](#development-server)
-    - [Running Tests](#running-tests)
-    - [Generating Coverage Reports](#generating-coverage-reports)
-    - [Formatting Code](#formatting-code)
-    - [Linting](#linting)
-    - [Building Releases](#building-releases)
+  - [Prerequisites](#prerequisites)
+  - [Initializing](#initializing)
+  - [Develop](#development-server)
+  - [Running Tests](#running-tests)
+  - [Generating Coverage Reports](#generating-coverage-reports)
+  - [Formatting Code](#formatting-code)
+  - [Linting](#linting)
+  - [Building Releases](#building-releases)
 - [Technologies](#technologies)
 - [Guidelines](#guidelines)
-    - [TypeScript](#typescript)
-    - [React](#react)
-    - [Redux](#redux)
-    - [Design and Layout](#design-and-layout)
-    - [Testing](#testing)
-    - [Documentation](#documentation)
-    - [Internationalization](#internationalization)
-    - [Code Style](#code-style)
+  - [TypeScript](#typescript)
+  - [React](#react)
+  - [Redux](#redux)
+  - [Design and Layout](#design-and-layout)
+  - [Testing](#testing)
+  - [Documentation](#documentation)
+  - [Internationalization](#internationalization)
+  - [Code Style](#code-style)
 
 ## Getting Started
 
@@ -138,9 +138,9 @@ TODO
 ### Design and Layout
 
 - The frontend should follow the [Material Design guidelines](https://material.io/).
-    - The [Material UI](https://material-ui.com/) library does conform to these guidelines. So make use of it as much as
-      possible.
-    - For icons make use of [Material Icons](https://fonts.google.com/icons).
+  - The [Material UI](https://material-ui.com/) library does conform to these guidelines. So make use of it as much as
+    possible.
+  - For icons make use of [Material Icons](https://fonts.google.com/icons).
 - The application should always look best in a 16:9 ratio with 1920x1080 and 2560x1440 pixel resolutions.
 - The layout should be as responsive as possible, but the previous point has priority.
 - The UI should be self describing. To ensure that all functionality can be understood add tooltips to components.
@@ -163,16 +163,19 @@ example don't to be documented unless they do something unconventional.
 All text in the application should be internationalized with at least German and English support. To internationalize
 texts the [react-i18next](https://react.i18next.com/) framework is used.
 
-You can add translations in the `public/locales/<language>/translation.json` files. The following code snippets show how
-to use a translation in a React-Hook.
+You can add translations in the `public/locales/<language>/<namespace>.json5` files. The following code snippets show
+how to use a translation in a React-Hook.
 
-`public/locales/en/translation.json`:
+`public/locales/en/global.json5`:
+
 ```json
 {
   "helloWorld": "Hello, World!"
 }
 ```
-`public/locales/de/translation.json`:
+
+`public/locales/de/global.json5`:
+
 ```json
 {
   "helloWorld": "Hallo, Welt!"
@@ -180,17 +183,14 @@ to use a translation in a React-Hook.
 ```
 
 `HelloWorld.tsx`:
+
 ```tsx
 import React from 'react';
 import {useTranslation} from 'react-i18next';
 
 export default function HelloWorld(): JSX.Element {
-  const { t } = useTranslation();
-  return (
-    <h1>
-      {t('helloWorld')}
-    </h1>
-  );
+  const {t} = useTranslation();
+  return <h1>{t('helloWorld')}</h1>;
 }
 ```
 
@@ -201,20 +201,20 @@ are React-Hooks, which should be written in `PascalCase`. In addition, classes a
 `PascalCase`:
 
 ```tsx
-function myFunction(myParameter: string) { 
+function myFunction(myParameter: string) {
   const myVariable = myParameter;
 }
 
 function MyHook() {
-  return (<div>Hello World</div>);
+  return <div>Hello World</div>;
 }
 
 interface MyInterface {
-  myMember: string
+  myMember: string;
 }
 
 class MyClass {
-  myMember: MyInterface
+  myMember: MyInterface;
 }
 ```
 

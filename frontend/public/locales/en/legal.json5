@@ -1,0 +1,147 @@
+{
+  imprint: {
+    header: 'Imprint',
+    content: '\
+      <div>\
+        <h2>Imprint according to Section § 5 TMG (German Telemedia Act) and § 18 Medienstaatsvertrag (German State Media Treaty) Deutsches Zentrum fuer Luft- und Raumfahrt e. V.</h2>\
+        <p>\
+          German Aerospace Center (DLR)<br />\
+          Linder Höhe<br />\
+          51147 Köln (Cologne)<br />\
+          Tel: +49 2203 601-0<br />\
+          Fax: +49 2203 67310<br />\
+          email: contact-hpc-against-corona [at] dlr.de<br />\
+          WWW:&nbsp;<a href="https://www.dlr.de/en" target="_blank" rel="noopener noreferrer">https://www.dlr.de/en/</a>\
+        </p>\
+        <p>\
+          DLR\'s Executive Board is empowered to act as DLR\'s representative. It consists of Prof. Dr.-Ing. Anke\
+          Kaysser-Pyzalla (Chair of the DLR Executive Board), Klaus Hamacher (Vice Chairman of the Executive\
+          Board), Prof. Dr. rer. nat. Hansjörg Dittus, Prof. Dr.-Ing. Karsten Lemmer and Dr.-Ing. Walther Pelzer.\
+        </p>\
+        <p>\
+          <b>Seat of the Executive Board:</b><br />\
+          The Executive Board\'s seat is located at DLR, Executive Board, Linder Höhe, D-51147 Cologne.\
+        </p>\
+        <p>\
+          The Executive Board can also authorise DLR employees to act on behalf of DLR. The head of DLR\'s legal\
+          department, Linder Hoehe, 51147 Cologne, can provide information about the extent of this authorisation.\
+        </p>\
+        <p>\
+          <b>Court of registration/registration number:</b><br />\
+          District court of Bonn, VR 2780.\
+        </p>\
+        <p>\
+          <b>Value added tax identification number:</b><br />\
+          DE 121965658\
+        </p>\
+        <h3>Responsible in the sense of Section § 18 2nd paragraph of Medienstaatsvertrag (German State Media Treaty):</h3>\
+        <p>\
+          <i>Martin J. Kühn, Linder Höhe, 54117 Köln</i>\
+        </p>\
+        <h3>The Portal is maintained by:</h3>\
+        <p>\
+          <b>Deutsches Zentrum fuer Luft- und Raumfahrt e. V. (DLR) | German Aerospace Center (DLR)</b><br />\
+          Institute for Software Technology<br />\
+          Linder Höhe<br />\
+          51147 Köln (Cologne)<br />\
+          Germany\
+        </p>\
+        <p>\
+          <b>Redaktion:</b><br />\
+          <i>Martin J. Kühn</i>\
+        </p>\
+        <p>\
+          <b>Responsible for Content:</b><br />\
+          Martin J. Kühn (German Aerospace Center (DLR)) <br />\
+          Michael Meyer-Hermann (Helmholtz Centre for Infection Research (HZI)) <br />\
+          Sebastian Binder (Helmholtz Centre for Infection Research (HZI)) <br />\
+        </p>\
+        <h3>Liability:</h3>\
+        <p>\
+          According to section 7 first paragraph of the German Telemedia Act, DLR as the content provider is\
+          responsible for its own content which it provides for use on this website, in accordance with the\
+          general laws. Cross-references ("links") to content provided by other content providers must be\
+          distinguished from DLR´s own content. By means of the cross-reference DLR provides third-party content\
+          for use which is marked accordingly by the indication "[external]" or by a link. Before setting the\
+          link DLR checks this third-party content if it causes possible civil or criminal liability. However, it\
+          cannot be excluded that the third-party content provider change their content afterwards. DLR does not\
+          constantly check the third-party content it refers to for changes made by the third-party content\
+          providers which could engender DLR´s civil or criminal liability. If you believe that the linked\
+          external sites violate applicable laws or otherwise have inappropriate content, please let us know.\
+        </p>\
+        <p>\
+          <b>Technical Maintenance:</b><br />\
+          email: dlr-infomaster [at] dlr.de\
+        </p>\
+        <p>\
+          <b>DLR images and video – terms and conditions of use:</b><br />\
+          The rights to all images and videos used on this website are owned by the German Aerospace Center\
+          (Deutsches Zentrum für Luft- und Raumfahrt e.V.; DLR), unless otherwise stated.\
+        </p>\
+        <p>\
+          Where expressly stated, DLR images and videos are covered by a\
+          <a href="http://creativecommons.org/licenses/by/3.0/de" target="_blank" rel="noopener noreferrer">Creative Commons Attribution 3.0 Germany (CC BY 3.0) licence</a>.\
+          This licence grants permission to reproduce or distribute the work, to make the work and/or its\
+          contents publically available, to alter or edit the work and/or its contents and to make commercial use\
+          of the work, provided that you explicitly mention DLR as its source in a clearly legible format.\
+          Examples: \'Photo: DLR, CC-BY 3.0\', \'Images: DLR, CC-BY 3.0\', \'Video: DLR, CC-BY 3.0\'.\
+        </p>\
+        <p>\
+          The licence has no influence on the following rights:\
+        </p>\
+        <p>\
+          The rights to which everyone is entitled through copyright law or legal permission (in some countries,\
+          established as the fundamental doctrine of fair use); the copyright entitlements of the legal owner;\
+          rights of other persons, either with regard to the object of the licence itself or in reference to its\
+          use, for example the personal rights of photographed persons.\
+        </p>\
+        <p>\
+          Note: In the event of distribution, you must notify others of all licence conditions applicable to\
+          this work. You will find detailed information and a legally binding licence contract\
+          <a href="http://creativecommons.org/licenses/by/3.0/de/legalcode" target="_blank" rel="noopener noreferrer">here</a>.\
+        </p>\
+        <p>\
+          Images and videos by DLR not indicated \'CC-BY 3.0\' are not licenced under the Creative Commons licence\
+          model. Permission of use for these images and videos is granted as follows: They may be used by press\
+          and other media, or for personal information or educational purposes. Commercial use is subject to DLR\
+          permission.\
+        </p>\
+        <p>\
+          Certain images (photos) and videos on the DLR web portal originate from other sources. If you wish to\
+          use these images or videos, please contact the copyright holder.\
+        </p>\
+        <p>\
+          Certain images and videos may have multiple copyright holders. In such cases, it is common practice to\
+          apply the conditions of use applied by the copyright holder mentioned in the source reference. In cases\
+          of doubt, please contact this person or entity. These images and videos are identified accordingly.\
+        </p>\
+        <p>\
+          The Creative Commons licence does not extend to the DLR logo, its constituent elements or other\
+          elements of DLR\'s corporate visual identity such as the "blue marble". The DLR logo must not be used\
+          by persons who are not DLR employees or who have not been granted permission for its use by DLR.\
+        </p>\
+        <p><b>Should you have any questions, please contact:</b></p>\
+        <p>\
+          DLR German Aerospace Center<br />\
+          Public Affairs and Communications Department, Communications Section<br />\
+          Linder Höhe<br />\
+          51147 Cologne<br />\
+          Tel: +49 2203 601-2116<br />\
+          Fax: +49 2203 601-3249<br />\
+          email: bildredaktion [at] dlr.de\
+        </p>\
+      </div>',
+  },
+  'privacy-policy': {
+    header: 'Privacy Policy',
+    content: '',
+  },
+  accessibility: {
+    header: 'Accessibility',
+    content: '',
+  },
+  attribution: {
+    header: 'Attribution',
+    content: '',
+  },
+}

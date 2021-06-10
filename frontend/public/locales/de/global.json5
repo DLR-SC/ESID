@@ -1,0 +1,14 @@
+{
+  topBar: {
+    'icon-alt': 'ESID Anwendungslogo',
+    menu: {
+      label: 'Anwendungsmenü',
+      login: 'Anmelden',
+      imprint: 'Impressum',
+      'privacy-policy': 'Datenschutzerklärung',
+      accessibility: 'Barrierefreiheit',
+      attribution: 'Attribution',
+    },
+  },
+  WIP: 'Diese Funktionalität befindet sich noch in der Entwicklung.',
+}
