@@ -4,61 +4,59 @@
 # The building stage uses a predefined docker image to improve performance. 
 
 stages:
-    - docker
-    - build
-    - deploy
+  - docker
+  - build
+  - deploy
 
 ubuntu:publish-docker-image:
   stage: docker
   tags:
-    - kp
     - shell
-    - ubuntu
   script:
     - cd .docker/ubuntu-gcc
     - docker image build -t esid:ubuntu-gcc .
-
   artifacts:
     expire_in: 1 hour
     paths:
-    - .docker/ubuntu-gcc
-  
+      - .docker/ubuntu-gcc
+
 ubuntu:build:
   stage: build
   image: esid:ubuntu-gcc
   tags:
     - docker
-    - kp
-
   before_script:
     - cd frontend
-  
   script:
     - npm set cache .npm
     - npm ci
     - npm run build
   cache:
+    key: "$CI_JOB_NAME"
     paths:
-    - frontend/.npm
-
-  needs: ["ubuntu:publish-docker-image"]
+      - frontend/.npm
   artifacts:
     expire_in: 1 hour
     paths:
-    - frontend/build
-
+      - frontend/build
 
 pages:
-    stage: deploy
-    image: esid:ubuntu-gcc
-    tags:
-        - ubuntu
-        - shell
-    script: 
-        - mkdir -p public/${CI_COMMIT_REF_NAME}/ 
-        - cp -rv frontend/build/* public/${CI_COMMIT_REF_NAME}
-
-    artifacts:
-      expire_in: 1 hour
-      paths:
+  stage: deploy
+  image: esid:ubuntu-gcc
+  tags:
+    - docker
+  script:
+    - folderName=$(echo "${CI_COMMIT_REF_NAME}" | tr / -)
+    - rm -rf public/$folderName/
+    - mkdir -p public/$folderName/
+    - cp -rv frontend/build/* public/$folderName
+    - cd public
+    - tree -H '.' -L 1 -d --noreport --charset utf-8 > index.html
+  cache:
+    key: "$CI_JOB_NAME"
+    paths:
+      - public
+  artifacts:
+    expire_in: 1 hour
+    paths:
       - public

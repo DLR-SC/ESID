@@ -1,5 +1,6 @@
 FROM ubuntu:20.04
 
-RUN apt-get update
-RUN apt-get install -y nodejs
-RUN apt-get install -y npm
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN apt-get update && apt-get install -y nodejs npm
+RUN apt-get update && apt-get install -y tree

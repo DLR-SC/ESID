@@ -21,7 +21,7 @@ void i18n
       caches: [], // This prevents the use of cookies.
     },
     backend: {
-      loadPath: '/locales/{{lng}}/{{ns}}.json5',
+      loadPath: 'locales/{{lng}}/{{ns}}.json5',
       parse(data: string): string {
         return JSON5.parse(data);
       },
