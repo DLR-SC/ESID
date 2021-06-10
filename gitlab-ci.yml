@@ -55,7 +55,6 @@ pages:
         - ubuntu
         - shell
     script: 
-        - echo "Deployment, $CI_COMMIT_BRANCH branch"
         - mkdir -p public/${CI_COMMIT_REF_NAME}/ 
         - cp -rv frontend/build/* public/${CI_COMMIT_REF_NAME}
 
