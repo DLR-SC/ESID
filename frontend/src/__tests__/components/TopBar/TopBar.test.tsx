@@ -3,7 +3,7 @@ import {render, screen} from '@testing-library/react';
 
 import i18n from '../../../util/i18nForTests';
 
-import TopBar from '../../../components/TopBar/TopBar';
+import TopBar from '../../../components/TopBar';
 import {I18nextProvider} from 'react-i18next';
 
 describe('TopBar', () => {

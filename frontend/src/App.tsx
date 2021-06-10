@@ -4,7 +4,7 @@ import './App.scss';
 
 import {Box} from '@material-ui/core';
 
-import TopBar from './components/TopBar/TopBar';
+import TopBar from './components/TopBar';
 import Sidebar from './components/Sidebar';
 import MainContent from './components/MainContent';
 
