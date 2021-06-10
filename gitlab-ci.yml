@@ -23,7 +23,6 @@ ubuntu:publish-docker-image:
     paths:
     - .docker/ubuntu-gcc
   
-
 ubuntu:build:
   stage: build
   image: esid:ubuntu-gcc
