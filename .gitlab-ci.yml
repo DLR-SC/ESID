@@ -32,9 +32,9 @@ ubuntu:build:
     - npm ci
     - npm run build
   cache:
+    key: "$CI_JOB_NAME"
     paths:
       - frontend/.npm
-      - frontend/build
   artifacts:
     expire_in: 1 hour
     paths:
