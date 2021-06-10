@@ -8,7 +8,11 @@ import i18n from '../util/i18nForTests';
 
 describe('App', () => {
   test('App', () => {
-    render(<I18nextProvider i18n={i18n}><App /></I18nextProvider>);
+    render(
+      <I18nextProvider i18n={i18n}>
+        <App />
+      </I18nextProvider>
+    );
     const app = document.getElementById('app');
     expect(app).not.toBeNull();
   });
