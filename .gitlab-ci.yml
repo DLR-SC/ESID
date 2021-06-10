@@ -50,7 +50,8 @@ pages:
     - rm -rf public/$folderName/
     - mkdir -p public/$folderName/
     - cp -rv frontend/build/* public/$folderName
-    - tree -H '.' -L 1 -d --noreport --charset utf-8 > public/index.html
+    - cd public
+    - tree -H '.' -L 1 -d --noreport --charset utf-8 > index.html
   cache:
     key: "$CI_JOB_NAME"
     paths:
