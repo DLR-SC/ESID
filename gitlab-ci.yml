@@ -63,9 +63,3 @@ pages:
       expire_in: 1 hour
       paths:
       - public
-
-
-
-
-
-  
