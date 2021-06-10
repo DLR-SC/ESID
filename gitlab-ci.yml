@@ -51,14 +51,6 @@ ubuntu:build:
     - frontend/build
 
 
-test-ESID:
-    stage: test
-    tags:
-        - ubuntu
-        - shell
-    script:
-        - echo "Hello ESID!"
-
 pages:
     stage: deploy
     image: esid:ubuntu-gcc
@@ -82,4 +74,3 @@ pages:
 
 
   
-
