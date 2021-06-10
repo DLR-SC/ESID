@@ -49,7 +49,7 @@ pages:
     - folderName=$(echo "${CI_COMMIT_REF_NAME}" | tr / -)
     - mkdir -p public/$folderName/
     - cp -rv frontend/build/* public/$folderName
-    - tree -H '.' -L 1 -d --noreport --charset utf-8 > index.html
+    - tree -H '.' -L 1 -d --noreport --charset utf-8 > public/index.html
   cache:
     paths:
       - public
