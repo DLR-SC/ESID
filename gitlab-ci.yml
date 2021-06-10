@@ -1,0 +1,64 @@
+# ! PLEASE NOTE THAT THIS IS ONLY FOR INTERNAL USE AND THE FILE IS UPLOADED ON GITHUB FOR CONVENIENCE  
+
+# The bellow pipeline allows to build and deploy the website automatically, whenever developer pushes code to the application.
+# The building stage uses a predefined docker image to improve performance. 
+
+stages:
+    - docker
+    - build
+    - deploy
+
+ubuntu:publish-docker-image:
+  stage: docker
+  tags:
+    - kp
+    - shell
+    - ubuntu
+  script:
+    - cd .docker/ubuntu-gcc
+    - docker image build -t esid:ubuntu-gcc .
+
+  artifacts:
+    expire_in: 1 hour
+    paths:
+    - .docker/ubuntu-gcc
+  
+ubuntu:build:
+  stage: build
+  image: esid:ubuntu-gcc
+  tags:
+    - docker
+    - kp
+
+  before_script:
+    - cd frontend
+  
+  script:
+    - npm set cache .npm
+    - npm ci
+    - npm run build
+  cache:
+    paths:
+    - frontend/.npm
+
+  needs: ["ubuntu:publish-docker-image"]
+  artifacts:
+    expire_in: 1 hour
+    paths:
+    - frontend/build
+
+
+pages:
+    stage: deploy
+    image: esid:ubuntu-gcc
+    tags:
+        - ubuntu
+        - shell
+    script: 
+        - mkdir -p public/${CI_COMMIT_REF_NAME}/ 
+        - cp -rv frontend/build/* public/${CI_COMMIT_REF_NAME}
+
+    artifacts:
+      expire_in: 1 hour
+      paths:
+      - public
