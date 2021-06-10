@@ -42,9 +42,6 @@ ubuntu:build:
     - frontend/.npm
 
   needs: ["ubuntu:publish-docker-image"]
-
-
-
   artifacts:
     expire_in: 1 hour
     paths:
