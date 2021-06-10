@@ -58,7 +58,6 @@ pages:
         - mkdir -p public/${CI_COMMIT_REF_NAME}/ 
         - cp -rv frontend/build/* public/${CI_COMMIT_REF_NAME}
 
-
     artifacts:
       expire_in: 1 hour
       paths:
