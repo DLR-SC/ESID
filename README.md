@@ -41,7 +41,7 @@ report this via [Github issues](https://github.com/DLR-SC/ESID/issues).
 
 We are happy to receive contributions to ESID in the form of **pull requests** via Github.
 Feel free to fork the repository, implement your changes and create a merge request to the `develop` branch.
-There is a [forking guide](#forking) available to get you started!
+There is a [forking guide](#forking-esid) available to get you started!
 
 ### Branching Guidelines
 The development of ESID follows a simplified version of **git-flow**: The `main` branch always contains stable code.
