@@ -5,6 +5,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import {useTranslation} from 'react-i18next';
 import ImprintDialog from './PopUps/ImprintDialog';
 import PrivacyPolicyDialog from './PopUps/PrivacyPolicyDialog';
+import AccessibilityDialog from './PopUps/AccessibilityDialog';
 
 /**
  * This menu is found at the top right of the application and is reachable from everywhere. It contains ways to access
@@ -16,6 +17,7 @@ export default function ApplicationMenu(): JSX.Element {
   const [anchorElement, setAnchorElement] = React.useState<Element | null>(null);
   const [imprintOpen, setImprintOpen] = React.useState(false);
   const [privacyPolicyOpen, setPrivacyPolicyOpen] = React.useState(false);
+  const [accessibilityOpen, setAccessibilityOpen] = React.useState(false);
   const [snackbarOpen, setSnackbarOpen] = React.useState(false);
 
   /** Calling this method opens the application menu. */
@@ -49,7 +51,7 @@ export default function ApplicationMenu(): JSX.Element {
   /** This method gets called, when the accessibility menu entry was clicked. */
   const accessibilityClicked = () => {
     closeMenu();
-    setSnackbarOpen(true);
+    setAccessibilityOpen(true);
   };
 
   /** This method gets called, when the attribution menu entry was clicked. */
@@ -79,6 +81,7 @@ export default function ApplicationMenu(): JSX.Element {
       </Menu>
       <ImprintDialog open={imprintOpen} onClose={() => setImprintOpen(false)} />
       <PrivacyPolicyDialog open={privacyPolicyOpen} onClose={() => setPrivacyPolicyOpen(false)} />
+      <AccessibilityDialog open={accessibilityOpen} onClose={() => setAccessibilityOpen(false)}/>
 
       <Snackbar open={snackbarOpen} autoHideDuration={5000} onClose={() => setSnackbarOpen(false)}>
         <Alert onClose={() => setSnackbarOpen(false)} severity="info">
