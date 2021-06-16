@@ -15,7 +15,8 @@ export interface ImprintDialogProps {
 
 const useStyles = makeStyles({
   dialogStyle: {
-    margin: '20px',
+    padding: '20px',
+    background: '#f8f8f8'
   },
 });
 

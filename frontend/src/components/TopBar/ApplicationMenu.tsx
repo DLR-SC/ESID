@@ -63,13 +63,13 @@ export default function ApplicationMenu(): JSX.Element {
       <Button
         id="top-bar-menu-button"
         aria-label={t('topBar.menu.label')}
-        aria-controls="top-bar-menu"
+        aria-controls="application-menu"
         aria-haspopup="true"
         onClick={openMenu}
       >
         <MenuIcon />
       </Button>
-      <Menu id="top-bar-menu" anchorEl={anchorElement} open={Boolean(anchorElement)} onClose={closeMenu}>
+      <Menu id="application-menu" anchorEl={anchorElement} open={Boolean(anchorElement)} onClose={closeMenu}>
         <MenuItem onClick={loginClicked}>{t('topBar.menu.login')}</MenuItem>
         <Divider />
         <MenuItem onClick={imprintClicked}>{t('topBar.menu.imprint')}</MenuItem>
