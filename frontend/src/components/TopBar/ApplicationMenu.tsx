@@ -4,6 +4,7 @@ import {Alert} from '@material-ui/lab';
 import MenuIcon from '@material-ui/icons/Menu';
 import {useTranslation} from 'react-i18next';
 import ImprintDialog from './PopUps/ImprintDialog';
+import PrivacyPolicyDialog from './PopUps/PrivacyPolicyDialog';
 
 /**
  * This menu is found at the top right of the application and is reachable from everywhere. It contains ways to access
@@ -14,6 +15,7 @@ export default function ApplicationMenu(): JSX.Element {
 
   const [anchorElement, setAnchorElement] = React.useState<Element | null>(null);
   const [imprintOpen, setImprintOpen] = React.useState(false);
+  const [privacyPolicyOpen, setPrivacyPolicyOpen] = React.useState(false);
   const [snackbarOpen, setSnackbarOpen] = React.useState(false);
 
   /** Calling this method opens the application menu. */
@@ -41,7 +43,7 @@ export default function ApplicationMenu(): JSX.Element {
   /** This method gets called, when the privacy policy menu entry was clicked. */
   const privacyPolicyClicked = () => {
     closeMenu();
-    setSnackbarOpen(true);
+    setPrivacyPolicyOpen(true);
   };
 
   /** This method gets called, when the accessibility menu entry was clicked. */
@@ -61,13 +63,13 @@ export default function ApplicationMenu(): JSX.Element {
       <Button
         id="top-bar-menu-button"
         aria-label={t('topBar.menu.label')}
-        aria-controls="top-bar-menu"
+        aria-controls="application-menu"
         aria-haspopup="true"
         onClick={openMenu}
       >
         <MenuIcon />
       </Button>
-      <Menu id="top-bar-menu" anchorEl={anchorElement} open={Boolean(anchorElement)} onClose={closeMenu}>
+      <Menu id="application-menu" anchorEl={anchorElement} open={Boolean(anchorElement)} onClose={closeMenu}>
         <MenuItem onClick={loginClicked}>{t('topBar.menu.login')}</MenuItem>
         <Divider />
         <MenuItem onClick={imprintClicked}>{t('topBar.menu.imprint')}</MenuItem>
@@ -76,6 +78,7 @@ export default function ApplicationMenu(): JSX.Element {
         <MenuItem onClick={attributionClicked}>{t('topBar.menu.attribution')}</MenuItem>
       </Menu>
       <ImprintDialog open={imprintOpen} onClose={() => setImprintOpen(false)} />
+      <PrivacyPolicyDialog open={privacyPolicyOpen} onClose={() => setPrivacyPolicyOpen(false)} />
 
       <Snackbar open={snackbarOpen} autoHideDuration={5000} onClose={() => setSnackbarOpen(false)}>
         <Alert onClose={() => setSnackbarOpen(false)} severity="info">

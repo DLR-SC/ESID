@@ -4,8 +4,8 @@ import Dialog from '@material-ui/core/Dialog';
 import {useTranslation} from 'react-i18next';
 import {makeStyles, Typography} from '@material-ui/core';
 
-/** This interface describes the props of the ImprintDialog component. */
-export interface ImprintDialogProps {
+/** This interface describes the props of the PrivacyPolicyDialog component. */
+export interface PrivacyPolicyDialogProps {
   /** Controls if the dialog is open or closed. */
   open: boolean;
 
@@ -21,18 +21,18 @@ const useStyles = makeStyles({
 });
 
 /**
- * This component displays the imprint legal text.
+ * This component displays the privacy policy legal text.
  */
-export default function ImprintDialog(props: ImprintDialogProps): JSX.Element {
+export default function PrivacyPolicyDialog(props: PrivacyPolicyDialogProps): JSX.Element {
   const {t} = useTranslation('legal');
   const classes = useStyles();
 
   return (
     <Dialog maxWidth="lg" fullWidth={true} open={props.open} onClose={props.onClose}>
       <div className={classes.dialogStyle}>
-        <Typography variant="h3">{t('imprint.header')}</Typography>
+        <Typography variant="h3">{t('privacy-policy.header')}</Typography>
         {/* While it says that it is dangerous, it is fine here. Only static content is inserted. */}
-        <div dangerouslySetInnerHTML={{__html: t('imprint.content')}} />
+        <div dangerouslySetInnerHTML={{__html: t('privacy-policy.content')}} />
       </div>
     </Dialog>
   );

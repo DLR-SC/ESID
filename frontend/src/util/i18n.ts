@@ -11,6 +11,7 @@ void i18n
   .use(initReactI18next)
   .init({
     fallbackLng: 'en',
+    supportedLngs: ['de', 'en'],
     defaultNS: 'global',
     debug: false,
     interpolation: {
@@ -26,6 +27,6 @@ void i18n
         return JSON5.parse(data);
       },
     },
-  });
+  }).then(() => document.documentElement.lang = i18n.language);
 
 export default i18n;
