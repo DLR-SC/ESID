@@ -35,26 +35,44 @@ const useStyles = makeStyles({
  */
 export default function AttributionDialog(props: AttributionDialogProps): JSX.Element {
   const {t} = useTranslation('legal');
-  const [attributions, setAttributions] = useState<Array<DependencyData>>();
+  const [attributions, setAttributions] = useState('');
   const classes = useStyles();
 
-  void fetch('assets/third-party-attributions.json').then(async response => {
-    setAttributions(await response.json());
-  });
+  // The data should be fetched only once, since it is really slow.
+  if (attributions === '') {
+    void fetch('assets/third-party-attributions.json').then(async response => {
+      const json = await response.json() as (Array<DependencyData>);
+
+      // We prebuild a single markdown string. It is more performant to have one markdown renderer render all text at
+      // once than having hundreds of markdown renderers render each entry separate.
+      let tmp = '';
+      json.forEach((lib: DependencyData) => {
+        tmp += '\n\n---\n\n';
+        tmp += `# __${lib.name}__ ${lib.version || ''}\n`;
+        if (lib.authors) {
+          tmp += `__${t('attribution.authors')}:__ ${lib.authors}\n\n`;
+        }
+        if (lib.repository) {
+          tmp += `__${t('attribution.repository')}:__ ${lib.repository}\n\n`;
+        }
+        if (lib.licenseText) {
+          // This inserts the license text and makes every heading one level smaller, so no heading has the same size as
+          // the library names.
+          tmp += `${lib.licenseText.replace(/#+/g, substring => '#'.repeat(substring.length + 1))}\n\n`;
+        }
+      });
+      setAttributions(tmp);
+    });
+  }
 
   return (
     <Dialog maxWidth='lg' fullWidth={true} open={props.open} onClose={props.onClose}>
       <div className={classes.dialogStyle}>
         <Typography variant='h3'>{t('attribution.header')}</Typography>
-        {attributions?.map(lib => {
-          return (<div key={`${lib.name} ${lib.version || ''}`}>
-            <hr className='solid' />
-            <Typography variant='h4'>{`${lib.name} ${lib.version || ''}`}</Typography>
-            {lib.authors ? (<p><strong>Author: </strong> {lib.authors}</p>) : (<div />)}
-            {lib.repository ? (<p><strong>Repository: </strong> {lib.repository}</p>) : (<div />)}
-            {lib.licenseText ? (<ReactMarkdown skipHtml>{lib.licenseText}</ReactMarkdown>) : (<div />)}
-          </div>);
-        })}
+        <br />
+        <Typography><i>{t('attribution.thank-you-text')}</i></Typography>
+        <br />
+        <ReactMarkdown>{attributions}</ReactMarkdown>
       </div>
     </Dialog>
   );
