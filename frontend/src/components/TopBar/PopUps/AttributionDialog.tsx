@@ -1,18 +1,8 @@
 import React, {useState} from 'react';
 
-import Dialog from '@material-ui/core/Dialog';
 import {useTranslation} from 'react-i18next';
-import {makeStyles, Typography} from '@material-ui/core';
+import {CircularProgress, Grid, makeStyles, Typography} from '@material-ui/core';
 import ReactMarkdown from 'react-markdown';
-
-/** This interface describes the props of the AttributionDialog component. */
-export interface AttributionDialogProps {
-  /** Controls if the dialog is open or closed. */
-  open: boolean;
-
-  /** A callback to notify the parent component, that the dialog was requested to be closed. */
-  onClose: (event: MouseEvent) => void;
-}
 
 interface DependencyData {
   name: string;
@@ -30,16 +20,18 @@ const useStyles = makeStyles({
   },
 });
 
+let ATTRIBUTIONS_CACHE = '';
+
 /**
  * This component displays third-party attributions.
  */
-export default function AttributionDialog(props: AttributionDialogProps): JSX.Element {
+export default function AttributionDialog(): JSX.Element {
   const {t} = useTranslation('legal');
-  const [attributions, setAttributions] = useState('');
+  const [attributions, setAttributions] = useState(ATTRIBUTIONS_CACHE);
   const classes = useStyles();
 
   // The data should be fetched only once, since it is really slow.
-  if (attributions === '') {
+  if (ATTRIBUTIONS_CACHE === '') {
     void fetch('assets/third-party-attributions.json').then(async response => {
       const json = await response.json() as (Array<DependencyData>);
 
@@ -61,19 +53,22 @@ export default function AttributionDialog(props: AttributionDialogProps): JSX.El
           tmp += `${lib.licenseText.replace(/#+/g, substring => '#'.repeat(substring.length + 1))}\n\n`;
         }
       });
-      setAttributions(tmp);
+      ATTRIBUTIONS_CACHE = tmp;
+      setAttributions(ATTRIBUTIONS_CACHE);
     });
   }
 
   return (
-    <Dialog maxWidth='lg' fullWidth={true} open={props.open} onClose={props.onClose}>
-      <div className={classes.dialogStyle}>
-        <Typography variant='h3'>{t('attribution.header')}</Typography>
-        <br />
-        <Typography><i>{t('attribution.thank-you-text')}</i></Typography>
-        <br />
-        <ReactMarkdown>{attributions}</ReactMarkdown>
-      </div>
-    </Dialog>
+    <div className={classes.dialogStyle}>
+      <Typography variant='h3'>{t('attribution.header')}</Typography>
+      <br />
+      <Typography><i>{t('attribution.thank-you-text')}</i></Typography>
+      <br />
+      {attributions === '' ?
+        <Grid container direction='row' alignItems='center' justify='center'>
+          <CircularProgress disableShrink />
+        </Grid> :
+        <ReactMarkdown>{attributions}</ReactMarkdown>}
+    </div>
   );
 }
