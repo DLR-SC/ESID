@@ -1,5 +1,5 @@
 import React, {MouseEvent} from 'react';
-import {Button, Divider, Grid, Menu, MenuItem, Snackbar} from '@material-ui/core';
+import {Button, Dialog, Divider, Grid, Menu, MenuItem, Snackbar} from '@material-ui/core';
 import {Alert} from '@material-ui/lab';
 import MenuIcon from '@material-ui/icons/Menu';
 import {useTranslation} from 'react-i18next';
@@ -79,9 +79,18 @@ export default function ApplicationMenu(): JSX.Element {
         <MenuItem onClick={accessibilityClicked}>{t('topBar.menu.accessibility')}</MenuItem>
         <MenuItem onClick={attributionClicked}>{t('topBar.menu.attribution')}</MenuItem>
       </Menu>
-      <ImprintDialog open={imprintOpen} onClose={() => setImprintOpen(false)} />
-      <PrivacyPolicyDialog open={privacyPolicyOpen} onClose={() => setPrivacyPolicyOpen(false)} />
-      <AccessibilityDialog open={accessibilityOpen} onClose={() => setAccessibilityOpen(false)}/>
+
+      <Dialog maxWidth='lg' fullWidth={true} open={imprintOpen} onClose={() => setImprintOpen(false)}>
+        <ImprintDialog />
+      </Dialog>
+
+      <Dialog maxWidth='lg' fullWidth={true} open={privacyPolicyOpen} onClose={() => setPrivacyPolicyOpen(false)}>
+        <PrivacyPolicyDialog />
+      </Dialog>
+
+      <Dialog maxWidth='lg' fullWidth={true} open={accessibilityOpen} onClose={() => setAccessibilityOpen(false)}>
+        <AccessibilityDialog />
+      </Dialog>
 
       <Snackbar open={snackbarOpen} autoHideDuration={5000} onClose={() => setSnackbarOpen(false)}>
         <Alert onClose={() => setSnackbarOpen(false)} severity="info">
