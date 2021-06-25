@@ -6,6 +6,7 @@ import {useTranslation} from 'react-i18next';
 import ImprintDialog from './PopUps/ImprintDialog';
 import PrivacyPolicyDialog from './PopUps/PrivacyPolicyDialog';
 import AccessibilityDialog from './PopUps/AccessibilityDialog';
+import AttributionDialog from './PopUps/AttributionDialog';
 
 /**
  * This menu is found at the top right of the application and is reachable from everywhere. It contains ways to access
@@ -18,6 +19,7 @@ export default function ApplicationMenu(): JSX.Element {
   const [imprintOpen, setImprintOpen] = React.useState(false);
   const [privacyPolicyOpen, setPrivacyPolicyOpen] = React.useState(false);
   const [accessibilityOpen, setAccessibilityOpen] = React.useState(false);
+  const [attributionsOpen, setAttributionsOpen] = React.useState(false);
   const [snackbarOpen, setSnackbarOpen] = React.useState(false);
 
   /** Calling this method opens the application menu. */
@@ -57,21 +59,21 @@ export default function ApplicationMenu(): JSX.Element {
   /** This method gets called, when the attribution menu entry was clicked. */
   const attributionClicked = () => {
     closeMenu();
-    setSnackbarOpen(true);
+    setAttributionsOpen(true);
   };
 
   return (
-    <Grid container item alignItems="center" justify="flex-end" xs={2}>
+    <Grid container item alignItems='center' justify='flex-end' xs={2}>
       <Button
-        id="top-bar-menu-button"
+        id='top-bar-menu-button'
         aria-label={t('topBar.menu.label')}
-        aria-controls="application-menu"
-        aria-haspopup="true"
+        aria-controls='application-menu'
+        aria-haspopup='true'
         onClick={openMenu}
       >
         <MenuIcon />
       </Button>
-      <Menu id="application-menu" anchorEl={anchorElement} open={Boolean(anchorElement)} onClose={closeMenu}>
+      <Menu id='application-menu' anchorEl={anchorElement} open={Boolean(anchorElement)} onClose={closeMenu}>
         <MenuItem onClick={loginClicked}>{t('topBar.menu.login')}</MenuItem>
         <Divider />
         <MenuItem onClick={imprintClicked}>{t('topBar.menu.imprint')}</MenuItem>
@@ -90,10 +92,13 @@ export default function ApplicationMenu(): JSX.Element {
 
       <Dialog maxWidth='lg' fullWidth={true} open={accessibilityOpen} onClose={() => setAccessibilityOpen(false)}>
         <AccessibilityDialog />
+
+      <Dialog maxWidth='lg' fullWidth={true} open={attributionsOpen} onClose={() => setAttributionsOpen(false)}>
+        <AttributionDialog />
       </Dialog>
 
       <Snackbar open={snackbarOpen} autoHideDuration={5000} onClose={() => setSnackbarOpen(false)}>
-        <Alert onClose={() => setSnackbarOpen(false)} severity="info">
+        <Alert onClose={() => setSnackbarOpen(false)} severity='info'>
           {t('WIP')}
         </Alert>
       </Snackbar>

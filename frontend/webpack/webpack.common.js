@@ -19,7 +19,7 @@ module.exports = {
     new ESLintPlugin({
       extensions: ['js', 'jsx', 'ts', 'tsx'],
       exclude: ['node_modules', 'build', 'webpack'],
-    }),
+    })
   ],
   output: {
     path: path.resolve(__dirname + '/..', 'build'),
