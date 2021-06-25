@@ -5,6 +5,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import {useTranslation} from 'react-i18next';
 import ImprintDialog from './PopUps/ImprintDialog';
 import PrivacyPolicyDialog from './PopUps/PrivacyPolicyDialog';
+import AccessibilityDialog from './PopUps/AccessibilityDialog';
 import AttributionDialog from './PopUps/AttributionDialog';
 
 /**
@@ -17,6 +18,7 @@ export default function ApplicationMenu(): JSX.Element {
   const [anchorElement, setAnchorElement] = React.useState<Element | null>(null);
   const [imprintOpen, setImprintOpen] = React.useState(false);
   const [privacyPolicyOpen, setPrivacyPolicyOpen] = React.useState(false);
+  const [accessibilityOpen, setAccessibilityOpen] = React.useState(false);
   const [attributionsOpen, setAttributionsOpen] = React.useState(false);
   const [snackbarOpen, setSnackbarOpen] = React.useState(false);
 
@@ -51,7 +53,7 @@ export default function ApplicationMenu(): JSX.Element {
   /** This method gets called, when the accessibility menu entry was clicked. */
   const accessibilityClicked = () => {
     closeMenu();
-    setSnackbarOpen(true);
+    setAccessibilityOpen(true);
   };
 
   /** This method gets called, when the attribution menu entry was clicked. */
@@ -86,6 +88,10 @@ export default function ApplicationMenu(): JSX.Element {
 
       <Dialog maxWidth='lg' fullWidth={true} open={privacyPolicyOpen} onClose={() => setPrivacyPolicyOpen(false)}>
         <PrivacyPolicyDialog />
+      </Dialog>
+
+      <Dialog maxWidth='lg' fullWidth={true} open={accessibilityOpen} onClose={() => setAccessibilityOpen(false)}>
+        <AccessibilityDialog />
       </Dialog>
 
       <Dialog maxWidth='lg' fullWidth={true} open={attributionsOpen} onClose={() => setAttributionsOpen(false)}>
