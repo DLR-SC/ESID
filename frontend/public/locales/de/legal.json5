@@ -847,6 +847,14 @@
   },
   attribution: {
     header: 'Attribution',
-    content: '',
+    'thank-you-text': '\
+      Viele fantastische Stücke freier und Open-Source-Software haben uns geholfen, diese Webseite dahin zu bringen, wo\
+      sie heute ist!\
+      Wir sind dankbar, dass dies in der heutigen Welt möglich ist.\
+      Die Zusammenarbeit rund um den Globus ist heute stärker als je zuvor.\
+      Wir möchten uns ausdrücklich bei allen bedanken, die an den nachfolgenden Softwarebibliotheken gearbeitet haben.\
+      Ihr macht großartige Arbeit!',
+    authors: 'Author(en)',
+    repository: 'Repository'
   },
 }
