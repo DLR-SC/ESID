@@ -92,6 +92,7 @@ export default function ApplicationMenu(): JSX.Element {
 
       <Dialog maxWidth='lg' fullWidth={true} open={accessibilityOpen} onClose={() => setAccessibilityOpen(false)}>
         <AccessibilityDialog />
+      </Dialog>
 
       <Dialog maxWidth='lg' fullWidth={true} open={attributionsOpen} onClose={() => setAttributionsOpen(false)}>
         <AttributionDialog />
