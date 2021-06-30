@@ -14,5 +14,5 @@ export default function ResearchBar(): JSX.Element {
   const classes = useStyles();
   const {t} = useTranslation();
 
-  return <Typography className={classes.HistorieTitleStyle}>{t('Historie.placeholder')}</Typography>;
+  return <Typography className={classes.historyTitle}>{t('history.placeholder')}</Typography>;
 }
