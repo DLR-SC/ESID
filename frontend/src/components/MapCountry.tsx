@@ -35,7 +35,7 @@ export default function MapCountry(): JSX.Element {
   const classes = useStyles();
 
   useEffect(() => {
-    let regionPolygon: IregionPolygon;
+    let regionPolygon: IRegionPolygon;
 
     // Colors set of the Map
     const heatColors1 = [am4core.color('#34BEC7'), am4core.color('#3998DB'), am4core.color('#3abedf')];
