@@ -28,7 +28,7 @@ export default function Sidebar(): JSX.Element {
     >
       <SearchBar />
       <MapCountry />
-      <Historie />
+      <History />
     </Grid>
   );
 }
