@@ -12,7 +12,7 @@ import {useEffect} from 'react';
 */
 
 const useStyles = makeStyles({
-  MapStyle: {
+  map: {
     height: '50%',
     width: '100%',
     paddingTop: '20px',
