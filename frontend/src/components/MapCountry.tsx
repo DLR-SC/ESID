@@ -108,8 +108,8 @@ export default function MapCountry(): JSX.Element {
 
   return (
     <>
-      <div id="chartdiv" className={classes.MapStyle}></div>
-      <div id="legenddiv" className={classes.HeatlegendStyle}></div>
+      <div id="chartdiv" className={classes.map}></div>
+      <div id="legenddiv" className={classes.heatlegend}></div>
     </>
   );
 }
