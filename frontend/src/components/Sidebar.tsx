@@ -2,7 +2,7 @@ import {Grid, makeStyles} from '@material-ui/core';
 import React from 'react';
 import MapCountry from './MapCountry';
 import SearchBar from './SearchBar';
-import Historie from './Historie';
+import History from './History';
 
 const useStyles = makeStyles({
   sideBar: {
