@@ -70,11 +70,11 @@ export default function MapCountry(): JSX.Element {
     //Assign colors to regions
     polygonSeries.events.on('validated', (event) => {
       event.target.mapPolygons.each((mapPolygon) => {
-        regionPolygone = mapPolygon.dataItem.dataContext as IregionPolygon;
+        regionPolygon = mapPolygon.dataItem.dataContext as IRegionPolygon;
         const colorIndex = Math.floor(Math.random() * 2);
-        if (regionPolygone.value <= 100) {
+        if (regionPolygon.value <= 100) {
           mapPolygon.fill = heatColors1[colorIndex];
-        } else if (regionPolygone.value >= 200 && regionPolygone.value <= 270) {
+        } else if (regionPolygon.value >= 200 && regionPolygon.value <= 270) {
           mapPolygon.fill = heatColors2[colorIndex];
         } else {
           mapPolygon.fill = heatColors3[colorIndex];
