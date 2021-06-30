@@ -62,8 +62,8 @@ export default function MapCountry(): JSX.Element {
     //Set values to each regions
     polygonSeries.events.on('validated', (event) => {
       event.target.mapPolygons.each((mapPolygon) => {
-        regionPolygone = mapPolygon.dataItem.dataContext as IregionPolygon;
-        regionPolygone.value = Math.floor(Math.random() * 300);
+        regionPolygon = mapPolygon.dataItem.dataContext as IRegionPolygon;
+        regionPolygon.value = Math.floor(Math.random() * 300);
       });
     });
 
