@@ -10,7 +10,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function ResearchBar(): JSX.Element {
+export default function History(): JSX.Element {
   const classes = useStyles();
   const {t} = useTranslation();
 
