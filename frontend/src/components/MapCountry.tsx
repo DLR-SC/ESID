@@ -27,7 +27,7 @@ const useStyles = makeStyles({
   },
 });
 
-interface IregionPolygon {
+interface IRegionPolygon {
   value: number;
 }
 
