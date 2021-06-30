@@ -18,7 +18,7 @@ const useStyles = makeStyles({
     paddingTop: '20px',
   },
 
-  HeatlegendStyle: {
+  heatlegend: {
     marginTop: '15px',
     marginRight: '20px',
     marginLeft: '10px',
