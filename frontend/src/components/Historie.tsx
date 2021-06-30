@@ -5,7 +5,7 @@ import {useTranslation} from 'react-i18next';
 import {makeStyles} from '@material-ui/core';
 
 const useStyles = makeStyles({
-  HistorieTitleStyle: {
+  historyTitle: {
     paddingTop: '20px',
   },
 });
