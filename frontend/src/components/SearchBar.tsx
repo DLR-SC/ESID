@@ -1,4 +1,3 @@
-/* eslint-disable no-use-before-define */
 import React from 'react';
 import InputBase from '@material-ui/core/InputBase';
 import {createStyles, fade, Theme, makeStyles} from '@material-ui/core/styles';
@@ -65,7 +64,7 @@ export default function SearchBar(): JSX.Element {
           <SearchIcon />
         </div>
         <InputBase
-          placeholder="Deutschland"
+          placeholder={t('country.placeholder')}
           classes={{
             root: classes.inputRoot,
             input: classes.inputInput,
