@@ -2,7 +2,9 @@ import React from 'react';
 import * as am4core from '@amcharts/amcharts4/core';
 import * as am4maps from '@amcharts/amcharts4/maps';
 import {makeStyles} from '@material-ui/core';
+import {Box} from '@material-ui/core';
 import {useEffect} from 'react';
+import {useTranslation} from 'react-i18next';
 
 /* The Map component includes:
   - A detailed Map of Germany
@@ -12,30 +14,29 @@ import {useEffect} from 'react';
 */
 
 const useStyles = makeStyles({
-  map: {
-    height: '50%',
-    width: '100%',
-    paddingTop: '20px',
+  MapStyle: {
+    height: '300px',
   },
 
-  heatlegend: {
+  HeatlegendStyle: {
     marginTop: '15px',
-    marginRight: '20px',
-    marginLeft: '10px',
-    height: '20px',
+    height: '25px',
     backgroundColor: '#F8F8F9',
   },
 });
 
-interface IRegionPolygon {
+interface IregionPolygon {
   value: number;
+  BEZ: string;
 }
 
 export default function MapCountry(): JSX.Element {
+  const {t} = useTranslation('global');
   const classes = useStyles();
 
   useEffect(() => {
-    let regionPolygon: IRegionPolygon;
+    let regionPolygon: IregionPolygon;
+    let regionPolygonName: IregionPolygon;
 
     // Colors set of the Map
     const heatColors1 = [am4core.color('#34BEC7'), am4core.color('#3998DB'), am4core.color('#3abedf')];
@@ -57,20 +58,25 @@ export default function MapCountry(): JSX.Element {
     // Configure series
     polygonSeries.mapPolygons.template.tooltipPosition = 'fixed';
     const polygonTemplate = polygonSeries.mapPolygons.template;
-    polygonTemplate.tooltipText = '{GEN}';
 
     //Set values to each regions
     polygonSeries.events.on('validated', (event) => {
       event.target.mapPolygons.each((mapPolygon) => {
-        regionPolygon = mapPolygon.dataItem.dataContext as IRegionPolygon;
+        regionPolygon = mapPolygon.dataItem.dataContext as IregionPolygon;
         regionPolygon.value = Math.floor(Math.random() * 300);
+        // add tooltipText
+        regionPolygonName = mapPolygon.tooltipDataItem.dataContext as IregionPolygon;
+        const RegionBEZ = regionPolygonName.BEZ;
+        RegionBEZ === 'Landkreis' || RegionBEZ === 'Kreis'
+          ? (mapPolygon.tooltipText = t('BEZ.Kreis') + ' {GEN}')
+          : (mapPolygon.tooltipText = t('BEZ.Stadtkreis') + ' {GEN}');
       });
     });
 
     //Assign colors to regions
     polygonSeries.events.on('validated', (event) => {
       event.target.mapPolygons.each((mapPolygon) => {
-        regionPolygon = mapPolygon.dataItem.dataContext as IRegionPolygon;
+        regionPolygon = mapPolygon.dataItem.dataContext as IregionPolygon;
         const colorIndex = Math.floor(Math.random() * 2);
         if (regionPolygon.value <= 100) {
           mapPolygon.fill = heatColors1[colorIndex];
@@ -108,8 +114,8 @@ export default function MapCountry(): JSX.Element {
 
   return (
     <>
-      <div id="chartdiv" className={classes.map}></div>
-      <div id="legenddiv" className={classes.heatlegend}></div>
+      <Box id="chartdiv" className={classes.MapStyle}></Box>
+      <Box id="legenddiv" className={classes.HeatlegendStyle}></Box>
     </>
   );
 }
