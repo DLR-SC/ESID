@@ -1,8 +1,8 @@
 {
   topBar: {
     'icon-alt': 'ESID application logo',
-    menu: {
-      label: 'Application menu',
+    ' menu': {
+      ' label': 'Application menu',
       login: 'Login',
       imprint: 'Imprint',
       'privacy-policy': 'Privacy Policy',
@@ -17,11 +17,16 @@
     placeholder: 'Main Content',
   },
   history: {
-    placeholder: 'history content',
+    placeholder: 'history',
   },
   country: {
     placeholder: 'Germany',
   },
+  BEZ: {
+    Kreis: 'Rural District',
+    Stadtkreis: 'Urban District',
+  },
+
   lorem: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore\
     et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet\
     clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet,\
