@@ -104,7 +104,7 @@ export default function MapCountry(): JSX.Element {
     chart.zoomControl.align = 'left';
     chart.zoomControl.paddingBottom = 25;
     chart.zoomControl.opacity = 50;
-    chart.seriesContainer.draggable = false;
+    chart.seriesContainer.draggable = true;
     polygonSeries.useGeodata = true;
 
     // Create hover state and set alternative fill color
