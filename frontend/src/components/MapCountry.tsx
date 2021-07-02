@@ -67,8 +67,12 @@ export default function MapCountry(): JSX.Element {
         // add tooltipText
         regionPolygonName = mapPolygon.tooltipDataItem.dataContext as IregionPolygon;
         const RegionBEZ = regionPolygonName.BEZ;
-        RegionBEZ === 'Landkreis' || RegionBEZ === 'Kreis'
+          RegionBEZ === 'Kreis'
           ? (mapPolygon.tooltipText = t('BEZ.Kreis') + ' {GEN}')
+          : RegionBEZ === 'Landkreis'
+          ? (mapPolygon.tooltipText = t('BEZ.Landkreis') + ' {GEN}')
+          : RegionBEZ === 'Kreisfreie'
+          ? (mapPolygon.tooltipText = t('BEZ.Kreisfreie') + ' {GEN}')
           : (mapPolygon.tooltipText = t('BEZ.Stadtkreis') + ' {GEN}');
       });
     });
