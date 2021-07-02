@@ -24,6 +24,8 @@
   },
   BEZ: {
     Kreis: 'Rural District',
+    Landkreis: 'Rural District',
+    Kreisfreie: 'Urban District',
     Stadtkreis: 'Urban District',
   },
 
