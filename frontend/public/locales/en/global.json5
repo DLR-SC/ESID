@@ -1,8 +1,8 @@
 {
   topBar: {
     'icon-alt': 'ESID application logo',
-    ' menu': {
-      ' label': 'Application menu',
+    menu: {
+      label: 'Application menu',
       login: 'Login',
       imprint: 'Imprint',
       'privacy-policy': 'Privacy Policy',
