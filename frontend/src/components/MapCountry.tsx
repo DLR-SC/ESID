@@ -14,18 +14,18 @@ import {useTranslation} from 'react-i18next';
 */
 
 const useStyles = makeStyles({
-  MapStyle: {
+  Map: {
     height: '300px',
   },
 
-  HeatlegendStyle: {
+  Heatlegend: {
     marginTop: '15px',
     height: '25px',
     backgroundColor: '#F8F8F9',
   },
 });
 
-interface IregionPolygon {
+interface IRegionPolygon {
   value: number;
   BEZ: string;
 }
@@ -35,8 +35,7 @@ export default function MapCountry(): JSX.Element {
   const classes = useStyles();
 
   useEffect(() => {
-    let regionPolygon: IregionPolygon;
-    let regionPolygonName: IregionPolygon;
+    let regionPolygon: IRegionPolygon;
 
     // Colors set of the Map
     const heatColors1 = [am4core.color('#34BEC7'), am4core.color('#3998DB'), am4core.color('#3abedf')];
@@ -62,18 +61,10 @@ export default function MapCountry(): JSX.Element {
     //Set values to each regions
     polygonSeries.events.on('validated', (event) => {
       event.target.mapPolygons.each((mapPolygon) => {
-        regionPolygon = mapPolygon.dataItem.dataContext as IregionPolygon;
+        regionPolygon = mapPolygon.dataItem.dataContext as IRegionPolygon;
         regionPolygon.value = Math.floor(Math.random() * 300);
         // add tooltipText
-        regionPolygonName = mapPolygon.tooltipDataItem.dataContext as IregionPolygon;
-        const RegionBEZ = regionPolygonName.BEZ;
-          RegionBEZ === 'Kreis'
-          ? (mapPolygon.tooltipText = t('BEZ.Kreis') + ' {GEN}')
-          : RegionBEZ === 'Landkreis'
-          ? (mapPolygon.tooltipText = t('BEZ.Landkreis') + ' {GEN}')
-          : RegionBEZ === 'Kreisfreie'
-          ? (mapPolygon.tooltipText = t('BEZ.Kreisfreie') + ' {GEN}')
-          : (mapPolygon.tooltipText = t('BEZ.Stadtkreis') + ' {GEN}');
+        mapPolygon.tooltipText = t(`BEZ.${regionPolygon.BEZ}`) + ' {GEN}';
       });
     });
 
@@ -118,8 +109,8 @@ export default function MapCountry(): JSX.Element {
 
   return (
     <>
-      <Box id="chartdiv" className={classes.MapStyle}></Box>
-      <Box id="legenddiv" className={classes.HeatlegendStyle}></Box>
+      <Box id="chartdiv" className={classes.Map}></Box>
+      <Box id="legenddiv" className={classes.Heatlegend}></Box>
     </>
   );
 }
