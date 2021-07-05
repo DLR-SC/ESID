@@ -80,7 +80,7 @@ export default function MapCountry(): JSX.Element {
     //Assign colors to regions
     polygonSeries.events.on('validated', (event) => {
       event.target.mapPolygons.each((mapPolygon) => {
-        regionPolygon = mapPolygon.dataItem.dataContext as IregionPolygon;
+        regionPolygon = mapPolygon.dataItem.dataContext as IRegionPolygon;
         const colorIndex = Math.floor(Math.random() * 2);
         if (regionPolygon.value <= 100) {
           mapPolygon.fill = heatColors1[colorIndex];
