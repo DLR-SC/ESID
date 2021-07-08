@@ -6,13 +6,6 @@ import {Box} from '@material-ui/core';
 import {useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
 
-/* The Map component includes:
-  - A detailed Map of Germany
-  - Heat Legend container
-  - Zoom control 
-  The colors depends on temporary values assigned to each region.  
-*/
-
 const useStyles = makeStyles({
   Map: {
     height: '300px',
@@ -30,6 +23,13 @@ interface IRegionPolygon {
   BEZ: string;
 }
 
+/**
+ * The Map component includes:
+ * - A detailed Map of Germany
+ * - Heat Legend container
+ * - Zoom control
+ * The colors depends on temporary values assigned to each region.
+ */
 export default function MapCountry(): JSX.Element {
   const {t} = useTranslation('global');
   const classes = useStyles();
@@ -94,7 +94,7 @@ export default function MapCountry(): JSX.Element {
     heatLegend.maxColor = am4core.color('#F8F8F9');
     heatLegend.align = 'center';
 
-    //Zoom control
+    // Zoom control
     chart.zoomControl = new am4maps.ZoomControl();
     chart.zoomControl.align = 'left';
     chart.zoomControl.paddingBottom = 25;
@@ -105,12 +105,12 @@ export default function MapCountry(): JSX.Element {
     // Create hover state and set alternative fill color
     const hs = polygonTemplate.states.create('hover');
     hs.properties.fill = am4core.color('#367B25');
-  }, []);
+  }, [t]);
 
   return (
     <>
-      <Box id="chartdiv" className={classes.Map}></Box>
-      <Box id="legenddiv" className={classes.Heatlegend}></Box>
+      <Box id='chartdiv' className={classes.Map} />
+      <Box id='legenddiv' className={classes.Heatlegend} />
     </>
   );
 }

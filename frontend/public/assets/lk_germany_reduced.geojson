@@ -15,7 +15,7 @@
           ]
         ]
       },
-      "properties": {"RS": "01001", "GEN": "Flensburg", "BEZ": "Kreisfreie Stadt", "id": 0}
+      "properties": {"RS": "01001", "GEN": "Flensburg", "BEZ": "KS", "id": 0}
     },
     {
       "type": "Feature",
@@ -33,7 +33,7 @@
           ]
         ]
       },
-      "properties": {"RS": "01002", "GEN": "Kiel", "BEZ": "Kreisfreie Stadt", "id": 1}
+      "properties": {"RS": "01002", "GEN": "Kiel", "BEZ": "KS", "id": 1}
     },
     {
       "type": "Feature",
@@ -56,7 +56,7 @@
           ]
         ]
       },
-      "properties": {"RS": "01003", "GEN": "Lübeck", "BEZ": "Kreisfreie Stadt", "id": 2}
+      "properties": {"RS": "01003", "GEN": "Lübeck", "BEZ": "KS", "id": 2}
     },
     {
       "type": "Feature",
@@ -73,7 +73,7 @@
           ]
         ]
       },
-      "properties": {"RS": "01004", "GEN": "Neumünster", "BEZ": "Kreisfreie Stadt", "id": 3}
+      "properties": {"RS": "01004", "GEN": "Neumünster", "BEZ": "KS", "id": 3}
     },
     {
       "type": "Feature",
@@ -106,7 +106,7 @@
           ]
         ]
       },
-      "properties": {"RS": "01051", "GEN": "Dithmarschen", "BEZ": "Kreis", "id": 4}
+      "properties": {"RS": "01051", "GEN": "Dithmarschen", "BEZ": "K", "id": 4}
     },
     {
       "type": "Feature",
@@ -135,7 +135,7 @@
           ]
         ]
       },
-      "properties": {"RS": "01053", "GEN": "Herzogtum Lauenburg", "BEZ": "Kreis", "id": 5}
+      "properties": {"RS": "01053", "GEN": "Herzogtum Lauenburg", "BEZ": "K", "id": 5}
     },
     {
       "type": "Feature",
@@ -211,7 +211,7 @@
           ]
         ]
       },
-      "properties": {"RS": "01054", "GEN": "Nordfriesland", "BEZ": "Kreis", "id": 6}
+      "properties": {"RS": "01054", "GEN": "Nordfriesland", "BEZ": "K", "id": 6}
     },
     {
       "type": "Feature",
@@ -256,7 +256,7 @@
           ]
         ]
       },
-      "properties": {"RS": "01055", "GEN": "Ostholstein", "BEZ": "Kreis", "id": 7}
+      "properties": {"RS": "01055", "GEN": "Ostholstein", "BEZ": "K", "id": 7}
     },
     {
       "type": "Feature",
@@ -280,7 +280,7 @@
           ]
         ]
       },
-      "properties": {"RS": "01056", "GEN": "Pinneberg", "BEZ": "Kreis", "id": 8}
+      "properties": {"RS": "01056", "GEN": "Pinneberg", "BEZ": "K", "id": 8}
     },
     {
       "type": "Feature",
@@ -310,7 +310,7 @@
           ]
         ]
       },
-      "properties": {"RS": "01057", "GEN": "Plön", "BEZ": "Kreis", "id": 9}
+      "properties": {"RS": "01057", "GEN": "Plön", "BEZ": "K", "id": 9}
     },
     {
       "type": "Feature",
@@ -351,7 +351,7 @@
           ]
         ]
       },
-      "properties": {"RS": "01058", "GEN": "Rendsburg-Eckernförde", "BEZ": "Kreis", "id": 10}
+      "properties": {"RS": "01058", "GEN": "Rendsburg-Eckernförde", "BEZ": "K", "id": 10}
     },
     {
       "type": "Feature",
@@ -394,7 +394,7 @@
           ]
         ]
       },
-      "properties": {"RS": "01059", "GEN": "Schleswig-Flensburg", "BEZ": "Kreis", "id": 11}
+      "properties": {"RS": "01059", "GEN": "Schleswig-Flensburg", "BEZ": "K", "id": 11}
     },
     {
       "type": "Feature",
@@ -428,7 +428,7 @@
           ]
         ]
       },
-      "properties": {"RS": "01060", "GEN": "Segeberg", "BEZ": "Kreis", "id": 12}
+      "properties": {"RS": "01060", "GEN": "Segeberg", "BEZ": "K", "id": 12}
     },
     {
       "type": "Feature",
@@ -454,7 +454,7 @@
           ]
         ]
       },
-      "properties": {"RS": "01061", "GEN": "Steinburg", "BEZ": "Kreis", "id": 13}
+      "properties": {"RS": "01061", "GEN": "Steinburg", "BEZ": "K", "id": 13}
     },
     {
       "type": "Feature",
@@ -484,7 +484,7 @@
           ]
         ]
       },
-      "properties": {"RS": "01062", "GEN": "Stormarn", "BEZ": "Kreis", "id": 14}
+      "properties": {"RS": "01062", "GEN": "Stormarn", "BEZ": "K", "id": 14}
     },
     {
       "type": "Feature",
@@ -515,7 +515,7 @@
           ]
         ]
       },
-      "properties": {"RS": "02000", "GEN": "Hamburg", "BEZ": "Kreisfreie Stadt", "id": 15}
+      "properties": {"RS": "02000", "GEN": "Hamburg", "BEZ": "KS", "id": 15}
     },
     {
       "type": "Feature",
@@ -534,7 +534,7 @@
           ]
         ]
       },
-      "properties": {"RS": "03101", "GEN": "Braunschweig", "BEZ": "Kreisfreie Stadt", "id": 16}
+      "properties": {"RS": "03101", "GEN": "Braunschweig", "BEZ": "KS", "id": 16}
     },
     {
       "type": "Feature",
@@ -557,7 +557,7 @@
           ]
         ]
       },
-      "properties": {"RS": "03102", "GEN": "Salzgitter", "BEZ": "Kreisfreie Stadt", "id": 17}
+      "properties": {"RS": "03102", "GEN": "Salzgitter", "BEZ": "KS", "id": 17}
     },
     {
       "type": "Feature",
@@ -575,7 +575,7 @@
           ]
         ]
       },
-      "properties": {"RS": "03103", "GEN": "Wolfsburg", "BEZ": "Kreisfreie Stadt", "id": 18}
+      "properties": {"RS": "03103", "GEN": "Wolfsburg", "BEZ": "KS", "id": 18}
     },
     {
       "type": "Feature",
@@ -606,7 +606,7 @@
           ]
         ]
       },
-      "properties": {"RS": "03151", "GEN": "Gifhorn", "BEZ": "Landkreis", "id": 19}
+      "properties": {"RS": "03151", "GEN": "Gifhorn", "BEZ": "LK", "id": 19}
     },
     {
       "type": "Feature",
@@ -638,7 +638,7 @@
           ]
         ]
       },
-      "properties": {"RS": "03153", "GEN": "Goslar", "BEZ": "Landkreis", "id": 20}
+      "properties": {"RS": "03153", "GEN": "Goslar", "BEZ": "LK", "id": 20}
     },
     {
       "type": "Feature",
@@ -667,7 +667,7 @@
           ]
         ]
       },
-      "properties": {"RS": "03154", "GEN": "Helmstedt", "BEZ": "Landkreis", "id": 21}
+      "properties": {"RS": "03154", "GEN": "Helmstedt", "BEZ": "LK", "id": 21}
     },
     {
       "type": "Feature",
@@ -697,7 +697,7 @@
           ]
         ]
       },
-      "properties": {"RS": "03155", "GEN": "Northeim", "BEZ": "Landkreis", "id": 22}
+      "properties": {"RS": "03155", "GEN": "Northeim", "BEZ": "LK", "id": 22}
     },
     {
       "type": "Feature",
@@ -719,7 +719,7 @@
           ]
         ]
       },
-      "properties": {"RS": "03157", "GEN": "Peine", "BEZ": "Landkreis", "id": 23}
+      "properties": {"RS": "03157", "GEN": "Peine", "BEZ": "LK", "id": 23}
     },
     {
       "type": "Feature",
@@ -757,7 +757,7 @@
           ]
         ]
       },
-      "properties": {"RS": "03158", "GEN": "Wolfenbüttel", "BEZ": "Landkreis", "id": 24}
+      "properties": {"RS": "03158", "GEN": "Wolfenbüttel", "BEZ": "LK", "id": 24}
     },
     {
       "type": "Feature",
@@ -803,7 +803,7 @@
           ]
         ]
       },
-      "properties": {"RS": "03159", "GEN": "Göttingen", "BEZ": "Landkreis", "id": 25}
+      "properties": {"RS": "03159", "GEN": "Göttingen", "BEZ": "LK", "id": 25}
     },
     {
       "type": "Feature",
@@ -842,7 +842,7 @@
           ]
         ]
       },
-      "properties": {"RS": "03241", "GEN": "Region Hannover", "BEZ": "Landkreis", "id": 26}
+      "properties": {"RS": "03241", "GEN": "Region Hannover", "BEZ": "LK", "id": 26}
     },
     {
       "type": "Feature",
@@ -877,7 +877,7 @@
           ]
         ]
       },
-      "properties": {"RS": "03251", "GEN": "Diepholz", "BEZ": "Landkreis", "id": 27}
+      "properties": {"RS": "03251", "GEN": "Diepholz", "BEZ": "LK", "id": 27}
     },
     {
       "type": "Feature",
@@ -905,7 +905,7 @@
           ]
         ]
       },
-      "properties": {"RS": "03252", "GEN": "Hameln-Pyrmont", "BEZ": "Landkreis", "id": 28}
+      "properties": {"RS": "03252", "GEN": "Hameln-Pyrmont", "BEZ": "LK", "id": 28}
     },
     {
       "type": "Feature",
@@ -934,7 +934,7 @@
           ]
         ]
       },
-      "properties": {"RS": "03254", "GEN": "Hildesheim", "BEZ": "Landkreis", "id": 29}
+      "properties": {"RS": "03254", "GEN": "Hildesheim", "BEZ": "LK", "id": 29}
     },
     {
       "type": "Feature",
@@ -962,7 +962,7 @@
           ]
         ]
       },
-      "properties": {"RS": "03255", "GEN": "Holzminden", "BEZ": "Landkreis", "id": 30}
+      "properties": {"RS": "03255", "GEN": "Holzminden", "BEZ": "LK", "id": 30}
     },
     {
       "type": "Feature",
@@ -997,7 +997,7 @@
           ]
         ]
       },
-      "properties": {"RS": "03256", "GEN": "Nienburg (Weser)", "BEZ": "Landkreis", "id": 31}
+      "properties": {"RS": "03256", "GEN": "Nienburg (Weser)", "BEZ": "LK", "id": 31}
     },
     {
       "type": "Feature",
@@ -1028,7 +1028,7 @@
           ]
         ]
       },
-      "properties": {"RS": "03257", "GEN": "Schaumburg", "BEZ": "Landkreis", "id": 32}
+      "properties": {"RS": "03257", "GEN": "Schaumburg", "BEZ": "LK", "id": 32}
     },
     {
       "type": "Feature",
@@ -1057,7 +1057,7 @@
           ]
         ]
       },
-      "properties": {"RS": "03351", "GEN": "Celle", "BEZ": "Landkreis", "id": 33}
+      "properties": {"RS": "03351", "GEN": "Celle", "BEZ": "LK", "id": 33}
     },
     {
       "type": "Feature",
@@ -1092,7 +1092,7 @@
           ]
         ]
       },
-      "properties": {"RS": "03352", "GEN": "Cuxhaven", "BEZ": "Landkreis", "id": 34}
+      "properties": {"RS": "03352", "GEN": "Cuxhaven", "BEZ": "LK", "id": 34}
     },
     {
       "type": "Feature",
@@ -1126,7 +1126,7 @@
           ]
         ]
       },
-      "properties": {"RS": "03353", "GEN": "Harburg", "BEZ": "Landkreis", "id": 35}
+      "properties": {"RS": "03353", "GEN": "Harburg", "BEZ": "LK", "id": 35}
     },
     {
       "type": "Feature",
@@ -1157,7 +1157,7 @@
           ]
         ]
       },
-      "properties": {"RS": "03354", "GEN": "Lüchow-Dannenberg", "BEZ": "Landkreis", "id": 36}
+      "properties": {"RS": "03354", "GEN": "Lüchow-Dannenberg", "BEZ": "LK", "id": 36}
     },
     {
       "type": "Feature",
@@ -1199,7 +1199,7 @@
           ]
         ]
       },
-      "properties": {"RS": "03355", "GEN": "Lüneburg", "BEZ": "Landkreis", "id": 37}
+      "properties": {"RS": "03355", "GEN": "Lüneburg", "BEZ": "LK", "id": 37}
     },
     {
       "type": "Feature",
@@ -1225,7 +1225,7 @@
           ]
         ]
       },
-      "properties": {"RS": "03356", "GEN": "Osterholz", "BEZ": "Landkreis", "id": 38}
+      "properties": {"RS": "03356", "GEN": "Osterholz", "BEZ": "LK", "id": 38}
     },
     {
       "type": "Feature",
@@ -1266,7 +1266,7 @@
           ]
         ]
       },
-      "properties": {"RS": "03357", "GEN": "Rotenburg (Wümme)", "BEZ": "Landkreis", "id": 39}
+      "properties": {"RS": "03357", "GEN": "Rotenburg (Wümme)", "BEZ": "LK", "id": 39}
     },
     {
       "type": "Feature",
@@ -1310,7 +1310,7 @@
           ]
         ]
       },
-      "properties": {"RS": "03358", "GEN": "Heidekreis", "BEZ": "Landkreis", "id": 40}
+      "properties": {"RS": "03358", "GEN": "Heidekreis", "BEZ": "LK", "id": 40}
     },
     {
       "type": "Feature",
@@ -1344,7 +1344,7 @@
           ]
         ]
       },
-      "properties": {"RS": "03359", "GEN": "Stade", "BEZ": "Landkreis", "id": 41}
+      "properties": {"RS": "03359", "GEN": "Stade", "BEZ": "LK", "id": 41}
     },
     {
       "type": "Feature",
@@ -1371,7 +1371,7 @@
           ]
         ]
       },
-      "properties": {"RS": "03360", "GEN": "Uelzen", "BEZ": "Landkreis", "id": 42}
+      "properties": {"RS": "03360", "GEN": "Uelzen", "BEZ": "LK", "id": 42}
     },
     {
       "type": "Feature",
@@ -1400,7 +1400,7 @@
           ]
         ]
       },
-      "properties": {"RS": "03361", "GEN": "Verden", "BEZ": "Landkreis", "id": 43}
+      "properties": {"RS": "03361", "GEN": "Verden", "BEZ": "LK", "id": 43}
     },
     {
       "type": "Feature",
@@ -1417,7 +1417,7 @@
           ]
         ]
       },
-      "properties": {"RS": "03401", "GEN": "Delmenhorst", "BEZ": "Kreisfreie Stadt", "id": 44}
+      "properties": {"RS": "03401", "GEN": "Delmenhorst", "BEZ": "KS", "id": 44}
     },
     {
       "type": "Feature",
@@ -1435,7 +1435,7 @@
           ]
         ]
       },
-      "properties": {"RS": "03402", "GEN": "Emden", "BEZ": "Kreisfreie Stadt", "id": 45}
+      "properties": {"RS": "03402", "GEN": "Emden", "BEZ": "KS", "id": 45}
     },
     {
       "type": "Feature",
@@ -1452,7 +1452,7 @@
           ]
         ]
       },
-      "properties": {"RS": "03403", "GEN": "Oldenburg (Oldb)", "BEZ": "Kreisfreie Stadt", "id": 46}
+      "properties": {"RS": "03403", "GEN": "Oldenburg (Oldb)", "BEZ": "KS", "id": 46}
     },
     {
       "type": "Feature",
@@ -1470,7 +1470,7 @@
           ]
         ]
       },
-      "properties": {"RS": "03404", "GEN": "Osnabrück", "BEZ": "Kreisfreie Stadt", "id": 47}
+      "properties": {"RS": "03404", "GEN": "Osnabrück", "BEZ": "KS", "id": 47}
     },
     {
       "type": "Feature",
@@ -1486,7 +1486,7 @@
           ]
         ]
       },
-      "properties": {"RS": "03405", "GEN": "Wilhelmshaven", "BEZ": "Kreisfreie Stadt", "id": 48}
+      "properties": {"RS": "03405", "GEN": "Wilhelmshaven", "BEZ": "KS", "id": 48}
     },
     {
       "type": "Feature",
@@ -1511,7 +1511,7 @@
           ]
         ]
       },
-      "properties": {"RS": "03451", "GEN": "Ammerland", "BEZ": "Landkreis", "id": 49}
+      "properties": {"RS": "03451", "GEN": "Ammerland", "BEZ": "LK", "id": 49}
     },
     {
       "type": "Feature",
@@ -1540,7 +1540,7 @@
           ]
         ]
       },
-      "properties": {"RS": "03452", "GEN": "Aurich", "BEZ": "Landkreis", "id": 50}
+      "properties": {"RS": "03452", "GEN": "Aurich", "BEZ": "LK", "id": 50}
     },
     {
       "type": "Feature",
@@ -1571,7 +1571,7 @@
           ]
         ]
       },
-      "properties": {"RS": "03453", "GEN": "Cloppenburg", "BEZ": "Landkreis", "id": 51}
+      "properties": {"RS": "03453", "GEN": "Cloppenburg", "BEZ": "LK", "id": 51}
     },
     {
       "type": "Feature",
@@ -1608,7 +1608,7 @@
           ]
         ]
       },
-      "properties": {"RS": "03454", "GEN": "Emsland", "BEZ": "Landkreis", "id": 52}
+      "properties": {"RS": "03454", "GEN": "Emsland", "BEZ": "LK", "id": 52}
     },
     {
       "type": "Feature",
@@ -1636,7 +1636,7 @@
           ]
         ]
       },
-      "properties": {"RS": "03455", "GEN": "Friesland", "BEZ": "Landkreis", "id": 53}
+      "properties": {"RS": "03455", "GEN": "Friesland", "BEZ": "LK", "id": 53}
     },
     {
       "type": "Feature",
@@ -1663,7 +1663,7 @@
           ]
         ]
       },
-      "properties": {"RS": "03456", "GEN": "Grafschaft Bentheim", "BEZ": "Landkreis", "id": 54}
+      "properties": {"RS": "03456", "GEN": "Grafschaft Bentheim", "BEZ": "LK", "id": 54}
     },
     {
       "type": "Feature",
@@ -1701,7 +1701,7 @@
           ]
         ]
       },
-      "properties": {"RS": "03457", "GEN": "Leer", "BEZ": "Landkreis", "id": 55}
+      "properties": {"RS": "03457", "GEN": "Leer", "BEZ": "LK", "id": 55}
     },
     {
       "type": "Feature",
@@ -1730,7 +1730,7 @@
           ]
         ]
       },
-      "properties": {"RS": "03458", "GEN": "Oldenburg", "BEZ": "Landkreis", "id": 56}
+      "properties": {"RS": "03458", "GEN": "Oldenburg", "BEZ": "LK", "id": 56}
     },
     {
       "type": "Feature",
@@ -1778,7 +1778,7 @@
           ]
         ]
       },
-      "properties": {"RS": "03459", "GEN": "Osnabrück", "BEZ": "Landkreis", "id": 57}
+      "properties": {"RS": "03459", "GEN": "Osnabrück", "BEZ": "LK", "id": 57}
     },
     {
       "type": "Feature",
@@ -1804,7 +1804,7 @@
           ]
         ]
       },
-      "properties": {"RS": "03460", "GEN": "Vechta", "BEZ": "Landkreis", "id": 58}
+      "properties": {"RS": "03460", "GEN": "Vechta", "BEZ": "LK", "id": 58}
     },
     {
       "type": "Feature",
@@ -1835,7 +1835,7 @@
           ]
         ]
       },
-      "properties": {"RS": "03461", "GEN": "Wesermarsch", "BEZ": "Landkreis", "id": 59}
+      "properties": {"RS": "03461", "GEN": "Wesermarsch", "BEZ": "LK", "id": 59}
     },
     {
       "type": "Feature",
@@ -1861,7 +1861,7 @@
           ]
         ]
       },
-      "properties": {"RS": "03462", "GEN": "Wittmund", "BEZ": "Landkreis", "id": 60}
+      "properties": {"RS": "03462", "GEN": "Wittmund", "BEZ": "LK", "id": 60}
     },
     {
       "type": "Feature",
@@ -1884,7 +1884,7 @@
           ]
         ]
       },
-      "properties": {"RS": "04011", "GEN": "Bremen", "BEZ": "Kreisfreie Stadt", "id": 61}
+      "properties": {"RS": "04011", "GEN": "Bremen", "BEZ": "KS", "id": 61}
     },
     {
       "type": "Feature",
@@ -1903,7 +1903,7 @@
           ]
         ]
       },
-      "properties": {"RS": "04012", "GEN": "Bremerhaven", "BEZ": "Kreisfreie Stadt", "id": 62}
+      "properties": {"RS": "04012", "GEN": "Bremerhaven", "BEZ": "KS", "id": 62}
     },
     {
       "type": "Feature",
@@ -1924,7 +1924,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05111", "GEN": "Düsseldorf", "BEZ": "Kreisfreie Stadt", "id": 63}
+      "properties": {"RS": "05111", "GEN": "Düsseldorf", "BEZ": "KS", "id": 63}
     },
     {
       "type": "Feature",
@@ -1947,7 +1947,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05112", "GEN": "Duisburg", "BEZ": "Kreisfreie Stadt", "id": 64}
+      "properties": {"RS": "05112", "GEN": "Duisburg", "BEZ": "KS", "id": 64}
     },
     {
       "type": "Feature",
@@ -1971,7 +1971,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05113", "GEN": "Essen", "BEZ": "Kreisfreie Stadt", "id": 65}
+      "properties": {"RS": "05113", "GEN": "Essen", "BEZ": "KS", "id": 65}
     },
     {
       "type": "Feature",
@@ -1989,7 +1989,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05114", "GEN": "Krefeld", "BEZ": "Kreisfreie Stadt", "id": 66}
+      "properties": {"RS": "05114", "GEN": "Krefeld", "BEZ": "KS", "id": 66}
     },
     {
       "type": "Feature",
@@ -2007,7 +2007,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05116", "GEN": "Mönchengladbach", "BEZ": "Kreisfreie Stadt", "id": 67}
+      "properties": {"RS": "05116", "GEN": "Mönchengladbach", "BEZ": "KS", "id": 67}
     },
     {
       "type": "Feature",
@@ -2024,7 +2024,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05117", "GEN": "Mülheim an der Ruhr", "BEZ": "Kreisfreie Stadt", "id": 68}
+      "properties": {"RS": "05117", "GEN": "Mülheim an der Ruhr", "BEZ": "KS", "id": 68}
     },
     {
       "type": "Feature",
@@ -2041,7 +2041,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05119", "GEN": "Oberhausen", "BEZ": "Kreisfreie Stadt", "id": 69}
+      "properties": {"RS": "05119", "GEN": "Oberhausen", "BEZ": "KS", "id": 69}
     },
     {
       "type": "Feature",
@@ -2058,7 +2058,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05120", "GEN": "Remscheid", "BEZ": "Kreisfreie Stadt", "id": 70}
+      "properties": {"RS": "05120", "GEN": "Remscheid", "BEZ": "KS", "id": 70}
     },
     {
       "type": "Feature",
@@ -2076,7 +2076,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05122", "GEN": "Solingen", "BEZ": "Kreisfreie Stadt", "id": 71}
+      "properties": {"RS": "05122", "GEN": "Solingen", "BEZ": "KS", "id": 71}
     },
     {
       "type": "Feature",
@@ -2096,7 +2096,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05124", "GEN": "Wuppertal", "BEZ": "Kreisfreie Stadt", "id": 72}
+      "properties": {"RS": "05124", "GEN": "Wuppertal", "BEZ": "KS", "id": 72}
     },
     {
       "type": "Feature",
@@ -2131,7 +2131,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05154", "GEN": "Kleve", "BEZ": "Kreis", "id": 73}
+      "properties": {"RS": "05154", "GEN": "Kleve", "BEZ": "K", "id": 73}
     },
     {
       "type": "Feature",
@@ -2161,7 +2161,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05158", "GEN": "Mettmann", "BEZ": "Kreis", "id": 74}
+      "properties": {"RS": "05158", "GEN": "Mettmann", "BEZ": "K", "id": 74}
     },
     {
       "type": "Feature",
@@ -2186,7 +2186,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05162", "GEN": "Rhein-Kreis Neuss", "BEZ": "Kreis", "id": 75}
+      "properties": {"RS": "05162", "GEN": "Rhein-Kreis Neuss", "BEZ": "K", "id": 75}
     },
     {
       "type": "Feature",
@@ -2214,7 +2214,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05166", "GEN": "Viersen", "BEZ": "Kreis", "id": 76}
+      "properties": {"RS": "05166", "GEN": "Viersen", "BEZ": "K", "id": 76}
     },
     {
       "type": "Feature",
@@ -2246,7 +2246,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05170", "GEN": "Wesel", "BEZ": "Kreis", "id": 77}
+      "properties": {"RS": "05170", "GEN": "Wesel", "BEZ": "K", "id": 77}
     },
     {
       "type": "Feature",
@@ -2264,7 +2264,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05314", "GEN": "Bonn", "BEZ": "Kreisfreie Stadt", "id": 78}
+      "properties": {"RS": "05314", "GEN": "Bonn", "BEZ": "KS", "id": 78}
     },
     {
       "type": "Feature",
@@ -2288,7 +2288,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05315", "GEN": "Köln", "BEZ": "Kreisfreie Stadt", "id": 79}
+      "properties": {"RS": "05315", "GEN": "Köln", "BEZ": "KS", "id": 79}
     },
     {
       "type": "Feature",
@@ -2305,7 +2305,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05316", "GEN": "Leverkusen", "BEZ": "Kreisfreie Stadt", "id": 80}
+      "properties": {"RS": "05316", "GEN": "Leverkusen", "BEZ": "KS", "id": 80}
     },
     {
       "type": "Feature",
@@ -2335,7 +2335,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05334", "GEN": "Städteregion Aachen", "BEZ": "Kreis", "id": 81}
+      "properties": {"RS": "05334", "GEN": "Städteregion Aachen", "BEZ": "K", "id": 81}
     },
     {
       "type": "Feature",
@@ -2364,7 +2364,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05358", "GEN": "Düren", "BEZ": "Kreis", "id": 82}
+      "properties": {"RS": "05358", "GEN": "Düren", "BEZ": "K", "id": 82}
     },
     {
       "type": "Feature",
@@ -2390,7 +2390,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05362", "GEN": "Rhein-Erft-Kreis", "BEZ": "Kreis", "id": 83}
+      "properties": {"RS": "05362", "GEN": "Rhein-Erft-Kreis", "BEZ": "K", "id": 83}
     },
     {
       "type": "Feature",
@@ -2423,7 +2423,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05366", "GEN": "Euskirchen", "BEZ": "Kreis", "id": 84}
+      "properties": {"RS": "05366", "GEN": "Euskirchen", "BEZ": "K", "id": 84}
     },
     {
       "type": "Feature",
@@ -2449,7 +2449,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05370", "GEN": "Heinsberg", "BEZ": "Kreis", "id": 85}
+      "properties": {"RS": "05370", "GEN": "Heinsberg", "BEZ": "K", "id": 85}
     },
     {
       "type": "Feature",
@@ -2481,7 +2481,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05374", "GEN": "Oberbergischer Kreis", "BEZ": "Kreis", "id": 86}
+      "properties": {"RS": "05374", "GEN": "Oberbergischer Kreis", "BEZ": "K", "id": 86}
     },
     {
       "type": "Feature",
@@ -2509,7 +2509,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05378", "GEN": "Rheinisch-Bergischer Kreis", "BEZ": "Kreis", "id": 87}
+      "properties": {"RS": "05378", "GEN": "Rheinisch-Bergischer Kreis", "BEZ": "K", "id": 87}
     },
     {
       "type": "Feature",
@@ -2549,7 +2549,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05382", "GEN": "Rhein-Sieg-Kreis", "BEZ": "Kreis", "id": 88}
+      "properties": {"RS": "05382", "GEN": "Rhein-Sieg-Kreis", "BEZ": "K", "id": 88}
     },
     {
       "type": "Feature",
@@ -2567,7 +2567,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05512", "GEN": "Bottrop", "BEZ": "Kreisfreie Stadt", "id": 89}
+      "properties": {"RS": "05512", "GEN": "Bottrop", "BEZ": "KS", "id": 89}
     },
     {
       "type": "Feature",
@@ -2586,7 +2586,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05513", "GEN": "Gelsenkirchen", "BEZ": "Kreisfreie Stadt", "id": 90}
+      "properties": {"RS": "05513", "GEN": "Gelsenkirchen", "BEZ": "KS", "id": 90}
     },
     {
       "type": "Feature",
@@ -2606,7 +2606,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05515", "GEN": "Münster", "BEZ": "Kreisfreie Stadt", "id": 91}
+      "properties": {"RS": "05515", "GEN": "Münster", "BEZ": "KS", "id": 91}
     },
     {
       "type": "Feature",
@@ -2645,7 +2645,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05554", "GEN": "Borken", "BEZ": "Kreis", "id": 92}
+      "properties": {"RS": "05554", "GEN": "Borken", "BEZ": "K", "id": 92}
     },
     {
       "type": "Feature",
@@ -2673,7 +2673,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05558", "GEN": "Coesfeld", "BEZ": "Kreis", "id": 93}
+      "properties": {"RS": "05558", "GEN": "Coesfeld", "BEZ": "K", "id": 93}
     },
     {
       "type": "Feature",
@@ -2707,7 +2707,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05562", "GEN": "Recklinghausen", "BEZ": "Kreis", "id": 94}
+      "properties": {"RS": "05562", "GEN": "Recklinghausen", "BEZ": "K", "id": 94}
     },
     {
       "type": "Feature",
@@ -2743,7 +2743,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05566", "GEN": "Steinfurt", "BEZ": "Kreis", "id": 95}
+      "properties": {"RS": "05566", "GEN": "Steinfurt", "BEZ": "K", "id": 95}
     },
     {
       "type": "Feature",
@@ -2774,7 +2774,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05570", "GEN": "Warendorf", "BEZ": "Kreis", "id": 96}
+      "properties": {"RS": "05570", "GEN": "Warendorf", "BEZ": "K", "id": 96}
     },
     {
       "type": "Feature",
@@ -2795,7 +2795,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05711", "GEN": "Bielefeld", "BEZ": "Kreisfreie Stadt", "id": 97}
+      "properties": {"RS": "05711", "GEN": "Bielefeld", "BEZ": "KS", "id": 97}
     },
     {
       "type": "Feature",
@@ -2826,7 +2826,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05754", "GEN": "Gütersloh", "BEZ": "Kreis", "id": 98}
+      "properties": {"RS": "05754", "GEN": "Gütersloh", "BEZ": "K", "id": 98}
     },
     {
       "type": "Feature",
@@ -2850,7 +2850,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05758", "GEN": "Herford", "BEZ": "Kreis", "id": 99}
+      "properties": {"RS": "05758", "GEN": "Herford", "BEZ": "K", "id": 99}
     },
     {
       "type": "Feature",
@@ -2880,7 +2880,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05762", "GEN": "Höxter", "BEZ": "Kreis", "id": 100}
+      "properties": {"RS": "05762", "GEN": "Höxter", "BEZ": "K", "id": 100}
     },
     {
       "type": "Feature",
@@ -2915,7 +2915,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05766", "GEN": "Lippe", "BEZ": "Kreis", "id": 101}
+      "properties": {"RS": "05766", "GEN": "Lippe", "BEZ": "K", "id": 101}
     },
     {
       "type": "Feature",
@@ -2949,7 +2949,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05770", "GEN": "Minden-Lübbecke", "BEZ": "Kreis", "id": 102}
+      "properties": {"RS": "05770", "GEN": "Minden-Lübbecke", "BEZ": "K", "id": 102}
     },
     {
       "type": "Feature",
@@ -2979,7 +2979,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05774", "GEN": "Paderborn", "BEZ": "Kreis", "id": 103}
+      "properties": {"RS": "05774", "GEN": "Paderborn", "BEZ": "K", "id": 103}
     },
     {
       "type": "Feature",
@@ -2998,7 +2998,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05911", "GEN": "Bochum", "BEZ": "Kreisfreie Stadt", "id": 104}
+      "properties": {"RS": "05911", "GEN": "Bochum", "BEZ": "KS", "id": 104}
     },
     {
       "type": "Feature",
@@ -3018,7 +3018,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05913", "GEN": "Dortmund", "BEZ": "Kreisfreie Stadt", "id": 105}
+      "properties": {"RS": "05913", "GEN": "Dortmund", "BEZ": "KS", "id": 105}
     },
     {
       "type": "Feature",
@@ -3037,7 +3037,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05914", "GEN": "Hagen", "BEZ": "Kreisfreie Stadt", "id": 106}
+      "properties": {"RS": "05914", "GEN": "Hagen", "BEZ": "KS", "id": 106}
     },
     {
       "type": "Feature",
@@ -3057,7 +3057,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05915", "GEN": "Hamm", "BEZ": "Kreisfreie Stadt", "id": 107}
+      "properties": {"RS": "05915", "GEN": "Hamm", "BEZ": "KS", "id": 107}
     },
     {
       "type": "Feature",
@@ -3073,7 +3073,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05916", "GEN": "Herne", "BEZ": "Kreisfreie Stadt", "id": 108}
+      "properties": {"RS": "05916", "GEN": "Herne", "BEZ": "KS", "id": 108}
     },
     {
       "type": "Feature",
@@ -3098,7 +3098,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05954", "GEN": "Ennepe-Ruhr-Kreis", "BEZ": "Kreis", "id": 109}
+      "properties": {"RS": "05954", "GEN": "Ennepe-Ruhr-Kreis", "BEZ": "K", "id": 109}
     },
     {
       "type": "Feature",
@@ -3138,7 +3138,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05958", "GEN": "Hochsauerlandkreis", "BEZ": "Kreis", "id": 110}
+      "properties": {"RS": "05958", "GEN": "HochsauerLK", "BEZ": "K", "id": 110}
     },
     {
       "type": "Feature",
@@ -3168,7 +3168,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05962", "GEN": "Märkischer Kreis", "BEZ": "Kreis", "id": 111}
+      "properties": {"RS": "05962", "GEN": "Märkischer Kreis", "BEZ": "K", "id": 111}
     },
     {
       "type": "Feature",
@@ -3194,7 +3194,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05966", "GEN": "Olpe", "BEZ": "Kreis", "id": 112}
+      "properties": {"RS": "05966", "GEN": "Olpe", "BEZ": "K", "id": 112}
     },
     {
       "type": "Feature",
@@ -3226,7 +3226,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05970", "GEN": "Siegen-Wittgenstein", "BEZ": "Kreis", "id": 113}
+      "properties": {"RS": "05970", "GEN": "Siegen-Wittgenstein", "BEZ": "K", "id": 113}
     },
     {
       "type": "Feature",
@@ -3260,7 +3260,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05974", "GEN": "Soest", "BEZ": "Kreis", "id": 114}
+      "properties": {"RS": "05974", "GEN": "Soest", "BEZ": "K", "id": 114}
     },
     {
       "type": "Feature",
@@ -3288,7 +3288,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05978", "GEN": "Unna", "BEZ": "Kreis", "id": 115}
+      "properties": {"RS": "05978", "GEN": "Unna", "BEZ": "K", "id": 115}
     },
     {
       "type": "Feature",
@@ -3306,7 +3306,7 @@
           ]
         ]
       },
-      "properties": {"RS": "06411", "GEN": "Darmstadt", "BEZ": "Kreisfreie Stadt", "id": 116}
+      "properties": {"RS": "06411", "GEN": "Darmstadt", "BEZ": "KS", "id": 116}
     },
     {
       "type": "Feature",
@@ -3329,7 +3329,7 @@
           ]
         ]
       },
-      "properties": {"RS": "06412", "GEN": "Frankfurt am Main", "BEZ": "Kreisfreie Stadt", "id": 117}
+      "properties": {"RS": "06412", "GEN": "Frankfurt am Main", "BEZ": "KS", "id": 117}
     },
     {
       "type": "Feature",
@@ -3345,7 +3345,7 @@
           ]
         ]
       },
-      "properties": {"RS": "06413", "GEN": "Offenbach am Main", "BEZ": "Kreisfreie Stadt", "id": 118}
+      "properties": {"RS": "06413", "GEN": "Offenbach am Main", "BEZ": "KS", "id": 118}
     },
     {
       "type": "Feature",
@@ -3366,7 +3366,7 @@
           ]
         ]
       },
-      "properties": {"RS": "06414", "GEN": "Wiesbaden", "BEZ": "Kreisfreie Stadt", "id": 119}
+      "properties": {"RS": "06414", "GEN": "Wiesbaden", "BEZ": "KS", "id": 119}
     },
     {
       "type": "Feature",
@@ -3407,7 +3407,7 @@
           ]
         ]
       },
-      "properties": {"RS": "06431", "GEN": "Bergstraße", "BEZ": "Landkreis", "id": 120}
+      "properties": {"RS": "06431", "GEN": "Bergstraße", "BEZ": "LK", "id": 120}
     },
     {
       "type": "Feature",
@@ -3437,7 +3437,7 @@
           ]
         ]
       },
-      "properties": {"RS": "06432", "GEN": "Darmstadt-Dieburg", "BEZ": "Landkreis", "id": 121}
+      "properties": {"RS": "06432", "GEN": "Darmstadt-Dieburg", "BEZ": "LK", "id": 121}
     },
     {
       "type": "Feature",
@@ -3462,7 +3462,7 @@
           ]
         ]
       },
-      "properties": {"RS": "06433", "GEN": "Groß-Gerau", "BEZ": "Landkreis", "id": 122}
+      "properties": {"RS": "06433", "GEN": "Groß-Gerau", "BEZ": "LK", "id": 122}
     },
     {
       "type": "Feature",
@@ -3484,7 +3484,7 @@
           ]
         ]
       },
-      "properties": {"RS": "06434", "GEN": "Hochtaunuskreis", "BEZ": "Landkreis", "id": 123}
+      "properties": {"RS": "06434", "GEN": "Hochtaunuskreis", "BEZ": "LK", "id": 123}
     },
     {
       "type": "Feature",
@@ -3522,7 +3522,7 @@
           ]
         ]
       },
-      "properties": {"RS": "06435", "GEN": "Main-Kinzig-Kreis", "BEZ": "Landkreis", "id": 124}
+      "properties": {"RS": "06435", "GEN": "Main-Kinzig-Kreis", "BEZ": "LK", "id": 124}
     },
     {
       "type": "Feature",
@@ -3543,7 +3543,7 @@
           ]
         ]
       },
-      "properties": {"RS": "06436", "GEN": "Main-Taunus-Kreis", "BEZ": "Landkreis", "id": 125}
+      "properties": {"RS": "06436", "GEN": "Main-Taunus-Kreis", "BEZ": "LK", "id": 125}
     },
     {
       "type": "Feature",
@@ -3571,7 +3571,7 @@
           ]
         ]
       },
-      "properties": {"RS": "06437", "GEN": "Odenwaldkreis", "BEZ": "Landkreis", "id": 126}
+      "properties": {"RS": "06437", "GEN": "Odenwaldkreis", "BEZ": "LK", "id": 126}
     },
     {
       "type": "Feature",
@@ -3596,7 +3596,7 @@
           ]
         ]
       },
-      "properties": {"RS": "06438", "GEN": "Offenbach", "BEZ": "Landkreis", "id": 127}
+      "properties": {"RS": "06438", "GEN": "Offenbach", "BEZ": "LK", "id": 127}
     },
     {
       "type": "Feature",
@@ -3626,7 +3626,7 @@
           ]
         ]
       },
-      "properties": {"RS": "06439", "GEN": "Rheingau-Taunus-Kreis", "BEZ": "Landkreis", "id": 128}
+      "properties": {"RS": "06439", "GEN": "Rheingau-Taunus-Kreis", "BEZ": "LK", "id": 128}
     },
     {
       "type": "Feature",
@@ -3657,7 +3657,7 @@
           ]
         ]
       },
-      "properties": {"RS": "06440", "GEN": "Wetteraukreis", "BEZ": "Landkreis", "id": 129}
+      "properties": {"RS": "06440", "GEN": "Wetteraukreis", "BEZ": "LK", "id": 129}
     },
     {
       "type": "Feature",
@@ -3685,7 +3685,7 @@
           ]
         ]
       },
-      "properties": {"RS": "06531", "GEN": "Gießen", "BEZ": "Landkreis", "id": 130}
+      "properties": {"RS": "06531", "GEN": "Gießen", "BEZ": "LK", "id": 130}
     },
     {
       "type": "Feature",
@@ -3715,7 +3715,7 @@
           ]
         ]
       },
-      "properties": {"RS": "06532", "GEN": "Lahn-Dill-Kreis", "BEZ": "Landkreis", "id": 131}
+      "properties": {"RS": "06532", "GEN": "Lahn-Dill-Kreis", "BEZ": "LK", "id": 131}
     },
     {
       "type": "Feature",
@@ -3741,7 +3741,7 @@
           ]
         ]
       },
-      "properties": {"RS": "06533", "GEN": "Limburg-Weilburg", "BEZ": "Landkreis", "id": 132}
+      "properties": {"RS": "06533", "GEN": "Limburg-Weilburg", "BEZ": "LK", "id": 132}
     },
     {
       "type": "Feature",
@@ -3768,7 +3768,7 @@
           ]
         ]
       },
-      "properties": {"RS": "06534", "GEN": "Marburg-Biedenkopf", "BEZ": "Landkreis", "id": 133}
+      "properties": {"RS": "06534", "GEN": "Marburg-Biedenkopf", "BEZ": "LK", "id": 133}
     },
     {
       "type": "Feature",
@@ -3800,7 +3800,7 @@
           ]
         ]
       },
-      "properties": {"RS": "06535", "GEN": "Vogelsbergkreis", "BEZ": "Landkreis", "id": 134}
+      "properties": {"RS": "06535", "GEN": "Vogelsbergkreis", "BEZ": "LK", "id": 134}
     },
     {
       "type": "Feature",
@@ -3817,7 +3817,7 @@
           ]
         ]
       },
-      "properties": {"RS": "06611", "GEN": "Kassel", "BEZ": "Kreisfreie Stadt", "id": 135}
+      "properties": {"RS": "06611", "GEN": "Kassel", "BEZ": "KS", "id": 135}
     },
     {
       "type": "Feature",
@@ -3848,7 +3848,7 @@
           ]
         ]
       },
-      "properties": {"RS": "06631", "GEN": "Fulda", "BEZ": "Landkreis", "id": 136}
+      "properties": {"RS": "06631", "GEN": "Fulda", "BEZ": "LK", "id": 136}
     },
     {
       "type": "Feature",
@@ -3879,7 +3879,7 @@
           ]
         ]
       },
-      "properties": {"RS": "06632", "GEN": "Hersfeld-Rotenburg", "BEZ": "Landkreis", "id": 137}
+      "properties": {"RS": "06632", "GEN": "Hersfeld-Rotenburg", "BEZ": "LK", "id": 137}
     },
     {
       "type": "Feature",
@@ -3919,7 +3919,7 @@
           ]
         ]
       },
-      "properties": {"RS": "06633", "GEN": "Kassel", "BEZ": "Landkreis", "id": 138}
+      "properties": {"RS": "06633", "GEN": "Kassel", "BEZ": "LK", "id": 138}
     },
     {
       "type": "Feature",
@@ -3947,7 +3947,7 @@
           ]
         ]
       },
-      "properties": {"RS": "06634", "GEN": "Schwalm-Eder-Kreis", "BEZ": "Landkreis", "id": 139}
+      "properties": {"RS": "06634", "GEN": "Schwalm-Eder-Kreis", "BEZ": "LK", "id": 139}
     },
     {
       "type": "Feature",
@@ -3983,7 +3983,7 @@
           ]
         ]
       },
-      "properties": {"RS": "06635", "GEN": "Waldeck-Frankenberg", "BEZ": "Landkreis", "id": 140}
+      "properties": {"RS": "06635", "GEN": "Waldeck-Frankenberg", "BEZ": "LK", "id": 140}
     },
     {
       "type": "Feature",
@@ -4014,7 +4014,7 @@
           ]
         ]
       },
-      "properties": {"RS": "06636", "GEN": "Werra-Meißner-Kreis", "BEZ": "Landkreis", "id": 141}
+      "properties": {"RS": "06636", "GEN": "Werra-Meißner-Kreis", "BEZ": "LK", "id": 141}
     },
     {
       "type": "Feature",
@@ -4033,7 +4033,7 @@
           ]
         ]
       },
-      "properties": {"RS": "07111", "GEN": "Koblenz", "BEZ": "Kreisfreie Stadt", "id": 142}
+      "properties": {"RS": "07111", "GEN": "Koblenz", "BEZ": "KS", "id": 142}
     },
     {
       "type": "Feature",
@@ -4061,7 +4061,7 @@
           ]
         ]
       },
-      "properties": {"RS": "07131", "GEN": "Ahrweiler", "BEZ": "Landkreis", "id": 143}
+      "properties": {"RS": "07131", "GEN": "Ahrweiler", "BEZ": "LK", "id": 143}
     },
     {
       "type": "Feature",
@@ -4092,7 +4092,7 @@
           ]
         ]
       },
-      "properties": {"RS": "07132", "GEN": "Altenkirchen (Westerwald)", "BEZ": "Landkreis", "id": 144}
+      "properties": {"RS": "07132", "GEN": "Altenkirchen (Westerwald)", "BEZ": "LK", "id": 144}
     },
     {
       "type": "Feature",
@@ -4119,7 +4119,7 @@
           ]
         ]
       },
-      "properties": {"RS": "07133", "GEN": "Bad Kreuznach", "BEZ": "Landkreis", "id": 145}
+      "properties": {"RS": "07133", "GEN": "Bad Kreuznach", "BEZ": "LK", "id": 145}
     },
     {
       "type": "Feature",
@@ -4145,7 +4145,7 @@
           ]
         ]
       },
-      "properties": {"RS": "07134", "GEN": "Birkenfeld", "BEZ": "Landkreis", "id": 146}
+      "properties": {"RS": "07134", "GEN": "Birkenfeld", "BEZ": "LK", "id": 146}
     },
     {
       "type": "Feature",
@@ -4171,7 +4171,7 @@
           ]
         ]
       },
-      "properties": {"RS": "07135", "GEN": "Cochem-Zell", "BEZ": "Landkreis", "id": 147}
+      "properties": {"RS": "07135", "GEN": "Cochem-Zell", "BEZ": "LK", "id": 147}
     },
     {
       "type": "Feature",
@@ -4205,7 +4205,7 @@
           ]
         ]
       },
-      "properties": {"RS": "07137", "GEN": "Mayen-Koblenz", "BEZ": "Landkreis", "id": 148}
+      "properties": {"RS": "07137", "GEN": "Mayen-Koblenz", "BEZ": "LK", "id": 148}
     },
     {
       "type": "Feature",
@@ -4230,7 +4230,7 @@
           ]
         ]
       },
-      "properties": {"RS": "07138", "GEN": "Neuwied", "BEZ": "Landkreis", "id": 149}
+      "properties": {"RS": "07138", "GEN": "Neuwied", "BEZ": "LK", "id": 149}
     },
     {
       "type": "Feature",
@@ -4259,7 +4259,7 @@
           ]
         ]
       },
-      "properties": {"RS": "07140", "GEN": "Rhein-Hunsrück-Kreis", "BEZ": "Landkreis", "id": 150}
+      "properties": {"RS": "07140", "GEN": "Rhein-Hunsrück-Kreis", "BEZ": "LK", "id": 150}
     },
     {
       "type": "Feature",
@@ -4289,7 +4289,7 @@
           ]
         ]
       },
-      "properties": {"RS": "07141", "GEN": "Rhein-Lahn-Kreis", "BEZ": "Landkreis", "id": 151}
+      "properties": {"RS": "07141", "GEN": "Rhein-Lahn-Kreis", "BEZ": "LK", "id": 151}
     },
     {
       "type": "Feature",
@@ -4322,7 +4322,7 @@
           ]
         ]
       },
-      "properties": {"RS": "07143", "GEN": "Westerwaldkreis", "BEZ": "Landkreis", "id": 152}
+      "properties": {"RS": "07143", "GEN": "Westerwaldkreis", "BEZ": "LK", "id": 152}
     },
     {
       "type": "Feature",
@@ -4339,7 +4339,7 @@
           ]
         ]
       },
-      "properties": {"RS": "07211", "GEN": "Trier", "BEZ": "Kreisfreie Stadt", "id": 153}
+      "properties": {"RS": "07211", "GEN": "Trier", "BEZ": "KS", "id": 153}
     },
     {
       "type": "Feature",
@@ -4370,7 +4370,7 @@
           ]
         ]
       },
-      "properties": {"RS": "07231", "GEN": "Bernkastel-Wittlich", "BEZ": "Landkreis", "id": 154}
+      "properties": {"RS": "07231", "GEN": "Bernkastel-Wittlich", "BEZ": "LK", "id": 154}
     },
     {
       "type": "Feature",
@@ -4397,7 +4397,7 @@
           ]
         ]
       },
-      "properties": {"RS": "07232", "GEN": "Eifelkreis Bitburg-Prüm", "BEZ": "Landkreis", "id": 155}
+      "properties": {"RS": "07232", "GEN": "Eifelkreis Bitburg-Prüm", "BEZ": "LK", "id": 155}
     },
     {
       "type": "Feature",
@@ -4427,7 +4427,7 @@
           ]
         ]
       },
-      "properties": {"RS": "07233", "GEN": "Vulkaneifel", "BEZ": "Landkreis", "id": 156}
+      "properties": {"RS": "07233", "GEN": "Vulkaneifel", "BEZ": "LK", "id": 156}
     },
     {
       "type": "Feature",
@@ -4463,7 +4463,7 @@
           ]
         ]
       },
-      "properties": {"RS": "07235", "GEN": "Trier-Saarburg", "BEZ": "Landkreis", "id": 157}
+      "properties": {"RS": "07235", "GEN": "Trier-Saarburg", "BEZ": "LK", "id": 157}
     },
     {
       "type": "Feature",
@@ -4480,7 +4480,7 @@
           ]
         ]
       },
-      "properties": {"RS": "07311", "GEN": "Frankenthal (Pfalz)", "BEZ": "Kreisfreie Stadt", "id": 158}
+      "properties": {"RS": "07311", "GEN": "Frankenthal (Pfalz)", "BEZ": "KS", "id": 158}
     },
     {
       "type": "Feature",
@@ -4499,7 +4499,7 @@
           ]
         ]
       },
-      "properties": {"RS": "07312", "GEN": "Kaiserslautern", "BEZ": "Kreisfreie Stadt", "id": 159}
+      "properties": {"RS": "07312", "GEN": "Kaiserslautern", "BEZ": "KS", "id": 159}
     },
     {
       "type": "Feature",
@@ -4525,7 +4525,7 @@
           ]
         ]
       },
-      "properties": {"RS": "07313", "GEN": "Landau in der Pfalz", "BEZ": "Kreisfreie Stadt", "id": 160}
+      "properties": {"RS": "07313", "GEN": "Landau in der Pfalz", "BEZ": "KS", "id": 160}
     },
     {
       "type": "Feature",
@@ -4541,7 +4541,7 @@
           ]
         ]
       },
-      "properties": {"RS": "07314", "GEN": "Ludwigshafen am Rhein", "BEZ": "Kreisfreie Stadt", "id": 161}
+      "properties": {"RS": "07314", "GEN": "Ludwigshafen am Rhein", "BEZ": "KS", "id": 161}
     },
     {
       "type": "Feature",
@@ -4557,7 +4557,7 @@
           ]
         ]
       },
-      "properties": {"RS": "07315", "GEN": "Mainz", "BEZ": "Kreisfreie Stadt", "id": 162}
+      "properties": {"RS": "07315", "GEN": "Mainz", "BEZ": "KS", "id": 162}
     },
     {
       "type": "Feature",
@@ -4576,7 +4576,7 @@
           ]
         ]
       },
-      "properties": {"RS": "07316", "GEN": "Neustadt an der Weinstraße", "BEZ": "Kreisfreie Stadt", "id": 163}
+      "properties": {"RS": "07316", "GEN": "Neustadt an der Weinstraße", "BEZ": "KS", "id": 163}
     },
     {
       "type": "Feature",
@@ -4592,7 +4592,7 @@
           ]
         ]
       },
-      "properties": {"RS": "07317", "GEN": "Pirmasens", "BEZ": "Kreisfreie Stadt", "id": 164}
+      "properties": {"RS": "07317", "GEN": "Pirmasens", "BEZ": "KS", "id": 164}
     },
     {
       "type": "Feature",
@@ -4609,7 +4609,7 @@
           ]
         ]
       },
-      "properties": {"RS": "07318", "GEN": "Speyer", "BEZ": "Kreisfreie Stadt", "id": 165}
+      "properties": {"RS": "07318", "GEN": "Speyer", "BEZ": "KS", "id": 165}
     },
     {
       "type": "Feature",
@@ -4629,7 +4629,7 @@
           ]
         ]
       },
-      "properties": {"RS": "07319", "GEN": "Worms", "BEZ": "Kreisfreie Stadt", "id": 166}
+      "properties": {"RS": "07319", "GEN": "Worms", "BEZ": "KS", "id": 166}
     },
     {
       "type": "Feature",
@@ -4646,7 +4646,7 @@
           ]
         ]
       },
-      "properties": {"RS": "07320", "GEN": "Zweibrücken", "BEZ": "Kreisfreie Stadt", "id": 167}
+      "properties": {"RS": "07320", "GEN": "Zweibrücken", "BEZ": "KS", "id": 167}
     },
     {
       "type": "Feature",
@@ -4673,7 +4673,7 @@
           ]
         ]
       },
-      "properties": {"RS": "07331", "GEN": "Alzey-Worms", "BEZ": "Landkreis", "id": 168}
+      "properties": {"RS": "07331", "GEN": "Alzey-Worms", "BEZ": "LK", "id": 168}
     },
     {
       "type": "Feature",
@@ -4704,7 +4704,7 @@
           ]
         ]
       },
-      "properties": {"RS": "07332", "GEN": "Bad Dürkheim", "BEZ": "Landkreis", "id": 169}
+      "properties": {"RS": "07332", "GEN": "Bad Dürkheim", "BEZ": "LK", "id": 169}
     },
     {
       "type": "Feature",
@@ -4728,7 +4728,7 @@
           ]
         ]
       },
-      "properties": {"RS": "07333", "GEN": "Donnersbergkreis", "BEZ": "Landkreis", "id": 170}
+      "properties": {"RS": "07333", "GEN": "Donnersbergkreis", "BEZ": "LK", "id": 170}
     },
     {
       "type": "Feature",
@@ -4751,7 +4751,7 @@
           ]
         ]
       },
-      "properties": {"RS": "07334", "GEN": "Germersheim", "BEZ": "Landkreis", "id": 171}
+      "properties": {"RS": "07334", "GEN": "Germersheim", "BEZ": "LK", "id": 171}
     },
     {
       "type": "Feature",
@@ -4784,7 +4784,7 @@
           ]
         ]
       },
-      "properties": {"RS": "07335", "GEN": "Kaiserslautern", "BEZ": "Landkreis", "id": 172}
+      "properties": {"RS": "07335", "GEN": "Kaiserslautern", "BEZ": "LK", "id": 172}
     },
     {
       "type": "Feature",
@@ -4810,7 +4810,7 @@
           ]
         ]
       },
-      "properties": {"RS": "07336", "GEN": "Kusel", "BEZ": "Landkreis", "id": 173}
+      "properties": {"RS": "07336", "GEN": "Kusel", "BEZ": "LK", "id": 173}
     },
     {
       "type": "Feature",
@@ -4842,7 +4842,7 @@
           ]
         ]
       },
-      "properties": {"RS": "07337", "GEN": "Südliche Weinstraße", "BEZ": "Landkreis", "id": 174}
+      "properties": {"RS": "07337", "GEN": "Südliche Weinstraße", "BEZ": "LK", "id": 174}
     },
     {
       "type": "Feature",
@@ -4874,7 +4874,7 @@
           ]
         ]
       },
-      "properties": {"RS": "07338", "GEN": "Rhein-Pfalz-Kreis", "BEZ": "Landkreis", "id": 175}
+      "properties": {"RS": "07338", "GEN": "Rhein-Pfalz-Kreis", "BEZ": "LK", "id": 175}
     },
     {
       "type": "Feature",
@@ -4903,7 +4903,7 @@
           ]
         ]
       },
-      "properties": {"RS": "07339", "GEN": "Mainz-Bingen", "BEZ": "Landkreis", "id": 176}
+      "properties": {"RS": "07339", "GEN": "Mainz-Bingen", "BEZ": "LK", "id": 176}
     },
     {
       "type": "Feature",
@@ -4940,7 +4940,7 @@
           ]
         ]
       },
-      "properties": {"RS": "07340", "GEN": "Südwestpfalz", "BEZ": "Landkreis", "id": 177}
+      "properties": {"RS": "07340", "GEN": "Südwestpfalz", "BEZ": "LK", "id": 177}
     },
     {
       "type": "Feature",
@@ -4961,7 +4961,7 @@
           ]
         ]
       },
-      "properties": {"RS": "08111", "GEN": "Stuttgart", "BEZ": "Stadtkreis", "id": 178}
+      "properties": {"RS": "08111", "GEN": "Stuttgart", "BEZ": "SK", "id": 178}
     },
     {
       "type": "Feature",
@@ -4986,7 +4986,7 @@
           ]
         ]
       },
-      "properties": {"RS": "08115", "GEN": "Böblingen", "BEZ": "Landkreis", "id": 179}
+      "properties": {"RS": "08115", "GEN": "Böblingen", "BEZ": "LK", "id": 179}
     },
     {
       "type": "Feature",
@@ -5013,7 +5013,7 @@
           ]
         ]
       },
-      "properties": {"RS": "08116", "GEN": "Esslingen", "BEZ": "Landkreis", "id": 180}
+      "properties": {"RS": "08116", "GEN": "Esslingen", "BEZ": "LK", "id": 180}
     },
     {
       "type": "Feature",
@@ -5040,7 +5040,7 @@
           ]
         ]
       },
-      "properties": {"RS": "08117", "GEN": "Göppingen", "BEZ": "Landkreis", "id": 181}
+      "properties": {"RS": "08117", "GEN": "Göppingen", "BEZ": "LK", "id": 181}
     },
     {
       "type": "Feature",
@@ -5077,7 +5077,7 @@
           ]
         ]
       },
-      "properties": {"RS": "08118", "GEN": "Ludwigsburg", "BEZ": "Landkreis", "id": 182}
+      "properties": {"RS": "08118", "GEN": "Ludwigsburg", "BEZ": "LK", "id": 182}
     },
     {
       "type": "Feature",
@@ -5107,7 +5107,7 @@
           ]
         ]
       },
-      "properties": {"RS": "08119", "GEN": "Rems-Murr-Kreis", "BEZ": "Landkreis", "id": 183}
+      "properties": {"RS": "08119", "GEN": "Rems-Murr-Kreis", "BEZ": "LK", "id": 183}
     },
     {
       "type": "Feature",
@@ -5124,7 +5124,7 @@
           ]
         ]
       },
-      "properties": {"RS": "08121", "GEN": "Heilbronn", "BEZ": "Stadtkreis", "id": 184}
+      "properties": {"RS": "08121", "GEN": "Heilbronn", "BEZ": "SK", "id": 184}
     },
     {
       "type": "Feature",
@@ -5169,7 +5169,7 @@
           ]
         ]
       },
-      "properties": {"RS": "08125", "GEN": "Heilbronn", "BEZ": "Landkreis", "id": 185}
+      "properties": {"RS": "08125", "GEN": "Heilbronn", "BEZ": "LK", "id": 185}
     },
     {
       "type": "Feature",
@@ -5195,7 +5195,7 @@
           ]
         ]
       },
-      "properties": {"RS": "08126", "GEN": "Hohenlohekreis", "BEZ": "Landkreis", "id": 186}
+      "properties": {"RS": "08126", "GEN": "Hohenlohekreis", "BEZ": "LK", "id": 186}
     },
     {
       "type": "Feature",
@@ -5229,7 +5229,7 @@
           ]
         ]
       },
-      "properties": {"RS": "08127", "GEN": "Schwäbisch Hall", "BEZ": "Landkreis", "id": 187}
+      "properties": {"RS": "08127", "GEN": "Schwäbisch Hall", "BEZ": "LK", "id": 187}
     },
     {
       "type": "Feature",
@@ -5268,7 +5268,7 @@
           ]
         ]
       },
-      "properties": {"RS": "08128", "GEN": "Main-Tauber-Kreis", "BEZ": "Landkreis", "id": 188}
+      "properties": {"RS": "08128", "GEN": "Main-Tauber-Kreis", "BEZ": "LK", "id": 188}
     },
     {
       "type": "Feature",
@@ -5304,7 +5304,7 @@
           ]
         ]
       },
-      "properties": {"RS": "08135", "GEN": "Heidenheim", "BEZ": "Landkreis", "id": 189}
+      "properties": {"RS": "08135", "GEN": "Heidenheim", "BEZ": "LK", "id": 189}
     },
     {
       "type": "Feature",
@@ -5334,7 +5334,7 @@
           ]
         ]
       },
-      "properties": {"RS": "08136", "GEN": "Ostalbkreis", "BEZ": "Landkreis", "id": 190}
+      "properties": {"RS": "08136", "GEN": "Ostalbkreis", "BEZ": "LK", "id": 190}
     },
     {
       "type": "Feature",
@@ -5353,7 +5353,7 @@
           ]
         ]
       },
-      "properties": {"RS": "08211", "GEN": "Baden-Baden", "BEZ": "Stadtkreis", "id": 191}
+      "properties": {"RS": "08211", "GEN": "Baden-Baden", "BEZ": "SK", "id": 191}
     },
     {
       "type": "Feature",
@@ -5369,7 +5369,7 @@
           ]
         ]
       },
-      "properties": {"RS": "08212", "GEN": "Karlsruhe", "BEZ": "Stadtkreis", "id": 192}
+      "properties": {"RS": "08212", "GEN": "Karlsruhe", "BEZ": "SK", "id": 192}
     },
     {
       "type": "Feature",
@@ -5403,7 +5403,7 @@
           ]
         ]
       },
-      "properties": {"RS": "08215", "GEN": "Karlsruhe", "BEZ": "Landkreis", "id": 193}
+      "properties": {"RS": "08215", "GEN": "Karlsruhe", "BEZ": "LK", "id": 193}
     },
     {
       "type": "Feature",
@@ -5442,7 +5442,7 @@
           ]
         ]
       },
-      "properties": {"RS": "08216", "GEN": "Rastatt", "BEZ": "Landkreis", "id": 194}
+      "properties": {"RS": "08216", "GEN": "Rastatt", "BEZ": "LK", "id": 194}
     },
     {
       "type": "Feature",
@@ -5460,7 +5460,7 @@
           ]
         ]
       },
-      "properties": {"RS": "08221", "GEN": "Heidelberg", "BEZ": "Stadtkreis", "id": 195}
+      "properties": {"RS": "08221", "GEN": "Heidelberg", "BEZ": "SK", "id": 195}
     },
     {
       "type": "Feature",
@@ -5483,7 +5483,7 @@
           ]
         ]
       },
-      "properties": {"RS": "08222", "GEN": "Mannheim", "BEZ": "Stadtkreis", "id": 196}
+      "properties": {"RS": "08222", "GEN": "Mannheim", "BEZ": "SK", "id": 196}
     },
     {
       "type": "Feature",
@@ -5517,7 +5517,7 @@
           ]
         ]
       },
-      "properties": {"RS": "08225", "GEN": "Neckar-Odenwald-Kreis", "BEZ": "Landkreis", "id": 197}
+      "properties": {"RS": "08225", "GEN": "Neckar-Odenwald-Kreis", "BEZ": "LK", "id": 197}
     },
     {
       "type": "Feature",
@@ -5557,7 +5557,7 @@
           ]
         ]
       },
-      "properties": {"RS": "08226", "GEN": "Rhein-Neckar-Kreis", "BEZ": "Landkreis", "id": 198}
+      "properties": {"RS": "08226", "GEN": "Rhein-Neckar-Kreis", "BEZ": "LK", "id": 198}
     },
     {
       "type": "Feature",
@@ -5575,7 +5575,7 @@
           ]
         ]
       },
-      "properties": {"RS": "08231", "GEN": "Pforzheim", "BEZ": "Stadtkreis", "id": 199}
+      "properties": {"RS": "08231", "GEN": "Pforzheim", "BEZ": "SK", "id": 199}
     },
     {
       "type": "Feature",
@@ -5605,7 +5605,7 @@
           ]
         ]
       },
-      "properties": {"RS": "08235", "GEN": "Calw", "BEZ": "Landkreis", "id": 200}
+      "properties": {"RS": "08235", "GEN": "Calw", "BEZ": "LK", "id": 200}
     },
     {
       "type": "Feature",
@@ -5636,7 +5636,7 @@
           ]
         ]
       },
-      "properties": {"RS": "08236", "GEN": "Enzkreis", "BEZ": "Landkreis", "id": 201}
+      "properties": {"RS": "08236", "GEN": "Enzkreis", "BEZ": "LK", "id": 201}
     },
     {
       "type": "Feature",
@@ -5665,7 +5665,7 @@
           ]
         ]
       },
-      "properties": {"RS": "08237", "GEN": "Freudenstadt", "BEZ": "Landkreis", "id": 202}
+      "properties": {"RS": "08237", "GEN": "Freudenstadt", "BEZ": "LK", "id": 202}
     },
     {
       "type": "Feature",
@@ -5686,7 +5686,7 @@
           ]
         ]
       },
-      "properties": {"RS": "08311", "GEN": "Freiburg im Breisgau", "BEZ": "Stadtkreis", "id": 203}
+      "properties": {"RS": "08311", "GEN": "Freiburg im Breisgau", "BEZ": "SK", "id": 203}
     },
     {
       "type": "Feature",
@@ -5725,7 +5725,7 @@
           ]
         ]
       },
-      "properties": {"RS": "08315", "GEN": "Breisgau-Hochschwarzwald", "BEZ": "Landkreis", "id": 204}
+      "properties": {"RS": "08315", "GEN": "Breisgau-Hochschwarzwald", "BEZ": "LK", "id": 204}
     },
     {
       "type": "Feature",
@@ -5751,7 +5751,7 @@
           ]
         ]
       },
-      "properties": {"RS": "08316", "GEN": "Emmendingen", "BEZ": "Landkreis", "id": 205}
+      "properties": {"RS": "08316", "GEN": "Emmendingen", "BEZ": "LK", "id": 205}
     },
     {
       "type": "Feature",
@@ -5783,7 +5783,7 @@
           ]
         ]
       },
-      "properties": {"RS": "08317", "GEN": "Ortenaukreis", "BEZ": "Landkreis", "id": 206}
+      "properties": {"RS": "08317", "GEN": "Ortenaukreis", "BEZ": "LK", "id": 206}
     },
     {
       "type": "Feature",
@@ -5809,7 +5809,7 @@
           ]
         ]
       },
-      "properties": {"RS": "08325", "GEN": "Rottweil", "BEZ": "Landkreis", "id": 207}
+      "properties": {"RS": "08325", "GEN": "Rottweil", "BEZ": "LK", "id": 207}
     },
     {
       "type": "Feature",
@@ -5838,7 +5838,7 @@
           ]
         ]
       },
-      "properties": {"RS": "08326", "GEN": "Schwarzwald-Baar-Kreis", "BEZ": "Landkreis", "id": 208}
+      "properties": {"RS": "08326", "GEN": "Schwarzwald-Baar-Kreis", "BEZ": "LK", "id": 208}
     },
     {
       "type": "Feature",
@@ -5863,7 +5863,7 @@
           ]
         ]
       },
-      "properties": {"RS": "08327", "GEN": "Tuttlingen", "BEZ": "Landkreis", "id": 209}
+      "properties": {"RS": "08327", "GEN": "Tuttlingen", "BEZ": "LK", "id": 209}
     },
     {
       "type": "Feature",
@@ -5895,7 +5895,7 @@
           ]
         ]
       },
-      "properties": {"RS": "08335", "GEN": "Konstanz", "BEZ": "Landkreis", "id": 210}
+      "properties": {"RS": "08335", "GEN": "Konstanz", "BEZ": "LK", "id": 210}
     },
     {
       "type": "Feature",
@@ -5918,7 +5918,7 @@
           ]
         ]
       },
-      "properties": {"RS": "08336", "GEN": "Lörrach", "BEZ": "Landkreis", "id": 211}
+      "properties": {"RS": "08336", "GEN": "Lörrach", "BEZ": "LK", "id": 211}
     },
     {
       "type": "Feature",
@@ -5952,7 +5952,7 @@
           ]
         ]
       },
-      "properties": {"RS": "08337", "GEN": "Waldshut", "BEZ": "Landkreis", "id": 212}
+      "properties": {"RS": "08337", "GEN": "Waldshut", "BEZ": "LK", "id": 212}
     },
     {
       "type": "Feature",
@@ -5984,7 +5984,7 @@
           ]
         ]
       },
-      "properties": {"RS": "08415", "GEN": "Reutlingen", "BEZ": "Landkreis", "id": 213}
+      "properties": {"RS": "08415", "GEN": "Reutlingen", "BEZ": "LK", "id": 213}
     },
     {
       "type": "Feature",
@@ -6007,7 +6007,7 @@
           ]
         ]
       },
-      "properties": {"RS": "08416", "GEN": "Tübingen", "BEZ": "Landkreis", "id": 214}
+      "properties": {"RS": "08416", "GEN": "Tübingen", "BEZ": "LK", "id": 214}
     },
     {
       "type": "Feature",
@@ -6035,7 +6035,7 @@
           ]
         ]
       },
-      "properties": {"RS": "08417", "GEN": "Zollernalbkreis", "BEZ": "Landkreis", "id": 215}
+      "properties": {"RS": "08417", "GEN": "Zollernalbkreis", "BEZ": "LK", "id": 215}
     },
     {
       "type": "Feature",
@@ -6052,7 +6052,7 @@
           ]
         ]
       },
-      "properties": {"RS": "08421", "GEN": "Ulm", "BEZ": "Stadtkreis", "id": 216}
+      "properties": {"RS": "08421", "GEN": "Ulm", "BEZ": "SK", "id": 216}
     },
     {
       "type": "Feature",
@@ -6090,7 +6090,7 @@
           ]
         ]
       },
-      "properties": {"RS": "08425", "GEN": "Alb-Donau-Kreis", "BEZ": "Landkreis", "id": 217}
+      "properties": {"RS": "08425", "GEN": "Alb-Donau-Kreis", "BEZ": "LK", "id": 217}
     },
     {
       "type": "Feature",
@@ -6126,7 +6126,7 @@
           ]
         ]
       },
-      "properties": {"RS": "08426", "GEN": "Biberach", "BEZ": "Landkreis", "id": 218}
+      "properties": {"RS": "08426", "GEN": "Biberach", "BEZ": "LK", "id": 218}
     },
     {
       "type": "Feature",
@@ -6151,7 +6151,7 @@
           ]
         ]
       },
-      "properties": {"RS": "08435", "GEN": "Bodenseekreis", "BEZ": "Landkreis", "id": 219}
+      "properties": {"RS": "08435", "GEN": "Bodenseekreis", "BEZ": "LK", "id": 219}
     },
     {
       "type": "Feature",
@@ -6188,7 +6188,7 @@
           ]
         ]
       },
-      "properties": {"RS": "08436", "GEN": "Ravensburg", "BEZ": "Landkreis", "id": 220}
+      "properties": {"RS": "08436", "GEN": "Ravensburg", "BEZ": "LK", "id": 220}
     },
     {
       "type": "Feature",
@@ -6220,7 +6220,7 @@
           ]
         ]
       },
-      "properties": {"RS": "08437", "GEN": "Sigmaringen", "BEZ": "Landkreis", "id": 221}
+      "properties": {"RS": "08437", "GEN": "Sigmaringen", "BEZ": "LK", "id": 221}
     },
     {
       "type": "Feature",
@@ -6239,7 +6239,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09161", "GEN": "Ingolstadt", "BEZ": "Kreisfreie Stadt", "id": 222}
+      "properties": {"RS": "09161", "GEN": "Ingolstadt", "BEZ": "KS", "id": 222}
     },
     {
       "type": "Feature",
@@ -6262,7 +6262,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09162", "GEN": "München", "BEZ": "Kreisfreie Stadt", "id": 223}
+      "properties": {"RS": "09162", "GEN": "München", "BEZ": "KS", "id": 223}
     },
     {
       "type": "Feature",
@@ -6278,7 +6278,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09163", "GEN": "Rosenheim", "BEZ": "Kreisfreie Stadt", "id": 224}
+      "properties": {"RS": "09163", "GEN": "Rosenheim", "BEZ": "KS", "id": 224}
     },
     {
       "type": "Feature",
@@ -6300,7 +6300,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09171", "GEN": "Altötting", "BEZ": "Landkreis", "id": 225}
+      "properties": {"RS": "09171", "GEN": "Altötting", "BEZ": "LK", "id": 225}
     },
     {
       "type": "Feature",
@@ -6330,7 +6330,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09172", "GEN": "Berchtesgadener Land", "BEZ": "Landkreis", "id": 226}
+      "properties": {"RS": "09172", "GEN": "Berchtesgadener Land", "BEZ": "LK", "id": 226}
     },
     {
       "type": "Feature",
@@ -6360,7 +6360,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09173", "GEN": "Bad Tölz-Wolfratshausen", "BEZ": "Landkreis", "id": 227}
+      "properties": {"RS": "09173", "GEN": "Bad Tölz-Wolfratshausen", "BEZ": "LK", "id": 227}
     },
     {
       "type": "Feature",
@@ -6383,7 +6383,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09174", "GEN": "Dachau", "BEZ": "Landkreis", "id": 228}
+      "properties": {"RS": "09174", "GEN": "Dachau", "BEZ": "LK", "id": 228}
     },
     {
       "type": "Feature",
@@ -6408,7 +6408,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09175", "GEN": "Ebersberg", "BEZ": "Landkreis", "id": 229}
+      "properties": {"RS": "09175", "GEN": "Ebersberg", "BEZ": "LK", "id": 229}
     },
     {
       "type": "Feature",
@@ -6440,7 +6440,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09176", "GEN": "Eichstätt", "BEZ": "Landkreis", "id": 230}
+      "properties": {"RS": "09176", "GEN": "Eichstätt", "BEZ": "LK", "id": 230}
     },
     {
       "type": "Feature",
@@ -6463,7 +6463,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09177", "GEN": "Erding", "BEZ": "Landkreis", "id": 231}
+      "properties": {"RS": "09177", "GEN": "Erding", "BEZ": "LK", "id": 231}
     },
     {
       "type": "Feature",
@@ -6489,7 +6489,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09178", "GEN": "Freising", "BEZ": "Landkreis", "id": 232}
+      "properties": {"RS": "09178", "GEN": "Freising", "BEZ": "LK", "id": 232}
     },
     {
       "type": "Feature",
@@ -6513,7 +6513,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09179", "GEN": "Fürstenfeldbruck", "BEZ": "Landkreis", "id": 233}
+      "properties": {"RS": "09179", "GEN": "Fürstenfeldbruck", "BEZ": "LK", "id": 233}
     },
     {
       "type": "Feature",
@@ -6542,7 +6542,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09180", "GEN": "Garmisch-Partenkirchen", "BEZ": "Landkreis", "id": 234}
+      "properties": {"RS": "09180", "GEN": "Garmisch-Partenkirchen", "BEZ": "LK", "id": 234}
     },
     {
       "type": "Feature",
@@ -6568,7 +6568,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09181", "GEN": "Landsberg am Lech", "BEZ": "Landkreis", "id": 235}
+      "properties": {"RS": "09181", "GEN": "Landsberg am Lech", "BEZ": "LK", "id": 235}
     },
     {
       "type": "Feature",
@@ -6596,7 +6596,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09182", "GEN": "Miesbach", "BEZ": "Landkreis", "id": 236}
+      "properties": {"RS": "09182", "GEN": "Miesbach", "BEZ": "LK", "id": 236}
     },
     {
       "type": "Feature",
@@ -6623,7 +6623,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09183", "GEN": "Mühldorf a. Inn", "BEZ": "Landkreis", "id": 237}
+      "properties": {"RS": "09183", "GEN": "Mühldorf a. Inn", "BEZ": "LK", "id": 237}
     },
     {
       "type": "Feature",
@@ -6659,7 +6659,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09184", "GEN": "München", "BEZ": "Landkreis", "id": 238}
+      "properties": {"RS": "09184", "GEN": "München", "BEZ": "LK", "id": 238}
     },
     {
       "type": "Feature",
@@ -6683,7 +6683,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09185", "GEN": "Neuburg-Schrobenhausen", "BEZ": "Landkreis", "id": 239}
+      "properties": {"RS": "09185", "GEN": "Neuburg-Schrobenhausen", "BEZ": "LK", "id": 239}
     },
     {
       "type": "Feature",
@@ -6712,7 +6712,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09186", "GEN": "Pfaffenhofen a.d. Ilm", "BEZ": "Landkreis", "id": 240}
+      "properties": {"RS": "09186", "GEN": "Pfaffenhofen a.d. Ilm", "BEZ": "LK", "id": 240}
     },
     {
       "type": "Feature",
@@ -6758,7 +6758,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09187", "GEN": "Rosenheim", "BEZ": "Landkreis", "id": 241}
+      "properties": {"RS": "09187", "GEN": "Rosenheim", "BEZ": "LK", "id": 241}
     },
     {
       "type": "Feature",
@@ -6781,7 +6781,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09188", "GEN": "Starnberg", "BEZ": "Landkreis", "id": 242}
+      "properties": {"RS": "09188", "GEN": "Starnberg", "BEZ": "LK", "id": 242}
     },
     {
       "type": "Feature",
@@ -6817,7 +6817,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09189", "GEN": "Traunstein", "BEZ": "Landkreis", "id": 243}
+      "properties": {"RS": "09189", "GEN": "Traunstein", "BEZ": "LK", "id": 243}
     },
     {
       "type": "Feature",
@@ -6847,7 +6847,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09190", "GEN": "Weilheim-Schongau", "BEZ": "Landkreis", "id": 244}
+      "properties": {"RS": "09190", "GEN": "Weilheim-Schongau", "BEZ": "LK", "id": 244}
     },
     {
       "type": "Feature",
@@ -6862,7 +6862,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09261", "GEN": "Landshut", "BEZ": "Kreisfreie Stadt", "id": 245}
+      "properties": {"RS": "09261", "GEN": "Landshut", "BEZ": "KS", "id": 245}
     },
     {
       "type": "Feature",
@@ -6878,7 +6878,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09262", "GEN": "Passau", "BEZ": "Kreisfreie Stadt", "id": 246}
+      "properties": {"RS": "09262", "GEN": "Passau", "BEZ": "KS", "id": 246}
     },
     {
       "type": "Feature",
@@ -6894,7 +6894,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09263", "GEN": "Straubing", "BEZ": "Kreisfreie Stadt", "id": 247}
+      "properties": {"RS": "09263", "GEN": "Straubing", "BEZ": "KS", "id": 247}
     },
     {
       "type": "Feature",
@@ -6922,7 +6922,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09271", "GEN": "Deggendorf", "BEZ": "Landkreis", "id": 248}
+      "properties": {"RS": "09271", "GEN": "Deggendorf", "BEZ": "LK", "id": 248}
     },
     {
       "type": "Feature",
@@ -6949,7 +6949,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09272", "GEN": "Freyung-Grafenau", "BEZ": "Landkreis", "id": 249}
+      "properties": {"RS": "09272", "GEN": "Freyung-Grafenau", "BEZ": "LK", "id": 249}
     },
     {
       "type": "Feature",
@@ -6977,7 +6977,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09273", "GEN": "Kelheim", "BEZ": "Landkreis", "id": 250}
+      "properties": {"RS": "09273", "GEN": "Kelheim", "BEZ": "LK", "id": 250}
     },
     {
       "type": "Feature",
@@ -7013,7 +7013,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09274", "GEN": "Landshut", "BEZ": "Landkreis", "id": 251}
+      "properties": {"RS": "09274", "GEN": "Landshut", "BEZ": "LK", "id": 251}
     },
     {
       "type": "Feature",
@@ -7048,7 +7048,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09275", "GEN": "Passau", "BEZ": "Landkreis", "id": 252}
+      "properties": {"RS": "09275", "GEN": "Passau", "BEZ": "LK", "id": 252}
     },
     {
       "type": "Feature",
@@ -7075,7 +7075,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09276", "GEN": "Regen", "BEZ": "Landkreis", "id": 253}
+      "properties": {"RS": "09276", "GEN": "Regen", "BEZ": "LK", "id": 253}
     },
     {
       "type": "Feature",
@@ -7107,7 +7107,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09277", "GEN": "Rottal-Inn", "BEZ": "Landkreis", "id": 254}
+      "properties": {"RS": "09277", "GEN": "Rottal-Inn", "BEZ": "LK", "id": 254}
     },
     {
       "type": "Feature",
@@ -7141,7 +7141,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09278", "GEN": "Straubing-Bogen", "BEZ": "Landkreis", "id": 255}
+      "properties": {"RS": "09278", "GEN": "Straubing-Bogen", "BEZ": "LK", "id": 255}
     },
     {
       "type": "Feature",
@@ -7170,7 +7170,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09279", "GEN": "Dingolfing-Landau", "BEZ": "Landkreis", "id": 256}
+      "properties": {"RS": "09279", "GEN": "Dingolfing-Landau", "BEZ": "LK", "id": 256}
     },
     {
       "type": "Feature",
@@ -7186,7 +7186,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09361", "GEN": "Amberg", "BEZ": "Kreisfreie Stadt", "id": 257}
+      "properties": {"RS": "09361", "GEN": "Amberg", "BEZ": "KS", "id": 257}
     },
     {
       "type": "Feature",
@@ -7202,7 +7202,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09362", "GEN": "Regensburg", "BEZ": "Kreisfreie Stadt", "id": 258}
+      "properties": {"RS": "09362", "GEN": "Regensburg", "BEZ": "KS", "id": 258}
     },
     {
       "type": "Feature",
@@ -7219,7 +7219,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09363", "GEN": "Weiden i.d. OPf.", "BEZ": "Kreisfreie Stadt", "id": 259}
+      "properties": {"RS": "09363", "GEN": "Weiden i.d. OPf.", "BEZ": "KS", "id": 259}
     },
     {
       "type": "Feature",
@@ -7261,7 +7261,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09371", "GEN": "Amberg-Sulzbach", "BEZ": "Landkreis", "id": 260}
+      "properties": {"RS": "09371", "GEN": "Amberg-Sulzbach", "BEZ": "LK", "id": 260}
     },
     {
       "type": "Feature",
@@ -7294,7 +7294,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09372", "GEN": "Cham", "BEZ": "Landkreis", "id": 261}
+      "properties": {"RS": "09372", "GEN": "Cham", "BEZ": "LK", "id": 261}
     },
     {
       "type": "Feature",
@@ -7331,7 +7331,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09373", "GEN": "Neumarkt i.d. OPf.", "BEZ": "Landkreis", "id": 262}
+      "properties": {"RS": "09373", "GEN": "Neumarkt i.d. OPf.", "BEZ": "LK", "id": 262}
     },
     {
       "type": "Feature",
@@ -7372,7 +7372,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09374", "GEN": "Neustadt a.d. Waldnaab", "BEZ": "Landkreis", "id": 263}
+      "properties": {"RS": "09374", "GEN": "Neustadt a.d. Waldnaab", "BEZ": "LK", "id": 263}
     },
     {
       "type": "Feature",
@@ -7415,7 +7415,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09375", "GEN": "Regensburg", "BEZ": "Landkreis", "id": 264}
+      "properties": {"RS": "09375", "GEN": "Regensburg", "BEZ": "LK", "id": 264}
     },
     {
       "type": "Feature",
@@ -7450,7 +7450,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09376", "GEN": "Schwandorf", "BEZ": "Landkreis", "id": 265}
+      "properties": {"RS": "09376", "GEN": "Schwandorf", "BEZ": "LK", "id": 265}
     },
     {
       "type": "Feature",
@@ -7478,7 +7478,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09377", "GEN": "Tirschenreuth", "BEZ": "Landkreis", "id": 266}
+      "properties": {"RS": "09377", "GEN": "Tirschenreuth", "BEZ": "LK", "id": 266}
     },
     {
       "type": "Feature",
@@ -7493,7 +7493,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09461", "GEN": "Bamberg", "BEZ": "Kreisfreie Stadt", "id": 267}
+      "properties": {"RS": "09461", "GEN": "Bamberg", "BEZ": "KS", "id": 267}
     },
     {
       "type": "Feature",
@@ -7509,7 +7509,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09462", "GEN": "Bayreuth", "BEZ": "Kreisfreie Stadt", "id": 268}
+      "properties": {"RS": "09462", "GEN": "Bayreuth", "BEZ": "KS", "id": 268}
     },
     {
       "type": "Feature",
@@ -7525,7 +7525,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09463", "GEN": "Coburg", "BEZ": "Kreisfreie Stadt", "id": 269}
+      "properties": {"RS": "09463", "GEN": "Coburg", "BEZ": "KS", "id": 269}
     },
     {
       "type": "Feature",
@@ -7541,7 +7541,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09464", "GEN": "Hof", "BEZ": "Kreisfreie Stadt", "id": 270}
+      "properties": {"RS": "09464", "GEN": "Hof", "BEZ": "KS", "id": 270}
     },
     {
       "type": "Feature",
@@ -7580,7 +7580,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09471", "GEN": "Bamberg", "BEZ": "Landkreis", "id": 271}
+      "properties": {"RS": "09471", "GEN": "Bamberg", "BEZ": "LK", "id": 271}
     },
     {
       "type": "Feature",
@@ -7621,7 +7621,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09472", "GEN": "Bayreuth", "BEZ": "Landkreis", "id": 272}
+      "properties": {"RS": "09472", "GEN": "Bayreuth", "BEZ": "LK", "id": 272}
     },
     {
       "type": "Feature",
@@ -7657,7 +7657,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09473", "GEN": "Coburg", "BEZ": "Landkreis", "id": 273}
+      "properties": {"RS": "09473", "GEN": "Coburg", "BEZ": "LK", "id": 273}
     },
     {
       "type": "Feature",
@@ -7679,7 +7679,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09474", "GEN": "Forchheim", "BEZ": "Landkreis", "id": 274}
+      "properties": {"RS": "09474", "GEN": "Forchheim", "BEZ": "LK", "id": 274}
     },
     {
       "type": "Feature",
@@ -7714,7 +7714,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09475", "GEN": "Hof", "BEZ": "Landkreis", "id": 275}
+      "properties": {"RS": "09475", "GEN": "Hof", "BEZ": "LK", "id": 275}
     },
     {
       "type": "Feature",
@@ -7739,7 +7739,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09476", "GEN": "Kronach", "BEZ": "Landkreis", "id": 276}
+      "properties": {"RS": "09476", "GEN": "Kronach", "BEZ": "LK", "id": 276}
     },
     {
       "type": "Feature",
@@ -7760,7 +7760,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09477", "GEN": "Kulmbach", "BEZ": "Landkreis", "id": 277}
+      "properties": {"RS": "09477", "GEN": "Kulmbach", "BEZ": "LK", "id": 277}
     },
     {
       "type": "Feature",
@@ -7782,7 +7782,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09478", "GEN": "Lichtenfels", "BEZ": "Landkreis", "id": 278}
+      "properties": {"RS": "09478", "GEN": "Lichtenfels", "BEZ": "LK", "id": 278}
     },
     {
       "type": "Feature",
@@ -7805,7 +7805,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09479", "GEN": "Wunsiedel i. Fichtelgebirge", "BEZ": "Landkreis", "id": 279}
+      "properties": {"RS": "09479", "GEN": "Wunsiedel i. Fichtelgebirge", "BEZ": "LK", "id": 279}
     },
     {
       "type": "Feature",
@@ -7822,7 +7822,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09561", "GEN": "Ansbach", "BEZ": "Kreisfreie Stadt", "id": 280}
+      "properties": {"RS": "09561", "GEN": "Ansbach", "BEZ": "KS", "id": 280}
     },
     {
       "type": "Feature",
@@ -7840,7 +7840,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09562", "GEN": "Erlangen", "BEZ": "Kreisfreie Stadt", "id": 281}
+      "properties": {"RS": "09562", "GEN": "Erlangen", "BEZ": "KS", "id": 281}
     },
     {
       "type": "Feature",
@@ -7857,7 +7857,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09563", "GEN": "Fürth", "BEZ": "Kreisfreie Stadt", "id": 282}
+      "properties": {"RS": "09563", "GEN": "Fürth", "BEZ": "KS", "id": 282}
     },
     {
       "type": "Feature",
@@ -7880,7 +7880,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09564", "GEN": "Nürnberg", "BEZ": "Kreisfreie Stadt", "id": 283}
+      "properties": {"RS": "09564", "GEN": "Nürnberg", "BEZ": "KS", "id": 283}
     },
     {
       "type": "Feature",
@@ -7895,7 +7895,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09565", "GEN": "Schwabach", "BEZ": "Kreisfreie Stadt", "id": 284}
+      "properties": {"RS": "09565", "GEN": "Schwabach", "BEZ": "KS", "id": 284}
     },
     {
       "type": "Feature",
@@ -7938,7 +7938,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09571", "GEN": "Ansbach", "BEZ": "Landkreis", "id": 285}
+      "properties": {"RS": "09571", "GEN": "Ansbach", "BEZ": "LK", "id": 285}
     },
     {
       "type": "Feature",
@@ -7969,7 +7969,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09572", "GEN": "Erlangen-Höchstadt", "BEZ": "Landkreis", "id": 286}
+      "properties": {"RS": "09572", "GEN": "Erlangen-Höchstadt", "BEZ": "LK", "id": 286}
     },
     {
       "type": "Feature",
@@ -7990,7 +7990,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09573", "GEN": "Fürth", "BEZ": "Landkreis", "id": 287}
+      "properties": {"RS": "09573", "GEN": "Fürth", "BEZ": "LK", "id": 287}
     },
     {
       "type": "Feature",
@@ -8019,7 +8019,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09574", "GEN": "Nürnberger Land", "BEZ": "Landkreis", "id": 288}
+      "properties": {"RS": "09574", "GEN": "Nürnberger Land", "BEZ": "LK", "id": 288}
     },
     {
       "type": "Feature",
@@ -8053,7 +8053,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09575", "GEN": "Neustadt a.d. Aisch-Bad Windsheim", "BEZ": "Landkreis", "id": 289}
+      "properties": {"RS": "09575", "GEN": "Neustadt a.d. Aisch-Bad Windsheim", "BEZ": "LK", "id": 289}
     },
     {
       "type": "Feature",
@@ -8085,7 +8085,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09576", "GEN": "Roth", "BEZ": "Landkreis", "id": 290}
+      "properties": {"RS": "09576", "GEN": "Roth", "BEZ": "LK", "id": 290}
     },
     {
       "type": "Feature",
@@ -8110,7 +8110,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09577", "GEN": "Weißenburg-Gunzenhausen", "BEZ": "Landkreis", "id": 291}
+      "properties": {"RS": "09577", "GEN": "Weißenburg-Gunzenhausen", "BEZ": "LK", "id": 291}
     },
     {
       "type": "Feature",
@@ -8126,7 +8126,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09661", "GEN": "Aschaffenburg", "BEZ": "Kreisfreie Stadt", "id": 292}
+      "properties": {"RS": "09661", "GEN": "Aschaffenburg", "BEZ": "KS", "id": 292}
     },
     {
       "type": "Feature",
@@ -8141,7 +8141,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09662", "GEN": "Schweinfurt", "BEZ": "Kreisfreie Stadt", "id": 293}
+      "properties": {"RS": "09662", "GEN": "Schweinfurt", "BEZ": "KS", "id": 293}
     },
     {
       "type": "Feature",
@@ -8158,7 +8158,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09663", "GEN": "Würzburg", "BEZ": "Kreisfreie Stadt", "id": 294}
+      "properties": {"RS": "09663", "GEN": "Würzburg", "BEZ": "KS", "id": 294}
     },
     {
       "type": "Feature",
@@ -8188,7 +8188,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09671", "GEN": "Aschaffenburg", "BEZ": "Landkreis", "id": 295}
+      "properties": {"RS": "09671", "GEN": "Aschaffenburg", "BEZ": "LK", "id": 295}
     },
     {
       "type": "Feature",
@@ -8221,7 +8221,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09672", "GEN": "Bad Kissingen", "BEZ": "Landkreis", "id": 296}
+      "properties": {"RS": "09672", "GEN": "Bad Kissingen", "BEZ": "LK", "id": 296}
     },
     {
       "type": "Feature",
@@ -8250,7 +8250,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09673", "GEN": "Rhön-Grabfeld", "BEZ": "Landkreis", "id": 297}
+      "properties": {"RS": "09673", "GEN": "Rhön-Grabfeld", "BEZ": "LK", "id": 297}
     },
     {
       "type": "Feature",
@@ -8279,7 +8279,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09674", "GEN": "Haßberge", "BEZ": "Landkreis", "id": 298}
+      "properties": {"RS": "09674", "GEN": "Haßberge", "BEZ": "LK", "id": 298}
     },
     {
       "type": "Feature",
@@ -8306,7 +8306,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09675", "GEN": "Kitzingen", "BEZ": "Landkreis", "id": 299}
+      "properties": {"RS": "09675", "GEN": "Kitzingen", "BEZ": "LK", "id": 299}
     },
     {
       "type": "Feature",
@@ -8336,7 +8336,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09676", "GEN": "Miltenberg", "BEZ": "Landkreis", "id": 300}
+      "properties": {"RS": "09676", "GEN": "Miltenberg", "BEZ": "LK", "id": 300}
     },
     {
       "type": "Feature",
@@ -8369,7 +8369,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09677", "GEN": "Main-Spessart", "BEZ": "Landkreis", "id": 301}
+      "properties": {"RS": "09677", "GEN": "Main-Spessart", "BEZ": "LK", "id": 301}
     },
     {
       "type": "Feature",
@@ -8406,7 +8406,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09678", "GEN": "Schweinfurt", "BEZ": "Landkreis", "id": 302}
+      "properties": {"RS": "09678", "GEN": "Schweinfurt", "BEZ": "LK", "id": 302}
     },
     {
       "type": "Feature",
@@ -8445,7 +8445,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09679", "GEN": "Würzburg", "BEZ": "Landkreis", "id": 303}
+      "properties": {"RS": "09679", "GEN": "Würzburg", "BEZ": "LK", "id": 303}
     },
     {
       "type": "Feature",
@@ -8465,7 +8465,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09761", "GEN": "Augsburg", "BEZ": "Kreisfreie Stadt", "id": 304}
+      "properties": {"RS": "09761", "GEN": "Augsburg", "BEZ": "KS", "id": 304}
     },
     {
       "type": "Feature",
@@ -8480,7 +8480,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09762", "GEN": "Kaufbeuren", "BEZ": "Kreisfreie Stadt", "id": 305}
+      "properties": {"RS": "09762", "GEN": "Kaufbeuren", "BEZ": "KS", "id": 305}
     },
     {
       "type": "Feature",
@@ -8497,7 +8497,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09763", "GEN": "Kempten (Allgäu)", "BEZ": "Kreisfreie Stadt", "id": 306}
+      "properties": {"RS": "09763", "GEN": "Kempten (Allgäu)", "BEZ": "KS", "id": 306}
     },
     {
       "type": "Feature",
@@ -8516,7 +8516,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09764", "GEN": "Memmingen", "BEZ": "Kreisfreie Stadt", "id": 307}
+      "properties": {"RS": "09764", "GEN": "Memmingen", "BEZ": "KS", "id": 307}
     },
     {
       "type": "Feature",
@@ -8547,7 +8547,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09771", "GEN": "Aichach-Friedberg", "BEZ": "Landkreis", "id": 308}
+      "properties": {"RS": "09771", "GEN": "Aichach-Friedberg", "BEZ": "LK", "id": 308}
     },
     {
       "type": "Feature",
@@ -8581,7 +8581,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09772", "GEN": "Augsburg", "BEZ": "Landkreis", "id": 309}
+      "properties": {"RS": "09772", "GEN": "Augsburg", "BEZ": "LK", "id": 309}
     },
     {
       "type": "Feature",
@@ -8610,7 +8610,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09773", "GEN": "Dillingen a.d. Donau", "BEZ": "Landkreis", "id": 310}
+      "properties": {"RS": "09773", "GEN": "Dillingen a.d. Donau", "BEZ": "LK", "id": 310}
     },
     {
       "type": "Feature",
@@ -8641,7 +8641,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09774", "GEN": "Günzburg", "BEZ": "Landkreis", "id": 311}
+      "properties": {"RS": "09774", "GEN": "Günzburg", "BEZ": "LK", "id": 311}
     },
     {
       "type": "Feature",
@@ -8665,7 +8665,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09775", "GEN": "Neu-Ulm", "BEZ": "Landkreis", "id": 312}
+      "properties": {"RS": "09775", "GEN": "Neu-Ulm", "BEZ": "LK", "id": 312}
     },
     {
       "type": "Feature",
@@ -8689,7 +8689,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09776", "GEN": "Lindau (Bodensee)", "BEZ": "Landkreis", "id": 313}
+      "properties": {"RS": "09776", "GEN": "Lindau (Bodensee)", "BEZ": "LK", "id": 313}
     },
     {
       "type": "Feature",
@@ -8735,7 +8735,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09777", "GEN": "Ostallgäu", "BEZ": "Landkreis", "id": 314}
+      "properties": {"RS": "09777", "GEN": "Ostallgäu", "BEZ": "LK", "id": 314}
     },
     {
       "type": "Feature",
@@ -8768,7 +8768,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09778", "GEN": "Unterallgäu", "BEZ": "Landkreis", "id": 315}
+      "properties": {"RS": "09778", "GEN": "Unterallgäu", "BEZ": "LK", "id": 315}
     },
     {
       "type": "Feature",
@@ -8798,7 +8798,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09779", "GEN": "Donau-Ries", "BEZ": "Landkreis", "id": 316}
+      "properties": {"RS": "09779", "GEN": "Donau-Ries", "BEZ": "LK", "id": 316}
     },
     {
       "type": "Feature",
@@ -8839,7 +8839,7 @@
           ]
         ]
       },
-      "properties": {"RS": "09780", "GEN": "Oberallgäu", "BEZ": "Landkreis", "id": 317}
+      "properties": {"RS": "09780", "GEN": "Oberallgäu", "BEZ": "LK", "id": 317}
     },
     {
       "type": "Feature",
@@ -8866,7 +8866,7 @@
           ]
         ]
       },
-      "properties": {"RS": "10041", "GEN": "Regionalverband Saarbrücken", "BEZ": "Landkreis", "id": 318}
+      "properties": {"RS": "10041", "GEN": "Regionalverband Saarbrücken", "BEZ": "LK", "id": 318}
     },
     {
       "type": "Feature",
@@ -8890,7 +8890,7 @@
           ]
         ]
       },
-      "properties": {"RS": "10042", "GEN": "Merzig-Wadern", "BEZ": "Landkreis", "id": 319}
+      "properties": {"RS": "10042", "GEN": "Merzig-Wadern", "BEZ": "LK", "id": 319}
     },
     {
       "type": "Feature",
@@ -8913,7 +8913,7 @@
           ]
         ]
       },
-      "properties": {"RS": "10043", "GEN": "Neunkirchen", "BEZ": "Landkreis", "id": 320}
+      "properties": {"RS": "10043", "GEN": "Neunkirchen", "BEZ": "LK", "id": 320}
     },
     {
       "type": "Feature",
@@ -8937,7 +8937,7 @@
           ]
         ]
       },
-      "properties": {"RS": "10044", "GEN": "Saarlouis", "BEZ": "Landkreis", "id": 321}
+      "properties": {"RS": "10044", "GEN": "Saarlouis", "BEZ": "LK", "id": 321}
     },
     {
       "type": "Feature",
@@ -8965,7 +8965,7 @@
           ]
         ]
       },
-      "properties": {"RS": "10045", "GEN": "Saarpfalz-Kreis", "BEZ": "Landkreis", "id": 322}
+      "properties": {"RS": "10045", "GEN": "Saarpfalz-Kreis", "BEZ": "LK", "id": 322}
     },
     {
       "type": "Feature",
@@ -8988,7 +8988,7 @@
           ]
         ]
       },
-      "properties": {"RS": "10046", "GEN": "St. Wendel", "BEZ": "Landkreis", "id": 323}
+      "properties": {"RS": "10046", "GEN": "St. Wendel", "BEZ": "LK", "id": 323}
     },
     {
       "type": "Feature",
@@ -9018,7 +9018,7 @@
           ]
         ]
       },
-      "properties": {"RS": "11000", "GEN": "Berlin", "BEZ": "Kreisfreie Stadt", "id": 324}
+      "properties": {"RS": "11000", "GEN": "Berlin", "BEZ": "KS", "id": 324}
     },
     {
       "type": "Feature",
@@ -9047,7 +9047,7 @@
           ]
         ]
       },
-      "properties": {"RS": "12051", "GEN": "Brandenburg an der Havel", "BEZ": "Kreisfreie Stadt", "id": 325}
+      "properties": {"RS": "12051", "GEN": "Brandenburg an der Havel", "BEZ": "KS", "id": 325}
     },
     {
       "type": "Feature",
@@ -9066,7 +9066,7 @@
           ]
         ]
       },
-      "properties": {"RS": "12052", "GEN": "Cottbus", "BEZ": "Kreisfreie Stadt", "id": 326}
+      "properties": {"RS": "12052", "GEN": "Cottbus", "BEZ": "KS", "id": 326}
     },
     {
       "type": "Feature",
@@ -9083,7 +9083,7 @@
           ]
         ]
       },
-      "properties": {"RS": "12053", "GEN": "Frankfurt (Oder)", "BEZ": "Kreisfreie Stadt", "id": 327}
+      "properties": {"RS": "12053", "GEN": "Frankfurt (Oder)", "BEZ": "KS", "id": 327}
     },
     {
       "type": "Feature",
@@ -9105,7 +9105,7 @@
           ]
         ]
       },
-      "properties": {"RS": "12054", "GEN": "Potsdam", "BEZ": "Kreisfreie Stadt", "id": 328}
+      "properties": {"RS": "12054", "GEN": "Potsdam", "BEZ": "KS", "id": 328}
     },
     {
       "type": "Feature",
@@ -9140,7 +9140,7 @@
           ]
         ]
       },
-      "properties": {"RS": "12060", "GEN": "Barnim", "BEZ": "Landkreis", "id": 329}
+      "properties": {"RS": "12060", "GEN": "Barnim", "BEZ": "LK", "id": 329}
     },
     {
       "type": "Feature",
@@ -9189,7 +9189,7 @@
           ]
         ]
       },
-      "properties": {"RS": "12061", "GEN": "Dahme-Spreewald", "BEZ": "Landkreis", "id": 330}
+      "properties": {"RS": "12061", "GEN": "Dahme-Spreewald", "BEZ": "LK", "id": 330}
     },
     {
       "type": "Feature",
@@ -9221,7 +9221,7 @@
           ]
         ]
       },
-      "properties": {"RS": "12062", "GEN": "Elbe-Elster", "BEZ": "Landkreis", "id": 331}
+      "properties": {"RS": "12062", "GEN": "Elbe-Elster", "BEZ": "LK", "id": 331}
     },
     {
       "type": "Feature",
@@ -9264,7 +9264,7 @@
           ]
         ]
       },
-      "properties": {"RS": "12063", "GEN": "Havelland", "BEZ": "Landkreis", "id": 332}
+      "properties": {"RS": "12063", "GEN": "Havelland", "BEZ": "LK", "id": 332}
     },
     {
       "type": "Feature",
@@ -9302,7 +9302,7 @@
           ]
         ]
       },
-      "properties": {"RS": "12064", "GEN": "Märkisch-Oderland", "BEZ": "Landkreis", "id": 333}
+      "properties": {"RS": "12064", "GEN": "Märkisch-Oderland", "BEZ": "LK", "id": 333}
     },
     {
       "type": "Feature",
@@ -9338,7 +9338,7 @@
           ]
         ]
       },
-      "properties": {"RS": "12065", "GEN": "Oberhavel", "BEZ": "Landkreis", "id": 334}
+      "properties": {"RS": "12065", "GEN": "Oberhavel", "BEZ": "LK", "id": 334}
     },
     {
       "type": "Feature",
@@ -9366,7 +9366,7 @@
           ]
         ]
       },
-      "properties": {"RS": "12066", "GEN": "Oberspreewald-Lausitz", "BEZ": "Landkreis", "id": 335}
+      "properties": {"RS": "12066", "GEN": "Oberspreewald-Lausitz", "BEZ": "LK", "id": 335}
     },
     {
       "type": "Feature",
@@ -9409,7 +9409,7 @@
           ]
         ]
       },
-      "properties": {"RS": "12067", "GEN": "Oder-Spree", "BEZ": "Landkreis", "id": 336}
+      "properties": {"RS": "12067", "GEN": "Oder-Spree", "BEZ": "LK", "id": 336}
     },
     {
       "type": "Feature",
@@ -9451,7 +9451,7 @@
           ]
         ]
       },
-      "properties": {"RS": "12068", "GEN": "Ostprignitz-Ruppin", "BEZ": "Landkreis", "id": 337}
+      "properties": {"RS": "12068", "GEN": "Ostprignitz-Ruppin", "BEZ": "LK", "id": 337}
     },
     {
       "type": "Feature",
@@ -9506,7 +9506,7 @@
           ]
         ]
       },
-      "properties": {"RS": "12069", "GEN": "Potsdam-Mittelmark", "BEZ": "Landkreis", "id": 338}
+      "properties": {"RS": "12069", "GEN": "Potsdam-Mittelmark", "BEZ": "LK", "id": 338}
     },
     {
       "type": "Feature",
@@ -9543,7 +9543,7 @@
           ]
         ]
       },
-      "properties": {"RS": "12070", "GEN": "Prignitz", "BEZ": "Landkreis", "id": 339}
+      "properties": {"RS": "12070", "GEN": "Prignitz", "BEZ": "LK", "id": 339}
     },
     {
       "type": "Feature",
@@ -9587,7 +9587,7 @@
           ]
         ]
       },
-      "properties": {"RS": "12071", "GEN": "Spree-Neiße", "BEZ": "Landkreis", "id": 340}
+      "properties": {"RS": "12071", "GEN": "Spree-Neiße", "BEZ": "LK", "id": 340}
     },
     {
       "type": "Feature",
@@ -9627,7 +9627,7 @@
           ]
         ]
       },
-      "properties": {"RS": "12072", "GEN": "Teltow-Fläming", "BEZ": "Landkreis", "id": 341}
+      "properties": {"RS": "12072", "GEN": "Teltow-Fläming", "BEZ": "LK", "id": 341}
     },
     {
       "type": "Feature",
@@ -9673,7 +9673,7 @@
           ]
         ]
       },
-      "properties": {"RS": "12073", "GEN": "Uckermark", "BEZ": "Landkreis", "id": 342}
+      "properties": {"RS": "12073", "GEN": "Uckermark", "BEZ": "LK", "id": 342}
     },
     {
       "type": "Feature",
@@ -9693,7 +9693,7 @@
           ]
         ]
       },
-      "properties": {"RS": "13003", "GEN": "Rostock", "BEZ": "Kreisfreie Stadt", "id": 343}
+      "properties": {"RS": "13003", "GEN": "Rostock", "BEZ": "KS", "id": 343}
     },
     {
       "type": "Feature",
@@ -9712,7 +9712,7 @@
           ]
         ]
       },
-      "properties": {"RS": "13004", "GEN": "Schwerin", "BEZ": "Kreisfreie Stadt", "id": 344}
+      "properties": {"RS": "13004", "GEN": "Schwerin", "BEZ": "KS", "id": 344}
     },
     {
       "type": "Feature",
@@ -9761,7 +9761,7 @@
           ]
         ]
       },
-      "properties": {"RS": "13071", "GEN": "Mecklenburgische Seenplatte", "BEZ": "Landkreis", "id": 345}
+      "properties": {"RS": "13071", "GEN": "Mecklenburgische Seenplatte", "BEZ": "LK", "id": 345}
     },
     {
       "type": "Feature",
@@ -9808,7 +9808,7 @@
           ]
         ]
       },
-      "properties": {"RS": "13072", "GEN": "Rostock", "BEZ": "Landkreis", "id": 346}
+      "properties": {"RS": "13072", "GEN": "Rostock", "BEZ": "LK", "id": 346}
     },
     {
       "type": "Feature",
@@ -9891,7 +9891,7 @@
           ]
         ]
       },
-      "properties": {"RS": "13073", "GEN": "Vorpommern-Rügen", "BEZ": "Landkreis", "id": 347}
+      "properties": {"RS": "13073", "GEN": "Vorpommern-Rügen", "BEZ": "LK", "id": 347}
     },
     {
       "type": "Feature",
@@ -9943,7 +9943,7 @@
           ]
         ]
       },
-      "properties": {"RS": "13074", "GEN": "Nordwestmecklenburg", "BEZ": "Landkreis", "id": 348}
+      "properties": {"RS": "13074", "GEN": "Nordwestmecklenburg", "BEZ": "LK", "id": 348}
     },
     {
       "type": "Feature",
@@ -10012,7 +10012,7 @@
           ]
         ]
       },
-      "properties": {"RS": "13075", "GEN": "Vorpommern-Greifswald", "BEZ": "Landkreis", "id": 349}
+      "properties": {"RS": "13075", "GEN": "Vorpommern-Greifswald", "BEZ": "LK", "id": 349}
     },
     {
       "type": "Feature",
@@ -10070,7 +10070,7 @@
           ]
         ]
       },
-      "properties": {"RS": "13076", "GEN": "Ludwigslust-Parchim", "BEZ": "Landkreis", "id": 350}
+      "properties": {"RS": "13076", "GEN": "Ludwigslust-Parchim", "BEZ": "LK", "id": 350}
     },
     {
       "type": "Feature",
@@ -10089,7 +10089,7 @@
           ]
         ]
       },
-      "properties": {"RS": "14511", "GEN": "Chemnitz", "BEZ": "Kreisfreie Stadt", "id": 351}
+      "properties": {"RS": "14511", "GEN": "Chemnitz", "BEZ": "KS", "id": 351}
     },
     {
       "type": "Feature",
@@ -10125,7 +10125,7 @@
           ]
         ]
       },
-      "properties": {"RS": "14521", "GEN": "Erzgebirgskreis", "BEZ": "Landkreis", "id": 352}
+      "properties": {"RS": "14521", "GEN": "Erzgebirgskreis", "BEZ": "LK", "id": 352}
     },
     {
       "type": "Feature",
@@ -10163,7 +10163,7 @@
           ]
         ]
       },
-      "properties": {"RS": "14522", "GEN": "Mittelsachsen", "BEZ": "Landkreis", "id": 353}
+      "properties": {"RS": "14522", "GEN": "Mittelsachsen", "BEZ": "LK", "id": 353}
     },
     {
       "type": "Feature",
@@ -10196,7 +10196,7 @@
           ]
         ]
       },
-      "properties": {"RS": "14523", "GEN": "Vogtlandkreis", "BEZ": "Landkreis", "id": 354}
+      "properties": {"RS": "14523", "GEN": "VogtLK", "BEZ": "LK", "id": 354}
     },
     {
       "type": "Feature",
@@ -10224,7 +10224,7 @@
           ]
         ]
       },
-      "properties": {"RS": "14524", "GEN": "Zwickau", "BEZ": "Landkreis", "id": 355}
+      "properties": {"RS": "14524", "GEN": "Zwickau", "BEZ": "LK", "id": 355}
     },
     {
       "type": "Feature",
@@ -10244,7 +10244,7 @@
           ]
         ]
       },
-      "properties": {"RS": "14612", "GEN": "Dresden", "BEZ": "Kreisfreie Stadt", "id": 356}
+      "properties": {"RS": "14612", "GEN": "Dresden", "BEZ": "KS", "id": 356}
     },
     {
       "type": "Feature",
@@ -10279,7 +10279,7 @@
           ]
         ]
       },
-      "properties": {"RS": "14625", "GEN": "Bautzen", "BEZ": "Landkreis", "id": 357}
+      "properties": {"RS": "14625", "GEN": "Bautzen", "BEZ": "LK", "id": 357}
     },
     {
       "type": "Feature",
@@ -10315,7 +10315,7 @@
           ]
         ]
       },
-      "properties": {"RS": "14626", "GEN": "Görlitz", "BEZ": "Landkreis", "id": 358}
+      "properties": {"RS": "14626", "GEN": "Görlitz", "BEZ": "LK", "id": 358}
     },
     {
       "type": "Feature",
@@ -10344,7 +10344,7 @@
           ]
         ]
       },
-      "properties": {"RS": "14627", "GEN": "Meißen", "BEZ": "Landkreis", "id": 359}
+      "properties": {"RS": "14627", "GEN": "Meißen", "BEZ": "LK", "id": 359}
     },
     {
       "type": "Feature",
@@ -10375,7 +10375,7 @@
           ]
         ]
       },
-      "properties": {"RS": "14628", "GEN": "Sächsische Schweiz-Osterzgebirge", "BEZ": "Landkreis", "id": 360}
+      "properties": {"RS": "14628", "GEN": "Sächsische Schweiz-Osterzgebirge", "BEZ": "LK", "id": 360}
     },
     {
       "type": "Feature",
@@ -10395,7 +10395,7 @@
           ]
         ]
       },
-      "properties": {"RS": "14713", "GEN": "Leipzig", "BEZ": "Kreisfreie Stadt", "id": 361}
+      "properties": {"RS": "14713", "GEN": "Leipzig", "BEZ": "KS", "id": 361}
     },
     {
       "type": "Feature",
@@ -10430,7 +10430,7 @@
           ]
         ]
       },
-      "properties": {"RS": "14729", "GEN": "Leipzig", "BEZ": "Landkreis", "id": 362}
+      "properties": {"RS": "14729", "GEN": "Leipzig", "BEZ": "LK", "id": 362}
     },
     {
       "type": "Feature",
@@ -10469,7 +10469,7 @@
           ]
         ]
       },
-      "properties": {"RS": "14730", "GEN": "Nordsachsen", "BEZ": "Landkreis", "id": 363}
+      "properties": {"RS": "14730", "GEN": "Nordsachsen", "BEZ": "LK", "id": 363}
     },
     {
       "type": "Feature",
@@ -10491,7 +10491,7 @@
           ]
         ]
       },
-      "properties": {"RS": "15001", "GEN": "Dessau-Roßlau", "BEZ": "Kreisfreie Stadt", "id": 364}
+      "properties": {"RS": "15001", "GEN": "Dessau-Roßlau", "BEZ": "KS", "id": 364}
     },
     {
       "type": "Feature",
@@ -10508,7 +10508,7 @@
           ]
         ]
       },
-      "properties": {"RS": "15002", "GEN": "Halle (Saale)", "BEZ": "Kreisfreie Stadt", "id": 365}
+      "properties": {"RS": "15002", "GEN": "Halle (Saale)", "BEZ": "KS", "id": 365}
     },
     {
       "type": "Feature",
@@ -10527,7 +10527,7 @@
           ]
         ]
       },
-      "properties": {"RS": "15003", "GEN": "Magdeburg", "BEZ": "Kreisfreie Stadt", "id": 366}
+      "properties": {"RS": "15003", "GEN": "Magdeburg", "BEZ": "KS", "id": 366}
     },
     {
       "type": "Feature",
@@ -10560,7 +10560,7 @@
           ]
         ]
       },
-      "properties": {"RS": "15081", "GEN": "Altmarkkreis Salzwedel", "BEZ": "Landkreis", "id": 367}
+      "properties": {"RS": "15081", "GEN": "Altmarkkreis Salzwedel", "BEZ": "LK", "id": 367}
     },
     {
       "type": "Feature",
@@ -10598,7 +10598,7 @@
           ]
         ]
       },
-      "properties": {"RS": "15082", "GEN": "Anhalt-Bitterfeld", "BEZ": "Landkreis", "id": 368}
+      "properties": {"RS": "15082", "GEN": "Anhalt-Bitterfeld", "BEZ": "LK", "id": 368}
     },
     {
       "type": "Feature",
@@ -10643,7 +10643,7 @@
           ]
         ]
       },
-      "properties": {"RS": "15083", "GEN": "Börde", "BEZ": "Landkreis", "id": 369}
+      "properties": {"RS": "15083", "GEN": "Börde", "BEZ": "LK", "id": 369}
     },
     {
       "type": "Feature",
@@ -10677,7 +10677,7 @@
           ]
         ]
       },
-      "properties": {"RS": "15084", "GEN": "Burgenlandkreis", "BEZ": "Landkreis", "id": 370}
+      "properties": {"RS": "15084", "GEN": "BurgenLK", "BEZ": "LK", "id": 370}
     },
     {
       "type": "Feature",
@@ -10709,7 +10709,7 @@
           ]
         ]
       },
-      "properties": {"RS": "15085", "GEN": "Harz", "BEZ": "Landkreis", "id": 371}
+      "properties": {"RS": "15085", "GEN": "Harz", "BEZ": "LK", "id": 371}
     },
     {
       "type": "Feature",
@@ -10744,7 +10744,7 @@
           ]
         ]
       },
-      "properties": {"RS": "15086", "GEN": "Jerichower Land", "BEZ": "Landkreis", "id": 372}
+      "properties": {"RS": "15086", "GEN": "Jerichower Land", "BEZ": "LK", "id": 372}
     },
     {
       "type": "Feature",
@@ -10781,7 +10781,7 @@
           ]
         ]
       },
-      "properties": {"RS": "15087", "GEN": "Mansfeld-Südharz", "BEZ": "Landkreis", "id": 373}
+      "properties": {"RS": "15087", "GEN": "Mansfeld-Südharz", "BEZ": "LK", "id": 373}
     },
     {
       "type": "Feature",
@@ -10825,7 +10825,7 @@
           ]
         ]
       },
-      "properties": {"RS": "15088", "GEN": "Saalekreis", "BEZ": "Landkreis", "id": 374}
+      "properties": {"RS": "15088", "GEN": "Saalekreis", "BEZ": "LK", "id": 374}
     },
     {
       "type": "Feature",
@@ -10856,7 +10856,7 @@
           ]
         ]
       },
-      "properties": {"RS": "15089", "GEN": "Salzlandkreis", "BEZ": "Landkreis", "id": 375}
+      "properties": {"RS": "15089", "GEN": "SalzLK", "BEZ": "LK", "id": 375}
     },
     {
       "type": "Feature",
@@ -10898,7 +10898,7 @@
           ]
         ]
       },
-      "properties": {"RS": "15090", "GEN": "Stendal", "BEZ": "Landkreis", "id": 376}
+      "properties": {"RS": "15090", "GEN": "Stendal", "BEZ": "LK", "id": 376}
     },
     {
       "type": "Feature",
@@ -10933,7 +10933,7 @@
           ]
         ]
       },
-      "properties": {"RS": "15091", "GEN": "Wittenberg", "BEZ": "Landkreis", "id": 377}
+      "properties": {"RS": "15091", "GEN": "Wittenberg", "BEZ": "LK", "id": 377}
     },
     {
       "type": "Feature",
@@ -10954,7 +10954,7 @@
           ]
         ]
       },
-      "properties": {"RS": "16051", "GEN": "Erfurt", "BEZ": "Kreisfreie Stadt", "id": 378}
+      "properties": {"RS": "16051", "GEN": "Erfurt", "BEZ": "KS", "id": 378}
     },
     {
       "type": "Feature",
@@ -10972,7 +10972,7 @@
           ]
         ]
       },
-      "properties": {"RS": "16052", "GEN": "Gera", "BEZ": "Kreisfreie Stadt", "id": 379}
+      "properties": {"RS": "16052", "GEN": "Gera", "BEZ": "KS", "id": 379}
     },
     {
       "type": "Feature",
@@ -10990,7 +10990,7 @@
           ]
         ]
       },
-      "properties": {"RS": "16053", "GEN": "Jena", "BEZ": "Kreisfreie Stadt", "id": 380}
+      "properties": {"RS": "16053", "GEN": "Jena", "BEZ": "KS", "id": 380}
     },
     {
       "type": "Feature",
@@ -11009,7 +11009,7 @@
           ]
         ]
       },
-      "properties": {"RS": "16054", "GEN": "Suhl", "BEZ": "Kreisfreie Stadt", "id": 381}
+      "properties": {"RS": "16054", "GEN": "Suhl", "BEZ": "KS", "id": 381}
     },
     {
       "type": "Feature",
@@ -11025,7 +11025,7 @@
           ]
         ]
       },
-      "properties": {"RS": "16055", "GEN": "Weimar", "BEZ": "Kreisfreie Stadt", "id": 382}
+      "properties": {"RS": "16055", "GEN": "Weimar", "BEZ": "KS", "id": 382}
     },
     {
       "type": "Feature",
@@ -11044,7 +11044,7 @@
           ]
         ]
       },
-      "properties": {"RS": "16056", "GEN": "Eisenach", "BEZ": "Kreisfreie Stadt", "id": 383}
+      "properties": {"RS": "16056", "GEN": "Eisenach", "BEZ": "KS", "id": 383}
     },
     {
       "type": "Feature",
@@ -11073,7 +11073,7 @@
           ]
         ]
       },
-      "properties": {"RS": "16061", "GEN": "Eichsfeld", "BEZ": "Landkreis", "id": 384}
+      "properties": {"RS": "16061", "GEN": "Eichsfeld", "BEZ": "LK", "id": 384}
     },
     {
       "type": "Feature",
@@ -11098,7 +11098,7 @@
           ]
         ]
       },
-      "properties": {"RS": "16062", "GEN": "Nordhausen", "BEZ": "Landkreis", "id": 385}
+      "properties": {"RS": "16062", "GEN": "Nordhausen", "BEZ": "LK", "id": 385}
     },
     {
       "type": "Feature",
@@ -11139,7 +11139,7 @@
           ]
         ]
       },
-      "properties": {"RS": "16063", "GEN": "Wartburgkreis", "BEZ": "Landkreis", "id": 386}
+      "properties": {"RS": "16063", "GEN": "Wartburgkreis", "BEZ": "LK", "id": 386}
     },
     {
       "type": "Feature",
@@ -11167,7 +11167,7 @@
           ]
         ]
       },
-      "properties": {"RS": "16064", "GEN": "Unstrut-Hainich-Kreis", "BEZ": "Landkreis", "id": 387}
+      "properties": {"RS": "16064", "GEN": "Unstrut-Hainich-Kreis", "BEZ": "LK", "id": 387}
     },
     {
       "type": "Feature",
@@ -11201,7 +11201,7 @@
           ]
         ]
       },
-      "properties": {"RS": "16065", "GEN": "Kyffhäuserkreis", "BEZ": "Landkreis", "id": 388}
+      "properties": {"RS": "16065", "GEN": "Kyffhäuserkreis", "BEZ": "LK", "id": 388}
     },
     {
       "type": "Feature",
@@ -11235,7 +11235,7 @@
           ]
         ]
       },
-      "properties": {"RS": "16066", "GEN": "Schmalkalden-Meiningen", "BEZ": "Landkreis", "id": 389}
+      "properties": {"RS": "16066", "GEN": "Schmalkalden-Meiningen", "BEZ": "LK", "id": 389}
     },
     {
       "type": "Feature",
@@ -11263,7 +11263,7 @@
           ]
         ]
       },
-      "properties": {"RS": "16067", "GEN": "Gotha", "BEZ": "Landkreis", "id": 390}
+      "properties": {"RS": "16067", "GEN": "Gotha", "BEZ": "LK", "id": 390}
     },
     {
       "type": "Feature",
@@ -11290,7 +11290,7 @@
           ]
         ]
       },
-      "properties": {"RS": "16068", "GEN": "Sömmerda", "BEZ": "Landkreis", "id": 391}
+      "properties": {"RS": "16068", "GEN": "Sömmerda", "BEZ": "LK", "id": 391}
     },
     {
       "type": "Feature",
@@ -11324,7 +11324,7 @@
           ]
         ]
       },
-      "properties": {"RS": "16069", "GEN": "Hildburghausen", "BEZ": "Landkreis", "id": 392}
+      "properties": {"RS": "16069", "GEN": "Hildburghausen", "BEZ": "LK", "id": 392}
     },
     {
       "type": "Feature",
@@ -11351,7 +11351,7 @@
           ]
         ]
       },
-      "properties": {"RS": "16070", "GEN": "Ilm-Kreis", "BEZ": "Landkreis", "id": 393}
+      "properties": {"RS": "16070", "GEN": "Ilm-Kreis", "BEZ": "LK", "id": 393}
     },
     {
       "type": "Feature",
@@ -11383,7 +11383,7 @@
           ]
         ]
       },
-      "properties": {"RS": "16071", "GEN": "Weimarer Land", "BEZ": "Landkreis", "id": 394}
+      "properties": {"RS": "16071", "GEN": "Weimarer Land", "BEZ": "LK", "id": 394}
     },
     {
       "type": "Feature",
@@ -11405,7 +11405,7 @@
           ]
         ]
       },
-      "properties": {"RS": "16072", "GEN": "Sonneberg", "BEZ": "Landkreis", "id": 395}
+      "properties": {"RS": "16072", "GEN": "Sonneberg", "BEZ": "LK", "id": 395}
     },
     {
       "type": "Feature",
@@ -11434,7 +11434,7 @@
           ]
         ]
       },
-      "properties": {"RS": "16073", "GEN": "Saalfeld-Rudolstadt", "BEZ": "Landkreis", "id": 396}
+      "properties": {"RS": "16073", "GEN": "Saalfeld-Rudolstadt", "BEZ": "LK", "id": 396}
     },
     {
       "type": "Feature",
@@ -11463,7 +11463,7 @@
           ]
         ]
       },
-      "properties": {"RS": "16074", "GEN": "Saale-Holzland-Kreis", "BEZ": "Landkreis", "id": 397}
+      "properties": {"RS": "16074", "GEN": "Saale-Holzland-Kreis", "BEZ": "LK", "id": 397}
     },
     {
       "type": "Feature",
@@ -11493,7 +11493,7 @@
           ]
         ]
       },
-      "properties": {"RS": "16075", "GEN": "Saale-Orla-Kreis", "BEZ": "Landkreis", "id": 398}
+      "properties": {"RS": "16075", "GEN": "Saale-Orla-Kreis", "BEZ": "LK", "id": 398}
     },
     {
       "type": "Feature",
@@ -11526,7 +11526,7 @@
           ]
         ]
       },
-      "properties": {"RS": "16076", "GEN": "Greiz", "BEZ": "Landkreis", "id": 399}
+      "properties": {"RS": "16076", "GEN": "Greiz", "BEZ": "LK", "id": 399}
     },
     {
       "type": "Feature",
@@ -11550,7 +11550,7 @@
           ]
         ]
       },
-      "properties": {"RS": "16077", "GEN": "Altenburger Land", "BEZ": "Landkreis", "id": 400}
+      "properties": {"RS": "16077", "GEN": "Altenburger Land", "BEZ": "LK", "id": 400}
     }
   ]
 }

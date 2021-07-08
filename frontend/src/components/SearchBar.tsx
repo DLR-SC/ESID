@@ -4,9 +4,6 @@ import {createStyles, fade, Theme, makeStyles} from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
 import {useTranslation} from 'react-i18next';
 
-
-/* The Search bar component help Zoom in on a specific region of the Map */
-
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     searchContainer: {
@@ -53,9 +50,10 @@ const useStyles = makeStyles((theme: Theme) =>
         },
       },
     },
-  })
+  }),
 );
 
+/** The Search bar component help Zoom in on a specific region of the Map */
 export default function SearchBar(): JSX.Element {
   const {t} = useTranslation('global');
   const classes = useStyles();
