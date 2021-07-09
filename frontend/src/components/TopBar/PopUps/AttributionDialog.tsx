@@ -61,12 +61,14 @@ export default function AttributionDialog(): JSX.Element {
     });
   }
 
+  /** A loading circle that is displayed while the attributions are downloaded. */
   function LoadingCircle(): JSX.Element {
     return <Grid container direction='row' alignItems='center' justify='center'>
       <CircularProgress disableShrink />
     </Grid>;
   }
 
+  /** The main content of the dialog containing all attributions. They are loaded lazily. */
   function AttributionList(props: {attrib: Array<string>}): JSX.Element {
     return <>
       {props.attrib.map((a: string, i) => <LazyLoad key={i}><ReactMarkdown>{a}</ReactMarkdown></LazyLoad>)}
