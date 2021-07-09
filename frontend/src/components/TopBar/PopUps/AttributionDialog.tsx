@@ -36,10 +36,8 @@ export default function AttributionDialog(): JSX.Element {
     void fetch('assets/third-party-attributions.json').then(async response => {
       const json = await response.json() as (Array<DependencyData>);
 
-      // We prebuild a single markdown string. It is more performant to have one markdown renderer render all text at
-      // once than having hundreds of markdown renderers render each entry separate.
-      const list: Array<string> = [];
-      json.forEach((lib: DependencyData) => {
+      // For each library we create a markdown string.
+      ATTRIBUTIONS_CACHE = json.map((lib: DependencyData) => {
         let tmp = '';
         tmp += '\n\n---\n\n';
         tmp += `# __${lib.name}__ ${lib.version || ''}\n`;
@@ -54,9 +52,8 @@ export default function AttributionDialog(): JSX.Element {
           // the library names.
           tmp += `${lib.licenseText.replace(/#+/g, substring => '#'.repeat(substring.length + 1))}\n\n`;
         }
-        list.push(tmp);
+        return tmp;
       });
-      ATTRIBUTIONS_CACHE = list;
       setAttributions(ATTRIBUTIONS_CACHE);
     });
   }
