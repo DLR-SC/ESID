@@ -4,6 +4,7 @@ import {act, render, screen} from '@testing-library/react';
 import i18n from '../../../../util/i18nForTests';
 
 import {I18nextProvider} from 'react-i18next';
+import { forceVisible } from 'react-lazyload';
 import ApplicationMenu from '../../../../components/TopBar/ApplicationMenu';
 
 describe('AttributionDialog', () => {
@@ -47,6 +48,9 @@ describe('AttributionDialog', () => {
     await act(async () => {
       expect(global.fetch).toBeCalledWith('assets/third-party-attributions.json');
     });
+
+    // Forces the lazy loaded components to load. This is needed, since there is no viewport, that would trigger a load.
+    await act(async () => forceVisible());
 
     // Ensure that all information is displayed.
     await act(async () => {

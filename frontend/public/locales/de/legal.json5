@@ -899,7 +899,7 @@
       Die Zusammenarbeit rund um den Globus ist heute stärker als je zuvor.\
       Wir möchten uns ausdrücklich bei allen bedanken, die an den nachfolgenden Softwarebibliotheken gearbeitet haben.\
       Ihr macht großartige Arbeit!',
-    authors: 'Author(en)',
+    authors: 'Autor(en)',
     repository: 'Repository'
   },
 }

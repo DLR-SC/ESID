@@ -3,6 +3,7 @@ import React, {useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {CircularProgress, Grid, makeStyles, Typography} from '@material-ui/core';
 import ReactMarkdown from 'react-markdown';
+import LazyLoad from 'react-lazyload';
 
 interface DependencyData {
   name: string;
@@ -20,7 +21,7 @@ const useStyles = makeStyles({
   },
 });
 
-let ATTRIBUTIONS_CACHE = '';
+let ATTRIBUTIONS_CACHE: Array<string> | null = null;
 
 /**
  * This component displays third-party attributions.
@@ -31,14 +32,13 @@ export default function AttributionDialog(): JSX.Element {
   const classes = useStyles();
 
   // The data should be fetched only once, since it is really slow.
-  if (ATTRIBUTIONS_CACHE === '') {
+  if (ATTRIBUTIONS_CACHE === null) {
     void fetch('assets/third-party-attributions.json').then(async response => {
       const json = await response.json() as (Array<DependencyData>);
 
-      // We prebuild a single markdown string. It is more performant to have one markdown renderer render all text at
-      // once than having hundreds of markdown renderers render each entry separate.
-      let tmp = '';
-      json.forEach((lib: DependencyData) => {
+      // For each library we create a markdown string.
+      ATTRIBUTIONS_CACHE = json.map((lib: DependencyData) => {
+        let tmp = '';
         tmp += '\n\n---\n\n';
         tmp += `# __${lib.name}__ ${lib.version || ''}\n`;
         if (lib.authors) {
@@ -52,10 +52,24 @@ export default function AttributionDialog(): JSX.Element {
           // the library names.
           tmp += `${lib.licenseText.replace(/#+/g, substring => '#'.repeat(substring.length + 1))}\n\n`;
         }
+        return tmp;
       });
-      ATTRIBUTIONS_CACHE = tmp;
       setAttributions(ATTRIBUTIONS_CACHE);
     });
+  }
+
+  /** A loading circle that is displayed while the attributions are downloaded. */
+  function LoadingCircle(): JSX.Element {
+    return <Grid container direction='row' alignItems='center' justify='center'>
+      <CircularProgress disableShrink />
+    </Grid>;
+  }
+
+  /** The main content of the dialog containing all attributions. They are loaded lazily. */
+  function AttributionList(props: {attrib: Array<string>}): JSX.Element {
+    return <>
+      {props.attrib.map((a: string, i) => <LazyLoad key={i}><ReactMarkdown>{a}</ReactMarkdown></LazyLoad>)}
+    </>;
   }
 
   return (
@@ -64,11 +78,7 @@ export default function AttributionDialog(): JSX.Element {
       <br />
       <Typography><i>{t('attribution.thank-you-text')}</i></Typography>
       <br />
-      {attributions === '' ?
-        <Grid container direction='row' alignItems='center' justify='center'>
-          <CircularProgress disableShrink />
-        </Grid> :
-        <ReactMarkdown>{attributions}</ReactMarkdown>}
+      {attributions === null ? <LoadingCircle /> : <AttributionList attrib={attributions} />}
     </div>
   );
 }
