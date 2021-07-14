@@ -133,7 +133,13 @@ In general developers should follow the best practices of the libraries they use
 
 ### Redux
 
-TODO
+Application state management is done using [Redux](https://redux.js.org/). We use the
+[Redux Toolkit](https://redux-toolkit.js.org/) to easier work with the framework.
+[React Redux](https://react-redux.js.org/) provides the interface between React and Redux.
+
+While it is possible to manage all state with Redux, it should be preferred to use React's `props` functionality to
+manage local component state. Redux should only be used, when the state affects large portions of the application that
+would be difficult to handle with React's `props` alone.
 
 ### Design and Layout
 
