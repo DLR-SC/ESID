@@ -13,7 +13,8 @@ describe('DataSelectionSlice', () => {
   });
 
   test('Select District', () => {
-    expect(reducer(initialState, selectDistrict({ags: '12345', name: 'Test District', type: 'Test Type'}))).toEqual({
+    const newDistrict = {ags: '12345', name: 'Test District', type: 'Test Type'};
+    expect(reducer(initialState, selectDistrict(newDistrict))).toEqual({
       district: {ags: '12345', name: 'Test District', type: 'Test Type'},
       date: new Date(2021, 0).getTime(),
       scenario: 'default',
@@ -22,7 +23,8 @@ describe('DataSelectionSlice', () => {
   });
 
   test('Select Date', () => {
-    expect(reducer(initialState, selectDate(new Date(2020, 8, 21)))).toEqual({
+    const newDate = new Date(2020, 8, 21);
+    expect(reducer(initialState, selectDate(newDate))).toEqual({
       district: {ags: '00000', name: 'germany', type: ''},
       date: new Date(2020, 8, 21).getTime(),
       scenario: 'default',
