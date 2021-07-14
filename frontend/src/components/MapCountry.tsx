@@ -5,6 +5,8 @@ import {makeStyles} from '@material-ui/core';
 import {Box} from '@material-ui/core';
 import {useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
+import {useAppDispatch} from '../store/hooks';
+import {selectDistrict} from '../store/DataSelectionSlice';
 
 const useStyles = makeStyles({
   Map: {
@@ -20,7 +22,15 @@ const useStyles = makeStyles({
 
 interface IRegionPolygon {
   value: number;
+
+  /** District name */
+  GEN: string;
+
+  /** District type */
   BEZ: string;
+
+  /** AGS (district ID) */
+  RS: string;
 }
 
 /**
@@ -33,6 +43,7 @@ interface IRegionPolygon {
 export default function MapCountry(): JSX.Element {
   const {t} = useTranslation('global');
   const classes = useStyles();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     let regionPolygon: IRegionPolygon;
@@ -57,6 +68,11 @@ export default function MapCountry(): JSX.Element {
     // Configure series
     polygonSeries.mapPolygons.template.tooltipPosition = 'fixed';
     const polygonTemplate = polygonSeries.mapPolygons.template;
+
+    polygonTemplate.events.on('hit', (e) => {
+      const item = e.target.dataItem.dataContext as IRegionPolygon;
+      dispatch(selectDistrict({ags: item.RS, name: item.GEN, type: t(item.BEZ)}));
+    });
 
     //Set values to each regions
     polygonSeries.events.on('validated', (event) => {
@@ -83,7 +99,7 @@ export default function MapCountry(): JSX.Element {
       });
     });
 
-    // add heat legend containter
+    // add heat legend container
     const legendContainer = am4core.create('legenddiv', am4core.Container);
     legendContainer.width = am4core.percent(100);
     const heatLegend = legendContainer.createChild(am4maps.HeatLegend);
@@ -105,12 +121,14 @@ export default function MapCountry(): JSX.Element {
     // Create hover state and set alternative fill color
     const hs = polygonTemplate.states.create('hover');
     hs.properties.fill = am4core.color('#367B25');
-  }, [t]);
+
+    dispatch(selectDistrict({ags: '00000', name: t('germany'), type: ''}));
+  }, [t, dispatch]);
 
   return (
     <>
-      <Box id='chartdiv' className={classes.Map} />
-      <Box id='legenddiv' className={classes.Heatlegend} />
+      <Box id="chartdiv" className={classes.Map} />
+      <Box id="legenddiv" className={classes.Heatlegend} />
     </>
   );
 }

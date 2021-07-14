@@ -13,14 +13,12 @@
   history: {
     placeholder: 'history',
   },
-  country: {
-    placeholder: 'Deutschland',
-  },
   BEZ: {
     K: 'Kreis',
     LK: 'Landkreis',
     KS: 'Kreisfreie Stadt',
     SK: 'Stadtkreis',
   },
+  germany: 'Deutschland',
   WIP: 'Diese Funktionalität befindet sich noch in der Entwicklung.',
 }
