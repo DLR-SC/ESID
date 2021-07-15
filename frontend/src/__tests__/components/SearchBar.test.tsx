@@ -7,7 +7,6 @@ import SearchBar from '../../components/SearchBar';
 import {I18nextProvider} from 'react-i18next';
 import {Provider} from 'react-redux';
 import Store from '../../store';
-// import {useAppDispatch} from '../../store/hooks';
 import {selectDistrict} from '../../store/DataSelectionSlice';
 
 describe('SearchBar', () => {
