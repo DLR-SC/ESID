@@ -11,5 +11,5 @@
   "quoteProps": "as-needed",
   "jsxSingleQuote": false,
   "htmlWhitespaceSensitivity": "css",
-  "endOfLine": "lf"
+  "endOfLine": "auto"
 }

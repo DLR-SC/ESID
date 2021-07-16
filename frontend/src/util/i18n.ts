@@ -27,6 +27,7 @@ void i18n
         return JSON5.parse(data);
       },
     },
-  }).then(() => document.documentElement.lang = i18n.language);
+  })
+  .then(() => (document.documentElement.lang = i18n.language));
 
 export default i18n;

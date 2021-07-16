@@ -3138,7 +3138,7 @@
           ]
         ]
       },
-      "properties": {"RS": "05958", "GEN": "HochsauerLK", "BEZ": "K", "id": 110}
+      "properties": {"RS": "05958", "GEN": "Hochsauerlandkreis", "BEZ": "K", "id": 110}
     },
     {
       "type": "Feature",
@@ -10196,7 +10196,7 @@
           ]
         ]
       },
-      "properties": {"RS": "14523", "GEN": "VogtLK", "BEZ": "LK", "id": 354}
+      "properties": {"RS": "14523", "GEN": "Vogtlandkreis", "BEZ": "LK", "id": 354}
     },
     {
       "type": "Feature",
@@ -10677,7 +10677,7 @@
           ]
         ]
       },
-      "properties": {"RS": "15084", "GEN": "BurgenLK", "BEZ": "LK", "id": 370}
+      "properties": {"RS": "15084", "GEN": "Burgenlandkreis", "BEZ": "LK", "id": 370}
     },
     {
       "type": "Feature",
@@ -10856,7 +10856,7 @@
           ]
         ]
       },
-      "properties": {"RS": "15089", "GEN": "SalzLK", "BEZ": "LK", "id": 375}
+      "properties": {"RS": "15089", "GEN": "Salzlandkreis", "BEZ": "LK", "id": 375}
     },
     {
       "type": "Feature",
