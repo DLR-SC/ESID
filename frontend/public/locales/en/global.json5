@@ -19,6 +19,9 @@
   history: {
     placeholder: 'history',
   },
+  details: {
+    placeholder: 'Details',
+  },
   BEZ: {
     K: 'Rural District',
     LK: 'Rural District',
