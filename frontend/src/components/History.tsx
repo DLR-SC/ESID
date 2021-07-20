@@ -13,17 +13,11 @@ import 'simplebar';
 import 'simplebar/dist/simplebar.css';
 
 /* The history componenent displays the restrictions occured during a pandemic
-   classified by month-Year. Each specific month is associated with a list of events */
+                 classified by month-Year. Each specific month is associated with a list of events */
 
 const AntTabs = withStyles({
   root: {
     borderBottom: '1px solid #e8e8e8',
-  },
-  indicator: {
-    height: 2,
-    borderTopLeftRadius: 3,
-    borderTopRightRadius: 3,
-    backgroundColor: '#1da1f2',
   },
 })(Tabs);
 
@@ -44,27 +38,12 @@ const AntTab = withStyles((_theme: Theme) =>
       },
       '&:not(:first-of-type)': {
         marginLeft: -1,
-        color: '#CC5AC7',
+        color: '#1da1f2',
       },
       '&:not(:last-of-type)': {
         marginLeft: -1,
-        color: '#3998DB',
+        color: '#1da1f2',
       },
-    },
-    selected: {
-      borderBottomWidth: 0,
-      background: '#ffffff',
-      '& $wrapper': {
-        opacity: 1,
-      },
-    },
-
-    textColorInherit: {
-      opacity: 1,
-    },
-
-    wrapper: {
-      opacity: 0.7,
     },
   })
 )((props: StyledTabProps) => <Tab disableRipple {...props} />);
