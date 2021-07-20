@@ -25,11 +25,11 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
 
     # Third party apps
+    'django_extensions',  # for generation db diagrams
     'rest_framework',  # utilities for rest apis
     'rest_framework.authtoken',  # token authentication
     'django_filters',  # for filtering rest endpoints
     'drf_yasg',  # swagger api
-    'easy_thumbnails',  # image lib
     'corsheaders',  # cors handling
 
     # Your apps
@@ -59,11 +59,23 @@ ADMINS = ()
 # CORS
 CORS_ORIGIN_ALLOW_ALL = True
 
-DATABASES = {
-    'default': {
+DB = {
+    'postgres': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST', 'db'),
+        'PORT': os.getenv('DB_PORT'),
+    },
+    'sqlite': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR + '/db.sqlite3',
     }
+}
+
+DATABASES = {
+    'default': DB.get(os.getenv('DB'), DB.get('postgres'))
 }
 
 # Postgres
@@ -275,3 +287,7 @@ SIMPLE_JWT = {
 }
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
+GRAPH_MODELS = {
+    'app_labels': ["api"],
+}

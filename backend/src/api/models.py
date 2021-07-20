@@ -8,6 +8,8 @@ class Node(models.Model):
 
     # Fields
     name = models.CharField(max_length=30)
+    description = models.TextField()
+    metadata = models.JSONField()
 
     class Meta:
         pass
@@ -21,6 +23,7 @@ class Group(models.Model):
 
     # Fields
     name = models.CharField(max_length=30)
+    description = models.TextField()
 
     class Meta:
         pass
@@ -56,6 +59,7 @@ class Restriction(models.Model):
     """Model definition for Restriction."""
 
     name = models.CharField(max_length=50)
+    contact_rate = models.FloatField()
 
     class Meta:
         """Meta definition for Restriction."""
@@ -68,7 +72,7 @@ class Restriction(models.Model):
         pass
 
 
-class Measure(models.Model):
+class Intervention(models.Model):
     """Model definition for Measure."""
 
     # Fields
@@ -88,70 +92,48 @@ class Measure(models.Model):
         """Unicode representation of Measure."""
         pass
 
-
-class StageTimes(models.Model):
-    """Model definition for a node belonging to a scenario (i.e. counties)."""
-
-    # Fields
-    incubation = models.ForeignKey(Distribution, related_name='incubation', on_delete=models.RESTRICT)
-    infectious_mild = models.ForeignKey(Distribution, related_name='infectious_mild', on_delete=models.RESTRICT)
-    serial_interval = models.ForeignKey(Distribution, related_name='serial_interval', on_delete=models.RESTRICT)
-    hospitalized_to_recovered = models.ForeignKey(Distribution,
-                                                  related_name='hospitalized_to_recovered',
-                                                  on_delete=models.RESTRICT)
-    infectious_to_hospitalized = models.ForeignKey(Distribution,
-                                                   related_name='infectious_to_hospitalized',
-                                                   on_delete=models.RESTRICT)
-    infectious_asympt = models.ForeignKey(Distribution, related_name='infectious_asympt', on_delete=models.RESTRICT)
-    hospitalized_to_icu = models.ForeignKey(Distribution, related_name='hospitalized_to_icu', on_delete=models.RESTRICT)
-    icu_to_recovered = models.ForeignKey(Distribution, related_name='icu_to_recovered', on_delete=models.RESTRICT)
-    icu_to_dead = models.ForeignKey(Distribution, related_name='icu_to_dead', on_delete=models.RESTRICT)
+class Parameter(models.Model):
+    name = models.CharField(max_length=30)
+    description = models.TextField()
 
     class Meta:
         pass
 
     def __str__(self):
-        return 'StageTimes'
+        return 'Parameter(%s)'.format(self.name)
 
 
-class Probabilities(models.Model):
-    """Model definition for a node belonging to a scenario (i.e. counties)."""
-
-    # Fields
-    infected_from_contact = models.ForeignKey(Distribution, related_name='infected_from_contact', on_delete=models.RESTRICT)
-    carrier_infectability = models.ForeignKey(Distribution, related_name='carrier_infectability', on_delete=models.RESTRICT)
-    asymp_per_infectious = models.ForeignKey(Distribution, related_name='asymp_per_infectious', on_delete=models.RESTRICT)
-    risk_from_symptotic = models.ForeignKey(Distribution, related_name='risk_from_symptotic', on_delete=models.RESTRICT)
-    dead_per_icu = models.ForeignKey(Distribution, related_name='dead_per_icu', on_delete=models.RESTRICT)
-    hospitalized_per_infectious = models.ForeignKey(Distribution,
-                                                    related_name='hospitalized_per_infectious',
-                                                    on_delete=models.RESTRICT)
-    icu_per_hospitalized = models.ForeignKey(Distribution, related_name='icu_per_hospitalized', on_delete=models.RESTRICT)
-
-    risk_from_symptomatic = models.ForeignKey(Distribution, related_name='risk_from_symptomatic', on_delete=models.RESTRICT)
+class Compartment(models.Model):
+    name = models.CharField(max_length=30)
+    description = models.TextField()
 
     class Meta:
         pass
 
     def __str__(self):
-        return 'Probabilities'
+        return 'Compartment(%s)'.format(self.name)
 
-
-class Population(models.Model):
-    total = models.IntegerField()
-    dead = models.IntegerField()
-    exposed = models.ForeignKey(Distribution, related_name='exposed', on_delete=models.RESTRICT)
-    carrier = models.ForeignKey(Distribution, related_name='carrier', on_delete=models.RESTRICT)
-    infectious = models.ForeignKey(Distribution, related_name='infectious', on_delete=models.RESTRICT)
-    hospitalized = models.ForeignKey(Distribution, related_name='hospitalized', on_delete=models.RESTRICT)
-    icu = models.ForeignKey(Distribution, related_name='icu', on_delete=models.RESTRICT)
-    recovered = models.ForeignKey(Distribution, related_name='recovered', on_delete=models.RESTRICT)
+class SimulationModel(models.Model):
+    name = models.CharField(max_length=30)
+    description = models.TextField()
+    parameters = models.ManyToManyField(Parameter)
+    compartments = models.ManyToManyField(Compartment)
 
     class Meta:
         pass
 
     def __str__(self):
-        return 'Population'
+        return 'SimulationModel(%s)'.format(self.name)
+
+
+class ScenarioParameter(Distribution):
+    parameter = models.ForeignKey(Parameter, related_name='parameter', on_delete=models.RESTRICT)
+
+    class Meta:
+        pass
+
+    def __str__(self):
+        return 'ScenarioParameter'
 
 
 class ScenarioNode(models.Model):
@@ -160,9 +142,8 @@ class ScenarioNode(models.Model):
     # Fields
     node = models.ForeignKey(Node, on_delete=models.RESTRICT)
     group = models.ForeignKey(Group, on_delete=models.RESTRICT)
-    stage_times = models.ForeignKey(StageTimes, on_delete=models.RESTRICT)
-    probabilities = models.ForeignKey(Probabilities, on_delete=models.RESTRICT)
-    measures = models.ManyToManyField(Measure)
+    parameters = models.ForeignKey(ScenarioParameter, on_delete=models.RESTRICT)
+    interventions = models.ManyToManyField(Intervention)
 
     class Meta:
         pass
@@ -171,9 +152,19 @@ class ScenarioNode(models.Model):
         return 'ScenarioNode(%s)'.format(self.name)
 
 
-class SimulationNode(ScenarioNode):
+class SimulationCompartment(Distribution):
+    compartment = models.ForeignKey(Compartment, on_delete=models.RESTRICT)
 
-    population = models.ForeignKey(Population, on_delete=models.RESTRICT)
+    class Meta:
+        pass
+
+    def __str__(self):
+        return 'SimulationCompartment'
+
+class SimulationNode(models.Model):
+
+    comparments = models.ManyToManyField(SimulationCompartment)
+    scenario_node = models.ForeignKey(ScenarioNode, on_delete=models.RESTRICT)
 
     class Meta:
         pass
@@ -188,7 +179,7 @@ class Scenario(models.Model):
     # Fields
     name = models.CharField(max_length=30)
     description = models.TextField()
-    simulation_model = models.CharField(max_length=10)
+    simulation_model = models.ForeignKey(SimulationModel, related_name='simulation_model', on_delete=models.RESTRICT)
     number_of_groups = models.IntegerField()
     number_of_nodes = models.IntegerField()
     nodes = models.ManyToManyField(ScenarioNode)
@@ -197,7 +188,7 @@ class Scenario(models.Model):
         pass
 
     def __str__(self):
-        return 'Scenario(%s, %s)'.format(self.name, self.simulation_model)
+        return 'Scenario(%s)'.format(self.name)
 
 
 class Simulation(models.Model):

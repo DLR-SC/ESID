@@ -15,7 +15,7 @@ django_unique_upload==0.2.1
 
 # Rest apis
 djangorestframework==3.12.4
-djangorestframework-camel-case=1.2.0
+djangorestframework-camel-case==1.2.0
 djangorestframework-simplejwt==4.7.1
 Markdown==3.3.4
 drf-yasg==1.20.0
