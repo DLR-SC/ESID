@@ -13,7 +13,7 @@ Be as elaborate as possible!
 
 <!--
 Please give a short explanation about why you implemented the PR as you did. Discuss possible alternative
-implementations, that you considered and why you chose this one.
+implementations that you considered and why you chose this one.
 
 If the PR is trivial you can remove this section.
 -->
