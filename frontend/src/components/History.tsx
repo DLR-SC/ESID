@@ -13,7 +13,7 @@ import 'simplebar';
 import 'simplebar/dist/simplebar.css';
 
 /* The history componenent displays the restrictions occured during a pandemic
-                 classified by month-Year. Each specific month is associated with a list of events */
+   classified by month-Year. Each specific month is associated with a list of events */
 
 const AntTabs = withStyles({
   root: {
@@ -74,9 +74,9 @@ export default function History(): JSX.Element {
   const {t} = useTranslation('global');
   const classes = useStyles();
 
-  const [value, setValue] = React.useState(true);
+  const [value, setValue] = React.useState(0);
   const handleChange = (_event: React.ChangeEvent<Record<string, never>>, value: number) => {
-    setValue(!value);
+    value === 1 ? setValue(1) : setValue(0);
   };
 
   // Events list, later data will be fetched from the backend.
@@ -129,7 +129,7 @@ export default function History(): JSX.Element {
         <AntTab label={t('details.placeholder')} />
       </AntTabs>
 
-      {value ? ( //History Tab content
+      {value === 0 ? ( //History Tab content
         <Box className={classes.PeriodContainer} data-simplebar>
           {DisplayHistory}
         </Box>
