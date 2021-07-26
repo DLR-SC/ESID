@@ -9,7 +9,6 @@ import Paper from '@material-ui/core/Paper';
 import {Theme, createStyles, withStyles, makeStyles} from '@material-ui/core/styles';
 import {useAppDispatch} from '../store/hooks';
 import {selectScenario} from '../store/DataSelectionSlice';
-import {useAppSelector} from '../store/hooks';
 
 /* This component displays the pandemic spread depending on different scenarios
  */
@@ -149,7 +148,6 @@ const scenario = [
 export default function Scenario(): JSX.Element {
   const classes = useStyles();
   const dispatch = useAppDispatch();
-  const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
 
   return (
     <div>
