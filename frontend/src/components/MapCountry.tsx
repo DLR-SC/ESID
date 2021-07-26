@@ -15,6 +15,7 @@ const useStyles = makeStyles({
 
   Heatlegend: {
     marginTop: '15px',
+    marginBottom: '10px',
     height: '25px',
     backgroundColor: '#F8F8F9',
   },
