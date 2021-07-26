@@ -1,23 +1,36 @@
-import {Grid, makeStyles, Typography} from '@material-ui/core';
+import {Grid, makeStyles} from '@material-ui/core';
 import React from 'react';
-import {useTranslation} from 'react-i18next';
+//import {useTranslation} from 'react-i18next';
+import Scenario from './Scenario';
+import Icones from './Icones';
+
+import SimulationChart from './SimulationChart';
 
 const useStyles = makeStyles({
   mainContent: {
-    width: '100%',
-    height: '100%',
+    marginLeft: '24px',
+    marginright: '24px',
+  },
+  icon: {
+    marginLeft: 'auto',
+    marginRight: 'auto',
   },
 });
 
-/**
- * This is currently a placeholder. It will contain the scenario cards and graphs for evaluation.
- */
 export default function MainContent(): JSX.Element {
-  const {t} = useTranslation();
+  //const {t} = useTranslation('global');
   const classes = useStyles();
   return (
-    <Grid container direction="column" alignItems="center" justify="center" className={classes.mainContent}>
-      <Typography>{t('mainContent.placeholder')}</Typography>
+    <Grid container direction="column" wrap="nowrap" className={classes.mainContent}>
+      <Grid item className={classes.icon}>
+        <Icones />
+      </Grid>
+      <Grid item>
+        <Scenario />
+      </Grid>
+      <Grid item>
+        <SimulationChart />
+      </Grid>
     </Grid>
   );
 }
