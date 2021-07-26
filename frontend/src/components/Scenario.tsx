@@ -183,7 +183,7 @@ export default function Scenario(): JSX.Element {
                   onMouseOver={() => {
                     dispatch(selectScenario(row.compartment));
                   }}
-                  onMouseLeave={() => console.log(selectedScenario)}
+                 
                 >
                   <TableCell>{row.compartment}</TableCell>
                   <TableCell>{row.latest}</TableCell>
