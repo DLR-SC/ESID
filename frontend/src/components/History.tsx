@@ -56,16 +56,19 @@ const useStyles = makeStyles((theme: Theme) => ({
   Tab: {
     backgroundColor: theme.palette.background.paper,
   },
+  history: {
+    overflow: 'auto',
+    maxHeight: '30vh',
+    position: 'relative',
+
+    backgroundColor: theme.palette.background.paper,
+  },
   PeriodContainer: {
     position: 'relative',
-    overflow: 'auto',
-    maxHeight: 200,
     backgroundColor: '#F2F2F2',
   },
   EventContainer: {
     position: 'relative',
-    overflow: 'auto',
-    maxHeight: 120,
     backgroundColor: theme.palette.background.paper,
   },
 }));
@@ -108,7 +111,7 @@ export default function History(): JSX.Element {
       {/* Display events */}
       {eventcontent.map((event, index2) =>
         period.id === event.idperiod ? (
-          <Box key={index2} className={classes.EventContainer} data-simplebar>
+          <Box key={index2} className={classes.EventContainer}>
             <ListItem disableGutters={false}>
               <ListItemIcon>
                 <CallMadeIcon fontSize="small" />
@@ -130,8 +133,8 @@ export default function History(): JSX.Element {
       </AntTabs>
 
       {value === 0 ? ( //History Tab content
-        <Box className={classes.PeriodContainer} data-simplebar>
-          {DisplayHistory}
+        <Box className={classes.history} data-simplebar>
+          <Box className={classes.PeriodContainer}>{DisplayHistory}</Box>
         </Box>
       ) : (
         // Details Tab content
