@@ -7,6 +7,7 @@ import {useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useAppDispatch} from '../store/hooks';
 import {selectDistrict} from '../store/DataSelectionSlice';
+import {useAppSelector} from '../store/hooks';
 
 const useStyles = makeStyles({
   Map: {
@@ -44,6 +45,7 @@ interface IRegionPolygon {
 export default function MapCountry(): JSX.Element {
   const {t} = useTranslation('global');
   const classes = useStyles();
+  const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -81,7 +83,7 @@ export default function MapCountry(): JSX.Element {
         regionPolygon = mapPolygon.dataItem.dataContext as IRegionPolygon;
         regionPolygon.value = Math.floor(Math.random() * 300);
         // add tooltipText
-        mapPolygon.tooltipText = t(`BEZ.${regionPolygon.BEZ}`) + ' {GEN}';
+        mapPolygon.tooltipText = t(`BEZ.${regionPolygon.BEZ}`) + ' {GEN}' + '  ' + selectedScenario;
       });
     });
 
@@ -124,7 +126,7 @@ export default function MapCountry(): JSX.Element {
     hs.properties.fill = am4core.color('#367B25');
 
     dispatch(selectDistrict({ags: '00000', name: t('germany'), type: ''}));
-  }, [t, dispatch]);
+  }, [t, dispatch, selectedScenario]);
 
   return (
     <>
