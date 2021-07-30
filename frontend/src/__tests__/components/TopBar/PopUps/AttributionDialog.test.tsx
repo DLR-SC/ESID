@@ -47,11 +47,13 @@ describe('AttributionDialog', () => {
     screen.getByText('attribution.thank-you-text');
 
     // Make sure that fetch was called with the correct value.
+    // eslint-disable-next-line @typescript-eslint/require-await
     await act(async () => {
       expect(global.fetch).toHaveBeenCalledWith('assets/third-party-attributions.json');
     });
 
     // Forces the lazy loaded components to load. This is needed, since there is no viewport, that would trigger a load.
+    // eslint-disable-next-line @typescript-eslint/require-await
     await act(async () => forceVisible());
 
     screen.getByText('SomeLib');
@@ -67,9 +69,6 @@ describe('AttributionDialog', () => {
 
     screen.getByText('OtherLib');
 
-    // @ts-ignore Cleanup the mocked method.
-    global.fetch.mockClear();
-    // @ts-ignore Cleanup the mocked method.
-    delete global.fetch;
+    (global.fetch as jest.Mock).mockClear();
   });
 });
