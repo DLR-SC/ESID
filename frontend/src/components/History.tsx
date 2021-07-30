@@ -126,7 +126,15 @@ export default function History(): JSX.Element {
 
   return (
     <div className={classes.Tab}>
-      <AntTabs value={value} onChange={handleChange}>
+      <AntTabs
+        TabIndicatorProps={{
+          style: {
+            backgroundColor: 'grey',
+          },
+        }}
+        value={value}
+        onChange={handleChange}
+      >
         {/* Set table labels */}
         <AntTab label={t('history.placeholder')} />
         <AntTab label={t('details.placeholder')} />
