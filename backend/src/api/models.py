@@ -1,4 +1,5 @@
 from django.db import models
+from django_pandas.managers import DataFrameManager
 
 # Create your models here.
 
@@ -7,7 +8,7 @@ class Node(models.Model):
     """Model definition for a Node (i.e. counties)."""
 
     # Fields
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=100)
     description = models.TextField()
     metadata = models.JSONField()
 
@@ -22,7 +23,7 @@ class Group(models.Model):
     """Model definition for a Group (i.e. age_group)."""
 
     # Fields
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=100)
     description = models.TextField()
 
     class Meta:
@@ -93,7 +94,7 @@ class Intervention(models.Model):
         pass
 
 class Parameter(models.Model):
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=100)
     description = models.TextField()
 
     class Meta:
@@ -104,7 +105,7 @@ class Parameter(models.Model):
 
 
 class Compartment(models.Model):
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=100)
     description = models.TextField()
 
     class Meta:
@@ -114,7 +115,7 @@ class Compartment(models.Model):
         return 'Compartment(%s)'.format(self.name)
 
 class SimulationModel(models.Model):
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=100)
     description = models.TextField()
     parameters = models.ManyToManyField(Parameter)
     compartments = models.ManyToManyField(Compartment)
@@ -177,7 +178,7 @@ class Scenario(models.Model):
     """Model definition for a scenario."""
 
     # Fields
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=100)
     description = models.TextField()
     simulation_model = models.ForeignKey(SimulationModel, related_name='simulation_model', on_delete=models.RESTRICT)
     number_of_groups = models.IntegerField()
@@ -194,7 +195,7 @@ class Scenario(models.Model):
 class Simulation(models.Model):
 
     # Fields
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=100)
     description = models.TextField()
     start_day = models.DateField()
     number_of_days = models.IntegerField()
@@ -207,3 +208,42 @@ class Simulation(models.Model):
 
     def __str__(self):
         return 'Simulation(%s)'.format(self.name)
+
+
+class GenderChoice(models.TextChoices):
+    M = 'M', 'Männlich'
+    W = 'W', 'Weiblich'
+    U = 'U', 'Unbekannt'
+
+class FlagChoice(models.IntegerChoices):
+    JA = 1, 'Ja'
+    NEIN = 0, 'Nein'
+    NA = -9, 'Nein'
+
+class RKIEntry(models.Model):
+    id_bundesland = models.CharField(max_length=20)
+    id_landkreis = models.CharField(max_length=20)
+    bundesland = models.CharField(max_length=100)
+    landkreis = models.CharField(max_length=100)
+    altersgruppe = models.CharField(max_length=10)
+    geschlecht = models.CharField(choices=GenderChoice.choices, max_length=1)
+    meldedatum = models.DateField()
+    refdatum = models.DateField()
+    ist_erkrankungsbeginn = models.IntegerField(choices=FlagChoice.choices)
+    neuer_fall = models.IntegerField(choices=FlagChoice.choices)
+    neuer_todesfall = models.IntegerField(choices=FlagChoice.choices)
+    neu_genesen = models.IntegerField(choices=FlagChoice.choices)
+    anzahl_fall = models.IntegerField()
+    anzahl_todesfall = models.IntegerField()
+    anzahl_genesen = models.IntegerField()
+
+    created = models.DateTimeField(auto_now_add=True)
+    last_modified = models.DateTimeField(auto_now=True)
+
+
+class RKICounty:
+
+    def __init__(self, county, timesteps):
+        self.county = county
+        self.data = timesteps
+        self.count = len(timesteps)

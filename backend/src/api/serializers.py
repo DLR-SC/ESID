@@ -1,5 +1,6 @@
-from .models import Distribution, Intervention, Node, Parameter, Restriction, Scenario, ScenarioNode, SimulationModel
+from .models import Distribution, Intervention, Node, Parameter, Restriction, Scenario, ScenarioNode, SimulationModel, RKIEntry
 from rest_framework import serializers
+from datetime import datetime
 
 
 class DistributionSerializer(serializers.ModelSerializer):
@@ -71,3 +72,26 @@ class SimulationModelSerializerFull(serializers.ModelSerializer):
     class Meta:
         model = SimulationModel
         fields = ['name', 'description', 'parameters', 'compartments']
+
+class RKIEntrySerializer(serializers.ModelSerializer):
+    infectious = serializers.IntegerField()
+    deaths = serializers.IntegerField()
+    recovered = serializers.IntegerField()
+    date = serializers.DateField(source="refdatum")
+    #county = serializers.CharField(source="id_landkreis")
+
+    class Meta:
+        model = RKIEntry
+        fields = ['date', 'infectious', 'deaths', 'recovered']
+
+    def to_representation(self, instance):
+        representation = super(RKIEntrySerializer, self).to_representation(instance)
+        representation['timestamp'] = int(datetime.combine(instance.refdatum, datetime.min.time()).timestamp() * 1000)
+
+        return representation
+
+class RKICountySerializer(serializers.Serializer):
+    county = serializers.CharField()
+    count = serializers.IntegerField()
+    data = RKIEntrySerializer(many=True)
+
