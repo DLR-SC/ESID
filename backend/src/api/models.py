@@ -247,3 +247,11 @@ class RKICounty:
         self.county = county
         self.data = timesteps
         self.count = len(timesteps)
+
+
+class RKIDay:
+
+    def __init__(self, day, counties):
+        self.day = day
+        self.data = counties
+        self.count = len(counties)

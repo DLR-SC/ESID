@@ -73,25 +73,38 @@ class SimulationModelSerializerFull(serializers.ModelSerializer):
         model = SimulationModel
         fields = ['name', 'description', 'parameters', 'compartments']
 
-class RKIEntrySerializer(serializers.ModelSerializer):
+class RKICountyEntrySerializer(serializers.ModelSerializer):
     infectious = serializers.IntegerField()
     deaths = serializers.IntegerField()
     recovered = serializers.IntegerField()
     date = serializers.DateField(source="refdatum")
-    #county = serializers.CharField(source="id_landkreis")
 
     class Meta:
         model = RKIEntry
         fields = ['date', 'infectious', 'deaths', 'recovered']
 
     def to_representation(self, instance):
-        representation = super(RKIEntrySerializer, self).to_representation(instance)
+        representation = super(RKICountyEntrySerializer, self).to_representation(instance)
         representation['timestamp'] = int(datetime.combine(instance.refdatum, datetime.min.time()).timestamp() * 1000)
 
         return representation
 
+class RKIDayEntrySerializer(serializers.ModelSerializer):
+    infectious = serializers.IntegerField()
+    deaths = serializers.IntegerField()
+    recovered = serializers.IntegerField()
+    county = serializers.CharField(source="id_landkreis")
+
+    class Meta:
+        model = RKIEntry
+        fields = ['county', 'infectious', 'deaths', 'recovered']
+
 class RKICountySerializer(serializers.Serializer):
     county = serializers.CharField()
     count = serializers.IntegerField()
-    data = RKIEntrySerializer(many=True)
+    data = RKICountyEntrySerializer(many=True)
 
+class RKIDaySerializer(serializers.Serializer): 
+    day = serializers.DateField()
+    count = serializers.IntegerField()
+    data = RKIDayEntrySerializer(many=True)
