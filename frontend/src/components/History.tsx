@@ -27,6 +27,7 @@ const AntTab = withStyles((_theme: Theme) =>
       textTransform: 'none',
       '&:hover': {
         backgroundColor: 'rgba(29, 161, 242, 0.1)',
+
         '& $wrapper': {
           color: '#1da1f2',
         },
@@ -37,12 +38,11 @@ const AntTab = withStyles((_theme: Theme) =>
         },
       },
       '&:not(:first-of-type)': {
-        marginLeft: -1,
-        color: '#1da1f2',
+        color: '#000',
+        marginLeft: 3,
       },
       '&:not(:last-of-type)': {
-        marginLeft: -1,
-        color: '#1da1f2',
+        color: '#000',
       },
     },
   })
@@ -108,20 +108,21 @@ export default function History(): JSX.Element {
       <Box pl={9}>
         <ListItemText secondary={period.month} />
       </Box>
-
-      {/* Display events */}
-      {eventcontent.map((event, index2) =>
-        period.id === event.idperiod ? (
-          <Box key={index2} className={classes.EventContainer}>
-            <ListItem disableGutters={false}>
-              <ListItemIcon>
-                <CallMadeIcon fontSize="small" />
-              </ListItemIcon>
-              <ListItemText secondary={event.eventlabel} />
-            </ListItem>
-          </Box>
-        ) : null
-      )}
+      <Box style={{border: '1px solid  #D3D2D8', borderLeft: 0, borderRight: 0}}>
+        {/* Display events */}
+        {eventcontent.map((event, index2) =>
+          period.id === event.idperiod ? (
+            <Box key={index2} className={classes.EventContainer}>
+              <ListItem disableGutters={false}>
+                <ListItemIcon>
+                  <CallMadeIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText secondary={event.eventlabel} />
+              </ListItem>
+            </Box>
+          ) : null
+        )}
+      </Box>
     </List>
   ));
 
@@ -130,11 +131,12 @@ export default function History(): JSX.Element {
       <AntTabs
         TabIndicatorProps={{
           style: {
-            backgroundColor: 'grey',
+            backgroundColor: '#D3D2D8',
           },
         }}
         value={value}
         onChange={handleChange}
+        style={{borderTop: '1px solid #D3D2D8'}}
       >
         {/* Set table labels */}
         <AntTab label={t('history.placeholder')} />
