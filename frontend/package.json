@@ -8,7 +8,7 @@
     "test": "jest",
     "coverage": "jest --collectCoverage --reporters='default'",
     "format": "prettier --write .",
-    "lint": "eslint src",
+    "lint": "eslint --fix src",
     "collect-attributions": "ts-node ./tools/CollectAttributions.ts"
   },
   "repository": {

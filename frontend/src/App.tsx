@@ -16,11 +16,11 @@ import Store from './store';
  */
 export default function App(): JSX.Element {
   return (
-    <Suspense fallback="loading">
+    <Suspense fallback='loading'>
       <Provider store={Store}>
-        <Box id="app" display="flex" flexDirection="column" style={{height: '100%'}}>
+        <Box id='app' display='flex' flexDirection='column' style={{height: '100%'}}>
           <TopBar />
-          <Box display="flex" flexDirection="row" flexGrow={1}>
+          <Box display="flex" flexDirection='row' flexGrow={1}>
             <Sidebar />
             <MainContent />
           </Box>

@@ -19,7 +19,7 @@ describe('SearchBar', () => {
       </I18nextProvider>
     );
 
-    screen.getByPlaceholderText("germany");
+    screen.getByPlaceholderText('germany');
 
     act(() => {
       Store.dispatch(selectDistrict({ags: '12345', name: 'Test District', type: 'Test Type'}));

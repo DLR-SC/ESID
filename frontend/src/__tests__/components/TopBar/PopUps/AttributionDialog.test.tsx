@@ -9,26 +9,28 @@ import ApplicationMenu from '../../../../components/TopBar/ApplicationMenu';
 
 describe('AttributionDialog', () => {
   test('PopUp', async () => {
-
     // We mock fetch to return two entries for attributions.
     global.fetch = jest.fn().mockImplementation(() => {
       return Promise.resolve({
         json: () => {
-          return Promise.resolve([{
-            name: 'SomeLib',
-            version: '1.0.1',
-            authors: 'John Doe, Jane, Doe',
-            repository: 'github.com',
-            license: 'MIT',
-            licenseText: 'MIT License Text ...',
-          }, {
-            name: 'OtherLib',
-            version: null,
-            authors: null,
-            repository: null,
-            license: null,
-            licenseText: null,
-          }]);
+          return Promise.resolve([
+            {
+              name: 'SomeLib',
+              version: '1.0.1',
+              authors: 'John Doe, Jane, Doe',
+              repository: 'github.com',
+              license: 'MIT',
+              licenseText: 'MIT License Text ...',
+            },
+            {
+              name: 'OtherLib',
+              version: null,
+              authors: null,
+              repository: null,
+              license: null,
+              licenseText: null,
+            },
+          ]);
         },
       });
     });
@@ -36,7 +38,7 @@ describe('AttributionDialog', () => {
     render(
       <I18nextProvider i18n={i18n}>
         <ApplicationMenu />
-      </I18nextProvider>,
+      </I18nextProvider>
     );
 
     screen.getByLabelText('topBar.menu.label').click();
@@ -46,7 +48,7 @@ describe('AttributionDialog', () => {
 
     // Make sure that fetch was called with the correct value.
     await act(async () => {
-      expect(global.fetch).toBeCalledWith('assets/third-party-attributions.json');
+      expect(global.fetch).toHaveBeenCalledWith('assets/third-party-attributions.json');
     });
 
     // Forces the lazy loaded components to load. This is needed, since there is no viewport, that would trigger a load.
