@@ -54,6 +54,7 @@ interface StyledTabProps {
 
 const useStyles = makeStyles((theme: Theme) => ({
   Tab: {
+    width: '100%',
     backgroundColor: theme.palette.background.paper,
   },
   history: {
