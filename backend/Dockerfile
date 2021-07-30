@@ -18,6 +18,7 @@ CMD ["sh", "/entrypoint-web.sh"]
 COPY ./docker/ /
 
 COPY ./requirements/ ./requirements
+RUN pip install numpy scipy pandas tqdm
 RUN pip install -r ./requirements/${REQUIREMENTS_FILE}
 
 COPY . ./

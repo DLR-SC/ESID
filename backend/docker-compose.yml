@@ -21,7 +21,7 @@ services:
         REQUIREMENTS_FILE: dev.txt
     restart: always
     ports:
-      - 8001:8000
+      - 8000:8000
     env_file: .env
     command: 'sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"'
     volumes:
@@ -34,8 +34,8 @@ services:
     image: dpage/pgadmin4
     restart: always
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: root
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
     ports:
       - "5050:80"
     volumes:

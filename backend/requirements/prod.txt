@@ -4,14 +4,18 @@ Django==3.2.3
 gunicorn==20.1.0
 newrelic==6.4.0.157
 django-dotenv==1.4.2
+tqdm==4.61.2
 
 # For the persistence stores
-psycopg2==2.8.6
+# psycopg2==2.8.6
+psycopg2-binary==2.8.6
 redis==3.5.3
 
 # Model Tools
 django-model-utils==4.1.1
 django_unique_upload==0.2.1
+django-pandas==0.6.0
+rest-pandas==1.1.0
 
 # Rest apis
 djangorestframework==3.12.4

@@ -59,36 +59,18 @@ ADMINS = ()
 # CORS
 CORS_ORIGIN_ALLOW_ALL = True
 
-DB = {
-    'postgres': {
+# Database configuration
+DATABASES = {
+    'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.getenv('DB_NAME'),
         'USER': os.getenv('DB_USER'),
         'PASSWORD': os.getenv('DB_PASSWORD'),
         'HOST': os.getenv('DB_HOST', 'db'),
         'PORT': os.getenv('DB_PORT'),
-    },
-    'sqlite': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR + '/db.sqlite3',
     }
 }
 
-DATABASES = {
-    'default': DB.get(os.getenv('DB'), DB.get('postgres'))
-}
-
-# Postgres
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': os.getenv('DB_NAME'),
-#         'USER': os.getenv('DB_USER'),
-#         'PASSWORD': os.getenv('DB_PASSWORD'),
-#         'HOST': os.getenv('DB_HOST', 'db'),
-#         'PORT': os.getenv('DB_PORT'),
-#     }
-# }
 
 # General
 APPEND_SLASH = True
@@ -222,13 +204,13 @@ AUTHENTICATION_BACKENDS = (
 
 # Django Rest Framework
 REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS':
-    'rest_framework.pagination.LimitOffsetPagination',
-    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend', 'rest_framework.filters.OrderingFilter'],
-    'PAGE_SIZE':
-    int(os.getenv('DJANGO_PAGINATION_LIMIT', 18)),
-    'DATETIME_FORMAT':
-    '%Y-%m-%dT%H:%M:%S.%fZ',
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend', 
+        'rest_framework.filters.OrderingFilter'
+    ],
+    'PAGE_SIZE': int(os.getenv('DJANGO_PAGINATION_LIMIT', 100)),
+    'DATETIME_FORMAT': '%Y-%m-%dT%H:%M:%S.%fZ',
     'DEFAULT_RENDERER_CLASSES': (
         'djangorestframework_camel_case.render.CamelCaseJSONRenderer',
         'djangorestframework_camel_case.render.CamelCaseBrowsableAPIRenderer',
@@ -242,7 +224,7 @@ REST_FRAMEWORK = {
         'djangorestframework_camel_case.parser.CamelCaseJSONParser',
     ),
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.AllowAny',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.SessionAuthentication',
@@ -258,8 +240,7 @@ REST_FRAMEWORK = {
         'user': '1000/second',
         'subscribe': '60/minute'
     },
-    'TEST_REQUEST_DEFAULT_FORMAT':
-    'json'
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json'
 }
 
 # JWT configuration
