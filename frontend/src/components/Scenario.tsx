@@ -28,15 +28,19 @@ const useStyles = makeStyles((theme: Theme) =>
     paper: {
       display: 'flex',
       flexWrap: 'nowrap',
+      position: 'relative',
       height: theme.spacing(25),
       marginLeft: theme.spacing(27),
-      zIndex: 0,
+      zIndex: 1,
+
+      '&  .MuiPaper-root': {
+        backgroundColor: 'transparent',
+      },
 
       '& :nth-child(n+1)': {
         marginRight: theme.spacing(2.5),
         padding: theme.spacing(7.65),
         border: `3px solid`,
-        backgroundColor: '#F8F8F9',
       },
 
       '&>*:hover': {
@@ -52,8 +56,15 @@ const useStyles = makeStyles((theme: Theme) =>
       position: 'absolute',
       opacity: 0.8,
       backgroundColor: 'transparent',
-      zIndex: 1,
+      zIndex: 0,
     },
+
+    tableRow: {
+      '&$selected, &$selected:hover': {
+        backgroundColor: '#F2F2F2',
+      },
+    },
+    selected: {},
   })
 );
 
@@ -122,6 +133,7 @@ const scenario = [
 export default function Scenario(): JSX.Element {
   const classes = useStyles();
   const dispatch = useAppDispatch();
+  const [selectedID, setSelectedID] = React.useState('');
 
   return (
     <Box>
@@ -140,11 +152,19 @@ export default function Scenario(): JSX.Element {
             <TableBody>
               {rows.map((row) => (
                 <TableRow
-                  hover
                   key={row.compartment}
-                  onMouseOver={() => {
+                  // style={{backgroundColor : rowColor? rowcolor[0] : rowcolor[1]}}
+                  /* onClick={() => { 
+                    dispatch(selectScenario(row.compartment));
+                  }} */
+
+                  onClick={() => {
+                    setSelectedID(row.compartment);
                     dispatch(selectScenario(row.compartment));
                   }}
+                  selected={selectedID === row.compartment}
+                  classes={{selected: classes.selected}}
+                  className={classes.tableRow}
                 >
                   <TableCell>{row.compartment}</TableCell>
                   <TableCell>{row.latest}</TableCell>
