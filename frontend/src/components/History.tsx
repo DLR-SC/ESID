@@ -9,8 +9,6 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import CallMadeIcon from '@material-ui/icons/CallMade';
-import 'simplebar';
-import 'simplebar/dist/simplebar.css';
 
 /* The history componenent displays the restrictions occured during a pandemic
    classified by month-Year. Each specific month is associated with a list of events */
@@ -21,28 +19,20 @@ const AntTabs = withStyles({
   },
 })(Tabs);
 
-const AntTab = withStyles((_theme: Theme) =>
+const AntTab = withStyles(() =>
   createStyles({
     root: {
       textTransform: 'none',
-      '&:hover': {
-        backgroundColor: 'rgba(29, 161, 242, 0.1)',
+      '&:focus': {
+        fontWeight: 'bold',
+      },
 
-        '& $wrapper': {
-          color: '#1da1f2',
-        },
-      },
-      '&$selected': {
-        '& *': {
-          color: '#1da1f2',
-        },
-      },
       '&:not(:first-of-type)': {
-        color: '#000',
         marginLeft: 3,
+        color: 'black',
       },
       '&:not(:last-of-type)': {
-        color: '#000',
+        color: 'black',
       },
     },
   })
@@ -61,6 +51,17 @@ const useStyles = makeStyles((theme: Theme) => ({
     overflow: 'auto',
     maxHeight: '30vh',
     position: 'relative',
+    '&::-webkit-scrollbar': {
+      width: '0.3em',
+    },
+    '&::-webkit-scrollbar-track': {
+      webkitBoxShadow: 'inset 0 0 4px rgba(0,0,0,0.00)',
+      backgroundColor: '#D3D2D8',
+    },
+    '&::-webkit-scrollbar-thumb': {
+      backgroundColor: 'rgba(0,0,0,.1)',
+      borderRadius: '8px',
+    },
 
     backgroundColor: theme.palette.background.paper,
   },
@@ -108,7 +109,15 @@ export default function History(): JSX.Element {
       <Box pl={9}>
         <ListItemText secondary={period.month} />
       </Box>
-      <Box style={{border: '1px solid  #D3D2D8', borderLeft: 0, borderRight: 0}}>
+      <Box
+        style={{
+          border: '1.5px solid ',
+          borderLeft: 0,
+          borderRight: 0,
+          borderImage: 'linear-gradient(360deg, #dee1e1 10%, #f4f4f4 360%)',
+          borderImageSlice: 1,
+        }}
+      >
         {/* Display events */}
         {eventcontent.map((event, index2) =>
           period.id === event.idperiod ? (
@@ -136,15 +145,19 @@ export default function History(): JSX.Element {
         }}
         value={value}
         onChange={handleChange}
-        style={{borderTop: '1px solid #D3D2D8'}}
+        style={{
+          borderTop: '1.5px solid',
+          borderImage: 'linear-gradient(360deg, #dee1e1 10%, #f4f4f4 360%)',
+          borderImageSlice: 1,
+          borderBottom: 0,
+        }}
       >
         {/* Set table labels */}
         <AntTab label={t('history.placeholder')} />
         <AntTab label={t('details.placeholder')} />
       </AntTabs>
-
       {value === 0 ? ( //History Tab content
-        <Box className={classes.history} data-simplebar>
+        <Box className={classes.history}>
           <Box className={classes.PeriodContainer}>{DisplayHistory}</Box>
         </Box>
       ) : (
