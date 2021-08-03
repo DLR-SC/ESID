@@ -136,6 +136,8 @@ export default function Scenario(): JSX.Element {
     return active;
   }
 
+  console.log(rows[1]);
+
   return (
     <Box>
       <TableContainer>
