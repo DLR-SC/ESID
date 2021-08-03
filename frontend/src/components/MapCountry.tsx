@@ -45,6 +45,9 @@ interface IRegionPolygon {
  */
 export default function MapCountry(): JSX.Element {
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
+  const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
+  const selectedRate = useAppSelector((state) => state.dataSelection.rate);
+
   const chartRef = useRef<am4maps.MapChart | null>(null);
 
   const {t} = useTranslation('global');
@@ -87,7 +90,6 @@ export default function MapCountry(): JSX.Element {
     heatLegend.align = 'center';
   }, []);
 
-
   //Polygone
   useEffect(() => {
     let regionPolygon: IRegionPolygon;
@@ -113,7 +115,21 @@ export default function MapCountry(): JSX.Element {
           regionPolygon = mapPolygon.dataItem.dataContext as IRegionPolygon;
           regionPolygon.value = Math.floor(Math.random() * 300);
           // add tooltipText
-          mapPolygon.tooltipText = t(`BEZ.${regionPolygon.BEZ}`) + ' {GEN}' + '  ' + selectedScenario;
+          mapPolygon.tooltipText =
+            t(`BEZ.${regionPolygon.BEZ}`) +
+            ' {GEN}' +
+            '\n' +
+            'Scenario:' +
+            '' +
+            selectedScenario +
+            '\n' +
+            'Compartment :' +
+            '' +
+            selectedCompartment +
+            '\n' +
+            'rate :' +
+            '' +
+            String(selectedRate);
         });
       });
 
@@ -137,7 +153,7 @@ export default function MapCountry(): JSX.Element {
       const hs = polygonTemplate.states.create('hover');
       hs.properties.fill = am4core.color('#367B25');
     }
-  }, [selectedScenario]);
+  }, [selectedScenario, selectedCompartment]);
 
   return (
     <>
