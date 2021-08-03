@@ -9,7 +9,8 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import {Theme, createStyles, withStyles, makeStyles} from '@material-ui/core/styles';
 import {useAppDispatch} from '../store/hooks';
-import {selectScenario} from '../store/DataSelectionSlice';
+import {selectCompartment} from '../store/DataSelectionSlice';
+import {selectRate} from '../store/DataSelectionSlice';
 
 /* This component displays the pandemic spread depending on different scenarios
  */
@@ -103,10 +104,10 @@ const header = [
 ];
 
 const rows = [
-  createRow('infected', 100, 100, 15, 100, -50, 100, 30, 100, -50),
-  createRow('hospitalized', 145, 100, 15, 100, -50, 100, 30, 100, -50),
-  createRow('death', 160, 100, 15, 100, -50, 100, 30, 100, -50),
-  createRow('other', 170, 100, 15, 100, -50, 100, 30, 100, -50),
+  createRow('infected', 100, 20000, 15, 300, -50, 400, 30, 500, -50),
+  createRow('hospitalized', 145, 200, 15, 300, -50, 400, 30, 500, -50),
+  createRow('death', 160, 200, 15, 300, -50, 400, 30, 500, -50),
+  createRow('other', 170, 200, 15, 300, -50, 400, 30, 500, -50),
 ];
 
 const scenario = [
@@ -131,6 +132,11 @@ export default function Scenario(): JSX.Element {
   const [selectedID, setSelectedID] = React.useState('');
   const [active, setActive] = React.useState(-1);
 
+  function ChangeShadow(index: number) {
+    active !== -1 ? setActive(-1) : setActive(index);
+    return active;
+  }
+
   return (
     <Box>
       <TableContainer>
@@ -151,7 +157,8 @@ export default function Scenario(): JSX.Element {
                   key={row.compartment}
                   onClick={() => {
                     setSelectedID(row.compartment);
-                    dispatch(selectScenario(row.compartment));
+                    dispatch(selectCompartment(row.compartment));
+                    dispatch(selectRate(row.latest));
                   }}
                   selected={selectedID === row.compartment}
                   classes={{selected: classes.selected}}
@@ -178,7 +185,7 @@ export default function Scenario(): JSX.Element {
         {scenario.map((scenario, index) => (
           <Paper
             style={active === index ? {color: scenario.color, boxShadow: '0px 0px 16px 3px'} : {color: scenario.color}}
-            onClick={() => setActive(index)}
+            onClick={() => ChangeShadow(index)}
             key={index}
           />
         ))}
