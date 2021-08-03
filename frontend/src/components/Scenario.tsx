@@ -1,6 +1,5 @@
 import React from 'react';
 import {Box} from '@material-ui/core';
-
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -41,10 +40,6 @@ const useStyles = makeStyles((theme: Theme) =>
         marginRight: theme.spacing(2.5),
         padding: theme.spacing(7.65),
         border: `3px solid`,
-      },
-
-      '&>*:hover': {
-        boxShadow: '0px 0px 16px 3px ',
       },
     },
 
@@ -134,6 +129,7 @@ export default function Scenario(): JSX.Element {
   const classes = useStyles();
   const dispatch = useAppDispatch();
   const [selectedID, setSelectedID] = React.useState('');
+  const [active, setActive] = React.useState(-1);
 
   return (
     <Box>
@@ -153,11 +149,6 @@ export default function Scenario(): JSX.Element {
               {rows.map((row) => (
                 <TableRow
                   key={row.compartment}
-                  // style={{backgroundColor : rowColor? rowcolor[0] : rowcolor[1]}}
-                  /* onClick={() => { 
-                    dispatch(selectScenario(row.compartment));
-                  }} */
-
                   onClick={() => {
                     setSelectedID(row.compartment);
                     dispatch(selectScenario(row.compartment));
@@ -186,9 +177,8 @@ export default function Scenario(): JSX.Element {
       <Box className={classes.paper}>
         {scenario.map((scenario, index) => (
           <Paper
-            style={{
-              color: scenario.color,
-            }}
+            style={active === index ? {color: scenario.color, boxShadow: '0px 0px 16px 3px'} : {color: scenario.color}}
+            onClick={() => setActive(index)}
             key={index}
           />
         ))}
