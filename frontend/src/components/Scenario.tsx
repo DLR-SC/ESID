@@ -10,7 +10,6 @@ import Paper from '@material-ui/core/Paper';
 import {Theme, createStyles, withStyles, makeStyles} from '@material-ui/core/styles';
 import {useAppDispatch} from '../store/hooks';
 import {selectCompartment} from '../store/DataSelectionSlice';
-import {selectRate} from '../store/DataSelectionSlice';
 
 /* This component displays the pandemic spread depending on different scenarios
  */
@@ -158,7 +157,6 @@ export default function Scenario(): JSX.Element {
                   onClick={() => {
                     setSelectedID(row.compartment);
                     dispatch(selectCompartment(row.compartment));
-                    dispatch(selectRate(row.latest));
                   }}
                   selected={selectedID === row.compartment}
                   classes={{selected: classes.selected}}
