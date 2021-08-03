@@ -6,6 +6,7 @@ describe('DataSelectionSlice', () => {
     date: new Date(2021, 0).getTime(),
     scenario: 'default',
     compartment: 'infected',
+    rate: 0,
   };
 
   test('Initial State', () => {
@@ -19,6 +20,7 @@ describe('DataSelectionSlice', () => {
       date: new Date(2021, 0).getTime(),
       scenario: 'default',
       compartment: 'infected',
+      rate: 0,
     });
   });
 
@@ -29,6 +31,7 @@ describe('DataSelectionSlice', () => {
       date: new Date(2020, 8, 21).getTime(),
       scenario: 'default',
       compartment: 'infected',
+      rate: 0,
     });
 
     expect(reducer(initialState, selectDate(2000000000))).toEqual({
@@ -36,6 +39,7 @@ describe('DataSelectionSlice', () => {
       date: 2000000000,
       scenario: 'default',
       compartment: 'infected',
+      rate: 0,
     });
   });
 
@@ -45,6 +49,7 @@ describe('DataSelectionSlice', () => {
       date: new Date(2021, 0).getTime(),
       scenario: 'Test Scenario',
       compartment: 'infected',
+      rate: 0,
     });
   });
 
@@ -54,6 +59,7 @@ describe('DataSelectionSlice', () => {
       date: new Date(2021, 0).getTime(),
       scenario: 'default',
       compartment: 'Test Compartment',
+      rate: 0,
     });
   });
 });
