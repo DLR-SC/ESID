@@ -104,7 +104,7 @@ const header = [
 ];
 
 const rows = [
-  createRow('infected', 100, 20000, 15, 300, -50, 400, 30, 500, -50),
+  createRow('infected', 100, 200, 15, 300, -50, 400, 30, 500, -50),
   createRow('hospitalized', 145, 200, 15, 300, -50, 400, 30, 500, -50),
   createRow('death', 160, 200, 15, 300, -50, 400, 30, 500, -50),
   createRow('other', 170, 200, 15, 300, -50, 400, 30, 500, -50),
