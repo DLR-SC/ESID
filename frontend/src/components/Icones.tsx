@@ -1,9 +1,10 @@
 import {Box} from '@material-ui/core';
 import React from 'react';
+import Button from '@material-ui/core/Button';
 import {makeStyles, createStyles, Theme} from '@material-ui/core/styles';
 import AutorenewIcon from '@material-ui/icons/Autorenew';
-import RefreshIcon from '@material-ui/icons/Refresh';
-import ReplayIcon from '@material-ui/icons/Replay';
+import RedoIcon from '@material-ui/icons/Redo';
+import UndoIcon from '@material-ui/icons/Undo';
 import FullscreenIcon from '@material-ui/icons/Fullscreen';
 import ShareIcon from '@material-ui/icons/Share';
 
@@ -23,11 +24,21 @@ export default function Icones() {
   return (
     <Box display="flex" width={500} height={60}>
       <Box className={classes.root} m="auto">
-        <AutorenewIcon />
-        <RefreshIcon />
-        <ReplayIcon />
-        <FullscreenIcon />
-        <ShareIcon />
+        <Button disabled>
+          <AutorenewIcon />
+        </Button>
+        <Button disabled>
+          <RedoIcon />
+        </Button>
+        <Button disabled>
+          <UndoIcon />
+        </Button>
+        <Button>
+          <FullscreenIcon />
+        </Button>
+        <Button disabled>
+          <ShareIcon />
+        </Button>
       </Box>
     </Box>
   );
