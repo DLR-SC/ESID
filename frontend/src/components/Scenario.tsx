@@ -11,6 +11,7 @@ import {Theme, createStyles, withStyles, makeStyles} from '@material-ui/core/sty
 import {useAppDispatch} from '../store/hooks';
 import {selectCompartment} from '../store/DataSelectionSlice';
 import {selectRate} from '../store/DataSelectionSlice';
+import {selectScenario} from '../store/DataSelectionSlice';
 
 /* This component displays the pandemic spread depending on different scenarios
  */
@@ -134,7 +135,6 @@ export default function Scenario(): JSX.Element {
 
   function ChangeShadow(index: number) {
     active !== -1 ? setActive(-1) : setActive(index);
-    return active;
   }
 
   return (
@@ -158,17 +158,22 @@ export default function Scenario(): JSX.Element {
                   onClick={() => {
                     setSelectedID(row.compartment);
                     dispatch(selectCompartment(row.compartment));
-                    active === 0
-                      ? dispatch(selectRate(row.basic))
-                      : active === 1
-                      ? dispatch(selectRate(row.medium))
-                      : active === 2
-                      ? dispatch(selectRate(row.big))
-                      : active === 3
-                      ? dispatch(selectRate(row.maximum))
-                      : active === -1
-                      ? dispatch(selectRate(row.latest))
-                      : null;
+
+                    switch (active) {
+                      case 0:
+                        dispatch(selectRate(row.basic));
+                      case 1:
+                        dispatch(selectRate(row.medium));
+                        dispatch(selectScenario(header[1].label));
+                      case 2:
+                        dispatch(selectRate(row.big));
+                        dispatch(selectScenario(header[2].label));
+                      case 3:
+                        dispatch(selectRate(row.maximum));
+                        dispatch(selectScenario(header[3].label));
+                      default:
+                        dispatch(selectRate(row.latest));
+                    }
                   }}
                   selected={selectedID === row.compartment}
                   classes={{selected: classes.selected}}
@@ -194,9 +199,9 @@ export default function Scenario(): JSX.Element {
       <Box className={classes.paper}>
         {scenario.map((scenario, index) => (
           <Paper
+            key={index}
             style={active === index ? {color: scenario.color, boxShadow: '0px 0px 16px 3px'} : {color: scenario.color}}
             onClick={() => ChangeShadow(index)}
-            key={index}
           />
         ))}
       </Box>
