@@ -16,6 +16,7 @@ import {selectScenario} from '../store/DataSelectionSlice';
 /* This component displays the pandemic spread depending on different scenarios
  */
 
+
 const StyledTableRow = withStyles((_theme) => ({
   root: {
     '& .MuiTableCell-root': {
