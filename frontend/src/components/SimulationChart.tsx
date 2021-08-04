@@ -13,9 +13,7 @@ import am4themes_animated from '@amcharts/amcharts4/themes/animated';
 const useStyles = makeStyles((_theme: Theme) =>
   createStyles({
     chart: {
-      paddingTop: 35,
-      maxWidth: '80%',
-      height: '40vh',
+      height: '100%',
     },
   })
 );
@@ -102,9 +100,5 @@ export default function SimulationChart(): JSX.Element {
     chart.cursor.xAxis = dateAxis;
   }, []);
 
-  return (
-    <Box id="chartdiv" className={classes.chart}>
-      {' '}
-    </Box>
-  );
+  return <Box id="chartdiv" className={classes.chart}></Box>;
 }
