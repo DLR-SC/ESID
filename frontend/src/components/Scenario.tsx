@@ -16,7 +16,6 @@ import {selectScenario} from '../store/DataSelectionSlice';
 /* This component displays the pandemic spread depending on different scenarios
  */
 
-
 const StyledTableRow = withStyles((_theme) => ({
   root: {
     '& .MuiTableCell-root': {
@@ -163,15 +162,23 @@ export default function Scenario(): JSX.Element {
                     switch (active) {
                       case 0:
                         dispatch(selectRate(row.basic));
+                        break;
+
                       case 1:
                         dispatch(selectRate(row.medium));
                         dispatch(selectScenario(header[1].label));
+                        break;
+
                       case 2:
                         dispatch(selectRate(row.big));
                         dispatch(selectScenario(header[2].label));
+                        break;
+
                       case 3:
                         dispatch(selectRate(row.maximum));
                         dispatch(selectScenario(header[3].label));
+                        break;
+
                       default:
                         dispatch(selectRate(row.latest));
                     }
