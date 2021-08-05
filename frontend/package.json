@@ -77,7 +77,8 @@
     "react-lazyload": "^3.2.0",
     "react-markdown": "^6.0.2",
     "react-redux": "^7.2.3",
-    "redux": "^4.0.5"
+    "redux": "^4.0.5",
+    "simplebar-react": "^2.3.5"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.12.13",
