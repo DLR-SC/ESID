@@ -97,8 +97,8 @@ export default function History(): JSX.Element {
   // Dislay period
   const DisplayHistory = eventperiod.map((period, index) => (
     <List key={index}>
-      <Box pl={9}>
-        <ListItemText secondary={period.month} />
+      <Box pl={9} pb={1} pt={1}>
+        <ListItemText secondary={`${period.day}` + ' ' + `${period.month}` + ' ' + `${period.year}`} />
       </Box>
       <Box
         style={{
