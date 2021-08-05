@@ -32,8 +32,8 @@ export default function SearchBar(): JSX.Element {
   const selectedDistrict = useAppSelector((state) => state.dataSelection.district);
 
   return (
-    <Box className={classes.searchContainer} display="flex" flexDirection="column" justifyContent="center">
-      <Box className={classes.searchIcon} display="flex" justifyContent="center">
+    <Box className={classes.searchContainer} display='flex' flexDirection='column' justifyContent='center'>
+      <Box className={classes.searchIcon} display='flex' justifyContent='center'>
         <SearchIcon />
       </Box>
       <InputBase

@@ -18,16 +18,22 @@ const PACKAGE_JSON = path.resolve(PROJECT_ROOT, 'package.json');
   console.info('Starting to collect the dependencies ...');
 
   // Read the dependencies section from the root package.json and save it as a set of strings.
-  const allDependencies = new Set<string>(Object.keys(JSON.parse(fs.readFileSync(PACKAGE_JSON).toString()).dependencies));
+  const allDependencies = new Set<string>(
+    Object.keys(JSON.parse(fs.readFileSync(PACKAGE_JSON).toString()).dependencies)
+  );
   // We go through all dependencies and get their sub dependencies until we can find no more.
   const visitedDependencies = new Set<string>();
   do {
-    new Set([...Array.from(allDependencies)].filter(d => !visitedDependencies.has(d))).forEach(lib => {
-      getDirectDependencies(lib).forEach(dep => allDependencies.add(dep));
+    new Set([...Array.from(allDependencies)].filter((d) => !visitedDependencies.has(d))).forEach((lib) => {
+      getDirectDependencies(lib).forEach((dep) => allDependencies.add(dep));
       visitedDependencies.add(lib);
     });
   } while (allDependencies.size > visitedDependencies.size);
-  console.info('Finished collecting dependencies.', `Found ${allDependencies.size} direct and indirect dependencies.`, '\n');
+  console.info(
+    'Finished collecting dependencies.',
+    `Found ${allDependencies.size} direct and indirect dependencies.`,
+    '\n'
+  );
 
   console.info('Starting to collect dependency data ...');
   // Now that we have all dependencies, we go through each one and collect all the attribution data we can find.
@@ -108,11 +114,11 @@ function getAuthors(packageJSON: any): string | null {
   } else if (packageJSON.author && typeof packageJSON.author === 'object' && packageJSON.author.name) {
     return packageJSON.author.name;
   } else if (packageJSON.contributors) {
-    return packageJSON.contributors.map((c: any) => typeof c === 'string' ? c : c.name).join(', ');
+    return packageJSON.contributors.map((c: any) => (typeof c === 'string' ? c : c.name)).join(', ');
   } else if (packageJSON.authors) {
-    return packageJSON.authors.map((c: any) => typeof c === 'string' ? c : c.name).join(', ');
+    return packageJSON.authors.map((c: any) => (typeof c === 'string' ? c : c.name)).join(', ');
   } else if (packageJSON.maintainers) {
-    return packageJSON.maintainers.map((c: any) => typeof c === 'string' ? c : c.name).join(', ');
+    return packageJSON.maintainers.map((c: any) => (typeof c === 'string' ? c : c.name)).join(', ');
   }
 
   return null;
@@ -164,14 +170,17 @@ async function getLicenseText(lib: string, license: string | null, author: strin
 
   // First we search for files that have fitting names for license files.
   const files = fs.readdirSync(libRoot);
-  const possibleLicenseFiles = files.filter(fileName => fileName.toLowerCase().includes('license') || fileName.toLowerCase().includes('licence'));
+  const possibleLicenseFiles = files.filter(
+    (fileName) => fileName.toLowerCase().includes('license') || fileName.toLowerCase().includes('licence')
+  );
 
   if (possibleLicenseFiles.length > 0) {
     return fs.readFileSync(`${libRoot}/${possibleLicenseFiles[0]}`).toString();
   } else if (license) {
     // If no license file is found, we try to get a generic license file from GitHub using the name of the license.
     let licenseText = null;
-    if (LICENSE_CACHE.has(license)) { // License texts are cached to minimize requests to GitHub.
+    if (LICENSE_CACHE.has(license)) {
+      // License texts are cached to minimize requests to GitHub.
       licenseText = LICENSE_CACHE.get(license);
     } else {
       const response = await fetch(`https://api.github.com/licenses/${license}`);

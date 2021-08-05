@@ -127,8 +127,8 @@ export default function MapCountry(): JSX.Element {
 
   return (
     <>
-      <Box id="chartdiv" className={classes.Map} />
-      <Box id="legenddiv" className={classes.Heatlegend} />
+      <Box id='chartdiv' className={classes.Map} />
+      <Box id='legenddiv' className={classes.Heatlegend} />
     </>
   );
 }
