@@ -9,6 +9,8 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import CallMadeIcon from '@material-ui/icons/CallMade';
+import 'simplebar';
+import 'simplebar/dist/simplebar.min.css';
 
 /* The history componenent displays the restrictions occured during a pandemic
    classified by month-Year. Each specific month is associated with a list of events */
@@ -146,7 +148,7 @@ export default function History(): JSX.Element {
         <AntTab label={t('details.placeholder')} />
       </AntTabs>
       {value === 0 ? ( //History Tab content
-        <Box className={classes.history}>
+        <Box className={classes.history} data-simplebar>
           <Box className={classes.PeriodContainer}>{DisplayHistory}</Box>
         </Box>
       ) : (
