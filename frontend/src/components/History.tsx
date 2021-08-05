@@ -51,17 +51,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     overflow: 'auto',
     maxHeight: '30vh',
     position: 'relative',
-    '&::-webkit-scrollbar': {
-      width: '0.3em',
-    },
-    '&::-webkit-scrollbar-track': {
-      webkitBoxShadow: 'inset 0 0 4px rgba(0,0,0,0.00)',
-      backgroundColor: '#D3D2D8',
-    },
-    '&::-webkit-scrollbar-thumb': {
-      backgroundColor: 'rgba(0,0,0,.1)',
-      borderRadius: '8px',
-    },
 
     backgroundColor: theme.palette.background.paper,
   },
