@@ -7,7 +7,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import {Theme, createStyles, withStyles, makeStyles} from '@material-ui/core/styles';
+import {Theme, createStyles, makeStyles} from '@material-ui/core/styles';
 import {useAppDispatch} from '../store/hooks';
 import {selectCompartment} from '../store/DataSelectionSlice';
 import {selectRate} from '../store/DataSelectionSlice';
@@ -15,14 +15,6 @@ import {selectScenario} from '../store/DataSelectionSlice';
 
 /* This component displays the pandemic spread depending on different scenarios
  */
-
-const StyledTableRow = withStyles((_theme) => ({
-  root: {
-    '& .MuiTableCell-root': {
-      borderBottom: 0,
-    },
-  },
-}))(TableRow);
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -54,6 +46,9 @@ const useStyles = makeStyles((theme: Theme) =>
       opacity: 0.8,
       backgroundColor: 'transparent',
       zIndex: 0,
+      '& .MuiTableCell-root': {
+        borderBottom: 0,
+      },
     },
 
     tableRow: {
@@ -140,68 +135,67 @@ export default function Scenario(): JSX.Element {
   return (
     <Box>
       <TableContainer>
-        <StyledTableRow>
-          <Table className={classes.table} aria-label="spanning table" size="small">
-            <TableHead>
-              <TableRow>
-                {header.map((header, index) => (
-                  <TableCell colSpan={2} align="center" style={{color: header.color, fontWeight: 'bold'}} key={index}>
-                    {header.label}
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows.map((row) => (
-                <TableRow
-                  key={row.compartment}
-                  onClick={() => {
-                    setSelectedID(row.compartment);
-                    dispatch(selectCompartment(row.compartment));
-
-                    switch (active) {
-                      case 0:
-                        dispatch(selectRate(row.basic));
-                        break;
-
-                      case 1:
-                        dispatch(selectRate(row.medium));
-                        dispatch(selectScenario(header[1].label));
-                        break;
-
-                      case 2:
-                        dispatch(selectRate(row.big));
-                        dispatch(selectScenario(header[2].label));
-                        break;
-
-                      case 3:
-                        dispatch(selectRate(row.maximum));
-                        dispatch(selectScenario(header[3].label));
-                        break;
-
-                      default:
-                        dispatch(selectRate(row.latest));
-                    }
-                  }}
-                  selected={selectedID === row.compartment}
-                  classes={{selected: classes.selected}}
-                  className={classes.tableRow}
-                >
-                  <TableCell>{row.compartment}</TableCell>
-                  <TableCell>{row.latest}</TableCell>
-                  <TableCell>{row.basic}</TableCell>
-                  <TableCell>{row.basicRate}%</TableCell>
-                  <TableCell>{row.medium}</TableCell>
-                  <TableCell>{row.mediumRate}%</TableCell>
-                  <TableCell>{row.big}</TableCell>
-                  <TableCell>{row.bigRate}%</TableCell>
-                  <TableCell>{row.maximum}</TableCell>
-                  <TableCell>{row.maximumRate}%</TableCell>
-                </TableRow>
+        <Table className={classes.table} aria-label="spanning table" size="small">
+          <TableHead>
+            <TableRow>
+              {header.map((header, index) => (
+                <TableCell colSpan={2} align="center" style={{color: header.color, fontWeight: 'bold'}} key={index}>
+                  {header.label}
+                </TableCell>
               ))}
-            </TableBody>
-          </Table>
-        </StyledTableRow>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map((row) => (
+              <TableRow
+                key={row.compartment}
+                onClick={() => {
+                  setSelectedID(row.compartment);
+                  dispatch(selectCompartment(row.compartment));
+
+                  switch (active) {
+                    case 0:
+                      dispatch(selectRate(row.basic));
+                      dispatch(selectScenario(header[1].label));
+                      break;
+
+                    case 1:
+                      dispatch(selectRate(row.medium));
+                      dispatch(selectScenario(header[2].label));
+                      break;
+
+                    case 2:
+                      dispatch(selectRate(row.big));
+                      dispatch(selectScenario(header[3].label));
+                      break;
+
+                    case 3:
+                      dispatch(selectRate(row.maximum));
+                      dispatch(selectScenario(header[4].label));
+                      break;
+
+                    default:
+                      dispatch(selectRate(row.latest));
+                  }
+                }}
+                selected={selectedID === row.compartment}
+                classes={{selected: classes.selected}}
+                className={classes.tableRow}
+              >
+                <TableCell>{row.compartment}</TableCell>
+                <TableCell>{row.latest}</TableCell>
+                <TableCell>{row.basic}</TableCell>
+                <TableCell>{row.basicRate}%</TableCell>
+                <TableCell>{row.medium}</TableCell>
+                <TableCell>{row.mediumRate}%</TableCell>
+                <TableCell>{row.big}</TableCell>
+                <TableCell>{row.bigRate}%</TableCell>
+                <TableCell>{row.maximum}</TableCell>
+                <TableCell>{row.maximumRate}%</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       </TableContainer>
       {/* Display Cards */}
       <Box className={classes.paper}>
