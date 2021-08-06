@@ -97,7 +97,7 @@ export default function History(): JSX.Element {
   // Dislay period
   const DisplayHistory = eventperiod.map((period, index) => (
     <List key={index}>
-      <Box pl={9} pb={1} pt={1}>
+      <Box pl={9} pb={2} pt={0}>
         <ListItemText secondary={`${period.day}` + ' ' + `${period.month}` + ' ' + `${period.year}`} />
       </Box>
       <Box
@@ -144,8 +144,8 @@ export default function History(): JSX.Element {
         }}
       >
         {/* Set table labels */}
-        <AntTab label={t('history.placeholder')} />
-        <AntTab label={t('details.placeholder')} />
+        <AntTab label={t('history.Tabtitle')} />
+        <AntTab label={t('details.Tabtitle')} />
       </AntTabs>
       {value === 0 ? ( //History Tab content
         <Box className={classes.history} data-simplebar>
