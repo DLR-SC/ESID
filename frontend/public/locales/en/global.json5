@@ -17,10 +17,10 @@
     placeholder: 'Main Content',
   },
   history: {
-    placeholder: 'history',
+    Tabtitle: 'history',
   },
   details: {
-    placeholder: 'Details',
+    Tabtitle: 'Details',
   },
   BEZ: {
     K: 'Rural District',
