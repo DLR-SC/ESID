@@ -11,6 +11,6 @@ describe('History', () => {
         <History />
       </I18nextProvider>
     );
-    screen.getByText('history.placeholder');
+    screen.getByText('history.Tabtitle');
   });
 });
