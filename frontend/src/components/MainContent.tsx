@@ -12,7 +12,7 @@ const useStyles = makeStyles({
     marginRight: 'auto',
   },
   divider: {
-    borderBottom: '2px dotted #3998DB',
+    borderBottom: '2px solid #F2F2F2',
     backgroundColor: 'transparent',
     margin: '20px 0 0 0',
   },
