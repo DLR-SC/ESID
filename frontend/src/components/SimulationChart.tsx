@@ -15,7 +15,11 @@ const useStyles = makeStyles((_theme: Theme) =>
     chart: {
       height: '100%',
       width: '100%',
+      margin: 0,
+      padding: 0,
       backgroundColor: 'white',
+      backgroundImage: 'radial-gradient(#E2E4E6 10%, transparent 11%)',
+      backgroundSize: '10px 10px',
     },
   })
 );
@@ -79,6 +83,7 @@ export default function SimulationChart(): JSX.Element {
     series.stroke = am4core.color('#876BE3');
     series2.strokeWidth = 1;
     series2.stroke = series.stroke;
+
     // Create series
     const series3 = chart.series.push(new am4charts.LineSeries());
     series3.dataFields.valueY = 'value3';
@@ -102,5 +107,9 @@ export default function SimulationChart(): JSX.Element {
     chart.cursor.xAxis = dateAxis;
   }, []);
 
-  return <Box id="chartdiv" className={classes.chart}></Box>;
+  return (
+    <Box id="chartdiv" className={classes.chart}>
+      {' '}
+    </Box>
+  );
 }
