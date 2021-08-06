@@ -14,6 +14,8 @@ const useStyles = makeStyles((_theme: Theme) =>
   createStyles({
     chart: {
       height: '100%',
+      width: '100%',
+      backgroundColor: 'white',
     },
   })
 );
