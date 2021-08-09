@@ -133,6 +133,7 @@ export default function History(): JSX.Element {
         value={value}
         onChange={handleChange}
         style={{
+          width: '100%',
           backgroundColor: 'white',
           borderTop: '1.5px solid',
           borderImage: 'linear-gradient(360deg, #dee1e1 10%, #f4f4f4 360%)',
