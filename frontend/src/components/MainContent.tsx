@@ -21,17 +21,17 @@ const useStyles = makeStyles({
 export default function MainContent(): JSX.Element {
   const classes = useStyles();
   return (
-    <Grid container direction="column" style={{width: '100vw'}}>
+    <Grid container direction="column">
       <Grid item className={classes.icon}>
         <Icones />
       </Grid>
-      <Grid item style={{width: '100%'}}>
+      <Grid item>
         <Scenario />
       </Grid>
-      <Grid item style={{width: '100%'}}>
+      <Grid item>
         <Divider className={classes.divider} light />
       </Grid>
-      <Grid item style={{width: '100%', flexGrow: 1}}>
+      <Grid item style={{flexGrow: 1}}>
         <SimulationChart />
       </Grid>
     </Grid>
