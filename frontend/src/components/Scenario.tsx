@@ -12,6 +12,8 @@ import {useAppDispatch} from '../store/hooks';
 import {selectCompartment} from '../store/DataSelectionSlice';
 import {selectRate} from '../store/DataSelectionSlice';
 import {selectScenario} from '../store/DataSelectionSlice';
+import 'simplebar';
+import 'simplebar/dist/simplebar.min.css';
 
 /* This component displays the pandemic spread depending on different scenarios
  */
@@ -23,7 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
       flexWrap: 'nowrap',
       position: 'relative',
       height: theme.spacing(25),
-      marginLeft: theme.spacing(27),
+      marginLeft: theme.spacing(26),
       zIndex: 1,
 
       '&  .MuiPaper-root': {
@@ -36,11 +38,18 @@ const useStyles = makeStyles((theme: Theme) =>
         border: `3px solid`,
       },
     },
+    root: {
+      width: '100%',
+      display: 'flex',
+      flexGrow: 1,
+      marginBottom: '200px',
+    },
 
     table: {
       width: '765px',
       marginLeft: theme.spacing(4),
       marginRight: theme.spacing(0),
+      maxHeight: '200px',
       marginTop: 1,
       position: 'absolute',
       opacity: 0.8,
@@ -104,6 +113,10 @@ const rows = [
   createRow('hospitalized', 145, 200, 15, 300, -50, 400, 30, 500, -50),
   createRow('death', 160, 200, 15, 300, -50, 400, 30, 500, -50),
   createRow('other', 170, 200, 15, 300, -50, 400, 30, 500, -50),
+  createRow('deat', 160, 200, 15, 300, -50, 400, 30, 500, -50),
+  createRow('othe', 170, 200, 15, 300, -50, 400, 30, 500, -50),
+  createRow('deat', 160, 200, 15, 300, -50, 400, 30, 500, -50),
+  createRow('oter', 170, 200, 15, 300, -50, 400, 30, 500, -50),
 ];
 
 const scenario = [
@@ -133,79 +146,100 @@ export default function Scenario(): JSX.Element {
   }
 
   return (
-    <Box>
-      <TableContainer>
-        <Table className={classes.table} aria-label="spanning table" size="small">
-          <TableHead>
-            <TableRow>
-              {header.map((header, index) => (
-                <TableCell colSpan={2} align="center" style={{color: header.color, fontWeight: 'bold'}} key={index}>
-                  {header.label}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row) => (
-              <TableRow
-                key={row.compartment}
-                onClick={() => {
-                  setSelectedID(row.compartment);
-                  dispatch(selectCompartment(row.compartment));
+    <Box className={classes.root}>
+      <Box style={{width: '100%', position: 'relative'}}>
+        <Box
+          style={{position: 'absolute', flex: '1 0 auto', overflowY: 'hidden', overflowX: 'auto', width: '100%'}}
+          data-simplebar
+        >
+          <TableContainer className={classes.table} data-simplebar>
+            <Table stickyHeader aria-label="sticky table">
+              <TableHead>
+                <TableRow style={{backgroundColor: '#f4f4f4'}}>
+                  {header.map((header, index) => (
+                    <TableCell colSpan={2} align="left" style={{color: header.color, fontWeight: 'bold'}} key={index}>
+                      {header.label}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {rows.map((row) => (
+                  <TableRow
+                    key={row.compartment}
+                    onClick={() => {
+                      setSelectedID(row.compartment);
 
-                  switch (active) {
-                    case 0:
-                      dispatch(selectRate(row.basic));
-                      dispatch(selectScenario(header[1].label));
-                      break;
+                      scenario.map((scenario, index) => (
+                        <Paper
+                          key={index}
+                          style={
+                            active === index
+                              ? {color: scenario.color, boxShadow: '0px 0px 16px 3px'}
+                              : {color: scenario.color}
+                          }
+                          onClick={() => ChangeShadow(index)}
+                        />
+                      ));
+                      dispatch(selectCompartment(row.compartment));
 
-                    case 1:
-                      dispatch(selectRate(row.medium));
-                      dispatch(selectScenario(header[2].label));
-                      break;
+                      switch (active) {
+                        case 0:
+                          dispatch(selectRate(row.basic));
+                          dispatch(selectScenario(header[1].label));
+                          break;
 
-                    case 2:
-                      dispatch(selectRate(row.big));
-                      dispatch(selectScenario(header[3].label));
-                      break;
+                        case 1:
+                          dispatch(selectRate(row.medium));
+                          dispatch(selectScenario(header[2].label));
+                          break;
 
-                    case 3:
-                      dispatch(selectRate(row.maximum));
-                      dispatch(selectScenario(header[4].label));
-                      break;
+                        case 2:
+                          dispatch(selectRate(row.big));
+                          dispatch(selectScenario(header[3].label));
+                          break;
 
-                    default:
-                      dispatch(selectRate(row.latest));
-                  }
-                }}
-                selected={selectedID === row.compartment}
-                classes={{selected: classes.selected}}
-                className={classes.tableRow}
-              >
-                <TableCell>{row.compartment}</TableCell>
-                <TableCell>{row.latest}</TableCell>
-                <TableCell>{row.basic}</TableCell>
-                <TableCell>{row.basicRate}%</TableCell>
-                <TableCell>{row.medium}</TableCell>
-                <TableCell>{row.mediumRate}%</TableCell>
-                <TableCell>{row.big}</TableCell>
-                <TableCell>{row.bigRate}%</TableCell>
-                <TableCell>{row.maximum}</TableCell>
-                <TableCell>{row.maximumRate}%</TableCell>
-              </TableRow>
+                        case 3:
+                          dispatch(selectRate(row.maximum));
+                          dispatch(selectScenario(header[4].label));
+                          break;
+
+                        default:
+                          dispatch(selectRate(row.latest));
+                      }
+                    }}
+                    selected={selectedID === row.compartment}
+                    classes={{selected: classes.selected}}
+                    className={classes.tableRow}
+                  >
+                    <TableCell>{row.compartment}</TableCell>
+                    <TableCell>{row.latest}</TableCell>
+                    <TableCell>{row.basic}</TableCell>
+                    <TableCell>{row.basicRate}%</TableCell>
+                    <TableCell>{row.medium}</TableCell>
+                    <TableCell>{row.mediumRate}%</TableCell>
+                    <TableCell>{row.big}</TableCell>
+                    <TableCell>{row.bigRate}%</TableCell>
+                    <TableCell>{row.maximum}</TableCell>
+                    <TableCell>{row.maximumRate}%</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          {/* Display Cards */}
+          <Box className={classes.paper}>
+            {scenario.map((scenario, index) => (
+              <Paper
+                key={index}
+                style={
+                  active === index ? {color: scenario.color, boxShadow: '0px 0px 16px 3px'} : {color: scenario.color}
+                }
+                onClick={() => ChangeShadow(index)}
+              />
             ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      {/* Display Cards */}
-      <Box className={classes.paper}>
-        {scenario.map((scenario, index) => (
-          <Paper
-            key={index}
-            style={active === index ? {color: scenario.color, boxShadow: '0px 0px 16px 3px'} : {color: scenario.color}}
-            onClick={() => ChangeShadow(index)}
-          />
-        ))}
+          </Box>
+        </Box>
       </Box>
     </Box>
   );
