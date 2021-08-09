@@ -22,7 +22,7 @@ export default function Icones() {
   const classes = useStyles();
 
   return (
-    <Box display="flex" width={500} height={60}>
+    <Box display="flex" height={60}>
       <Box className={classes.root} m="auto">
         <Button disabled>
           <AutorenewIcon />
