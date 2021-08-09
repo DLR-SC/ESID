@@ -47,15 +47,11 @@ interface StyledTabProps {
 const useStyles = makeStyles((theme: Theme) => ({
   Tab: {
     width: '100%',
+    display: 'flex',
+    flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
   },
-  history: {
-    overflow: 'auto',
-    maxHeight: '30vh',
-    position: 'relative',
 
-    backgroundColor: theme.palette.background.paper,
-  },
   PeriodContainer: {
     position: 'relative',
     backgroundColor: '#F2F2F2',
@@ -127,7 +123,7 @@ export default function History(): JSX.Element {
   ));
 
   return (
-    <div className={classes.Tab}>
+    <>
       <AntTabs
         TabIndicatorProps={{
           style: {
@@ -137,6 +133,7 @@ export default function History(): JSX.Element {
         value={value}
         onChange={handleChange}
         style={{
+          backgroundColor: 'white',
           borderTop: '1.5px solid',
           borderImage: 'linear-gradient(360deg, #dee1e1 10%, #f4f4f4 360%)',
           borderImageSlice: 1,
@@ -147,14 +144,21 @@ export default function History(): JSX.Element {
         <AntTab label={t('history.Tabtitle')} />
         <AntTab label={t('details.Tabtitle')} />
       </AntTabs>
-      {value === 0 ? ( //History Tab content
-        <Box className={classes.history} data-simplebar>
-          <Box className={classes.PeriodContainer}>{DisplayHistory}</Box>
-        </Box>
-      ) : (
-        // Details Tab content
-        <Tab label="Details" />
-      )}
-    </div>
+      <div className={classes.Tab}>
+        {value === 0 ? ( //History Tab content
+          <Box style={{width: '100%', height: '100%', position: 'relative'}}>
+            <Box
+              style={{position: 'absolute', flex: '1 1 auto', overflow: 'auto', height: '100%', width: '100%'}}
+              data-simplebar
+            >
+              <Box className={classes.PeriodContainer}>{DisplayHistory}</Box>
+            </Box>
+          </Box>
+        ) : (
+          // Details Tab content
+          <Tab label="Details" />
+        )}
+      </div>
+    </>
   );
 }
