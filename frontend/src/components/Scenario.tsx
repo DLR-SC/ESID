@@ -26,8 +26,6 @@ const useStyles = makeStyles((theme: Theme) =>
       position: 'relative',
       height: theme.spacing(25),
       marginLeft: theme.spacing(26),
-      marginTop: '20px',
-      marginBottom: '20px',
       zIndex: 1,
 
       '&  .MuiPaper-root': {
@@ -157,19 +155,9 @@ export default function Scenario(): JSX.Element {
           <TableContainer className={classes.table} data-simplebar>
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
-                <TableRow>
+                <TableRow style={{backgroundColor: '#f4f4f4'}}>
                   {header.map((header, index) => (
-                    <TableCell
-                      colSpan={2}
-                      align="left"
-                      style={{
-                        color: header.color,
-                        fontWeight: 'bold',
-                        paddingTop: '40px',
-                        backgroundColor: 'transparent',
-                      }}
-                      key={index}
-                    >
+                    <TableCell colSpan={2} align="left" style={{color: header.color, fontWeight: 'bold'}} key={index}>
                       {header.label}
                     </TableCell>
                   ))}
