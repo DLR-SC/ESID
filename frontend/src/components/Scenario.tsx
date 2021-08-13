@@ -139,17 +139,17 @@ export default function Scenario(): JSX.Element {
   const classes = useStyles();
   const dispatch = useAppDispatch();
   const [selectedID, setSelectedID] = React.useState('');
-  const [active, setActive] = React.useState(-1);
+  const [active, setActive] = React.useState(0);
 
   function ChangeShadow(index: number) {
-    active !== -1 ? setActive(-1) : setActive(index);
+    setActive(index);
   }
 
   return (
     <Box className={classes.root}>
-      <Box style={{width: '100%', position: 'relative'}}>
+      <Box style={{width: '100%', position: 'relative', zIndex: 0}}>
         <Box
-          style={{position: 'absolute', flex: '1 0 auto', overflowY: 'hidden', overflowX: 'auto', width: '100%'}}
+          style={{position: 'absolute', flex: '1 1 auto', overflowY: 'hidden', overflowX: 'auto', width: '100%'}}
           data-simplebar
         >
           <TableContainer className={classes.table} data-simplebar>
