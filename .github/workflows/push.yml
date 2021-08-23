@@ -41,3 +41,6 @@ jobs:
 
       - name: Linting
         run: npx eslint src
+
+      - name: Accessibilty
+        run: npx pa11y ./build/index.html
