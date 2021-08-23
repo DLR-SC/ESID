@@ -43,4 +43,4 @@ jobs:
         run: npx eslint src
 
       - name: Accessibilty
-        run: npx pa11y ./build/index.html
+        run: npx pa11y --threshold 100 -w 10000 ./build/index.html

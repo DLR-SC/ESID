@@ -9,7 +9,7 @@
     "coverage": "jest --collectCoverage --reporters='default'",
     "format": "prettier --write .",
     "lint": "eslint --fix src",
-    "a11y": "npm run build && pa11y ./build/index.html",
+    "a11y": "npm run build && pa11y --threshold 100 -w 10000 ./build/index.html",
     "collect-attributions": "ts-node ./tools/CollectAttributions.ts"
   },
   "repository": {
