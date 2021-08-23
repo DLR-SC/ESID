@@ -9,6 +9,7 @@
     "coverage": "jest --collectCoverage --reporters='default'",
     "format": "prettier --write .",
     "lint": "eslint --fix src",
+    "a11y": "npm run build && pa11y ./build/index.html",
     "collect-attributions": "ts-node ./tools/CollectAttributions.ts"
   },
   "repository": {
@@ -105,6 +106,7 @@
     "jest-junit": "^12.0.0",
     "lint-staged": "^10.5.4",
     "node-fetch": "^2.6.1",
+    "pa11y": "^6.0.1",
     "prettier": "^2.2.1",
     "sass": "^1.32.8",
     "sass-loader": "^11.0.1",
