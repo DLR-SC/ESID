@@ -23,11 +23,11 @@ void i18n
     },
     backend: {
       loadPath: 'locales/{{lng}}/{{ns}}.json5',
-      parse(data: string): string {
+      parse(data: string) {
         return JSON5.parse(data);
       },
     },
-  })
+  }, undefined)
   .then(() => (document.documentElement.lang = i18n.language));
 
 export default i18n;

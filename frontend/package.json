@@ -9,7 +9,6 @@
     "coverage": "jest --collectCoverage --reporters='default'",
     "format": "prettier --write .",
     "lint": "eslint --fix src",
-    "a11y": "npm run build && pa11y --threshold 100 -w 10000 ./build/index.html",
     "collect-attributions": "ts-node ./tools/CollectAttributions.ts"
   },
   "repository": {
@@ -81,6 +80,8 @@
     "redux": "^4.0.5"
   },
   "devDependencies": {
+    "@axe-core/cli": "^4.2.2",
+    "@axe-core/react": "^4.2.2",
     "@babel/preset-react": "^7.12.13",
     "@testing-library/react": "^11.2.6",
     "@types/jest": "^26.0.22",
@@ -106,7 +107,6 @@
     "jest-junit": "^12.0.0",
     "lint-staged": "^10.5.4",
     "node-fetch": "^2.6.1",
-    "pa11y": "^6.0.1",
     "prettier": "^2.2.1",
     "sass": "^1.32.8",
     "sass-loader": "^11.0.1",

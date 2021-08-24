@@ -42,5 +42,7 @@ jobs:
       - name: Linting
         run: npx eslint src
 
-      - name: Accessibilty
-        run: npx pa11y --threshold 100 -w 10000 ./build/index.html
+      -name: Accessibility
+        run: |
+        npm run start & npx wait-on http://localhost:8080
+        axe http://localhost:8080 --exit
