@@ -44,5 +44,6 @@ jobs:
 
       - name: Accessibility
         run: |
+          sudo apt install -y firefox-geckodriver
           npm run start & npx wait-on http://localhost:8080
-          npx axe http://localhost:8080 --exit --show-errors --verbose
+          npx axe http://localhost:8080 -b firefox --exit --show-errors --verbose
