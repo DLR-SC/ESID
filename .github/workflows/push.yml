@@ -45,4 +45,4 @@ jobs:
       - name: Accessibility
         run: |
           npm run start & npx wait-on http://localhost:8080
-          axe http://localhost:8080 --exit
+          npx axe http://localhost:8080 --exit
