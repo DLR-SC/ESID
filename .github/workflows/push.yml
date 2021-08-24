@@ -42,7 +42,7 @@ jobs:
       - name: Linting
         run: npx eslint src
 
-      -name: Accessibility
+      - name: Accessibility
         run: |
         npm run start & npx wait-on http://localhost:8080
         axe http://localhost:8080 --exit
