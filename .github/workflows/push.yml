@@ -41,9 +41,3 @@ jobs:
 
       - name: Linting
         run: npx eslint src
-
-      - name: Accessibility
-        run: |
-          sudo apt update && sudo apt install -y firefox-geckodriver
-          npm run start & npx wait-on http://localhost:8080
-          npx axe http://localhost:8080 -b firefox --exit --show-errors --verbose

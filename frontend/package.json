@@ -80,7 +80,6 @@
     "redux": "^4.0.5"
   },
   "devDependencies": {
-    "@axe-core/cli": "^4.2.2",
     "@axe-core/react": "^4.2.2",
     "@babel/preset-react": "^7.12.13",
     "@testing-library/react": "^11.2.6",
