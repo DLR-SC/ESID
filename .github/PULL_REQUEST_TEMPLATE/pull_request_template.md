@@ -30,3 +30,12 @@ I, the author of this PR checked the following requirements for good software qu
 - [ ] All texts have been internationalized with at least the following languages:
   - [ ] English
   - [ ] German
+- [ ] I tried addressing all new accessibility problems displayed in the console and documented if they can't be fixed
+
+I, the reviewer checked the following things:
+
+- [ ] I ran the software once and tried all new and related functionality to this PR
+- [ ] I looked at all new and changed lines of code and commented on possible problems
+- [ ] I read the added documentation and checked if it is understandable and clear
+- [ ] I checked the added tests for completeness
+- [ ] I checked the internationalized strings for spelling errors
