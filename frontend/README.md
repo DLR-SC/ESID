@@ -202,7 +202,7 @@ export default function HelloWorld(): JSX.Element {
 
 ### Accessibility
 
-The application should conform to modern accessibility (a11y) guidelines. We use 
+The application should conform to modern accessibility (a11y) guidelines. We use
 [Axe](https://github.com/dequelabs/axe-core) to check for a11y problems. Axe, automatically posts a11y issues in the
 console, when they arise. This is only enabled in the development mode with `npm run start`. In production Axe is not
 running.
