@@ -197,6 +197,7 @@ German Aerospace Center (DLR):
 - Margrit Klitz
 - Jonas Gilg
 - Luca Spataro
+- Selma Dahmani
 
 Hochschule für Gestaltung Schwäbisch Gmünd (HfG):
 - Julien Stoll
