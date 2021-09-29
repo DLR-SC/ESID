@@ -16,7 +16,7 @@ export default function MainContent(): JSX.Element {
   const {t} = useTranslation();
   const classes = useStyles();
   return (
-    <Grid container direction='column' alignItems='center' justify='center' className={classes.mainContent}>
+    <Grid container direction='column' alignItems='center' justifyContent='center' className={classes.mainContent}>
       <Typography>{t('mainContent.placeholder')}</Typography>
     </Grid>
   );

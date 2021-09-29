@@ -63,7 +63,7 @@ export default function ApplicationMenu(): JSX.Element {
   };
 
   return (
-    <Grid container item alignItems='center' justify='flex-end' xs={2}>
+    <Grid container item alignItems='center' justifyContent='flex-end' xs={2}>
       <Button
         id='top-bar-menu-button'
         aria-label={t('topBar.menu.label')}

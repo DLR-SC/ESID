@@ -63,7 +63,7 @@ export default function AttributionDialog(): JSX.Element {
   /** A loading circle that is displayed while the attributions are downloaded. */
   function LoadingCircle(): JSX.Element {
     return (
-      <Grid container direction='row' alignItems='center' justify='center'>
+      <Grid container direction='row' alignItems='center' justifyContent='center'>
         <CircularProgress disableShrink />
       </Grid>
     );
