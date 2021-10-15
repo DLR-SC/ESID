@@ -70,8 +70,7 @@ export default function SimulationChart(): JSX.Element {
     series.tensionX = 0.8;
     series.strokeWidth = 1;
     series.tensionX = 0.8;
-    series.tooltipText =
-      `{date.formatDate()}:[/] {value1}
+    series.tooltipText = `{date.formatDate()}:[/] {value1}
 {previousDate.formatDate()}:[/] {value2}
 {date.formatDate()}:[/] {value3}
 {date.formatDate()}:[/] {value4}`;
@@ -111,7 +110,7 @@ export default function SimulationChart(): JSX.Element {
   }, []);
 
   return (
-    <Box id="chartdiv" className={classes.chart}>
+    <Box id='chartdiv' className={classes.chart}>
       {' '}
     </Box>
   );

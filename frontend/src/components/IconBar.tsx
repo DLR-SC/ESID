@@ -16,9 +16,8 @@ const useStyles = makeStyles((theme: Theme) =>
         margin: theme.spacing(2),
       },
     },
-  }),
+  })
 );
-
 
 export default function IconBar(): JSX.Element {
   const classes = useStyles();

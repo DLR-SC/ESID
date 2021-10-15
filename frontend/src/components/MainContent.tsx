@@ -21,7 +21,7 @@ const useStyles = makeStyles({
 export default function MainContent(): JSX.Element {
   const classes = useStyles();
   return (
-    <Grid container direction="column">
+    <Grid container direction='column'>
       <Grid item className={classes.icon}>
         <IconBar />
       </Grid>

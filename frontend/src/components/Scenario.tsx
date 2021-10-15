@@ -153,11 +153,11 @@ export default function Scenario(): JSX.Element {
           data-simplebar
         >
           <TableContainer className={classes.table} data-simplebar>
-            <Table stickyHeader aria-label="sticky table">
+            <Table stickyHeader aria-label='sticky table'>
               <TableHead>
                 <TableRow style={{backgroundColor: '#f4f4f4'}}>
                   {header.map((header, index) => (
-                    <TableCell colSpan={2} align="left" style={{color: header.color, fontWeight: 'bold'}} key={index}>
+                    <TableCell colSpan={2} align='left' style={{color: header.color, fontWeight: 'bold'}} key={index}>
                       {header.label}
                     </TableCell>
                   ))}

@@ -111,7 +111,7 @@ export default function History(): JSX.Element {
             <Box key={index2} className={classes.EventContainer}>
               <ListItem disableGutters={false}>
                 <ListItemIcon>
-                  <CallMadeIcon fontSize="small" />
+                  <CallMadeIcon fontSize='small' />
                 </ListItemIcon>
                 <ListItemText secondary={event.eventlabel} />
               </ListItem>
@@ -157,7 +157,7 @@ export default function History(): JSX.Element {
           </Box>
         ) : (
           // Details Tab content
-          <Tab label="Details" />
+          <Tab label='Details' />
         )}
       </div>
     </>

@@ -45,7 +45,7 @@ const PACKAGE_JSON = path.resolve(PROJECT_ROOT, 'package.json');
   }
   console.info('Finished collecting dependency data.', '\n');
 
-  console.info("The following licenses are used by the dependencies:");
+  console.info('The following licenses are used by the dependencies:');
   LICENSES.forEach((occurrences: number, license: string) => {
     console.info(`${occurrences.toString().padStart(4)}x ${license}`);
   });
