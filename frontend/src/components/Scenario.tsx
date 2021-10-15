@@ -164,9 +164,9 @@ export default function Scenario(): JSX.Element {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows.map((row) => (
+                {rows.map((row, index) => (
                   <TableRow
-                    key={row.compartment}
+                    key={index}
                     onClick={() => {
                       setSelectedID(row.compartment);
 
