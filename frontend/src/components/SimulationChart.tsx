@@ -71,7 +71,10 @@ export default function SimulationChart(): JSX.Element {
     series.strokeWidth = 1;
     series.tensionX = 0.8;
     series.tooltipText =
-      '{date.formatDate()}:[/] {value1}\n {previousDate.formatDate()}:[/] {value2}\n{date.formatDate()}:[/] {value3}\n{date.formatDate()}:[/] {value4}';
+      `{date.formatDate()}:[/] {value1}
+{previousDate.formatDate()}:[/] {value2}
+{date.formatDate()}:[/] {value3}
+{date.formatDate()}:[/] {value4}`;
     series.fill = am4core.color('#3998DB');
     series.stroke = am4core.color('#3998DB');
     // Create series

@@ -7,6 +7,7 @@ import RedoIcon from '@material-ui/icons/Redo';
 import UndoIcon from '@material-ui/icons/Undo';
 import FullscreenIcon from '@material-ui/icons/Fullscreen';
 import ShareIcon from '@material-ui/icons/Share';
+import {useFullscreen} from 'rooks';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -15,26 +16,36 @@ const useStyles = makeStyles((theme: Theme) =>
         margin: theme.spacing(2),
       },
     },
-  })
+  }),
 );
+
 
 export default function IconBar(): JSX.Element {
   const classes = useStyles();
+  const fsApi = useFullscreen();
+
+  const toggleFullscreen = () => {
+    if (fsApi?.isFullscreen) {
+      fsApi?.exit();
+    } else {
+      fsApi?.request();
+    }
+  };
 
   return (
-    <Box display="flex" height={60}>
-      <Box className={classes.root} m="auto">
+    <Box display='flex' height={60}>
+      <Box className={classes.root} m='auto'>
         <Button disabled>
           <AutorenewIcon />
         </Button>
         <Button disabled>
-          <RedoIcon />
-        </Button>
-        <Button disabled>
           <UndoIcon />
         </Button>
+        <Button disabled>
+          <RedoIcon />
+        </Button>
         <Button>
-          <FullscreenIcon />
+          <FullscreenIcon onClick={toggleFullscreen} />
         </Button>
         <Button disabled>
           <ShareIcon />
