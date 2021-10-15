@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/DLR-SC/ESID#readme",
   "jest": {
+    "testEnvironment": "jsdom",
     "preset": "ts-jest",
     "roots": [
       "<rootDir>/src"
