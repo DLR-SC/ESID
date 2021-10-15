@@ -900,6 +900,6 @@
       Wir möchten uns ausdrücklich bei allen bedanken, die an den nachfolgenden Softwarebibliotheken gearbeitet haben.\
       Ihr macht großartige Arbeit!',
     authors: 'Autor(en)',
-    repository: 'Repository'
+    repository: 'Repository',
   },
 }

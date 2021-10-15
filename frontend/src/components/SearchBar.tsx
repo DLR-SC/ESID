@@ -1,6 +1,6 @@
 import React from 'react';
 import InputBase from '@material-ui/core/InputBase';
-import {createStyles, fade, Theme, makeStyles} from '@material-ui/core/styles';
+import {createStyles, alpha, Theme, makeStyles} from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
 import {useAppSelector} from '../store/hooks';
 import {Box} from '@material-ui/core';
@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme: Theme) =>
     searchContainer: {
       width: '90%',
       borderRadius: theme.shape.borderRadius,
-      backgroundColor: fade(theme.palette.common.white, 1),
+      backgroundColor: alpha(theme.palette.common.white, 1),
     },
     searchIcon: {
       position: 'absolute',
@@ -32,8 +32,8 @@ export default function SearchBar(): JSX.Element {
   const selectedDistrict = useAppSelector((state) => state.dataSelection.district);
 
   return (
-    <Box className={classes.searchContainer} display="flex" flexDirection="column" justifyContent="center">
-      <Box className={classes.searchIcon} display="flex" justifyContent="center">
+    <Box className={classes.searchContainer} display='flex' flexDirection='column' justifyContent='center'>
+      <Box className={classes.searchIcon} display='flex' justifyContent='center'>
         <SearchIcon />
       </Box>
       <InputBase

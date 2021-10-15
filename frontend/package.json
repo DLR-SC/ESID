@@ -8,7 +8,7 @@
     "test": "jest",
     "coverage": "jest --collectCoverage --reporters='default'",
     "format": "prettier --write .",
-    "lint": "eslint src",
+    "lint": "eslint --fix src",
     "collect-attributions": "ts-node ./tools/CollectAttributions.ts"
   },
   "repository": {
@@ -81,6 +81,7 @@
     "simplebar": "^5.3.5"
   },
   "devDependencies": {
+    "@axe-core/react": "^4.2.2",
     "@babel/preset-react": "^7.12.13",
     "@testing-library/react": "^11.2.6",
     "@types/jest": "^26.0.22",

@@ -20,10 +20,10 @@ export default function Sidebar(): JSX.Element {
   return (
     <Grid
       container
-      direction="column"
-      alignItems="center"
-      justify-content="space-around"
-      alignContent="space-between"
+      direction='column'
+      alignItems='center'
+      justify-content='space-around'
+      alignContent='space-between'
       className={classes.sideBar}
     >
       <SearchBar />

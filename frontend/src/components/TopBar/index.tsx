@@ -27,12 +27,12 @@ export default function TopBar(): JSX.Element {
   const classes = useStyles();
 
   return (
-    <Grid className={classes.gridStyle} container direction="row" alignItems="center">
-      <Grid container item alignItems="center" xs={2}>
+    <Grid className={classes.gridStyle} container direction='row' alignItems='center'>
+      <Grid container item alignItems='center' xs={2}>
         <img
-          id="application-icon"
+          id='application-icon'
           className={classes.iconStyle}
-          src="assets/logo/logo-200x66.svg"
+          src='assets/logo/logo-200x66.svg'
           alt={t('topBar.icon-alt')}
         />
       </Grid>
