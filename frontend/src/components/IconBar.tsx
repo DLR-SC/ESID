@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function Icones() {
+export default function IconBar(): JSX.Element {
   const classes = useStyles();
 
   return (

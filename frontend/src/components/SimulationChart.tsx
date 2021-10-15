@@ -3,14 +3,14 @@ import * as am4core from '@amcharts/amcharts4/core';
 import * as am4charts from '@amcharts/amcharts4/charts';
 import {Box} from '@material-ui/core';
 import {useEffect} from 'react';
-import {makeStyles, createStyles, Theme} from '@material-ui/core/styles';
+import {makeStyles, createStyles} from '@material-ui/core/styles';
 import am4themes_animated from '@amcharts/amcharts4/themes/animated';
 
 /* This component displays the evolution of the pandemic for a specific compartment ( Hospitalized,death,infected, etc.)
  regarding 4 differents scenarios
  */
 
-const useStyles = makeStyles((_theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
     chart: {
       height: '100%',

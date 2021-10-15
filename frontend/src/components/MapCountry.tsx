@@ -153,7 +153,7 @@ export default function MapCountry(): JSX.Element {
       const hs = polygonTemplate.states.create('hover');
       hs.properties.fill = am4core.color('#367B25');
     }
-  }, [selectedScenario, selectedCompartment, selectedRate]);
+  }, [selectedScenario, selectedCompartment, selectedRate, dispatch, t]);
 
   return (
     <>

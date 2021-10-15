@@ -1,7 +1,7 @@
 import {Grid, makeStyles} from '@material-ui/core';
 import React from 'react';
 import Scenario from './Scenario';
-import Icones from './Icones';
+import IconBar from './IconBar';
 import Divider from '@material-ui/core/Divider';
 
 import SimulationChart from './SimulationChart';
@@ -23,7 +23,7 @@ export default function MainContent(): JSX.Element {
   return (
     <Grid container direction="column">
       <Grid item className={classes.icon}>
-        <Icones />
+        <IconBar />
       </Grid>
       <Grid item>
         <Scenario />
