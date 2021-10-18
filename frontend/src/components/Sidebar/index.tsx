@@ -3,7 +3,7 @@ import SearchBar from './SearchBar';
 import DistrictMap from './DistrictMap';
 import SidebarTabs from './SidebarTabs';
 import {makeStyles} from '@mui/styles';
-import {Grid} from '@mui/material';
+import {Container, Stack} from '@mui/material';
 
 const useStyles = makeStyles({
   sideBar: {
@@ -15,7 +15,6 @@ const useStyles = makeStyles({
   },
   sidebarItem: {
     width: '422px',
-    height: '100%',
   },
 });
 
@@ -23,22 +22,20 @@ export default function Sidebar(): JSX.Element {
   const classes = useStyles();
 
   return (
-    <Grid container direction='column' alignItems='stretch' justifyContent='center' className={classes.sideBar}>
-      <Grid item xs={1}>
-        <div className={classes.sidebarItem}>
-          <SearchBar />
-        </div>
-      </Grid>
-      <Grid item xs={5}>
-        <div className={classes.sidebarItem}>
-          <DistrictMap />
-        </div>
-      </Grid>
-      <Grid item xs>
-        <div className={classes.sidebarItem}>
-          <SidebarTabs />
-        </div>
-      </Grid>
-    </Grid>
+    <Stack
+      direction='column'
+      alignItems='stretch'
+      justifyContent='flex-start'
+      className={classes.sideBar}>
+      <div className={classes.sidebarItem}>
+        <SearchBar />
+      </div>
+      <div className={classes.sidebarItem}>
+        <DistrictMap />
+      </div>
+      <Container disableGutters className={classes.sidebarItem} sx={{flexGrow: 1}}>
+        <SidebarTabs />
+      </Container>
+    </Stack>
   );
 }

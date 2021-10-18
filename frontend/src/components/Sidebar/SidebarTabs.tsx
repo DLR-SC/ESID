@@ -5,18 +5,17 @@ export default function SidebarTabs(): JSX.Element {
   //const {t} = useTranslation('global');
 
   const [value, setValue] = React.useState(0);
-  const handleChange = (_: React.ChangeEvent<unknown>, newValue: number) => {
-    setValue(newValue);
-  };
+  const handleChange = (_: React.ChangeEvent<unknown>, newValue: number) => setValue(newValue);
 
   return (
-    <Box display='flex' flexDirection='column' alignItems='stretch' style={{width: '422px', height: '100%'}}>
+    <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'stretch'}}
+         style={{width: '422px', height: '100%'}}>
       <Tabs value={value} onChange={handleChange} aria-label='todo' variant='fullWidth'>
         <Tab label='History' {...a11yProps(0)} />
         <Tab label='Details' {...a11yProps(0)} />
       </Tabs>
-      <TabPanel value={value} index={0} />
-      <TabPanel value={value} index={1} />
+      <TabPanel value={value} index={0}><p>History</p></TabPanel>
+      <TabPanel value={value} index={1}><p>Details</p></TabPanel>
     </Box>
   );
 }
@@ -32,7 +31,7 @@ function TabPanel(props: TabPanelProps) {
 
   return (
     <Box
-      display='flex'
+      sx={{display: 'flex', flexGrow: 1}}
       role='tab-panel'
       hidden={value !== index}
       id={`sidebar-tab-panel-${index}`}

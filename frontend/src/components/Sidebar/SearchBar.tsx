@@ -3,12 +3,12 @@ import {createStyles, makeStyles} from '@mui/styles';
 import SearchIcon from '@mui/icons-material/Search';
 import React from 'react';
 import {useAppSelector} from '../../store/hooks';
-import {alpha, Box, InputBase} from '@mui/material';
+import {alpha, Box, Container, InputBase} from '@mui/material';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     searchContainer: {
-      width: '90%',
+      width: '100%',
       borderRadius: theme.shape.borderRadius,
       backgroundColor: alpha(theme.palette.common.white, 1),
     },
@@ -21,7 +21,6 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(1, 1, 1, 0),
       paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
       transition: theme.transitions.create('width'),
-      flexGrow: 1,
     },
   })
 );
@@ -32,17 +31,17 @@ export default function SearchBar(): JSX.Element {
   const selectedDistrict = useAppSelector((state) => state.dataSelection.district);
 
   return (
-    <Box display='flex' flexDirection='row' justifyContent='center' alignItems='center'>
-      <Box className={classes.searchContainer} display='flex' flexDirection='column' justifyContent='center'>
-        <Box className={classes.searchIcon} display='flex' justifyContent='center'>
-          <SearchIcon />
-        </Box>
+    <Container>
+      <Box className={classes.searchContainer}
+           sx={{display: 'flex', justifyContent: 'flex-start', alignItems: 'center', alignContent: 'center'}}>
+        <SearchIcon style={{paddingLeft: '10px', paddingRight: '5px'}} />
         <InputBase
           placeholder={selectedDistrict.name}
           classes={{input: classes.inputInput}}
           inputProps={{'aria-label': 'search'}}
+          style={{flexGrow: 1}}
         />
       </Box>
-    </Box>
+    </Container>
   );
 }
