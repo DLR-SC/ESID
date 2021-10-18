@@ -1,6 +1,6 @@
-import { Theme } from '@mui/material/styles';
-import {createStyles, makeStyles } from '@mui/styles';
-import SearchIcon from '@mui/icons-material/Search'
+import {Theme} from '@mui/material/styles';
+import {createStyles, makeStyles} from '@mui/styles';
+import SearchIcon from '@mui/icons-material/Search';
 import React from 'react';
 import {useAppSelector} from '../../store/hooks';
 import {alpha, Box, InputBase} from '@mui/material';
@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme: Theme) =>
       transition: theme.transitions.create('width'),
       flexGrow: 1,
     },
-  }),
+  })
 );
 
 /** The Search bar component help Zoom in on a specific region of the Map */

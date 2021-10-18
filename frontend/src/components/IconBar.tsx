@@ -5,8 +5,8 @@ import UndoIcon from '@mui/icons-material/Undo';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import ShareIcon from '@mui/icons-material/Share';
 import {useFullscreen} from 'rooks';
-import {createStyles, makeStyles } from '@mui/styles';
-import { Theme } from '@mui/material/styles';
+import {createStyles, makeStyles} from '@mui/styles';
+import {Theme} from '@mui/material/styles';
 import {Box, Button} from '@mui/material';
 
 const useStyles = makeStyles((theme: Theme) =>

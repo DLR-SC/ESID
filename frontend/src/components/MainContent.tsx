@@ -3,8 +3,8 @@ import Scenario from './Scenario';
 import IconBar from './IconBar';
 
 import SimulationChart from './SimulationChart';
-import { makeStyles } from '@mui/styles';
-import {Divider, Grid } from '@mui/material';
+import {makeStyles} from '@mui/styles';
+import {Divider, Grid} from '@mui/material';
 
 const useStyles = makeStyles({
   icon: {

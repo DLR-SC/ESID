@@ -3,8 +3,8 @@ import {useAppDispatch} from '../store/hooks';
 import {selectCompartment} from '../store/DataSelectionSlice';
 import {selectRate} from '../store/DataSelectionSlice';
 import {selectScenario} from '../store/DataSelectionSlice';
-import {createStyles, makeStyles } from '@mui/styles';
-import { Theme } from '@mui/material/styles';
+import {createStyles, makeStyles} from '@mui/styles';
+import {Theme} from '@mui/material/styles';
 import {Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from '@mui/material';
 
 /* This component displays the pandemic spread depending on different scenarios

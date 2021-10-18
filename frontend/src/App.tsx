@@ -3,12 +3,11 @@ import {Provider} from 'react-redux';
 
 import './App.scss';
 
-
 import TopBar from './components/TopBar';
 import Sidebar from './components/Sidebar';
 import MainContent from './components/MainContent';
 import Store from './store';
-import {Box, createTheme } from '@mui/material';
+import {Box, createTheme} from '@mui/material';
 import {ThemeProvider} from '@mui/styles';
 
 const theme = createTheme();

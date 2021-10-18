@@ -12,7 +12,7 @@ const {useRef} = React;
 
 const useStyles = makeStyles({
   Map: {
-    height: '450px'
+    height: '450px',
   },
 
   Heatlegend: {
@@ -115,8 +115,7 @@ export default function DistrictMap(): JSX.Element {
           regionPolygon = mapPolygon.dataItem.dataContext as IRegionPolygon;
           regionPolygon.value = Math.floor(Math.random() * 300);
           // add tooltipText
-          mapPolygon.tooltipText =
-            `${t(`BEZ.${regionPolygon.BEZ}`)} {GEN}
+          mapPolygon.tooltipText = `${t(`BEZ.${regionPolygon.BEZ}`)} {GEN}
 Scenario:${selectedScenario}
 Compartment :${selectedCompartment}
 rate :${String(selectedRate)}`;

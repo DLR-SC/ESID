@@ -1,4 +1,4 @@
-import {Box, Tabs, Tab } from '@mui/material';
+import {Box, Tabs, Tab} from '@mui/material';
 import React from 'react';
 
 export default function SidebarTabs(): JSX.Element {
@@ -15,8 +15,8 @@ export default function SidebarTabs(): JSX.Element {
         <Tab label='History' {...a11yProps(0)} />
         <Tab label='Details' {...a11yProps(0)} />
       </Tabs>
-      <TabPanel value={value} index={0}/>
-      <TabPanel value={value} index={1}/>
+      <TabPanel value={value} index={0} />
+      <TabPanel value={value} index={1} />
     </Box>
   );
 }
@@ -28,22 +28,18 @@ interface TabPanelProps {
 }
 
 function TabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
+  const {children, value, index, ...other} = props;
 
   return (
     <Box
       display='flex'
-      role="tab-panel"
+      role='tab-panel'
       hidden={value !== index}
       id={`sidebar-tab-panel-${index}`}
       aria-labelledby={`sidebar-tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          {children}
-        </Box>
-      )}
+      {value === index && <Box sx={{p: 3}}>{children}</Box>}
     </Box>
   );
 }

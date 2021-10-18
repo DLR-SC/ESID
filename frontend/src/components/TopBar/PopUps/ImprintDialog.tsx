@@ -1,4 +1,4 @@
-import { makeStyles } from '@mui/styles';
+import {makeStyles} from '@mui/styles';
 import React from 'react';
 
 import {useTranslation} from 'react-i18next';
