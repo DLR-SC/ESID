@@ -1,18 +1,18 @@
 import React from 'react';
 import * as am4core from '@amcharts/amcharts4/core';
 import * as am4maps from '@amcharts/amcharts4/maps';
-import {makeStyles} from '@material-ui/core';
-import {Box} from '@material-ui/core';
 import {useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
-import {useAppDispatch} from '../store/hooks';
-import {selectDistrict} from '../store/DataSelectionSlice';
-import {useAppSelector} from '../store/hooks';
+import {useAppDispatch} from '../../store/hooks';
+import {selectDistrict} from '../../store/DataSelectionSlice';
+import {useAppSelector} from '../../store/hooks';
+import {makeStyles} from '@mui/styles';
+import {Box} from '@mui/material';
 const {useRef} = React;
 
 const useStyles = makeStyles({
   Map: {
-    height: '300px',
+    height: '450px'
   },
 
   Heatlegend: {
@@ -43,7 +43,7 @@ interface IRegionPolygon {
  * - Zoom control
  * The colors depends on temporary values assigned to each region.
  */
-export default function MapCountry(): JSX.Element {
+export default function DistrictMap(): JSX.Element {
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
   const selectedRate = useAppSelector((state) => state.dataSelection.rate);
@@ -116,20 +116,10 @@ export default function MapCountry(): JSX.Element {
           regionPolygon.value = Math.floor(Math.random() * 300);
           // add tooltipText
           mapPolygon.tooltipText =
-            t(`BEZ.${regionPolygon.BEZ}`) +
-            ' {GEN}' +
-            '\n' +
-            'Scenario:' +
-            '' +
-            selectedScenario +
-            '\n' +
-            'Compartment :' +
-            '' +
-            selectedCompartment +
-            '\n' +
-            'rate :' +
-            '' +
-            String(selectedRate);
+            `${t(`BEZ.${regionPolygon.BEZ}`)} {GEN}
+Scenario:${selectedScenario}
+Compartment :${selectedCompartment}
+rate :${String(selectedRate)}`;
         });
       });
 

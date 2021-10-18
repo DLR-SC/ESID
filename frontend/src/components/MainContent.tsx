@@ -1,10 +1,10 @@
-import {Grid, makeStyles} from '@material-ui/core';
 import React from 'react';
 import Scenario from './Scenario';
 import IconBar from './IconBar';
-import Divider from '@material-ui/core/Divider';
 
 import SimulationChart from './SimulationChart';
+import { makeStyles } from '@mui/styles';
+import {Divider, Grid } from '@mui/material';
 
 const useStyles = makeStyles({
   icon: {

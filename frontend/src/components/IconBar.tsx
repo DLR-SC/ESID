@@ -1,13 +1,13 @@
-import {Box} from '@material-ui/core';
 import React from 'react';
-import Button from '@material-ui/core/Button';
-import {makeStyles, createStyles, Theme} from '@material-ui/core/styles';
-import AutorenewIcon from '@material-ui/icons/Autorenew';
-import RedoIcon from '@material-ui/icons/Redo';
-import UndoIcon from '@material-ui/icons/Undo';
-import FullscreenIcon from '@material-ui/icons/Fullscreen';
-import ShareIcon from '@material-ui/icons/Share';
+import AutorenewIcon from '@mui/icons-material/Autorenew';
+import RedoIcon from '@mui/icons-material/Redo';
+import UndoIcon from '@mui/icons-material/Undo';
+import FullscreenIcon from '@mui/icons-material/Fullscreen';
+import ShareIcon from '@mui/icons-material/Share';
 import {useFullscreen} from 'rooks';
+import {createStyles, makeStyles } from '@mui/styles';
+import { Theme } from '@mui/material/styles';
+import {Box, Button} from '@mui/material';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

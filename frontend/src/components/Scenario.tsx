@@ -1,19 +1,11 @@
 import React from 'react';
-import {Box} from '@material-ui/core';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-import {Theme, createStyles, makeStyles} from '@material-ui/core/styles';
 import {useAppDispatch} from '../store/hooks';
 import {selectCompartment} from '../store/DataSelectionSlice';
 import {selectRate} from '../store/DataSelectionSlice';
 import {selectScenario} from '../store/DataSelectionSlice';
-import 'simplebar';
-import 'simplebar/dist/simplebar.min.css';
+import {createStyles, makeStyles } from '@mui/styles';
+import { Theme } from '@mui/material/styles';
+import {Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from '@mui/material';
 
 /* This component displays the pandemic spread depending on different scenarios
  */

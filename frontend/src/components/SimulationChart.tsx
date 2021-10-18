@@ -1,10 +1,10 @@
 import React from 'react';
 import * as am4core from '@amcharts/amcharts4/core';
 import * as am4charts from '@amcharts/amcharts4/charts';
-import {Box} from '@material-ui/core';
 import {useEffect} from 'react';
-import {makeStyles, createStyles} from '@material-ui/core/styles';
 import am4themes_animated from '@amcharts/amcharts4/themes/animated';
+import {createStyles, makeStyles} from '@mui/styles';
+import {Box} from '@mui/material';
 
 /* This component displays the evolution of the pandemic for a specific compartment ( Hospitalized,death,infected, etc.)
  regarding 4 differents scenarios

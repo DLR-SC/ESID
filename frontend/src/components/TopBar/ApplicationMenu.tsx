@@ -1,12 +1,11 @@
 import React, {MouseEvent} from 'react';
-import {Button, Dialog, Divider, Grid, Menu, MenuItem, Snackbar} from '@material-ui/core';
-import {Alert} from '@material-ui/lab';
-import MenuIcon from '@material-ui/icons/Menu';
+import MenuIcon from '@mui/icons-material/Menu';
 import {useTranslation} from 'react-i18next';
 import ImprintDialog from './PopUps/ImprintDialog';
 import PrivacyPolicyDialog from './PopUps/PrivacyPolicyDialog';
 import AccessibilityDialog from './PopUps/AccessibilityDialog';
 import AttributionDialog from './PopUps/AttributionDialog';
+import {Alert, Button, Dialog, Divider, Grid, Menu, MenuItem, Snackbar} from '@mui/material';
 
 /**
  * This menu is found at the top right of the application and is reachable from everywhere. It contains ways to access
