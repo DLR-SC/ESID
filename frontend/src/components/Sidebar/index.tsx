@@ -11,7 +11,6 @@ const useStyles = makeStyles({
     height: '100%',
     borderRight: '1px solid #D3D2D8',
     backgroundColor: '#F2F2F2',
-    paddingTop: '10px',
   },
   sidebarItem: {
     width: '422px',
@@ -22,11 +21,7 @@ export default function Sidebar(): JSX.Element {
   const classes = useStyles();
 
   return (
-    <Stack
-      direction='column'
-      alignItems='stretch'
-      justifyContent='flex-start'
-      className={classes.sideBar}>
+    <Stack direction='column' alignItems='stretch' justifyContent='flex-start' className={classes.sideBar}>
       <div className={classes.sidebarItem}>
         <SearchBar />
       </div>

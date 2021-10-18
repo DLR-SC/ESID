@@ -7,8 +7,8 @@ import TopBar from './components/TopBar';
 import Sidebar from './components/Sidebar';
 import MainContent from './components/MainContent';
 import Store from './store';
-import {Box, createTheme} from '@mui/material';
-import {ThemeProvider} from '@mui/styles';
+import {Box, ThemeProvider} from '@mui/material';
+import {createTheme} from '@mui/material/styles';
 
 const theme = createTheme();
 
