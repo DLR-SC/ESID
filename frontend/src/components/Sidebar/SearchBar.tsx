@@ -20,7 +20,7 @@ const useStyles = makeStyles(() =>
     inputInput: {
       padding: '1 1 1 0',
     },
-  }),
+  })
 );
 
 /** The Search bar component help Zoom in on a specific region of the Map */
