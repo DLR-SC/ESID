@@ -84,7 +84,7 @@ export default function MapCountry(): JSX.Element {
     polygonSeries.events.on('validated', (event) => {
       event.target.mapPolygons.each((mapPolygon) => {
         regionPolygon = mapPolygon.dataItem.dataContext as IRegionPolygon;
-        regionPolygon.value = Math.floor(Math.random() * 300);
+        regionPolygon.value = Math.floor(Math.random() * 210);
         // add tooltipText
         mapPolygon.tooltipText = t(`BEZ.${regionPolygon.BEZ}`) + ' {GEN}';
       });
