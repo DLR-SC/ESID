@@ -15,8 +15,8 @@ const useStyles = makeStyles({
 
   Heatlegend: {
     marginTop: '15px',
-    height: '25px',
-    backgroundColor: '#F8F8F9',
+    height: '30px',
+    backgroundColor: '#F2F2F2',
   },
 });
 
@@ -47,6 +47,17 @@ export default function MapCountry(): JSX.Element {
 
   useEffect(() => {
     let regionPolygon: IRegionPolygon;
+
+    // Dummy Props for Heat Legend
+    const dummyProps = {
+      legend: [
+        {color: 'green',  stop: 0},
+        {color: 'yellow', stop: 35},
+        {color: 'orange', stop: 50},
+        {color: 'red',    stop: 100},
+        {color: 'purple', stop: 200}
+      ]
+    }
 
     // Colors set of the Map
     const heatColors1 = [am4core.color('#34BEC7'), am4core.color('#3998DB'), am4core.color('#3abedf')];
@@ -106,9 +117,26 @@ export default function MapCountry(): JSX.Element {
     heatLegend.valign = 'bottom';
     heatLegend.orientation = 'horizontal';
     heatLegend.height = am4core.percent(20);
-    heatLegend.minColor = am4core.color('#F8F8F9');
-    heatLegend.maxColor = am4core.color('#F8F8F9');
+    heatLegend.minValue = dummyProps.legend[0].stop;
+    heatLegend.maxValue = dummyProps.legend[dummyProps.legend.length-1].stop;
+    heatLegend.minColor = am4core.color('#F2F2F2');
+    heatLegend.maxColor = am4core.color('#F2F2F2');
     heatLegend.align = 'center';
+    
+    // override heatLegend gradient
+    // function to normalize stop to 0..1 for gradient
+    const normalize = (x:number): number => {
+      return ((x - dummyProps.legend[0].stop) / (dummyProps.legend[dummyProps.legend.length-1].stop - dummyProps.legend[0].stop));
+    };
+    // create new gradient and add color for each item in props, then add it to heatLegend to override
+    const gradient = new am4core.LinearGradient();
+    dummyProps.legend.forEach((item) => { gradient.addColor(am4core.color(item.color), 1, normalize(item.stop)); })
+    heatLegend.markers.template.adapter.add('fill', () => gradient);
+
+    // add Legend labels
+    heatLegend.valueAxis.renderer.labels.template.fontSize = 9;
+    heatLegend.valueAxis.renderer.minGridDistance = 20;
+    
 
     // Zoom control
     chart.zoomControl = new am4maps.ZoomControl();
