@@ -51,13 +51,13 @@ export default function MapCountry(): JSX.Element {
     // Dummy Props for Heat Legend
     const dummyProps = {
       legend: [
-        {color: 'green',  stop: 0},
+        {color: 'green', stop: 0},
         {color: 'yellow', stop: 35},
         {color: 'orange', stop: 50},
-        {color: 'red',    stop: 100},
-        {color: 'purple', stop: 200}
-      ]
-    }
+        {color: 'red', stop: 100},
+        {color: 'purple', stop: 200},
+      ],
+    };
 
     // Create map instance
     const chart = am4core.create('chartdiv', am4maps.MapChart);
@@ -94,7 +94,7 @@ export default function MapCountry(): JSX.Element {
     polygonSeries.events.on('validated', (event) => {
       event.target.mapPolygons.each((mapPolygon) => {
         regionPolygon = mapPolygon.dataItem.dataContext as IRegionPolygon;
-        
+
         // interpolate color from upper and lower color stop
         const getColor = (x: number): am4core.Color => {
           let upper = {color: '#FFF', stop: 0};
@@ -102,7 +102,7 @@ export default function MapCountry(): JSX.Element {
           for (let i = 0; i < dummyProps.legend.length; i++) {
             upper = dummyProps.legend[i];
             if (upper.stop > x) {
-              lower = dummyProps.legend[i-1];
+              lower = dummyProps.legend[i - 1];
               break;
             }
           }
@@ -111,10 +111,10 @@ export default function MapCountry(): JSX.Element {
             am4core.colors.interpolate(
               am4core.color(lower.color).rgb,
               am4core.color(upper.color).rgb,
-              ((x - lower.stop) / (upper.stop - lower.stop))
+              (x - lower.stop) / (upper.stop - lower.stop)
             )
           );
-        }
+        };
 
         mapPolygon.fill = getColor(regionPolygon.value);
       });
@@ -128,25 +128,29 @@ export default function MapCountry(): JSX.Element {
     heatLegend.orientation = 'horizontal';
     heatLegend.height = am4core.percent(20);
     heatLegend.minValue = dummyProps.legend[0].stop;
-    heatLegend.maxValue = dummyProps.legend[dummyProps.legend.length-1].stop;
+    heatLegend.maxValue = dummyProps.legend[dummyProps.legend.length - 1].stop;
     heatLegend.minColor = am4core.color('#F2F2F2');
     heatLegend.maxColor = am4core.color('#F2F2F2');
     heatLegend.align = 'center';
-    
+
     // override heatLegend gradient
     // function to normalize stop to 0..1 for gradient
-    const normalize = (x:number): number => {
-      return ((x - dummyProps.legend[0].stop) / (dummyProps.legend[dummyProps.legend.length-1].stop - dummyProps.legend[0].stop));
+    const normalize = (x: number): number => {
+      return (
+        (x - dummyProps.legend[0].stop) /
+        (dummyProps.legend[dummyProps.legend.length - 1].stop - dummyProps.legend[0].stop)
+      );
     };
     // create new gradient and add color for each item in props, then add it to heatLegend to override
     const gradient = new am4core.LinearGradient();
-    dummyProps.legend.forEach((item) => { gradient.addColor(am4core.color(item.color), 1, normalize(item.stop)); })
+    dummyProps.legend.forEach((item) => {
+      gradient.addColor(am4core.color(item.color), 1, normalize(item.stop));
+    });
     heatLegend.markers.template.adapter.add('fill', () => gradient);
 
     // resize and pack axis labels
     heatLegend.valueAxis.renderer.labels.template.fontSize = 9;
     heatLegend.valueAxis.renderer.minGridDistance = 20;
-    
 
     // Zoom control
     chart.zoomControl = new am4maps.ZoomControl();
