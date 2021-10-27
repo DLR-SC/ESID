@@ -59,11 +59,6 @@ export default function MapCountry(): JSX.Element {
       ]
     }
 
-    // Colors set of the Map
-    const heatColors1 = [am4core.color('#34BEC7'), am4core.color('#3998DB'), am4core.color('#3abedf')];
-    const heatColors2 = [am4core.color('#34BEC7'), am4core.color('#3998DB'), am4core.color('#3abedf')];
-    const heatColors3 = [am4core.color('#34BEC7'), am4core.color('#3998DB'), am4core.color('#3abedf')];
-
     // Create map instance
     const chart = am4core.create('chartdiv', am4maps.MapChart);
 
@@ -99,14 +94,29 @@ export default function MapCountry(): JSX.Element {
     polygonSeries.events.on('validated', (event) => {
       event.target.mapPolygons.each((mapPolygon) => {
         regionPolygon = mapPolygon.dataItem.dataContext as IRegionPolygon;
-        const colorIndex = Math.floor(Math.random() * 2);
-        if (regionPolygon.value <= 100) {
-          mapPolygon.fill = heatColors1[colorIndex];
-        } else if (regionPolygon.value >= 200 && regionPolygon.value <= 270) {
-          mapPolygon.fill = heatColors2[colorIndex];
-        } else {
-          mapPolygon.fill = heatColors3[colorIndex];
+        
+        // interpolate color from upper and lower color stop
+        const getColor = (x: number): am4core.Color => {
+          let upper = {color: '#FFF', stop: 0};
+          let lower = {color: '#FFF', stop: 0};
+          for (let i = 0; i < dummyProps.legend.length; i++) {
+            upper = dummyProps.legend[i];
+            if (upper.stop > x) {
+              lower = dummyProps.legend[i-1];
+              break;
+            }
+          }
+          // interpolate color between upper and lower
+          return new am4core.Color(
+            am4core.colors.interpolate(
+              am4core.color(lower.color).rgb,
+              am4core.color(upper.color).rgb,
+              ((x - lower.stop) / (upper.stop - lower.stop))
+            )
+          );
         }
+
+        mapPolygon.fill = getColor(regionPolygon.value);
       });
     });
 
