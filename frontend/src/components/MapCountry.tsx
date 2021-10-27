@@ -133,7 +133,7 @@ export default function MapCountry(): JSX.Element {
     dummyProps.legend.forEach((item) => { gradient.addColor(am4core.color(item.color), 1, normalize(item.stop)); })
     heatLegend.markers.template.adapter.add('fill', () => gradient);
 
-    // add Legend labels
+    // resize and pack axis labels
     heatLegend.valueAxis.renderer.labels.template.fontSize = 9;
     heatLegend.valueAxis.renderer.minGridDistance = 20;
     
