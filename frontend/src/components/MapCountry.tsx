@@ -86,7 +86,7 @@ export default function MapCountry(): JSX.Element {
         regionPolygon = mapPolygon.dataItem.dataContext as IRegionPolygon;
         regionPolygon.value = Math.floor(Math.random() * 210);
         // add tooltipText
-        mapPolygon.tooltipText = t(`BEZ.${regionPolygon.BEZ}`) + ' {GEN}';
+        mapPolygon.tooltipText = t(`BEZ.${regionPolygon.BEZ}`) + ' {GEN}' + `\nValue: ${regionPolygon.value}`;
       });
     });
 
