@@ -73,7 +73,7 @@ export default function MapCountry(): JSX.Element {
 
     // Configure series
     polygonSeries.mapPolygons.template.tooltipPosition = 'fixed';
-    if(polygonSeries.tooltip) {
+    if (polygonSeries.tooltip) {
       polygonSeries.tooltip.label.maxWidth = 200;
       polygonSeries.tooltip.label.wrap = true;
     }
