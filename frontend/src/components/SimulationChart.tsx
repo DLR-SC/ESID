@@ -2,7 +2,6 @@ import React from 'react';
 import * as am4core from '@amcharts/amcharts4/core';
 import * as am4charts from '@amcharts/amcharts4/charts';
 import {useEffect} from 'react';
-import am4themes_animated from '@amcharts/amcharts4/themes/animated';
 import {createStyles, makeStyles} from '@mui/styles';
 import {Box} from '@mui/material';
 
@@ -27,7 +26,6 @@ const useStyles = makeStyles(() =>
 export default function SimulationChart(): JSX.Element {
   const classes = useStyles();
   useEffect(() => {
-    am4core.useTheme(am4themes_animated);
 
     // Create chart instance
     const chart = am4core.create('chartdiv', am4charts.XYChart);
