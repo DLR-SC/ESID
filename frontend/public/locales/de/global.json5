@@ -19,6 +19,13 @@
     KS: 'Kreisfreie Stadt',
     SK: 'Stadtkreis',
   },
+  scenario: {
+    add: 'Szenario hinzufügen',
+    more: 'Mehr Eigenschaften',
+  },
+  today: 'Heute',
+  more: 'Mehr',
+  less: 'Weniger',
   germany: 'Deutschland',
   WIP: 'Diese Funktionalität befindet sich noch in der Entwicklung.',
 }
