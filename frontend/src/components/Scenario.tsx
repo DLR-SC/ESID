@@ -264,7 +264,7 @@ export default function Scenario(): JSX.Element {
               // set selected property and dispatch new compartment and new rate for currently selected scenario
               setSelectedProperty(compartment.compartment);
               dispatch(selectCompartment(compartment.compartment));
-              dispatch(selectRate(compartment.scenarios[activeScenario].value)); // TODO: dispatch selectRate passing value not rate?
+              dispatch(selectRate(compartment.scenarios[scenarios[activeScenario].id].value)); // TODO: dispatch selectRate passing value not rate?
             }}
           >
             <li>{compartment.compartment}</li>
