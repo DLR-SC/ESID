@@ -19,6 +19,7 @@ const useStyles = makeStyles(() =>
       backgroundColor: 'white',
       backgroundImage: 'radial-gradient(#E2E4E6 10%, transparent 11%)',
       backgroundSize: '10px 10px',
+      cursor: 'crosshair',
     },
   })
 );
@@ -32,34 +33,21 @@ interface Scenario {
 
 export default function SimulationChart(props: {scenarios: Scenario[]}): JSX.Element {
   const classes = useStyles();
-  useEffect(() => {
+  const scenarios = props.scenarios;
 
+  useEffect(() => {
     // Create chart instance
     const chart = am4core.create('chartdiv', am4charts.XYChart);
 
     // Add data
     chart.data = [
-      {date: new Date(2019, 5, 12), value1: 50, value2: 48, value3: 45, value4: 40, previousDate: new Date(2019, 5, 5)},
-      {date: new Date(2019, 5, 13), value1: 53, value2: 51, value3: 48, value4: 46, previousDate: new Date(2019, 5, 6)},
-      {date: new Date(2019, 5, 14), value1: 56, value2: 57, value3: 55, value4: 50, previousDate: new Date(2019, 5, 7)},
-      {date: new Date(2019, 5, 15), value1: 52, value2: 53, value3: 50, value4: 48, previousDate: new Date(2019, 5, 8)},
-      {date: new Date(2019, 5, 16), value1: 48, value2: 44, value3: 42, value4: 40, previousDate: new Date(2019, 5, 9)},
-      {
-        date: new Date(2019, 5, 17),
-        value1: 47,
-        value2: 42,
-        value3: 40,
-        value4: 38,
-        previousDate: new Date(2019, 5, 10),
-      },
-      {
-        date: new Date(2019, 5, 18),
-        value1: 59,
-        value2: 55,
-        value3: 50,
-        value4: 48,
-        previousDate: new Date(2019, 5, 11),
-      },
+      {date: new Date(2019, 5, 12), basic: 50, medium: 48, big: 45, maximum: 40, previousDate: new Date(2019, 5, 5)},
+      {date: new Date(2019, 5, 13), basic: 53, medium: 51, big: 48, maximum: 46, previousDate: new Date(2019, 5, 6)},
+      {date: new Date(2019, 5, 14), basic: 56, medium: 57, big: 55, maximum: 50, previousDate: new Date(2019, 5, 7)},
+      {date: new Date(2019, 5, 15), basic: 52, medium: 53, big: 50, maximum: 48, previousDate: new Date(2019, 5, 8)},
+      {date: new Date(2019, 5, 16), basic: 48, medium: 44, big: 42, maximum: 40, previousDate: new Date(2019, 5, 9)},
+      {date: new Date(2019, 5, 17), basic: 47, medium: 42, big: 40, maximum: 38, previousDate: new Date(2019, 5, 10)},
+      {date: new Date(2019, 5, 18), basic: 59, medium: 55, big: 50, maximum: 48, previousDate: new Date(2019, 5, 11)},
     ];
 
     // Create axes
@@ -68,51 +56,21 @@ export default function SimulationChart(props: {scenarios: Scenario[]}): JSX.Ele
     dateAxis.renderer.minGridDistance = 50;
     chart.yAxes.push(new am4charts.ValueAxis());
 
-    // Create series
-    const series = chart.series.push(new am4charts.LineSeries());
-    series.dataFields.valueY = 'value1';
-    series.dataFields.dateX = 'date';
-    series.tensionX = 0.8;
-    series.strokeWidth = 1;
-    series.tensionX = 0.8;
-    series.tooltipText = `{date.formatDate()}:[/] {value1}
-{previousDate.formatDate()}:[/] {value2}
-{date.formatDate()}:[/] {value3}
-{date.formatDate()}:[/] {value4}`;
-    series.fill = am4core.color('#3998DB');
-    series.stroke = am4core.color('#3998DB');
-    // Create series
-    const series2 = chart.series.push(new am4charts.LineSeries());
-    series2.dataFields.valueY = 'value2';
-    series2.dataFields.dateX = 'date';
-    series2.tensionX = 0.8;
-    series.fill = am4core.color('#876BE3');
-    series.stroke = am4core.color('#876BE3');
-    series2.strokeWidth = 1;
-    series2.stroke = series.stroke;
-
-    // Create series
-    const series3 = chart.series.push(new am4charts.LineSeries());
-    series3.dataFields.valueY = 'value3';
-    series3.dataFields.dateX = 'date';
-    series3.tensionX = 0.8;
-    series3.strokeWidth = 1;
-    series.fill = am4core.color('#CC5AC7');
-    series.stroke = am4core.color('#CC5AC7');
-    // Create series
-    const series4 = chart.series.push(new am4charts.LineSeries());
-    series4.dataFields.valueY = 'value4';
-    series4.dataFields.dateX = 'date';
-    series.tensionX = 0.8;
-    series4.strokeWidth = 1;
-    series4.stroke = series.stroke;
-    series.fill = am4core.color('#EBA73B');
-    series.stroke = am4core.color('#EBA73B');
+    scenarios.map((scn) => {
+      const series = chart.series.push(new am4charts.LineSeries());
+      series.dataFields.valueY = scn.id;
+      series.dataFields.dateX = 'date';
+      series.tensionX = 0.8;
+      series.strokeWidth = 1;
+      series.fill = am4core.color(scn.color);
+      series.stroke = am4core.color(scn.color);
+      series.tooltipText = `${scn.label}: [bold]{${scn.id}}[/]`;
+    });
 
     // Add cursor
     chart.cursor = new am4charts.XYCursor();
     chart.cursor.xAxis = dateAxis;
-  }, []);
+  }, [scenarios]);
 
   return (
     <Box id='chartdiv' className={classes.chart}>
