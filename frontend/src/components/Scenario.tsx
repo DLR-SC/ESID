@@ -162,28 +162,6 @@ interface Scenario {
   label: string;
   color: string;
 }
-const scenarios: Scenario[] = [
-  {
-    id: 'basic',
-    label: 'Basic Contact',
-    color: '#3998DB',
-  },
-  {
-    id: 'medium',
-    label: 'Leichter Kontakt an Weihnachten',
-    color: '#876BE3',
-  },
-  {
-    id: 'big',
-    label: 'Big Contact',
-    color: '#CC5AC7',
-  },
-  {
-    id: 'maximum',
-    label: 'Maximum Contact',
-    color: '#EBA73B',
-  },
-];
 
 // list of properties and value/rate pairs for each scenario
 // compartment/name, latest, basic, basicRate, medium, mediumRate, big, bigRate, maximum, maximumRate
@@ -240,7 +218,7 @@ function ScenarioCard(props: {
 }
 
 // Scenario Card Section
-export default function Scenario(): JSX.Element {
+export default function Scenario(props: {scenarios: Scenario[]}): JSX.Element {
   const {t} = useTranslation();
 
   const classes = useStyles();
@@ -264,7 +242,7 @@ export default function Scenario(): JSX.Element {
               // set selected property and dispatch new compartment and new rate for currently selected scenario
               setSelectedProperty(compartment.compartment);
               dispatch(selectCompartment(compartment.compartment));
-              dispatch(selectRate(compartment.scenarios[scenarios[activeScenario].id].value)); // TODO: dispatch selectRate passing value not rate?
+              dispatch(selectRate(compartment.scenarios[props.scenarios[activeScenario].id].value)); // TODO: dispatch selectRate passing value not rate?
             }}
           >
             <li>{compartment.compartment}</li>
@@ -289,7 +267,7 @@ export default function Scenario(): JSX.Element {
         </button>
       </div>
       <div className='scenario-container'>
-        {scenarios.map((scn, i) => (
+        {props.scenarios.map((scn, i) => (
           <ScenarioCard
             key={i}
             scenario={scn}

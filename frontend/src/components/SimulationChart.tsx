@@ -23,7 +23,14 @@ const useStyles = makeStyles(() =>
   })
 );
 
-export default function SimulationChart(): JSX.Element {
+// list of Name and Color for Scenario Cards
+interface Scenario {
+  id: string;
+  label: string;
+  color: string;
+}
+
+export default function SimulationChart(props: {scenarios: Scenario[]}): JSX.Element {
   const classes = useStyles();
   useEffect(() => {
 
