@@ -3,20 +3,19 @@ import {useAppDispatch} from '../store/hooks';
 import {createStyles, makeStyles} from '@mui/styles';
 import {useTranslation} from 'react-i18next';
 import {selectCompartment, selectRate, selectScenario} from 'store/DataSelectionSlice';
-//import {Theme} from '@mui/material/styles';
 
 /* This component displays the pandemic spread depending on different scenarios
  */
 
 // create css styles
-const useStyles = makeStyles((/*theme: Theme*/) =>
+const useStyles = makeStyles(() =>
   createStyles({
     root: {
       display: 'flex',
       cursor: 'default',
 
       '& .scenario-header': {
-        background: '#F8F8F8', //theme.palette.background.default,
+        background: '#F8F8F8',
         borderRight: '2px dashed #d3d2d8', // background accent color
         flex: '0 1 276px',
         minHeight: '20vh',
@@ -42,7 +41,7 @@ const useStyles = makeStyles((/*theme: Theme*/) =>
         padding: '7px',
         margin: '0px',
         borderStyle: 'solid hidden solid hidden',
-        border: '1px solid #F8F8F8', //theme.palette.background.default,
+        border: '1px solid #F8F8F8',
         fontWeight: 'normal',
       },
 
@@ -55,7 +54,7 @@ const useStyles = makeStyles((/*theme: Theme*/) =>
         boxSizing: 'border-box',
         fontWeight: 'bold',
         color: '#1976D2', // accent color
-        background: '#F8F8F8', //theme.palette.background.default,
+        background: '#F8F8F8',
         border: '1px solid #d3d2d8', // background accent color
         borderRadius: '5px',
         maxWidth: '30%',
@@ -67,7 +66,7 @@ const useStyles = makeStyles((/*theme: Theme*/) =>
       },
 
       '& .scenario-container': {
-        background: '#F8F8F8', //theme.palette.background.default,
+        background: '#F8F8F8',
         flex: '1 1 100%',
         display: 'flex',
         overflowX: 'auto',
@@ -78,7 +77,7 @@ const useStyles = makeStyles((/*theme: Theme*/) =>
         boxSizing: 'border-box',
         margin: '12px',
         padding: '12px',
-        background: '#F8F8F8', //theme.palette.background.default,
+        background: '#F8F8F8',
       },
 
       '& .scenario-card header': {
@@ -97,7 +96,7 @@ const useStyles = makeStyles((/*theme: Theme*/) =>
       },
 
       '& .scenario-footer': {
-        background: '#F8F8F8', //theme.palette.background.default,
+        background: '#F8F8F8',
         borderLeft: '1px solid #d3d2d8', // background accent color
         flex: '0 0 208px',
         minHeight: '20vh',
@@ -106,7 +105,7 @@ const useStyles = makeStyles((/*theme: Theme*/) =>
       },
 
       '& .scenario-footer button': {
-        background: '#F8F8F8', //theme.palette.background.default,
+        background: '#F8F8F8',
         color: '#d3d2d8', // background accent color
         border: '2px dashed #d3d2d8', // background accent color
         flex: '0 0 160px',

@@ -23,7 +23,7 @@ const useStyles = makeStyles(() =>
   })
 );
 
-/** The Search bar component help Zoom in on a specific region of the Map */
+/** The SearchBar component helps select a specific district of the map. */
 export default function SearchBar(): JSX.Element {
   const classes = useStyles();
   const selectedDistrict = useAppSelector((state) => state.dataSelection.district);

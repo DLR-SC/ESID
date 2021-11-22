@@ -90,7 +90,7 @@ export default function DistrictMap(): JSX.Element {
     heatLegend.align = 'center';
   }, []);
 
-  //Polygone
+  // Polygon
   useEffect(() => {
     let regionPolygon: IRegionPolygon;
     // Colors set of the Map
@@ -99,7 +99,7 @@ export default function DistrictMap(): JSX.Element {
     const heatColors3 = [am4core.color('#34BEC7'), am4core.color('#3998DB'), am4core.color('#3abedf')];
 
     if (chartRef.current) {
-      //Create map polygon series
+      // Create map polygon series
       const polygonSeries = chartRef.current.series.push(new am4maps.MapPolygonSeries());
       // Configure series
       polygonSeries.mapPolygons.template.tooltipPosition = 'fixed';
@@ -109,7 +109,7 @@ export default function DistrictMap(): JSX.Element {
         dispatch(selectDistrict({ags: item.RS, name: item.GEN, type: t(item.BEZ)}));
       });
 
-      //Set values to each regions
+      // Set values to each regions
       polygonSeries.events.on('validated', (event) => {
         event.target.mapPolygons.each((mapPolygon) => {
           regionPolygon = mapPolygon.dataItem.dataContext as IRegionPolygon;
@@ -122,7 +122,7 @@ rate :${String(selectedRate)}`;
         });
       });
 
-      //Assign colors to regions
+      // Assign colors to regions
       polygonSeries.events.on('validated', (event) => {
         event.target.mapPolygons.each((mapPolygon) => {
           regionPolygon = mapPolygon.dataItem.dataContext as IRegionPolygon;
