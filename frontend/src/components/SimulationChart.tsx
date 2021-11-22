@@ -202,8 +202,3 @@ export default function SimulationChart(props: {scenarios: Scenario[]}): JSX.Ele
     </Box>
   );
 }
-
-// ToDo: make chart Update-able
-//          - make chart memo?
-//          - extra useEffect to update data w/ dependency [props, data] to redraw chart?
-//          - move stroke color etc. into data.properties to dynamically change it & use invalidate() to trigger redraw?
