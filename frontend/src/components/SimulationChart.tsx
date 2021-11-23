@@ -189,7 +189,7 @@ export default function SimulationChart(props: {scenarios: Scenario[]}): JSX.Ele
       console.log('trying to dispose chart');
       chart.dispose();
     };
-    // only do this effect on the first render
+    // empty dependencies to do this effect only on the first render
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
