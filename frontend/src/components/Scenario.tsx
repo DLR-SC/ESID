@@ -3,9 +3,19 @@ import {useAppDispatch} from '../store/hooks';
 import {createStyles, makeStyles} from '@mui/styles';
 import {useTranslation} from 'react-i18next';
 import {selectCompartment, selectRate, selectScenario, selectValue} from 'store/DataSelectionSlice';
+import ScenarioCard from './ScenarioCard';
 
 /* This component displays the pandemic spread depending on different scenarios
  */
+
+// css theme variables
+const theme = {
+  colors: {
+    accent: '#1976D2',
+    background: '#F8F8F8',
+    background_accent: '#d3d2d8',
+  },
+};
 
 // create css styles
 const useStyles = makeStyles(() =>
@@ -13,19 +23,21 @@ const useStyles = makeStyles(() =>
     root: {
       display: 'flex',
       cursor: 'default',
+      background: theme.colors.background,
+    },
 
-      '& .scenario-header': {
-        background: '#F8F8F8',
-        borderRight: '2px dashed #d3d2d8', // background accent color
-        flex: '0 1 276px',
-        minHeight: '20vh',
-        display: 'flex',
-        flexDirection: 'column',
-        padding: '12px',
-        paddingTop: '26px',
-      },
+    scenario_header: {
+      borderRight: `2px dashed ${theme.colors.background_accent}`,
+      flexGrow: 0,
+      flexShrink: 1,
+      flexBasis: '276px',
+      minHeight: '20vh',
+      display: 'flex',
+      flexDirection: 'column',
+      padding: '12px',
+      paddingTop: '26px',
 
-      '& .scenario-header span': {
+      '& span': {
         width: '100%',
         textAlign: 'right',
         fontWeight: 'bold',
@@ -34,81 +46,60 @@ const useStyles = makeStyles(() =>
         marginBottom: '8px',
       },
 
-      '& .scenario-header ul': {
+      '& ul': {
         display: 'flex',
         justifyContent: 'space-between',
         listStyleType: 'none',
         padding: '7px',
         margin: '0px',
         borderStyle: 'solid hidden solid hidden',
-        border: '1px solid #F8F8F8',
+        border: `1px solid ${theme.colors.background}`,
         fontWeight: 'normal',
       },
 
-      '& .scenario-header ul:hover': {
+      '& ul:hover': {
         borderStyle: 'solid hidden solid hidden',
-        border: '1px solid #d3d2d8', // background accent color
+        border: `1px solid ${theme.colors.background_accent}`,
       },
 
-      '& .scenario-header button': {
+      '& button': {
         boxSizing: 'border-box',
         fontWeight: 'bold',
-        color: '#1976D2', // accent color
-        background: '#F8F8F8',
-        border: '1px solid #d3d2d8', // background accent color
+        color: `${theme.colors.accent}`,
+        background: `${theme.colors.background}`,
+        border: `1px solid ${theme.colors.background_accent}`,
         borderRadius: '5px',
-        maxWidth: '30%',
         margin: '8px',
       },
 
-      '& .scenario-header button:hover': {
-        border: '1px solid #1976D2', // accent color'
+      '& button:hover': {
+        border: `1px solid ${theme.colors.accent}`,
       },
+    },
 
-      '& .scenario-container': {
-        background: '#F8F8F8',
-        flex: '1 1 100%',
-        display: 'flex',
-        overflowX: 'auto',
-      },
+    scenario_container: {
+      flexGrow: 1,
+      flexShrink: 1,
+      flexBasis: '100%',
+      display: 'flex',
+      overflowX: 'auto',
+    },
 
-      '& .scenario-card': {
-        flex: '0 0 160px',
-        boxSizing: 'border-box',
-        margin: '12px',
-        padding: '12px',
-        background: '#F8F8F8',
-      },
+    scenario_footer: {
+      borderLeft: `1px solid ${theme.colors.background_accent}`,
+      flexGrow: 0,
+      flexShrink: 0,
+      flexBasis: '208px',
+      minHeight: '20vh',
+      paddingLeft: '12px',
+      display: 'flex',
 
-      '& .scenario-card header': {
-        fontWeight: 'bold',
-        lineHeight: '1.5rem',
-        minHeight: '3rem',
-      },
-
-      '& .scenario-card ul': {
-        display: 'flex',
-      },
-
-      '& .scenario-card li': {
-        listStyleType: 'none',
-        flex: '1 1 100%',
-      },
-
-      '& .scenario-footer': {
-        background: '#F8F8F8',
-        borderLeft: '1px solid #d3d2d8', // background accent color
-        flex: '0 0 208px',
-        minHeight: '20vh',
-        paddingLeft: '12px',
-        display: 'flex',
-      },
-
-      '& .scenario-footer button': {
-        background: '#F8F8F8',
-        color: '#d3d2d8', // background accent color
-        border: '2px dashed #d3d2d8', // background accent color
-        flex: '0 0 160px',
+      '& button': {
+        color: `${theme.colors.background_accent}`,
+        border: `2px dashed ${theme.colors.background_accent}`,
+        flexGrow: 0,
+        flexShrink: 0,
+        flexBasis: '160px',
         minHeight: '220px',
         margin: '12px',
         fontWeight: 'bolder',
@@ -116,12 +107,13 @@ const useStyles = makeStyles(() =>
         transition: '0.3s',
       },
 
-      '& .scenario-footer button:hover': {
-        border: '2px solid #d3d2d8', // background accent color
-        color: '#1976D2', // accent color
+      '& button:hover': {
+        border: `2px solid ${theme.colors.background_accent}`,
+        color: `${theme.colors.accent}`,
       },
     },
-  }));
+  })
+);
 
 /* === Begin Sample Data === */
 /**
@@ -211,7 +203,7 @@ export default function Scenario(props: {scenarios: Scenario[]}): JSX.Element {
 
   return (
     <div className={classes.root}>
-      <div className='scenario-header'>
+      <div className={classes.scenario_header}>
         <span>{t('today')}</span>
         {properties.map((compartment, i) => (
           <ul
@@ -249,7 +241,7 @@ export default function Scenario(props: {scenarios: Scenario[]}): JSX.Element {
           {expandProperties ? t('less') : t('more')}
         </button>
       </div>
-      <div className='scenario-container'>
+      <div className={classes.scenario_container}>
         {props.scenarios.map((scn, i) => (
           <ScenarioCard
             key={i}
@@ -279,7 +271,7 @@ export default function Scenario(props: {scenarios: Scenario[]}): JSX.Element {
           />
         ))}
       </div>
-      <div className='scenario-footer'>
+      <div className={classes.scenario_footer}>
         <button aria-label={t('scenario.add')}>+</button>
       </div>
     </div>
