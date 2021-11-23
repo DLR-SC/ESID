@@ -124,13 +124,23 @@ const useStyles = makeStyles(() =>
   }));
 
 /* === Begin Sample Data === */
-// function packing simulation information into one object
+/**
+ * Scenario Property type definition.
+ * @typedef {object} PropertyUpdate
+ * @property {string} compartment               - The compartment of this property.
+ * @property {number} latest                    - The latest/real value for this compartment.
+ * @property {object} scenarios                 - The object containing the IDs of the scenarios and their values for this property.
+ * @property {string} scenarios.scenario        - The key for the scenarios object (a scenario ID {@link Scenario}).
+ * @property {number} scenarios.scenario.value  - The value of the scenario for this compartment.
+ * @property {number} scenarios.scenario.rate   - The rate of the scenario for this compartment.
+ */
 interface PropertyUpdate {
   compartment: string;
   latest: number;
   scenarios: {[scenario: string]: {value: number; rate: number}};
 }
 
+// function packing simulation information into one object
 function createRow(
   compartment: string,
   latest: number,
@@ -155,7 +165,13 @@ function createRow(
   };
 }
 
-// list of Name and Color for Scenario Cards
+/**
+ * Scenario type definition.
+ * @typedef {object} Scenario
+ * @property {string} id    - The identifier for the scenario.
+ * @property {string} label - The label for the scenario displayed to the user.
+ * @property {string} color - The Hex-color code for the scenario.
+ */
 interface Scenario {
   id: string;
   label: string;
@@ -177,7 +193,21 @@ const properties = [
 
 /* === End Sample Data === */
 
-// individual Scenario Card
+/**
+ * React Component to render individual Scenario Card
+ * @prop {object}   props                   - The props for the component.
+ * @prop {Scenario} props.scenario          - The scenario this card is displaying.
+ * @prop {number}   props.key               - The key for this scenario (index from the map function for the scenario list).
+ * @prop {boolean}  props.active            - Boolean value whether the scenario is the selected scenario.
+ * @prop {object[]} props.data              - The aggregated list of compartment data for this scenario (see {@link PropertyUpdate}).
+ * @prop {string}   props.data.compartment  - The compartment name.
+ * @prop {number}   props.data.value        - The value for the compartment.
+ * @prop {number}   props.data.rate         - The rate for the compartment.
+ * @prop {string}   props.selectedProperty  - The compartment name of the currently selected compartment, or empty string if none is selected.
+ * @prop {boolean}  props.expandProperties  - Boolean value whether the properties list is expanded or only the first four are shown.
+ * @prop {function} props.onClick           - The function that is executed when the scenario card is clicked.
+ * @returns {JSX.Element} JSX Element to render the scenario card.
+ */
 function ScenarioCard(props: {
   scenario: Scenario;
   key: number;
@@ -216,7 +246,13 @@ function ScenarioCard(props: {
   );
 }
 
-// Scenario Card Section
+/**
+ * React Component to render the Scenario Cards Section
+ * @prop {object}     props           - The props for the component.
+ * @prop {Scenario[]} props.scenarios - The list of scenarios for the scenario cards.
+ * @returns {JSX.Element} JSX Element to render the scenario card container and the scenario cards within.
+ * @see ScenarioCard
+ */
 export default function Scenario(props: {scenarios: Scenario[]}): JSX.Element {
   const {t} = useTranslation();
 
