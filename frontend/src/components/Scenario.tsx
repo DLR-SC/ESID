@@ -194,59 +194,6 @@ const properties = [
 /* === End Sample Data === */
 
 /**
- * React Component to render individual Scenario Card
- * @prop {object}   props                   - The props for the component.
- * @prop {Scenario} props.scenario          - The scenario this card is displaying.
- * @prop {number}   props.key               - The key for this scenario (index from the map function for the scenario list).
- * @prop {boolean}  props.active            - Boolean value whether the scenario is the selected scenario.
- * @prop {object[]} props.data              - The aggregated list of compartment data for this scenario (see {@link PropertyUpdate}).
- * @prop {string}   props.data.compartment  - The compartment name.
- * @prop {number}   props.data.value        - The value for the compartment.
- * @prop {number}   props.data.rate         - The rate for the compartment.
- * @prop {string}   props.selectedProperty  - The compartment name of the currently selected compartment, or empty string if none is selected.
- * @prop {boolean}  props.expandProperties  - Boolean value whether the properties list is expanded or only the first four are shown.
- * @prop {function} props.onClick           - The function that is executed when the scenario card is clicked.
- * @returns {JSX.Element} JSX Element to render the scenario card.
- */
-function ScenarioCard(props: {
-  scenario: Scenario;
-  key: number;
-  active: boolean;
-  data: {compartment: string; value: number; rate: number}[];
-  selectedProperty: string;
-  expandProperties: boolean;
-  onClick: () => void;
-}): JSX.Element {
-  return (
-    <div
-      className='scenario-card'
-      style={{
-        border: `2px solid ${props.scenario.color}`,
-        color: props.scenario.color,
-        boxShadow: props.active ? '0px 0px 12px 3px' : 'none',
-      }}
-      onClick={() => props.onClick()}
-    >
-      <header>{props.scenario.label}</header>
-      {props.data.map((compartment, i) => (
-        // hide compartment if expandProperties false and index > 4
-        // highlight compartment if selectedProperty === compartment
-        <ul
-          key={compartment.compartment}
-          style={{
-            display: props.expandProperties || i < 4 ? 'flex' : 'none',
-            color: props.selectedProperty === compartment.compartment ? 'inherit' : 'black',
-          }}
-        >
-          <li>{compartment.value}</li>
-          <li>{compartment.rate}%</li>
-        </ul>
-      ))}
-    </div>
-  );
-}
-
-/**
  * React Component to render the Scenario Cards Section
  * @prop {object}     props           - The props for the component.
  * @prop {Scenario[]} props.scenarios - The list of scenarios for the scenario cards.
