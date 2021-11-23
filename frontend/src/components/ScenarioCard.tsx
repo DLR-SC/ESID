@@ -38,6 +38,7 @@ const useStyles = makeStyles(() =>
 /**
  * Type definition for the ScenarioCard props
  * @typedef {object} ScenarioCardProps
+ *
  * @prop {object}   scenario          - The scenario this card is displaying.
  * @prop {string}   scenario.id    - The identifier for the scenario.
  * @prop {string}   scenario.label - The label for the scenario displayed to the user.
@@ -51,6 +52,8 @@ const useStyles = makeStyles(() =>
  * @prop {string}   selectedProperty  - The compartment name of the currently selected compartment, or empty string if none is selected.
  * @prop {boolean}  expandProperties  - Boolean value whether the properties list is expanded or only the first four are shown.
  * @prop {function} onClick           - The function that is executed when the scenario card is clicked.
+ *
+ * @returns {JSX.Element} JSX Element to render the scenario card.
  */
 interface ScenarioCardProps {
   scenario: {

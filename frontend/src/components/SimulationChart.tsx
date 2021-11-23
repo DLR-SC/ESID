@@ -4,8 +4,7 @@ import * as am4charts from '@amcharts/amcharts4/charts';
 import {createStyles, makeStyles} from '@mui/styles';
 import {Box} from '@mui/material';
 
-/* This component displays the evolution of the pandemic for a specific compartment ( Hospitalized,death,infected, etc.)
- regarding 4 differents scenarios
+/* This component displays the evolution of the pandemic for a specific compartment (hospitalized, dead, infected, etc.) regarding the different scenarios
  */
 
 const useStyles = makeStyles(() =>
@@ -140,6 +139,13 @@ const data = [
   },
 ];
 
+/**
+ * React Component to render the Simulation Chart Section
+ * @prop {object}     props           - The props for the component.
+ * @prop {Scenario[]} props.scenarios - The list of scenarios for the chart.
+ *
+ * @returns {JSX.Element} JSX Element to render the scenario chart container and the scenario graph within.
+ */
 export default function SimulationChart(props: {scenarios: Scenario[]}): JSX.Element {
   const classes = useStyles();
 
@@ -185,10 +191,6 @@ export default function SimulationChart(props: {scenarios: Scenario[]}): JSX.Ele
     chart.cursor = new am4charts.XYCursor();
     chart.cursor.xAxis = dateAxis;
 
-    return () => {
-      console.log('trying to dispose chart');
-      chart.dispose();
-    };
     // empty dependencies to do this effect only on the first render
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

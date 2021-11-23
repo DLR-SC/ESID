@@ -160,6 +160,7 @@ function createRow(
 /**
  * Scenario type definition.
  * @typedef {object} Scenario
+ *
  * @property {string} id    - The identifier for the scenario.
  * @property {string} label - The label for the scenario displayed to the user.
  * @property {string} color - The Hex-color code for the scenario.
@@ -189,6 +190,7 @@ const properties = [
  * React Component to render the Scenario Cards Section
  * @prop {object}     props           - The props for the component.
  * @prop {Scenario[]} props.scenarios - The list of scenarios for the scenario cards.
+ *
  * @returns {JSX.Element} JSX Element to render the scenario card container and the scenario cards within.
  * @see ScenarioCard
  */
