@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {useAppDispatch} from '../store/hooks';
 import {createStyles, makeStyles} from '@mui/styles';
 import {useTranslation} from 'react-i18next';
-import {selectCompartment, selectRate, selectScenario} from 'store/DataSelectionSlice';
+import {selectCompartment, selectRate, selectScenario, selectValue} from 'store/DataSelectionSlice';
 
 /* This component displays the pandemic spread depending on different scenarios
  */
@@ -274,10 +274,11 @@ export default function Scenario(props: {scenarios: Scenario[]}): JSX.Element {
               fontWeight: compartment.compartment === selectedProperty ? 'bold' : 'normal',
             }}
             onClick={() => {
-              // set selected property and dispatch new compartment and new rate for currently selected scenario
+              // set selected property and dispatch new compartment, new value and new rate for currently selected scenario
               setSelectedProperty(compartment.compartment);
               dispatch(selectCompartment(compartment.compartment));
-              dispatch(selectRate(compartment.scenarios[props.scenarios[activeScenario].id].value)); // TODO: dispatch selectRate passing value not rate?
+              dispatch(selectValue(compartment.scenarios[props.scenarios[activeScenario].id].value));
+              dispatch(selectRate(compartment.scenarios[props.scenarios[activeScenario].id].rate));
             }}
           >
             <li>{compartment.compartment}</li>
@@ -318,10 +319,13 @@ export default function Scenario(props: {scenarios: Scenario[]}): JSX.Element {
               // set active scenario to this one and send dispatches
               setActiveScenario(i);
               dispatch(selectScenario(scn.id));
-              // if a property has been selected filter properties for selected and dispatch selectRate for that property and the selected scenario
+              // if a property has been selected filter properties for selected and dispatch selectValue & selectRate for that property
               if (!(selectedProperty === '')) {
                 dispatch(
-                  selectRate(properties.filter((x) => x.compartment === selectedProperty)[0].scenarios[scn.id].value) // TODO: dispatch selectRate passing value not rate?
+                  selectValue(properties.filter((x) => x.compartment === selectedProperty)[0].scenarios[scn.id].value)
+                );
+                dispatch(
+                  selectRate(properties.filter((x) => x.compartment === selectedProperty)[0].scenarios[scn.id].rate)
                 );
               }
             }}

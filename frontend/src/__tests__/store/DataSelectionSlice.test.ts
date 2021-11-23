@@ -6,6 +6,7 @@ describe('DataSelectionSlice', () => {
     date: new Date(2021, 0).getTime(),
     scenario: 'default',
     compartment: 'infected',
+    value: 0,
     rate: 0,
   };
 
@@ -20,6 +21,7 @@ describe('DataSelectionSlice', () => {
       date: new Date(2021, 0).getTime(),
       scenario: 'default',
       compartment: 'infected',
+      value: 0,
       rate: 0,
     });
   });
@@ -31,6 +33,7 @@ describe('DataSelectionSlice', () => {
       date: new Date(2020, 8, 21).getTime(),
       scenario: 'default',
       compartment: 'infected',
+      value: 0,
       rate: 0,
     });
 
@@ -39,6 +42,7 @@ describe('DataSelectionSlice', () => {
       date: 2000000000,
       scenario: 'default',
       compartment: 'infected',
+      value: 0,
       rate: 0,
     });
   });
@@ -49,6 +53,7 @@ describe('DataSelectionSlice', () => {
       date: new Date(2021, 0).getTime(),
       scenario: 'Test Scenario',
       compartment: 'infected',
+      value: 0,
       rate: 0,
     });
   });
@@ -59,6 +64,7 @@ describe('DataSelectionSlice', () => {
       date: new Date(2021, 0).getTime(),
       scenario: 'default',
       compartment: 'Test Compartment',
+      value: 0,
       rate: 0,
     });
   });
