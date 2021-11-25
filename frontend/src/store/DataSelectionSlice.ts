@@ -22,7 +22,7 @@ const initialState: DataSelection = {
   district: {ags: '00000', name: i18n.t('germany'), type: ''},
   date: new Date(2021, 0).getTime(),
   scenario: 'default',
-  compartment: 'infected',
+  compartment: '',
   value: 0,
   rate: 0,
 };
