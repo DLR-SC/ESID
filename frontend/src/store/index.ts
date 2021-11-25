@@ -1,9 +1,11 @@
 import {configureStore} from '@reduxjs/toolkit';
 import DataSelectionReducer from './DataSelectionSlice';
+import ScenarioReducer from './ScenarioSlice';
 
 const Store = configureStore({
   reducer: {
     dataSelection: DataSelectionReducer,
+    scenarioList: ScenarioReducer,
   },
 });
 
