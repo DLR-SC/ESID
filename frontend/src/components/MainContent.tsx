@@ -61,7 +61,7 @@ export default function MainContent(): JSX.Element {
         <Divider className={classes.divider} light />
       </Grid>
       <Grid item style={{flexGrow: 1}}>
-        <SimulationChart scenarios={scenarios} />
+        <SimulationChart />
       </Grid>
     </Grid>
   );

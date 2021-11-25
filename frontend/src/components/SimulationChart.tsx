@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react';
 import * as am4core from '@amcharts/amcharts4/core';
 import * as am4charts from '@amcharts/amcharts4/charts';
+import {useAppSelector} from '../store/hooks';
 import {createStyles, makeStyles} from '@mui/styles';
 import {Box} from '@mui/material';
 
@@ -21,13 +22,6 @@ const useStyles = makeStyles(() =>
     },
   })
 );
-
-// list of Name and Color for Scenario Cards
-interface Scenario {
-  id: string;
-  label: string;
-  color: string;
-}
 
 // dummy data
 const drawDeviations = true;
@@ -141,13 +135,11 @@ const data = [
 
 /**
  * React Component to render the Simulation Chart Section
- * @prop {object}     props           - The props for the component.
- * @prop {Scenario[]} props.scenarios - The list of scenarios for the chart.
- *
  * @returns {JSX.Element} JSX Element to render the scenario chart container and the scenario graph within.
  */
-export default function SimulationChart(props: {scenarios: Scenario[]}): JSX.Element {
+export default function SimulationChart(): JSX.Element {
   const classes = useStyles();
+  const scenarioList = useAppSelector((state) => state.scenarioList);
 
   useEffect(() => {
     // Create chart instance (is called when props.scenarios changes)
@@ -162,28 +154,28 @@ export default function SimulationChart(props: {scenarios: Scenario[]}): JSX.Ele
     dateAxis.renderer.minGridDistance = 50;
     chart.yAxes.push(new am4charts.ValueAxis());
 
-    props.scenarios.map((scn) => {
+    Object.entries(scenarioList).map(([scn_id, scn_info]) => {
       const series = chart.series.push(new am4charts.LineSeries());
-      series.dataFields.valueY = scn.id;
+      series.dataFields.valueY = scn_id;
       series.dataFields.dateX = 'date';
       series.tensionX = 0.8;
       series.strokeWidth = 1;
-      series.fill = am4core.color(scn.color);
-      series.stroke = am4core.color(scn.color);
-      series.tooltipText = `${scn.label}: [bold]{${scn.id}}[/]`;
+      series.fill = am4core.color(scn_info.color);
+      series.stroke = am4core.color(scn_info.color);
+      series.tooltipText = `${scn_info.label}: [bold]{${scn_id}}[/]`;
 
       if (drawDeviations) {
         const seriesSTD = chart.series.push(new am4charts.LineSeries());
-        seriesSTD.dataFields.valueY = `${scn.id}STDup`;
-        seriesSTD.dataFields.openValueY = `${scn.id}STDdown`;
+        seriesSTD.dataFields.valueY = `${scn_id}STDup`;
+        seriesSTD.dataFields.openValueY = `${scn_id}STDdown`;
         seriesSTD.dataFields.dateX = 'date';
         seriesSTD.tensionX = 0.8;
         seriesSTD.strokeWidth = 0;
-        seriesSTD.fill = am4core.color(scn.color);
+        seriesSTD.fill = am4core.color(scn_info.color);
         seriesSTD.fillOpacity = 0.3;
-        seriesSTD.stroke = am4core.color(scn.color);
+        seriesSTD.stroke = am4core.color(scn_info.color);
         // override tooltip
-        series.tooltipText = `${scn.label}: [bold]{${scn.id}STDdown} ~ {${scn.id}STDup}[/]`;
+        series.tooltipText = `${scn_info.label}: [bold]{${scn_id}STDdown} ~ {${scn_id}STDup}[/]`;
       }
     });
 
