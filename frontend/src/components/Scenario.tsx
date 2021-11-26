@@ -95,6 +95,7 @@ const useStyles = makeStyles(() =>
       display: 'flex',
 
       '& button': {
+        background: `${theme.colors.background}`,
         color: `${theme.colors.background_accent}`,
         border: `2px dashed ${theme.colors.background_accent}`,
         flexGrow: 0,
