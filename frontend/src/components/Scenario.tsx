@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {useAppDispatch} from '../store/hooks';
+import {useAppDispatch, useAppSelector} from '../store/hooks';
 import {createStyles, makeStyles} from '@mui/styles';
 import {useTranslation} from 'react-i18next';
 import {selectCompartment, selectRate, selectScenario, selectValue} from 'store/DataSelectionSlice';
@@ -157,20 +157,6 @@ function createRow(
   };
 }
 
-/**
- * Scenario type definition.
- * @typedef {object} Scenario
- *
- * @property {string} id    - The identifier for the scenario.
- * @property {string} label - The label for the scenario displayed to the user.
- * @property {string} color - The Hex-color code for the scenario.
- */
-interface Scenario {
-  id: string;
-  label: string;
-  color: string;
-}
-
 // list of properties and value/rate pairs for each scenario
 // compartment/name, latest, basic, basicRate, medium, mediumRate, big, bigRate, maximum, maximumRate
 const properties = [
@@ -188,13 +174,10 @@ const properties = [
 
 /**
  * React Component to render the Scenario Cards Section
- * @prop {object}     props           - The props for the component.
- * @prop {Scenario[]} props.scenarios - The list of scenarios for the scenario cards.
- *
  * @returns {JSX.Element} JSX Element to render the scenario card container and the scenario cards within.
  * @see ScenarioCard
  */
-export default function Scenario(props: {scenarios: Scenario[]}): JSX.Element {
+export default function Scenario(): JSX.Element {
   const {t} = useTranslation();
 
   const classes = useStyles();
@@ -202,6 +185,8 @@ export default function Scenario(props: {scenarios: Scenario[]}): JSX.Element {
   const [selectedProperty, setSelectedProperty] = useState('');
   const [activeScenario, setActiveScenario] = useState(0);
   const [expandProperties, setExpandProperties] = useState(false);
+
+  const scenarioList = useAppSelector((state) => state.scenarioList);
 
   return (
     <div className={classes.root}>
@@ -215,11 +200,13 @@ export default function Scenario(props: {scenarios: Scenario[]}): JSX.Element {
               fontWeight: compartment.compartment === selectedProperty ? 'bold' : 'normal',
             }}
             onClick={() => {
-              // set selected property and dispatch new compartment, new value and new rate for currently selected scenario
+              // set selected property
               setSelectedProperty(compartment.compartment);
+              // dispatch new compartment name
               dispatch(selectCompartment(compartment.compartment));
-              dispatch(selectValue(compartment.scenarios[props.scenarios[activeScenario].id].value));
-              dispatch(selectRate(compartment.scenarios[props.scenarios[activeScenario].id].rate));
+              // dispatch value & rate (active Scenario is stored as number but compartment.scenarios needs id => list keys & use index)
+              dispatch(selectValue(compartment.scenarios[Object.keys(scenarioList)[activeScenario]].value));
+              dispatch(selectRate(compartment.scenarios[Object.keys(scenarioList)[activeScenario]].rate));
             }}
           >
             <li>{compartment.compartment}</li>
@@ -244,29 +231,29 @@ export default function Scenario(props: {scenarios: Scenario[]}): JSX.Element {
         </button>
       </div>
       <div className={classes.scenario_container}>
-        {props.scenarios.map((scn, i) => (
+        {Object.entries(scenarioList).map(([scn_id, scn_info], i) => (
           <ScenarioCard
             key={i}
-            scenario={scn}
+            scenario={scn_info}
             active={activeScenario === i}
             data={properties.map((p) => ({
               compartment: p.compartment,
-              value: p.scenarios[scn.id].value,
-              rate: p.scenarios[scn.id].rate,
+              value: p.scenarios[scn_id].value,
+              rate: p.scenarios[scn_id].rate,
             }))}
             selectedProperty={selectedProperty}
             expandProperties={expandProperties}
             onClick={() => {
               // set active scenario to this one and send dispatches
               setActiveScenario(i);
-              dispatch(selectScenario(scn.id));
+              dispatch(selectScenario(scn_id));
               // if a property has been selected filter properties for selected and dispatch selectValue & selectRate for that property
               if (!(selectedProperty === '')) {
                 dispatch(
-                  selectValue(properties.filter((x) => x.compartment === selectedProperty)[0].scenarios[scn.id].value)
+                  selectValue(properties.filter((x) => x.compartment === selectedProperty)[0].scenarios[scn_id].value)
                 );
                 dispatch(
-                  selectRate(properties.filter((x) => x.compartment === selectedProperty)[0].scenarios[scn.id].rate)
+                  selectRate(properties.filter((x) => x.compartment === selectedProperty)[0].scenarios[scn_id].rate)
                 );
               }
             }}

@@ -40,9 +40,9 @@ const useStyles = makeStyles(() =>
  * @typedef {object} ScenarioCardProps
  *
  * @prop {object}   scenario          - The scenario this card is displaying.
- * @prop {string}   scenario.id    - The identifier for the scenario.
- * @prop {string}   scenario.label - The label for the scenario displayed to the user.
- * @prop {string}   scenario.color - The Hex-color code for the scenario.
+ * @prop {string}   scenario.id       - The identifier for the scenario.
+ * @prop {string}   scenario.label    - The label for the scenario displayed to the user.
+ * @prop {string}   scenario.color    - The Hex-color code for the scenario.
  * @prop {number}   key               - The key for this scenario (index from the map function for the scenario list).
  * @prop {boolean}  active            - Boolean value whether the scenario is the selected scenario.
  * @prop {object[]} data              - The list of compartment data for this scenario (see {@link PropertyUpdate}).
