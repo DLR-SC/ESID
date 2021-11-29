@@ -13,7 +13,7 @@ const theme = {
   colors: {
     accent: '#1976D2',
     background: '#F8F8F8',
-    background_accent: '#d3d2d8',
+    backgroundAccent: '#d3d2d8',
   },
 };
 
@@ -27,7 +27,7 @@ const useStyles = makeStyles(() =>
     },
 
     scenario_header: {
-      borderRight: `2px dashed ${theme.colors.background_accent}`,
+      borderRight: `2px dashed ${theme.colors.backgroundAccent}`,
       flexGrow: 0,
       flexShrink: 1,
       flexBasis: '276px',
@@ -59,7 +59,7 @@ const useStyles = makeStyles(() =>
 
       '& ul:hover': {
         borderStyle: 'solid hidden solid hidden',
-        border: `1px solid ${theme.colors.background_accent}`,
+        border: `1px solid ${theme.colors.backgroundAccent}`,
       },
 
       '& button': {
@@ -67,7 +67,7 @@ const useStyles = makeStyles(() =>
         fontWeight: 'bold',
         color: `${theme.colors.accent}`,
         background: `${theme.colors.background}`,
-        border: `1px solid ${theme.colors.background_accent}`,
+        border: `1px solid ${theme.colors.backgroundAccent}`,
         borderRadius: '5px',
         margin: '8px',
       },
@@ -86,7 +86,7 @@ const useStyles = makeStyles(() =>
     },
 
     scenario_footer: {
-      borderLeft: `1px solid ${theme.colors.background_accent}`,
+      borderLeft: `1px solid ${theme.colors.backgroundAccent}`,
       flexGrow: 0,
       flexShrink: 0,
       flexBasis: '208px',
@@ -96,8 +96,8 @@ const useStyles = makeStyles(() =>
 
       '& button': {
         background: `${theme.colors.background}`,
-        color: `${theme.colors.background_accent}`,
-        border: `2px dashed ${theme.colors.background_accent}`,
+        color: `${theme.colors.backgroundAccent}`,
+        border: `2px dashed ${theme.colors.backgroundAccent}`,
         flexGrow: 0,
         flexShrink: 0,
         flexBasis: '160px',
@@ -109,7 +109,7 @@ const useStyles = makeStyles(() =>
       },
 
       '& button:hover': {
-        border: `2px solid ${theme.colors.background_accent}`,
+        border: `2px solid ${theme.colors.backgroundAccent}`,
         color: `${theme.colors.accent}`,
       },
     },
