@@ -1,0 +1,2002 @@
+[
+  {
+    "RS": "07131",
+    "GEN": "Ahrweiler",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09771",
+    "GEN": "Aichach-Friedberg",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "08425",
+    "GEN": "Alb-Donau-Kreis",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "16077",
+    "GEN": "Altenburger Land",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "07132",
+    "GEN": "Altenkirchen (Westerwald)",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "15081",
+    "GEN": "Altmarkkreis Salzwedel",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09171",
+    "GEN": "Altötting",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "07331",
+    "GEN": "Alzey-Worms",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09361",
+    "GEN": "Amberg",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "09371",
+    "GEN": "Amberg-Sulzbach",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "03451",
+    "GEN": "Ammerland",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "15082",
+    "GEN": "Anhalt-Bitterfeld",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09561",
+    "GEN": "Ansbach",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "09571",
+    "GEN": "Ansbach",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09661",
+    "GEN": "Aschaffenburg",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "09671",
+    "GEN": "Aschaffenburg",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09761",
+    "GEN": "Augsburg",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "09772",
+    "GEN": "Augsburg",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "03452",
+    "GEN": "Aurich",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "07332",
+    "GEN": "Bad Dürkheim",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09672",
+    "GEN": "Bad Kissingen",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "07133",
+    "GEN": "Bad Kreuznach",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09173",
+    "GEN": "Bad Tölz-Wolfratshausen",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "08211",
+    "GEN": "Baden-Baden",
+    "BEZ": "SK"
+  },
+  {
+    "RS": "09461",
+    "GEN": "Bamberg",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "09471",
+    "GEN": "Bamberg",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "12060",
+    "GEN": "Barnim",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "14625",
+    "GEN": "Bautzen",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09462",
+    "GEN": "Bayreuth",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "09472",
+    "GEN": "Bayreuth",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09172",
+    "GEN": "Berchtesgadener Land",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "06431",
+    "GEN": "Bergstraße",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "11000",
+    "GEN": "Berlin",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "07231",
+    "GEN": "Bernkastel-Wittlich",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "08426",
+    "GEN": "Biberach",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "05711",
+    "GEN": "Bielefeld",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "07134",
+    "GEN": "Birkenfeld",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "05911",
+    "GEN": "Bochum",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "08435",
+    "GEN": "Bodenseekreis",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "05314",
+    "GEN": "Bonn",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "05554",
+    "GEN": "Borken",
+    "BEZ": "K"
+  },
+  {
+    "RS": "05512",
+    "GEN": "Bottrop",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "12051",
+    "GEN": "Brandenburg an der Havel",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "03101",
+    "GEN": "Braunschweig",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "08315",
+    "GEN": "Breisgau-Hochschwarzwald",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "04011",
+    "GEN": "Bremen",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "04012",
+    "GEN": "Bremerhaven",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "15084",
+    "GEN": "Burgenlandkreis",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "08115",
+    "GEN": "Böblingen",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "15083",
+    "GEN": "Börde",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "08235",
+    "GEN": "Calw",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "03351",
+    "GEN": "Celle",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09372",
+    "GEN": "Cham",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "14511",
+    "GEN": "Chemnitz",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "03453",
+    "GEN": "Cloppenburg",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09463",
+    "GEN": "Coburg",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "09473",
+    "GEN": "Coburg",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "07135",
+    "GEN": "Cochem-Zell",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "05558",
+    "GEN": "Coesfeld",
+    "BEZ": "K"
+  },
+  {
+    "RS": "12052",
+    "GEN": "Cottbus",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "03352",
+    "GEN": "Cuxhaven",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09174",
+    "GEN": "Dachau",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "12061",
+    "GEN": "Dahme-Spreewald",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "06411",
+    "GEN": "Darmstadt",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "06432",
+    "GEN": "Darmstadt-Dieburg",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09271",
+    "GEN": "Deggendorf",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "03401",
+    "GEN": "Delmenhorst",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "15001",
+    "GEN": "Dessau-Roßlau",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "03251",
+    "GEN": "Diepholz",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09773",
+    "GEN": "Dillingen a.d. Donau",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09279",
+    "GEN": "Dingolfing-Landau",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "01051",
+    "GEN": "Dithmarschen",
+    "BEZ": "K"
+  },
+  {
+    "RS": "09779",
+    "GEN": "Donau-Ries",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "07333",
+    "GEN": "Donnersbergkreis",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "05913",
+    "GEN": "Dortmund",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "14612",
+    "GEN": "Dresden",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "05112",
+    "GEN": "Duisburg",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "05358",
+    "GEN": "Düren",
+    "BEZ": "K"
+  },
+  {
+    "RS": "05111",
+    "GEN": "Düsseldorf",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "09175",
+    "GEN": "Ebersberg",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "16061",
+    "GEN": "Eichsfeld",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09176",
+    "GEN": "Eichstätt",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "07232",
+    "GEN": "Eifelkreis Bitburg-Prüm",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "12062",
+    "GEN": "Elbe-Elster",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "03402",
+    "GEN": "Emden",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "08316",
+    "GEN": "Emmendingen",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "03454",
+    "GEN": "Emsland",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "05954",
+    "GEN": "Ennepe-Ruhr-Kreis",
+    "BEZ": "K"
+  },
+  {
+    "RS": "08236",
+    "GEN": "Enzkreis",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09177",
+    "GEN": "Erding",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "16051",
+    "GEN": "Erfurt",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "09562",
+    "GEN": "Erlangen",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "09572",
+    "GEN": "Erlangen-Höchstadt",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "14521",
+    "GEN": "Erzgebirgskreis",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "05113",
+    "GEN": "Essen",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "08116",
+    "GEN": "Esslingen",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "05366",
+    "GEN": "Euskirchen",
+    "BEZ": "K"
+  },
+  {
+    "RS": "01001",
+    "GEN": "Flensburg",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "09474",
+    "GEN": "Forchheim",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "07311",
+    "GEN": "Frankenthal (Pfalz)",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "12053",
+    "GEN": "Frankfurt (Oder)",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "06412",
+    "GEN": "Frankfurt am Main",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "08311",
+    "GEN": "Freiburg im Breisgau",
+    "BEZ": "SK"
+  },
+  {
+    "RS": "09178",
+    "GEN": "Freising",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "08237",
+    "GEN": "Freudenstadt",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09272",
+    "GEN": "Freyung-Grafenau",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "03455",
+    "GEN": "Friesland",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "06631",
+    "GEN": "Fulda",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09179",
+    "GEN": "Fürstenfeldbruck",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09563",
+    "GEN": "Fürth",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "09573",
+    "GEN": "Fürth",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09180",
+    "GEN": "Garmisch-Partenkirchen",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "05513",
+    "GEN": "Gelsenkirchen",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "16052",
+    "GEN": "Gera",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "07334",
+    "GEN": "Germersheim",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "06531",
+    "GEN": "Gießen",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "03151",
+    "GEN": "Gifhorn",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "03153",
+    "GEN": "Goslar",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "16067",
+    "GEN": "Gotha",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "03456",
+    "GEN": "Grafschaft Bentheim",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "16076",
+    "GEN": "Greiz",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "06433",
+    "GEN": "Groß-Gerau",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "08117",
+    "GEN": "Göppingen",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "14626",
+    "GEN": "Görlitz",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "03159",
+    "GEN": "Göttingen",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09774",
+    "GEN": "Günzburg",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "05754",
+    "GEN": "Gütersloh",
+    "BEZ": "K"
+  },
+  {
+    "RS": "05914",
+    "GEN": "Hagen",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "15002",
+    "GEN": "Halle (Saale)",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "02000",
+    "GEN": "Hamburg",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "03252",
+    "GEN": "Hameln-Pyrmont",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "05915",
+    "GEN": "Hamm",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "03353",
+    "GEN": "Harburg",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "15085",
+    "GEN": "Harz",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "12063",
+    "GEN": "Havelland",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09674",
+    "GEN": "Haßberge",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "03358",
+    "GEN": "Heidekreis",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "08221",
+    "GEN": "Heidelberg",
+    "BEZ": "SK"
+  },
+  {
+    "RS": "08135",
+    "GEN": "Heidenheim",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "08121",
+    "GEN": "Heilbronn",
+    "BEZ": "SK"
+  },
+  {
+    "RS": "08125",
+    "GEN": "Heilbronn",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "05370",
+    "GEN": "Heinsberg",
+    "BEZ": "K"
+  },
+  {
+    "RS": "03154",
+    "GEN": "Helmstedt",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "05758",
+    "GEN": "Herford",
+    "BEZ": "K"
+  },
+  {
+    "RS": "05916",
+    "GEN": "Herne",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "06632",
+    "GEN": "Hersfeld-Rotenburg",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "01053",
+    "GEN": "Herzogtum Lauenburg",
+    "BEZ": "K"
+  },
+  {
+    "RS": "16069",
+    "GEN": "Hildburghausen",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "03254",
+    "GEN": "Hildesheim",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "05958",
+    "GEN": "Hochsauerlandkreis",
+    "BEZ": "K"
+  },
+  {
+    "RS": "06434",
+    "GEN": "Hochtaunuskreis",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09464",
+    "GEN": "Hof",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "09475",
+    "GEN": "Hof",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "08126",
+    "GEN": "Hohenlohekreis",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "03255",
+    "GEN": "Holzminden",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "05762",
+    "GEN": "Höxter",
+    "BEZ": "K"
+  },
+  {
+    "RS": "16070",
+    "GEN": "Ilm-Kreis",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09161",
+    "GEN": "Ingolstadt",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "16053",
+    "GEN": "Jena",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "15086",
+    "GEN": "Jerichower Land",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "07312",
+    "GEN": "Kaiserslautern",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "07335",
+    "GEN": "Kaiserslautern",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "08212",
+    "GEN": "Karlsruhe",
+    "BEZ": "SK"
+  },
+  {
+    "RS": "08215",
+    "GEN": "Karlsruhe",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "06611",
+    "GEN": "Kassel",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "06633",
+    "GEN": "Kassel",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09762",
+    "GEN": "Kaufbeuren",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "09273",
+    "GEN": "Kelheim",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09763",
+    "GEN": "Kempten (Allgäu)",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "01002",
+    "GEN": "Kiel",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "09675",
+    "GEN": "Kitzingen",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "05154",
+    "GEN": "Kleve",
+    "BEZ": "K"
+  },
+  {
+    "RS": "07111",
+    "GEN": "Koblenz",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "08335",
+    "GEN": "Konstanz",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "05114",
+    "GEN": "Krefeld",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "09476",
+    "GEN": "Kronach",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09477",
+    "GEN": "Kulmbach",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "07336",
+    "GEN": "Kusel",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "16065",
+    "GEN": "Kyffhäuserkreis",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "05315",
+    "GEN": "Köln",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "06532",
+    "GEN": "Lahn-Dill-Kreis",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "07313",
+    "GEN": "Landau in der Pfalz",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "09181",
+    "GEN": "Landsberg am Lech",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09261",
+    "GEN": "Landshut",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "09274",
+    "GEN": "Landshut",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "03457",
+    "GEN": "Leer",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "14713",
+    "GEN": "Leipzig",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "14729",
+    "GEN": "Leipzig",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "05316",
+    "GEN": "Leverkusen",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "09478",
+    "GEN": "Lichtenfels",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "06533",
+    "GEN": "Limburg-Weilburg",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09776",
+    "GEN": "Lindau (Bodensee)",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "05766",
+    "GEN": "Lippe",
+    "BEZ": "K"
+  },
+  {
+    "RS": "08118",
+    "GEN": "Ludwigsburg",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "07314",
+    "GEN": "Ludwigshafen am Rhein",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "13076",
+    "GEN": "Ludwigslust-Parchim",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "08336",
+    "GEN": "Lörrach",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "01003",
+    "GEN": "Lübeck",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "03354",
+    "GEN": "Lüchow-Dannenberg",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "03355",
+    "GEN": "Lüneburg",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "15003",
+    "GEN": "Magdeburg",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "06435",
+    "GEN": "Main-Kinzig-Kreis",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09677",
+    "GEN": "Main-Spessart",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "08128",
+    "GEN": "Main-Tauber-Kreis",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "06436",
+    "GEN": "Main-Taunus-Kreis",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "07315",
+    "GEN": "Mainz",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "07339",
+    "GEN": "Mainz-Bingen",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "08222",
+    "GEN": "Mannheim",
+    "BEZ": "SK"
+  },
+  {
+    "RS": "15087",
+    "GEN": "Mansfeld-Südharz",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "06534",
+    "GEN": "Marburg-Biedenkopf",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "07137",
+    "GEN": "Mayen-Koblenz",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "13071",
+    "GEN": "Mecklenburgische Seenplatte",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "14627",
+    "GEN": "Meißen",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09764",
+    "GEN": "Memmingen",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "10042",
+    "GEN": "Merzig-Wadern",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "05158",
+    "GEN": "Mettmann",
+    "BEZ": "K"
+  },
+  {
+    "RS": "09182",
+    "GEN": "Miesbach",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09676",
+    "GEN": "Miltenberg",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "05770",
+    "GEN": "Minden-Lübbecke",
+    "BEZ": "K"
+  },
+  {
+    "RS": "14522",
+    "GEN": "Mittelsachsen",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "12064",
+    "GEN": "Märkisch-Oderland",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "05962",
+    "GEN": "Märkischer Kreis",
+    "BEZ": "K"
+  },
+  {
+    "RS": "05116",
+    "GEN": "Mönchengladbach",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "09183",
+    "GEN": "Mühldorf a. Inn",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "05117",
+    "GEN": "Mülheim an der Ruhr",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "09162",
+    "GEN": "München",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "09184",
+    "GEN": "München",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "05515",
+    "GEN": "Münster",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "08225",
+    "GEN": "Neckar-Odenwald-Kreis",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09775",
+    "GEN": "Neu-Ulm",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09185",
+    "GEN": "Neuburg-Schrobenhausen",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09373",
+    "GEN": "Neumarkt i.d. OPf.",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "01004",
+    "GEN": "Neumünster",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "10043",
+    "GEN": "Neunkirchen",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09575",
+    "GEN": "Neustadt a.d. Aisch-Bad Windsheim",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09374",
+    "GEN": "Neustadt a.d. Waldnaab",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "07316",
+    "GEN": "Neustadt an der Weinstraße",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "07138",
+    "GEN": "Neuwied",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "03256",
+    "GEN": "Nienburg (Weser)",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "01054",
+    "GEN": "Nordfriesland",
+    "BEZ": "K"
+  },
+  {
+    "RS": "16062",
+    "GEN": "Nordhausen",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "14730",
+    "GEN": "Nordsachsen",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "13074",
+    "GEN": "Nordwestmecklenburg",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "03155",
+    "GEN": "Northeim",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09564",
+    "GEN": "Nürnberg",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "09574",
+    "GEN": "Nürnberger Land",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09780",
+    "GEN": "Oberallgäu",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "05374",
+    "GEN": "Oberbergischer Kreis",
+    "BEZ": "K"
+  },
+  {
+    "RS": "05119",
+    "GEN": "Oberhausen",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "12065",
+    "GEN": "Oberhavel",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "12066",
+    "GEN": "Oberspreewald-Lausitz",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "06437",
+    "GEN": "Odenwaldkreis",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "12067",
+    "GEN": "Oder-Spree",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "06438",
+    "GEN": "Offenbach",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "06413",
+    "GEN": "Offenbach am Main",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "03458",
+    "GEN": "Oldenburg",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "03403",
+    "GEN": "Oldenburg (Oldb)",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "05966",
+    "GEN": "Olpe",
+    "BEZ": "K"
+  },
+  {
+    "RS": "08317",
+    "GEN": "Ortenaukreis",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "03404",
+    "GEN": "Osnabrück",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "03459",
+    "GEN": "Osnabrück",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "08136",
+    "GEN": "Ostalbkreis",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09777",
+    "GEN": "Ostallgäu",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "03356",
+    "GEN": "Osterholz",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "01055",
+    "GEN": "Ostholstein",
+    "BEZ": "K"
+  },
+  {
+    "RS": "12068",
+    "GEN": "Ostprignitz-Ruppin",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "05774",
+    "GEN": "Paderborn",
+    "BEZ": "K"
+  },
+  {
+    "RS": "09262",
+    "GEN": "Passau",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "09275",
+    "GEN": "Passau",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "03157",
+    "GEN": "Peine",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09186",
+    "GEN": "Pfaffenhofen a.d. Ilm",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "08231",
+    "GEN": "Pforzheim",
+    "BEZ": "SK"
+  },
+  {
+    "RS": "01056",
+    "GEN": "Pinneberg",
+    "BEZ": "K"
+  },
+  {
+    "RS": "07317",
+    "GEN": "Pirmasens",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "01057",
+    "GEN": "Plön",
+    "BEZ": "K"
+  },
+  {
+    "RS": "12054",
+    "GEN": "Potsdam",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "12069",
+    "GEN": "Potsdam-Mittelmark",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "12070",
+    "GEN": "Prignitz",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "08216",
+    "GEN": "Rastatt",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "08436",
+    "GEN": "Ravensburg",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "05562",
+    "GEN": "Recklinghausen",
+    "BEZ": "K"
+  },
+  {
+    "RS": "09276",
+    "GEN": "Regen",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09362",
+    "GEN": "Regensburg",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "09375",
+    "GEN": "Regensburg",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "03241",
+    "GEN": "Region Hannover",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "10041",
+    "GEN": "Regionalverband Saarbrücken",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "08119",
+    "GEN": "Rems-Murr-Kreis",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "05120",
+    "GEN": "Remscheid",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "01058",
+    "GEN": "Rendsburg-Eckernförde",
+    "BEZ": "K"
+  },
+  {
+    "RS": "08415",
+    "GEN": "Reutlingen",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "05362",
+    "GEN": "Rhein-Erft-Kreis",
+    "BEZ": "K"
+  },
+  {
+    "RS": "07140",
+    "GEN": "Rhein-Hunsrück-Kreis",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "05162",
+    "GEN": "Rhein-Kreis Neuss",
+    "BEZ": "K"
+  },
+  {
+    "RS": "07141",
+    "GEN": "Rhein-Lahn-Kreis",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "08226",
+    "GEN": "Rhein-Neckar-Kreis",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "07338",
+    "GEN": "Rhein-Pfalz-Kreis",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "05382",
+    "GEN": "Rhein-Sieg-Kreis",
+    "BEZ": "K"
+  },
+  {
+    "RS": "06439",
+    "GEN": "Rheingau-Taunus-Kreis",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "05378",
+    "GEN": "Rheinisch-Bergischer Kreis",
+    "BEZ": "K"
+  },
+  {
+    "RS": "09673",
+    "GEN": "Rhön-Grabfeld",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09163",
+    "GEN": "Rosenheim",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "09187",
+    "GEN": "Rosenheim",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "13003",
+    "GEN": "Rostock",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "13072",
+    "GEN": "Rostock",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "03357",
+    "GEN": "Rotenburg (Wümme)",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09576",
+    "GEN": "Roth",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09277",
+    "GEN": "Rottal-Inn",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "08325",
+    "GEN": "Rottweil",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "16074",
+    "GEN": "Saale-Holzland-Kreis",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "16075",
+    "GEN": "Saale-Orla-Kreis",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "15088",
+    "GEN": "Saalekreis",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "16073",
+    "GEN": "Saalfeld-Rudolstadt",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "10044",
+    "GEN": "Saarlouis",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "10045",
+    "GEN": "Saarpfalz-Kreis",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "03102",
+    "GEN": "Salzgitter",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "15089",
+    "GEN": "Salzlandkreis",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "03257",
+    "GEN": "Schaumburg",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "01059",
+    "GEN": "Schleswig-Flensburg",
+    "BEZ": "K"
+  },
+  {
+    "RS": "16066",
+    "GEN": "Schmalkalden-Meiningen",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09565",
+    "GEN": "Schwabach",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "06634",
+    "GEN": "Schwalm-Eder-Kreis",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09376",
+    "GEN": "Schwandorf",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "08326",
+    "GEN": "Schwarzwald-Baar-Kreis",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09662",
+    "GEN": "Schweinfurt",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "09678",
+    "GEN": "Schweinfurt",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "13004",
+    "GEN": "Schwerin",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "08127",
+    "GEN": "Schwäbisch Hall",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "01060",
+    "GEN": "Segeberg",
+    "BEZ": "K"
+  },
+  {
+    "RS": "05970",
+    "GEN": "Siegen-Wittgenstein",
+    "BEZ": "K"
+  },
+  {
+    "RS": "08437",
+    "GEN": "Sigmaringen",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "05974",
+    "GEN": "Soest",
+    "BEZ": "K"
+  },
+  {
+    "RS": "05122",
+    "GEN": "Solingen",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "16072",
+    "GEN": "Sonneberg",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "07318",
+    "GEN": "Speyer",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "12071",
+    "GEN": "Spree-Neiße",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "10046",
+    "GEN": "St. Wendel",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "03359",
+    "GEN": "Stade",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09188",
+    "GEN": "Starnberg",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "01061",
+    "GEN": "Steinburg",
+    "BEZ": "K"
+  },
+  {
+    "RS": "05566",
+    "GEN": "Steinfurt",
+    "BEZ": "K"
+  },
+  {
+    "RS": "15090",
+    "GEN": "Stendal",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "01062",
+    "GEN": "Stormarn",
+    "BEZ": "K"
+  },
+  {
+    "RS": "09263",
+    "GEN": "Straubing",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "09278",
+    "GEN": "Straubing-Bogen",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "08111",
+    "GEN": "Stuttgart",
+    "BEZ": "SK"
+  },
+  {
+    "RS": "05334",
+    "GEN": "Städteregion Aachen",
+    "BEZ": "K"
+  },
+  {
+    "RS": "16054",
+    "GEN": "Suhl",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "14628",
+    "GEN": "Sächsische Schweiz-Osterzgebirge",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "16068",
+    "GEN": "Sömmerda",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "07337",
+    "GEN": "Südliche Weinstraße",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "07340",
+    "GEN": "Südwestpfalz",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "12072",
+    "GEN": "Teltow-Fläming",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09377",
+    "GEN": "Tirschenreuth",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09189",
+    "GEN": "Traunstein",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "07211",
+    "GEN": "Trier",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "07235",
+    "GEN": "Trier-Saarburg",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "08327",
+    "GEN": "Tuttlingen",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "08416",
+    "GEN": "Tübingen",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "12073",
+    "GEN": "Uckermark",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "03360",
+    "GEN": "Uelzen",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "08421",
+    "GEN": "Ulm",
+    "BEZ": "SK"
+  },
+  {
+    "RS": "05978",
+    "GEN": "Unna",
+    "BEZ": "K"
+  },
+  {
+    "RS": "16064",
+    "GEN": "Unstrut-Hainich-Kreis",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09778",
+    "GEN": "Unterallgäu",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "03460",
+    "GEN": "Vechta",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "03361",
+    "GEN": "Verden",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "05166",
+    "GEN": "Viersen",
+    "BEZ": "K"
+  },
+  {
+    "RS": "06535",
+    "GEN": "Vogelsbergkreis",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "14523",
+    "GEN": "Vogtlandkreis",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "13075",
+    "GEN": "Vorpommern-Greifswald",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "13073",
+    "GEN": "Vorpommern-Rügen",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "07233",
+    "GEN": "Vulkaneifel",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "06635",
+    "GEN": "Waldeck-Frankenberg",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "08337",
+    "GEN": "Waldshut",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "05570",
+    "GEN": "Warendorf",
+    "BEZ": "K"
+  },
+  {
+    "RS": "16063",
+    "GEN": "Wartburgkreis",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09363",
+    "GEN": "Weiden i.d. OPf.",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "09190",
+    "GEN": "Weilheim-Schongau",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "16055",
+    "GEN": "Weimar",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "16071",
+    "GEN": "Weimarer Land",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "09577",
+    "GEN": "Weißenburg-Gunzenhausen",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "06636",
+    "GEN": "Werra-Meißner-Kreis",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "05170",
+    "GEN": "Wesel",
+    "BEZ": "K"
+  },
+  {
+    "RS": "03461",
+    "GEN": "Wesermarsch",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "07143",
+    "GEN": "Westerwaldkreis",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "06440",
+    "GEN": "Wetteraukreis",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "06414",
+    "GEN": "Wiesbaden",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "03405",
+    "GEN": "Wilhelmshaven",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "15091",
+    "GEN": "Wittenberg",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "03462",
+    "GEN": "Wittmund",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "03158",
+    "GEN": "Wolfenbüttel",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "03103",
+    "GEN": "Wolfsburg",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "07319",
+    "GEN": "Worms",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "09479",
+    "GEN": "Wunsiedel i. Fichtelgebirge",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "05124",
+    "GEN": "Wuppertal",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "09663",
+    "GEN": "Würzburg",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "09679",
+    "GEN": "Würzburg",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "08417",
+    "GEN": "Zollernalbkreis",
+    "BEZ": "LK"
+  },
+  {
+    "RS": "07320",
+    "GEN": "Zweibrücken",
+    "BEZ": "KS"
+  },
+  {
+    "RS": "14524",
+    "GEN": "Zwickau",
+    "BEZ": "LK"
+  }
+]
