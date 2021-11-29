@@ -133,8 +133,21 @@ interface PropertyUpdate {
   scenarios: {[scenario: string]: {value: number; rate: number}};
 }
 
-// function packing simulation information into one object
-function createRow(
+/**
+ * function packing simulation information into one object (for each compartment)
+ * @property {string} compartment - The compartment name.
+ * @property {number} latest      - The latest/real value for the compartment.
+ * @property {number} basic       - The value for the scenario with id = 'basic'.
+ * @property {number} basicRate   - The rate for the scenario with id = 'basic'.
+ * @property {number} medium      - The value for the scenario with id = 'medium'.
+ * @property {number} mediumRate  - The rate for the scenario with id = 'medium'.
+ * @property {number} big         - The value for the scenario with id = 'big'.
+ * @property {number} bigRate     - The rate for the scenario with id = 'big'.
+ * @property {number} maximum     - The value for the scenario with id = 'maximum'.
+ * @property {number} maximumRate - The rate for the scenario with id = 'maximum'.
+ * @returns {PropertyUpdate} The packed Object for the compartment.
+ */
+function packData(
   compartment: string,
   latest: number,
   basic: number,
@@ -161,14 +174,14 @@ function createRow(
 // list of properties and value/rate pairs for each scenario
 // compartment/name, latest, basic, basicRate, medium, mediumRate, big, bigRate, maximum, maximumRate
 const properties = [
-  createRow('infected', 100, 200, 15, 300, -50, 400, 30, 500, -50),
-  createRow('hospitalized', 145, 200, 15, 300, -50, 400, 30, 500, -50),
-  createRow('dead', 160, 200, 15, 300, -50, 400, 30, 500, -50),
-  createRow('other', 170, 200, 15, 300, -50, 400, 30, 500, -50),
-  createRow('property 5', 160, 200, 15, 300, -50, 400, 30, 500, -50),
-  createRow('property 6', 170, 200, 15, 300, -50, 400, 30, 500, -50),
-  createRow('property 7', 160, 200, 15, 300, -50, 400, 30, 500, -50),
-  createRow('property 8', 170, 200, 15, 300, -50, 400, 30, 500, -50),
+  packData('infected', 100, 200, 15, 300, -50, 400, 30, 500, -50),
+  packData('hospitalized', 145, 200, 15, 300, -50, 400, 30, 500, -50),
+  packData('dead', 160, 200, 15, 300, -50, 400, 30, 500, -50),
+  packData('other', 170, 200, 15, 300, -50, 400, 30, 500, -50),
+  packData('property 5', 160, 200, 15, 300, -50, 400, 30, 500, -50),
+  packData('property 6', 170, 200, 15, 300, -50, 400, 30, 500, -50),
+  packData('property 7', 160, 200, 15, 300, -50, 400, 30, 500, -50),
+  packData('property 8', 170, 200, 15, 300, -50, 400, 30, 500, -50),
 ];
 
 /* === End Sample Data === */

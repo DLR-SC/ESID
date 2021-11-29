@@ -4,7 +4,6 @@ import {createStyles, makeStyles} from '@mui/styles';
 /* This component displays the individual scenario cards of the Scenario component
  */
 
-// create css styles
 const useStyles = makeStyles(() =>
   createStyles({
     scenario_card: {
@@ -35,41 +34,45 @@ const useStyles = makeStyles(() =>
   })
 );
 
-/**
- * Type definition for the ScenarioCard props
- * @typedef {object} ScenarioCardProps
- *
- * @prop {object}   scenario          - The scenario this card is displaying.
- * @prop {string}   scenario.id       - The identifier for the scenario.
- * @prop {string}   scenario.label    - The label for the scenario displayed to the user.
- * @prop {string}   scenario.color    - The Hex-color code for the scenario.
- * @prop {number}   key               - The key for this scenario (index from the map function for the scenario list).
- * @prop {boolean}  active            - Boolean value whether the scenario is the selected scenario.
- * @prop {object[]} data              - The list of compartment data for this scenario (see {@link PropertyUpdate}).
- * @prop {string}   data.compartment  - The compartment name.
- * @prop {number}   data.value        - The value for the compartment.
- * @prop {number}   data.rate         - The rate for the compartment.
- * @prop {string}   selectedProperty  - The compartment name of the currently selected compartment, or empty string if none is selected.
- * @prop {boolean}  expandProperties  - Boolean value whether the properties list is expanded or only the first four are shown.
- * @prop {function} onClick           - The function that is executed when the scenario card is clicked.
- *
- * @returns {JSX.Element} JSX Element to render the scenario card.
- */
+/** Type definition for the ScenarioCard props */
 interface ScenarioCardProps {
+  /** The scenario this card is displaying. */
   scenario: {
+    /** The identifier for the scenario. */
     id: string;
+
+    /** The label for the scenario displayed to the user. */
     label: string;
+
+    /** The Hex-color code for the scenario. */
     color: string;
   };
+
+  /** The key for this scenario (index from the map function for the scenario list). */
   key: number;
+
+  /** Boolean value whether the scenario is the selected scenario. */
   active: boolean;
+
+  /** The list of compartment data for this scenario (see {@link PropertyUpdate}. */
   data: {
+    /** The compartment name. */
     compartment: string;
+
+    /** The value for the compartment. */
     value: number;
+
+    /** The rate for the compartment. */
     rate: number;
   }[];
+
+  /** The compartment name of the currently selected compartment, or empty string if none is selected. */
   selectedProperty: string;
+
+  /** Boolean value whether the properties list is expanded or only the first four are shown. */
   expandProperties: boolean;
+
+  /** The function that is executed when the scenario card is clicked. */
   onClick: () => void;
 }
 
