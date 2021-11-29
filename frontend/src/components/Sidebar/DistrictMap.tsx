@@ -12,7 +12,7 @@ const {useRef} = React;
 
 const useStyles = makeStyles({
   Map: {
-    height: '300px',
+    height: '500px',
   },
 
   Heatlegend: {
