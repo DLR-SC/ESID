@@ -10,6 +10,8 @@ import fetch from 'node-fetch';
 /** Generic license texts are being cached here, since some projects don't provide any, and we have to download them.*/
 const LICENSE_CACHE = new Map<string, string>();
 
+const LICENSES = new Map<string, number>();
+
 const PROJECT_ROOT = path.resolve(__dirname, '..');
 const NODE_MODULES = path.resolve(PROJECT_ROOT, 'node_modules');
 const PACKAGE_JSON = path.resolve(PROJECT_ROOT, 'package.json');
@@ -42,6 +44,12 @@ const PACKAGE_JSON = path.resolve(PROJECT_ROOT, 'package.json');
     dependencyData.push(await getDependencyData(lib));
   }
   console.info('Finished collecting dependency data.', '\n');
+
+  console.info('The following licenses are used by the dependencies:');
+  LICENSES.forEach((occurrences: number, license: string) => {
+    console.info(`${occurrences.toString().padStart(4)}x ${license}`);
+  });
+  console.info();
 
   console.info('Writing to disk ...');
   fs.writeFileSync(`${PROJECT_ROOT}/public/assets/third-party-attributions.json`, JSON.stringify(dependencyData));
@@ -86,6 +94,12 @@ async function getDependencyData(lib: string): Promise<DependencyData> {
   const licenseType = getLicenseType(json);
   if (licenseType === null) {
     console.warn(`No license type for '${lib}' could be found!`);
+  } else {
+    if (LICENSES.has(licenseType)) {
+      LICENSES.set(licenseType, LICENSES.get(licenseType)!! + 1);
+    } else {
+      LICENSES.set(licenseType, 1);
+    }
   }
 
   const licenseText = await getLicenseText(lib, licenseType, authors);

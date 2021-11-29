@@ -1,5 +1,6 @@
+import {Grid} from '@mui/material';
+import {makeStyles} from '@mui/styles';
 import React from 'react';
-import {Grid, makeStyles} from '@material-ui/core';
 import {useTranslation} from 'react-i18next';
 import ApplicationMenu from './ApplicationMenu';
 

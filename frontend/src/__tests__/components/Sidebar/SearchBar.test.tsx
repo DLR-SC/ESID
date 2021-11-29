@@ -1,13 +1,13 @@
 import React from 'react';
 import {act, render, screen} from '@testing-library/react';
 
-import i18n from '../../util/i18nForTests';
+import i18n from '../../../util/i18nForTests';
 
-import SearchBar from '../../components/SearchBar';
+import SearchBar from '../../../components/Sidebar/SearchBar';
 import {I18nextProvider} from 'react-i18next';
 import {Provider} from 'react-redux';
-import Store from '../../store';
-import {selectDistrict} from '../../store/DataSelectionSlice';
+import Store from '../../../store';
+import {selectDistrict} from '../../../store/DataSelectionSlice';
 
 describe('SearchBar', () => {
   test('placeholder', () => {

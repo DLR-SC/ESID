@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from 'react';
 
 import {useTranslation} from 'react-i18next';
-import {CircularProgress, Grid, makeStyles, Typography} from '@material-ui/core';
 import ReactMarkdown from 'react-markdown';
 import LazyLoad from 'react-lazyload';
+import {makeStyles} from '@mui/styles';
+import {CircularProgress, Grid, Typography} from '@mui/material';
 
 interface DependencyData {
   name: string;
