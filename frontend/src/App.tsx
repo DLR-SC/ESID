@@ -7,10 +7,82 @@ import TopBar from './components/TopBar';
 import Sidebar from './components/Sidebar';
 import MainContent from './components/MainContent';
 import Store from './store';
-import {Box, ThemeProvider} from '@mui/material';
-import {createTheme} from '@mui/material/styles';
+import {Box} from '@mui/material';
+import {createTheme, ThemeProvider} from '@mui/material/styles';
 
-const theme = createTheme();
+const theme = createTheme({
+  palette: {
+    background: {
+      default: '#F0F0F2',
+      paper: '#F8F8F9',
+    },
+    text: {
+      primary: '#0C0B0D',
+      secondary: '#212122',
+      disabled: '#8C8C8C',
+    },
+    primary: {
+      main: '#543CF0',
+      light: '#7561f3',
+      dark: '#3619eb',
+      contrastText: '#f2f2f2',
+    },
+    secondary: {
+      main: '#962fef',
+      light: '#aa57f2',
+      dark: '#840ee9',
+      contrastText: '#f2f2f2',
+    },
+    info: {
+      main: '#3382ee',
+      light: '#5999f1',
+      dark: '#116ce8',
+      contrastText: '#f2f2f2',
+    },
+    warning: {
+      main: '#ffad23',
+      light: '#ffbd4f',
+      dark: '#ff9f00',
+      contrastText: '#0c0b0d',
+    },
+    divider: '#d2d1db',
+  },
+  typography: {
+    fontFamily: 'Inter, Arial, sans-serif',
+    fontSize: 13,
+    h1: {
+      fontSize: 16,
+      fontWeight: 700,
+      lineHeight: 1.2,
+    },
+    h2: {
+      fontSize: 13,
+      fontWeight: 600,
+    },
+    h3: {
+      fontSize: 12,
+      fontWeight: 600,
+      lineHeight: 1.15,
+    },
+    body1: {
+      fontSize: 13,
+      fontWeight: 400,
+    },
+    body2: {
+      fontSize: 12,
+      fontWeight: 400,
+    },
+    button: {
+      fontSize: 12,
+      fontWeight: 500,
+    },
+    caption: {
+      fontSize: 10,
+      fontWeight: 600,
+      // monospace Inter font does not exist
+    },
+  },
+});
 
 /**
  * This is the root element of the React application. It divides the main screen area into the three main components.
