@@ -11,20 +11,42 @@ import {selectDistrict} from '../../../store/DataSelectionSlice';
 
 describe('SearchBar', () => {
   test('placeholder', () => {
-    render(
-      <I18nextProvider i18n={i18n}>
-        <Provider store={Store}>
-          <SearchBar />
-        </Provider>
-      </I18nextProvider>
-    );
+    // We mock fetch to return two entries for searchable districts.
+    global.fetch = jest.fn().mockImplementation(() => {
+      return Promise.resolve({
+        json: () => {
+          return Promise.resolve([
+            {
+              RS: '12345',
+              GEN: 'Test District',
+              BEZ: 'Test Type',
+            },
+            {
+              RS: '09771',
+              GEN: 'Aichach-Friedberg',
+              BEZ: 'LK',
+            },
+          ]);
+        },
+      });
+    });
 
-    screen.getByPlaceholderText('germany');
+    act(() => {
+      render(
+        <I18nextProvider i18n={i18n}>
+          <Provider store={Store}>
+            <SearchBar />
+          </Provider>
+        </I18nextProvider>
+      );
+    });
+
+    screen.getByPlaceholderText('search');
 
     act(() => {
       Store.dispatch(selectDistrict({ags: '12345', name: 'Test District', type: 'Test Type'}));
     });
 
-    screen.getByPlaceholderText('Test District');
+    screen.getByDisplayValue('Test District (BEZ.Test Type)');
   });
 });
