@@ -34,7 +34,7 @@ class Group(models.Model):
 
 
 class Distribution(models.Model):
-    """Model definition for Distribution."""
+    """Model definition for a Distribution."""
     DistributionTypes = models.TextChoices('Normal', 'Gaussian')
 
     # Fields
@@ -57,7 +57,7 @@ class Distribution(models.Model):
 
 
 class Restriction(models.Model):
-    """Model definition for Restriction."""
+    """Model definition for a Restriction."""
 
     name = models.CharField(max_length=50)
     contact_rate = models.FloatField()
@@ -74,7 +74,7 @@ class Restriction(models.Model):
 
 
 class Intervention(models.Model):
-    """Model definition for Measure."""
+    """Model definition for a Intervention."""
 
     # Fields
     start_date = models.DateField()
@@ -84,16 +84,17 @@ class Intervention(models.Model):
     restriction = models.ForeignKey(Restriction, on_delete=models.RESTRICT)
 
     class Meta:
-        """Meta definition for Measure."""
+        """Meta definition for a Intervention."""
 
-        verbose_name = 'Measure'
-        verbose_name_plural = 'Measures'
+        verbose_name = 'Intervention'
+        verbose_name_plural = 'Interventions'
 
     def __str__(self):
-        """Unicode representation of Measure."""
+        """Unicode representation of Intervention."""
         pass
 
 class Parameter(models.Model):
+    """Model definition for a Simulation Parameter."""
     name = models.CharField(max_length=100)
     description = models.TextField()
 
@@ -105,6 +106,7 @@ class Parameter(models.Model):
 
 
 class Compartment(models.Model):
+    """Model definition for a Simulation Compartment."""
     name = models.CharField(max_length=100)
     description = models.TextField()
 
@@ -115,6 +117,7 @@ class Compartment(models.Model):
         return 'Compartment(%s)'.format(self.name)
 
 class SimulationModel(models.Model):
+    """Model definition for a Simulation Model."""
     name = models.CharField(max_length=100)
     description = models.TextField()
     parameters = models.ManyToManyField(Parameter)
@@ -128,6 +131,7 @@ class SimulationModel(models.Model):
 
 
 class ScenarioParameter(Distribution):
+    """Model definition for a parameter belongng to a scenario."""
     parameter = models.ForeignKey(Parameter, related_name='parameter', on_delete=models.RESTRICT)
 
     class Meta:
@@ -154,6 +158,7 @@ class ScenarioNode(models.Model):
 
 
 class SimulationCompartment(Distribution):
+    """Model definition for a compartment belonging to a simulation."""
     compartment = models.ForeignKey(Compartment, on_delete=models.RESTRICT)
 
     class Meta:
@@ -163,6 +168,7 @@ class SimulationCompartment(Distribution):
         return 'SimulationCompartment'
 
 class SimulationNode(models.Model):
+    """Model definition for a node belonging to a simulation (i.e. counties)."""
 
     comparments = models.ManyToManyField(SimulationCompartment)
     scenario_node = models.ForeignKey(ScenarioNode, on_delete=models.RESTRICT)
@@ -193,6 +199,7 @@ class Scenario(models.Model):
 
 
 class Simulation(models.Model):
+    """Model definition for a simulation."""
 
     # Fields
     name = models.CharField(max_length=100)
@@ -211,16 +218,20 @@ class Simulation(models.Model):
 
 
 class GenderChoice(models.TextChoices):
+    """RKI gender choice definition."""
+
     M = 'M', 'Männlich'
     W = 'W', 'Weiblich'
     U = 'U', 'Unbekannt'
 
 class FlagChoice(models.IntegerChoices):
+    """RKI flags definition."""
     JA = 1, 'Ja'
     NEIN = 0, 'Nein'
     NA = -9, 'Nein'
 
 class RKIEntry(models.Model):
+    """Model definition for one rki data entry."""
     id_bundesland = models.CharField(max_length=20)
     id_landkreis = models.CharField(max_length=20)
     bundesland = models.CharField(max_length=100)
@@ -239,19 +250,3 @@ class RKIEntry(models.Model):
 
     created = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
-
-
-class RKICounty:
-
-    def __init__(self, county, timesteps):
-        self.county = county
-        self.data = timesteps
-        self.count = len(timesteps)
-
-
-class RKIDay:
-
-    def __init__(self, day, counties):
-        self.day = day
-        self.data = counties
-        self.count = len(counties)

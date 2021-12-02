@@ -1,46 +1,69 @@
 # Create your views here.
 from rest_framework.response import Response
-from .models import Intervention, Node, Restriction, Scenario, SimulationModel, RKIEntry, RKICounty, RKIDay
+from .models import Intervention, Node, Restriction, Scenario, SimulationModel, RKIEntry
+from .classes import RKICounty, RKIDay
 from rest_framework import viewsets, permissions, mixins
 from rest_pandas import PandasViewSet, PandasSerializer
 from django.db.models import Sum, F, Window
 import src.api.serializers as serializers
 
 class RestrictionsViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    """
+    Return a list of all available restrictions.
+    """
     queryset = Restriction.objects.all().order_by('name')
     serializer_class = serializers.RestrictionSerializer
     permission_classes = [permissions.AllowAny]
 
 class NodesViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    """
+    Return a list of all available nodes (e.g. counties)
+    """
     queryset = Node.objects.all().order_by('id')
     serializer_class = serializers.NodeSerializer
     permission_classes = [permissions.AllowAny]
 
 class ScenarioViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+    """
+    retrieve:
+    Return all informations for the given scenario.
+
+    list:
+    Return a list of all available scenarios.
+    """
     queryset = Scenario.objects.all().order_by('id')
     permission_classes = [permissions.AllowAny]
 
     serializers_ = {'list': serializers.ScenarioSerializerMeta, 'retrieve': serializers.ScenarioSerializerFull}
 
     def get_serializer_class(self):
-        return self.serializers_.get(self.action, ScenarioSerializerMeta)
+        return self.serializers_.get(self.action, serializers.ScenarioSerializerMeta)
 
 
 class SimulationModelViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+    """
+    retrieve:
+    Return all informations for the given simulation model.
+
+    list:
+    Return a list of all available simulation models.
+    """
     queryset = SimulationModel.objects.all().order_by('name')
     permission_classes = [permissions.AllowAny]
 
     serializers_ = {'list': serializers.SimulationModelSerializerMeta, 'retrieve': serializers.SimulationModelSerializerFull}
 
     def get_serializer_class(self):
-        return self.serializers_.get(self.action, ScenarioSerializerMeta)
+        return self.serializers_.get(self.action, serializers.SimulationModelSerializerMeta)
 
 
 class RKIByCountyViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
-
+    """
+    Return the rki data for the given county for all available past days
+    """
     serializer_class = serializers.RKICountyEntrySerializer
     permission_classes = [permissions.AllowAny]
-    # pagination_class = None
+
     lookup_field = "county"
 
     def get_queryset(self):
@@ -78,7 +101,9 @@ class RKIByCountyViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
 
 
 class RKIByDayViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
-
+    """
+    Return the rki data for all counties on the given date.
+    """
     serializer_class = serializers.RKIDayEntrySerializer
     permission_classes = [permissions.AllowAny]
     # pagination_class = None
