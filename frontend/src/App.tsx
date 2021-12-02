@@ -48,7 +48,11 @@ const theme = createTheme({
     divider: '#d2d1db',
   },
   typography: {
-    fontFamily: 'Inter, Arial, sans-serif',
+    fontFamily: [
+      'Inter',
+      'Arial',
+      'sans-serif',
+    ].join(','),
     fontSize: 13,
     h1: {
       fontSize: 16,
@@ -82,6 +86,7 @@ const theme = createTheme({
       // monospace Inter font does not exist
     },
   },
+  spacing: [0, 4, 8, 12, 26],
 });
 
 /**
