@@ -70,6 +70,7 @@
     "@mui/lab": "*",
     "@mui/material": "^5.0.4",
     "@mui/styles": "^5.0.1",
+    "@mui/system": "^5.2.2",
     "@reduxjs/toolkit": "^1.5.0",
     "i18next": "^20.2.4",
     "i18next-browser-languagedetector": "^6.1.1",
