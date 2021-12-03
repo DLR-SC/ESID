@@ -23,7 +23,7 @@ class Group(models.Model):
     """Model definition for a Group (i.e. age_group)."""
 
     # Fields
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
     description = models.TextField()
 
     class Meta:
@@ -39,11 +39,11 @@ class Distribution(models.Model):
 
     # Fields
     type = models.CharField(choices=DistributionTypes.choices, max_length=10)
-    min = models.FloatField()
-    max = models.FloatField()
-    mean = models.FloatField()
-    deviation = models.FloatField()
-    value = models.FloatField()
+    min = models.FloatField(default=0.0)
+    max = models.FloatField(default=0.0)
+    mean = models.FloatField(default=0.0)
+    deviation = models.FloatField(default=0.0)
+    value = models.FloatField(default=0.0)
 
     class Meta:
         """Meta definition for Distribution."""
@@ -59,7 +59,7 @@ class Distribution(models.Model):
 class Restriction(models.Model):
     """Model definition for a Restriction."""
 
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, unique=True)
     contact_rate = models.FloatField()
 
     class Meta:
@@ -95,7 +95,7 @@ class Intervention(models.Model):
 
 class Parameter(models.Model):
     """Model definition for a Simulation Parameter."""
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
     description = models.TextField()
 
     class Meta:
@@ -107,7 +107,7 @@ class Parameter(models.Model):
 
 class Compartment(models.Model):
     """Model definition for a Simulation Compartment."""
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
     description = models.TextField()
 
     class Meta:
@@ -118,7 +118,7 @@ class Compartment(models.Model):
 
 class SimulationModel(models.Model):
     """Model definition for a Simulation Model."""
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
     description = models.TextField()
     parameters = models.ManyToManyField(Parameter)
     compartments = models.ManyToManyField(Compartment)
@@ -130,10 +130,12 @@ class SimulationModel(models.Model):
         return 'SimulationModel(%s)'.format(self.name)
 
 
-class ScenarioParameter(Distribution):
+class ScenarioParameter(models.Model):
     """Model definition for a parameter belongng to a scenario."""
+    distribution = models.ForeignKey(Distribution, related_name='distribution', on_delete=models.RESTRICT)
     parameter = models.ForeignKey(Parameter, related_name='parameter', on_delete=models.RESTRICT)
-
+    group = models.ForeignKey(Group, related_name='group', on_delete=models.RESTRICT)
+    
     class Meta:
         pass
 
@@ -146,15 +148,21 @@ class ScenarioNode(models.Model):
 
     # Fields
     node = models.ForeignKey(Node, on_delete=models.RESTRICT)
-    group = models.ForeignKey(Group, on_delete=models.RESTRICT)
-    parameters = models.ForeignKey(ScenarioParameter, on_delete=models.RESTRICT)
+    parameters = models.ManyToManyField(ScenarioParameter)
     interventions = models.ManyToManyField(Intervention)
 
     class Meta:
         pass
 
     def __str__(self):
-        return 'ScenarioNode(%s)'.format(self.name)
+        return 'ScenarioNode'
+
+    def delete(self, *args, **kwargs):
+        for parameter in self.parameters.all():
+            parameter.delete()
+        
+        self.parameters.clear()
+        super().delete(*args, **kwargs)
 
 
 class SimulationCompartment(Distribution):
@@ -184,7 +192,7 @@ class Scenario(models.Model):
     """Model definition for a scenario."""
 
     # Fields
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
     description = models.TextField()
     simulation_model = models.ForeignKey(SimulationModel, related_name='simulation_model', on_delete=models.RESTRICT)
     number_of_groups = models.IntegerField()
@@ -197,12 +205,19 @@ class Scenario(models.Model):
     def __str__(self):
         return 'Scenario(%s)'.format(self.name)
 
+    def delete(self, *args, **kwargs):
+        for node in self.nodes.all():
+            node.delete()
+        
+        self.nodes.clear()
+        super().delete(*args, **kwargs)
+
 
 class Simulation(models.Model):
     """Model definition for a simulation."""
 
     # Fields
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
     description = models.TextField()
     start_day = models.DateField()
     number_of_days = models.IntegerField()

@@ -399,41 +399,76 @@ NODES = [
     {"key": "16074", "label": "Saale-Holzland-Kreis"},
     {"key": "16075", "label": "Saale-Orla-Kreis"},
     {"key": "16076", "label": "Greiz"},
-    {"key": "16077", "label": "Altenburger Land"}]
+    {"key": "16077", "label": "Altenburger Land"}
+]
 
 
-RESTRICTIONS = ['Restriction 1', 'Restriction 2', 'Restriction 3', 'Restriction 4']
-PARAMETERS = ['incubation',
-              'infectious_mild',
-              'serial_interval',
-              'hospitalized_to_recovered',
-              'infectious_to_hospitalized',
-              'infectious_asympt',
-              'hospitalized_to_icu',
-              'icu_to_recovered',
-              'icu_to_dead',
-              'infected_from_contact',
-              'carrier_infectability',
-              'asymp_per_infectious',
-              'risk_from_symptotic',
-              'dead_per_icu',
-              'hospitalized_per_infectious',
-              'icu_per_hospitalized',
-              'risk_from_symptomatic']
+RESTRICTIONS = [
+    "Restriction 1", 
+    "Restriction 2", 
+    "Restriction 3", 
+    "Restriction 4"
+]
 
-COMPARTMENTS = ['total',
-                'dead',
-                'exposed',
-                'carrier',
-                'infectious',
-                'hospitalized',
-                'icu',
-                'recovered'
-                ]
+PARAMETERS = [ 
+    "IncubationTime",
+    "SerialInterval",
+    "InfectiousTimeMild",
+    "HomeToHospitalizedTime",
+    "HospitalizedToHomeTime",
+    "HospitalizedToICUTime",
+    "ICUToHomeTime",
+    "ICUToDeathTime",
+    "InfectionProbabilityFromContact",
+    "RelativeCarrierInfectability",
+    "RiskOfInfectionFromSympomatic",
+    "MaxRiskOfInfectionFromSympomatic",
+    "AsymptoticCasesPerInfectious",
+    "HospitalizedCasesPerInfectious",
+    "ICUCasesPerHospitalized",
+    "DeathsPerHospitalized",
+    "ReducVaccExp",
+    "ReducImmuneExp",
+    "ReducExpInf",
+    "ReducImmuneExpInf",
+    "ReducInfHosp",
+    "ReducImmuneInfHosp",
+    "ReducTime",
+    "Seasonality",
+    "VaccinationGap"
+]
+
+COMPARTMENTS = [
+    "Susceptible",
+    "SusceptibleV1",
+    "Exposed",
+    "ExposedV1",
+    "ExposedV2",
+    "Carrier",
+    "CarrierV1",
+    "CarrierV2",
+    "CarrierT",
+    "CarrierTV1",
+    "CarrierTV2",
+    "Infected",
+    "InfectedV1",
+    "InfectedV2",
+    "InfectedT",
+    "InfectedTV1",
+    "InfectedTV2",
+    "Hospitalized",
+    "HospitalizedV1",
+    "HospitalizedV2",
+    "ICU",
+    "ICUV1",
+    "ICUV2",
+    "Recovered",
+    "Dead"
+]
 
 SIMULATION_MODELS = {
-    'secihurd': {
-        'parameters': PARAMETERS,
-        'compartments': COMPARTMENTS
+    "secihurd": {
+        "parameters": PARAMETERS,
+        "compartments": COMPARTMENTS
     }
 }
