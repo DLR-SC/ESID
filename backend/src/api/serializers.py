@@ -1,4 +1,4 @@
-from .models import Distribution, Intervention, Node, Parameter, Restriction, Scenario, ScenarioNode, SimulationModel, RKIEntry
+from .models import Distribution, Intervention, Node, Parameter, Restriction, Scenario, ScenarioNode, ScenarioParameter, ScenarioParameterGroup, SimulationModel, RKIEntry
 from rest_framework import serializers
 from datetime import datetime
 
@@ -24,35 +24,52 @@ class InterventionSerializer(serializers.ModelSerializer):
         fields = ['restriction', 'start', 'end', 'contact_rate']
 
 
+class ScenarioParameterGroupSerializer(serializers.ModelSerializer):
+    group = serializers.SlugRelatedField(slug_field="name", read_only=True)
+    
+    class Meta:
+        model = ScenarioParameterGroup
+        fields = ['group', 'min', 'max']
+
+
+class ScenarioParameterSerializer(serializers.ModelSerializer):
+    parameter = serializers.SlugRelatedField(slug_field="name", read_only=True)
+    groups = ScenarioParameterGroupSerializer(many=True)
+
+    class Meta:
+        model = ScenarioParameter
+        fields = ['parameter', 'groups']
+
 class ScenarioNodeSerializer(serializers.ModelSerializer):
     """
     JSON serializer for scenario data for a specific node
     """
     node = serializers.SlugRelatedField(slug_field="name", read_only=True)
-    group = serializers.SlugRelatedField(slug_field="name", read_only=True)
-    interventions = InterventionSerializer(many=True)
-
+    parameters = ScenarioParameterSerializer(many=True)
+    
     class Meta:
         model = ScenarioNode
-        fields = '__all__'
+        fields = ['node', 'parameters']
 
-class ScenarioSerializerMeta(serializers.ModelSerializer):
+class ScenarioSerializerMeta(serializers.HyperlinkedModelSerializer):
     """
     JSON serializer for scenario meta data
     """
     class Meta:
         model = Scenario
-        fields = ['id', 'name', 'description', 'simulation_model', 'number_of_groups', 'number_of_nodes']
+        fields = ['id', 'url', 'name', 'description', 'simulation_model', 'number_of_groups', 'number_of_nodes']
 
 class ScenarioSerializerFull(serializers.ModelSerializer):
     """
     JSON serializer for all scenario data with all nodes
     """
-    nodes = ScenarioNodeSerializer(many=True)
+
+    parameters = ScenarioParameterSerializer(many=True)
+    nodes = serializers.SlugRelatedField(slug_field="name", read_only=True, many=True)
 
     class Meta:
         model = Scenario
-        fields = ['name', 'description', 'simulation_model', 'number_of_groups', 'number_of_nodes', 'nodes']
+        fields = ['name', 'description', 'simulation_model', 'number_of_groups', 'number_of_nodes', 'parameters', 'nodes']
 
 class RestrictionSerializer(serializers.ModelSerializer):
     """

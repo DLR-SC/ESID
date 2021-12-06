@@ -128,13 +128,39 @@ class SimulationModel(models.Model):
 
     def __str__(self):
         return 'SimulationModel(%s)'.format(self.name)
+        
+class Scenario(models.Model):
+    """Model definition for a scenario."""
 
+    # Fields
+    name = models.CharField(max_length=100, unique=True)
+    description = models.TextField()
+    simulation_model = models.ForeignKey(SimulationModel, related_name='simulation_model', on_delete=models.RESTRICT)
+    number_of_groups = models.IntegerField()
+    number_of_nodes = models.IntegerField()
+    nodes = models.ManyToManyField(ScenarioNode)
+
+    @property
+    def parameters(self):
+        return self.nodes.all()[0].parameters.all()
+
+    class Meta:
+        pass
+
+    def __str__(self):
+        return 'Scenario(%s)'.format(self.name)
+
+    def delete(self, *args, **kwargs):
+        for node in self.nodes.all():
+            node.delete()
+        
+        self.nodes.clear()
+        super().delete(*args, **kwargs)
 
 class ScenarioParameter(models.Model):
     """Model definition for a parameter belongng to a scenario."""
-    distribution = models.ForeignKey(Distribution, related_name='distribution', on_delete=models.RESTRICT)
     parameter = models.ForeignKey(Parameter, related_name='parameter', on_delete=models.RESTRICT)
-    group = models.ForeignKey(Group, related_name='group', on_delete=models.RESTRICT)
+    groups = models.ManyToManyField(ScenarioParameterGroup)
     
     class Meta:
         pass
@@ -142,6 +168,17 @@ class ScenarioParameter(models.Model):
     def __str__(self):
         return 'ScenarioParameter'
 
+class ScenarioParameterGroup(models.Model):
+    distribution = models.ForeignKey(Distribution, related_name='distribution', on_delete=models.RESTRICT)
+    group = models.ForeignKey(Group, related_name='group', on_delete=models.RESTRICT)
+    
+    @property
+    def min(self):
+        return self.distribution.min
+
+    @property
+    def max(self):
+        return self.distribution.max
 
 class ScenarioNode(models.Model):
     """Model definition for a node belonging to a scenario (i.e. counties)."""
@@ -150,6 +187,10 @@ class ScenarioNode(models.Model):
     node = models.ForeignKey(Node, on_delete=models.RESTRICT)
     parameters = models.ManyToManyField(ScenarioParameter)
     interventions = models.ManyToManyField(Intervention)
+
+    @property
+    def name(self):
+        return self.node.name
 
     class Meta:
         pass
@@ -164,6 +205,23 @@ class ScenarioNode(models.Model):
         self.parameters.clear()
         super().delete(*args, **kwargs)
 
+class Simulation(models.Model):
+    """Model definition for a simulation."""
+
+    # Fields
+    name = models.CharField(max_length=100, unique=True)
+    description = models.TextField()
+    start_day = models.DateField()
+    number_of_days = models.IntegerField()
+
+    scenario = models.ForeignKey(Scenario, on_delete=models.RESTRICT)
+    nodes = models.ManyToManyField(SimulationNode)
+
+    class Meta:
+        pass
+
+    def __str__(self):
+        return 'Simulation(%s)'.format(self.name)
 
 class SimulationCompartment(Distribution):
     """Model definition for a compartment belonging to a simulation."""
@@ -186,51 +244,6 @@ class SimulationNode(models.Model):
 
     def __str__(self):
         return 'SimulationNode'
-
-
-class Scenario(models.Model):
-    """Model definition for a scenario."""
-
-    # Fields
-    name = models.CharField(max_length=100, unique=True)
-    description = models.TextField()
-    simulation_model = models.ForeignKey(SimulationModel, related_name='simulation_model', on_delete=models.RESTRICT)
-    number_of_groups = models.IntegerField()
-    number_of_nodes = models.IntegerField()
-    nodes = models.ManyToManyField(ScenarioNode)
-
-    class Meta:
-        pass
-
-    def __str__(self):
-        return 'Scenario(%s)'.format(self.name)
-
-    def delete(self, *args, **kwargs):
-        for node in self.nodes.all():
-            node.delete()
-        
-        self.nodes.clear()
-        super().delete(*args, **kwargs)
-
-
-class Simulation(models.Model):
-    """Model definition for a simulation."""
-
-    # Fields
-    name = models.CharField(max_length=100, unique=True)
-    description = models.TextField()
-    start_day = models.DateField()
-    number_of_days = models.IntegerField()
-
-    scenario = models.ForeignKey(Scenario, on_delete=models.RESTRICT)
-    nodes = models.ManyToManyField(SimulationNode)
-
-    class Meta:
-        pass
-
-    def __str__(self):
-        return 'Simulation(%s)'.format(self.name)
-
 
 class GenderChoice(models.TextChoices):
     """RKI gender choice definition."""
