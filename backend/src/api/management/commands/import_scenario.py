@@ -78,16 +78,20 @@ class Command(BaseCommand):
 
                     parameter_info = config['parameters'][parameter_name]
                     parameter = models.Parameter.objects.get(name=parameter_name)
+                    scenario_parameter = models.ScenarioParameter(parameter=parameter)
+                    scenario_parameter.save()
+
                     for i, group in enumerate(groups):
                         # if group specific values exist use them, otherwise use global values
                         [min_value, max_value] = parameter_info['groups'][i] if 'groups' in parameter_info else parameter_info['value']
                         [distribution, created] = models.Distribution.objects.get_or_create(min=min_value, max=max_value, type='Normal', value=0.0)
-                        
-                        scenario_parameter = models.ScenarioParameter(distribution=distribution, group=group, parameter=parameter)
-                        scenario_parameter.save()
-                        
-                        scenario_node.parameters.add(scenario_parameter)
+                        group_parameter = models.ScenarioParameterGroup(group=group, distribution=distribution)
+                        group_parameter.save();
+                        scenario_parameter.groups.add(group_parameter)
                         progress.update()
+                        
+                    scenario_parameter.save()
+                    scenario_node.parameters.add(scenario_parameter)
 
             scenario_node.save()
             scenario.nodes.add(scenario_node)
