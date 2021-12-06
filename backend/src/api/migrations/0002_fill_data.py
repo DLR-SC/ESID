@@ -60,7 +60,7 @@ def fillin_nodes(apps, schema_editor):
     Node = apps.get_model('api', 'Node')
 
     for n in NODES:
-        node = Node(name=n.get('label'), metadata=n)
+        node = Node(name=n.get('key'), metadata=n)
         node.save()
 
 
