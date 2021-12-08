@@ -85,6 +85,11 @@ describe('SearchBar', () => {
     userEvent.type(screen.getByPlaceholderText('search'), 'Aic{Enter}');
 
     await screen.findByDisplayValue('Aichach-Friedberg (BEZ.LK)');
+    expect(Store.getState().dataSelection.district).toStrictEqual({
+      ags: '09771',
+      name: 'Aichach-Friedberg',
+      type: 'LK',
+    });
   });
 
   test('select district by dropdown selection with keyboard (Arrow-Down)', async () => {
@@ -101,5 +106,10 @@ describe('SearchBar', () => {
     userEvent.type(screen.getByPlaceholderText('search'), '{ArrowDown}{Enter}');
 
     await screen.findByDisplayValue('Test District (BEZ.Test Type)');
+    expect(Store.getState().dataSelection.district).toStrictEqual({
+      ags: '12345',
+      name: 'Test District',
+      type: 'Test Type',
+    });
   });
 });
