@@ -48,7 +48,11 @@ const theme = createTheme({
     divider: '#d2d1db',
   },
   typography: {
-    fontFamily: ['Inter', 'Arial', 'sans-serif'].join(','),
+    fontFamily: [
+      'Inter',
+      'Arial',
+      'sans-serif',
+    ].join(','),
     fontSize: 13,
     h1: {
       fontSize: 16,
