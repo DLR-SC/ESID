@@ -109,7 +109,7 @@ export default function SearchBar(): JSX.Element {
           console.warn('Did not receive proper county list');
         }
       );
-    console.log(countyList);
+    console.log('List: ', countyList);
     // this init should only run once on first render
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -125,7 +125,7 @@ export default function SearchBar(): JSX.Element {
           // set value to selectedDistrict contents from store
           value={{RS: selectedDistrict.ags, GEN: selectedDistrict.name, BEZ: selectedDistrict.type}}
           // function to compare value to options in list, comparing ags number and name of district
-          isOptionEqualToValue={(option, value) => option.RS === value.RS && option.GEN === value.GEN}
+          isOptionEqualToValue={(option, value) => option.RS === value.RS}
           // onChange of input dispatch new selected district or initial value (ags: 00000, name: germany) if input is cleared
           onChange={(_event, newValue: CountyItem | null) => {
             dispatch(
@@ -138,12 +138,16 @@ export default function SearchBar(): JSX.Element {
           }}
           // enable clearing/resetting the input field with escape key
           clearOnEscape
+          // automatically highlights first option
+          autoHighlight
+          // selects highlighted option on focus loss
+          autoSelect
           // provide countyList as options for drop down
           options={countyList}
           // group dropdown contents by first letter (json array needs to be sorted alphabetically by name for this to work correctly)
           groupBy={(option) => option.GEN[0]}
           // provide function to display options in dropdown menu
-          getOptionLabel={(option) => `${option.GEN} ${option.BEZ ? `(${t(`BEZ.${option.BEZ}`)})` : ''}`}
+          getOptionLabel={(option) => `${option.GEN}${option.BEZ ? ` (${t(`BEZ.${option.BEZ}`)})` : ''}`}
           sx={{flexGrow: 1}}
           // override default input field, placeholder is a fallback, as value should always be a selected district or germany (initial/default value)
           renderInput={(params) => (
