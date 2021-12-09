@@ -131,9 +131,7 @@ export default function Scenario(): JSX.Element {
         </span>
         <List dense={true} disablePadding={true}>
           {properties.map((compartment, i) => (
-            /*
-          
-          */
+            // map all compartments to display compartment list
             <ListItemButton
               key={compartment.compartment}
               sx={{
