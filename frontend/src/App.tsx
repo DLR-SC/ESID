@@ -81,6 +81,12 @@ const theme = createTheme({
       fontWeight: 600,
       // monospace Inter font does not exist
     },
+    // use overline for List Item Typography to avoid redefining theme typedef
+    overline: {
+      fontSize: 13,
+      fontWeight: 500,
+      fontFeatureSettings: `'tnum' on`,
+    },
   },
   spacing: [0, 4, 8, 12, 26],
 });
