@@ -156,7 +156,9 @@ would be difficult to handle with React's `props` alone.
   
   ![](../docs/images/ThemeGuidelines-800x650.svg "ESID Design Guidelines")
   
-  ** The alternative text color for lighter and darker variants where the contrast is not high enough is always either `#F2F2F2` for light text, or `#0C0B0D` for dark text.**
+  **The alternative text color for lighter and darker variants where the contrast is not high enough is always either `#F2F2F2` for light text, or `#0C0B0D` for dark text.**
+  
+  ---
   </details>
   
   - The theme is provided using the [MUI Theme Provider](https://mui.com/customization/theming "mui.com")
