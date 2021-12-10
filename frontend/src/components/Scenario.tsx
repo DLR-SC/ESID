@@ -157,7 +157,10 @@ export default function Scenario(): JSX.Element {
               />
               <ListItemText
                 primary={compartment.latest}
+                // disable child typography overriding this
+                disableTypography={true}
                 sx={{
+                  typography: theme.typography.listElement,
                   flexGrow: 1,
                 }}
               />

@@ -96,13 +96,19 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
           >
             <ListItemText
               primary={compartment.value}
+              // disable child typography overriding this
+              disableTypography={true}
               sx={{
+                typography: theme.typography.listElement,
                 paddingLeft: theme.spacing(2),
               }}
             />
             <ListItemText
               primary={`${compartment.rate} %`}
+              // disable child typography overriding this
+              disableTypography={true}
               sx={{
+                typography: theme.typography.listElement,
                 textAlign: 'right',
                 paddingRight: theme.spacing(2),
               }}

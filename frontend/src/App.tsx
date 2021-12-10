@@ -10,6 +10,25 @@ import Store from './store';
 import {Box} from '@mui/material';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 
+// add List Element typography using module augmentation
+declare module '@mui/material/styles' {
+  interface TypographyVariants {
+    listElement: React.CSSProperties;
+  }
+
+  // allow configuration using `createTheme`
+  interface TypographyVariantsOptions {
+    listElement?: React.CSSProperties;
+  }
+}
+
+// Update the Typography's variant prop options
+declare module '@mui/material/Typography' {
+  interface TypographyPropsVariantOverrides {
+    listElement: true;
+  }
+}
+
 const theme = createTheme({
   palette: {
     background: {
@@ -64,6 +83,11 @@ const theme = createTheme({
       fontWeight: 600,
       lineHeight: 1.15,
     },
+    h4: undefined,
+    h5: undefined,
+    h6: undefined,
+    subtitle1: undefined,
+    subtitle2: undefined,
     body1: {
       fontSize: 13,
       fontWeight: 400,
@@ -81,8 +105,8 @@ const theme = createTheme({
       fontWeight: 600,
       // monospace Inter font does not exist
     },
-    // use overline for List Item Typography to avoid redefining theme typedef
-    overline: {
+    overline: undefined,
+    listElement: {
       fontSize: 13,
       fontWeight: 500,
       fontFeatureSettings: `'tnum' on`,
