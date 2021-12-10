@@ -4,8 +4,7 @@ import {useTheme} from '@mui/material/styles';
 import {useTranslation} from 'react-i18next';
 import {selectCompartment, selectRate, selectScenario, selectValue} from 'store/DataSelectionSlice';
 import ScenarioCard from './ScenarioCard';
-import {Box} from '@mui/system';
-import {Button, List, ListItemButton, ListItemText} from '@mui/material';
+import {Box, Button, List, ListItemButton, ListItemText, Typography} from '@mui/material';
 
 /* This component displays the pandemic spread depending on different scenarios
  */
@@ -87,7 +86,7 @@ const properties = [
  */
 export default function Scenario(): JSX.Element {
   const {t} = useTranslation();
-  const customTheme = useTheme();
+  const theme = useTheme();
 
   const dispatch = useAppDispatch();
   const [selectedProperty, setSelectedProperty] = useState('');
@@ -101,34 +100,33 @@ export default function Scenario(): JSX.Element {
       sx={{
         display: 'flex',
         cursor: 'default',
-        background: customTheme.palette.background.default,
+        background: theme.palette.background.default,
       }}
     >
       <Box
         sx={{
-          borderRight: `2px dashed ${customTheme.palette.divider}`,
+          borderRight: `2px dashed ${theme.palette.divider}`,
           flexGrow: 0,
           flexShrink: 1,
           flexBasis: '276px',
           minHeight: '20vh',
           display: 'flex',
           flexDirection: 'column',
-          padding: customTheme.spacing(3),
-          paddingTop: customTheme.spacing(4),
+          padding: theme.spacing(3),
+          paddingTop: theme.spacing(4),
         }}
       >
-        <span
-          style={{
+        <Typography
+          variant='h1'
+          sx={{
             width: '100%',
             textAlign: 'right',
-            fontWeight: 'bold',
-            lineHeight: '1.5rem',
             minHeight: '3rem',
-            marginBottom: customTheme.spacing(2),
+            marginBottom: theme.spacing(3),
           }}
         >
           {t('today')}
-        </span>
+        </Typography>
         <List dense={true} disablePadding={true}>
           {properties.map((compartment, i) => (
             // map all compartments to display compartment list
@@ -136,8 +134,8 @@ export default function Scenario(): JSX.Element {
               key={compartment.compartment}
               sx={{
                 display: expandProperties || i < 4 ? 'flex' : 'none',
-                padding: customTheme.spacing(1),
-                margin: customTheme.spacing(0),
+                padding: theme.spacing(1),
+                margin: theme.spacing(0),
               }}
               selected={selectedProperty === compartment.compartment}
               onClick={() => {
@@ -170,7 +168,7 @@ export default function Scenario(): JSX.Element {
           variant='outlined'
           color='primary'
           sx={{
-            margin: customTheme.spacing(2),
+            margin: theme.spacing(2),
           }}
           aria-label={t('scenario.more')}
           onClick={() => {
@@ -234,7 +232,7 @@ export default function Scenario(): JSX.Element {
           flexShrink: 0,
           flexBasis: '208px',
           minHeight: '20vh',
-          paddingLeft: customTheme.spacing(3),
+          paddingLeft: theme.spacing(3),
           display: 'flex',
         }}
       >
@@ -246,7 +244,7 @@ export default function Scenario(): JSX.Element {
             flexShrink: 0,
             flexBasis: '160px',
             minHeight: '220px',
-            margin: customTheme.spacing(3),
+            margin: theme.spacing(3),
             fontWeight: 'bolder',
             fontSize: '3rem',
           }}
