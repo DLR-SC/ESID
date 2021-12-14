@@ -49,6 +49,8 @@ describe('SearchBar', () => {
 
     await screen.findByText('A');
     await screen.findByText('Aichach-Friedberg (BEZ.LK)');
+    await screen.findByText('g');
+    await screen.findByText('germany');
     await screen.findByText('T');
     await screen.findByText('Test District (BEZ.Test Type)');
   });
@@ -103,7 +105,7 @@ describe('SearchBar', () => {
 
     await waitFor(() => expect(global.fetch).toHaveBeenCalled());
 
-    userEvent.type(screen.getByPlaceholderText('search'), '{ArrowDown}{Enter}');
+    userEvent.type(screen.getByPlaceholderText('search'), '{ArrowDown}{ArrowDown}{Enter}');
 
     await screen.findByDisplayValue('Test District (BEZ.Test Type)');
     expect(Store.getState().dataSelection.district).toStrictEqual({
