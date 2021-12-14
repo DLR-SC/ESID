@@ -26,113 +26,56 @@ const useStyles = makeStyles(() =>
 
 // dummy data
 const drawDeviations = true;
-const data = [
+let data = [
   {
-    date: new Date(2020, 4, 1),
-    basic: 50,
-    basicSTDup: 50,
-    basicSTDdown: 50,
-    medium: 48,
-    mediumSTDup: 48,
-    mediumSTDdown: 48,
-    big: 45,
-    bigSTDup: 45,
-    bigSTDdown: 45,
-    maximum: 40,
-    maximumSTDup: 40,
-    maximumSTDdown: 40,
-  },
-  {
-    date: new Date(2020, 7, 1),
-    basic: 53,
-    basicSTDup: 53,
-    basicSTDdown: 53,
-    medium: 51,
-    mediumSTDup: 51.33,
-    mediumSTDdown: 50.67,
-    big: 48,
-    bigSTDup: 48.33,
-    bigSTDdown: 47.67,
-    maximum: 46,
-    maximumSTDup: 46.33,
-    maximumSTDdown: 45.67,
-  },
-  {
-    date: new Date(2020, 10, 1),
-    basic: 56,
-    basicSTDup: 56,
-    basicSTDdown: 56,
-    medium: 57,
-    mediumSTDup: 57.66,
-    mediumSTDdown: 56.34,
-    big: 55,
-    bigSTDup: 55.66,
-    bigSTDdown: 54.34,
-    maximum: 50,
-    maximumSTDup: 50.66,
-    maximumSTDdown: 49.34,
-  },
-  {
-    date: new Date(2021, 1, 1),
-    basic: 52,
-    basicSTDup: 52,
-    basicSTDdown: 52,
-    medium: 53,
-    mediumSTDup: 54,
-    mediumSTDdown: 52,
-    big: 50,
-    bigSTDup: 51,
-    bigSTDdown: 49,
-    maximum: 48,
-    maximumSTDup: 49,
-    maximumSTDdown: 47,
-  },
-  {
-    date: new Date(2021, 4, 1),
-    basic: 48,
-    basicSTDup: 48,
-    basicSTDdown: 48,
-    medium: 44,
-    mediumSTDup: 45.33,
-    mediumSTDdown: 42.67,
-    big: 42,
-    bigSTDup: 43.33,
-    bigSTDdown: 40.67,
-    maximum: 40,
-    maximumSTDup: 41.33,
-    maximumSTDdown: 38.67,
-  },
-  {
-    date: new Date(2021, 7, 1),
-    basic: 47,
-    basicSTDup: 47,
-    basicSTDdown: 47,
-    medium: 42,
-    mediumSTDup: 43.66,
-    mediumSTDdown: 40.34,
-    big: 40,
-    bigSTDup: 41.66,
-    bigSTDdown: 38.34,
-    maximum: 38,
-    maximumSTDup: 39.66,
-    maximumSTDdown: 36.34,
-  },
-  {
-    date: new Date(2021, 10, 1),
-    basic: 59,
-    basicSTDup: 59,
-    basicSTDdown: 59,
-    medium: 55,
-    mediumSTDup: 57,
-    mediumSTDdown: 53,
-    big: 50,
-    bigSTDup: 52,
-    bigSTDdown: 48,
-    maximum: 48,
-    maximumSTDup: 50,
-    maximumSTDdown: 46,
+    date: new Date(2020, 0, 1),
+    basic: 0,
+    basicSTDup: 0,
+    basicSTDdown: 0,
+    medium: 0,
+    mediumSTDup: 0,
+    mediumSTDdown: 0,
+    big: 0,
+    bigSTDup: 0,
+    bigSTDdown: 0,
+    maximum: 0,
+    maximumSTDup: 0,
+    maximumSTDdown: 0,
   },
 ];
+
+data = [];
+for (let i = 0; i < 600; i++) {
+  const date = new Date(2020, 2, i);
+  const basic = 100 * Math.sin(i / 100.0) + 150;
+  const basicSTDup = basic;
+  const basicSTDdown = basic;
+  const medium = 100 * Math.cos(i / 100.0) + 175;
+  const mediumSTDup = medium + i / 15.0;
+  const mediumSTDdown = medium - i / 15.0;
+  const big = 100 * Math.cos(i / 100.0) + 100 * Math.sin(i / 100) + 200;
+  const bigSTDup = big + i / 15.0;
+  const bigSTDdown = big - i / 15.0;
+  const maximum = 100 * Math.cos(i / 100.0) - 100 * Math.sin(i / 100) + 225;
+  const maximumSTDup = maximum + i / 15.0;
+  const maximumSTDdown = maximum - i / 15.0;
+
+  data.push({
+    date,
+    basic,
+    basicSTDup,
+    basicSTDdown,
+    medium,
+    mediumSTDup,
+    mediumSTDdown,
+    big,
+    bigSTDup,
+    bigSTDdown,
+    maximum,
+    maximumSTDup,
+    maximumSTDdown,
+  });
+}
 
 /**
  * React Component to render the Simulation Chart Section
@@ -154,8 +97,6 @@ export default function SimulationChart(): JSX.Element {
 
     // Create axes
     const dateAxis = chart.xAxes.push(new am4charts.DateAxis());
-    dateAxis.logarithmic = true;
-    dateAxis.renderer.minGridDistance = 50;
     chart.yAxes.push(new am4charts.ValueAxis());
 
     Object.entries(scenarioList).map(([scn_id, scn_info]) => {
@@ -179,7 +120,7 @@ export default function SimulationChart(): JSX.Element {
         seriesSTD.fillOpacity = 0.3;
         seriesSTD.stroke = am4core.color(scn_info.color);
         // override tooltip
-        series.tooltipText = `${scn_info.label}: [bold]{${scn_id}STDdown} ~ {${scn_id}STDup}[/]`;
+        series.tooltipText = `${scn_info.label}: [bold]{${scn_id}STDdown} ~ {${scn_id}STDup}[/] {date}`;
       }
     });
 
@@ -187,8 +128,16 @@ export default function SimulationChart(): JSX.Element {
     chart.cursor = new am4charts.XYCursor();
     chart.cursor.xAxis = dateAxis;
 
+    const range = dateAxis.axisRanges.create();
+    range.date = new Date();
+    range.grid.above = true;
+    range.grid.stroke = am4core.color('purple');
+    range.grid.strokeWidth = 2;
+    range.grid.strokeOpacity = 1;
+
     chart.events.on('hit', () => {
       dispatch(selectDate(dateAxis.tooltipDate.getTime() + (24 * 60 * 60 * 1000)));
+      range.date = new Date(dateAxis.tooltipDate.getTime() + (12 * 60 * 60 * 1000));
     });
 
     chartRef.current = chart;
