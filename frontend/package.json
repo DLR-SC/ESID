@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/DLR-SC/ESID#readme",
   "jest": {
+    "testEnvironment": "jsdom",
     "preset": "ts-jest",
     "roots": [
       "<rootDir>/src"
@@ -63,9 +64,12 @@
   },
   "dependencies": {
     "@amcharts/amcharts4": "^4.10.17",
-    "@material-ui/core": "^4.11.3",
-    "@material-ui/icons": "^4.11.2",
-    "@material-ui/lab": "^4.0.0-alpha.58",
+    "@emotion/react": "^11.5.0",
+    "@emotion/styled": "^11.3.0",
+    "@mui/icons-material": "^5.0.4",
+    "@mui/lab": "*",
+    "@mui/material": "^5.0.4",
+    "@mui/styles": "^5.0.1",
     "@reduxjs/toolkit": "^1.5.0",
     "i18next": "^20.2.4",
     "i18next-browser-languagedetector": "^6.1.1",
@@ -77,7 +81,9 @@
     "react-lazyload": "^3.2.0",
     "react-markdown": "^6.0.2",
     "react-redux": "^7.2.3",
-    "redux": "^4.0.5"
+    "redux": "^4.0.5",
+    "rooks": "^5.7.3",
+    "simplebar": "^5.3.5"
   },
   "devDependencies": {
     "@axe-core/react": "^4.2.2",
@@ -103,21 +109,21 @@
     "html-webpack-plugin": "^5.3.1",
     "husky": "^6.0.0",
     "identity-obj-proxy": "^3.0.0",
-    "jest": "^26.6.3",
-    "jest-junit": "^12.0.0",
+    "jest": "^27.2.5",
+    "jest-junit": "^13.0.0",
     "lint-staged": "^10.5.4",
     "node-fetch": "^2.6.1",
     "prettier": "^2.2.1",
     "sass": "^1.32.8",
     "sass-loader": "^11.0.1",
     "style-loader": "^2.0.0",
-    "ts-jest": "^26.5.4",
+    "ts-jest": "^27.0.1",
     "ts-loader": "^8.0.18",
     "ts-node": "^10.0.0",
     "typescript": "^4.2.3",
     "webpack": "^5.27.2",
     "webpack-cli": "^4.5.0",
-    "webpack-dev-server": "^3.11.2",
+    "webpack-dev-server": "^4.3.1",
     "webpack-merge": "^5.7.3"
   }
 }
