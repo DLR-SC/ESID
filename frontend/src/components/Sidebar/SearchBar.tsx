@@ -99,6 +99,12 @@ export default function SearchBar(): JSX.Element {
       .then(
         // Resolve Promise
         (jsonlist: CountyItem[]) => {
+          // append germany to list
+          jsonlist.push({RS: '00000', GEN: t('germany'), BEZ: ''});
+          // sort list to put germany at the right place (loading and sorting takes 1.5 ~ 2 sec)
+          jsonlist.sort((a, b) => {
+            return a.GEN.localeCompare(b.GEN);
+          });
           // fill countyList state with list
           setCountyList(jsonlist);
         },
@@ -107,7 +113,6 @@ export default function SearchBar(): JSX.Element {
           console.warn('Did not receive proper county list');
         }
       );
-    console.log('List: ', countyList);
     // this init should only run once on first render
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
