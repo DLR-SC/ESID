@@ -61,17 +61,15 @@ const useStyles = makeStyles(() =>
   })
 );
 
-/**
- * CountyItem type definition
- * @typedef {object} CountyItem
- * @property {string} RS  - ID for the district (Amtlicher Gemeindeschlüssel) (same as ags in store).
- * @property {string} GEN - label/name of the district (same as name in store).
- * @property {string} BEZ - region type identifier (same as type in store).
- * @see DataSelectionSlice
+/** Type definition for the CountyItems of the Autocomplete field
+ *  @see DataSelectionSlice
  */
 interface CountyItem {
+  /** ID for the district (Amtlicher Gemeindeschlüssel) (same as ags in store). */
   RS: string;
+  /** Label/Name of the district (same as the name in the data store). */
   GEN: string;
+  /** Region type identifier (same as the type in the data store). */
   BEZ: string;
 }
 
