@@ -1,9 +1,10 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import * as am4core from '@amcharts/amcharts4/core';
 import * as am4charts from '@amcharts/amcharts4/charts';
-import {useAppSelector} from '../store/hooks';
+import {useAppDispatch, useAppSelector} from '../store/hooks';
 import {createStyles, makeStyles} from '@mui/styles';
 import {Box} from '@mui/material';
+import {selectDate} from '../store/DataSelectionSlice';
 
 /* This component displays the evolution of the pandemic for a specific compartment (hospitalized, dead, infected, etc.) regarding the different scenarios
  */
@@ -27,7 +28,7 @@ const useStyles = makeStyles(() =>
 const drawDeviations = true;
 const data = [
   {
-    date: new Date(2019, 5, 12),
+    date: new Date(2020, 4, 1),
     basic: 50,
     basicSTDup: 50,
     basicSTDdown: 50,
@@ -42,7 +43,7 @@ const data = [
     maximumSTDdown: 40,
   },
   {
-    date: new Date(2019, 5, 13),
+    date: new Date(2020, 7, 1),
     basic: 53,
     basicSTDup: 53,
     basicSTDdown: 53,
@@ -57,7 +58,7 @@ const data = [
     maximumSTDdown: 45.67,
   },
   {
-    date: new Date(2019, 5, 14),
+    date: new Date(2020, 10, 1),
     basic: 56,
     basicSTDup: 56,
     basicSTDdown: 56,
@@ -72,7 +73,7 @@ const data = [
     maximumSTDdown: 49.34,
   },
   {
-    date: new Date(2019, 5, 15),
+    date: new Date(2021, 1, 1),
     basic: 52,
     basicSTDup: 52,
     basicSTDdown: 52,
@@ -87,7 +88,7 @@ const data = [
     maximumSTDdown: 47,
   },
   {
-    date: new Date(2019, 5, 16),
+    date: new Date(2021, 4, 1),
     basic: 48,
     basicSTDup: 48,
     basicSTDdown: 48,
@@ -102,7 +103,7 @@ const data = [
     maximumSTDdown: 38.67,
   },
   {
-    date: new Date(2019, 5, 17),
+    date: new Date(2021, 7, 1),
     basic: 47,
     basicSTDup: 47,
     basicSTDdown: 47,
@@ -117,7 +118,7 @@ const data = [
     maximumSTDdown: 36.34,
   },
   {
-    date: new Date(2019, 5, 18),
+    date: new Date(2021, 10, 1),
     basic: 59,
     basicSTDup: 59,
     basicSTDdown: 59,
@@ -140,6 +141,9 @@ const data = [
 export default function SimulationChart(): JSX.Element {
   const classes = useStyles();
   const scenarioList = useAppSelector((state) => state.scenarioList);
+  const dispatch = useAppDispatch();
+
+  const chartRef = useRef<am4charts.XYChart | null>(null);
 
   useEffect(() => {
     // Create chart instance (is called when props.scenarios changes)
@@ -183,9 +187,16 @@ export default function SimulationChart(): JSX.Element {
     chart.cursor = new am4charts.XYCursor();
     chart.cursor.xAxis = dateAxis;
 
-    // empty dependencies to do this effect only on the first render
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    chart.events.on('hit', () => {
+      dispatch(selectDate(dateAxis.tooltipDate.getTime() + (24 * 60 * 60 * 1000)));
+    });
+
+    chartRef.current = chart;
+    return () => {
+      chartRef.current && chartRef.current.dispose();
+    };
+  }, [dispatch, scenarioList]);
+
 
   return (
     <Box id='chartdiv' className={classes.chart}>

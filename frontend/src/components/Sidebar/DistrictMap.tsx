@@ -8,6 +8,8 @@ import {selectDistrict} from '../../store/DataSelectionSlice';
 import {useAppSelector} from '../../store/hooks';
 import {makeStyles} from '@mui/styles';
 import {Box} from '@mui/material';
+import {useGetAllDistrictsByDateQuery} from '../../store/services/rkiApi';
+
 const {useRef} = React;
 
 const useStyles = makeStyles({
@@ -58,7 +60,10 @@ export default function DistrictMap(): JSX.Element {
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
   const selectedValue = useAppSelector((state) => state.dataSelection.value);
   const selectedRate = useAppSelector((state) => state.dataSelection.rate);
+  const selectedDate = useAppSelector((state) => state.dataSelection.date);
   const scenarioList = useAppSelector((state) => state.scenarioList);
+
+  const {data} = useGetAllDistrictsByDateQuery(new Date(selectedDate).toISOString().slice(0, 10));
 
   const chartRef = useRef<am4maps.MapChart | null>(null);
 
@@ -141,11 +146,21 @@ export default function DistrictMap(): JSX.Element {
         dispatch(selectDistrict({ags: item.RS, name: item.GEN, type: t(item.BEZ)}));
       });
 
+      const dataMapped = new Map<string, number>();
+      data?.data.forEach(entry => {
+        let rs = entry.county;
+        if (rs.length === 4) {
+          rs = `0${rs}`;
+        }
+        dataMapped.set(rs, entry.infectious);
+      });
+
       // Set values to each regions
       polygonSeries.events.on('validated', (event) => {
         event.target.mapPolygons.each((mapPolygon) => {
           regionPolygon = mapPolygon.dataItem.dataContext as IRegionPolygon;
-          regionPolygon.value = Math.floor(Math.random() * 210);
+          regionPolygon.value = dataMapped.get(regionPolygon.RS) || 0;
+
           // add tooltipText, omit compartment if none selected
           mapPolygon.tooltipText = `${t(`BEZ.${regionPolygon.BEZ}`)} {GEN}`;
           // append scenario label to tooltip if selected
@@ -181,8 +196,8 @@ export default function DistrictMap(): JSX.Element {
               am4core.colors.interpolate(
                 am4core.color(lower.color).rgb,
                 am4core.color(upper.color).rgb,
-                (x - lower.stop) / (upper.stop - lower.stop)
-              )
+                (x - lower.stop) / (upper.stop - lower.stop),
+              ),
             );
           };
 
@@ -195,7 +210,7 @@ export default function DistrictMap(): JSX.Element {
       const hs = polygonTemplate.states.create('hover');
       hs.properties.fill = am4core.color('#367B25');
     }
-  }, [scenarioList, selectedScenario, selectedCompartment, selectedValue, selectedRate, dispatch, t]);
+  }, [scenarioList, selectedScenario, selectedCompartment, selectedValue, selectedRate, dispatch, t, data, selectedDate]);
 
   return (
     <>
