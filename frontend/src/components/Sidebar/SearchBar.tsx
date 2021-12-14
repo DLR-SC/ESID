@@ -131,20 +131,22 @@ export default function SearchBar(): JSX.Element {
           isOptionEqualToValue={(option, value) => option.RS === value.RS}
           // onChange of input dispatch new selected district or initial value (ags: 00000, name: germany) if input is cleared
           onChange={(_event, newValue: CountyItem | null) => {
-            dispatch(
-              selectDistrict({
-                ags: newValue?.RS ?? '00000',
-                name: newValue?.GEN ?? t('germany'),
-                type: newValue?.BEZ ?? '',
-              })
-            );
+            if (newValue) {
+              dispatch(
+                selectDistrict({
+                  ags: newValue?.RS ?? '00000',
+                  name: newValue?.GEN ?? t('germany'),
+                  type: newValue?.BEZ ?? '',
+                })
+              );
+            }
           }}
           // enable clearing/resetting the input field with escape key
           clearOnEscape
           // automatically highlights first option
           autoHighlight
           // selects highlighted option on focus loss
-          autoSelect
+          //autoSelect
           // provide countyList as options for drop down
           options={countyList}
           // group dropdown contents by first letter (json array needs to be sorted alphabetically by name for this to work correctly)
@@ -155,7 +157,14 @@ export default function SearchBar(): JSX.Element {
           // override default input field, placeholder is a fallback, as value should always be a selected district or germany (initial/default value)
           renderInput={(params) => (
             <div ref={params.InputProps.ref} style={{display: 'flex'}}>
-              <input type='search' {...params.inputProps} className={classes.searchInput} placeholder={t('search')} />
+              <input
+                type='search'
+                {...params.inputProps}
+                className={classes.searchInput}
+                placeholder={`${selectedDistrict.name}${
+                  selectedDistrict.type ? ` (${t(`BEZ.${selectedDistrict.type}`)})` : ''
+                }`}
+              />
             </div>
           )}
         />

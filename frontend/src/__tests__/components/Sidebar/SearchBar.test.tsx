@@ -1,5 +1,5 @@
 import React from 'react';
-import {act, render, screen, waitFor} from '@testing-library/react';
+import {act, cleanup, render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import i18n from '../../../util/i18nForTests';
@@ -42,10 +42,9 @@ describe('SearchBar', () => {
 
     await waitFor(() => expect(global.fetch).toHaveBeenCalled());
 
-    await screen.findByPlaceholderText('search');
     await screen.findByDisplayValue('germany');
 
-    userEvent.click(screen.getByPlaceholderText('search'));
+    userEvent.click(screen.getByDisplayValue('germany'));
 
     await screen.findByText('A');
     await screen.findByText('Aichach-Friedberg (BEZ.LK)');
@@ -84,7 +83,7 @@ describe('SearchBar', () => {
 
     await waitFor(() => expect(global.fetch).toHaveBeenCalled());
 
-    userEvent.type(screen.getByPlaceholderText('search'), 'Aic{Enter}');
+    userEvent.type(screen.getByDisplayValue('germany'), 'Aic{Enter}');
 
     await screen.findByDisplayValue('Aichach-Friedberg (BEZ.LK)');
     expect(Store.getState().dataSelection.district).toStrictEqual({
@@ -105,7 +104,7 @@ describe('SearchBar', () => {
 
     await waitFor(() => expect(global.fetch).toHaveBeenCalled());
 
-    userEvent.type(screen.getByPlaceholderText('search'), '{ArrowDown}{ArrowDown}{Enter}');
+    userEvent.type(screen.getByDisplayValue('germany'), '{ArrowDown}{Enter}');
 
     await screen.findByDisplayValue('Test District (BEZ.Test Type)');
     expect(Store.getState().dataSelection.district).toStrictEqual({
@@ -113,5 +112,10 @@ describe('SearchBar', () => {
       name: 'Test District',
       type: 'Test Type',
     });
+  });
+
+  afterEach(() => {
+    cleanup();
+    Store.dispatch(selectDistrict({ags: '00000', name: i18n.t('germany'), type: ''}));
   });
 });
