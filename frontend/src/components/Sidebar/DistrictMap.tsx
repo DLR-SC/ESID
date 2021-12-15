@@ -74,7 +74,7 @@ export default function DistrictMap(): JSX.Element {
   //Chart
   useEffect(() => {
     // Create map instance
-    const chart = am4core.create('chartdiv', am4maps.MapChart);
+    const chart = am4core.create('mapdiv', am4maps.MapChart);
     // Set map definition
     chart.geodataSource.url = 'assets/lk_germany_reduced.geojson';
     // Set projection
@@ -214,7 +214,7 @@ export default function DistrictMap(): JSX.Element {
 
   return (
     <>
-      <Box id='chartdiv' className={classes.Map} />
+      <Box id='mapdiv' className={classes.Map} />
       <Box id='legenddiv' className={classes.Heatlegend} />
     </>
   );

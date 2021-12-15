@@ -1,10 +1,10 @@
-interface RKIDistrictQuery {
+export interface RKIDistrictQueryResult {
   county: string;
   count: number;
-  data: Array<RKIDistrictEntryResult>;
+  data: Array<RKIDistrictEntry>;
 }
 
-interface RKIDistrictEntryResult {
+export interface RKIDistrictEntry {
   date: string;
   infectious: number;
   deaths: number;
@@ -12,13 +12,13 @@ interface RKIDistrictEntryResult {
   timestamp: number;
 }
 
-interface RKIDateQueryResult {
+export interface RKIDateQueryResult {
   day: string;
   count: number;
   data: Array<RKIDateEntry>;
 }
 
-interface RKIDateEntry {
+export interface RKIDateEntry {
   county: string;
   infectious: number;
   deaths: number;

@@ -5,6 +5,8 @@ import {useAppDispatch, useAppSelector} from '../store/hooks';
 import {createStyles, makeStyles} from '@mui/styles';
 import {Box} from '@mui/material';
 import {selectDate} from '../store/DataSelectionSlice';
+import {useGetAllDatesByDistrictQuery} from '../store/services/rkiApi';
+import {RKIDistrictEntry} from '../types/rki';
 
 /* This component displays the evolution of the pandemic for a specific compartment (hospitalized, dead, infected, etc.) regarding the different scenarios
  */
@@ -21,12 +23,12 @@ const useStyles = makeStyles(() =>
       backgroundSize: '10px 10px',
       cursor: 'crosshair',
     },
-  })
+  }),
 );
 
 // dummy data
 const drawDeviations = true;
-let data = [
+let dummyData = [
   {
     date: new Date(2020, 0, 1),
     basic: 0,
@@ -44,7 +46,7 @@ let data = [
   },
 ];
 
-data = [];
+dummyData = [];
 for (let i = 0; i < 600; i++) {
   const date = new Date(2020, 2, i);
   const basic = 100 * Math.sin(i / 100.0) + 150;
@@ -60,7 +62,7 @@ for (let i = 0; i < 600; i++) {
   const maximumSTDup = maximum + i / 15.0;
   const maximumSTDdown = maximum - i / 15.0;
 
-  data.push({
+  dummyData.push({
     date,
     basic,
     basicSTDup,
@@ -84,20 +86,28 @@ for (let i = 0; i < 600; i++) {
 export default function SimulationChart(): JSX.Element {
   const classes = useStyles();
   const scenarioList = useAppSelector((state) => state.scenarioList);
+  const selectedDistrict = useAppSelector((state) => state.dataSelection.district.ags);
   const dispatch = useAppDispatch();
+  const {data} = useGetAllDatesByDistrictQuery(selectedDistrict[0] === '0' ? selectedDistrict.slice(1, 5) : selectedDistrict);
 
   const chartRef = useRef<am4charts.XYChart | null>(null);
+  const rkiSeriesRef = useRef<am4charts.LineSeries | null>(null);
 
   useEffect(() => {
     // Create chart instance (is called when props.scenarios changes)
     const chart = am4core.create('chartdiv', am4charts.XYChart);
-
     // Add data
-    chart.data = data;
+    chart.data = dummyData;
 
     // Create axes
     const dateAxis = chart.xAxes.push(new am4charts.DateAxis());
-    chart.yAxes.push(new am4charts.ValueAxis());
+    const valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+    valueAxis.logarithmic = true;
+    valueAxis.min = 1;
+
+    // Add cursor
+    chart.cursor = new am4charts.XYCursor();
+    chart.cursor.xAxis = dateAxis;
 
     Object.entries(scenarioList).map(([scn_id, scn_info]) => {
       const series = chart.series.push(new am4charts.LineSeries());
@@ -120,31 +130,58 @@ export default function SimulationChart(): JSX.Element {
         seriesSTD.fillOpacity = 0.3;
         seriesSTD.stroke = am4core.color(scn_info.color);
         // override tooltip
-        series.tooltipText = `${scn_info.label}: [bold]{${scn_id}STDdown} ~ {${scn_id}STDup}[/] {date}`;
+        series.tooltipText = `${scn_info.label}: [bold]{${scn_id}STDdown} ~ {${scn_id}STDup}[/]`;
       }
     });
 
-    // Add cursor
-    chart.cursor = new am4charts.XYCursor();
-    chart.cursor.xAxis = dateAxis;
-
-    const range = dateAxis.axisRanges.create();
-    range.date = new Date();
-    range.grid.above = true;
-    range.grid.stroke = am4core.color('purple');
-    range.grid.strokeWidth = 2;
-    range.grid.strokeOpacity = 1;
-
-    chart.events.on('hit', () => {
-      dispatch(selectDate(dateAxis.tooltipDate.getTime() + (24 * 60 * 60 * 1000)));
-      range.date = new Date(dateAxis.tooltipDate.getTime() + (12 * 60 * 60 * 1000));
-    });
+    const rkiSeries = chart.series.push(new am4charts.LineSeries());
+    rkiSeries.dataFields.valueY = 'value';
+    rkiSeries.dataFields.dateX = 'date';
+    rkiSeries.tensionX = 0.8;
+    rkiSeries.strokeWidth = 1;
+    rkiSeries.fill = am4core.color('red');
+    rkiSeries.stroke = am4core.color('red');
+    rkiSeries.tooltipText = `Infected: [bold]{value}[/]`;
 
     chartRef.current = chart;
+    rkiSeriesRef.current = rkiSeries;
     return () => {
       chartRef.current && chartRef.current.dispose();
     };
-  }, [dispatch, scenarioList]);
+  }, [scenarioList]);
+
+  useEffect(() => {
+    const chart = chartRef.current;
+
+    if (chart) {
+      const dateAxis = chart.xAxes.getIndex(0) as am4charts.DateAxis;
+      const range = dateAxis.axisRanges.create();
+      range.date = new Date();
+      range.grid.above = true;
+      range.grid.stroke = am4core.color('purple');
+      range.grid.strokeWidth = 2;
+      range.grid.strokeOpacity = 1;
+
+      chart.events.on('hit', () => {
+        dispatch(selectDate(dateAxis.tooltipDate.getTime() + (24 * 60 * 60 * 1000)));
+        range.date = new Date(dateAxis.tooltipDate.getTime() + (12 * 60 * 60 * 1000));
+      });
+    }
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (rkiSeriesRef.current) {
+      rkiSeriesRef.current.data = [];
+      data?.data.forEach((entry: RKIDistrictEntry) => {
+        rkiSeriesRef.current?.data.push({
+          date: new Date(entry.date),
+          value: entry.infectious,
+        });
+      });
+      rkiSeriesRef.current?.invalidateData();
+
+    }
+  }, [data]);
 
 
   return (
