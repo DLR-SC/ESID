@@ -41,7 +41,12 @@ const PACKAGE_JSON = path.resolve(PROJECT_ROOT, 'package.json');
   // Now that we have all dependencies, we go through each one and collect all the attribution data we can find.
   const dependencyData: Array<DependencyData> = [];
   for (const lib of Array.from(allDependencies)) {
-    dependencyData.push(await getDependencyData(lib));
+    try {
+      dependencyData.push(await getDependencyData(lib));
+    } catch (error) {
+      // handle rejected promise returned if dependency not found/resolved
+      console.warn(`Could not get dependency data for ${lib}!`);
+    }
   }
   console.info('Finished collecting dependency data.', '\n');
 
@@ -63,8 +68,13 @@ const PACKAGE_JSON = path.resolve(PROJECT_ROOT, 'package.json');
  * @param lib The library name to get the direct dependencies from.
  */
 function getDirectDependencies(lib: string): Array<string> {
-  const json = JSON.parse(fs.readFileSync(`${NODE_MODULES}/${lib}/package.json`).toString());
-  return json && json.dependencies ? Object.keys(json.dependencies) : [];
+  try {
+    const json = JSON.parse(fs.readFileSync(`${NODE_MODULES}/${lib}/package.json`).toString());
+    return json && json.dependencies ? Object.keys(json.dependencies) : [];
+  } catch (error) {
+    console.warn(`package.json of ${lib} not found!`);
+    return [];
+  }
 }
 
 /**
@@ -74,47 +84,51 @@ function getDirectDependencies(lib: string): Array<string> {
  * @param lib The library name to collect the data from.
  */
 async function getDependencyData(lib: string): Promise<DependencyData> {
-  const json = JSON.parse(fs.readFileSync(`${NODE_MODULES}/${lib}/package.json`).toString());
+  try {
+    const json = JSON.parse(fs.readFileSync(`${NODE_MODULES}/${lib}/package.json`).toString());
 
-  const authors = getAuthors(json);
-  if (authors === null) {
-    console.warn(`No author information for '${lib}' could be found!`);
-  }
-
-  const version = json?.version;
-  if (version === null) {
-    console.warn(`No version for '${lib}' could be found!`);
-  }
-
-  const repositoryURL = getRepositoryURL(json);
-  if (repositoryURL === null) {
-    console.warn(`No repository url for '${lib}' could be found!`);
-  }
-
-  const licenseType = getLicenseType(json);
-  if (licenseType === null) {
-    console.warn(`No license type for '${lib}' could be found!`);
-  } else {
-    if (LICENSES.has(licenseType)) {
-      LICENSES.set(licenseType, LICENSES.get(licenseType)!! + 1);
-    } else {
-      LICENSES.set(licenseType, 1);
+    const authors = getAuthors(json);
+    if (authors === null) {
+      console.warn(`No author information for '${lib}' could be found!`);
     }
-  }
 
-  const licenseText = await getLicenseText(lib, licenseType, authors);
-  if (licenseText === null) {
-    console.warn(`No license text for '${lib}' could be found!`);
-  }
+    const version = json?.version;
+    if (version === null) {
+      console.warn(`No version for '${lib}' could be found!`);
+    }
 
-  return {
-    name: lib,
-    authors: authors,
-    version: version,
-    repository: repositoryURL,
-    license: licenseType,
-    licenseText: licenseText,
-  };
+    const repositoryURL = getRepositoryURL(json);
+    if (repositoryURL === null) {
+      console.warn(`No repository url for '${lib}' could be found!`);
+    }
+
+    const licenseType = getLicenseType(json);
+    if (licenseType === null) {
+      console.warn(`No license type for '${lib}' could be found!`);
+    } else {
+      if (LICENSES.has(licenseType)) {
+        LICENSES.set(licenseType, LICENSES.get(licenseType)!! + 1);
+      } else {
+        LICENSES.set(licenseType, 1);
+      }
+    }
+
+    const licenseText = await getLicenseText(lib, licenseType, authors);
+    if (licenseText === null) {
+      console.warn(`No license text for '${lib}' could be found!`);
+    }
+
+    return {
+      name: lib,
+      authors: authors,
+      version: version,
+      repository: repositoryURL,
+      license: licenseType,
+      licenseText: licenseText,
+    };
+  } catch (error) {
+    return Promise.reject(error);
+  }
 }
 
 /**
