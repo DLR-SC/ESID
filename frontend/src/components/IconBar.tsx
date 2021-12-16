@@ -19,7 +19,15 @@ export default function IconBar(): JSX.Element {
   };
 
   return (
-    <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}} height={60}>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+      height={60}
+    >
       <Button disabled>
         <AutorenewIcon />
       </Button>
