@@ -1,34 +1,32 @@
 import React from 'react';
+import {useTheme} from '@mui/material/styles';
 import SearchBar from './SearchBar';
 import DistrictMap from './DistrictMap';
 import SidebarTabs from './SidebarTabs';
-import {makeStyles} from '@mui/styles';
-import {Container, Stack} from '@mui/material';
-
-const useStyles = makeStyles({
-  sideBar: {
-    width: '422px',
-    height: '100%',
-    borderRight: '1px solid #D3D2D8',
-    backgroundColor: '#F2F2F2',
-  },
-  sidebarItem: {
-    width: '422px',
-  },
-});
+import {Box, Container, Stack} from '@mui/material';
 
 export default function Sidebar(): JSX.Element {
-  const classes = useStyles();
+  const theme = useTheme();
 
   return (
-    <Stack direction='column' alignItems='stretch' justifyContent='flex-start' className={classes.sideBar}>
-      <div className={classes.sidebarItem}>
+    <Stack
+      direction='column'
+      alignItems='stretch'
+      justifyContent='flex-start'
+      sx={{
+        width: 422,
+        height: 1,
+        borderRight: `1p solid ${theme.palette.divider}`,
+        background: theme.palette.background.default,
+      }}
+    >
+      <Box>
         <SearchBar />
-      </div>
-      <div className={classes.sidebarItem}>
+      </Box>
+      <Box>
         <DistrictMap />
-      </div>
-      <Container disableGutters className={classes.sidebarItem} sx={{flexGrow: 1}}>
+      </Box>
+      <Container disableGutters sx={{flexGrow: 1}}>
         <SidebarTabs />
       </Container>
     </Stack>
