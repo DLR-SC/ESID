@@ -7,17 +7,15 @@ import SearchIcon from '@mui/icons-material/Search';
 import {Autocomplete, Box, Container} from '@mui/material';
 import {useTranslation} from 'react-i18next';
 
-/**
- * CountyItem type definition
- * @typedef {object} CountyItem
- * @property {string} RS  - ID for the district (Amtlicher Gemeindeschlüssel) (same as ags in store).
- * @property {string} GEN - label/name of the district (same as name in store).
- * @property {string} BEZ - region type identifier (same as type in store).
- * @see DataSelectionSlice
+/** Type definition for the CountyItems of the Autocomplete field
+ *  @see DataSelectionSlice
  */
 interface CountyItem {
+  /** ID for the district (Amtlicher Gemeindeschlüssel) (same as ags in store). */
   RS: string;
+  /** Label/Name of the district (same as the name in the data store). */
   GEN: string;
+  /** Region type identifier (same as the type in the data store). */
   BEZ: string;
 }
 
@@ -47,6 +45,12 @@ export default function SearchBar(): JSX.Element {
       .then(
         // Resolve Promise
         (jsonlist: CountyItem[]) => {
+          // append germany to list
+          jsonlist.push({RS: '00000', GEN: t('germany'), BEZ: ''});
+          // sort list to put germany at the right place (loading and sorting takes 1.5 ~ 2 sec)
+          jsonlist.sort((a, b) => {
+            return a.GEN.localeCompare(b.GEN);
+          });
           // fill countyList state with list
           setCountyList(jsonlist);
         },
@@ -55,7 +59,6 @@ export default function SearchBar(): JSX.Element {
           console.warn('Did not receive proper county list');
         }
       );
-    console.log(countyList);
     // this init should only run once on first render
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -92,25 +95,31 @@ export default function SearchBar(): JSX.Element {
           // set value to selectedDistrict contents from store
           value={{RS: selectedDistrict.ags, GEN: selectedDistrict.name, BEZ: selectedDistrict.type}}
           // function to compare value to options in list, comparing ags number and name of district
-          isOptionEqualToValue={(option, value) => option.RS === value.RS && option.GEN === value.GEN}
+          isOptionEqualToValue={(option, value) => option.RS === value.RS}
           // onChange of input dispatch new selected district or initial value (ags: 00000, name: germany) if input is cleared
           onChange={(_event, newValue: CountyItem | null) => {
-            dispatch(
-              selectDistrict({
-                ags: newValue?.RS ?? '00000',
-                name: newValue?.GEN ?? t('germany'),
-                type: newValue?.BEZ ?? '',
-              })
-            );
+            if (newValue) {
+              dispatch(
+                selectDistrict({
+                  ags: newValue?.RS ?? '00000',
+                  name: newValue?.GEN ?? t('germany'),
+                  type: newValue?.BEZ ?? '',
+                })
+              );
+            }
           }}
           // enable clearing/resetting the input field with escape key
           clearOnEscape
+          // automatically highlights first option
+          autoHighlight
+          // selects highlighted option on focus loss
+          //autoSelect
           // provide countyList as options for drop down
           options={countyList}
           // group dropdown contents by first letter (json array needs to be sorted alphabetically by name for this to work correctly)
           groupBy={(option) => option.GEN[0]}
           // provide function to display options in dropdown menu
-          getOptionLabel={(option) => `${option.GEN} ${option.BEZ ? `(${t(`BEZ.${option.BEZ}`)})` : ''}`}
+          getOptionLabel={(option) => `${option.GEN}${option.BEZ ? ` (${t(`BEZ.${option.BEZ}`)})` : ''}`}
           sx={{
             flexGrow: 1,
             //disable outline for any children
@@ -135,7 +144,9 @@ export default function SearchBar(): JSX.Element {
                   borderTopRightRadius: 26,
                   borderBottomRightRadius: 26,
                 }}
-                placeholder={t('search')}
+                placeholder={`${selectedDistrict.name}${
+                  selectedDistrict.type ? ` (${t(`BEZ.${selectedDistrict.type}`)})` : ''
+                }`}
               />
             </div>
           )}
