@@ -35,7 +35,6 @@ export default function MainContent(): JSX.Element {
             backgroundColor: 'transparent',
             margin: `${theme.spacing(4)} 0 0 0`,
           }}
-          light
         />
       </Grid>
       <Grid item sx={{flexGrow: 1}}>
