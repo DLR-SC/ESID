@@ -153,24 +153,25 @@ would be difficult to handle with React's `props` alone.
 - The frontend uses a global theme based on the following guidelines:
   <details>
   <summary>Design Guidelines for Colors and Typography <i>(-- Click to expand --)</i></summary>
-  
-  ![](../docs/images/ThemeGuidelines-800x650.svg "ESID Design Guidelines")
-  
+
+  ![](../docs/images/ThemeGuidelines-800x650.svg 'ESID Design Guidelines')
+
   **The alternative text color for lighter and darker variants where the contrast is not high enough is always either `#F2F2F2` (light text), or `#0C0B0D` (dark text).**
-  
-  ---
+
+  ***
+
   </details>
-  
-  - The theme is provided using the [MUI Theme Provider](https://mui.com/customization/theming "mui.com")
+
+  - The theme is provided using the [MUI Theme Provider](https://mui.com/customization/theming 'mui.com')
   - <details>
     <summary>It can be accessed in components like this: <i>(-- Click to expand --)</i></summary>
-  
+
     ```typescript
     import {useTheme} from '@mui/material/styles';
-    
+
     export default function MyComponent(): JSX.Element {
       const theme = useTheme();
-      
+
       return (
         <Box
           sx={{
@@ -179,12 +180,12 @@ would be difficult to handle with React's `props` alone.
              */
             // accessing theme variables
             background: theme.palette.background.default,
-             
+
             // accessing theme typography
             typography: theme.typography.h1,
             // or
             typography: 'h1',
-            
+
             // accessing theme spacing
             margin: theme.spacing(3),
           }}
@@ -192,6 +193,7 @@ would be difficult to handle with React's `props` alone.
         </Box>
       );
     ```
+
     </details>
 
 ### Testing
