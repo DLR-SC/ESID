@@ -69,7 +69,7 @@ export default function SearchBar(): JSX.Element {
           alignItems: 'center',
           alignContent: 'center',
           width: 1,
-          my: 3, // margin top & bottom = theme.spacing(3)
+          my: 3, // sx-shorthand for margin-top & -bottom = theme.spacing(3)
           borderRadius: 4,
           background: theme.palette.background.default,
           borderStyle: 'solid',
@@ -84,8 +84,8 @@ export default function SearchBar(): JSX.Element {
         <SearchIcon
           color='primary'
           sx={{
-            pl: 2,
-            pr: 1,
+            pl: 2, // sx-shorthand for padding-left = theme.spacing(2)
+            pr: 1, // sx-shorthand for padding-right = theme.spacing(1)
           }}
         />
         <Autocomplete
