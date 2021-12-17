@@ -25,8 +25,8 @@ export default function IconBar(): JSX.Element {
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
+        height: '60px',
       }}
-      height={60}
     >
       <Button disabled>
         <AutorenewIcon />
