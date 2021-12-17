@@ -16,7 +16,7 @@ export default function Sidebar(): JSX.Element {
       sx={{
         width: 422,
         height: 1,
-        borderRight: `1p solid ${theme.palette.divider}`,
+        borderRight: `1px solid ${theme.palette.divider}`,
         background: theme.palette.background.default,
       }}
     >
