@@ -158,7 +158,7 @@ would be difficult to handle with React's `props` alone.
 
   **The alternative text color for lighter and darker variants where the contrast is not high enough is always either `#F2F2F2` (light text), or `#0C0B0D` (dark text).**
 
-  ***
+  - The Spacing is done in 5 steps: `0 px`, `4 px`, `8 px`, `12 px`, and `26 px`
 
   </details>
 
@@ -180,14 +180,15 @@ would be difficult to handle with React's `props` alone.
              */
             // accessing theme variables
             background: theme.palette.background.default,
+            border: `1px solid ${theme.palette.divider}`
 
             // accessing theme typography
             typography: theme.typography.h1,
             // or
             typography: 'h1',
 
-            // accessing theme spacing
-            margin: theme.spacing(3),
+            // accessing theme spacing via index [0, 4, 8, 12, 26]
+            margin: theme.spacing(3), // 12 px margin
           }}
         >
         </Box>
