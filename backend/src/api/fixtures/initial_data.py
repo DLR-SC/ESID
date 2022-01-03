@@ -1,4 +1,5 @@
 NODES = [
+    {"key": "00000", "label": "Deutschland"},
     {"key": "01001", "label": "Flensburg"},
     {"key": "01002", "label": "Kiel"},
     {"key": "01003", "label": "Lübeck"},
