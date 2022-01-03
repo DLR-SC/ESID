@@ -1,8 +1,10 @@
 # Create your views here.
+
+from datetime import datetime
 from rest_framework.response import Response
-from .models import Intervention, Node, Restriction, Scenario, SimulationModel, RKIEntry
-from .classes import RKICounty, RKIDay
-from rest_framework import viewsets, permissions, mixins
+from .models import *
+from .classes import DataEntryFilterMixin
+from rest_framework import viewsets, permissions, mixins, generics
 from rest_pandas import PandasViewSet, PandasSerializer
 from django.db.models import Sum, F, Window
 import src.api.serializers as serializers
@@ -15,6 +17,7 @@ class RestrictionsViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     serializer_class = serializers.RestrictionSerializer
     permission_classes = [permissions.AllowAny]
 
+
 class NodesViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     """
     Return a list of all available nodes (e.g. counties)
@@ -22,6 +25,7 @@ class NodesViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     queryset = Node.objects.all().order_by('id')
     serializer_class = serializers.NodeSerializer
     permission_classes = [permissions.AllowAny]
+
 
 class ScenarioViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     """
@@ -38,6 +42,16 @@ class ScenarioViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets
 
     def get_serializer_class(self):
         return self.serializers_.get(self.action, serializers.ScenarioSerializerMeta)
+
+
+class SimulationsViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    """
+    list:
+    Return a list of all available simulations.
+    """
+    queryset = Simulation.objects.all().order_by('id')
+    serializer_class = serializers.SimulationSerializerMeta
+    permission_classes = [permissions.AllowAny]
 
 
 class SimulationModelViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
@@ -57,6 +71,62 @@ class SimulationModelViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, v
         return self.serializers_.get(self.action, serializers.SimulationModelSerializerMeta)
 
 
+class SimulationDataByNodeView(DataEntryFilterMixin, generics.ListAPIView):
+    
+    serializer_class = serializers.DataEntrySerializer
+    permission_classes = [permissions.AllowAny]
+
+    def get_queryset(self):
+        simulationId = self.kwargs.get('id')
+        nodeId = self.kwargs.get('nodeId')
+
+        simulation = Simulation.objects.get(id=simulationId)
+        node = simulation.nodes.get(scenario_node__node__name=nodeId)
+        
+        return self.get_filtered_queryset(node).order_by('day')
+class SimulationDataByDayView(DataEntryFilterMixin, generics.ListAPIView):
+    
+    serializer_class = serializers.SimulationNodeSerializer
+    permission_classes = [permissions.AllowAny]
+
+    def get_queryset(self):
+        simulationId = self.kwargs.get('id')
+        
+        simulation = Simulation.objects.get(id=simulationId)
+
+        return simulation.nodes.order_by('scenario_node__node__name')
+
+class RkiDataByNodeView(DataEntryFilterMixin, generics.ListAPIView):
+    
+    serializer_class = serializers.DataEntrySerializer
+    permission_classes = [permissions.AllowAny]
+
+    def get_queryset(self):
+        nodeId = self.kwargs.get('nodeId')
+        node = RKINode.objects.get(node__name=nodeId)
+
+        return self.get_filtered_queryset(node.data).order_by('day')
+
+class RkiDataByDayView(DataEntryFilterMixin, generics.ListAPIView):
+
+    serializer_class = serializers.RkiNodeSerializer
+    permission_classes = [permissions.AllowAny]
+
+    def get_queryset(self):
+        queryset = RKINode.objects.all()
+
+        request_context = self.get_filter_context()
+
+        nodes = request_context.get('nodes', None)
+        if nodes is not None:
+            queryset = queryset.filter(node__name__in=nodes)
+
+        return queryset.order_by('node__name')
+
+
+
+
+'''
 class RKIByCountyViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     """
     Return the rki data for the given county for all available past days
@@ -141,3 +211,4 @@ class RKIByDayViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
         day = RKIDay(kwargs.get('day'), counties)
 
         return Response(data=serializers.RKIDaySerializer(day).data)
+'''

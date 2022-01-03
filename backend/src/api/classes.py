@@ -1,16 +1,58 @@
-class RKICounty:
-    """ Class representing all rki entries for one county. """
+from datetime import datetime
+class DataEntryFilterMixin:
 
-    def __init__(self, county, timesteps):
-        self.county = county
-        self.data = timesteps
-        self.count = len(timesteps)
+    def get_filter_context(self):
+        context = {}
+        context["group"] = self.kwargs.get('group', None)
+        context["day"] = self.kwargs.get('day', self.request.query_params.get('day', None))
+
+        context["from"] = self.request.query_params.get('from', None)
+        context["to"] = self.request.query_params.get('to', None)
+
+        context["nodes"] = self.request.query_params.get('nodes', None)
+
+        context["compartments"] = self.request.query_params.get('compartments', None)
+
+        if context["day"] is not None:
+            context["day"] = datetime.strptime(context["day"], "%Y-%m-%d")
+
+        if context["from"] is not None:
+            context["from"] = datetime.strptime(context["from"], "%Y-%m-%d")
+
+        if context["to"] is not None:
+            context["to"] = datetime.strptime(context["to"], "%Y-%m-%d")
+
+        if context["nodes"] is not None:
+            context["nodes"] = context["nodes"].split(',')
+
+        if context["compartments"] is not None:
+            context["compartments"] = context["compartments"].split(',')
 
 
-class RKIDay:
-    """ Class representing the rki entries for all counties on a single day. """
 
-    def __init__(self, day, counties):
-        self.day = day
-        self.data = counties
-        self.count = len(counties)
+        return context
+
+    def get_serializer_context(self):
+        return {**super().get_serializer_context(), **self.get_filter_context()}
+
+    def get_filtered_queryset(self, queryset):
+        context = self.get_filter_context()
+
+        group = context.get('group', None)
+        if group is not None:
+            queryset = queryset.filter(group__name=group)
+
+        day = context.get('day', None)
+        from_ = context.get('from', None)
+        to = context.get('to', None)
+        
+        if day is not None:
+            queryset = queryset.filter(day=day)
+        
+        if day is None and from_ is not None:
+            queryset = queryset.filter(day__gte=from_)
+
+        if day is None and to is not None:
+            queryset = queryset.filter(day__lte=to)
+
+        return queryset

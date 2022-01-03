@@ -1,4 +1,4 @@
-from .models import Distribution, Intervention, Node, Parameter, Restriction, Scenario, ScenarioNode, ScenarioParameter, ScenarioParameterGroup, SimulationModel, RKIEntry
+from .models import *
 from rest_framework import serializers
 from datetime import datetime
 
@@ -97,6 +97,32 @@ class ParameterSerializer(serializers.ModelSerializer):
         model = Parameter
         fields = ['name']
 
+class DataEntrySerializer(serializers.ModelSerializer):
+    """
+    JSON serializer for a simulation model parameter
+    """
+    class Meta:
+        model = DataEntry
+        fields = '__all__'
+
+    def to_representation(self, instance):
+        serialized = {}
+        
+        compartments = self.context.get('compartments', None)
+        if compartments is not None:
+            for compartment in compartments:
+                serialized[compartment] = instance.data[compartment]
+        else:
+            serialized = {**instance.data}
+
+        if self.context.get('day', None) is None:
+            serialized['day'] = instance.day
+
+        if self.context.get('group', None) is None:
+            serialized['group'] = instance.group.name
+
+        return serialized
+
 
 class SimulationModelSerializerMeta(serializers.HyperlinkedModelSerializer):
     """
@@ -117,50 +143,68 @@ class SimulationModelSerializerFull(serializers.ModelSerializer):
         model = SimulationModel
         fields = ['name', 'description', 'parameters', 'compartments']
 
-class RKICountyEntrySerializer(serializers.ModelSerializer):
+class SimulationSerializerMeta(serializers.HyperlinkedModelSerializer):
     """
-    Rki data json serializer for one county
+    JSON serializer simulation meta data
     """
-    infectious = serializers.IntegerField()
-    deaths = serializers.IntegerField()
-    recovered = serializers.IntegerField()
-    date = serializers.DateField(source="refdatum")
 
     class Meta:
-        model = RKIEntry
-        fields = ['date', 'infectious', 'deaths', 'recovered']
+        model = Simulation
+        fields = ['name', 'description', 'start_day', 'number_of_days', 'scenario']
 
-    def to_representation(self, instance):
-        representation = super(RKICountyEntrySerializer, self).to_representation(instance)
-        representation['timestamp'] = int(datetime.combine(instance.refdatum, datetime.min.time()).timestamp() * 1000)
-
-        return representation
-
-class RKIDayEntrySerializer(serializers.ModelSerializer):
+class SimulationNodeSerializer(serializers.ModelSerializer):
     """
-    Rki data json serializer for one day
+    JSON serializer for a simulation model parameter
     """
-    infectious = serializers.IntegerField()
-    deaths = serializers.IntegerField()
-    recovered = serializers.IntegerField()
-    county = serializers.CharField(source="id_landkreis")
+
+    values = serializers.SerializerMethodField('get_values')
 
     class Meta:
-        model = RKIEntry
-        fields = ['county', 'infectious', 'deaths', 'recovered']
+        model = SimulationNode
+        fields = ['name', 'values']
 
-class RKICountySerializer(serializers.Serializer):
-    """
-    Rki data json serializer for one day for all counties
-    """
-    county = serializers.CharField()
-    count = serializers.IntegerField()
-    data = RKICountyEntrySerializer(many=True)
+    def get_values(self, node):
+        queryset = node.data.all()
+        many = True
 
-class RKIDaySerializer(serializers.Serializer):
+        if 'group' in self.context:
+            queryset = queryset.filter(group__name=self.context['group'])
+
+        if 'day' in self.context:
+            queryset = queryset.filter(day=self.context['day']).first()
+            many = False
+        
+        serialized = DataEntrySerializer(instance=queryset, context=self.context, many=many)
+        return serialized.data
+
+
+class RkiNodeSerializer(serializers.ModelSerializer):
     """
-    Rki data json serializer for all days for one county
+    JSON serializer for a simulation model parameter
     """
-    day = serializers.DateField()
-    count = serializers.IntegerField()
-    data = RKIDayEntrySerializer(many=True)
+
+    class Meta:
+        model = RKINode
+        fields = ['name']
+
+    def __init__(self, *args, **kwargs):
+        super(RkiNodeSerializer, self).__init__(*args, **kwargs)
+
+    def to_representation(self, node):
+        
+        queryset = node.data.all()
+        many = True
+
+        if self.context.get('group', None) is not None:
+            queryset = queryset.filter(group__name=self.context['group'])
+
+        if self.context.get('day', None) is not None:
+            queryset = queryset.filter(day=self.context['day']).first()
+            many = False
+        
+        serialized = DataEntrySerializer(instance=queryset, context=self.context, many=many)
+
+        if not many:
+            return {'node': node.name, 'compartments': serialized.data}
+        else:
+            return {'node': node.name, 'data': serialized.data}

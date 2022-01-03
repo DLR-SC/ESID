@@ -13,7 +13,7 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
 from src.users.urls import users_router
-from src.api.urls import api_router
+from src.api.urls import api_router, urlpatterns
 
 schema_view = get_schema_view(
     openapi.Info(title="Pastebin API", default_version='v1'),
@@ -30,7 +30,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     # api
-    path('api/v1/', include(router.urls)),
+    path('api/v1/', include(router.urls + urlpatterns)),
 
     # auth
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
