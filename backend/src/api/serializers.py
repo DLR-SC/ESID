@@ -150,7 +150,7 @@ class SimulationSerializerMeta(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Simulation
-        fields = ['name', 'description', 'start_day', 'number_of_days', 'scenario']
+        fields = ['id', 'name', 'description', 'start_day', 'number_of_days', 'scenario']
 
 class SimulationNodeSerializer(serializers.ModelSerializer):
     """
