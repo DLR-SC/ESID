@@ -83,7 +83,7 @@ class SimulationDataByNodeView(DataEntryFilterMixin, generics.ListAPIView):
         simulation = Simulation.objects.get(id=simulationId)
         node = simulation.nodes.get(scenario_node__node__name=nodeId)
         
-        return self.get_filtered_queryset(node).order_by('day')
+        return self.get_filtered_queryset(node.data).order_by('day')
 class SimulationDataByDayView(DataEntryFilterMixin, generics.ListAPIView):
     
     serializer_class = serializers.SimulationNodeSerializer
