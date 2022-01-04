@@ -1,4 +1,5 @@
 import React from 'react';
+import {useTheme} from '@mui/material/styles';
 import * as am4core from '@amcharts/amcharts4/core';
 import * as am4maps from '@amcharts/amcharts4/maps';
 import {useEffect} from 'react';
@@ -6,21 +7,8 @@ import {useTranslation} from 'react-i18next';
 import {useAppDispatch} from '../../store/hooks';
 import {selectDistrict} from '../../store/DataSelectionSlice';
 import {useAppSelector} from '../../store/hooks';
-import {makeStyles} from '@mui/styles';
 import {Box} from '@mui/material';
 const {useRef} = React;
-
-const useStyles = makeStyles({
-  Map: {
-    height: '500px',
-  },
-
-  Heatlegend: {
-    marginTop: '15px',
-    height: '30px',
-    backgroundColor: '#F2F2F2',
-  },
-});
 
 interface IRegionPolygon {
   value: number;
@@ -63,7 +51,7 @@ export default function DistrictMap(): JSX.Element {
   const chartRef = useRef<am4maps.MapChart | null>(null);
 
   const {t} = useTranslation('global');
-  const classes = useStyles();
+  const theme = useTheme();
   const dispatch = useAppDispatch();
 
   //Chart
@@ -199,8 +187,15 @@ export default function DistrictMap(): JSX.Element {
 
   return (
     <>
-      <Box id='chartdiv' className={classes.Map} />
-      <Box id='legenddiv' className={classes.Heatlegend} />
+      <Box id='chartdiv' height={'500px'} />
+      <Box
+        id='legenddiv'
+        sx={{
+          mt: 3,
+          height: '30px',
+          backgroundColor: theme.palette.background.default,
+        }}
+      />
     </>
   );
 }

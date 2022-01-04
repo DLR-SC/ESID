@@ -1,65 +1,11 @@
-import {createStyles, makeStyles} from '@mui/styles';
-import SearchIcon from '@mui/icons-material/Search';
 import React, {useEffect, useState} from 'react';
+import {useTheme} from '@mui/material/styles';
 import {useAppSelector} from '../../store/hooks';
 import {useAppDispatch} from '../../store/hooks';
 import {selectDistrict} from '../../store/DataSelectionSlice';
+import SearchIcon from '@mui/icons-material/Search';
 import {Autocomplete, Box, Container} from '@mui/material';
 import {useTranslation} from 'react-i18next';
-
-// css theme variables
-const theme = {
-  colors: {
-    primary: '#1976d2',
-    background: '#f8f8f9',
-    backgroundAccent: '#d3d2d8',
-    backgroundAccentHover: '#8c8c8c',
-  },
-};
-
-const useStyles = makeStyles(() =>
-  createStyles({
-    // css style for the container of the search bar
-    searchContainer: {
-      width: '100%',
-      marginTop: '10px',
-      marginBottom: '10px',
-      borderRadius: 4,
-      backgroundColor: theme.colors.background,
-      borderStyle: 'solid',
-      borderWidth: '2px',
-      color: theme.colors.backgroundAccent,
-
-      '&:hover': {
-        color: theme.colors.backgroundAccentHover,
-      },
-
-      '&:hover *': {
-        color: theme.colors.backgroundAccentHover,
-      },
-
-      '&:focus-within': {
-        color: theme.colors.primary,
-      },
-
-      '&:focus-within *': {
-        color: theme.colors.primary,
-      },
-    },
-
-    // css style for the search bar input field
-    searchInput: {
-      flexGrow: 1,
-      borderStyle: 'none',
-      fontSize: '16px',
-      padding: '5px',
-
-      '&:focus': {
-        outline: 'none',
-      },
-    },
-  })
-);
 
 /** Type definition for the CountyItems of the Autocomplete field
  *  @see DataSelectionSlice
@@ -78,10 +24,10 @@ interface CountyItem {
  * @returns {JSX.Element} JSX Element to render the search bar container.
  */
 export default function SearchBar(): JSX.Element {
-  const classes = useStyles();
   const selectedDistrict = useAppSelector((state) => state.dataSelection.district);
   const [countyList, setCountyList] = useState([{RS: '', GEN: '', BEZ: ''}]);
   const {t} = useTranslation('global');
+  const theme = useTheme();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -120,10 +66,31 @@ export default function SearchBar(): JSX.Element {
   return (
     <Container>
       <Box
-        className={classes.searchContainer}
-        sx={{display: 'flex', justifyContent: 'flex-start', alignItems: 'center', alignContent: 'center'}}
+        sx={{
+          display: 'flex',
+          justifyContent: 'flex-start',
+          alignItems: 'center',
+          alignContent: 'center',
+          width: 1,
+          my: 3, // sx-shorthand for margin-top & -bottom = theme.spacing(3)
+          borderRadius: 4,
+          background: theme.palette.background.default,
+          borderStyle: 'solid',
+          borderWidth: '2px',
+          borderColor: theme.palette.divider,
+          '&:hover': {borderColor: theme.palette.primary.light},
+          '&:hover *': {borderColor: theme.palette.primary.light},
+          '&:focus-within': {borderColor: theme.palette.primary.main},
+          '&:focus-within *': {borderColor: theme.palette.primary.main},
+        }}
       >
-        <SearchIcon style={{paddingLeft: '10px', paddingRight: '5px'}} />
+        <SearchIcon
+          color='primary'
+          sx={{
+            pl: 2, // sx-shorthand for padding-left = theme.spacing(2)
+            pr: 1, // sx-shorthand for padding-right = theme.spacing(1)
+          }}
+        />
         <Autocomplete
           // set value to selectedDistrict contents from store
           value={{RS: selectedDistrict.ags, GEN: selectedDistrict.name, BEZ: selectedDistrict.type}}
@@ -153,14 +120,30 @@ export default function SearchBar(): JSX.Element {
           groupBy={(option) => option.GEN[0]}
           // provide function to display options in dropdown menu
           getOptionLabel={(option) => `${option.GEN}${option.BEZ ? ` (${t(`BEZ.${option.BEZ}`)})` : ''}`}
-          sx={{flexGrow: 1}}
+          sx={{
+            flexGrow: 1,
+            //disable outline for any children
+            '& *:focus': {outline: 'none'},
+          }}
           // override default input field, placeholder is a fallback, as value should always be a selected district or germany (initial/default value)
           renderInput={(params) => (
-            <div ref={params.InputProps.ref} style={{display: 'flex'}}>
+            <div
+              ref={params.InputProps.ref}
+              style={{
+                display: 'flex',
+              }}
+            >
               <input
                 type='search'
                 {...params.inputProps}
-                className={classes.searchInput}
+                style={{
+                  flexGrow: 1,
+                  borderStyle: 'none',
+                  fontSize: '16px',
+                  padding: '5px',
+                  borderTopRightRadius: 26,
+                  borderBottomRightRadius: 26,
+                }}
                 placeholder={`${selectedDistrict.name}${
                   selectedDistrict.type ? ` (${t(`BEZ.${selectedDistrict.type}`)})` : ''
                 }`}

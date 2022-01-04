@@ -1,120 +1,13 @@
 import React, {useState} from 'react';
 import {useAppDispatch, useAppSelector} from '../store/hooks';
-import {createStyles, makeStyles} from '@mui/styles';
+import {useTheme} from '@mui/material/styles';
 import {useTranslation} from 'react-i18next';
 import {selectCompartment, selectRate, selectScenario, selectValue} from 'store/DataSelectionSlice';
 import ScenarioCard from './ScenarioCard';
+import {Box, Button, List, ListItemButton, ListItemText, Typography} from '@mui/material';
 
 /* This component displays the pandemic spread depending on different scenarios
  */
-
-// css theme variables
-const theme = {
-  colors: {
-    accent: '#1976D2',
-    background: '#F8F8F8',
-    backgroundAccent: '#d3d2d8',
-  },
-};
-
-// create css styles
-const useStyles = makeStyles(() =>
-  createStyles({
-    root: {
-      display: 'flex',
-      cursor: 'default',
-      background: theme.colors.background,
-    },
-
-    scenario_header: {
-      borderRight: `2px dashed ${theme.colors.backgroundAccent}`,
-      flexGrow: 0,
-      flexShrink: 1,
-      flexBasis: '276px',
-      minHeight: '20vh',
-      display: 'flex',
-      flexDirection: 'column',
-      padding: '12px',
-      paddingTop: '26px',
-
-      '& span': {
-        width: '100%',
-        textAlign: 'right',
-        fontWeight: 'bold',
-        lineHeight: '1.5rem',
-        minHeight: '3rem',
-        marginBottom: '8px',
-      },
-
-      '& ul': {
-        display: 'flex',
-        justifyContent: 'space-between',
-        listStyleType: 'none',
-        padding: '7px',
-        margin: '0px',
-        borderStyle: 'solid hidden solid hidden',
-        border: `1px solid ${theme.colors.background}`,
-        fontWeight: 'normal',
-      },
-
-      '& ul:hover': {
-        borderStyle: 'solid hidden solid hidden',
-        border: `1px solid ${theme.colors.backgroundAccent}`,
-      },
-
-      '& button': {
-        boxSizing: 'border-box',
-        fontWeight: 'bold',
-        color: `${theme.colors.accent}`,
-        background: `${theme.colors.background}`,
-        border: `1px solid ${theme.colors.backgroundAccent}`,
-        borderRadius: '5px',
-        margin: '8px',
-      },
-
-      '& button:hover': {
-        border: `1px solid ${theme.colors.accent}`,
-      },
-    },
-
-    scenario_container: {
-      flexGrow: 1,
-      flexShrink: 1,
-      flexBasis: '100%',
-      display: 'flex',
-      overflowX: 'auto',
-    },
-
-    scenario_footer: {
-      borderLeft: `1px solid ${theme.colors.backgroundAccent}`,
-      flexGrow: 0,
-      flexShrink: 0,
-      flexBasis: '208px',
-      minHeight: '20vh',
-      paddingLeft: '12px',
-      display: 'flex',
-
-      '& button': {
-        background: `${theme.colors.background}`,
-        color: `${theme.colors.backgroundAccent}`,
-        border: `2px dashed ${theme.colors.backgroundAccent}`,
-        flexGrow: 0,
-        flexShrink: 0,
-        flexBasis: '160px',
-        minHeight: '220px',
-        margin: '12px',
-        fontWeight: 'bolder',
-        fontSize: '3rem',
-        transition: '0.3s',
-      },
-
-      '& button:hover': {
-        border: `2px solid ${theme.colors.backgroundAccent}`,
-        color: `${theme.colors.accent}`,
-      },
-    },
-  })
-);
 
 /* === Begin Sample Data === */
 /**
@@ -193,8 +86,8 @@ const properties = [
  */
 export default function Scenario(): JSX.Element {
   const {t} = useTranslation();
+  const theme = useTheme();
 
-  const classes = useStyles();
   const dispatch = useAppDispatch();
   const [selectedProperty, setSelectedProperty] = useState('');
   const [activeScenario, setActiveScenario] = useState(0);
@@ -203,31 +96,83 @@ export default function Scenario(): JSX.Element {
   const scenarioList = useAppSelector((state) => state.scenarioList);
 
   return (
-    <div className={classes.root}>
-      <div className={classes.scenario_header}>
-        <span>{t('today')}</span>
-        {properties.map((compartment, i) => (
-          <ul
-            key={compartment.compartment}
-            style={{
-              display: expandProperties || i < 4 ? 'flex' : 'none',
-              fontWeight: compartment.compartment === selectedProperty ? 'bold' : 'normal',
-            }}
-            onClick={() => {
-              // set selected property
-              setSelectedProperty(compartment.compartment);
-              // dispatch new compartment name
-              dispatch(selectCompartment(compartment.compartment));
-              // dispatch value & rate (active Scenario is stored as number but compartment.scenarios needs id => list keys & use index)
-              dispatch(selectValue(compartment.scenarios[Object.keys(scenarioList)[activeScenario]].value));
-              dispatch(selectRate(compartment.scenarios[Object.keys(scenarioList)[activeScenario]].rate));
-            }}
-          >
-            <li>{compartment.compartment}</li>
-            <li>{compartment.latest}</li>
-          </ul>
-        ))}
-        <button
+    <Box
+      sx={{
+        display: 'flex',
+        cursor: 'default',
+        background: theme.palette.background.default,
+      }}
+    >
+      <Box
+        sx={{
+          borderRight: `2px dashed ${theme.palette.divider}`,
+          flexGrow: 0,
+          flexShrink: 1,
+          flexBasis: '276px',
+          minHeight: '20vh',
+          display: 'flex',
+          flexDirection: 'column',
+          padding: theme.spacing(3),
+          paddingTop: theme.spacing(4),
+        }}
+      >
+        <Typography
+          variant='h1'
+          sx={{
+            width: '100%',
+            textAlign: 'right',
+            minHeight: '3rem',
+            marginBottom: theme.spacing(3),
+          }}
+        >
+          {t('today')}
+        </Typography>
+        <List dense={true} disablePadding={true}>
+          {properties.map((compartment, i) => (
+            // map all compartments to display compartment list
+            <ListItemButton
+              key={compartment.compartment}
+              sx={{
+                display: expandProperties || i < 4 ? 'flex' : 'none',
+                padding: theme.spacing(1),
+                margin: theme.spacing(0),
+              }}
+              selected={selectedProperty === compartment.compartment}
+              onClick={() => {
+                // set selected property
+                setSelectedProperty(compartment.compartment);
+                // dispatch new compartment name
+                dispatch(selectCompartment(compartment.compartment));
+                // dispatch value & rate (active Scenario is stored as number but compartment.scenarios needs id => list keys & use index)
+                dispatch(selectValue(compartment.scenarios[Object.keys(scenarioList)[activeScenario]].value));
+                dispatch(selectRate(compartment.scenarios[Object.keys(scenarioList)[activeScenario]].rate));
+              }}
+            >
+              <ListItemText
+                primary={compartment.compartment}
+                sx={{
+                  flexGrow: 1,
+                  flexBasis: 100,
+                }}
+              />
+              <ListItemText
+                primary={compartment.latest}
+                // disable child typography overriding this
+                disableTypography={true}
+                sx={{
+                  typography: theme.typography.listElement,
+                  flexGrow: 1,
+                }}
+              />
+            </ListItemButton>
+          ))}
+        </List>
+        <Button
+          variant='outlined'
+          color='primary'
+          sx={{
+            margin: theme.spacing(2),
+          }}
           aria-label={t('scenario.more')}
           onClick={() => {
             setExpandProperties(!expandProperties);
@@ -242,9 +187,17 @@ export default function Scenario(): JSX.Element {
           }}
         >
           {expandProperties ? t('less') : t('more')}
-        </button>
-      </div>
-      <div className={classes.scenario_container}>
+        </Button>
+      </Box>
+      <Box
+        sx={{
+          flexGrow: 1,
+          flexShrink: 1,
+          flexBasis: '100%',
+          display: 'flex',
+          overflowX: 'auto',
+        }}
+      >
         {Object.entries(scenarioList).map(([scn_id, scn_info], i) => (
           <ScenarioCard
             key={i}
@@ -273,10 +226,36 @@ export default function Scenario(): JSX.Element {
             }}
           />
         ))}
-      </div>
-      <div className={classes.scenario_footer}>
-        <button aria-label={t('scenario.add')}>+</button>
-      </div>
-    </div>
+      </Box>
+      <Box
+        sx={{
+          borderLeft: `1px solid`,
+          borderColor: 'divider',
+          flexGrow: 0,
+          flexShrink: 0,
+          flexBasis: '208px',
+          minHeight: '20vh',
+          paddingLeft: theme.spacing(3),
+          display: 'flex',
+        }}
+      >
+        <Button
+          variant='outlined'
+          color='success'
+          sx={{
+            flexGrow: 0,
+            flexShrink: 0,
+            flexBasis: '160px',
+            minHeight: '220px',
+            margin: theme.spacing(3),
+            fontWeight: 'bolder',
+            fontSize: '3rem',
+          }}
+          aria-label={t('scenario.add')}
+        >
+          +
+        </Button>
+      </Box>
+    </Box>
   );
 }

@@ -2,26 +2,11 @@ import React, {useEffect} from 'react';
 import * as am4core from '@amcharts/amcharts4/core';
 import * as am4charts from '@amcharts/amcharts4/charts';
 import {useAppSelector} from '../store/hooks';
-import {createStyles, makeStyles} from '@mui/styles';
 import {Box} from '@mui/material';
+import {useTheme} from '@mui/material/styles';
 
 /* This component displays the evolution of the pandemic for a specific compartment (hospitalized, dead, infected, etc.) regarding the different scenarios
  */
-
-const useStyles = makeStyles(() =>
-  createStyles({
-    chart: {
-      height: '100%',
-      width: '100%',
-      margin: 0,
-      padding: 0,
-      backgroundColor: 'white',
-      backgroundImage: 'radial-gradient(#E2E4E6 10%, transparent 11%)',
-      backgroundSize: '10px 10px',
-      cursor: 'crosshair',
-    },
-  })
-);
 
 // dummy data
 const drawDeviations = true;
@@ -138,7 +123,7 @@ const data = [
  * @returns {JSX.Element} JSX Element to render the scenario chart container and the scenario graph within.
  */
 export default function SimulationChart(): JSX.Element {
-  const classes = useStyles();
+  const theme = useTheme();
   const scenarioList = useAppSelector((state) => state.scenarioList);
 
   useEffect(() => {
@@ -188,7 +173,19 @@ export default function SimulationChart(): JSX.Element {
   }, []);
 
   return (
-    <Box id='chartdiv' className={classes.chart}>
+    <Box
+      id='chartdiv'
+      sx={{
+        height: '100%',
+        width: '100%',
+        margin: 0,
+        padding: 0,
+        backgroundColor: theme.palette.background.paper,
+        backgroundImage: 'radial-gradient(#E2E4E6 10%, transparent 11%)',
+        backgroundSize: '10px 10px',
+        cursor: 'crosshair',
+      }}
+    >
       {' '}
     </Box>
   );
