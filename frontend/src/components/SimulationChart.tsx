@@ -96,7 +96,7 @@ export default function SimulationChart(): JSX.Element {
     chart.cursor = new am4charts.XYCursor();
     chart.cursor.xAxis = dateAxis;
 
-    Object.entries(scenarioList).map(([scenarioId, scenario]) => {
+    Object.entries(scenarioList.scenarios).map(([scenarioId, scenario]) => {
       const series = chart.series.push(new am4charts.LineSeries());
       series.dataFields.valueY = scenarioId;
       series.dataFields.dateX = 'date';
