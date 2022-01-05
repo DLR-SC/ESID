@@ -10,13 +10,10 @@ interface ScenarioCardProps {
   /** The scenario this card is displaying. */
   scenario: {
     /** The identifier for the scenario. */
-    id: string;
+    id: number;
 
     /** The label for the scenario displayed to the user. */
     label: string;
-
-    /** The Hex-color code for the scenario. */
-    color: string;
   };
 
   /** The key for this scenario (index from the map function for the scenario list). */
@@ -65,9 +62,9 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
         height: 'auto',
         margin: theme.spacing(3),
         padding: theme.spacing(3),
-        border: `2px solid ${props.scenario.color}`,
+        border: `2px solid red`, // TODO
         background: theme.palette.background.paper,
-        color: props.scenario.color,
+        color: 'red', // TODO
         boxShadow: props.active ? '0px 0px 12px 3px' : 'none',
       }}
       onClick={() => props.onClick()}

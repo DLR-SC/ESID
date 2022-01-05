@@ -1,5 +1,11 @@
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
-import {SimulationDataByDate, SimulationDataByNode, SimulationModels, Simulations} from '../../types/scenario';
+import {
+  SimulationDataByDate,
+  SimulationDataByNode,
+  SimulationModel,
+  SimulationModels,
+  Simulations,
+} from '../../types/scenario';
 import {dateToISOString} from '../../util/util';
 
 export const scenarioApi = createApi({
@@ -11,16 +17,19 @@ export const scenarioApi = createApi({
         return 'simulationmodels/';
       },
     }),
-    getSimulationModel: builder.query<SimulationModels, number>({
+
+    getSimulationModel: builder.query<SimulationModel, number>({
       query: (id: number) => {
-        return `simulationmodels/${id}`;
+        return `simulationmodels/${id}/`;
       },
     }),
+
     getSimulations: builder.query<Simulations, unknown>({
       query: () => {
         return `simulations/`;
       },
     }),
+
     getSimulationDataByDate: builder.query<SimulationDataByDate, SimulationDataByDateParameters>({
       query: (arg: SimulationDataByDateParameters) => {
         const day = dateToISOString(arg.day);
@@ -30,6 +39,7 @@ export const scenarioApi = createApi({
         return `simulation/${arg.id}/${day}/${group}/${compartments}`;
       },
     }),
+
     getSimulationDataByNode: builder.query<SimulationDataByNode, SimulationDataByNodeParameters>({
       query: (arg: SimulationDataByNodeParameters) => {
         const group = arg.group || 'total';

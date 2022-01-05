@@ -5,79 +5,16 @@ import {useTranslation} from 'react-i18next';
 import {selectCompartment, selectRate, selectScenario, selectValue} from 'store/DataSelectionSlice';
 import ScenarioCard from './ScenarioCard';
 import {Box, Button, List, ListItemButton, ListItemText, Typography} from '@mui/material';
+import {
+  useGetSimulationModelQuery,
+  useGetSimulationModelsQuery,
+  useGetSimulationsQuery,
+} from '../store/services/scenarioApi';
+import {useEffect} from 'react';
+import {setScenarios} from 'store/ScenarioSlice';
 
 /* This component displays the pandemic spread depending on different scenarios
  */
-
-/* === Begin Sample Data === */
-/**
- * Scenario Property type definition.
- * @typedef {object} PropertyUpdate
- * @property {string} compartment               - The compartment of this property.
- * @property {number} latest                    - The latest/real value for this compartment.
- * @property {object} scenarios                 - The object containing the IDs of the scenarios and their values for this property.
- * @property {string} scenarios.scenario        - The key for the scenarios object (a scenario ID {@link Scenario}).
- * @property {number} scenarios.scenario.value  - The value of the scenario for this compartment.
- * @property {number} scenarios.scenario.rate   - The rate of the scenario for this compartment.
- */
-interface PropertyUpdate {
-  compartment: string;
-  latest: number;
-  scenarios: {[scenario: string]: {value: number; rate: number}};
-}
-
-/**
- * function packing simulation information into one object (for each compartment)
- * @property {string} compartment - The compartment name.
- * @property {number} latest      - The latest/real value for the compartment.
- * @property {number} basic       - The value for the scenario with id = 'basic'.
- * @property {number} basicRate   - The rate for the scenario with id = 'basic'.
- * @property {number} medium      - The value for the scenario with id = 'medium'.
- * @property {number} mediumRate  - The rate for the scenario with id = 'medium'.
- * @property {number} big         - The value for the scenario with id = 'big'.
- * @property {number} bigRate     - The rate for the scenario with id = 'big'.
- * @property {number} maximum     - The value for the scenario with id = 'maximum'.
- * @property {number} maximumRate - The rate for the scenario with id = 'maximum'.
- * @returns {PropertyUpdate} The packed Object for the compartment.
- */
-function packData(
-  compartment: string,
-  latest: number,
-  basic: number,
-  basicRate: number,
-  medium: number,
-  mediumRate: number,
-  big: number,
-  bigRate: number,
-  maximum: number,
-  maximumRate: number
-): PropertyUpdate {
-  return {
-    compartment,
-    latest,
-    scenarios: {
-      basic: {value: basic, rate: basicRate},
-      medium: {value: medium, rate: mediumRate},
-      big: {value: big, rate: bigRate},
-      maximum: {value: maximum, rate: maximumRate},
-    },
-  };
-}
-
-// list of properties and value/rate pairs for each scenario
-// compartment/name, latest, basic, basicRate, medium, mediumRate, big, bigRate, maximum, maximumRate
-const properties = [
-  packData('infected', 100, 200, 15, 300, -50, 400, 30, 500, -50),
-  packData('hospitalized', 145, 200, 15, 300, -50, 400, 30, 500, -50),
-  packData('dead', 160, 200, 15, 300, -50, 400, 30, 500, -50),
-  packData('other', 170, 200, 15, 300, -50, 400, 30, 500, -50),
-  packData('property 5', 160, 200, 15, 300, -50, 400, 30, 500, -50),
-  packData('property 6', 170, 200, 15, 300, -50, 400, 30, 500, -50),
-  packData('property 7', 160, 200, 15, 300, -50, 400, 30, 500, -50),
-  packData('property 8', 170, 200, 15, 300, -50, 400, 30, 500, -50),
-];
-
-/* === End Sample Data === */
 
 /**
  * React Component to render the Scenario Cards Section
@@ -93,7 +30,39 @@ export default function Scenario(): JSX.Element {
   const [activeScenario, setActiveScenario] = useState(0);
   const [expandProperties, setExpandProperties] = useState(false);
 
+  const [simulationModelId, setSimulationModelId] = useState(0);
+
+  const [compartments, setCompartments] = useState<Array<string>>([]);
+
   const scenarioList = useAppSelector((state) => state.scenarioList);
+
+  const {data: scenarioListData} = useGetSimulationsQuery(null);
+  const {data: simulationModelsData} = useGetSimulationModelsQuery(null);
+  const {data: simulationModelData} = useGetSimulationModelQuery(simulationModelId);
+
+  useEffect(() => {
+    if (simulationModelsData && simulationModelsData.results.length > 0) {
+      const id = Number.parseInt(simulationModelsData.results[0].url.slice(-2, -1), 10);
+      setSimulationModelId(id);
+    } else {
+      console.warn('Could not fetch simulation model data!');
+    }
+  }, [simulationModelsData]);
+
+  useEffect(() => {
+    if (simulationModelData) {
+      setCompartments(simulationModelData.compartments);
+    } else {
+      console.warn('Could not fetch simulation model data!');
+    }
+  }, [simulationModelData]);
+
+  useEffect(() => {
+    if (scenarioListData) {
+      const scenarios = scenarioListData.results.map((scenario) => ({id: scenario.id, label: scenario.description}));
+      dispatch(setScenarios(scenarios));
+    }
+  }, [scenarioListData, dispatch]);
 
   return (
     <Box
@@ -128,35 +97,35 @@ export default function Scenario(): JSX.Element {
           {t('today')}
         </Typography>
         <List dense={true} disablePadding={true}>
-          {properties.map((compartment, i) => (
+          {compartments.map((compartment, i) => (
             // map all compartments to display compartment list
             <ListItemButton
-              key={compartment.compartment}
+              key={compartment}
               sx={{
                 display: expandProperties || i < 4 ? 'flex' : 'none',
                 padding: theme.spacing(1),
                 margin: theme.spacing(0),
               }}
-              selected={selectedProperty === compartment.compartment}
+              selected={selectedProperty === compartment}
               onClick={() => {
                 // set selected property
-                setSelectedProperty(compartment.compartment);
+                setSelectedProperty(compartment);
                 // dispatch new compartment name
-                dispatch(selectCompartment(compartment.compartment));
+                dispatch(selectCompartment(compartment));
                 // dispatch value & rate (active Scenario is stored as number but compartment.scenarios needs id => list keys & use index)
-                dispatch(selectValue(compartment.scenarios[Object.keys(scenarioList)[activeScenario]].value));
-                dispatch(selectRate(compartment.scenarios[Object.keys(scenarioList)[activeScenario]].rate));
+                dispatch(selectValue(0)); // TODO
+                dispatch(selectRate(0)); // TODO
               }}
             >
               <ListItemText
-                primary={compartment.compartment}
+                primary={compartment}
                 sx={{
                   flexGrow: 1,
                   flexBasis: 100,
                 }}
               />
               <ListItemText
-                primary={compartment.latest}
+                primary={0} // TODO
                 // disable child typography overriding this
                 disableTypography={true}
                 sx={{
@@ -178,8 +147,8 @@ export default function Scenario(): JSX.Element {
             setExpandProperties(!expandProperties);
             // unselect Property if hidden through show less button
             if (
-              properties.findIndex((o) => {
-                return o.compartment === selectedProperty;
+              compartments.findIndex((o) => {
+                return o === selectedProperty;
               }) > 4
             ) {
               setSelectedProperty('');
@@ -198,29 +167,29 @@ export default function Scenario(): JSX.Element {
           overflowX: 'auto',
         }}
       >
-        {Object.entries(scenarioList).map(([scn_id, scn_info], i) => (
+        {Object.entries(scenarioList.scenarios).map(([scenarioId, scenario], i) => (
           <ScenarioCard
             key={i}
-            scenario={scn_info}
+            scenario={scenario}
             active={activeScenario === i}
-            data={properties.map((p) => ({
-              compartment: p.compartment,
-              value: p.scenarios[scn_id].value,
-              rate: p.scenarios[scn_id].rate,
+            data={compartments.map((p) => ({
+              compartment: p,
+              value: 0, // TODO
+              rate: 0, // TODO
             }))}
             selectedProperty={selectedProperty}
             expandProperties={expandProperties}
             onClick={() => {
               // set active scenario to this one and send dispatches
               setActiveScenario(i);
-              dispatch(selectScenario(scn_id));
+              dispatch(selectScenario(scenarioId));
               // if a property has been selected filter properties for selected and dispatch selectValue & selectRate for that property
               if (!(selectedProperty === '')) {
                 dispatch(
-                  selectValue(properties.filter((x) => x.compartment === selectedProperty)[0].scenarios[scn_id].value)
+                  selectValue(0), // TODO
                 );
                 dispatch(
-                  selectRate(properties.filter((x) => x.compartment === selectedProperty)[0].scenarios[scn_id].rate)
+                  selectRate(0), // TODO
                 );
               }
             }}

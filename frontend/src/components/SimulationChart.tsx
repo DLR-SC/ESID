@@ -96,28 +96,28 @@ export default function SimulationChart(): JSX.Element {
     chart.cursor = new am4charts.XYCursor();
     chart.cursor.xAxis = dateAxis;
 
-    Object.entries(scenarioList).map(([scn_id, scn_info]) => {
+    Object.entries(scenarioList).map(([scenarioId, scenario]) => {
       const series = chart.series.push(new am4charts.LineSeries());
-      series.dataFields.valueY = scn_id;
+      series.dataFields.valueY = scenarioId;
       series.dataFields.dateX = 'date';
       series.tensionX = 0.8;
       series.strokeWidth = 1;
-      series.fill = am4core.color(scn_info.color);
-      series.stroke = am4core.color(scn_info.color);
-      series.tooltipText = `${scn_info.label}: [bold]{${scn_id}}[/]`;
+      series.fill = am4core.color('red'); // TODO
+      series.stroke = am4core.color('red'); // TODO
+      series.tooltipText = `${scenario.label}: [bold]{${scenarioId}}[/]`;
 
       if (drawDeviations) {
         const seriesSTD = chart.series.push(new am4charts.LineSeries());
-        seriesSTD.dataFields.valueY = `${scn_id}STDup`;
-        seriesSTD.dataFields.openValueY = `${scn_id}STDdown`;
+        seriesSTD.dataFields.valueY = `${scenarioId}STDup`;
+        seriesSTD.dataFields.openValueY = `${scenarioId}STDdown`;
         seriesSTD.dataFields.dateX = 'date';
         seriesSTD.tensionX = 0.8;
         seriesSTD.strokeWidth = 0;
-        seriesSTD.fill = am4core.color(scn_info.color);
+        seriesSTD.fill = am4core.color('red'); // TODO
         seriesSTD.fillOpacity = 0.3;
-        seriesSTD.stroke = am4core.color(scn_info.color);
+        seriesSTD.stroke = am4core.color('red'); // TODO
         // override tooltip
-        series.tooltipText = `${scn_info.label}: [bold]{${scn_id}STDdown} ~ {${scn_id}STDup}[/]`;
+        series.tooltipText = `${scenario.label}: [bold]{${scenarioId}STDdown} ~ {${scenarioId}STDup}[/]`;
       }
     });
 
