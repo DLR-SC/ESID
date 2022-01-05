@@ -3,6 +3,7 @@ services:
   db:
     container_name: esid_db
     image: postgres:13.3
+    restart: always
     ports:
       - 5432:5432
     environment:
