@@ -21,7 +21,7 @@ MANDATORY = [
 ]
 
 
-def create_data_entries(start_day, n_days, compartments, dataset, group):
+def create_data_entries(start_day, n_days, compartments, dataset, group, percentile):
     entries = []
 
     # skip first data entry, because it only contains the inital rki data
@@ -35,13 +35,13 @@ def create_data_entries(start_day, n_days, compartments, dataset, group):
 
             values[compartment] = dataset[day, index]
 
-        entry = models.DataEntry(day=date, group=group, data=values)
+        entry = models.DataEntry(day=date, group=group, data=values, percentile=percentile)
         entries.append(entry)
 
     return entries
 
 
-def process_node(self, meta, h5node, compartments, order, start_day, scenario_node):
+def process_node(self, meta, h5node, compartments, order, start_day, percentile, simulation_node):
     data_entries = []
 
     for dataset_name in meta['datasets']:
@@ -64,16 +64,77 @@ def process_node(self, meta, h5node, compartments, order, start_day, scenario_no
             self.stdout.write(self.style.ERROR('Compartment mapping must be of the same length as columns in dataset {}!={}'.format(len(order), n_compartments)))
             continue
 
-        entries = create_data_entries(start_day, n_days, order, dataset, group)
+        entries = create_data_entries(start_day, n_days, order, dataset, group, percentile)
         data_entries.extend(entries)
 
     models.DataEntry.objects.bulk_create(data_entries)
-                        
-    simulation_node = models.SimulationNode(scenario_node=scenario_node)
+    
+    simulation_node.data.set(list(simulation_node.data.all()) + data_entries)
     simulation_node.save()
-    simulation_node.data.set(data_entries)
 
-    return simulation_node
+
+def process_percentile(self, path, percentile, meta, simulation, scenario, compartments, order, start_day):
+    self.stdout.write("Processing percentile {}".format(percentile))
+
+    files = os.listdir(path)
+
+    if "Results.h5" not in files:
+        raise CommandError('No Results.h5 found in data folder!')
+
+    if "Results_sum.h5" not in files:
+        raise CommandError('No Results_sum.h5 found in data folder!')
+
+    scenario_nodes = scenario.nodes.all()
+    scenario_node_names = list(map(lambda n: n.name, scenario_nodes))
+
+    self.stdout.write("Processing GraphNode files")
+    node_files = list(filter(lambda f: 'GraphNode' in f, files))
+
+    with h5py.File(os.path.join(path, 'Results.h5'), 'r') as h5:
+        with tqdm(node_files, total=len(node_files)) as progress:
+            for node_file in progress:
+                progress.set_description('Procressing node file {}'.format(node_file))
+                with open(os.path.join(path, node_file)) as handle:
+                    node = json.load(handle)
+                    nodeId = str(node['NodeId'])
+                    padded = nodeId.zfill(5)
+
+                    if not padded in scenario_node_names:
+                        self.stdout.write(self.style.ERROR('Node {} not part of scenario {}'.format(padded, scenario.name)))
+
+                    if not h5[nodeId]:
+                        self.stdout.write(self.style.ERROR('No data found for node {}'.format(padded, scenario.name)))
+
+                    h5node = h5[nodeId]
+
+                    scenario_node = scenario_nodes.get(node__name=padded)
+
+                    try:
+                        simulation_node = simulation.nodes.get(scenario_node=scenario_node)
+                    except models.SimulationNode.DoesNotExist:
+                        simulation_node = models.SimulationNode(scenario_node=scenario_node)
+                        simulation_node.save()
+                        simulation.nodes.add(simulation_node)
+
+                    process_node(self, meta, h5node, compartments, order, start_day, percentile, simulation_node)
+
+
+    self.stdout.write("Importing Results_sum.h5 as node 00000")
+    with h5py.File(os.path.join(path, 'Results_sum.h5'), 'r') as h5:            
+        h5node = h5['0']
+
+        scenario_node = scenario_nodes.get(node__name='00000')
+
+        try:
+            simulation_node = simulation.nodes.get(scenario_node=scenario_node)
+        except models.SimulationNode.DoesNotExist:
+            simulation_node = models.SimulationNode(scenario_node=scenario_node)
+            simulation_node.save()
+            simulation.nodes.add(simulation_node)
+        
+        process_node(self, meta, h5node, compartments, order, start_day, percentile, simulation_node)
+        
+    simulation.save()      
 
 
 class Command(BaseCommand):
@@ -111,11 +172,14 @@ class Command(BaseCommand):
         if "metadata.json" not in files:
             raise CommandError('No metadata.json found in data folder!')
 
-        if "Results.h5" not in files:
-            raise CommandError('No Results.h5 found in data folder!')
+        print(files)
 
-        if "Results_sum.h5" not in files:
-            raise CommandError('No Results_sum.h5 found in data folder!')
+        percentiles = list(map(lambda p: int(p) if p.isnumeric() else int(p[1:]), filter(lambda f: os.path.isdir(os.path.join(path, f)), files)))
+
+        print(percentiles)
+        if len(percentiles) == 0:
+            raise CommandError('No percentiles found to import!')
+
 
         with open(os.path.join(path, 'metadata.json')) as metafile:
             meta = json.load(metafile)
@@ -140,60 +204,40 @@ class Command(BaseCommand):
             except ValueError:
                 raise CommandError(self.style.ERROR('Compartment {} not found in mapping'.format(compartment.name)))
 
+        simulation = None
+
         try:
             simulation = models.Simulation.objects.get(name=meta['name'])
-            simulation.delete()
+            
+            self.stdout.write('Simulation {} already exists! \n What do you want to do?'.format(meta['name']))
+            action = input("(1) replace simulation, (2) append simulation data \n")
+
+            if action == '1':
+                simulation.delete()
+                simulation = None
+            elif action == '2':
+                pass
+            else:
+                raise CommandError(self.style.ERROR('Unrecognized input {}!'.format(action)))
+
         except models.Simulation.DoesNotExist:
             pass
 
         start_day = datetime.strptime(meta['startDay'], "%Y-%m-%d")
-        simulation = models.Simulation( \
-            name=meta['name'], \
-            description=meta['description'], \
-            scenario=scenario, \
-            start_day=start_day, 
-            number_of_days=meta['numberOfDays'] )
 
-        simulation.save()
+        if simulation is None:
+            simulation = models.Simulation( \
+                name=meta['name'], \
+                description=meta['description'], \
+                scenario=scenario, \
+                start_day=start_day, 
+                number_of_days=meta['numberOfDays'] )
 
-
-        scenario_nodes = scenario.nodes.all()
-        scenario_node_names = list(map(lambda n: n.name, scenario_nodes))
-
-        self.stdout.write("Processing all GraphNode files")
-        node_files = list(filter(lambda f: 'GraphNode' in f, files))
-        nodes = []
-        with h5py.File(os.path.join(path, 'Results.h5'), 'r') as h5:
-            with tqdm(node_files, total=len(node_files)) as progress:
-                for node_file in progress:
-                    progress.set_description('Procressing node file {}'.format(node_file))
-                    with open(os.path.join(path, node_file)) as handle:
-                        node = json.load(handle)
-                        nodeId = str(node['NodeId'])
-                        padded = nodeId.zfill(5)
-
-                        if not padded in scenario_node_names:
-                            self.stdout.write(self.style.ERROR('Node {} not part of scenario {}'.format(padded, scenario.name)))
-
-                        if not h5[nodeId]:
-                            self.stdout.write(self.style.ERROR('No data found for node {}'.format(padded, scenario.name)))
-
-                        h5node = h5[nodeId]
-
-                        
-                        simulation_node = process_node(self, meta, h5node, compartments, order, start_day, scenario_nodes.get(node__name=padded))
-                        nodes.append(simulation_node)
+            simulation.save()
 
 
-        self.stdout.write("Importing Results_sum.h5 as node 00000")
-        with h5py.File(os.path.join(path, 'Results_sum.h5'), 'r') as h5:            
-            h5node = h5['0']
-            simulation_node = process_node(self, meta, h5node, compartments, order, start_day, scenario_nodes.get(node__name='00000'))
-            nodes.append(simulation_node)
-
-
-        simulation.nodes.set(nodes)
-        simulation.save()      
+        for percentile in percentiles:
+            process_percentile(self, os.path.join(path, str(percentile)), percentile, meta, simulation, scenario, compartments, order, start_day)
 
         
         if is_zip:

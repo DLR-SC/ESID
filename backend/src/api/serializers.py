@@ -121,6 +121,8 @@ class DataEntrySerializer(serializers.ModelSerializer):
         if self.context.get('group', None) is None:
             serialized['group'] = instance.group.name
 
+        # serialized['percentile'] = instance.percentile
+
         return serialized
 
 
@@ -148,9 +150,16 @@ class SimulationSerializerMeta(serializers.HyperlinkedModelSerializer):
     JSON serializer simulation meta data
     """
 
+    percentiles = serializers.SerializerMethodField('get_percentiles')
+
     class Meta:
         model = Simulation
-        fields = ['id', 'name', 'description', 'start_day', 'number_of_days', 'scenario']
+        fields = ['id', 'name', 'description', 'start_day', 'number_of_days', 'scenario', 'percentiles']
+
+
+    def get_percentiles(self, simulation):
+        entries = list(simulation.nodes.first().data.all().distinct("percentile"))
+        return [entry.percentile for entry in entries]
 
 class SimulationNodeSerializer(serializers.ModelSerializer):
     """
@@ -166,6 +175,10 @@ class SimulationNodeSerializer(serializers.ModelSerializer):
     def get_values(self, node):
         queryset = node.data.all()
         many = True
+
+        percentile = self.context.get('percentile', 50)
+
+        queryset = queryset.filter(percentile=percentile)
 
         if 'group' in self.context:
             queryset = queryset.filter(group__name=self.context['group'])

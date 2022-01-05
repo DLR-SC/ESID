@@ -12,6 +12,7 @@ class DataEntryFilterMixin:
         context["nodes"] = self.request.query_params.get('nodes', None)
 
         context["compartments"] = self.request.query_params.get('compartments', None)
+        context["percentile"] = self.request.query_params.get('percentile', 50)
 
         if context["day"] is not None:
             context["day"] = datetime.strptime(context["day"], "%Y-%m-%d")
@@ -28,15 +29,17 @@ class DataEntryFilterMixin:
         if context["compartments"] is not None:
             context["compartments"] = context["compartments"].split(',')
 
-
-
         return context
+
 
     def get_serializer_context(self):
         return {**super().get_serializer_context(), **self.get_filter_context()}
 
+
     def get_filtered_queryset(self, queryset):
         context = self.get_filter_context()
+
+        queryset = queryset.filter(percentile=context.get('percentile', 50))
 
         group = context.get('group', None)
         if group is not None:

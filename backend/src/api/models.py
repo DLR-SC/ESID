@@ -120,6 +120,8 @@ class Compartment(models.Model):
 class DataEntry(models.Model):
     day = models.DateField()
     data = models.JSONField()
+    percentile = models.IntegerField(default=50)
+
     group = models.ForeignKey(Group, on_delete=models.RESTRICT)
 
     class Meta:
