@@ -160,7 +160,7 @@ export default function Scenario(): JSX.Element {
                 // disable child typography overriding this
                 disableTypography={true}
                 sx={{
-                  typography: theme.typography.listElement,
+                  typography: 'listElement',
                   flexGrow: 1,
                 }}
               />

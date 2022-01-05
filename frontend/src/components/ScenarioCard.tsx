@@ -99,7 +99,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
               // disable child typography overriding this
               disableTypography={true}
               sx={{
-                typography: theme.typography.listElement,
+                typography: 'listElement',
                 paddingLeft: theme.spacing(2),
               }}
             />
@@ -108,7 +108,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
               // disable child typography overriding this
               disableTypography={true}
               sx={{
-                typography: theme.typography.listElement,
+                typography: 'listElement',
                 textAlign: 'right',
                 paddingRight: theme.spacing(2),
               }}
