@@ -27,18 +27,19 @@ services:
     command: 'sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"'
     volumes:
       - ./:/app
+      - ${STORAGE_PATH}:/localdata
     depends_on:
       - db
 
   pgadmin:
     container_name: pgadmin4
-    image: dpage/pgadmin4
+    image: dpage/pgadmin4:latest
     restart: always
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
     ports:
-      - "5050:80"
+      - '5050:80'
     volumes:
       - pgadmin-data:/var/lib/pgadmin
     depends_on:
