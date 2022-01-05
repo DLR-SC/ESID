@@ -1,28 +1,25 @@
-import {Typography} from '@mui/material';
-import {makeStyles} from '@mui/styles';
 import React from 'react';
-
+import {useTheme} from '@mui/material/styles';
+import {Box, Typography} from '@mui/material';
 import {useTranslation} from 'react-i18next';
-
-const useStyles = makeStyles({
-  dialogStyle: {
-    padding: '20px',
-    background: '#f8f8f8',
-  },
-});
 
 /**
  * This component displays the accessibility legal text.
  */
 export default function AccessibilityDialog(): JSX.Element {
   const {t} = useTranslation('legal');
-  const classes = useStyles();
+  const theme = useTheme();
 
   return (
-    <div className={classes.dialogStyle}>
-      <Typography variant='h3'>{t('accessibility.header')}</Typography>
+    <Box
+      sx={{
+        padding: theme.spacing(4),
+        background: theme.palette.background.paper,
+      }}
+    >
+      <Typography variant='h1'>{t('accessibility.header')}</Typography>
       {/* While it says that it is dangerous, it is fine here. Only static content is inserted. */}
       <div dangerouslySetInnerHTML={{__html: t('accessibility.content')}} />
-    </div>
+    </Box>
   );
 }

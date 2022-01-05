@@ -1,10 +1,9 @@
 import React, {useEffect, useState} from 'react';
-
+import {useTheme} from '@mui/material/styles';
 import {useTranslation} from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
 import LazyLoad from 'react-lazyload';
-import {makeStyles} from '@mui/styles';
-import {CircularProgress, Grid, Typography} from '@mui/material';
+import {Box, CircularProgress, Grid, Typography} from '@mui/material';
 
 interface DependencyData {
   name: string;
@@ -15,13 +14,6 @@ interface DependencyData {
   licenseText: string | null;
 }
 
-const useStyles = makeStyles({
-  dialogStyle: {
-    padding: '20px',
-    background: '#f8f8f8',
-  },
-});
-
 let ATTRIBUTIONS_CACHE: Array<string> | null = null;
 
 /**
@@ -29,8 +21,8 @@ let ATTRIBUTIONS_CACHE: Array<string> | null = null;
  */
 export default function AttributionDialog(): JSX.Element {
   const {t} = useTranslation('legal');
+  const theme = useTheme();
   const [attributions, setAttributions] = useState(ATTRIBUTIONS_CACHE);
-  const classes = useStyles();
 
   useEffect(() => {
     // The data should be fetched only once, since it is really slow.
@@ -84,7 +76,12 @@ export default function AttributionDialog(): JSX.Element {
   }
 
   return (
-    <div className={classes.dialogStyle}>
+    <Box
+      sx={{
+        padding: theme.spacing(4),
+        background: theme.palette.background.paper,
+      }}
+    >
       <Typography variant='h3'>{t('attribution.header')}</Typography>
       <br />
       <Typography>
@@ -92,6 +89,6 @@ export default function AttributionDialog(): JSX.Element {
       </Typography>
       <br />
       {attributions === null ? <LoadingCircle /> : <AttributionList attrib={attributions} />}
-    </div>
+    </Box>
   );
 }
