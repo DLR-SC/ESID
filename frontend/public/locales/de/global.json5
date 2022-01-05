@@ -26,6 +26,7 @@
   today: 'Heute',
   more: 'Mehr',
   less: 'Weniger',
+  search: 'Suche',
   germany: 'Deutschland',
   WIP: 'Diese Funktionalität befindet sich noch in der Entwicklung.',
 }

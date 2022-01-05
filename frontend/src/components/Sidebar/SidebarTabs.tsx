@@ -10,8 +10,13 @@ export default function SidebarTabs(): JSX.Element {
 
   return (
     <Box
-      sx={{display: 'flex', flexDirection: 'column', alignItems: 'stretch'}}
-      style={{width: '422px', height: '100%'}}
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'stretch',
+        width: '422px',
+        height: '100%',
+      }}
     >
       <Tabs value={value} onChange={handleChange} aria-label='todo' variant='fullWidth'>
         <Tab label={t('history.Tabtitle')} {...a11yProps(0)} />

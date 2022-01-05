@@ -1,38 +1,9 @@
 import React from 'react';
-import {createStyles, makeStyles} from '@mui/styles';
+import {useTheme} from '@mui/material/styles';
+import {Box, List, ListItem, ListItemText, Typography} from '@mui/material';
 
 /* This component displays the individual scenario cards of the Scenario component
  */
-
-const useStyles = makeStyles(() =>
-  createStyles({
-    scenario_card: {
-      flexGrow: 0,
-      flexShrink: 0,
-      flexBasis: '160px',
-      boxSizing: 'border-box',
-      margin: '12px',
-      padding: '12px',
-
-      '& header': {
-        fontWeight: 'bold',
-        lineHeight: '1.5rem',
-        minHeight: '3rem',
-      },
-
-      '& ul': {
-        display: 'flex',
-      },
-
-      '& li': {
-        listStyleType: 'none',
-        flexGrow: 1,
-        flexShrink: 1,
-        flexBasis: '100%',
-      },
-    },
-  })
-);
 
 /** Type definition for the ScenarioCard props */
 interface ScenarioCardProps {
@@ -82,32 +53,69 @@ interface ScenarioCardProps {
  * @returns {JSX.Element} JSX Element to render the scenario card.
  */
 export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
-  const classes = useStyles();
+  const theme = useTheme();
+
   return (
-    <div
-      className={classes.scenario_card}
-      style={{
+    <Box
+      sx={{
+        flexGrow: 0,
+        flexShrink: 0,
+        flexBasis: '160px',
+        boxSizing: 'border-box',
+        height: 'auto',
+        margin: theme.spacing(3),
+        padding: theme.spacing(3),
         border: `2px solid ${props.scenario.color}`,
+        background: theme.palette.background.paper,
         color: props.scenario.color,
         boxShadow: props.active ? '0px 0px 12px 3px' : 'none',
       }}
       onClick={() => props.onClick()}
     >
-      <header>{props.scenario.label}</header>
-      {props.data.map((compartment, i) => (
-        // hide compartment if expandProperties false and index > 4
-        // highlight compartment if selectedProperty === compartment
-        <ul
-          key={compartment.compartment}
-          style={{
-            display: props.expandProperties || i < 4 ? 'flex' : 'none',
-            color: props.selectedProperty === compartment.compartment ? 'inherit' : 'black',
-          }}
-        >
-          <li>{compartment.value}</li>
-          <li>{compartment.rate}%</li>
-        </ul>
-      ))}
-    </div>
+      <Typography
+        variant='h1'
+        sx={{
+          minHeight: '3rem',
+          marginBottom: theme.spacing(3),
+        }}
+      >
+        {props.scenario.label}
+      </Typography>
+      <List dense={true} disablePadding={true}>
+        {props.data.map((compartment, i) => (
+          // hide compartment if expandProperties false and index > 4
+          // highlight compartment if selectedProperty === compartment
+          <ListItem
+            key={compartment.compartment}
+            sx={{
+              display: props.expandProperties || i < 4 ? 'flex' : 'none',
+              color: props.selectedProperty === compartment.compartment ? 'inherit' : 'black',
+              padding: theme.spacing(1),
+              margin: theme.spacing(0),
+            }}
+          >
+            <ListItemText
+              primary={compartment.value}
+              // disable child typography overriding this
+              disableTypography={true}
+              sx={{
+                typography: theme.typography.listElement,
+                paddingLeft: theme.spacing(2),
+              }}
+            />
+            <ListItemText
+              primary={`${compartment.rate} %`}
+              // disable child typography overriding this
+              disableTypography={true}
+              sx={{
+                typography: theme.typography.listElement,
+                textAlign: 'right',
+                paddingRight: theme.spacing(2),
+              }}
+            />
+          </ListItem>
+        ))}
+      </List>
+    </Box>
   );
 }

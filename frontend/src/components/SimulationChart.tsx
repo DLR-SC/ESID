@@ -2,7 +2,7 @@ import React, {useEffect, useRef} from 'react';
 import * as am4core from '@amcharts/amcharts4/core';
 import * as am4charts from '@amcharts/amcharts4/charts';
 import {useAppDispatch, useAppSelector} from '../store/hooks';
-import {createStyles, makeStyles} from '@mui/styles';
+import {useTheme} from '@mui/material/styles';
 import {Box} from '@mui/material';
 import {selectDate} from '../store/DataSelectionSlice';
 import {useGetAllDatesByDistrictQuery} from '../store/services/rkiApi';
@@ -10,21 +10,6 @@ import {RKIDistrictEntry} from '../types/rki';
 
 /* This component displays the evolution of the pandemic for a specific compartment (hospitalized, dead, infected, etc.) regarding the different scenarios
  */
-
-const useStyles = makeStyles(() =>
-  createStyles({
-    chart: {
-      height: '100%',
-      width: '100%',
-      margin: 0,
-      padding: 0,
-      backgroundColor: 'white',
-      backgroundImage: 'radial-gradient(#E2E4E6 10%, transparent 11%)',
-      backgroundSize: '10px 10px',
-      cursor: 'crosshair',
-    },
-  }),
-);
 
 // dummy data
 const drawDeviations = true;
@@ -84,11 +69,13 @@ for (let i = 0; i < 600; i++) {
  * @returns {JSX.Element} JSX Element to render the scenario chart container and the scenario graph within.
  */
 export default function SimulationChart(): JSX.Element {
-  const classes = useStyles();
+  const theme = useTheme();
   const scenarioList = useAppSelector((state) => state.scenarioList);
   const selectedDistrict = useAppSelector((state) => state.dataSelection.district.ags);
   const dispatch = useAppDispatch();
-  const {data} = useGetAllDatesByDistrictQuery(selectedDistrict[0] === '0' ? selectedDistrict.slice(1, 5) : selectedDistrict);
+  const {data} = useGetAllDatesByDistrictQuery(
+    selectedDistrict[0] === '0' ? selectedDistrict.slice(1, 5) : selectedDistrict
+  );
 
   const chartRef = useRef<am4charts.XYChart | null>(null);
   const rkiSeriesRef = useRef<am4charts.LineSeries | null>(null);
@@ -163,8 +150,8 @@ export default function SimulationChart(): JSX.Element {
       range.grid.strokeOpacity = 1;
 
       chart.events.on('hit', () => {
-        dispatch(selectDate(dateAxis.tooltipDate.getTime() + (24 * 60 * 60 * 1000)));
-        range.date = new Date(dateAxis.tooltipDate.getTime() + (12 * 60 * 60 * 1000));
+        dispatch(selectDate(dateAxis.tooltipDate.getTime() + 24 * 60 * 60 * 1000));
+        range.date = new Date(dateAxis.tooltipDate.getTime() + 12 * 60 * 60 * 1000);
       });
     }
   }, [dispatch]);
@@ -179,13 +166,23 @@ export default function SimulationChart(): JSX.Element {
         });
       });
       rkiSeriesRef.current?.invalidateData();
-
     }
   }, [data]);
 
-
   return (
-    <Box id='chartdiv' className={classes.chart}>
+    <Box
+      id='chartdiv'
+      sx={{
+        height: '100%',
+        width: '100%',
+        margin: 0,
+        padding: 0,
+        backgroundColor: theme.palette.background.paper,
+        backgroundImage: 'radial-gradient(#E2E4E6 10%, transparent 11%)',
+        backgroundSize: '10px 10px',
+        cursor: 'crosshair',
+      }}
+    >
       {' '}
     </Box>
   );

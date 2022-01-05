@@ -3,35 +3,41 @@ import Scenario from './Scenario';
 import IconBar from './IconBar';
 
 import SimulationChart from './SimulationChart';
-import {makeStyles} from '@mui/styles';
 import {Divider, Grid} from '@mui/material';
-
-const useStyles = makeStyles({
-  icon: {
-    marginLeft: 'auto',
-    marginRight: 'auto',
-  },
-  divider: {
-    borderBottom: '2px solid #F2F2F2',
-    backgroundColor: 'transparent',
-    margin: '20px 0 0 0',
-  },
-});
+import {useTheme} from '@mui/material/styles';
 
 export default function MainContent(): JSX.Element {
-  const classes = useStyles();
+  const theme = useTheme();
   return (
-    <Grid container direction='column'>
-      <Grid item className={classes.icon}>
+    <Grid
+      container
+      direction='column'
+      sx={{
+        background: theme.palette.background.default,
+      }}
+    >
+      <Grid
+        item
+        sx={{
+          marginLeft: 'auto',
+          marginRight: 'auto',
+        }}
+      >
         <IconBar />
       </Grid>
       <Grid item>
         <Scenario />
       </Grid>
       <Grid item>
-        <Divider className={classes.divider} light />
+        <Divider
+          sx={{
+            borderBottom: `1px solid ${theme.palette.divider}`,
+            backgroundColor: 'transparent',
+            margin: `${theme.spacing(4)} 0 0 0`,
+          }}
+        />
       </Grid>
-      <Grid item style={{flexGrow: 1}}>
+      <Grid item sx={{flexGrow: 1}}>
         <SimulationChart />
       </Grid>
     </Grid>
