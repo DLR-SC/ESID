@@ -1,0 +1,48 @@
+version: '3'
+services:
+  db:
+    container_name: esid_db
+    image: postgres:13.3
+    user: ${USER_ID}:${GROUP_ID}
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      PGDATA: /data/postgres
+    volumes:
+      - postgres-data:/data/postgres
+
+  web:
+    container_name: esid_web
+    image: esid_web:latest
+    user: ${USER_ID}:${GROUP_ID}
+    restart: always
+    ports:
+      - 8000:8000
+    env_file: .env
+    volumes:
+      - django-data:/localdata
+    depends_on:
+      - db
+
+  pgadmin:
+    container_name: pgadmin4
+    image: dpage/pgadmin4:latest
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+    ports:
+      - '5050:80'
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    depends_on:
+      - db
+
+volumes:
+  django-data:
+    external: True
+  postgres-data:
+    external: True
+  pgadmin-data:
+    external: True
