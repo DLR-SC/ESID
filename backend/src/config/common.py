@@ -25,7 +25,6 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
 
     # Third party apps
-    'django_extensions',  # for generation db diagrams
     'rest_framework',  # utilities for rest apis
     'rest_framework.authtoken',  # token authentication
     'django_filters',  # for filtering rest endpoints
