@@ -167,7 +167,7 @@ export default function Scenario(): JSX.Element {
           overflowX: 'auto',
         }}
       >
-        {Object.entries(scenarioList.scenarios).map(([scenarioId, scenario], i) => (
+        {Object.entries(scenarioList.scenarios).map(([, scenario], i) => (
           <ScenarioCard
             key={i}
             scenario={scenario}
@@ -182,7 +182,7 @@ export default function Scenario(): JSX.Element {
             onClick={() => {
               // set active scenario to this one and send dispatches
               setActiveScenario(i);
-              dispatch(selectScenario(scenarioId));
+              dispatch(selectScenario(scenario.id));
               // if a property has been selected filter properties for selected and dispatch selectValue & selectRate for that property
               if (!(selectedProperty === '')) {
                 dispatch(selectValue(0)); // TODO

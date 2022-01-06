@@ -1,3 +1,5 @@
+import {Dictionary} from 'util/util';
+
 export interface SimulationModels {
   count: number;
   previous: string | null;
@@ -32,12 +34,12 @@ export interface SimulationDataByDate {
   count: number;
   previous: string | null;
   next: string | null;
-  results: Array<{name: string; values: Array<{name: string; [key: string]: number | string}>}>;
+  results: Array<{name: string; values: Dictionary<number>}>;
 }
 
 export interface SimulationDataByNode {
   count: number;
   previous: string | null;
   next: string | null;
-  results: Array<{name: string; values: Array<{day: string; [key: string]: number | string}>}>;
+  results: Array<{values: {day: string; [key: string]: number | string}}>;
 }

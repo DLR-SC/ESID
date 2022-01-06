@@ -4,7 +4,7 @@ describe('DataSelectionSlice', () => {
   const initialState = {
     district: {ags: '00000', name: 'germany', type: ''},
     date: new Date(2021, 0).getTime(),
-    scenario: 'default',
+    scenario: 0,
     compartment: '',
     value: 0,
     rate: 0,
@@ -19,7 +19,7 @@ describe('DataSelectionSlice', () => {
     expect(reducer(initialState, selectDistrict(newDistrict))).toEqual({
       district: {ags: '12345', name: 'Test District', type: 'Test Type'},
       date: new Date(2021, 0).getTime(),
-      scenario: 'default',
+      scenario: 0,
       compartment: '',
       value: 0,
       rate: 0,
@@ -31,7 +31,7 @@ describe('DataSelectionSlice', () => {
     expect(reducer(initialState, selectDate(newDate))).toEqual({
       district: {ags: '00000', name: 'germany', type: ''},
       date: new Date(2020, 8, 21).getTime(),
-      scenario: 'default',
+      scenario: 0,
       compartment: '',
       value: 0,
       rate: 0,
@@ -40,7 +40,7 @@ describe('DataSelectionSlice', () => {
     expect(reducer(initialState, selectDate(2000000000))).toEqual({
       district: {ags: '00000', name: 'germany', type: ''},
       date: 2000000000,
-      scenario: 'default',
+      scenario: 0,
       compartment: '',
       value: 0,
       rate: 0,
@@ -48,10 +48,10 @@ describe('DataSelectionSlice', () => {
   });
 
   test('Select Scenario', () => {
-    expect(reducer(initialState, selectScenario('Test Scenario'))).toEqual({
+    expect(reducer(initialState, selectScenario(1))).toEqual({
       district: {ags: '00000', name: 'germany', type: ''},
       date: new Date(2021, 0).getTime(),
-      scenario: 'Test Scenario',
+      scenario: 1,
       compartment: '',
       value: 0,
       rate: 0,
@@ -62,7 +62,7 @@ describe('DataSelectionSlice', () => {
     expect(reducer(initialState, selectCompartment('Test Compartment'))).toEqual({
       district: {ags: '00000', name: 'germany', type: ''},
       date: new Date(2021, 0).getTime(),
-      scenario: 'default',
+      scenario: 0,
       compartment: 'Test Compartment',
       value: 0,
       rate: 0,

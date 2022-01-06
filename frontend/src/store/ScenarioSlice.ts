@@ -19,7 +19,7 @@ export const ScenarioSlice = createSlice({
   reducers: {
     setScenarios(state, action: PayloadAction<Array<Scenario>>) {
       const scenarioDict: Dictionary<Scenario> = {};
-      action.payload.forEach((value) => (scenarioDict[value.id] = value));
+      action.payload.forEach((value) => (scenarioDict[value.label] = value));
       state.scenarios = scenarioDict;
     },
   },

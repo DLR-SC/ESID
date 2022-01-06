@@ -8,7 +8,7 @@ import {useAppDispatch} from '../../store/hooks';
 import {selectDistrict} from '../../store/DataSelectionSlice';
 import {useAppSelector} from '../../store/hooks';
 import {Box} from '@mui/material';
-import {useGetAllDistrictsByDateQuery} from '../../store/services/rkiApi';
+import {useGetSimulationDataByDateQuery} from 'store/services/scenarioApi';
 
 const {useRef} = React;
 
@@ -51,7 +51,12 @@ export default function DistrictMap(): JSX.Element {
   const selectedDate = useAppSelector((state) => state.dataSelection.date);
   const scenarioList = useAppSelector((state) => state.scenarioList.scenarios);
 
-  const {data} = useGetAllDistrictsByDateQuery(new Date(selectedDate).toISOString().slice(0, 10));
+  const {data} = useGetSimulationDataByDateQuery({
+    id: selectedScenario,
+    day: selectedDate,
+    group: 'total',
+    compartments: [selectedCompartment],
+  });
 
   const chartRef = useRef<am4maps.MapChart | null>(null);
 
@@ -135,12 +140,9 @@ export default function DistrictMap(): JSX.Element {
       });
 
       const dataMapped = new Map<string, number>();
-      data?.data.forEach((entry) => {
-        let rs = entry.county;
-        if (rs.length === 4) {
-          rs = `0${rs}`;
-        }
-        dataMapped.set(rs, entry.infectious);
+      data?.results.forEach((entry) => {
+        const rs = entry.name;
+        dataMapped.set(rs, entry.values[selectedCompartment]);
       });
 
       // Set values to each regions
