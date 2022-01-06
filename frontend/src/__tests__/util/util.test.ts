@@ -36,7 +36,7 @@ describe('dateToISOString', () => {
   });
 
   test('Epoch Millis', () => {
-    const millis = 1612479600000;
+    const millis = new Date(2021, 1, 5).getTime();
     const result = dateToISOString(millis);
 
     expect(result).toBe('2021-02-05');
