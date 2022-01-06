@@ -185,12 +185,8 @@ export default function Scenario(): JSX.Element {
               dispatch(selectScenario(scenarioId));
               // if a property has been selected filter properties for selected and dispatch selectValue & selectRate for that property
               if (!(selectedProperty === '')) {
-                dispatch(
-                  selectValue(0), // TODO
-                );
-                dispatch(
-                  selectRate(0), // TODO
-                );
+                dispatch(selectValue(0)); // TODO
+                dispatch(selectRate(0)); // TODO
               }
             }}
           />
