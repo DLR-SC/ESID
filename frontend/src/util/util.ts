@@ -6,12 +6,21 @@ export function deepCopy<T>(obj: T): T {
   return JSON.parse(JSON.stringify(obj)) as T;
 }
 
+/**
+ * Converts the given Date to a string following the ISO-Format YYYY-MM-DD.
+ * @param date Either a Date object or milliseconds since the Unix-Epoch.
+ * @return The date in the ISO-Format: YYYY-MM-DD
+ */
 export function dateToISOString(date: Date | number): string {
   if (typeof date === 'number') {
     date = new Date(date);
   }
 
-  return date.toISOString().slice(0, 10);
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
 }
 
 /**

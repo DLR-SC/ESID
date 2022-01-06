@@ -32,13 +32,13 @@ describe('dateToISOString', () => {
     const date = new Date(2021, 1, 5);
     const result = dateToISOString(date);
 
-    expect(result).toBe('2021-02-04');
+    expect(result).toBe('2021-02-05');
   });
 
   test('Epoch Millis', () => {
     const millis = 1612479600000;
     const result = dateToISOString(millis);
 
-    expect(result).toBe('2021-02-04');
+    expect(result).toBe('2021-02-05');
   });
 });
