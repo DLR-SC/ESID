@@ -11,8 +11,7 @@ const Store = configureStore({
     [rkiApi.reducerPath]: rkiApi.reducer,
     [scenarioApi.reducerPath]: scenarioApi.reducer,
   },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(rkiApi.middleware, scenarioApi.middleware),
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(rkiApi.middleware, scenarioApi.middleware),
 });
 
 export default Store;

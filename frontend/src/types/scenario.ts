@@ -4,7 +4,7 @@ export interface SimulationModels {
   count: number;
   previous: string | null;
   next: string | null;
-  results: Array<{url: string, name: string}>;
+  results: Array<{url: string; name: string}>;
 }
 
 export interface SimulationModel {
@@ -31,15 +31,15 @@ export interface SimulationMetaData {
 }
 
 export interface SimulationDataByDate {
-  count: number,
+  count: number;
   previous: string | null;
   next: string | null;
-  results: Array<{name: string, values: Array<Dictionary<number>>}>
+  results: Array<{name: string; values: Array<Dictionary<number>>}>;
 }
 
 export interface SimulationDataByNode {
-  count: number,
+  count: number;
   previous: string | null;
   next: string | null;
-  results: Array<{name: string, values: Array<{day: string, [key: string]: number | string}>}>
+  results: Array<{name: string; values: Array<{day: string; [key: string]: number | string}>}>;
 }
