@@ -49,7 +49,7 @@ export default function DistrictMap(): JSX.Element {
   const selectedValue = useAppSelector((state) => state.dataSelection.value);
   const selectedRate = useAppSelector((state) => state.dataSelection.rate);
   const selectedDate = useAppSelector((state) => state.dataSelection.date);
-  const scenarioList = useAppSelector((state) => state.scenarioList);
+  const scenarioList = useAppSelector((state) => state.scenarioList.scenarios);
 
   const {data} = useGetAllDistrictsByDateQuery(new Date(selectedDate).toISOString().slice(0, 10));
 

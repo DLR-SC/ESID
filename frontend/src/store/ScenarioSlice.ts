@@ -1,32 +1,13 @@
-import {createSlice} from '@reduxjs/toolkit';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {Dictionary} from 'util/util';
 
 export interface Scenario {
-  id: string;
+  id: number;
   label: string;
-  color: string;
 }
 
-const initialState: {[key: string]: Scenario} = {
-  basic: {
-    id: 'basic',
-    label: 'Basic Contact',
-    color: '#3998DB',
-  },
-  medium: {
-    id: 'medium',
-    label: 'Leichter Kontakt an Weihnachten',
-    color: '#876BE3',
-  },
-  big: {
-    id: 'big',
-    label: 'Big Contact',
-    color: '#CC5AC7',
-  },
-  maximum: {
-    id: 'maximum',
-    label: 'Maximum Contact',
-    color: '#EBA73B',
-  },
+const initialState = {
+  scenarios: {} as Dictionary<Scenario>,
 };
 
 /**
@@ -35,8 +16,14 @@ const initialState: {[key: string]: Scenario} = {
 export const ScenarioSlice = createSlice({
   name: 'Scenario',
   initialState,
-  reducers: {},
+  reducers: {
+    setScenarios(state, action: PayloadAction<Array<Scenario>>) {
+      const scenarioDict: Dictionary<Scenario> = {};
+      action.payload.forEach((value) => (scenarioDict[value.id] = value));
+      state.scenarios = scenarioDict;
+    },
+  },
 });
 
-//export const {} = ScenarioSlice.actions;
+export const {setScenarios} = ScenarioSlice.actions;
 export default ScenarioSlice.reducer;
