@@ -27,7 +27,7 @@ describe('DataSelectionSlice', () => {
   });
 
   test('Select Date', () => {
-    const newDate = new Date(2020, 8, 21);
+    const newDate = '2020-07-21';
     expect(reducer(initialState, selectDate(newDate))).toEqual({
       district: {ags: '00000', name: 'germany', type: ''},
       date: new Date(2020, 8, 21).getTime(),

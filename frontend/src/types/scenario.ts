@@ -25,9 +25,10 @@ export interface SimulationMetaData {
   id: number;
   name: string;
   description: string;
-  startDate: string;
+  startDay: string;
   numberOfDays: number;
   scenario: string;
+  percentiles: string;
 }
 
 export interface SimulationDataByDate {

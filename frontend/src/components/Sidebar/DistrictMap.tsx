@@ -46,8 +46,6 @@ const dummyProps = {
 export default function DistrictMap(): JSX.Element {
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
-  const selectedValue = useAppSelector((state) => state.dataSelection.value);
-  const selectedRate = useAppSelector((state) => state.dataSelection.rate);
   const selectedDate = useAppSelector((state) => state.dataSelection.date);
   const scenarioList = useAppSelector((state) => state.scenarioList.scenarios);
 
@@ -147,20 +145,16 @@ export default function DistrictMap(): JSX.Element {
 
       // Set values to each regions
       polygonSeries.events.on('validated', (event) => {
+        console.log(scenarioList, scenarioList[selectedScenario], selectedCompartment);
         event.target.mapPolygons.each((mapPolygon) => {
           regionPolygon = mapPolygon.dataItem.dataContext as IRegionPolygon;
           regionPolygon.value = dataMapped.get(regionPolygon.RS) || 0;
 
           // add tooltipText, omit compartment if none selected
           mapPolygon.tooltipText = `${t(`BEZ.${regionPolygon.BEZ}`)} {GEN}`;
-          // append scenario label to tooltip if selected
-          if (scenarioList[selectedScenario]) {
-            mapPolygon.tooltipText += `\nScenario: ${scenarioList[selectedScenario].label}`;
-          }
           // append compartment info if selected
           if (scenarioList[selectedScenario] && selectedCompartment) {
-            mapPolygon.tooltipText += `\nCompartment: ${selectedCompartment}
-                                       Value: ${String(selectedValue)} (${String(selectedRate)}%)`;
+            mapPolygon.tooltipText += `\n${selectedCompartment}: {value}`;
           }
         });
       });
@@ -204,8 +198,6 @@ export default function DistrictMap(): JSX.Element {
     scenarioList,
     selectedScenario,
     selectedCompartment,
-    selectedValue,
-    selectedRate,
     dispatch,
     t,
     data,

@@ -37,8 +37,8 @@ export const DataSelectionSlice = createSlice({
     selectDistrict(state, action: PayloadAction<{ags: AGS; name: string; type: string}>) {
       state.district = action.payload;
     },
-    selectDate(state, action: PayloadAction<number | Date>) {
-      state.date = typeof action.payload === 'number' ? action.payload : action.payload.getTime();
+    selectDate(state, action: PayloadAction<number | string>) {
+      state.date = typeof action.payload === 'number' ? action.payload : new Date(action.payload).getTime();
     },
     selectScenario(state, action: PayloadAction<number>) {
       state.scenario = action.payload;
