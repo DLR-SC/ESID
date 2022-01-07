@@ -1,26 +1,20 @@
-export interface RKIDistrictQueryResult {
-  county: string;
-  count: number;
-  data: Array<RKIDistrictEntry>;
-}
+import {Dictionary} from 'util/util';
 
-export interface RKIDistrictEntry {
-  date: string;
-  infectious: number;
-  deaths: number;
-  recovered: number;
-  timestamp: number;
+export interface RKIDistrictQueryResult {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: Array<Dictionary<number | string>>;
 }
 
 export interface RKIDateQueryResult {
-  day: string;
   count: number;
-  data: Array<RKIDateEntry>;
+  next: string | null;
+  previous: string | null;
+  results: Array<RKIDateQueryDistrictEntry>;
 }
 
-export interface RKIDateEntry {
-  county: string;
-  infectious: number;
-  deaths: number;
-  recovered: number;
+export interface RKIDateQueryDistrictEntry {
+  node: string;
+  compartments: Dictionary<number>;
 }

@@ -5,9 +5,9 @@ import {useAppDispatch, useAppSelector} from '../store/hooks';
 import {useTheme} from '@mui/material/styles';
 import {Box} from '@mui/material';
 import {selectDate} from '../store/DataSelectionSlice';
-import {useGetAllDatesByDistrictQuery} from '../store/services/rkiApi';
-import {RKIDistrictEntry} from '../types/rki';
+import {useGetRkiByDistrictQuery} from '../store/services/rkiApi';
 import {dateToISOString} from 'util/util';
+import {Dictionary} from 'util/util';
 
 /* This component displays the evolution of the pandemic for a specific compartment (hospitalized, dead, infected, etc.) regarding the different scenarios
  */
@@ -73,10 +73,13 @@ export default function SimulationChart(): JSX.Element {
   const theme = useTheme();
   const scenarioList = useAppSelector((state) => state.scenarioList);
   const selectedDistrict = useAppSelector((state) => state.dataSelection.district.ags);
+  const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
   const dispatch = useAppDispatch();
-  const {data} = useGetAllDatesByDistrictQuery(
-    selectedDistrict[0] === '0' ? selectedDistrict.slice(1, 5) : selectedDistrict
-  );
+  const {data} = useGetRkiByDistrictQuery({
+    node: selectedDistrict,
+    group: '',
+    compartments: selectedCompartment ? [selectedCompartment] : null,
+  });
 
   const chartRef = useRef<am4charts.XYChart | null>(null);
   const rkiSeriesRef = useRef<am4charts.LineSeries | null>(null);
@@ -160,15 +163,15 @@ export default function SimulationChart(): JSX.Element {
   useEffect(() => {
     if (rkiSeriesRef.current) {
       rkiSeriesRef.current.data = [];
-      data?.data.forEach((entry: RKIDistrictEntry) => {
+      data?.results.forEach((entry: Dictionary<number | string>) => {
         rkiSeriesRef.current?.data.push({
-          date: new Date(entry.date),
-          value: entry.infectious,
+          date: new Date(entry['day']),
+          value: entry[selectedCompartment],
         });
       });
       rkiSeriesRef.current?.invalidateData();
     }
-  }, [data]);
+  }, [data, selectedCompartment]);
 
   return (
     <Box
