@@ -72,6 +72,10 @@ export const scenarioApi = createApi({
         return `simulation/${arg.id}/${arg.node}/${group}/${compartments}`;
       },
     }),
+
+    getSingleSimulationEntry: builder.query<SimulationDataByNode, SingleSimulationEntryParameters>({
+      query: (arg: SingleSimulationEntryParameters) => `simulation/${arg.id}/${arg.node}/${arg.group}/?day=${arg.day}`,
+    }),
   }),
 });
 
@@ -89,10 +93,18 @@ interface SimulationDataByNodeParameters {
   compartments: Array<string> | null;
 }
 
+interface SingleSimulationEntryParameters {
+  id: number;
+  node: string;
+  day: string;
+  group: string;
+}
+
 export const {
   useGetSimulationModelsQuery,
   useGetSimulationModelQuery,
   useGetSimulationsQuery,
   useGetSimulationDataByDateQuery,
   useGetSimulationDataByNodeQuery,
+  useGetSingleSimulationEntryQuery,
 } = scenarioApi;

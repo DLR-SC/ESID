@@ -11,7 +11,7 @@ import {
   useGetSimulationsQuery,
 } from '../store/services/scenarioApi';
 import {useEffect} from 'react';
-import {setScenarios} from 'store/ScenarioSlice';
+import {setCompartments, setScenarios} from 'store/ScenarioSlice';
 import {dateToISOString} from 'util/util';
 
 /**
@@ -27,8 +27,6 @@ export default function Scenario(): JSX.Element {
   const [expandProperties, setExpandProperties] = useState(false);
 
   const [simulationModelId, setSimulationModelId] = useState(0);
-
-  const [compartments, setCompartments] = useState<Array<string>>([]);
 
   const scenarioList = useAppSelector((state) => state.scenarioList);
   const activeScenario = useAppSelector((state) => state.dataSelection.scenario);
@@ -49,7 +47,7 @@ export default function Scenario(): JSX.Element {
 
   useEffect(() => {
     if (simulationModelData) {
-      setCompartments(simulationModelData.compartments);
+      dispatch(setCompartments(simulationModelData.compartments));
 
       if (simulationModelData.compartments.length > 0) {
         dispatch(selectCompartment(simulationModelData.compartments[0]));
@@ -108,7 +106,7 @@ export default function Scenario(): JSX.Element {
           {t('today')}
         </Typography>
         <List dense={true} disablePadding={true}>
-          {compartments.map((compartment, i) => (
+          {scenarioList.compartments.map((compartment, i) => (
             // map all compartments to display compartment list
             <ListItemButton
               key={compartment}
@@ -153,12 +151,12 @@ export default function Scenario(): JSX.Element {
             setExpandProperties(!expandProperties);
             // unselect Property if hidden through show less button
             if (
-              compartments.findIndex((o) => {
+              scenarioList.compartments.findIndex((o) => {
                 return o === selectedCompartment;
               }) > 4
             ) {
-              if (compartments.length > 0) {
-                dispatch(selectCompartment(compartments[0]));
+              if (scenarioList.compartments.length > 0) {
+                dispatch(selectCompartment(scenarioList.compartments[0]));
               }
             }
           }}
@@ -180,11 +178,6 @@ export default function Scenario(): JSX.Element {
             key={i}
             scenario={scenario}
             active={activeScenario === i + 1}
-            data={compartments.map((p) => ({
-              compartment: p,
-              value: 0, // TODO
-              rate: 0, // TODO
-            }))}
             color={theme.custom.scenarios[i]}
             selectedProperty={selectedCompartment}
             expandProperties={expandProperties}

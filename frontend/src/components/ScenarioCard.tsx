@@ -1,6 +1,9 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useTheme} from '@mui/material/styles';
 import {Box, List, ListItem, ListItemText, Typography} from '@mui/material';
+import {useAppSelector} from 'store/hooks';
+import {useGetSingleSimulationEntryQuery} from 'store/services/scenarioApi';
+import {useState} from 'react';
 
 /**
  * React Component to render individual Scenario Card
@@ -9,6 +12,31 @@ import {Box, List, ListItem, ListItemText, Typography} from '@mui/material';
  */
 export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
   const theme = useTheme();
+
+  const [compartmentValues, setCompartmentValues] = useState<{[key: string]: string | number, day: string} | null>(null);
+
+  const compartments = useAppSelector((state) => state.scenarioList.compartments);
+  const node = useAppSelector((state) => state.dataSelection.district.ags);
+  const day = useAppSelector((state) => state.dataSelection.date);
+  const {data} = useGetSingleSimulationEntryQuery({id: props.scenario.id, node, day, group: 'total'});
+
+  useEffect(() => {
+    if (data && data.results.length > 0) {
+      setCompartmentValues(data.results[0]);
+    }
+  }, [data]);
+
+  const getCompartmentValue = (compartment: string): string => {
+    if (compartmentValues && compartment in compartmentValues) {
+      const value = compartmentValues[compartment];
+      if (typeof value === 'number') {
+        // What should the logic be here? Can fractional numbers occur?
+        return value.toFixed(0);
+      }
+    }
+
+    return 'No Data';
+  };
 
   return (
     <Box
@@ -37,20 +65,20 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
         {props.scenario.label}
       </Typography>
       <List dense={true} disablePadding={true}>
-        {props.data.map((compartment, i) => (
+        {compartments.map((compartment, i) => (
           // hide compartment if expandProperties false and index > 4
           // highlight compartment if selectedProperty === compartment
           <ListItem
-            key={compartment.compartment}
+            key={compartment}
             sx={{
               display: props.expandProperties || i < 4 ? 'flex' : 'none',
-              color: props.selectedProperty === compartment.compartment ? 'inherit' : 'black',
+              color: props.selectedProperty === compartment ? 'inherit' : 'black',
               padding: theme.spacing(1),
               margin: theme.spacing(0),
             }}
           >
             <ListItemText
-              primary={compartment.value}
+              primary={getCompartmentValue(compartment)}
               // disable child typography overriding this
               disableTypography={true}
               sx={{
@@ -59,7 +87,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
               }}
             />
             <ListItemText
-              primary={`${compartment.rate} %`}
+              primary={`${/*compartment.rate*/ 0} %`}
               // disable child typography overriding this
               disableTypography={true}
               sx={{
@@ -94,18 +122,6 @@ interface ScenarioCardProps {
 
   /** The color of the card. */
   color: string;
-
-  /** The list of compartment data for this scenario (see {@link PropertyUpdate}. */
-  data: {
-    /** The compartment name. */
-    compartment: string;
-
-    /** The value for the compartment. */
-    value: number;
-
-    /** The rate for the compartment. */
-    rate: number;
-  }[];
 
   /** The compartment name of the currently selected compartment, or empty string if none is selected. */
   selectedProperty: string;
