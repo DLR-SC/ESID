@@ -5,7 +5,7 @@ import App from './App';
 import './util/i18n';
 import reactAxe from '@axe-core/react';
 
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV === 'a11y-testing') {
   console.warn('This is a development version. Do not release this!');
   void reactAxe(React, ReactDOM, 2000);
 }

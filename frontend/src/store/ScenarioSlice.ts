@@ -1,5 +1,4 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {Dictionary} from 'util/util';
 
 export interface Scenario {
   id: number;
@@ -7,7 +6,7 @@ export interface Scenario {
 }
 
 const initialState = {
-  scenarios: {} as Dictionary<Scenario>,
+  scenarios: {} as {[key: number]: Scenario},
 };
 
 /**
@@ -18,7 +17,7 @@ export const ScenarioSlice = createSlice({
   initialState,
   reducers: {
     setScenarios(state, action: PayloadAction<Array<Scenario>>) {
-      const scenarioDict: Dictionary<Scenario> = {};
+      const scenarioDict: {[key: number]: Scenario} = {};
       action.payload.forEach((value) => (scenarioDict[value.id] = value));
       state.scenarios = scenarioDict;
     },

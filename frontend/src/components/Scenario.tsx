@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {useAppDispatch, useAppSelector} from '../store/hooks';
 import {useTheme} from '@mui/material/styles';
 import {useTranslation} from 'react-i18next';
-import {selectCompartment, selectRate, selectScenario, selectValue} from 'store/DataSelectionSlice';
+import {selectCompartment, selectDate, selectScenario} from 'store/DataSelectionSlice';
 import ScenarioCard from './ScenarioCard';
 import {Box, Button, List, ListItemButton, ListItemText, Typography} from '@mui/material';
 import {
@@ -12,9 +12,7 @@ import {
 } from '../store/services/scenarioApi';
 import {useEffect} from 'react';
 import {setScenarios} from 'store/ScenarioSlice';
-
-/* This component displays the pandemic spread depending on different scenarios
- */
+import {dateToISOString} from 'util/util';
 
 /**
  * React Component to render the Scenario Cards Section
@@ -26,8 +24,6 @@ export default function Scenario(): JSX.Element {
   const theme = useTheme();
 
   const dispatch = useAppDispatch();
-  const [selectedProperty, setSelectedProperty] = useState('');
-  const [activeScenario, setActiveScenario] = useState(0);
   const [expandProperties, setExpandProperties] = useState(false);
 
   const [simulationModelId, setSimulationModelId] = useState(0);
@@ -35,9 +31,11 @@ export default function Scenario(): JSX.Element {
   const [compartments, setCompartments] = useState<Array<string>>([]);
 
   const scenarioList = useAppSelector((state) => state.scenarioList);
+  const activeScenario = useAppSelector((state) => state.dataSelection.scenario);
+  const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
 
-  const {data: scenarioListData} = useGetSimulationsQuery(null);
-  const {data: simulationModelsData} = useGetSimulationModelsQuery(null);
+  const {data: scenarioListData} = useGetSimulationsQuery();
+  const {data: simulationModelsData} = useGetSimulationModelsQuery();
   const {data: simulationModelData} = useGetSimulationModelQuery(simulationModelId);
 
   useEffect(() => {
@@ -52,15 +50,28 @@ export default function Scenario(): JSX.Element {
   useEffect(() => {
     if (simulationModelData) {
       setCompartments(simulationModelData.compartments);
+
+      if (simulationModelData.compartments.length > 0) {
+        dispatch(selectCompartment(simulationModelData.compartments[0]));
+      }
     } else {
       console.warn('Could not fetch simulation model data!');
     }
-  }, [simulationModelData]);
+  }, [simulationModelData, dispatch]);
 
   useEffect(() => {
     if (scenarioListData) {
       const scenarios = scenarioListData.results.map((scenario) => ({id: scenario.id, label: scenario.description}));
       dispatch(setScenarios(scenarios));
+
+      if (scenarios.length > 0) {
+        // It seems, that the simulation data is only available from the second day forward.
+        const day = new Date(scenarioListData.results[0].startDay);
+        day.setDate(day.getDate() + 1);
+
+        dispatch(selectDate(dateToISOString(day)));
+        dispatch(selectScenario(scenarios[0].id));
+      }
     }
   }, [scenarioListData, dispatch]);
 
@@ -106,15 +117,10 @@ export default function Scenario(): JSX.Element {
                 padding: theme.spacing(1),
                 margin: theme.spacing(0),
               }}
-              selected={selectedProperty === compartment}
+              selected={selectedCompartment === compartment}
               onClick={() => {
-                // set selected property
-                setSelectedProperty(compartment);
                 // dispatch new compartment name
                 dispatch(selectCompartment(compartment));
-                // dispatch value & rate (active Scenario is stored as number but compartment.scenarios needs id => list keys & use index)
-                dispatch(selectValue(0)); // TODO
-                dispatch(selectRate(0)); // TODO
               }}
             >
               <ListItemText
@@ -148,10 +154,12 @@ export default function Scenario(): JSX.Element {
             // unselect Property if hidden through show less button
             if (
               compartments.findIndex((o) => {
-                return o === selectedProperty;
+                return o === selectedCompartment;
               }) > 4
             ) {
-              setSelectedProperty('');
+              if (compartments.length > 0) {
+                dispatch(selectCompartment(compartments[0]));
+              }
             }
           }}
         >
@@ -167,27 +175,21 @@ export default function Scenario(): JSX.Element {
           overflowX: 'auto',
         }}
       >
-        {Object.entries(scenarioList.scenarios).map(([scenarioId, scenario], i) => (
+        {Object.entries(scenarioList.scenarios).map(([, scenario], i) => (
           <ScenarioCard
             key={i}
             scenario={scenario}
-            active={activeScenario === i}
+            active={activeScenario === i + 1}
             data={compartments.map((p) => ({
               compartment: p,
               value: 0, // TODO
               rate: 0, // TODO
             }))}
-            selectedProperty={selectedProperty}
+            selectedProperty={selectedCompartment}
             expandProperties={expandProperties}
             onClick={() => {
               // set active scenario to this one and send dispatches
-              setActiveScenario(i);
-              dispatch(selectScenario(scenarioId));
-              // if a property has been selected filter properties for selected and dispatch selectValue & selectRate for that property
-              if (!(selectedProperty === '')) {
-                dispatch(selectValue(0)); // TODO
-                dispatch(selectRate(0)); // TODO
-              }
+              dispatch(selectScenario(scenario.id));
             }}
           />
         ))}

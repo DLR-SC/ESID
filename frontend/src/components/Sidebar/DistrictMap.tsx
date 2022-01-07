@@ -8,7 +8,7 @@ import {useAppDispatch} from '../../store/hooks';
 import {selectDistrict} from '../../store/DataSelectionSlice';
 import {useAppSelector} from '../../store/hooks';
 import {Box} from '@mui/material';
-import {useGetAllDistrictsByDateQuery} from '../../store/services/rkiApi';
+import {useGetSimulationDataByDateQuery} from 'store/services/scenarioApi';
 
 const {useRef} = React;
 
@@ -46,12 +46,15 @@ const dummyProps = {
 export default function DistrictMap(): JSX.Element {
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
-  const selectedValue = useAppSelector((state) => state.dataSelection.value);
-  const selectedRate = useAppSelector((state) => state.dataSelection.rate);
   const selectedDate = useAppSelector((state) => state.dataSelection.date);
   const scenarioList = useAppSelector((state) => state.scenarioList.scenarios);
 
-  const {data} = useGetAllDistrictsByDateQuery(new Date(selectedDate).toISOString().slice(0, 10));
+  const {data} = useGetSimulationDataByDateQuery({
+    id: selectedScenario,
+    day: selectedDate,
+    group: 'total',
+    compartments: [selectedCompartment],
+  });
 
   const chartRef = useRef<am4maps.MapChart | null>(null);
 
@@ -135,12 +138,9 @@ export default function DistrictMap(): JSX.Element {
       });
 
       const dataMapped = new Map<string, number>();
-      data?.data.forEach((entry) => {
-        let rs = entry.county;
-        if (rs.length === 4) {
-          rs = `0${rs}`;
-        }
-        dataMapped.set(rs, entry.infectious);
+      data?.results.forEach((entry) => {
+        const rs = entry.name;
+        dataMapped.set(rs, entry.values[selectedCompartment]);
       });
 
       // Set values to each regions
@@ -151,14 +151,9 @@ export default function DistrictMap(): JSX.Element {
 
           // add tooltipText, omit compartment if none selected
           mapPolygon.tooltipText = `${t(`BEZ.${regionPolygon.BEZ}`)} {GEN}`;
-          // append scenario label to tooltip if selected
-          if (scenarioList[selectedScenario]) {
-            mapPolygon.tooltipText += `\nScenario: ${scenarioList[selectedScenario].label}`;
-          }
           // append compartment info if selected
           if (scenarioList[selectedScenario] && selectedCompartment) {
-            mapPolygon.tooltipText += `\nCompartment: ${selectedCompartment}
-                                       Value: ${String(selectedValue)} (${String(selectedRate)}%)`;
+            mapPolygon.tooltipText += `\n${selectedCompartment}: {value}`;
           }
         });
       });
@@ -198,17 +193,7 @@ export default function DistrictMap(): JSX.Element {
       const hs = polygonTemplate.states.create('hover');
       hs.properties.fill = am4core.color('#367B25');
     }
-  }, [
-    scenarioList,
-    selectedScenario,
-    selectedCompartment,
-    selectedValue,
-    selectedRate,
-    dispatch,
-    t,
-    data,
-    selectedDate,
-  ]);
+  }, [scenarioList, selectedScenario, selectedCompartment, dispatch, t, data, selectedDate]);
 
   return (
     <>

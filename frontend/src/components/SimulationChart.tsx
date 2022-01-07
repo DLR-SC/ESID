@@ -7,6 +7,7 @@ import {Box} from '@mui/material';
 import {selectDate} from '../store/DataSelectionSlice';
 import {useGetAllDatesByDistrictQuery} from '../store/services/rkiApi';
 import {RKIDistrictEntry} from '../types/rki';
+import {dateToISOString} from 'util/util';
 
 /* This component displays the evolution of the pandemic for a specific compartment (hospitalized, dead, infected, etc.) regarding the different scenarios
  */
@@ -150,8 +151,8 @@ export default function SimulationChart(): JSX.Element {
       range.grid.strokeOpacity = 1;
 
       chart.events.on('hit', () => {
-        dispatch(selectDate(dateAxis.tooltipDate.getTime() + 24 * 60 * 60 * 1000));
         range.date = new Date(dateAxis.tooltipDate.getTime() + 12 * 60 * 60 * 1000);
+        dispatch(selectDate(dateToISOString(range.date)));
       });
     }
   }, [dispatch]);
