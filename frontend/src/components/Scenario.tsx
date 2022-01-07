@@ -34,8 +34,8 @@ export default function Scenario(): JSX.Element {
   const activeScenario = useAppSelector((state) => state.dataSelection.scenario);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
 
-  const {data: scenarioListData} = useGetSimulationsQuery(null);
-  const {data: simulationModelsData} = useGetSimulationModelsQuery(null);
+  const {data: scenarioListData} = useGetSimulationsQuery();
+  const {data: simulationModelsData} = useGetSimulationModelsQuery();
   const {data: simulationModelData} = useGetSimulationModelQuery(simulationModelId);
 
   useEffect(() => {
