@@ -20,6 +20,18 @@ declare module '@mui/material/styles' {
   interface TypographyVariantsOptions {
     listElement?: React.CSSProperties;
   }
+
+  interface Theme {
+    custom: {
+      scenarios: Array<string>
+    };
+  }
+
+  interface ThemeOptions {
+    custom?: {
+      scenarios?: Array<string>
+    };
+  }
 }
 
 // Update the Typography's variant prop options
@@ -113,6 +125,18 @@ const theme = createTheme({
     },
   },
   spacing: [0, 4, 8, 12, 26],
+  custom: {
+    scenarios: [
+      '#3998DB',
+      '#876BE3',
+      '#CC5AC7',
+      '#EBA73B',
+      '#34C290',
+      '#EB7651',
+      '#34BEC7',
+      '#9FC750',
+    ],
+  },
 });
 
 /**

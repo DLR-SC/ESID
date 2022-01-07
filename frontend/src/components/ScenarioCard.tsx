@@ -2,48 +2,6 @@ import React from 'react';
 import {useTheme} from '@mui/material/styles';
 import {Box, List, ListItem, ListItemText, Typography} from '@mui/material';
 
-/* This component displays the individual scenario cards of the Scenario component
- */
-
-/** Type definition for the ScenarioCard props */
-interface ScenarioCardProps {
-  /** The scenario this card is displaying. */
-  scenario: {
-    /** The identifier for the scenario. */
-    id: number;
-
-    /** The label for the scenario displayed to the user. */
-    label: string;
-  };
-
-  /** The key for this scenario (index from the map function for the scenario list). */
-  key: number;
-
-  /** Boolean value whether the scenario is the selected scenario. */
-  active: boolean;
-
-  /** The list of compartment data for this scenario (see {@link PropertyUpdate}. */
-  data: {
-    /** The compartment name. */
-    compartment: string;
-
-    /** The value for the compartment. */
-    value: number;
-
-    /** The rate for the compartment. */
-    rate: number;
-  }[];
-
-  /** The compartment name of the currently selected compartment, or empty string if none is selected. */
-  selectedProperty: string;
-
-  /** Boolean value whether the properties list is expanded or only the first four are shown. */
-  expandProperties: boolean;
-
-  /** The function that is executed when the scenario card is clicked. */
-  onClick: () => void;
-}
-
 /**
  * React Component to render individual Scenario Card
  * @prop {ScenarioCardProps} props - The props for the component.
@@ -62,9 +20,9 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
         height: 'auto',
         margin: theme.spacing(3),
         padding: theme.spacing(3),
-        border: `2px solid red`, // TODO
+        border: `2px solid ${props.color}`,
         background: theme.palette.background.paper,
-        color: 'red', // TODO
+        color: props.color,
         boxShadow: props.active ? '0px 0px 12px 3px' : 'none',
       }}
       onClick={() => props.onClick()}
@@ -115,4 +73,46 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
       </List>
     </Box>
   );
+}
+
+/** Type definition for the ScenarioCard props */
+interface ScenarioCardProps {
+  /** The scenario this card is displaying. */
+  scenario: {
+    /** The identifier for the scenario. */
+    id: number;
+
+    /** The label for the scenario displayed to the user. */
+    label: string;
+  };
+
+  /** The key for this scenario (index from the map function for the scenario list). */
+  key: number;
+
+  /** Boolean value whether the scenario is the selected scenario. */
+  active: boolean;
+
+  /** The color of the card. */
+  color: string;
+
+  /** The list of compartment data for this scenario (see {@link PropertyUpdate}. */
+  data: {
+    /** The compartment name. */
+    compartment: string;
+
+    /** The value for the compartment. */
+    value: number;
+
+    /** The rate for the compartment. */
+    rate: number;
+  }[];
+
+  /** The compartment name of the currently selected compartment, or empty string if none is selected. */
+  selectedProperty: string;
+
+  /** Boolean value whether the properties list is expanded or only the first four are shown. */
+  expandProperties: boolean;
+
+  /** The function that is executed when the scenario card is clicked. */
+  onClick: () => void;
 }

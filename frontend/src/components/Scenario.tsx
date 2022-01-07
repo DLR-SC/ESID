@@ -185,6 +185,7 @@ export default function Scenario(): JSX.Element {
               value: 0, // TODO
               rate: 0, // TODO
             }))}
+            color={theme.custom.scenarios[i]}
             selectedProperty={selectedCompartment}
             expandProperties={expandProperties}
             onClick={() => {
