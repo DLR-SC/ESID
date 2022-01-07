@@ -65,7 +65,7 @@ export default function Scenario(): JSX.Element {
       dispatch(setScenarios(scenarios));
 
       if (scenarios.length > 0) {
-        // I seems, that the simulation data is only available from the second day forward.
+        // It seems, that the simulation data is only available from the second day forward.
         const day = new Date(scenarioListData.results[0].startDay);
         day.setDate(day.getDate() + 1);
 

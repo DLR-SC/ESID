@@ -145,7 +145,6 @@ export default function DistrictMap(): JSX.Element {
 
       // Set values to each regions
       polygonSeries.events.on('validated', (event) => {
-        console.log(scenarioList, scenarioList[selectedScenario], selectedCompartment);
         event.target.mapPolygons.each((mapPolygon) => {
           regionPolygon = mapPolygon.dataItem.dataContext as IRegionPolygon;
           regionPolygon.value = dataMapped.get(regionPolygon.RS) || 0;
@@ -194,15 +193,7 @@ export default function DistrictMap(): JSX.Element {
       const hs = polygonTemplate.states.create('hover');
       hs.properties.fill = am4core.color('#367B25');
     }
-  }, [
-    scenarioList,
-    selectedScenario,
-    selectedCompartment,
-    dispatch,
-    t,
-    data,
-    selectedDate,
-  ]);
+  }, [scenarioList, selectedScenario, selectedCompartment, dispatch, t, data, selectedDate]);
 
   return (
     <>

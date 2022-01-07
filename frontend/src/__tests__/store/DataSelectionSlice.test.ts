@@ -3,7 +3,7 @@ import reducer, {selectDistrict, selectDate, selectScenario, selectCompartment} 
 describe('DataSelectionSlice', () => {
   const initialState = {
     district: {ags: '00000', name: 'germany', type: ''},
-    date: new Date(2021, 0).getTime(),
+    date: '2021-01-01',
     scenario: 0,
     compartment: '',
     value: 0,
@@ -18,7 +18,7 @@ describe('DataSelectionSlice', () => {
     const newDistrict = {ags: '12345', name: 'Test District', type: 'Test Type'};
     expect(reducer(initialState, selectDistrict(newDistrict))).toEqual({
       district: {ags: '12345', name: 'Test District', type: 'Test Type'},
-      date: new Date(2021, 0).getTime(),
+      date: '2021-01-01',
       scenario: 0,
       compartment: '',
       value: 0,
@@ -27,19 +27,10 @@ describe('DataSelectionSlice', () => {
   });
 
   test('Select Date', () => {
-    const newDate = '2020-07-21';
+    const newDate = '2020-09-21';
     expect(reducer(initialState, selectDate(newDate))).toEqual({
       district: {ags: '00000', name: 'germany', type: ''},
-      date: new Date(2020, 8, 21).getTime(),
-      scenario: 0,
-      compartment: '',
-      value: 0,
-      rate: 0,
-    });
-
-    expect(reducer(initialState, selectDate(2000000000))).toEqual({
-      district: {ags: '00000', name: 'germany', type: ''},
-      date: 2000000000,
+      date: '2020-09-21',
       scenario: 0,
       compartment: '',
       value: 0,
@@ -50,7 +41,7 @@ describe('DataSelectionSlice', () => {
   test('Select Scenario', () => {
     expect(reducer(initialState, selectScenario(1))).toEqual({
       district: {ags: '00000', name: 'germany', type: ''},
-      date: new Date(2021, 0).getTime(),
+      date: '2021-01-01',
       scenario: 1,
       compartment: '',
       value: 0,
@@ -61,7 +52,7 @@ describe('DataSelectionSlice', () => {
   test('Select Compartment', () => {
     expect(reducer(initialState, selectCompartment('Test Compartment'))).toEqual({
       district: {ags: '00000', name: 'germany', type: ''},
-      date: new Date(2021, 0).getTime(),
+      date: '2021-01-01',
       scenario: 0,
       compartment: 'Test Compartment',
       value: 0,

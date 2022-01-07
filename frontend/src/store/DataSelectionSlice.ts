@@ -11,7 +11,7 @@ export type AGS = string;
 
 export interface DataSelection {
   district: {ags: AGS; name: string; type: string};
-  date: number;
+  date: string;
   scenario: number;
   compartment: string;
   value: number;
@@ -20,7 +20,7 @@ export interface DataSelection {
 
 const initialState: DataSelection = {
   district: {ags: '00000', name: i18n.t('germany'), type: ''},
-  date: new Date(2021, 8, 1).getTime(),
+  date: '2021-01-01',
   scenario: 0,
   compartment: '',
   value: 0,
@@ -37,8 +37,8 @@ export const DataSelectionSlice = createSlice({
     selectDistrict(state, action: PayloadAction<{ags: AGS; name: string; type: string}>) {
       state.district = action.payload;
     },
-    selectDate(state, action: PayloadAction<number | string>) {
-      state.date = typeof action.payload === 'number' ? action.payload : new Date(action.payload).getTime();
+    selectDate(state, action: PayloadAction<string>) {
+      state.date = action.payload;
     },
     selectScenario(state, action: PayloadAction<number>) {
       state.scenario = action.payload;

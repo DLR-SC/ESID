@@ -6,7 +6,6 @@ import {
   SimulationModels,
   Simulations,
 } from '../../types/scenario';
-import {dateToISOString} from '../../util/util';
 
 export const scenarioApi = createApi({
   reducerPath: 'scenarioApi',
@@ -32,11 +31,10 @@ export const scenarioApi = createApi({
 
     getSimulationDataByDate: builder.query<SimulationDataByDate, SimulationDataByDateParameters>({
       query: (arg: SimulationDataByDateParameters) => {
-        const day = dateToISOString(arg.day);
         const group = arg.group || 'total';
         const compartments = arg.compartments ? `?compartments=${arg.compartments.join(',')}` : '';
 
-        return `simulation/${arg.id}/${day}/${group}/${compartments}`;
+        return `simulation/${arg.id}/${arg.day}/${group}/${compartments}`;
       },
     }),
 
@@ -53,7 +51,7 @@ export const scenarioApi = createApi({
 
 interface SimulationDataByDateParameters {
   id: number;
-  day: Date | number;
+  day: string;
   group: string | null;
   compartments: Array<string> | null;
 }
