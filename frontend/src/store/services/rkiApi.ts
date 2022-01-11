@@ -24,9 +24,7 @@ export const rkiApi = createApi({
         // return error if any occurs
         if (secondResult.error) return {error: secondResult.error};
 
-        console.log(`RKI get all days by district: ${secondResult.meta?.request.url ?? ''}`);
         const result = secondResult.data as RKIDistrictQueryResult;
-        console.log(result);
         return {data: result};
       },
     }),
@@ -50,7 +48,6 @@ export const rkiApi = createApi({
         // return error if any occurs
         if (secondResult.error) return {error: secondResult.error};
 
-        console.log(`RKI get all districts by Date: ${secondResult.meta?.request.url ?? ''}`);
         const result = secondResult.data as RKIDateQueryResult;
         return {data: result};
       },
