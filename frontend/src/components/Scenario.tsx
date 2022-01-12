@@ -239,13 +239,18 @@ export default function Scenario(): JSX.Element {
             flexGrow: 0,
             flexShrink: 0,
             flexBasis: '160px',
-            height: '200px',
+            height: '212px',
             margin: theme.spacing(3),
             fontWeight: 'bolder',
             fontSize: '3rem',
             border: `2px ${theme.palette.divider} dashed`,
             borderRadius: '3px',
             color: theme.palette.divider,
+
+            '&:hover': {
+              border: `2px ${theme.palette.divider} dashed`,
+              background: '#E7E7E7',
+            },
           }}
           aria-label={t('scenario.add')}
         >
