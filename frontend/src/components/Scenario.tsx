@@ -131,7 +131,7 @@ export default function Scenario(): JSX.Element {
                 paddingRight: theme.spacing(3),
                 margin: theme.spacing(0),
                 marginTop: theme.spacing(1),
-                borderLeft: selectedCompartment === compartment ? `2px ${theme.palette.primary.main} solid` : 'none',
+                borderLeft: `2px ${selectedCompartment === compartment ? theme.palette.primary.main : 'transparent'} solid`,
                 '&.MuiListItemButton-root.Mui-selected': {
                   backgroundColor: theme.palette.background.paper,
                 },
