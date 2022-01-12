@@ -45,7 +45,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
         flexShrink: 0,
         flexBasis: '160px',
         boxSizing: 'border-box',
-        height: 'auto',
+        height: 'min-content',
         margin: theme.spacing(3),
         padding: theme.spacing(3),
         border: `2px solid ${props.color}`,
@@ -83,16 +83,21 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
               disableTypography={true}
               sx={{
                 typography: 'listElement',
+                fontWeight: props.selectedProperty === compartment ? 'bold' : 'regular',
+                textAlign: 'right',
+                flexBasis: '61.8%', // golden ratio
                 paddingLeft: theme.spacing(2),
               }}
             />
             <ListItemText
-              primary={`${/*compartment.rate*/ 0} %`}
+              primary={`${/*compartment.rate*/ 100}%`}
               // disable child typography overriding this
               disableTypography={true}
               sx={{
                 typography: 'listElement',
+                fontWeight: props.selectedProperty === compartment ? 'bold' : 'regular',
                 textAlign: 'right',
+                flexBasis: '38.2%', // golden ratio
                 paddingRight: theme.spacing(2),
               }}
             />
