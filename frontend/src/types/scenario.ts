@@ -42,5 +42,5 @@ export interface SimulationDataByNode {
   count: number;
   previous: string | null;
   next: string | null;
-  results: Array<{values: {day: string; [key: string]: number | string}}>;
+  results: Array<{day: string; [key: string]: number | string}>;
 }
