@@ -94,8 +94,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
               sx={{
                 typography: 'listElement',
                 textAlign: 'right',
-                flexBasis: '55%',
-                paddingLeft: theme.spacing(2),
+                flexBasis: '61.8%',
               }}
             />
             <ListItemText
@@ -106,8 +105,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
                 typography: 'listElement',
                 fontWeight: 'bold',
                 textAlign: 'right',
-                flexBasis: '45%',
-                paddingRight: theme.spacing(2),
+                flexBasis: '38.2%',
               }}
             />
           </ListItem>
