@@ -90,17 +90,21 @@ export default function Scenario(): JSX.Element {
           minHeight: '20vh',
           display: 'flex',
           flexDirection: 'column',
-          padding: theme.spacing(3),
+          paddingBottom: 0,
           paddingTop: theme.spacing(4),
+          paddingLeft: 0,
+          paddingRight: 0,
         }}
       >
         <Typography
           variant='h1'
           sx={{
-            width: '100%',
             textAlign: 'right',
             minHeight: '3rem',
+            marginLeft: 'auto',
+            marginRight: 0,
             marginBottom: theme.spacing(3),
+            paddingRight: theme.spacing(3),
           }}
         >
           {t('today')}
@@ -113,7 +117,10 @@ export default function Scenario(): JSX.Element {
               sx={{
                 display: expandProperties || i < 4 ? 'flex' : 'none',
                 padding: theme.spacing(1),
+                paddingLeft: theme.spacing(3),
+                paddingRight: theme.spacing(3),
                 margin: theme.spacing(0),
+                borderLeft: selectedCompartment === compartment ? `2px ${theme.palette.primary.main} solid` : 'none',
               }}
               selected={selectedCompartment === compartment}
               onClick={() => {
@@ -137,6 +144,7 @@ export default function Scenario(): JSX.Element {
                 disableTypography={true}
                 sx={{
                   typography: 'listElement',
+                  textAlign: 'right',
                   flexGrow: 1,
                 }}
               />
@@ -147,7 +155,10 @@ export default function Scenario(): JSX.Element {
           variant='outlined'
           color='primary'
           sx={{
-            margin: theme.spacing(2),
+            margin: theme.spacing(3),
+            marginTop: theme.spacing(4),
+            marginBottom: 0,
+            padding: theme.spacing(1),
           }}
           aria-label={t('scenario.more')}
           onClick={() => {
@@ -210,7 +221,7 @@ export default function Scenario(): JSX.Element {
             flexGrow: 0,
             flexShrink: 0,
             flexBasis: '160px',
-            minHeight: '220px',
+            height: '212px',
             margin: theme.spacing(3),
             fontWeight: 'bolder',
             fontSize: '3rem',

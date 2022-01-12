@@ -85,7 +85,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
                 typography: 'listElement',
                 fontWeight: props.selectedProperty === compartment ? 'bold' : 'regular',
                 textAlign: 'right',
-                flexBasis: '61.8%', // golden ratio
+                flexBasis: '55%',
                 paddingLeft: theme.spacing(2),
               }}
             />
@@ -97,7 +97,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
                 typography: 'listElement',
                 fontWeight: props.selectedProperty === compartment ? 'bold' : 'regular',
                 textAlign: 'right',
-                flexBasis: '38.2%', // golden ratio
+                flexBasis: '45%',
                 paddingRight: theme.spacing(2),
               }}
             />
