@@ -85,30 +85,40 @@ export default function Scenario(): JSX.Element {
         sx={{
           borderRight: `2px dashed ${theme.palette.divider}`,
           flexGrow: 0,
-          flexShrink: 1,
-          flexBasis: '276px',
+          flexShrink: 0,
+          flexBasis: '274px',
           minHeight: '20vh',
           display: 'flex',
           flexDirection: 'column',
+          marginTop: theme.spacing(3),
+          borderTop: '2px solid transparent', // invisible border for alignment with the scenario card
           paddingBottom: 0,
-          paddingTop: theme.spacing(4),
+          paddingTop: theme.spacing(2),
           paddingLeft: 0,
           paddingRight: 0,
         }}
       >
-        <Typography
-          variant='h1'
-          sx={{
-            textAlign: 'right',
-            minHeight: '3rem',
-            marginLeft: 'auto',
-            marginRight: 0,
-            marginBottom: theme.spacing(3),
-            paddingRight: theme.spacing(3),
-          }}
-        >
-          {t('today')}
-        </Typography>
+        <Box sx={{
+          display: 'flex',
+          alignItems: 'flex-end',
+          height: '3rem',
+          marginLeft: 'auto',
+          marginRight: 0,
+          marginBottom: theme.spacing(2),
+          paddingRight: theme.spacing(3),
+        }}>
+          <Typography
+            variant='h2'
+            sx={{
+              textAlign: 'right',
+              height: 'min-content',
+              fontWeight: 'bold',
+              fontSize: '13pt',
+            }}
+          >
+            {t('today')}
+          </Typography>
+        </Box>
         <List dense={true} disablePadding={true}>
           {scenarioList.compartments.map((compartment, i) => (
             // map all compartments to display compartment list
@@ -120,7 +130,11 @@ export default function Scenario(): JSX.Element {
                 paddingLeft: theme.spacing(3),
                 paddingRight: theme.spacing(3),
                 margin: theme.spacing(0),
+                marginTop: theme.spacing(1),
                 borderLeft: selectedCompartment === compartment ? `2px ${theme.palette.primary.main} solid` : 'none',
+                '&.MuiListItemButton-root.Mui-selected': {
+                  backgroundColor: theme.palette.background.paper,
+                },
               }}
               selected={selectedCompartment === compartment}
               onClick={() => {
@@ -134,6 +148,7 @@ export default function Scenario(): JSX.Element {
                 disableTypography={true}
                 sx={{
                   typography: 'listElement',
+                  fontWeight: selectedCompartment === compartment ? 'bold' : 'normal',
                   flexGrow: 1,
                   flexBasis: 100,
                 }}
@@ -144,6 +159,7 @@ export default function Scenario(): JSX.Element {
                 disableTypography={true}
                 sx={{
                   typography: 'listElement',
+                  color: selectedCompartment === compartment ? theme.palette.text.primary : theme.palette.text.disabled,
                   textAlign: 'right',
                   flexGrow: 1,
                 }}
@@ -185,6 +201,7 @@ export default function Scenario(): JSX.Element {
           flexBasis: '100%',
           display: 'flex',
           overflowX: 'auto',
+          marginLeft: theme.spacing(3),
         }}
       >
         {Object.entries(scenarioList.scenarios).map(([, scenario], i) => (
@@ -208,9 +225,10 @@ export default function Scenario(): JSX.Element {
           borderColor: 'divider',
           flexGrow: 0,
           flexShrink: 0,
-          flexBasis: '208px',
+          flexBasis: '185px',
           minHeight: '20vh',
           paddingLeft: theme.spacing(3),
+          paddingRight: theme.spacing(3),
           display: 'flex',
         }}
       >
@@ -221,10 +239,13 @@ export default function Scenario(): JSX.Element {
             flexGrow: 0,
             flexShrink: 0,
             flexBasis: '160px',
-            height: '212px',
+            height: '200px',
             margin: theme.spacing(3),
             fontWeight: 'bolder',
             fontSize: '3rem',
+            border: `2px ${theme.palette.divider} dashed`,
+            borderRadius: '3px',
+            color: theme.palette.divider,
           }}
           aria-label={t('scenario.add')}
         >

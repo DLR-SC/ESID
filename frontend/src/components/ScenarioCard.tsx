@@ -47,23 +47,32 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
         boxSizing: 'border-box',
         height: 'min-content',
         margin: theme.spacing(3),
-        padding: theme.spacing(3),
+        padding: theme.spacing(2),
         border: `2px solid ${props.color}`,
+        borderRadius: '3px',
         background: theme.palette.background.paper,
         color: props.color,
-        boxShadow: props.active ? '0px 0px 12px 3px' : 'none',
+        boxShadow: props.active ? '0px 0px 8px 3px' : 'none',
       }}
       onClick={() => props.onClick()}
     >
-      <Typography
-        variant='h1'
-        sx={{
-          minHeight: '3rem',
-          marginBottom: theme.spacing(3),
-        }}
-      >
-        {props.scenario.label}
-      </Typography>
+      <Box sx={{
+        display: 'flex',
+        alignItems: 'flex-end',
+        height: '3rem',
+        marginBottom: theme.spacing(2),
+      }}>
+        <Typography
+          variant='h2'
+          sx={{
+            height: 'min-content',
+            fontWeight: 'bold',
+            fontSize: '13pt',
+          }}
+        >
+          {props.scenario.label}
+        </Typography>
+      </Box>
       <List dense={true} disablePadding={true}>
         {compartments.map((compartment, i) => (
           // hide compartment if expandProperties false and index > 4
@@ -72,9 +81,10 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
             key={compartment}
             sx={{
               display: props.expandProperties || i < 4 ? 'flex' : 'none',
-              color: props.selectedProperty === compartment ? 'inherit' : 'black',
+              color: props.selectedProperty === compartment ? theme.palette.text.primary : theme.palette.text.disabled,
               padding: theme.spacing(1),
               margin: theme.spacing(0),
+              marginTop: theme.spacing(1),
             }}
           >
             <ListItemText
@@ -83,7 +93,6 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
               disableTypography={true}
               sx={{
                 typography: 'listElement',
-                fontWeight: props.selectedProperty === compartment ? 'bold' : 'regular',
                 textAlign: 'right',
                 flexBasis: '55%',
                 paddingLeft: theme.spacing(2),
@@ -95,7 +104,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
               disableTypography={true}
               sx={{
                 typography: 'listElement',
-                fontWeight: props.selectedProperty === compartment ? 'bold' : 'regular',
+                fontWeight: 'bold',
                 textAlign: 'right',
                 flexBasis: '45%',
                 paddingRight: theme.spacing(2),
