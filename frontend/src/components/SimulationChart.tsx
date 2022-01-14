@@ -25,6 +25,7 @@ export default function SimulationChart(): JSX.Element {
   const scenarioList = useAppSelector((state) => state.scenarioList);
   const selectedDistrict = useAppSelector((state) => state.dataSelection.district.ags);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
+  const selectedDate = useAppSelector((state) => state.dataSelection.date);
   const dispatch = useAppDispatch();
   const {data: rkiData} = useGetRkiByDistrictQuery({
     node: selectedDistrict,
@@ -92,31 +93,41 @@ export default function SimulationChart(): JSX.Element {
       }
     });
 
+    chart.events.on('hit', () => {
+      const date = new Date(dateAxis.tooltipDate.getTime());
+      dispatch(selectDate(dateToISOString(date)));
+    });
+
     chartRef.current = chart;
     return () => {
       chartRef.current && chartRef.current.dispose();
     };
-  }, [scenarioList, selectedCompartment]);
+  }, [scenarioList, selectedCompartment, dispatch]);
 
+  // Effect to add Guide when date selected
   useEffect(() => {
-    const chart = chartRef.current;
-
-    if (chart) {
-      const dateAxis = chart.xAxes.getIndex(0) as am4charts.DateAxis;
+    if (chartRef.current) {
+      const dateAxis = chartRef.current.xAxes.getIndex(0) as am4charts.DateAxis;
       const range = dateAxis.axisRanges.create();
-      range.date = new Date();
+      range.date = new Date(selectedDate);
       range.grid.above = true;
-      range.grid.stroke = am4core.color('purple');
+      range.grid.stroke = am4core.color(`${theme.palette.primary.main}`);
       range.grid.strokeWidth = 2;
       range.grid.strokeOpacity = 1;
-
-      chart.events.on('hit', () => {
-        range.date = new Date(dateAxis.tooltipDate.getTime() + 12 * 60 * 60 * 1000);
-        console.log('click');
-        dispatch(selectDate(dateToISOString(range.date)));
-      });
+      range.label.text = '{date}';
+      range.label.dateFormatter.dateFormat = 'MMM dd, YYYY';
+      range.label.fill = am4core.color('white');
+      range.label.background.fill = range.grid.stroke;
     }
-  }, [dispatch]);
+
+    // remove old ranges before creating a new one
+    return () => {
+      const ranges = chartRef.current?.xAxes.getIndex(0)?.axisRanges;
+      ranges?.values.forEach((range) => {
+        ranges.removeValue(range);
+      });
+    };
+  }, [selectedDate, theme]);
 
   // Effect to update Simulation and RKI Data
   useEffect(() => {
