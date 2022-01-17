@@ -100,7 +100,7 @@ export default function SimulationChart(): JSX.Element {
 
     chartRef.current = chart;
     return () => {
-      chartRef.current && chartRef.current.dispose();
+      chartRef.current?.dispose();
     };
   }, [scenarioList, selectedCompartment, dispatch]);
 
