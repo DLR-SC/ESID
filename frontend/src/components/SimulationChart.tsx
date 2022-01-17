@@ -33,7 +33,7 @@ export default function SimulationChart(): JSX.Element {
   const dispatch = useAppDispatch();
   const {data: rkiData} = useGetRkiByDistrictQuery({
     node: selectedDistrict,
-    group: '',
+    group: 'total',
     compartments: selectedCompartment ? [selectedCompartment] : null,
   });
 
