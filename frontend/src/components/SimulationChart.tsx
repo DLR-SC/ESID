@@ -1,6 +1,8 @@
 import React, {useEffect, useRef} from 'react';
 import * as am4core from '@amcharts/amcharts4/core';
 import * as am4charts from '@amcharts/amcharts4/charts';
+import am4lang_en_US from '@amcharts/amcharts4/lang/en_US';
+import am4lang_de_DE from '@amcharts/amcharts4/lang/de_DE';
 import {useAppDispatch, useAppSelector} from '../store/hooks';
 import {useTheme} from '@mui/material/styles';
 import {Box} from '@mui/material';
@@ -9,6 +11,7 @@ import {useGetRkiByDistrictQuery} from '../store/services/rkiApi';
 import {dateToISOString} from 'util/util';
 import {Dictionary} from 'util/util';
 import {useGetMultipleSimulationDataByNodeQuery} from 'store/services/scenarioApi';
+import {useTranslation} from 'react-i18next';
 
 /* This component displays the evolution of the pandemic for a specific compartment (hospitalized, dead, infected, etc.) regarding the different scenarios
  */
@@ -21,6 +24,7 @@ const drawDeviations = false;
  * @returns {JSX.Element} JSX Element to render the scenario chart container and the scenario graph within.
  */
 export default function SimulationChart(): JSX.Element {
+  const {t, i18n} = useTranslation();
   const theme = useTheme();
   const scenarioList = useAppSelector((state) => state.scenarioList);
   const selectedDistrict = useAppSelector((state) => state.dataSelection.district.ags);
@@ -46,6 +50,8 @@ export default function SimulationChart(): JSX.Element {
   useEffect(() => {
     // Create chart instance (is called when props.scenarios changes)
     const chart = am4core.create('chartdiv', am4charts.XYChart);
+    // Set localization
+    chart.language.locale = i18n.language === 'de' ? am4lang_de_DE : am4lang_en_US;
 
     // Create axes
     const dateAxis = chart.xAxes.push(new am4charts.DateAxis());
@@ -102,7 +108,7 @@ export default function SimulationChart(): JSX.Element {
     return () => {
       chartRef.current?.dispose();
     };
-  }, [scenarioList, selectedCompartment, dispatch]);
+  }, [scenarioList, selectedCompartment, dispatch, i18n.language]);
 
   // Effect to add Guide when date selected
   useEffect(() => {
@@ -115,7 +121,8 @@ export default function SimulationChart(): JSX.Element {
       range.grid.strokeWidth = 2;
       range.grid.strokeOpacity = 1;
       range.label.text = '{date}';
-      range.label.dateFormatter.dateFormat = 'MMM dd, YYYY';
+      range.label.language.locale = dateAxis.language.locale;
+      range.label.dateFormatter.dateFormat = `${t('dateFormat')}`;
       range.label.fill = am4core.color('white');
       range.label.background.fill = range.grid.stroke;
     }
@@ -127,7 +134,7 @@ export default function SimulationChart(): JSX.Element {
         ranges.removeValue(range);
       });
     };
-  }, [selectedDate, theme]);
+  }, [selectedDate, theme, t, i18n.language]);
 
   // Effect to update Simulation and RKI Data
   useEffect(() => {
