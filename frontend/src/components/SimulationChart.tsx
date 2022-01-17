@@ -71,7 +71,7 @@ export default function SimulationChart(): JSX.Element {
     rkiSeries.strokeWidth = 1;
     rkiSeries.fill = am4core.color('red');
     rkiSeries.stroke = am4core.color('red');
-    rkiSeries.tooltipText = `${selectedCompartment}: [bold]{rki}[/]`;
+    rkiSeries.tooltipText = `RKI Data: [bold]{rki}[/]`;
 
     // Add series for scenarios
     Object.entries(scenarioList.scenarios).forEach(([scenarioId, scenario]) => {
@@ -108,7 +108,7 @@ export default function SimulationChart(): JSX.Element {
     return () => {
       chartRef.current?.dispose();
     };
-  }, [scenarioList, selectedCompartment, dispatch, i18n.language]);
+  }, [scenarioList, dispatch, i18n.language]);
 
   // Effect to add Guide when date selected
   useEffect(() => {
