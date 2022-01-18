@@ -16,8 +16,7 @@ services:
   web:
     container_name: esid_web
     image: esid_web:latest
-    user: ${USER_ID}:${GROUP_ID}
-    restart: always
+    restart: 'no'
     ports:
       - 8000:8000
     env_file: .env
