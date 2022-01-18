@@ -29,7 +29,7 @@ export default function Scenario(): JSX.Element {
   const [simulationModelId, setSimulationModelId] = useState(0);
   const [startDay, setStartDay] = useState<Date | null>();
   const [compartmentValues, setCompartmentValues] = useState<{[key: string]: string | number; day: string} | null>(
-    null,
+    null
   );
 
   const getCompartmentValue = (compartment: string): string => {

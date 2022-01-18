@@ -14,7 +14,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
   const theme = useTheme();
 
   const [compartmentValues, setCompartmentValues] = useState<{[key: string]: string | number; day: string} | null>(
-    null,
+    null
   );
 
   const compartments = useAppSelector((state) => state.scenarioList.compartments);
