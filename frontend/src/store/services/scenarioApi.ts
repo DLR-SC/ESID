@@ -76,6 +76,37 @@ export const scenarioApi = createApi({
     getSingleSimulationEntry: builder.query<SimulationDataByNode, SingleSimulationEntryParameters>({
       query: (arg: SingleSimulationEntryParameters) => `simulation/${arg.id}/${arg.node}/${arg.group}/?day=${arg.day}`,
     }),
+
+    getMultipleSimulationDataByNode: builder.query<SimulationDataByNode[], MultipleSimulationDataByNodeParameters>({
+      async queryFn(arg, _queryApi, _extraOptions, fetchWithBQ) {
+        const group = arg.group || 'total';
+        const compartments = arg.compartments ? `&compartments=${arg.compartments.join(',')}` : '';
+        const url = (id: number, limit: number, offset: number) =>
+          `simulation/${id}/${arg.node}/${group}/?limit=${limit}&offset=${offset}${compartments}`;
+
+        const result: SimulationDataByNode[] = [];
+
+        // fetch simulation data for each id
+        for (const id of arg.ids) {
+          // fetch first entry to get total count
+          const preResult = await fetchWithBQ(url(id, 1, 0));
+          // return if errors occur
+          if (preResult.error) return {error: preResult.error};
+
+          const preData = preResult.data as SimulationDataByNode;
+
+          // fetch all entries
+          const fullResult = await fetchWithBQ(url(id, preData.count, 0));
+          // return if errors occur
+          if (fullResult.error) return {error: fullResult.error};
+
+          // put result into list to return
+          result[id] = fullResult.data as SimulationDataByNode;
+        }
+
+        return {data: result};
+      },
+    }),
   }),
 });
 
@@ -100,6 +131,13 @@ interface SingleSimulationEntryParameters {
   group: string;
 }
 
+interface MultipleSimulationDataByNodeParameters {
+  ids: number[];
+  node: string;
+  group: string | null;
+  compartments: Array<string> | null;
+}
+
 export const {
   useGetSimulationModelsQuery,
   useGetSimulationModelQuery,
@@ -107,4 +145,5 @@ export const {
   useGetSimulationDataByDateQuery,
   useGetSimulationDataByNodeQuery,
   useGetSingleSimulationEntryQuery,
+  useGetMultipleSimulationDataByNodeQuery,
 } = scenarioApi;
