@@ -13,6 +13,7 @@ import {
 import {useEffect} from 'react';
 import {setCompartments, setScenarios} from 'store/ScenarioSlice';
 import {dateToISOString} from 'util/util';
+import {useGetRkiSingleSimulationEntryQuery} from '../store/services/rkiApi';
 
 /**
  * React Component to render the Scenario Cards Section
@@ -25,16 +26,35 @@ export default function Scenario(): JSX.Element {
 
   const dispatch = useAppDispatch();
   const [expandProperties, setExpandProperties] = useState(false);
-
   const [simulationModelId, setSimulationModelId] = useState(0);
+  const [startDay, setStartDay] = useState<Date | null>();
+  const [compartmentValues, setCompartmentValues] = useState<{[key: string]: string | number, day: string} | null>(null);
+
+  const getCompartmentValue = (compartment: string): string => {
+    if (compartmentValues && compartment in compartmentValues) {
+      const value = compartmentValues[compartment];
+      if (typeof value === 'number') {
+        // What should the logic be here? Can fractional numbers occur?
+        return value.toFixed(0);
+      }
+    }
+
+    return 'No Data';
+  };
 
   const scenarioList = useAppSelector((state) => state.scenarioList);
   const activeScenario = useAppSelector((state) => state.dataSelection.scenario);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
+  const node = useAppSelector(((state) => state.dataSelection.district.ags));
 
   const {data: scenarioListData} = useGetSimulationsQuery();
   const {data: simulationModelsData} = useGetSimulationModelsQuery();
   const {data: simulationModelData} = useGetSimulationModelQuery(simulationModelId);
+  const {data: rkiData} = useGetRkiSingleSimulationEntryQuery({
+    node,
+    day: startDay ? dateToISOString(startDay) : '',
+    group: 'total',
+  });
 
   useEffect(() => {
     if (simulationModelsData && simulationModelsData.results.length > 0) {
@@ -44,6 +64,12 @@ export default function Scenario(): JSX.Element {
       console.warn('Could not fetch simulation model data!');
     }
   }, [simulationModelsData]);
+
+  useEffect(() => {
+    if (rkiData) {
+      setCompartmentValues(rkiData.results[0]);
+    }
+  }, [rkiData]);
 
   useEffect(() => {
     if (simulationModelData) {
@@ -65,9 +91,11 @@ export default function Scenario(): JSX.Element {
       if (scenarios.length > 0) {
         // It seems, that the simulation data is only available from the second day forward.
         const day = new Date(scenarioListData.results[0].startDay);
-        day.setDate(day.getDate() + 1);
+        setStartDay(day);
 
-        dispatch(selectDate(dateToISOString(day)));
+        const endDay = new Date(day);
+        endDay.setDate(endDay.getDate() + scenarioListData.results[0].numberOfDays);
+        dispatch(selectDate(dateToISOString(endDay)));
         dispatch(selectScenario(scenarios[0].id));
       }
     }
@@ -116,7 +144,7 @@ export default function Scenario(): JSX.Element {
               fontSize: '13pt',
             }}
           >
-            {t('today')}
+            {startDay ? startDay.toLocaleDateString() : t('today')}
           </Typography>
         </Box>
         <List dense={true} disablePadding={true}>
@@ -154,7 +182,7 @@ export default function Scenario(): JSX.Element {
                 }}
               />
               <ListItemText
-                primary={0} // TODO
+                primary={getCompartmentValue(compartment)}
                 // disable child typography overriding this
                 disableTypography={true}
                 sx={{
@@ -212,6 +240,7 @@ export default function Scenario(): JSX.Element {
             color={theme.custom.scenarios[i]}
             selectedProperty={selectedCompartment}
             expandProperties={expandProperties}
+            startValues={compartmentValues}
             onClick={() => {
               // set active scenario to this one and send dispatches
               dispatch(selectScenario(scenario.id));

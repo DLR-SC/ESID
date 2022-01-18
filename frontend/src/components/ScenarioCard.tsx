@@ -21,7 +21,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
   const {data} = useGetSingleSimulationEntryQuery({id: props.scenario.id, node, day, group: 'total'});
 
   useEffect(() => {
-    if (data && data.results.length > 0) {
+    if (data) {
       setCompartmentValues(data.results[0]);
     }
   }, [data]);
@@ -36,6 +36,21 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
     }
 
     return 'No Data';
+  };
+
+  const getCompartmentRate = (compartment: string): string => {
+    if (compartmentValues && compartment in compartmentValues && props.startValues && compartment in props.startValues) {
+      const value = compartmentValues[compartment];
+      const startValue = props.startValues[compartment];
+      if (typeof value === 'number' && typeof startValue === 'number') {
+        const result = 100 * (value / startValue);
+        if (isFinite(result)) {
+          return result.toFixed() + '%';
+        }
+      }
+    }
+
+    return 'N/A';
   };
 
   return (
@@ -98,7 +113,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
               }}
             />
             <ListItemText
-              primary={`${/*compartment.rate*/ 100}%`}
+              primary={getCompartmentRate(compartment)}
               // disable child typography overriding this
               disableTypography={true}
               sx={{
@@ -140,6 +155,8 @@ interface ScenarioCardProps {
 
   /** Boolean value whether the properties list is expanded or only the first four are shown. */
   expandProperties: boolean;
+
+  startValues: {[key: string]: string | number, day: string} | null;
 
   /** The function that is executed when the scenario card is clicked. */
   onClick: () => void;

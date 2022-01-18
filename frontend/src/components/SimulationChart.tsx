@@ -56,8 +56,7 @@ export default function SimulationChart(): JSX.Element {
     // Create axes
     const dateAxis = chart.xAxes.push(new am4charts.DateAxis());
     const valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-    valueAxis.logarithmic = true;
-    valueAxis.min = 1;
+    valueAxis.min = 0;
 
     // Add cursor
     chart.cursor = new am4charts.XYCursor();
@@ -134,7 +133,7 @@ export default function SimulationChart(): JSX.Element {
         ranges.removeValue(range);
       });
     };
-  }, [selectedDate, theme, t, i18n.language]);
+  }, [selectedDate, scenarioList, theme, t, i18n.language]);
 
   // Effect to update Simulation and RKI Data
   useEffect(() => {
