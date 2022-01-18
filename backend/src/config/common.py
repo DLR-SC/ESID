@@ -10,7 +10,7 @@ TESTING = sys.argv[1:2] == ['test']
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 if not TESTING:
-    dotenv.read_dotenv(ROOT_DIR)
+    dotenv.read_dotenv(join(ROOT_DIR, '.env'))
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
