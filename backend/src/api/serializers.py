@@ -175,7 +175,7 @@ class SimulationNodeSerializer(serializers.ModelSerializer):
         model = SimulationNode
         fields = ['name', 'compartments']
 
-    def get_vaget_compartments(self, node):
+    def get_compartments(self, node):
         queryset = node.data.all()
         many = True
 
