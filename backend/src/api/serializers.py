@@ -97,7 +97,7 @@ class ParameterSerializer(serializers.ModelSerializer):
         model = Parameter
         fields = ['name']
 
-class DataEntrySerializer(serializers.ModelSerializer):
+class CompartmentsDataEntrySerializer(serializers.ModelSerializer):
     """
     JSON serializer for a simulation model parameter
     """
@@ -107,13 +107,16 @@ class DataEntrySerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         serialized = {}
-        
+        values = {}
+
         compartments = self.context.get('compartments', None)
         if compartments is not None:
             for compartment in compartments:
-                serialized[compartment] = instance.data[compartment]
+                values[compartment] = instance.data[compartment]
         else:
-            serialized = {**instance.data}
+            values = {**instance.data}
+
+        serialized['compartments'] = values
 
         if self.context.get('day', None) is None:
             serialized['day'] = instance.day
@@ -166,13 +169,13 @@ class SimulationNodeSerializer(serializers.ModelSerializer):
     JSON serializer for a simulation model parameter
     """
 
-    values = serializers.SerializerMethodField('get_values')
+    compartments = serializers.SerializerMethodField('get_compartments')
 
     class Meta:
         model = SimulationNode
-        fields = ['name', 'values']
+        fields = ['name', 'compartments']
 
-    def get_values(self, node):
+    def get_vaget_compartments(self, node):
         queryset = node.data.all()
         many = True
 
@@ -187,8 +190,9 @@ class SimulationNodeSerializer(serializers.ModelSerializer):
             queryset = queryset.filter(day=self.context['day']).first()
             many = False
         
-        serialized = DataEntrySerializer(instance=queryset, context=self.context, many=many)
-        return serialized.data
+        serialized = CompartmentsDataEntrySerializer(instance=queryset, context=self.context, many=many)
+
+        return serialized.data['compartments']
 
 
 class RkiNodeSerializer(serializers.ModelSerializer):
@@ -215,9 +219,6 @@ class RkiNodeSerializer(serializers.ModelSerializer):
             queryset = queryset.filter(day=self.context['day']).first()
             many = False
         
-        serialized = DataEntrySerializer(instance=queryset, context=self.context, many=many)
+        serialized = CompartmentsDataEntrySerializer(instance=queryset, context=self.context, many=many)
 
-        if not many:
-            return {'node': node.name, 'compartments': serialized.data}
-        else:
-            return {'node': node.name, 'data': serialized.data}
+        return {'node': node.name, **serialized.data}

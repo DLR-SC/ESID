@@ -73,7 +73,7 @@ class SimulationModelViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, v
 
 class SimulationDataByNodeView(DataEntryFilterMixin, generics.ListAPIView):
     
-    serializer_class = serializers.DataEntrySerializer
+    serializer_class = serializers.CompartmentsDataEntrySerializer
     permission_classes = [permissions.AllowAny]
 
     def get_queryset(self):
@@ -98,7 +98,7 @@ class SimulationDataByDayView(DataEntryFilterMixin, generics.ListAPIView):
 
 class RkiDataByNodeView(DataEntryFilterMixin, generics.ListAPIView):
     
-    serializer_class = serializers.DataEntrySerializer
+    serializer_class = serializers.CompartmentsDataEntrySerializer
     permission_classes = [permissions.AllowAny]
 
     def get_queryset(self):
