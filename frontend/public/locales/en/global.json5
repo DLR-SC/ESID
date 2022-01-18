@@ -1,4 +1,5 @@
 {
+  dateFormat: 'MMM dd. yyyy',
   topBar: {
     'icon-alt': 'ESID application logo',
     menu: {
