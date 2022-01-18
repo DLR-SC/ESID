@@ -14,12 +14,13 @@ RUN set -x && \
 	wget -O /wait-for https://raw.githubusercontent.com/eficode/wait-for/master/wait-for && \
 	chmod +x /wait-for
 
-CMD ["sh", "/entrypoint-web.sh"]
-COPY ./docker/ /
+CMD ["sh", "/entrypoint-startup.sh"]
+COPY ./docker/entrypoint-startup.sh /
 
-COPY ./requirements/ ./requirements
+COPY ./requirements/${REQUIREMENTS_FILE} ./requirements.txt
 RUN pip install numpy scipy pandas tqdm
-RUN pip install -r ./requirements/${REQUIREMENTS_FILE}
+RUN pip install -r ./requirements.txt
 
-COPY . ./
+COPY ./src ./src
+COPY ./manage.py ./manage.py
 
