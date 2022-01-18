@@ -28,7 +28,9 @@ export default function Scenario(): JSX.Element {
   const [expandProperties, setExpandProperties] = useState(false);
   const [simulationModelId, setSimulationModelId] = useState(0);
   const [startDay, setStartDay] = useState<Date | null>();
-  const [compartmentValues, setCompartmentValues] = useState<{[key: string]: string | number, day: string} | null>(null);
+  const [compartmentValues, setCompartmentValues] = useState<{[key: string]: string | number; day: string} | null>(
+    null,
+  );
 
   const getCompartmentValue = (compartment: string): string => {
     if (compartmentValues && compartment in compartmentValues) {
@@ -45,7 +47,7 @@ export default function Scenario(): JSX.Element {
   const scenarioList = useAppSelector((state) => state.scenarioList);
   const activeScenario = useAppSelector((state) => state.dataSelection.scenario);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
-  const node = useAppSelector(((state) => state.dataSelection.district.ags));
+  const node = useAppSelector((state) => state.dataSelection.district.ags);
 
   const {data: scenarioListData} = useGetSimulationsQuery();
   const {data: simulationModelsData} = useGetSimulationModelsQuery();
@@ -126,15 +128,17 @@ export default function Scenario(): JSX.Element {
           paddingRight: 0,
         }}
       >
-        <Box sx={{
-          display: 'flex',
-          alignItems: 'flex-end',
-          height: '3rem',
-          marginLeft: 'auto',
-          marginRight: 0,
-          marginBottom: theme.spacing(2),
-          paddingRight: theme.spacing(3),
-        }}>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'flex-end',
+            height: '3rem',
+            marginLeft: 'auto',
+            marginRight: 0,
+            marginBottom: theme.spacing(2),
+            paddingRight: theme.spacing(3),
+          }}
+        >
           <Typography
             variant='h2'
             sx={{
@@ -159,7 +163,9 @@ export default function Scenario(): JSX.Element {
                 paddingRight: theme.spacing(3),
                 margin: theme.spacing(0),
                 marginTop: theme.spacing(1),
-                borderLeft: `2px ${selectedCompartment === compartment ? theme.palette.primary.main : 'transparent'} solid`,
+                borderLeft: `2px ${
+                  selectedCompartment === compartment ? theme.palette.primary.main : 'transparent'
+                } solid`,
                 '&.MuiListItemButton-root.Mui-selected': {
                   backgroundColor: theme.palette.background.paper,
                 },

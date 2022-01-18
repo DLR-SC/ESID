@@ -23,13 +23,13 @@ declare module '@mui/material/styles' {
 
   interface Theme {
     custom: {
-      scenarios: Array<string>
+      scenarios: Array<string>;
     };
   }
 
   interface ThemeOptions {
     custom?: {
-      scenarios?: Array<string>
+      scenarios?: Array<string>;
     };
   }
 }
@@ -126,16 +126,7 @@ const theme = createTheme({
   },
   spacing: [0, 4, 8, 12, 26],
   custom: {
-    scenarios: [
-      '#3998DB',
-      '#876BE3',
-      '#CC5AC7',
-      '#EBA73B',
-      '#34C290',
-      '#EB7651',
-      '#34BEC7',
-      '#9FC750',
-    ],
+    scenarios: ['#3998DB', '#876BE3', '#CC5AC7', '#EBA73B', '#34C290', '#EB7651', '#34BEC7', '#9FC750'],
   },
 });
 

@@ -13,7 +13,9 @@ import {useState} from 'react';
 export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
   const theme = useTheme();
 
-  const [compartmentValues, setCompartmentValues] = useState<{[key: string]: string | number, day: string} | null>(null);
+  const [compartmentValues, setCompartmentValues] = useState<{[key: string]: string | number; day: string} | null>(
+    null,
+  );
 
   const compartments = useAppSelector((state) => state.scenarioList.compartments);
   const node = useAppSelector((state) => state.dataSelection.district.ags);
@@ -39,7 +41,12 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
   };
 
   const getCompartmentRate = (compartment: string): string => {
-    if (compartmentValues && compartment in compartmentValues && props.startValues && compartment in props.startValues) {
+    if (
+      compartmentValues &&
+      compartment in compartmentValues &&
+      props.startValues &&
+      compartment in props.startValues
+    ) {
       const value = compartmentValues[compartment];
       const startValue = props.startValues[compartment];
       if (typeof value === 'number' && typeof startValue === 'number') {
@@ -71,12 +78,14 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
       }}
       onClick={() => props.onClick()}
     >
-      <Box sx={{
-        display: 'flex',
-        alignItems: 'flex-end',
-        height: '3rem',
-        marginBottom: theme.spacing(2),
-      }}>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'flex-end',
+          height: '3rem',
+          marginBottom: theme.spacing(2),
+        }}
+      >
         <Typography
           variant='h2'
           sx={{
@@ -156,7 +165,7 @@ interface ScenarioCardProps {
   /** Boolean value whether the properties list is expanded or only the first four are shown. */
   expandProperties: boolean;
 
-  startValues: {[key: string]: string | number, day: string} | null;
+  startValues: {[key: string]: string | number; day: string} | null;
 
   /** The function that is executed when the scenario card is clicked. */
   onClick: () => void;
