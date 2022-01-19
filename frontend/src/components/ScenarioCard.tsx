@@ -15,10 +15,12 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
   const theme = useTheme();
   const {i18n} = useTranslation();
 
-  const [numberFormat] = useState(new Intl.NumberFormat(i18n.language, {
-    minimumSignificantDigits: 1,
-    maximumSignificantDigits: 3
-  }));
+  const [numberFormat] = useState(
+    new Intl.NumberFormat(i18n.language, {
+      minimumSignificantDigits: 1,
+      maximumSignificantDigits: 3,
+    })
+  );
 
   const [compartmentValues, setCompartmentValues] = useState<{[key: string]: string | number; day: string} | null>(
     null

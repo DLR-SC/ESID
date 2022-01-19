@@ -31,10 +31,12 @@ export default function Scenario(): JSX.Element {
   const [compartmentValues, setCompartmentValues] = useState<{[key: string]: string | number; day: string} | null>(
     null
   );
-  const [numberFormat] = useState(new Intl.NumberFormat(i18n.language, {
-    minimumSignificantDigits: 1,
-    maximumSignificantDigits: 3
-  }));
+  const [numberFormat] = useState(
+    new Intl.NumberFormat(i18n.language, {
+      minimumSignificantDigits: 1,
+      maximumSignificantDigits: 3,
+    })
+  );
 
   const getCompartmentValue = (compartment: string): string => {
     if (compartmentValues && compartment in compartmentValues) {
