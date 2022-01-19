@@ -9,7 +9,6 @@ import {Box} from '@mui/material';
 import {selectDate} from '../store/DataSelectionSlice';
 import {useGetRkiByDistrictQuery} from '../store/services/rkiApi';
 import {dateToISOString} from 'util/util';
-import {Dictionary} from 'util/util';
 import {useGetMultipleSimulationDataByNodeQuery} from 'store/services/scenarioApi';
 import {useTranslation} from 'react-i18next';
 
@@ -146,16 +145,14 @@ export default function SimulationChart(): JSX.Element {
 
       // cycle through scenarios
       Object.entries(scenarioList.scenarios).forEach(([scenarioId, scenario]) => {
-        simulationData[scenario.id].results.forEach(({day, ...compartments}) => {
-          dataMap.set(day, {...dataMap.get(day), [scenarioId]: compartments[selectedCompartment] as number});
+        simulationData[scenario.id].results.forEach(({day, compartments}) => {
+          dataMap.set(day, {...dataMap.get(day), [scenarioId]: compartments[selectedCompartment]});
         });
       });
 
       // add rki values
-      rkiData?.results.forEach((entry: Dictionary<number | string>) => {
-        dataMap.set(entry['day'] as string, {
-          ...dataMap.get(entry['day'] as string),
-          rki: entry[selectedCompartment] as number,
+      rkiData?.results.forEach((entry) => {
+        dataMap.set(entry.day, {...dataMap.get(entry.day), rki: entry.compartments[selectedCompartment],
         });
       });
 

@@ -12,7 +12,7 @@ import {
 } from '../store/services/scenarioApi';
 import {useEffect} from 'react';
 import {setCompartments, setScenarios} from 'store/ScenarioSlice';
-import {dateToISOString} from 'util/util';
+import {dateToISOString, Dictionary} from 'util/util';
 import {useGetRkiSingleSimulationEntryQuery} from '../store/services/rkiApi';
 
 /**
@@ -28,17 +28,14 @@ export default function Scenario(): JSX.Element {
   const [expandProperties, setExpandProperties] = useState(false);
   const [simulationModelId, setSimulationModelId] = useState(0);
   const [startDay, setStartDay] = useState<Date | null>();
-  const [compartmentValues, setCompartmentValues] = useState<{[key: string]: string | number; day: string} | null>(
-    null
-  );
+  const [compartmentValues, setCompartmentValues] = useState<Dictionary<number> | null>(null );
 
   const getCompartmentValue = (compartment: string): string => {
     if (compartmentValues && compartment in compartmentValues) {
       const value = compartmentValues[compartment];
-      if (typeof value === 'number') {
-        // What should the logic be here? Can fractional numbers occur?
-        return value.toFixed(0);
-      }
+
+      // What should the logic be here? Can fractional numbers occur?
+      return value.toFixed(0);
     }
 
     return 'No Data';
@@ -69,7 +66,7 @@ export default function Scenario(): JSX.Element {
 
   useEffect(() => {
     if (rkiData) {
-      setCompartmentValues(rkiData.results[0]);
+      setCompartmentValues(rkiData.results[0].compartments);
     }
   }, [rkiData]);
 

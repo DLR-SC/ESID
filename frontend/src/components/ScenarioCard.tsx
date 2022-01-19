@@ -4,6 +4,7 @@ import {Box, List, ListItem, ListItemText, Typography} from '@mui/material';
 import {useAppSelector} from 'store/hooks';
 import {useGetSingleSimulationEntryQuery} from 'store/services/scenarioApi';
 import {useState} from 'react';
+import {Dictionary} from '../util/util';
 
 /**
  * React Component to render individual Scenario Card
@@ -13,7 +14,7 @@ import {useState} from 'react';
 export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
   const theme = useTheme();
 
-  const [compartmentValues, setCompartmentValues] = useState<{[key: string]: string | number; day: string} | null>(
+  const [compartmentValues, setCompartmentValues] = useState<Dictionary<number> | null>(
     null
   );
 
@@ -24,17 +25,15 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
 
   useEffect(() => {
     if (data) {
-      setCompartmentValues(data.results[0]);
+      setCompartmentValues(data.results[0].compartments);
     }
   }, [data]);
 
   const getCompartmentValue = (compartment: string): string => {
     if (compartmentValues && compartment in compartmentValues) {
       const value = compartmentValues[compartment];
-      if (typeof value === 'number') {
-        // What should the logic be here? Can fractional numbers occur?
-        return value.toFixed(0);
-      }
+      // What should the logic be here? Can fractional numbers occur?
+      return value.toFixed(0);
     }
 
     return 'No Data';
@@ -49,11 +48,9 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
     ) {
       const value = compartmentValues[compartment];
       const startValue = props.startValues[compartment];
-      if (typeof value === 'number' && typeof startValue === 'number') {
-        const result = 100 * (value / startValue);
-        if (isFinite(result)) {
-          return result.toFixed() + '%';
-        }
+      const result = 100 * (value / startValue) - 100;
+      if (isFinite(result)) {
+        return (result > 0 ? '+' : '') + result.toFixed() + '%';
       }
     }
 
@@ -165,7 +162,7 @@ interface ScenarioCardProps {
   /** Boolean value whether the properties list is expanded or only the first four are shown. */
   expandProperties: boolean;
 
-  startValues: {[key: string]: string | number; day: string} | null;
+  startValues: Dictionary<number> | null;
 
   /** The function that is executed when the scenario card is clicked. */
   onClick: () => void;
