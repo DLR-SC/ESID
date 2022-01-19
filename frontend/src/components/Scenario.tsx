@@ -21,7 +21,7 @@ import {useGetRkiSingleSimulationEntryQuery} from '../store/services/rkiApi';
  * @see ScenarioCard
  */
 export default function Scenario(): JSX.Element {
-  const {t} = useTranslation();
+  const {t, i18n} = useTranslation();
   const theme = useTheme();
 
   const dispatch = useAppDispatch();
@@ -31,13 +31,16 @@ export default function Scenario(): JSX.Element {
   const [compartmentValues, setCompartmentValues] = useState<{[key: string]: string | number; day: string} | null>(
     null
   );
+  const [numberFormat] = useState(new Intl.NumberFormat(i18n.language, {
+    minimumSignificantDigits: 1,
+    maximumSignificantDigits: 3
+  }));
 
   const getCompartmentValue = (compartment: string): string => {
     if (compartmentValues && compartment in compartmentValues) {
       const value = compartmentValues[compartment];
       if (typeof value === 'number') {
-        // What should the logic be here? Can fractional numbers occur?
-        return value.toFixed(0);
+        return numberFormat.format(value);
       }
     }
 
@@ -135,7 +138,7 @@ export default function Scenario(): JSX.Element {
             height: '3rem',
             marginLeft: 'auto',
             marginRight: 0,
-            marginBottom: theme.spacing(2),
+            marginBottom: theme.spacing(1),
             paddingRight: theme.spacing(3),
           }}
         >

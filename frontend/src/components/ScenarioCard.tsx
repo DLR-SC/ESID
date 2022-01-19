@@ -4,6 +4,7 @@ import {Box, List, ListItem, ListItemText, Typography} from '@mui/material';
 import {useAppSelector} from 'store/hooks';
 import {useGetSingleSimulationEntryQuery} from 'store/services/scenarioApi';
 import {useState} from 'react';
+import {useTranslation} from 'react-i18next';
 
 /**
  * React Component to render individual Scenario Card
@@ -12,6 +13,12 @@ import {useState} from 'react';
  */
 export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
   const theme = useTheme();
+  const {i18n} = useTranslation();
+
+  const [numberFormat] = useState(new Intl.NumberFormat(i18n.language, {
+    minimumSignificantDigits: 1,
+    maximumSignificantDigits: 3
+  }));
 
   const [compartmentValues, setCompartmentValues] = useState<{[key: string]: string | number; day: string} | null>(
     null
@@ -32,8 +39,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
     if (compartmentValues && compartment in compartmentValues) {
       const value = compartmentValues[compartment];
       if (typeof value === 'number') {
-        // What should the logic be here? Can fractional numbers occur?
-        return value.toFixed(0);
+        return numberFormat.format(value);
       }
     }
 
