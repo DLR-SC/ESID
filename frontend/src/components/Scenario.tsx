@@ -21,21 +21,26 @@ import {useGetRkiSingleSimulationEntryQuery} from '../store/services/rkiApi';
  * @see ScenarioCard
  */
 export default function Scenario(): JSX.Element {
-  const {t} = useTranslation();
+  const {t, i18n} = useTranslation();
   const theme = useTheme();
 
   const dispatch = useAppDispatch();
   const [expandProperties, setExpandProperties] = useState(false);
   const [simulationModelId, setSimulationModelId] = useState(0);
   const [startDay, setStartDay] = useState<Date | null>();
-  const [compartmentValues, setCompartmentValues] = useState<Dictionary<number> | null>(null );
+  const [compartmentValues, setCompartmentValues] = useState<Dictionary<number> | null>(
+    null
+  );
+  const [numberFormat] = useState(
+    new Intl.NumberFormat(i18n.language, {
+      minimumSignificantDigits: 1,
+      maximumSignificantDigits: 3,
+    })
+  );
 
   const getCompartmentValue = (compartment: string): string => {
     if (compartmentValues && compartment in compartmentValues) {
-      const value = compartmentValues[compartment];
-
-      // What should the logic be here? Can fractional numbers occur?
-      return value.toFixed(0);
+      return numberFormat.format(compartmentValues[compartment]);
     }
 
     return 'No Data';
@@ -132,7 +137,7 @@ export default function Scenario(): JSX.Element {
             height: '3rem',
             marginLeft: 'auto',
             marginRight: 0,
-            marginBottom: theme.spacing(2),
+            marginBottom: theme.spacing(1),
             paddingRight: theme.spacing(3),
           }}
         >
@@ -145,7 +150,7 @@ export default function Scenario(): JSX.Element {
               fontSize: '13pt',
             }}
           >
-            {startDay ? startDay.toLocaleDateString() : t('today')}
+            {startDay ? startDay.toLocaleDateString(i18n.language) : t('today')}
           </Typography>
         </Box>
         <List dense={true} disablePadding={true}>

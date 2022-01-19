@@ -5,6 +5,7 @@ import {useAppSelector} from 'store/hooks';
 import {useGetSingleSimulationEntryQuery} from 'store/services/scenarioApi';
 import {useState} from 'react';
 import {Dictionary} from '../util/util';
+import {useTranslation} from 'react-i18next';
 
 /**
  * React Component to render individual Scenario Card
@@ -13,6 +14,14 @@ import {Dictionary} from '../util/util';
  */
 export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
   const theme = useTheme();
+  const {i18n} = useTranslation();
+
+  const [numberFormat] = useState(
+    new Intl.NumberFormat(i18n.language, {
+      minimumSignificantDigits: 1,
+      maximumSignificantDigits: 3,
+    })
+  );
 
   const [compartmentValues, setCompartmentValues] = useState<Dictionary<number> | null>(
     null
@@ -31,9 +40,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
 
   const getCompartmentValue = (compartment: string): string => {
     if (compartmentValues && compartment in compartmentValues) {
-      const value = compartmentValues[compartment];
-      // What should the logic be here? Can fractional numbers occur?
-      return value.toFixed(0);
+      return numberFormat.format(compartmentValues[compartment]);
     }
 
     return 'No Data';
