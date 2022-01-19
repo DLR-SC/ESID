@@ -153,7 +153,7 @@ export default function Scenario(): JSX.Element {
               fontSize: '13pt',
             }}
           >
-            {startDay ? startDay.toLocaleDateString() : t('today')}
+            {startDay ? startDay.toLocaleDateString(i18n.language) : t('today')}
           </Typography>
         </Box>
         <List dense={true} disablePadding={true}>
