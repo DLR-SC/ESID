@@ -1,5 +1,6 @@
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 import {RKIDistrictQueryResult, RKIDateQueryResult} from '../../types/rki';
+import {SimulationDataByNode} from '../../types/scenario';
 
 export const rkiApi = createApi({
   reducerPath: 'rkiApi',
@@ -52,6 +53,10 @@ export const rkiApi = createApi({
         return {data: result};
       },
     }),
+
+    getRkiSingleSimulationEntry: builder.query<SimulationDataByNode, RKISingleSimulationEntryParameters>({
+      query: (arg: RKISingleSimulationEntryParameters) => `${arg.node}/${arg.group}/?day=${arg.day}`,
+    }),
   }),
 });
 
@@ -67,4 +72,10 @@ interface RKIDataByDateParameters {
   compartments: Array<string> | null;
 }
 
-export const {useGetRkiByDateQuery, useGetRkiByDistrictQuery} = rkiApi;
+interface RKISingleSimulationEntryParameters {
+  node: string;
+  day: string;
+  group: string;
+}
+
+export const {useGetRkiByDateQuery, useGetRkiByDistrictQuery, useGetRkiSingleSimulationEntryQuery} = rkiApi;
