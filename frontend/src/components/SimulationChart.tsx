@@ -186,9 +186,9 @@ export default function SimulationChart(): JSX.Element {
         });
         // fix tooltip text & background color
         if (series.tooltip) {
-          series.tooltip.label.fill = am4core.color(`${theme.palette.text.primary}`);
+          series.tooltip.label.fill = am4core.color(theme.palette.text.primary);
           series.tooltip.getFillFromObject = false;
-          series.tooltip.background.fill = am4core.color(`${theme.palette.background.paper}`);
+          series.tooltip.background.fill = am4core.color(theme.palette.background.paper);
         }
       });
       // prevent multiple tooltips from showing
