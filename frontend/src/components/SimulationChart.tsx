@@ -71,6 +71,7 @@ export default function SimulationChart(): JSX.Element {
     rkiSeries.strokeWidth = 1;
     rkiSeries.fill = am4core.color('red');
     rkiSeries.stroke = am4core.color('red');
+    rkiSeries.name = t('chart.rkiData');
     rkiSeries.tooltipText = `RKI Data: [bold]{rki}[/]`;
 
     // Add series for scenarios
@@ -82,7 +83,7 @@ export default function SimulationChart(): JSX.Element {
       series.strokeWidth = 1;
       series.fill = am4core.color('red'); // TODO
       series.stroke = am4core.color('red'); // TODO
-      series.tooltipText = `${scenario.label}: [bold]{${scenarioId}}[/]`;
+      series.name = scenario.label;
 
       if (drawDeviations) {
         const seriesSTD = chart.series.push(new am4charts.LineSeries());
@@ -108,7 +109,7 @@ export default function SimulationChart(): JSX.Element {
     return () => {
       chartRef.current?.dispose();
     };
-  }, [scenarioList, dispatch, i18n.language]);
+  }, [scenarioList, dispatch, i18n.language, t]);
 
   // Effect to add Guide when date selected
   useEffect(() => {
@@ -170,9 +171,33 @@ export default function SimulationChart(): JSX.Element {
           ...values,
         });
       });
-      chartRef.current?.invalidateData();
+
+      // set up tooltip
+      chartRef.current.series.each((series) => {
+        series.adapter.add('tooltipText', (_, target) => {
+          const data = target.tooltipDataItem.dataContext;
+          const text = [`${selectedCompartment}:`];
+          chartRef.current?.series.each((s) => {
+            if (s.dataFields.valueY && (data as {[key: string]: number | string})[s.dataFields.valueY]) {
+              text.push(`[${(s.stroke as am4core.Color).hex}]${s.name} ●[/] {${s.dataFields.valueY ?? ''}}`);
+            }
+          });
+          return text.join('\n');
+        });
+        // fix tooltip text & background color
+        if (series.tooltip) {
+          series.tooltip.label.fill = am4core.color(`${theme.palette.text.primary}`);
+          series.tooltip.getFillFromObject = false;
+          series.tooltip.background.fill = am4core.color(`${theme.palette.background.paper}`);
+        }
+      });
+      // prevent multiple tooltips from showing
+      chartRef.current.cursor.maxTooltipDistance = 0;
+
+      // invalidate/reload data
+      chartRef.current.invalidateData();
     }
-  }, [simulationData, rkiData, scenarioList, selectedCompartment]);
+  }, [simulationData, rkiData, scenarioList, selectedCompartment, theme]);
 
   return (
     <Box
