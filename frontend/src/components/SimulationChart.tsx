@@ -152,8 +152,7 @@ export default function SimulationChart(): JSX.Element {
 
       // add rki values
       rkiData?.results.forEach((entry) => {
-        dataMap.set(entry.day, {...dataMap.get(entry.day), rki: entry.compartments[selectedCompartment],
-        });
+        dataMap.set(entry.day, {...dataMap.get(entry.day), rki: entry.compartments[selectedCompartment]});
       });
 
       // sort map by date

@@ -23,9 +23,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
     })
   );
 
-  const [compartmentValues, setCompartmentValues] = useState<Dictionary<number> | null>(
-    null
-  );
+  const [compartmentValues, setCompartmentValues] = useState<Dictionary<number> | null>(null);
 
   const compartments = useAppSelector((state) => state.scenarioList.compartments);
   const node = useAppSelector((state) => state.dataSelection.district.ags);

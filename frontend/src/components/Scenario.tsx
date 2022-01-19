@@ -28,9 +28,7 @@ export default function Scenario(): JSX.Element {
   const [expandProperties, setExpandProperties] = useState(false);
   const [simulationModelId, setSimulationModelId] = useState(0);
   const [startDay, setStartDay] = useState<Date | null>();
-  const [compartmentValues, setCompartmentValues] = useState<Dictionary<number> | null>(
-    null
-  );
+  const [compartmentValues, setCompartmentValues] = useState<Dictionary<number> | null>(null);
   const [numberFormat] = useState(
     new Intl.NumberFormat(i18n.language, {
       minimumSignificantDigits: 1,
