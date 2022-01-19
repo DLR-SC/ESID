@@ -11,8 +11,9 @@ import {
   useGetSimulationsQuery,
 } from '../store/services/scenarioApi';
 import {useEffect} from 'react';
-import {setScenarios} from 'store/ScenarioSlice';
+import {setCompartments, setScenarios} from 'store/ScenarioSlice';
 import {dateToISOString} from 'util/util';
+import {useGetRkiSingleSimulationEntryQuery} from '../store/services/rkiApi';
 
 /**
  * React Component to render the Scenario Cards Section
@@ -25,18 +26,37 @@ export default function Scenario(): JSX.Element {
 
   const dispatch = useAppDispatch();
   const [expandProperties, setExpandProperties] = useState(false);
-
   const [simulationModelId, setSimulationModelId] = useState(0);
+  const [startDay, setStartDay] = useState<Date | null>();
+  const [compartmentValues, setCompartmentValues] = useState<{[key: string]: string | number; day: string} | null>(
+    null
+  );
 
-  const [compartments, setCompartments] = useState<Array<string>>([]);
+  const getCompartmentValue = (compartment: string): string => {
+    if (compartmentValues && compartment in compartmentValues) {
+      const value = compartmentValues[compartment];
+      if (typeof value === 'number') {
+        // What should the logic be here? Can fractional numbers occur?
+        return value.toFixed(0);
+      }
+    }
+
+    return 'No Data';
+  };
 
   const scenarioList = useAppSelector((state) => state.scenarioList);
   const activeScenario = useAppSelector((state) => state.dataSelection.scenario);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
+  const node = useAppSelector((state) => state.dataSelection.district.ags);
 
   const {data: scenarioListData} = useGetSimulationsQuery();
   const {data: simulationModelsData} = useGetSimulationModelsQuery();
   const {data: simulationModelData} = useGetSimulationModelQuery(simulationModelId);
+  const {data: rkiData} = useGetRkiSingleSimulationEntryQuery({
+    node,
+    day: startDay ? dateToISOString(startDay) : '',
+    group: 'total',
+  });
 
   useEffect(() => {
     if (simulationModelsData && simulationModelsData.results.length > 0) {
@@ -48,8 +68,14 @@ export default function Scenario(): JSX.Element {
   }, [simulationModelsData]);
 
   useEffect(() => {
+    if (rkiData) {
+      setCompartmentValues(rkiData.results[0]);
+    }
+  }, [rkiData]);
+
+  useEffect(() => {
     if (simulationModelData) {
-      setCompartments(simulationModelData.compartments);
+      dispatch(setCompartments(simulationModelData.compartments));
 
       if (simulationModelData.compartments.length > 0) {
         dispatch(selectCompartment(simulationModelData.compartments[0]));
@@ -67,9 +93,11 @@ export default function Scenario(): JSX.Element {
       if (scenarios.length > 0) {
         // It seems, that the simulation data is only available from the second day forward.
         const day = new Date(scenarioListData.results[0].startDay);
-        day.setDate(day.getDate() + 1);
+        setStartDay(day);
 
-        dispatch(selectDate(dateToISOString(day)));
+        const endDay = new Date(day);
+        endDay.setDate(endDay.getDate() + scenarioListData.results[0].numberOfDays);
+        dispatch(selectDate(dateToISOString(endDay)));
         dispatch(selectScenario(scenarios[0].id));
       }
     }
@@ -87,35 +115,60 @@ export default function Scenario(): JSX.Element {
         sx={{
           borderRight: `2px dashed ${theme.palette.divider}`,
           flexGrow: 0,
-          flexShrink: 1,
-          flexBasis: '276px',
+          flexShrink: 0,
+          flexBasis: '274px',
           minHeight: '20vh',
           display: 'flex',
           flexDirection: 'column',
-          padding: theme.spacing(3),
-          paddingTop: theme.spacing(4),
+          marginTop: theme.spacing(3),
+          borderTop: '2px solid transparent', // invisible border for alignment with the scenario card
+          paddingBottom: 0,
+          paddingTop: theme.spacing(2),
+          paddingLeft: 0,
+          paddingRight: 0,
         }}
       >
-        <Typography
-          variant='h1'
+        <Box
           sx={{
-            width: '100%',
-            textAlign: 'right',
-            minHeight: '3rem',
-            marginBottom: theme.spacing(3),
+            display: 'flex',
+            alignItems: 'flex-end',
+            height: '3rem',
+            marginLeft: 'auto',
+            marginRight: 0,
+            marginBottom: theme.spacing(2),
+            paddingRight: theme.spacing(3),
           }}
         >
-          {t('today')}
-        </Typography>
+          <Typography
+            variant='h2'
+            sx={{
+              textAlign: 'right',
+              height: 'min-content',
+              fontWeight: 'bold',
+              fontSize: '13pt',
+            }}
+          >
+            {startDay ? startDay.toLocaleDateString() : t('today')}
+          </Typography>
+        </Box>
         <List dense={true} disablePadding={true}>
-          {compartments.map((compartment, i) => (
+          {scenarioList.compartments.map((compartment, i) => (
             // map all compartments to display compartment list
             <ListItemButton
               key={compartment}
               sx={{
                 display: expandProperties || i < 4 ? 'flex' : 'none',
                 padding: theme.spacing(1),
+                paddingLeft: theme.spacing(3),
+                paddingRight: theme.spacing(3),
                 margin: theme.spacing(0),
+                marginTop: theme.spacing(1),
+                borderLeft: `2px ${
+                  selectedCompartment === compartment ? theme.palette.primary.main : 'transparent'
+                } solid`,
+                '&.MuiListItemButton-root.Mui-selected': {
+                  backgroundColor: theme.palette.background.paper,
+                },
               }}
               selected={selectedCompartment === compartment}
               onClick={() => {
@@ -125,17 +178,23 @@ export default function Scenario(): JSX.Element {
             >
               <ListItemText
                 primary={compartment}
+                // disable child typography overriding this
+                disableTypography={true}
                 sx={{
+                  typography: 'listElement',
+                  fontWeight: selectedCompartment === compartment ? 'bold' : 'normal',
                   flexGrow: 1,
                   flexBasis: 100,
                 }}
               />
               <ListItemText
-                primary={0} // TODO
+                primary={getCompartmentValue(compartment)}
                 // disable child typography overriding this
                 disableTypography={true}
                 sx={{
                   typography: 'listElement',
+                  color: selectedCompartment === compartment ? theme.palette.text.primary : theme.palette.text.disabled,
+                  textAlign: 'right',
                   flexGrow: 1,
                 }}
               />
@@ -146,19 +205,22 @@ export default function Scenario(): JSX.Element {
           variant='outlined'
           color='primary'
           sx={{
-            margin: theme.spacing(2),
+            margin: theme.spacing(3),
+            marginTop: theme.spacing(4),
+            marginBottom: 0,
+            padding: theme.spacing(1),
           }}
           aria-label={t('scenario.more')}
           onClick={() => {
             setExpandProperties(!expandProperties);
             // unselect Property if hidden through show less button
             if (
-              compartments.findIndex((o) => {
+              scenarioList.compartments.findIndex((o) => {
                 return o === selectedCompartment;
               }) > 4
             ) {
-              if (compartments.length > 0) {
-                dispatch(selectCompartment(compartments[0]));
+              if (scenarioList.compartments.length > 0) {
+                dispatch(selectCompartment(scenarioList.compartments[0]));
               }
             }
           }}
@@ -173,6 +235,7 @@ export default function Scenario(): JSX.Element {
           flexBasis: '100%',
           display: 'flex',
           overflowX: 'auto',
+          marginLeft: theme.spacing(3),
         }}
       >
         {Object.entries(scenarioList.scenarios).map(([, scenario], i) => (
@@ -180,13 +243,10 @@ export default function Scenario(): JSX.Element {
             key={i}
             scenario={scenario}
             active={activeScenario === i + 1}
-            data={compartments.map((p) => ({
-              compartment: p,
-              value: 0, // TODO
-              rate: 0, // TODO
-            }))}
+            color={theme.custom.scenarios[i]}
             selectedProperty={selectedCompartment}
             expandProperties={expandProperties}
+            startValues={compartmentValues}
             onClick={() => {
               // set active scenario to this one and send dispatches
               dispatch(selectScenario(scenario.id));
@@ -200,9 +260,10 @@ export default function Scenario(): JSX.Element {
           borderColor: 'divider',
           flexGrow: 0,
           flexShrink: 0,
-          flexBasis: '208px',
+          flexBasis: '185px',
           minHeight: '20vh',
           paddingLeft: theme.spacing(3),
+          paddingRight: theme.spacing(3),
           display: 'flex',
         }}
       >
@@ -213,10 +274,18 @@ export default function Scenario(): JSX.Element {
             flexGrow: 0,
             flexShrink: 0,
             flexBasis: '160px',
-            minHeight: '220px',
+            height: '212px',
             margin: theme.spacing(3),
             fontWeight: 'bolder',
             fontSize: '3rem',
+            border: `2px ${theme.palette.divider} dashed`,
+            borderRadius: '3px',
+            color: theme.palette.divider,
+
+            '&:hover': {
+              border: `2px ${theme.palette.divider} dashed`,
+              background: '#E7E7E7',
+            },
           }}
           aria-label={t('scenario.add')}
         >

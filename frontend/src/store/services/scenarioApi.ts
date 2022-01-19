@@ -73,6 +73,10 @@ export const scenarioApi = createApi({
       },
     }),
 
+    getSingleSimulationEntry: builder.query<SimulationDataByNode, SingleSimulationEntryParameters>({
+      query: (arg: SingleSimulationEntryParameters) => `simulation/${arg.id}/${arg.node}/${arg.group}/?day=${arg.day}`,
+    }),
+
     getMultipleSimulationDataByNode: builder.query<SimulationDataByNode[], MultipleSimulationDataByNodeParameters>({
       async queryFn(arg, _queryApi, _extraOptions, fetchWithBQ) {
         const group = arg.group || 'total';
@@ -120,6 +124,13 @@ interface SimulationDataByNodeParameters {
   compartments: Array<string> | null;
 }
 
+interface SingleSimulationEntryParameters {
+  id: number;
+  node: string;
+  day: string;
+  group: string;
+}
+
 interface MultipleSimulationDataByNodeParameters {
   ids: number[];
   node: string;
@@ -133,5 +144,6 @@ export const {
   useGetSimulationsQuery,
   useGetSimulationDataByDateQuery,
   useGetSimulationDataByNodeQuery,
+  useGetSingleSimulationEntryQuery,
   useGetMultipleSimulationDataByNodeQuery,
 } = scenarioApi;

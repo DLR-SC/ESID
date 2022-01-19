@@ -6,8 +6,6 @@ describe('DataSelectionSlice', () => {
     date: '2021-01-01',
     scenario: 0,
     compartment: '',
-    value: 0,
-    rate: 0,
   };
 
   test('Initial State', () => {
@@ -21,8 +19,6 @@ describe('DataSelectionSlice', () => {
       date: '2021-01-01',
       scenario: 0,
       compartment: '',
-      value: 0,
-      rate: 0,
     });
   });
 
@@ -33,8 +29,6 @@ describe('DataSelectionSlice', () => {
       date: '2020-09-21',
       scenario: 0,
       compartment: '',
-      value: 0,
-      rate: 0,
     });
   });
 
@@ -44,8 +38,6 @@ describe('DataSelectionSlice', () => {
       date: '2021-01-01',
       scenario: 1,
       compartment: '',
-      value: 0,
-      rate: 0,
     });
   });
 
@@ -55,8 +47,6 @@ describe('DataSelectionSlice', () => {
       date: '2021-01-01',
       scenario: 0,
       compartment: 'Test Compartment',
-      value: 0,
-      rate: 0,
     });
   });
 });

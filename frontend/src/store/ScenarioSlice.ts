@@ -7,6 +7,7 @@ export interface Scenario {
 
 const initialState = {
   scenarios: {} as {[key: number]: Scenario},
+  compartments: [] as Array<string>,
 };
 
 /**
@@ -21,8 +22,11 @@ export const ScenarioSlice = createSlice({
       action.payload.forEach((value) => (scenarioDict[value.id] = value));
       state.scenarios = scenarioDict;
     },
+    setCompartments(state, action: PayloadAction<Array<string>>) {
+      state.compartments = action.payload;
+    },
   },
 });
 
-export const {setScenarios} = ScenarioSlice.actions;
+export const {setScenarios, setCompartments} = ScenarioSlice.actions;
 export default ScenarioSlice.reducer;
