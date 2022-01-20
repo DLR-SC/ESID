@@ -173,15 +173,26 @@ export default function SimulationChart(): JSX.Element {
       });
 
       // set up tooltip
+      // TODO: HTML Tooltip
       chartRef.current.series.each((series) => {
-        series.adapter.add('tooltipText', (_, target) => {
+        series.adapter.add('tooltipHTML', (_, target) => {
           const data = target.tooltipDataItem.dataContext;
-          const text = [`${selectedCompartment}:`];
+          const text = [`<strong>{date} (${selectedCompartment})</strong>`];
+          text.push('<table>');
           chartRef.current?.series.each((s) => {
             if (s.dataFields.valueY && (data as {[key: string]: number | string})[s.dataFields.valueY]) {
-              text.push(`[${(s.stroke as am4core.Color).hex}]${s.name} ●[/] {${s.dataFields.valueY ?? ''}}`);
+              text.push('<tr>');
+              text.push(
+                `<th 
+                style="text-align:left; color:${(s.stroke as am4core.Color).hex}; padding-right:${theme.spacing(2)}">
+                <strong>${s.name}</strong>
+                </th>`
+              );
+              text.push(`<td style="text-align:right">{${s.dataFields.valueY ?? ''}}</td>`);
+              text.push('</tr>');
             }
           });
+          text.push('</table>');
           return text.join('\n');
         });
         // fix tooltip text & background color
