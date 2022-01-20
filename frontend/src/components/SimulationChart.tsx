@@ -12,6 +12,7 @@ import {dateToISOString} from 'util/util';
 import {Dictionary} from 'util/util';
 import {useGetMultipleSimulationDataByNodeQuery} from 'store/services/scenarioApi';
 import {useTranslation} from 'react-i18next';
+import {NumberFormatter} from 'util/hooks';
 
 /* This component displays the evolution of the pandemic for a specific compartment (hospitalized, dead, infected, etc.) regarding the different scenarios
  */
@@ -36,7 +37,6 @@ export default function SimulationChart(): JSX.Element {
     group: 'total',
     compartments: selectedCompartment ? [selectedCompartment] : null,
   });
-
   const {data: simulationData} = useGetMultipleSimulationDataByNodeQuery({
     // take scenario ids and flatten them into array
     ids: Object.entries(scenarioList.scenarios).map(([, scn]) => scn.id),
@@ -44,6 +44,7 @@ export default function SimulationChart(): JSX.Element {
     group: '',
     compartments: selectedCompartment ? [selectedCompartment] : null,
   });
+  const [formatNumber] = NumberFormatter({lang: i18n.language, significantDigits: 3, maxFractionalDigits: 8});
 
   const chartRef = useRef<am4charts.XYChart | null>(null);
 
@@ -83,6 +84,7 @@ export default function SimulationChart(): JSX.Element {
       series.strokeWidth = 1;
       series.fill = am4core.color('red'); // TODO
       series.stroke = am4core.color('red'); // TODO
+      series.tooltipText = `[bold ${series.stroke.hex}]${scenario.label}:[/] {${scenarioId}}`;
       series.name = scenario.label;
 
       if (drawDeviations) {
@@ -177,7 +179,7 @@ export default function SimulationChart(): JSX.Element {
       chartRef.current.series.each((series) => {
         series.adapter.add('tooltipHTML', (_, target) => {
           const data = target.tooltipDataItem.dataContext;
-          const text = [`<strong>{date} (${selectedCompartment})</strong>`];
+          const text = [`<strong>{date.formatDate("${t('dateFormat')}")} (${selectedCompartment})</strong>`];
           text.push('<table>');
           chartRef.current?.series.each((s) => {
             if (s.dataFields.valueY && (data as {[key: string]: number | string})[s.dataFields.valueY]) {
@@ -188,7 +190,11 @@ export default function SimulationChart(): JSX.Element {
                 <strong>${s.name}</strong>
                 </th>`
               );
-              text.push(`<td style="text-align:right">{${s.dataFields.valueY ?? ''}}</td>`);
+              text.push(
+                `<td style="text-align:right">${formatNumber(
+                  (data as {[key: string]: number})[s.dataFields.valueY]
+                )}</td>`
+              );
               text.push('</tr>');
             }
           });
@@ -208,7 +214,7 @@ export default function SimulationChart(): JSX.Element {
       // invalidate/reload data
       chartRef.current.invalidateData();
     }
-  }, [simulationData, rkiData, scenarioList, selectedCompartment, theme]);
+  }, [simulationData, rkiData, scenarioList, selectedCompartment, theme, formatNumber, t]);
 
   return (
     <Box
