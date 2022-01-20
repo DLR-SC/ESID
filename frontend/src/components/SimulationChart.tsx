@@ -118,12 +118,12 @@ export default function SimulationChart(): JSX.Element {
       const range = dateAxis.axisRanges.create();
       range.date = new Date(selectedDate);
       range.grid.above = true;
-      range.grid.stroke = am4core.color(`${theme.palette.primary.main}`);
+      range.grid.stroke = am4core.color(theme.palette.primary.main);
       range.grid.strokeWidth = 2;
       range.grid.strokeOpacity = 1;
       range.label.text = '{date}';
       range.label.language.locale = dateAxis.language.locale;
-      range.label.dateFormatter.dateFormat = `${t('dateFormat')}`;
+      range.label.dateFormatter.dateFormat = t('dateFormat');
       range.label.fill = am4core.color('white');
       range.label.background.fill = range.grid.stroke;
     }
