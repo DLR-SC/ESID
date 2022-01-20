@@ -6,6 +6,7 @@ import {useGetSingleSimulationEntryQuery} from 'store/services/scenarioApi';
 import {useState} from 'react';
 import {Dictionary} from '../util/util';
 import {useTranslation} from 'react-i18next';
+import {NumberFormatter} from '../util/hooks';
 
 /**
  * React Component to render individual Scenario Card
@@ -14,14 +15,9 @@ import {useTranslation} from 'react-i18next';
  */
 export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
   const theme = useTheme();
-  const {i18n} = useTranslation();
+  const {t, i18n} = useTranslation();
 
-  const [numberFormat] = useState(
-    new Intl.NumberFormat(i18n.language, {
-      minimumSignificantDigits: 1,
-      maximumSignificantDigits: 3,
-    })
-  );
+  const [formatNumber] = NumberFormatter({lang: i18n.language, significantDigits: 3, maxFractionalDigits: 8});
 
   const [compartmentValues, setCompartmentValues] = useState<Dictionary<number> | null>(null);
 
@@ -38,10 +34,9 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
 
   const getCompartmentValue = (compartment: string): string => {
     if (compartmentValues && compartment in compartmentValues) {
-      return numberFormat.format(compartmentValues[compartment]);
+      return formatNumber(compartmentValues[compartment]);
     }
-
-    return 'No Data';
+    return t('no-data');
   };
 
   const getCompartmentRate = (compartment: string): string => {
@@ -53,9 +48,10 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
     ) {
       const value = compartmentValues[compartment];
       const startValue = props.startValues[compartment];
-      const result = 100 * (value / startValue) - 100;
+      const result = Math.round(100 * (value / startValue) - 100);
       if (isFinite(result)) {
-        return (result > 0 ? '+' : '') + result.toFixed() + '%';
+        const sign = result === 0 ? '\u00B1' : result > 0 ? '+' : '-';
+        return sign + Math.abs(result).toFixed() + '%';
       }
     }
 
@@ -120,7 +116,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
               sx={{
                 typography: 'listElement',
                 textAlign: 'right',
-                flexBasis: '60%',
+                flexBasis: '55%',
               }}
             />
             <ListItemText
@@ -131,7 +127,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
                 typography: 'listElement',
                 fontWeight: 'bold',
                 textAlign: 'right',
-                flexBasis: '40%',
+                flexBasis: '45%',
               }}
             />
           </ListItem>
