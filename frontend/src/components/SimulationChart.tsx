@@ -43,7 +43,7 @@ export default function SimulationChart(): JSX.Element {
     group: '',
     compartments: selectedCompartment ? [selectedCompartment] : null,
   });
-  const [formatNumber] = NumberFormatter({lang: i18n.language, significantDigits: 3, maxFractionalDigits: 8});
+  const {formatNumber} = NumberFormatter(i18n.language, 3, 8);
 
   const chartRef = useRef<am4charts.XYChart | null>(null);
 
@@ -56,8 +56,7 @@ export default function SimulationChart(): JSX.Element {
     // Create axes
     const dateAxis = chart.xAxes.push(new am4charts.DateAxis());
     const valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-    valueAxis.logarithmic = true;
-    valueAxis.min = 1;
+    valueAxis.min = 0;
 
     // Add cursor
     chart.cursor = new am4charts.XYCursor();
@@ -136,7 +135,7 @@ export default function SimulationChart(): JSX.Element {
         ranges.removeValue(range);
       });
     };
-  }, [selectedDate, theme, t, i18n.language]);
+  }, [scenarioList, selectedDate, theme, t, i18n.language]);
 
   // Effect to update Simulation and RKI Data
   useEffect(() => {
@@ -182,12 +181,12 @@ export default function SimulationChart(): JSX.Element {
               text.push('<tr>');
               text.push(
                 `<th 
-                style="text-align:left; color:${(s.stroke as am4core.Color).hex}; padding-right:${theme.spacing(2)}">
+                style='text-align:left; color:${(s.stroke as am4core.Color).hex}; padding-right:${theme.spacing(2)}'>
                 <strong>${s.name}</strong>
                 </th>`
               );
               text.push(
-                `<td style="text-align:right">${formatNumber(
+                `<td style='text-align:right'>${formatNumber(
                   (data as {[key: string]: number})[s.dataFields.valueY]
                 )}</td>`
               );
