@@ -11,6 +11,7 @@ import {useGetRkiByDistrictQuery} from '../store/services/rkiApi';
 import {dateToISOString} from 'util/util';
 import {useGetMultipleSimulationDataByNodeQuery} from 'store/services/scenarioApi';
 import {useTranslation} from 'react-i18next';
+import {NumberFormatter} from 'util/hooks';
 
 /* This component displays the evolution of the pandemic for a specific compartment (hospitalized, dead, infected, etc.) regarding the different scenarios
  */
@@ -35,7 +36,6 @@ export default function SimulationChart(): JSX.Element {
     group: 'total',
     compartments: selectedCompartment ? [selectedCompartment] : null,
   });
-
   const {data: simulationData} = useGetMultipleSimulationDataByNodeQuery({
     // take scenario ids and flatten them into array
     ids: Object.entries(scenarioList.scenarios).map(([, scn]) => scn.id),
@@ -43,6 +43,7 @@ export default function SimulationChart(): JSX.Element {
     group: '',
     compartments: selectedCompartment ? [selectedCompartment] : null,
   });
+  const [formatNumber] = NumberFormatter({lang: i18n.language, significantDigits: 3, maxFractionalDigits: 8});
 
   const chartRef = useRef<am4charts.XYChart | null>(null);
 
@@ -55,7 +56,8 @@ export default function SimulationChart(): JSX.Element {
     // Create axes
     const dateAxis = chart.xAxes.push(new am4charts.DateAxis());
     const valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-    valueAxis.min = 0;
+    valueAxis.logarithmic = true;
+    valueAxis.min = 1;
 
     // Add cursor
     chart.cursor = new am4charts.XYCursor();
@@ -67,20 +69,22 @@ export default function SimulationChart(): JSX.Element {
     rkiSeries.dataFields.dateX = 'date';
     rkiSeries.tensionX = 0.8;
     rkiSeries.strokeWidth = 1;
-    rkiSeries.fill = am4core.color('red');
-    rkiSeries.stroke = am4core.color('red');
+    rkiSeries.fill = am4core.color('black');
+    rkiSeries.stroke = am4core.color('black');
+    rkiSeries.name = t('chart.rkiData');
     rkiSeries.tooltipText = `RKI Data: [bold]{rki}[/]`;
 
     // Add series for scenarios
-    Object.entries(scenarioList.scenarios).forEach(([scenarioId, scenario]) => {
+    Object.entries(scenarioList.scenarios).forEach(([scenarioId, scenario], i) => {
       const series = chart.series.push(new am4charts.LineSeries());
       series.dataFields.valueY = scenarioId;
       series.dataFields.dateX = 'date';
       series.tensionX = 0.8;
       series.strokeWidth = 1;
-      series.fill = am4core.color('red'); // TODO
-      series.stroke = am4core.color('red'); // TODO
-      series.tooltipText = `${scenario.label}: [bold]{${scenarioId}}[/]`;
+      series.fill = am4core.color(theme.custom.scenarios[i % theme.custom.scenarios.length]); // loop around the color list if scenarios exceed color list
+      series.stroke = series.fill;
+      series.tooltipText = `[bold ${series.stroke.hex}]${scenario.label}:[/] {${scenarioId}}`;
+      series.name = scenario.label;
 
       if (drawDeviations) {
         const seriesSTD = chart.series.push(new am4charts.LineSeries());
@@ -89,9 +93,9 @@ export default function SimulationChart(): JSX.Element {
         seriesSTD.dataFields.dateX = 'date';
         seriesSTD.tensionX = 0.8;
         seriesSTD.strokeWidth = 0;
-        seriesSTD.fill = am4core.color('red'); // TODO
         seriesSTD.fillOpacity = 0.3;
-        seriesSTD.stroke = am4core.color('red'); // TODO
+        series.fill = am4core.color(theme.custom.scenarios[i % theme.custom.scenarios.length]); // loop around the color list if scenarios exceed color list
+        series.stroke = series.fill;
         // override tooltip
         series.tooltipText = `${scenario.label}: [bold]{${scenarioId}STDdown} ~ {${scenarioId}STDup}[/]`;
       }
@@ -106,7 +110,7 @@ export default function SimulationChart(): JSX.Element {
     return () => {
       chartRef.current?.dispose();
     };
-  }, [scenarioList, dispatch, i18n.language]);
+  }, [scenarioList, dispatch, i18n.language, t, theme]);
 
   // Effect to add Guide when date selected
   useEffect(() => {
@@ -115,12 +119,12 @@ export default function SimulationChart(): JSX.Element {
       const range = dateAxis.axisRanges.create();
       range.date = new Date(selectedDate);
       range.grid.above = true;
-      range.grid.stroke = am4core.color(`${theme.palette.primary.main}`);
+      range.grid.stroke = am4core.color(theme.palette.primary.main);
       range.grid.strokeWidth = 2;
       range.grid.strokeOpacity = 1;
       range.label.text = '{date}';
       range.label.language.locale = dateAxis.language.locale;
-      range.label.dateFormatter.dateFormat = `${t('dateFormat')}`;
+      range.label.dateFormatter.dateFormat = t('dateFormat');
       range.label.fill = am4core.color('white');
       range.label.background.fill = range.grid.stroke;
     }
@@ -132,7 +136,7 @@ export default function SimulationChart(): JSX.Element {
         ranges.removeValue(range);
       });
     };
-  }, [selectedDate, scenarioList, theme, t, i18n.language]);
+  }, [selectedDate, theme, t, i18n.language]);
 
   // Effect to update Simulation and RKI Data
   useEffect(() => {
@@ -165,9 +169,48 @@ export default function SimulationChart(): JSX.Element {
           ...values,
         });
       });
-      chartRef.current?.invalidateData();
+
+      // set up tooltip
+      // TODO: HTML Tooltip
+      chartRef.current.series.each((series) => {
+        series.adapter.add('tooltipHTML', (_, target) => {
+          const data = target.tooltipDataItem.dataContext;
+          const text = [`<strong>{date.formatDate("${t('dateFormat')}")} (${selectedCompartment})</strong>`];
+          text.push('<table>');
+          chartRef.current?.series.each((s) => {
+            if (s.dataFields.valueY && (data as {[key: string]: number | string})[s.dataFields.valueY]) {
+              text.push('<tr>');
+              text.push(
+                `<th 
+                style="text-align:left; color:${(s.stroke as am4core.Color).hex}; padding-right:${theme.spacing(2)}">
+                <strong>${s.name}</strong>
+                </th>`
+              );
+              text.push(
+                `<td style="text-align:right">${formatNumber(
+                  (data as {[key: string]: number})[s.dataFields.valueY]
+                )}</td>`
+              );
+              text.push('</tr>');
+            }
+          });
+          text.push('</table>');
+          return text.join('\n');
+        });
+        // fix tooltip text & background color
+        if (series.tooltip) {
+          series.tooltip.label.fill = am4core.color(theme.palette.text.primary);
+          series.tooltip.getFillFromObject = false;
+          series.tooltip.background.fill = am4core.color(theme.palette.background.paper);
+        }
+      });
+      // prevent multiple tooltips from showing
+      chartRef.current.cursor.maxTooltipDistance = 0;
+
+      // invalidate/reload data
+      chartRef.current.invalidateData();
     }
-  }, [simulationData, rkiData, scenarioList, selectedCompartment]);
+  }, [simulationData, rkiData, scenarioList, selectedCompartment, theme, formatNumber, t]);
 
   return (
     <Box

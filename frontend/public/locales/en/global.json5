@@ -33,6 +33,9 @@
     add: 'Add scenario',
     more: 'More properties',
   },
+  chart: {
+    rkiData: 'RKI Data',
+  },
   today: 'Today',
   more: 'More',
   less: 'Less',

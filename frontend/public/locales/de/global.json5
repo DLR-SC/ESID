@@ -24,6 +24,9 @@
     add: 'Szenario hinzufügen',
     more: 'Mehr Eigenschaften',
   },
+  chart: {
+    rkiData: 'RKI-Daten',
+  },
   today: 'Heute',
   more: 'Mehr',
   less: 'Weniger',
