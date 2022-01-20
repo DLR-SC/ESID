@@ -17,7 +17,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
   const theme = useTheme();
   const {t, i18n} = useTranslation();
 
-  const [formatNumber] = NumberFormatter({lang: i18n.language, significantDigits: 3, maxFractionalDigits: 8});
+  const {formatNumber} = NumberFormatter(i18n.language, 3, 8);
 
   const [compartmentValues, setCompartmentValues] = useState<Dictionary<number> | null>(null);
 

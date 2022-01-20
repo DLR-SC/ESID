@@ -31,7 +31,7 @@ export default function Scenario(): JSX.Element {
   const [startDay, setStartDay] = useState<Date | null>();
   const [compartmentValues, setCompartmentValues] = useState<Dictionary<number> | null>(null);
 
-  const [formatNumber] = NumberFormatter({lang: i18n.language, significantDigits: 3, maxFractionalDigits: 8});
+  const {formatNumber} = NumberFormatter(i18n.language, 3, 8);
 
   const getCompartmentValue = (compartment: string): string => {
     if (compartmentValues && compartment in compartmentValues) {

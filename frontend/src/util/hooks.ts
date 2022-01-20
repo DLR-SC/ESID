@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 
 /**
  * This hook can be used to format numbers with language specific formatting and can be configured to display certain
@@ -22,35 +22,36 @@ import {useState} from 'react';
  * - 0,000123456789  => 0,0001
  * - 0,0000123456789 => 0
  */
-export function NumberFormatter(props: NumberFormatterProps): [formatNumber: (value: number) => string] {
-  const [largeIntegerNumberFormatter] = useState(new Intl.NumberFormat(props.lang, {maximumFractionDigits: 0}));
-  const [smallNumberFormatter] = useState(
-    new Intl.NumberFormat(props.lang, {maximumSignificantDigits: props.significantDigits})
+export function NumberFormatter(
+  lang: string,
+  significantDigits: number,
+  maxFractionalDigits: number
+): {formatNumber: (value: number) => string} {
+  const [largeNumberFormatter, setLargeNumberFormatter] = useState(
+    new Intl.NumberFormat(lang, {maximumFractionDigits: 0})
   );
+
+  const [smallNumberFormatter, setSmallNumberFormatter] = useState(
+    new Intl.NumberFormat(lang, {maximumSignificantDigits: significantDigits})
+  );
+
+  useEffect(() => {
+    setLargeNumberFormatter(new Intl.NumberFormat(lang, {maximumFractionDigits: 0}));
+    setSmallNumberFormatter(new Intl.NumberFormat(lang, {maximumSignificantDigits: significantDigits}));
+  }, [lang, significantDigits]);
 
   function formatNumber(value: number): string {
     const absValue = Math.abs(value);
-    const powSignificant = Math.pow(10, props.significantDigits - 1);
+    const powSignificant = Math.pow(10, significantDigits - 1);
 
     if (absValue >= powSignificant) {
-      return largeIntegerNumberFormatter.format(value);
+      return largeNumberFormatter.format(value);
     }
 
-    const powFractional = Math.pow(10, props.maxFractionalDigits);
+    const powFractional = Math.pow(10, maxFractionalDigits);
     value = Math.round((value + Number.EPSILON) * powFractional) / powFractional;
     return smallNumberFormatter.format(value);
   }
 
-  return [formatNumber];
-}
-
-interface NumberFormatterProps {
-  /** The language code. e.g. 'de' or 'en' */
-  lang: string;
-
-  /** How many digits should be displayed, if decimal places are needed to represent the number. */
-  significantDigits: number;
-
-  /** How many digits should be maximally displayed right of the decimal point. */
-  maxFractionalDigits: number;
+  return {formatNumber};
 }
