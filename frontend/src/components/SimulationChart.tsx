@@ -70,20 +70,20 @@ export default function SimulationChart(): JSX.Element {
     rkiSeries.dataFields.dateX = 'date';
     rkiSeries.tensionX = 0.8;
     rkiSeries.strokeWidth = 1;
-    rkiSeries.fill = am4core.color('red');
-    rkiSeries.stroke = am4core.color('red');
+    rkiSeries.fill = am4core.color('black');
+    rkiSeries.stroke = am4core.color('black');
     rkiSeries.name = t('chart.rkiData');
     rkiSeries.tooltipText = `RKI Data: [bold]{rki}[/]`;
 
     // Add series for scenarios
-    Object.entries(scenarioList.scenarios).forEach(([scenarioId, scenario]) => {
+    Object.entries(scenarioList.scenarios).forEach(([scenarioId, scenario], i) => {
       const series = chart.series.push(new am4charts.LineSeries());
       series.dataFields.valueY = scenarioId;
       series.dataFields.dateX = 'date';
       series.tensionX = 0.8;
       series.strokeWidth = 1;
-      series.fill = am4core.color('red'); // TODO
-      series.stroke = am4core.color('red'); // TODO
+      series.fill = am4core.color(theme.custom.scenarios[i % theme.custom.scenarios.length]); // loop around the color list if scenarios exceed color list
+      series.stroke = series.fill;
       series.tooltipText = `[bold ${series.stroke.hex}]${scenario.label}:[/] {${scenarioId}}`;
       series.name = scenario.label;
 
@@ -94,9 +94,9 @@ export default function SimulationChart(): JSX.Element {
         seriesSTD.dataFields.dateX = 'date';
         seriesSTD.tensionX = 0.8;
         seriesSTD.strokeWidth = 0;
-        seriesSTD.fill = am4core.color('red'); // TODO
         seriesSTD.fillOpacity = 0.3;
-        seriesSTD.stroke = am4core.color('red'); // TODO
+        series.fill = am4core.color(theme.custom.scenarios[i % theme.custom.scenarios.length]); // loop around the color list if scenarios exceed color list
+        series.stroke = series.fill;
         // override tooltip
         series.tooltipText = `${scenario.label}: [bold]{${scenarioId}STDdown} ~ {${scenarioId}STDup}[/]`;
       }
@@ -111,7 +111,7 @@ export default function SimulationChart(): JSX.Element {
     return () => {
       chartRef.current?.dispose();
     };
-  }, [scenarioList, dispatch, i18n.language, t]);
+  }, [scenarioList, dispatch, i18n.language, t, theme]);
 
   // Effect to add Guide when date selected
   useEffect(() => {
