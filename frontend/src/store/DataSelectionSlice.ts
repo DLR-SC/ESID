@@ -14,8 +14,6 @@ export interface DataSelection {
   date: string;
   scenario: number;
   compartment: string;
-  value: number;
-  rate: number;
 }
 
 const initialState: DataSelection = {
@@ -23,8 +21,6 @@ const initialState: DataSelection = {
   date: '2021-01-01',
   scenario: 0,
   compartment: '',
-  value: 0,
-  rate: 0,
 };
 
 /**
@@ -46,15 +42,8 @@ export const DataSelectionSlice = createSlice({
     selectCompartment(state, action: PayloadAction<string>) {
       state.compartment = action.payload;
     },
-    selectValue(state, action: PayloadAction<number>) {
-      state.value = action.payload;
-    },
-    selectRate(state, action: PayloadAction<number>) {
-      state.rate = action.payload;
-    },
   },
 });
 
-export const {selectDistrict, selectDate, selectScenario, selectCompartment, selectValue, selectRate} =
-  DataSelectionSlice.actions;
+export const {selectDistrict, selectDate, selectScenario, selectCompartment} = DataSelectionSlice.actions;
 export default DataSelectionSlice.reducer;
