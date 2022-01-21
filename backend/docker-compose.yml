@@ -1,38 +1,33 @@
 version: '3'
 services:
   db:
-    container_name: esid_db
     image: postgres:13.3
+    user: ${USER_ID}:${GROUP_ID}
     restart: always
-    ports:
-      - 5432:5432
     environment:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       PGDATA: /data/postgres
     volumes:
-      - db-data:/data/postgres
+      - postgres-data:/data/postgres
 
-  web:
-    container_name: esid_web
+  backend:
+    image: esid/backend:latest
+    restart: always
+    env_file: .env.django
     build:
       context: .
       args:
-        REQUIREMENTS_FILE: dev.txt
-    restart: always
+        REQUIREMENTS_FILE: prod.txt
     ports:
       - 8000:8000
-    env_file: .env
-    command: 'sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"'
     volumes:
-      - ./:/app
-      - ${STORAGE_PATH}:/localdata
+      - django-data:/localdata
     depends_on:
       - db
 
   pgadmin:
-    container_name: pgadmin4
     image: dpage/pgadmin4:latest
     restart: always
     environment:
@@ -46,5 +41,9 @@ services:
       - db
 
 volumes:
-  db-data:
+  django-data:
+    external: True
+  postgres-data:
+    external: True
   pgadmin-data:
+    external: True
