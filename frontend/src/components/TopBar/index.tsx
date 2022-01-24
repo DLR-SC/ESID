@@ -1,22 +1,8 @@
+import {Grid} from '@mui/material';
+import {useTheme} from '@mui/material/styles';
 import React from 'react';
-import {Grid, makeStyles} from '@material-ui/core';
 import {useTranslation} from 'react-i18next';
 import ApplicationMenu from './ApplicationMenu';
-
-const useStyles = makeStyles({
-  gridStyle: {
-    width: '100%',
-    height: '56px',
-    backgroundColor: '#F0F0F2',
-    borderBottom: '1px solid #D3D2D8',
-    paddingLeft: '24px',
-    paddingRight: '24px',
-  },
-  iconStyle: {
-    height: '36px',
-    width: 'auto',
-  },
-});
 
 /**
  * This is the top navigation bar of the application. It contains the logo and a burger menu to access settings and
@@ -24,15 +10,30 @@ const useStyles = makeStyles({
  */
 export default function TopBar(): JSX.Element {
   const {t} = useTranslation();
-  const classes = useStyles();
+  const theme = useTheme();
 
   return (
-    <Grid className={classes.gridStyle} container direction="row" alignItems="center">
-      <Grid container item alignItems="center" xs={2}>
+    <Grid
+      sx={{
+        width: '100%',
+        height: '56px',
+        backgroundColor: theme.palette.background.default,
+        borderBottom: `1px solid ${theme.palette.divider}`,
+        paddingLeft: theme.spacing(4),
+        paddingRight: theme.spacing(4),
+      }}
+      container
+      direction='row'
+      alignItems='center'
+    >
+      <Grid container item alignItems='center' xs={2}>
         <img
-          id="application-icon"
-          className={classes.iconStyle}
-          src="assets/logo/logo-200x66.svg"
+          id='application-icon'
+          style={{
+            height: '36px',
+            width: 'auto',
+          }}
+          src='assets/logo/logo-200x66.svg'
           alt={t('topBar.icon-alt')}
         />
       </Grid>

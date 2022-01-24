@@ -2,6 +2,7 @@
   "arrowParens": "always",
   "bracketSpacing": false,
   "singleQuote": true,
+  "jsxSingleQuote": true,
   "jsxBracketSameLine": false,
   "trailingComma": "es5",
   "printWidth": 120,
@@ -9,7 +10,6 @@
   "tabWidth": 2,
   "semi": true,
   "quoteProps": "as-needed",
-  "jsxSingleQuote": false,
   "htmlWhitespaceSensitivity": "css",
-  "endOfLine": "lf"
+  "endOfLine": "auto"
 }

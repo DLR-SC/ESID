@@ -2,6 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
+const DotenvPlugin = require('dotenv-webpack');
 
 module.exports = {
   entry: './src/main.tsx',
@@ -20,6 +21,7 @@ module.exports = {
       extensions: ['js', 'jsx', 'ts', 'tsx'],
       exclude: ['node_modules', 'build', 'webpack'],
     }),
+    new DotenvPlugin(),
   ],
   output: {
     path: path.resolve(__dirname + '/..', 'build'),
@@ -35,5 +37,6 @@ module.exports = {
   resolve: {
     modules: [path.resolve(__dirname, '..', 'src'), 'node_modules'],
     extensions: ['.ts', '.tsx', '.js', '.jsx'],
+    fallback: {crypto: false},
   },
 };

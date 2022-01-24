@@ -1,4 +1,5 @@
 {
+  dateFormat: 'dd. MMM yyyy',
   topBar: {
     'icon-alt': 'ESID Anwendungslogo',
     menu: {
@@ -10,5 +11,27 @@
       attribution: 'Attribution',
     },
   },
+  history: {
+    placeholder: 'history',
+  },
+  BEZ: {
+    K: 'Kreis',
+    LK: 'Landkreis',
+    KS: 'Kreisfreie Stadt',
+    SK: 'Stadtkreis',
+  },
+  scenario: {
+    add: 'Szenario hinzufügen',
+    more: 'Mehr Eigenschaften',
+  },
+  chart: {
+    rkiData: 'RKI-Daten',
+  },
+  today: 'Heute',
+  more: 'Mehr',
+  less: 'Weniger',
+  search: 'Suche',
+  germany: 'Deutschland',
   WIP: 'Diese Funktionalität befindet sich noch in der Entwicklung.',
+  'no-data': 'Keine Daten',
 }

@@ -1,23 +1,45 @@
-import {Grid, makeStyles, Typography} from '@material-ui/core';
 import React from 'react';
-import {useTranslation} from 'react-i18next';
+import Scenario from './Scenario';
+import IconBar from './IconBar';
 
-const useStyles = makeStyles({
-  mainContent: {
-    width: '100%',
-    height: '100%',
-  },
-});
+import SimulationChart from './SimulationChart';
+import {Divider, Grid} from '@mui/material';
+import {useTheme} from '@mui/material/styles';
 
-/**
- * This is currently a placeholder. It will contain the scenario cards and graphs for evaluation.
- */
 export default function MainContent(): JSX.Element {
-  const {t} = useTranslation();
-  const classes = useStyles();
+  const theme = useTheme();
   return (
-    <Grid container direction="column" alignItems="center" justify="center" className={classes.mainContent}>
-      <Typography>{t('mainContent.placeholder')}</Typography>
+    <Grid
+      container
+      direction='column'
+      sx={{
+        background: theme.palette.background.default,
+      }}
+    >
+      <Grid
+        item
+        sx={{
+          marginLeft: 'auto',
+          marginRight: 'auto',
+        }}
+      >
+        <IconBar />
+      </Grid>
+      <Grid item>
+        <Scenario />
+      </Grid>
+      <Grid item>
+        <Divider
+          sx={{
+            borderBottom: `1px solid ${theme.palette.divider}`,
+            backgroundColor: 'transparent',
+            margin: `${theme.spacing(4)} 0 0 0`,
+          }}
+        />
+      </Grid>
+      <Grid item sx={{flexGrow: 1}}>
+        <SimulationChart />
+      </Grid>
     </Grid>
   );
 }

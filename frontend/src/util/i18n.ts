@@ -9,24 +9,28 @@ void i18n
   .use(Backend)
   .use(LanguageDetector)
   .use(initReactI18next)
-  .init({
-    fallbackLng: 'en',
-    supportedLngs: ['de', 'en'],
-    defaultNS: 'global',
-    debug: false,
-    interpolation: {
-      escapeValue: false,
-    },
-    detection: {
-      order: ['navigator'], // Make sure that the browser language is the app language. This also prevents cookies.
-      caches: [], // This prevents the use of cookies.
-    },
-    backend: {
-      loadPath: 'locales/{{lng}}/{{ns}}.json5',
-      parse(data: string): string {
-        return JSON5.parse(data);
+  .init(
+    {
+      fallbackLng: 'en',
+      supportedLngs: ['de', 'en'],
+      defaultNS: 'global',
+      debug: false,
+      interpolation: {
+        escapeValue: false,
+      },
+      detection: {
+        order: ['navigator'], // Make sure that the browser language is the app language. This also prevents cookies.
+        caches: [], // This prevents the use of cookies.
+      },
+      backend: {
+        loadPath: 'locales/{{lng}}/{{ns}}.json5',
+        parse(data: string) {
+          return JSON5.parse(data);
+        },
       },
     },
-  }).then(() => document.documentElement.lang = i18n.language);
+    undefined
+  )
+  .then(() => (document.documentElement.lang = i18n.language));
 
 export default i18n;

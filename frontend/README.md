@@ -133,7 +133,13 @@ In general developers should follow the best practices of the libraries they use
 
 ### Redux
 
-TODO
+Application state management is done using [Redux](https://redux.js.org/). We use the
+[Redux Toolkit](https://redux-toolkit.js.org/) to easier work with the framework.
+[React Redux](https://react-redux.js.org/) provides the interface between React and Redux.
+
+While it is possible to manage all state with Redux, it should be preferred to use React's `props` functionality to
+manage local component state. Redux should only be used, when the state affects large portions of the application that
+would be difficult to handle with React's `props` alone.
 
 ### Design and Layout
 
@@ -144,6 +150,52 @@ TODO
 - The application should always look best in a 16:9 ratio with 1920x1080 and 2560x1440 pixel resolutions.
 - The layout should be as responsive as possible, but the previous point has priority.
 - The UI should be self describing. To ensure that all functionality can be understood add tooltips to components.
+- The frontend uses a global theme based on the following guidelines:
+  <details>
+  <summary>Design Guidelines for Colors and Typography <i>(-- Click to expand --)</i></summary>
+
+  ![](../docs/images/ThemeGuidelines-800x650.svg 'ESID Design Guidelines')
+
+  **The alternative text color for lighter and darker variants where the contrast is not high enough is always either `#F2F2F2` (light text), or `#0C0B0D` (dark text).**
+
+  - The Spacing is done in 5 steps: `0 px`, `4 px`, `8 px`, `12 px`, and `26 px`
+
+  </details>
+
+  - The theme is provided using the [MUI Theme Provider](https://mui.com/customization/theming 'mui.com')
+  - <details>
+    <summary>It can be accessed in components like this: <i>(-- Click to expand --)</i></summary>
+
+    ```typescript
+    import {useTheme} from '@mui/material/styles';
+
+    export default function MyComponent(): JSX.Element {
+      const theme = useTheme();
+
+      return (
+        <Box
+          sx={{
+            /*
+             * Available theme properties can be found at their declaration inside the App.tsx.
+             */
+            // accessing theme variables
+            background: theme.palette.background.default,
+            border: `1px solid ${theme.palette.divider}`
+
+            // accessing theme typography
+            typography: theme.typography.h1,
+            // or
+            typography: 'h1',
+
+            // accessing theme spacing via index [0, 4, 8, 12, 26]
+            margin: theme.spacing(3), // 12 px margin
+          }}
+        >
+        </Box>
+      );
+    ```
+
+    </details>
 
 ### Testing
 
@@ -193,6 +245,13 @@ export default function HelloWorld(): JSX.Element {
   return <h1>{t('helloWorld')}</h1>;
 }
 ```
+
+### Accessibility
+
+The application should conform to modern accessibility (a11y) guidelines. We use
+[Axe](https://github.com/dequelabs/axe-core) to check for a11y problems. Axe, automatically posts a11y issues in the
+console, when they arise. This is only enabled in the development mode with `npm run start`. In production Axe is not
+running.
 
 ### Code Style
 

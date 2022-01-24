@@ -1,4 +1,5 @@
 {
+  dateFormat: 'MMM dd. yyyy',
   topBar: {
     'icon-alt': 'ESID application logo',
     menu: {
@@ -16,6 +17,31 @@
   mainContent: {
     placeholder: 'Main Content',
   },
+  history: {
+    Tabtitle: 'history',
+  },
+  details: {
+    Tabtitle: 'Details',
+  },
+  BEZ: {
+    K: 'Rural District',
+    LK: 'Rural District',
+    KS: 'Urban District',
+    SK: 'Urban District',
+  },
+  scenario: {
+    add: 'Add scenario',
+    more: 'More properties',
+  },
+  chart: {
+    rkiData: 'RKI Data',
+  },
+  today: 'Today',
+  more: 'More',
+  less: 'Less',
+  search: 'Search',
+  germany: 'Germany',
+  'no-data': 'No Data',
   lorem: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore\
     et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet\
     clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet,\
