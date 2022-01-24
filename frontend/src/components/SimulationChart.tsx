@@ -31,18 +31,26 @@ export default function SimulationChart(): JSX.Element {
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
   const selectedDate = useAppSelector((state) => state.dataSelection.date);
   const dispatch = useAppDispatch();
-  const {data: rkiData} = useGetRkiByDistrictQuery({
-    node: selectedDistrict,
-    group: 'total',
-    compartments: selectedCompartment ? [selectedCompartment] : null,
-  });
-  const {data: simulationData} = useGetMultipleSimulationDataByNodeQuery({
-    // take scenario ids and flatten them into array
-    ids: Object.entries(scenarioList.scenarios).map(([, scn]) => scn.id),
-    node: selectedDistrict,
-    group: '',
-    compartments: selectedCompartment ? [selectedCompartment] : null,
-  });
+  const {data: rkiData} = useGetRkiByDistrictQuery(
+    {
+      node: selectedDistrict,
+      group: 'total',
+      compartments: [selectedCompartment ?? ''],
+    },
+    {skip: !selectedCompartment}
+  );
+
+  const {data: simulationData} = useGetMultipleSimulationDataByNodeQuery(
+    {
+      // take scenario ids and flatten them into array
+      ids: Object.entries(scenarioList.scenarios).map(([, scn]) => scn.id),
+      node: selectedDistrict,
+      group: '',
+      compartments: [selectedCompartment ?? ''],
+    },
+    {skip: !selectedCompartment}
+  );
+
   const {formatNumber} = NumberFormatter(i18n.language, 3, 8);
 
   const chartRef = useRef<am4charts.XYChart | null>(null);
@@ -113,7 +121,7 @@ export default function SimulationChart(): JSX.Element {
 
   // Effect to add Guide when date selected
   useEffect(() => {
-    if (chartRef.current) {
+    if (chartRef.current && selectedDate) {
       const dateAxis = chartRef.current.xAxes.getIndex(0) as am4charts.DateAxis;
       const range = dateAxis.axisRanges.create();
       range.date = new Date(selectedDate);
@@ -139,7 +147,7 @@ export default function SimulationChart(): JSX.Element {
 
   // Effect to update Simulation and RKI Data
   useEffect(() => {
-    if (chartRef.current && simulationData && simulationData.length > 1) {
+    if (chartRef.current && simulationData && simulationData.length > 1 && selectedCompartment) {
       // clear data
       chartRef.current.data = [];
 

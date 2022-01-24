@@ -49,12 +49,15 @@ export default function DistrictMap(): JSX.Element {
   const selectedDate = useAppSelector((state) => state.dataSelection.date);
   const scenarioList = useAppSelector((state) => state.scenarioList.scenarios);
 
-  const {data} = useGetSimulationDataByDateQuery({
-    id: selectedScenario,
-    day: selectedDate,
-    group: 'total',
-    compartments: [selectedCompartment],
-  });
+  const {data} = useGetSimulationDataByDateQuery(
+    {
+      id: selectedScenario ?? 0,
+      day: selectedDate ?? '',
+      group: 'total',
+      compartments: [selectedCompartment ?? ''],
+    },
+    {skip: !selectedScenario || !selectedCompartment || !selectedDate}
+  );
 
   const chartRef = useRef<am4maps.MapChart | null>(null);
 
@@ -123,7 +126,7 @@ export default function DistrictMap(): JSX.Element {
   useEffect(() => {
     let regionPolygon: IRegionPolygon;
 
-    if (chartRef.current) {
+    if (chartRef.current && selectedCompartment && selectedScenario) {
       // Create map polygon series
       const polygonSeries = chartRef.current.series.push(new am4maps.MapPolygonSeries());
       // Configure series

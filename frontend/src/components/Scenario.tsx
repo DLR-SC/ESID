@@ -47,12 +47,15 @@ export default function Scenario(): JSX.Element {
 
   const {data: scenarioListData} = useGetSimulationsQuery();
   const {data: simulationModelsData} = useGetSimulationModelsQuery();
-  const {data: simulationModelData} = useGetSimulationModelQuery(simulationModelId);
-  const {data: rkiData} = useGetRkiSingleSimulationEntryQuery({
-    node,
-    day: startDay ? dateToISOString(startDay) : '',
-    group: 'total',
-  });
+  const {data: simulationModelData} = useGetSimulationModelQuery(simulationModelId, {skip: simulationModelId === 0});
+  const {data: rkiData} = useGetRkiSingleSimulationEntryQuery(
+    {
+      node: node,
+      day: startDay ? dateToISOString(startDay) : '',
+      group: 'total',
+    },
+    {skip: !startDay}
+  );
 
   useEffect(() => {
     if (simulationModelsData && simulationModelsData.results.length > 0) {
@@ -240,7 +243,7 @@ export default function Scenario(): JSX.Element {
             scenario={scenario}
             active={activeScenario === i + 1}
             color={theme.custom.scenarios[i]}
-            selectedProperty={selectedCompartment}
+            selectedProperty={selectedCompartment || ''}
             expandProperties={expandProperties}
             startValues={compartmentValues}
             onClick={() => {

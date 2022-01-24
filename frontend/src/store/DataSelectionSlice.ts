@@ -11,16 +11,16 @@ export type AGS = string;
 
 export interface DataSelection {
   district: {ags: AGS; name: string; type: string};
-  date: string;
-  scenario: number;
-  compartment: string;
+  date: string | null;
+  scenario: number | null;
+  compartment: string | null;
 }
 
 const initialState: DataSelection = {
   district: {ags: '00000', name: i18n.t('germany'), type: ''},
-  date: '2021-01-01',
-  scenario: 0,
-  compartment: '',
+  date: null,
+  scenario: null,
+  compartment: null,
 };
 
 /**

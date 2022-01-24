@@ -22,9 +22,12 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
   const [compartmentValues, setCompartmentValues] = useState<Dictionary<number> | null>(null);
 
   const compartments = useAppSelector((state) => state.scenarioList.compartments);
-  const node = useAppSelector((state) => state.dataSelection.district.ags);
+  const node = useAppSelector((state) => state.dataSelection.district?.ags);
   const day = useAppSelector((state) => state.dataSelection.date);
-  const {data} = useGetSingleSimulationEntryQuery({id: props.scenario.id, node, day, group: 'total'});
+  const {data} = useGetSingleSimulationEntryQuery(
+    {id: props.scenario.id, node: node, day: day ?? '', group: 'total'},
+    {skip: !day}
+  );
 
   useEffect(() => {
     if (data) {
