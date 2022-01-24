@@ -61,8 +61,6 @@ export default function Scenario(): JSX.Element {
     if (simulationModelsData && simulationModelsData.results.length > 0) {
       const id = Number.parseInt(simulationModelsData.results[0].url.slice(-2, -1), 10);
       setSimulationModelId(id);
-    } else {
-      console.warn('Could not fetch simulation model data!');
     }
   }, [simulationModelsData]);
 
@@ -79,8 +77,6 @@ export default function Scenario(): JSX.Element {
       if (simulationModelData.compartments.length > 0) {
         dispatch(selectCompartment(simulationModelData.compartments[0]));
       }
-    } else {
-      console.warn('Could not fetch simulation model data!');
     }
   }, [simulationModelData, dispatch]);
 
