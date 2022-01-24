@@ -9,7 +9,6 @@ import {Box} from '@mui/material';
 import {selectDate} from '../store/DataSelectionSlice';
 import {useGetRkiByDistrictQuery} from '../store/services/rkiApi';
 import {dateToISOString} from 'util/util';
-import {Dictionary} from 'util/util';
 import {useGetMultipleSimulationDataByNodeQuery} from 'store/services/scenarioApi';
 import {useTranslation} from 'react-i18next';
 import {NumberFormatter} from 'util/hooks';
@@ -44,7 +43,7 @@ export default function SimulationChart(): JSX.Element {
     group: '',
     compartments: selectedCompartment ? [selectedCompartment] : null,
   });
-  const [formatNumber] = NumberFormatter({lang: i18n.language, significantDigits: 3, maxFractionalDigits: 8});
+  const {formatNumber} = NumberFormatter(i18n.language, 3, 8);
 
   const chartRef = useRef<am4charts.XYChart | null>(null);
 
@@ -57,8 +56,7 @@ export default function SimulationChart(): JSX.Element {
     // Create axes
     const dateAxis = chart.xAxes.push(new am4charts.DateAxis());
     const valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-    valueAxis.logarithmic = true;
-    valueAxis.min = 1;
+    valueAxis.min = 0;
 
     // Add cursor
     chart.cursor = new am4charts.XYCursor();
@@ -137,7 +135,7 @@ export default function SimulationChart(): JSX.Element {
         ranges.removeValue(range);
       });
     };
-  }, [selectedDate, theme, t, i18n.language]);
+  }, [scenarioList, selectedDate, theme, t, i18n.language]);
 
   // Effect to update Simulation and RKI Data
   useEffect(() => {
@@ -150,17 +148,14 @@ export default function SimulationChart(): JSX.Element {
 
       // cycle through scenarios
       Object.entries(scenarioList.scenarios).forEach(([scenarioId, scenario]) => {
-        simulationData[scenario.id].results.forEach(({day, ...compartments}) => {
-          dataMap.set(day, {...dataMap.get(day), [scenarioId]: compartments[selectedCompartment] as number});
+        simulationData[scenario.id].results.forEach(({day, compartments}) => {
+          dataMap.set(day, {...dataMap.get(day), [scenarioId]: compartments[selectedCompartment]});
         });
       });
 
       // add rki values
-      rkiData?.results.forEach((entry: Dictionary<number | string>) => {
-        dataMap.set(entry['day'] as string, {
-          ...dataMap.get(entry['day'] as string),
-          rki: entry[selectedCompartment] as number,
-        });
+      rkiData?.results.forEach((entry) => {
+        dataMap.set(entry.day, {...dataMap.get(entry.day), rki: entry.compartments[selectedCompartment]});
       });
 
       // sort map by date
@@ -186,12 +181,12 @@ export default function SimulationChart(): JSX.Element {
               text.push('<tr>');
               text.push(
                 `<th 
-                style="text-align:left; color:${(s.stroke as am4core.Color).hex}; padding-right:${theme.spacing(2)}">
+                style='text-align:left; color:${(s.stroke as am4core.Color).hex}; padding-right:${theme.spacing(2)}'>
                 <strong>${s.name}</strong>
                 </th>`
               );
               text.push(
-                `<td style="text-align:right">${formatNumber(
+                `<td style='text-align:right'>${formatNumber(
                   (data as {[key: string]: number})[s.dataFields.valueY]
                 )}</td>`
               );

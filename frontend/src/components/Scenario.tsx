@@ -12,8 +12,9 @@ import {
 } from '../store/services/scenarioApi';
 import {useEffect} from 'react';
 import {setCompartments, setScenarios} from 'store/ScenarioSlice';
-import {dateToISOString} from 'util/util';
+import {dateToISOString, Dictionary} from 'util/util';
 import {useGetRkiSingleSimulationEntryQuery} from '../store/services/rkiApi';
+import {NumberFormatter} from '../util/hooks';
 
 /**
  * React Component to render the Scenario Cards Section
@@ -28,25 +29,15 @@ export default function Scenario(): JSX.Element {
   const [expandProperties, setExpandProperties] = useState(false);
   const [simulationModelId, setSimulationModelId] = useState(0);
   const [startDay, setStartDay] = useState<Date | null>();
-  const [compartmentValues, setCompartmentValues] = useState<{[key: string]: string | number; day: string} | null>(
-    null
-  );
-  const [numberFormat] = useState(
-    new Intl.NumberFormat(i18n.language, {
-      minimumSignificantDigits: 1,
-      maximumSignificantDigits: 3,
-    })
-  );
+  const [compartmentValues, setCompartmentValues] = useState<Dictionary<number> | null>(null);
+
+  const {formatNumber} = NumberFormatter(i18n.language, 3, 8);
 
   const getCompartmentValue = (compartment: string): string => {
     if (compartmentValues && compartment in compartmentValues) {
-      const value = compartmentValues[compartment];
-      if (typeof value === 'number') {
-        return numberFormat.format(value);
-      }
+      return formatNumber(compartmentValues[compartment]);
     }
-
-    return 'No Data';
+    return t('no-data');
   };
 
   const scenarioList = useAppSelector((state) => state.scenarioList);
@@ -74,7 +65,7 @@ export default function Scenario(): JSX.Element {
 
   useEffect(() => {
     if (rkiData) {
-      setCompartmentValues(rkiData.results[0]);
+      setCompartmentValues(rkiData.results[0].compartments);
     }
   }, [rkiData]);
 

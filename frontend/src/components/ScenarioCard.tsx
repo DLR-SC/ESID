@@ -4,7 +4,9 @@ import {Box, List, ListItem, ListItemText, Typography} from '@mui/material';
 import {useAppSelector} from 'store/hooks';
 import {useGetSingleSimulationEntryQuery} from 'store/services/scenarioApi';
 import {useState} from 'react';
+import {Dictionary} from '../util/util';
 import {useTranslation} from 'react-i18next';
+import {NumberFormatter} from '../util/hooks';
 
 /**
  * React Component to render individual Scenario Card
@@ -13,18 +15,11 @@ import {useTranslation} from 'react-i18next';
  */
 export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
   const theme = useTheme();
-  const {i18n} = useTranslation();
+  const {t, i18n} = useTranslation();
 
-  const [numberFormat] = useState(
-    new Intl.NumberFormat(i18n.language, {
-      minimumSignificantDigits: 1,
-      maximumSignificantDigits: 3,
-    })
-  );
+  const {formatNumber} = NumberFormatter(i18n.language, 3, 8);
 
-  const [compartmentValues, setCompartmentValues] = useState<{[key: string]: string | number; day: string} | null>(
-    null
-  );
+  const [compartmentValues, setCompartmentValues] = useState<Dictionary<number> | null>(null);
 
   const compartments = useAppSelector((state) => state.scenarioList.compartments);
   const node = useAppSelector((state) => state.dataSelection.district.ags);
@@ -33,19 +28,15 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
 
   useEffect(() => {
     if (data) {
-      setCompartmentValues(data.results[0]);
+      setCompartmentValues(data.results[0].compartments);
     }
   }, [data]);
 
   const getCompartmentValue = (compartment: string): string => {
     if (compartmentValues && compartment in compartmentValues) {
-      const value = compartmentValues[compartment];
-      if (typeof value === 'number') {
-        return numberFormat.format(value);
-      }
+      return formatNumber(compartmentValues[compartment]);
     }
-
-    return 'No Data';
+    return t('no-data');
   };
 
   const getCompartmentRate = (compartment: string): string => {
@@ -57,11 +48,10 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
     ) {
       const value = compartmentValues[compartment];
       const startValue = props.startValues[compartment];
-      if (typeof value === 'number' && typeof startValue === 'number') {
-        const result = 100 * (value / startValue);
-        if (isFinite(result)) {
-          return result.toFixed() + '%';
-        }
+      const result = Math.round(100 * (value / startValue) - 100);
+      if (isFinite(result)) {
+        const sign = result === 0 ? '\u00B1' : result > 0 ? '+' : '-';
+        return sign + Math.abs(result).toFixed() + '%';
       }
     }
 
@@ -126,7 +116,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
               sx={{
                 typography: 'listElement',
                 textAlign: 'right',
-                flexBasis: '61.8%',
+                flexBasis: '55%',
               }}
             />
             <ListItemText
@@ -137,7 +127,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
                 typography: 'listElement',
                 fontWeight: 'bold',
                 textAlign: 'right',
-                flexBasis: '38.2%',
+                flexBasis: '45%',
               }}
             />
           </ListItem>
@@ -173,7 +163,7 @@ interface ScenarioCardProps {
   /** Boolean value whether the properties list is expanded or only the first four are shown. */
   expandProperties: boolean;
 
-  startValues: {[key: string]: string | number; day: string} | null;
+  startValues: Dictionary<number> | null;
 
   /** The function that is executed when the scenario card is clicked. */
   onClick: () => void;

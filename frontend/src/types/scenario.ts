@@ -28,19 +28,19 @@ export interface SimulationMetaData {
   startDay: string;
   numberOfDays: number;
   scenario: string;
-  percentiles: string;
+  percentiles: Array<number>;
 }
 
 export interface SimulationDataByDate {
   count: number;
   previous: string | null;
   next: string | null;
-  results: Array<{name: string; values: Dictionary<number>}>;
+  results: Array<{name: string; compartments: Dictionary<number>}>;
 }
 
 export interface SimulationDataByNode {
   count: number;
   previous: string | null;
   next: string | null;
-  results: Array<{day: string; [key: string]: number | string}>;
+  results: Array<{day: string; compartments: Dictionary<number>}>;
 }

@@ -1,20 +1,15 @@
 import {Dictionary} from 'util/util';
 
-export interface RKIDistrictQueryResult {
+export interface RKIDataByNode {
   count: number;
   next: string | null;
   previous: string | null;
-  results: Array<Dictionary<number | string>>;
+  results: Array<{day: string; compartments: Dictionary<number>}>;
 }
 
-export interface RKIDateQueryResult {
+export interface RKIDataByDate {
   count: number;
   next: string | null;
   previous: string | null;
-  results: Array<RKIDateQueryDistrictEntry>;
-}
-
-export interface RKIDateQueryDistrictEntry {
-  node: string;
-  compartments: Dictionary<number>;
+  results: Array<{node: string; compartments: Dictionary<number>}>;
 }

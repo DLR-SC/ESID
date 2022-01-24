@@ -140,7 +140,7 @@ export default function DistrictMap(): JSX.Element {
       const dataMapped = new Map<string, number>();
       data?.results.forEach((entry) => {
         const rs = entry.name;
-        dataMapped.set(rs, entry.values[selectedCompartment]);
+        dataMapped.set(rs, entry.compartments[selectedCompartment]);
       });
 
       // Set values to each regions
