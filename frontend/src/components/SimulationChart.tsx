@@ -109,7 +109,11 @@ export default function SimulationChart(): JSX.Element {
     });
 
     chart.events.on('hit', () => {
-      const date = new Date(dateAxis.tooltipDate.getTime());
+      // Timezone shenanigans could get us the wrong day ...
+      const date = new Date(dateAxis.tooltipDate);
+      date.setUTCFullYear(date.getFullYear());
+      date.setUTCMonth(date.getMonth());
+      date.setUTCDate(date.getDate());
       dispatch(selectDate(dateToISOString(date)));
     });
 

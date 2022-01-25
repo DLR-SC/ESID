@@ -11,6 +11,12 @@
       attribution: 'Attribution',
     },
   },
+  'icon-bar': {
+    'previous-day-tooltip': 'Vorheriger Tag',
+    'next-day-tooltip': 'Nächster Tag',
+    'play-pause-tooltip': 'Start/Pause',
+    'fullscreen-tooltip': 'Vollbild',
+  },
   history: {
     placeholder: 'history',
   },
