@@ -236,8 +236,6 @@ export default function SimulationChart(): JSX.Element {
         backgroundSize: '10px 10px',
         cursor: 'crosshair',
       }}
-    >
-      {' '}
-    </Box>
+    />
   );
 }
