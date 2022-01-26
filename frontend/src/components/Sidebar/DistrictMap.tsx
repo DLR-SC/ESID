@@ -36,6 +36,13 @@ const dummyProps = {
   ],
 };
 
+/**
+ * The Map component includes:
+ * - A detailed Map of Germany
+ * - Heat Legend container
+ * - Zoom control
+ * The colors depends on temporary values assigned to each region.
+ */
 export default function DistrictMap(): JSX.Element {
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
@@ -193,7 +200,7 @@ export default function DistrictMap(): JSX.Element {
 
   return (
     <>
-      <Box id='mapdiv' height={'650px'} />
+      <Box id='mapdiv' height={'700px'} />
       <Box
         id='legenddiv'
         sx={{

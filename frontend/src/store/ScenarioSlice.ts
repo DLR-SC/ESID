@@ -23,20 +23,10 @@ export const ScenarioSlice = createSlice({
       state.scenarios = scenarioDict;
     },
     setCompartments(state, action: PayloadAction<Array<string>>) {
-      state.compartments = sortWithPreference([...action.payload]);
+      state.compartments = action.payload;
     },
   },
 });
 
 export const {setScenarios, setCompartments} = ScenarioSlice.actions;
 export default ScenarioSlice.reducer;
-
-const preferredOrder = ['Infected', 'Hospitalized', 'ICU', 'Dead', 'Exposed', 'Recovered', 'Carrier', 'Susceptible'];
-
-/** This function sorts an array with the first elements being the above preference if they are included in the array. */
-function sortWithPreference(array: Array<string>): Array<string> {
-  const result = preferredOrder.filter((entry) => array.includes(entry));
-  array = array.filter((entry) => !preferredOrder.includes(entry));
-
-  return [...result, ...array.sort()];
-}

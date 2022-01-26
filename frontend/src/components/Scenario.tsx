@@ -29,11 +29,6 @@ export default function Scenario(): JSX.Element {
   const [expandProperties, setExpandProperties] = useState(false);
   const [simulationModelId, setSimulationModelId] = useState(0);
   const [compartmentValues, setCompartmentValues] = useState<Dictionary<number> | null>(null);
-  const [scrollTop, setScrollTop] = useState(0);
-
-  function handleScroll(scrollEvent: React.UIEvent<HTMLElement>) {
-    setScrollTop(scrollEvent.currentTarget.scrollTop);
-  }
 
   const {formatNumber} = NumberFormatter(i18n.language, 3, 8);
 
@@ -78,14 +73,12 @@ export default function Scenario(): JSX.Element {
   useEffect(() => {
     if (simulationModelData) {
       dispatch(setCompartments(simulationModelData.compartments));
+
+      if (simulationModelData.compartments.length > 0) {
+        dispatch(selectCompartment(simulationModelData.compartments[0]));
+      }
     }
   }, [simulationModelData, dispatch]);
-
-  useEffect(() => {
-    if (scenarioList.compartments.length > 0) {
-      dispatch(selectCompartment(scenarioList.compartments[0]));
-    }
-  }, [dispatch, scenarioList.compartments]);
 
   useEffect(() => {
     if (scenarioListData) {
@@ -155,15 +148,7 @@ export default function Scenario(): JSX.Element {
             {startDay ? new Date(startDay).toLocaleDateString(i18n.language) : t('today')}
           </Typography>
         </Box>
-        <List
-          dense={true}
-          disablePadding={true}
-          sx={{
-            maxHeight: expandProperties ? '248px' : 'auto',
-            overflowY: 'auto',
-          }}
-          onScroll={handleScroll}
-        >
+        <List dense={true} disablePadding={true}>
           {scenarioList.compartments.map((compartment, i) => (
             // map all compartments to display compartment list
             <ListItemButton
@@ -258,7 +243,6 @@ export default function Scenario(): JSX.Element {
             color={theme.custom.scenarios[i]}
             selectedProperty={selectedCompartment || ''}
             expandProperties={expandProperties}
-            scrollTop={scrollTop}
             startValues={compartmentValues}
             onClick={() => {
               // set active scenario to this one and send dispatches
