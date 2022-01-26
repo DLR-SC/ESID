@@ -200,7 +200,7 @@ export default function DistrictMap(): JSX.Element {
 
   return (
     <>
-      <Box id='mapdiv' height={'500px'} />
+      <Box id='mapdiv' height={'700px'} />
       <Box
         id='legenddiv'
         sx={{
