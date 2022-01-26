@@ -25,8 +25,8 @@ interface CountyItem {
  */
 export default function SearchBar(): JSX.Element {
   const selectedDistrict = useAppSelector((state) => state.dataSelection.district);
-  const [countyList, setCountyList] = useState([{RS: '', GEN: '', BEZ: ''}]);
   const {t} = useTranslation('global');
+  const [countyList, setCountyList] = useState<Array<CountyItem>>([]);
   const theme = useTheme();
   const dispatch = useAppDispatch();
 

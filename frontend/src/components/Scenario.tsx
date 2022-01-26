@@ -47,19 +47,20 @@ export default function Scenario(): JSX.Element {
 
   const {data: scenarioListData} = useGetSimulationsQuery();
   const {data: simulationModelsData} = useGetSimulationModelsQuery();
-  const {data: simulationModelData} = useGetSimulationModelQuery(simulationModelId);
-  const {data: rkiData} = useGetRkiSingleSimulationEntryQuery({
-    node,
-    day: startDay ? dateToISOString(startDay) : '',
-    group: 'total',
-  });
+  const {data: simulationModelData} = useGetSimulationModelQuery(simulationModelId, {skip: simulationModelId === 0});
+  const {data: rkiData} = useGetRkiSingleSimulationEntryQuery(
+    {
+      node: node,
+      day: startDay ? dateToISOString(startDay) : '',
+      group: 'total',
+    },
+    {skip: !startDay}
+  );
 
   useEffect(() => {
     if (simulationModelsData && simulationModelsData.results.length > 0) {
       const id = Number.parseInt(simulationModelsData.results[0].url.slice(-2, -1), 10);
       setSimulationModelId(id);
-    } else {
-      console.warn('Could not fetch simulation model data!');
     }
   }, [simulationModelsData]);
 
@@ -76,8 +77,6 @@ export default function Scenario(): JSX.Element {
       if (simulationModelData.compartments.length > 0) {
         dispatch(selectCompartment(simulationModelData.compartments[0]));
       }
-    } else {
-      console.warn('Could not fetch simulation model data!');
     }
   }, [simulationModelData, dispatch]);
 
@@ -240,7 +239,7 @@ export default function Scenario(): JSX.Element {
             scenario={scenario}
             active={activeScenario === i + 1}
             color={theme.custom.scenarios[i]}
-            selectedProperty={selectedCompartment}
+            selectedProperty={selectedCompartment || ''}
             expandProperties={expandProperties}
             startValues={compartmentValues}
             onClick={() => {
