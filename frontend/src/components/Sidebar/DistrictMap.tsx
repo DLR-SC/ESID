@@ -1,7 +1,9 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {useTheme} from '@mui/material/styles';
-import * as am4core from '@amcharts/amcharts4/core';
-import * as am4maps from '@amcharts/amcharts4/maps';
+/* deprecated */ import * as am4core from '@amcharts/amcharts4/core';
+/* deprecated */ import * as am4maps from '@amcharts/amcharts4/maps';
+import * as am5 from '@amcharts/amcharts5';
+import * as am5map from '@amcharts/amcharts5/map';
 import {useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useAppDispatch} from '../../store/hooks';
@@ -28,11 +30,11 @@ interface IRegionPolygon {
 // Dummy Props for Heat Legend
 const dummyProps = {
   legend: [
-    {color: 'green', stop: 0},
-    {color: 'yellow', stop: 35},
-    {color: 'orange', stop: 50},
-    {color: 'red', stop: 100},
-    {color: 'purple', stop: 200},
+    {color: '#00FF00', stop: 0},
+    {color: '#FFFF00', stop: 35},
+    {color: '#FFA500', stop: 50},
+    {color: '#FF0000', stop: 100},
+    {color: '#800080', stop: 200},
   ],
 };
 
@@ -44,60 +46,150 @@ const dummyProps = {
  * The colors depends on temporary values assigned to each region.
  */
 export default function DistrictMap(): JSX.Element {
+  const [geodata, setGeodata] = useState<GeoJSON.GeoJSON | null>(null);
+  //const selectedDistrict = useAppSelector((state) => state.dataSelection.district);
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
   const selectedDate = useAppSelector((state) => state.dataSelection.date);
   const scenarioList = useAppSelector((state) => state.scenarioList.scenarios);
 
-  const {data} = useGetSimulationDataByDateQuery({
-    id: selectedScenario,
-    day: selectedDate,
-    group: 'total',
-    compartments: [selectedCompartment],
-  });
+  const {data} = useGetSimulationDataByDateQuery(
+    {
+      id: selectedScenario ?? 0,
+      day: selectedDate ?? '',
+      group: 'total',
+      compartments: [selectedCompartment ?? ''],
+    },
+    {skip: !selectedScenario || !selectedCompartment || !selectedDate}
+  );
 
-  const chartRef = useRef<am4maps.MapChart | null>(null);
+  const chartRef = useRef<am5map.MapChart | null>(null);
+  const rootRef = useRef<am5.Root | null>(null);
 
   const {t} = useTranslation('global');
   const theme = useTheme();
   const dispatch = useAppDispatch();
+  //const lastSelectedPolygon = useRef<am5map.MapPolygon | null>(null);
 
-  //Chart
+  // fetch geojson
+  useEffect(() => {
+    fetch('assets/lk_germany_reduced.geojson', {
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+    })
+      .then((response) => response.json())
+      .then(
+        // resolve Promise
+        (geojson: GeoJSON.GeoJSON) => {
+          setGeodata(geojson);
+        },
+        // reject promise
+        () => {
+          console.warn('Failed to fetch geoJSON');
+        }
+      );
+  }, []);
+
+  // Setup Map
   useEffect(() => {
     // Create map instance
-    const chart = am4core.create('mapdiv', am4maps.MapChart);
-    // Set map definition
-    chart.geodataSource.url = 'assets/lk_germany_reduced.geojson';
-    // Set projection
-    chart.projection = new am4maps.projections.Mercator();
-    // Zoom control
-    chart.zoomControl = new am4maps.ZoomControl();
-    chart.zoomControl.align = 'left';
-    chart.zoomControl.paddingBottom = 25;
-    chart.zoomControl.opacity = 50;
-    chart.seriesContainer.draggable = true;
+    const root = am5.Root.new('mapdiv');
+    const chart = root.container.children.push(
+      am5map.MapChart.new(root, {
+        projection: am5map.geoMercator(),
+        zoomControl: am5map.ZoomControl.new(root, {
+          paddingBottom: 25,
+          opacity: 50,
+        }),
+      })
+    );
     dispatch(selectDistrict({ags: '00000', name: t('germany'), type: ''}));
 
+    // Create polygon series
+    const polygonSeries = chart.series.push(
+      am5map.MapPolygonSeries.new(root, {
+        geoJSON: geodata ?? undefined,
+        tooltipPosition: 'fixed',
+      })
+    );
+    // get template for polygons to attach events etc to each
+    const polygonTemplate = polygonSeries.mapPolygons.template;
+    polygonTemplate.setAll({
+      stroke: am5.color(theme.palette.divider),
+      strokeWidth: 1,
+    });
+    // add click event
+    polygonTemplate.events.on('click', (e) => {
+      const item = e.target.dataItem?.dataContext as IRegionPolygon;
+      dispatch(selectDistrict({ags: item.RS, name: item.GEN, type: t(item.BEZ)}));
+    });
+    // add hover state
+    polygonTemplate.states.create('hover', {
+      stroke: am5.color(theme.palette.primary.main),
+      strokeWidth: 2,
+    });
+    // pull polygon to front on hover (to fix other polygons omitting outline)
+    polygonTemplate.events.on('pointerover', (e) => {
+      e.target.toFront();
+    });
+
+    rootRef.current = root;
     chartRef.current = chart;
     return () => {
       chartRef.current && chartRef.current.dispose();
+      rootRef.current && rootRef.current.dispose();
     };
-  }, [t, dispatch]);
+  }, [geodata, theme, t, dispatch]);
 
-  // Heat Legend
+  // TODO: district search for highlighting
+  /*
+  useEffect(() => {
+    // unselect previous
+    if (chartRef.current && lastSelectedPolygon.current) {
+      // reset style
+      lastSelectedPolygon.current.setAll({
+        stroke: am5.color(theme.palette.background.default),
+        strokeWidth: 1,
+        showTooltipOn: 'hover',
+      });
+    }
+    if (chartRef.current && chartRef.current.series.length > 0) {
+      const series = chartRef.current.series.getIndex(0) as am5map.MapPolygonSeries;
+      series.mapPolygons.each((polygon) => {
+        // TODO: change this to a map lookup?
+        const data = polygon.dataItem?.dataContext as IRegionPolygon;
+        if (data.RS === selectedDistrict.ags) {
+          // pull to front (z-level)
+          polygon.toFront();
+          // apply hover style
+          polygon.setAll({
+            stroke: am5.color(theme.palette.primary.main),
+            strokeWidth: 2,
+            showTooltipOn: 'always',
+          });
+          // save polygon
+          lastSelectedPolygon.current = polygon;
+        }
+      });
+    }
+  }, [selectedDistrict]);*/
+
+  // Heat Legend TODO: review new heat legends & redo this
   useEffect(() => {
     // add heat legend container
-    const legendContainer = am4core.create('legenddiv', am4core.Container);
-    legendContainer.width = am4core.percent(100);
-    const heatLegend = legendContainer.createChild(am4maps.HeatLegend);
-    heatLegend.valign = 'bottom';
-    heatLegend.orientation = 'horizontal';
-    heatLegend.height = am4core.percent(20);
-    heatLegend.minValue = dummyProps.legend[0].stop;
-    heatLegend.maxValue = dummyProps.legend[dummyProps.legend.length - 1].stop;
-    heatLegend.minColor = am4core.color('#F2F2F2');
-    heatLegend.maxColor = am4core.color('#F2F2F2');
-    heatLegend.align = 'center';
+    const legendContainer4 = am4core.create('legenddiv', am4core.Container);
+    legendContainer4.width = am4core.percent(100);
+    const heatLegend4 = legendContainer4.createChild(am4maps.HeatLegend);
+    heatLegend4.valign = 'bottom';
+    heatLegend4.orientation = 'horizontal';
+    heatLegend4.height = am4core.percent(20);
+    heatLegend4.minValue = dummyProps.legend[0].stop;
+    heatLegend4.maxValue = dummyProps.legend[dummyProps.legend.length - 1].stop;
+    heatLegend4.minColor = am4core.color('#F2F2F2');
+    heatLegend4.maxColor = am4core.color('#F2F2F2');
+    heatLegend4.align = 'center';
 
     // override heatLegend gradient
     // function to normalize stop to 0..1 for gradient
@@ -108,63 +200,37 @@ export default function DistrictMap(): JSX.Element {
       );
     };
     // create new gradient and add color for each item in props, then add it to heatLegend to override
-    const gradient = new am4core.LinearGradient();
+    const gradient4 = new am4core.LinearGradient();
     dummyProps.legend.forEach((item) => {
-      gradient.addColor(am4core.color(item.color), 1, normalize(item.stop));
+      gradient4.addColor(am4core.color(item.color), 1, normalize(item.stop));
     });
-    heatLegend.markers.template.adapter.add('fill', () => gradient);
+    heatLegend4.markers.template.adapter.add('fill', () => gradient4);
 
     // resize and pack axis labels
-    heatLegend.valueAxis.renderer.labels.template.fontSize = 9;
-    heatLegend.valueAxis.renderer.minGridDistance = 20;
+    heatLegend4.valueAxis.renderer.labels.template.fontSize = 9;
+    heatLegend4.valueAxis.renderer.minGridDistance = 20;
   }, []);
 
   // Polygon
   useEffect(() => {
-    let regionPolygon: IRegionPolygon;
+    if (chartRef.current && chartRef.current.series.length > 0) {
+      const polygonSeries = chartRef.current.series.getIndex(0) as am5map.MapPolygonSeries;
 
-    if (chartRef.current) {
-      // Create map polygon series
-      const polygonSeries = chartRef.current.series.push(new am4maps.MapPolygonSeries());
-      // Configure series
-      polygonSeries.mapPolygons.template.tooltipPosition = 'fixed';
-      if (polygonSeries.tooltip) {
-        polygonSeries.tooltip.label.wrap = true;
-      }
-      const polygonTemplate = polygonSeries.mapPolygons.template;
-      polygonTemplate.events.on('hit', (e) => {
-        const item = e.target.dataItem.dataContext as IRegionPolygon;
-        dispatch(selectDistrict({ags: item.RS, name: item.GEN, type: t(item.BEZ)}));
-      });
-
+      // Map compartment value to RS
       const dataMapped = new Map<string, number>();
       data?.results.forEach((entry) => {
         const rs = entry.name;
         dataMapped.set(rs, entry.compartments[selectedCompartment]);
       });
 
-      // Set values to each regions
-      polygonSeries.events.on('validated', (event) => {
-        event.target.mapPolygons.each((mapPolygon) => {
-          regionPolygon = mapPolygon.dataItem.dataContext as IRegionPolygon;
-          regionPolygon.value = dataMapped.get(regionPolygon.RS) || 0;
+      if (dataMapped.size > 0) {
+        polygonSeries.mapPolygons.each((polygon) => {
+          const regionData = polygon.dataItem?.dataContext as IRegionPolygon;
+          regionData.value = dataMapped.get(regionData.RS) || Number.NaN;
 
-          // add tooltipText, omit compartment if none selected
-          mapPolygon.tooltipText = `${t(`BEZ.${regionPolygon.BEZ}`)} {GEN}`;
-          // append compartment info if selected
-          if (scenarioList[selectedScenario] && selectedCompartment) {
-            mapPolygon.tooltipText += `\n${selectedCompartment}: {value}`;
-          }
-        });
-      });
-
-      // Assign colors to regions
-      polygonSeries.events.on('validated', (event) => {
-        event.target.mapPolygons.each((mapPolygon) => {
-          regionPolygon = mapPolygon.dataItem.dataContext as IRegionPolygon;
-
-          // interpolate color from upper and lower color stop
-          const getColor = (x: number): am4core.Color => {
+          // calculate fill color
+          // color interpolation function
+          const getColor = (x: number): am5.Color => {
             let upper = {color: '#FFF', stop: 0};
             let lower = {color: '#FFF', stop: 0};
             for (let i = 0; i < dummyProps.legend.length; i++) {
@@ -175,25 +241,29 @@ export default function DistrictMap(): JSX.Element {
               }
             }
             // interpolate color between upper and lower
-            return new am4core.Color(
-              am4core.colors.interpolate(
-                am4core.color(lower.color).rgb,
-                am4core.color(upper.color).rgb,
-                (x - lower.stop) / (upper.stop - lower.stop)
-              )
+            return am5.Color.interpolate(
+              (x - lower.stop) / (upper.stop - lower.stop),
+              am5.color(lower.color),
+              am5.color(upper.color),
+              'hsl'
             );
           };
 
-          mapPolygon.fill = getColor(regionPolygon.value);
+          polygon.setAll({
+            // set tooltip
+            tooltipText:
+              scenarioList[selectedScenario] && selectedCompartment
+                ? `${t(`BEZ.${regionData.BEZ}`)} {GEN}\n${selectedCompartment}: {value}`
+                : `${t(`BEZ.${regionData.BEZ}`)} {GEN}`,
+            // set fill color
+            fill: Number.isNaN(regionData.value)
+              ? am5.color(theme.palette.background.default)
+              : getColor(regionData.value),
+          });
         });
-      });
-
-      polygonSeries.useGeodata = true;
-      // Create hover state and set alternative fill color
-      const hs = polygonTemplate.states.create('hover');
-      hs.properties.fill = am4core.color('#367B25');
+      }
     }
-  }, [scenarioList, selectedScenario, selectedCompartment, dispatch, t, data, selectedDate]);
+  }, [scenarioList, selectedScenario, selectedCompartment, selectedDate, dispatch, t, data, theme]);
 
   return (
     <>
