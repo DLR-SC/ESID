@@ -6,6 +6,8 @@ describe('DataSelectionSlice', () => {
     date: null,
     scenario: null,
     compartment: null,
+    minDate: null,
+    maxDate: null,
   };
 
   test('Initial State', () => {
@@ -19,6 +21,8 @@ describe('DataSelectionSlice', () => {
       date: null,
       scenario: null,
       compartment: null,
+      minDate: null,
+      maxDate: null,
     });
   });
 
@@ -29,6 +33,8 @@ describe('DataSelectionSlice', () => {
       date: '2020-09-21',
       scenario: null,
       compartment: null,
+      minDate: null,
+      maxDate: null,
     });
   });
 
@@ -38,6 +44,8 @@ describe('DataSelectionSlice', () => {
       date: null,
       scenario: 1,
       compartment: null,
+      minDate: null,
+      maxDate: null,
     });
   });
 
@@ -47,6 +55,8 @@ describe('DataSelectionSlice', () => {
       date: null,
       scenario: null,
       compartment: 'Test Compartment',
+      minDate: null,
+      maxDate: null,
     });
   });
 });

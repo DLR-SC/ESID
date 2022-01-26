@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useCallback, useEffect, useRef, useState} from 'react';
 
 /**
  * This hook can be used to format numbers with language specific formatting and can be configured to display certain
@@ -40,18 +40,61 @@ export function NumberFormatter(
     setSmallNumberFormatter(new Intl.NumberFormat(lang, {maximumSignificantDigits: significantDigits}));
   }, [lang, significantDigits]);
 
-  function formatNumber(value: number): string {
-    const absValue = Math.abs(value);
-    const powSignificant = Math.pow(10, significantDigits - 1);
+  const formatNumber = useCallback(
+    (value: number): string => {
+      const absValue = Math.abs(value);
+      const powSignificant = Math.pow(10, significantDigits - 1);
 
-    if (absValue >= powSignificant) {
-      return largeNumberFormatter.format(value);
-    }
+      if (absValue >= powSignificant) {
+        return largeNumberFormatter.format(value);
+      }
 
-    const powFractional = Math.pow(10, maxFractionalDigits);
-    value = Math.round((value + Number.EPSILON) * powFractional) / powFractional;
-    return smallNumberFormatter.format(value);
-  }
+      const powFractional = Math.pow(10, maxFractionalDigits);
+      value = Math.round((value + Number.EPSILON) * powFractional) / powFractional;
+      return smallNumberFormatter.format(value);
+    },
+    [largeNumberFormatter, maxFractionalDigits, significantDigits, smallNumberFormatter]
+  );
 
   return {formatNumber};
+}
+
+/**
+ * This hook can be used to save the previous state.
+ */
+export function usePrevious<T>(value: T, initialValue: T): T {
+  const ref = useRef(initialValue);
+  useEffect(() => {
+    ref.current = value;
+  });
+  return ref.current;
+}
+
+/**
+ * This is basically the same as useEffect, except that it prints the changed dependencies. This can be used, if you
+ * want to know which dependency changed and triggered a rerender.
+ */
+export function useEffectDebugger(effectHook: {(): void}, dependencies: Array<unknown>, dependencyNames = []): void {
+  const previousDeps = usePrevious(dependencies, []);
+
+  const changedDeps = dependencies.reduce((accum, dependency, index) => {
+    if (dependency !== previousDeps[index]) {
+      const keyName = dependencyNames[index] || index;
+      return {
+        ...(accum as Record<string | number, unknown>),
+        [keyName]: {
+          before: previousDeps[index],
+          after: dependency,
+        },
+      };
+    }
+
+    return accum;
+  }, {});
+
+  if (Object.keys(changedDeps as Record<string | number, unknown>).length) {
+    console.log('[use-effect-debugger] ', changedDeps);
+  }
+
+  useEffect(effectHook, [effectHook, ...dependencies]);
 }

@@ -30,7 +30,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
   );
 
   useEffect(() => {
-    if (data) {
+    if (data && data.results.length > 0) {
       setCompartmentValues(data.results[0].compartments);
     }
   }, [data]);
