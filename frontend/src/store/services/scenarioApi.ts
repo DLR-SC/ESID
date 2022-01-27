@@ -36,31 +36,17 @@ export const scenarioApi = createApi({
         const url = (limit: number, offset: number) =>
           `simulation/${arg.id}/${arg.day}/${group}/?limit=${limit}&offset=${offset}${compartments}`;
 
-        // We fetch the first 100 entries.
-        const firstResult = await fetchWithBQ(url(100, 0));
+        // We fetch 1 entry.
+        const firstResult = await fetchWithBQ(url(1, 0));
         // When an error occurs, we return it.
         if (firstResult.error) return {error: firstResult.error};
 
-        const firstData = firstResult.data as SimulationDataByDate;
+        const currResult = await fetchWithBQ(url((firstResult.data as SimulationDataByDate).count, 0));
+        if (currResult.error) return {error: currResult.error};
 
-        // We write the count and results into our aggregated result set.
-        const result: SimulationDataByDate = {
-          count: firstData.count,
-          previous: null,
-          next: null,
-          results: firstData.results,
-        };
+        const data = currResult.data as SimulationDataByDate;
 
-        // We continue to request 100 entries at a time until we fetched all data.
-        for (let offset = 100; offset <= result.count; offset += 100) {
-          const currResult = await fetchWithBQ(url(100, offset));
-          if (currResult.error) return {error: currResult.error};
-
-          const currData = currResult.data as SimulationDataByDate;
-          result.results.push(...currData.results);
-        }
-
-        return {data: result};
+        return {data};
       },
     }),
 
