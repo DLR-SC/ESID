@@ -150,25 +150,6 @@ export default function DistrictMap(): JSX.Element {
         heatLegendRef.current.maxValue = Math.round(maxValue);
       }
 
-      const getColor = (workingValue: number, minValue: number, maxValue: number) => {
-        // calculate percentage and restrict it between 0 and 1
-        const percent = Math.max(0, Math.min(1, (workingValue - minValue) / (maxValue - minValue)));
-        const intervals = heatColors.length - 1;
-        const fract = 1 / intervals;
-
-        const colorIndex = Math.max(0, Math.ceil(intervals * percent - 1));
-        if (isFinite(colorIndex)) {
-          return new am4core.Color(
-            am4core.colors.interpolate(
-              heatColors[colorIndex].rgb,
-              heatColors[colorIndex + 1].rgb,
-              (percent - colorIndex * fract) / fract
-            )
-          );
-        }
-        return heatColors[0];
-      };
-
       // Set values to each regions
       const event = polygonSeries.events.on('validated', (event) => {
         event.target.mapPolygons.each((mapPolygon) => {
@@ -185,7 +166,7 @@ export default function DistrictMap(): JSX.Element {
         });
       });
 
-      polygonSeries.invalidateData();
+      polygonSeries.invalidateRawData();
 
       return () => {
         event.dispose();
@@ -207,4 +188,23 @@ export default function DistrictMap(): JSX.Element {
       />
     </>
   );
+}
+
+function getColor(workingValue: number, minValue: number, maxValue: number) {
+  // calculate percentage and restrict it between 0 and 1
+  const percent = Math.max(0, Math.min(1, (workingValue - minValue) / (maxValue - minValue)));
+  const intervals = heatColors.length - 1;
+  const fract = 1 / intervals;
+
+  const colorIndex = Math.max(0, Math.ceil(intervals * percent - 1));
+  if (isFinite(colorIndex)) {
+    return new am4core.Color(
+      am4core.colors.interpolate(
+        heatColors[colorIndex].rgb,
+        heatColors[colorIndex + 1].rgb,
+        (percent - colorIndex * fract) / fract
+      )
+    );
+  }
+  return heatColors[0];
 }
