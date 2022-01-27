@@ -27,16 +27,19 @@ interface IRegionPolygon {
   RS: string;
 }
 
+interface IHeatmapLegendItem {
+  color: string;
+  value: number;
+}
+
 // Dummy Props for Heat Legend
-const dummyProps = {
-  legend: [
-    {color: '#00FF00', stop: 0},
-    {color: '#FFFF00', stop: 35},
-    {color: '#FFA500', stop: 50},
-    {color: '#FF0000', stop: 100},
-    {color: '#800080', stop: 200},
-  ],
-};
+const dummyLegend: IHeatmapLegendItem[] = [
+  {color: '#00FF00', value: 0},
+  {color: '#FFFF00', value: 35},
+  {color: '#FFA500', value: 50},
+  {color: '#FF0000', value: 100},
+  {color: '#800080', value: 200},
+];
 
 /**
  * The Map component includes:
@@ -185,8 +188,8 @@ export default function DistrictMap(): JSX.Element {
     heatLegend4.valign = 'bottom';
     heatLegend4.orientation = 'horizontal';
     heatLegend4.height = am4core.percent(20);
-    heatLegend4.minValue = dummyProps.legend[0].stop;
-    heatLegend4.maxValue = dummyProps.legend[dummyProps.legend.length - 1].stop;
+    heatLegend4.minValue = dummyLegend[0].value;
+    heatLegend4.maxValue = dummyLegend[dummyLegend.length - 1].value;
     heatLegend4.minColor = am4core.color('#F2F2F2');
     heatLegend4.maxColor = am4core.color('#F2F2F2');
     heatLegend4.align = 'center';
@@ -194,15 +197,12 @@ export default function DistrictMap(): JSX.Element {
     // override heatLegend gradient
     // function to normalize stop to 0..1 for gradient
     const normalize = (x: number): number => {
-      return (
-        (x - dummyProps.legend[0].stop) /
-        (dummyProps.legend[dummyProps.legend.length - 1].stop - dummyProps.legend[0].stop)
-      );
+      return (x - dummyLegend[0].value) / (dummyLegend[dummyLegend.length - 1].value - dummyLegend[0].value);
     };
     // create new gradient and add color for each item in props, then add it to heatLegend to override
     const gradient4 = new am4core.LinearGradient();
-    dummyProps.legend.forEach((item) => {
-      gradient4.addColor(am4core.color(item.color), 1, normalize(item.stop));
+    dummyLegend.forEach((item) => {
+      gradient4.addColor(am4core.color(item.color), 1, normalize(item.value));
     });
     heatLegend4.markers.template.adapter.add('fill', () => gradient4);
 
@@ -228,27 +228,6 @@ export default function DistrictMap(): JSX.Element {
           const regionData = polygon.dataItem?.dataContext as IRegionPolygon;
           regionData.value = dataMapped.get(regionData.RS) || Number.NaN;
 
-          // calculate fill color
-          // color interpolation function
-          const getColor = (x: number): am5.Color => {
-            let upper = {color: '#FFF', stop: 0};
-            let lower = {color: '#FFF', stop: 0};
-            for (let i = 0; i < dummyProps.legend.length; i++) {
-              upper = dummyProps.legend[i];
-              if (upper.stop > x) {
-                lower = dummyProps.legend[i - 1];
-                break;
-              }
-            }
-            // interpolate color between upper and lower
-            return am5.Color.interpolate(
-              (x - lower.stop) / (upper.stop - lower.stop),
-              am5.color(lower.color),
-              am5.color(upper.color),
-              'hsl'
-            );
-          };
-
           polygon.setAll({
             // set tooltip
             tooltipText:
@@ -258,7 +237,7 @@ export default function DistrictMap(): JSX.Element {
             // set fill color
             fill: Number.isNaN(regionData.value)
               ? am5.color(theme.palette.background.default)
-              : getColor(regionData.value),
+              : getColorFromLegend(regionData.value, dummyLegend),
           });
         });
       }
@@ -278,4 +257,27 @@ export default function DistrictMap(): JSX.Element {
       />
     </>
   );
+}
+
+function getColorFromLegend(value: number, legend: IHeatmapLegendItem[]): am5.Color {
+  if (value <= legend[0].value) {
+    return am5.color(legend[0].color);
+  } else if (value >= legend[legend.length - 1].value) {
+    return am5.color(legend[legend.length - 1].color);
+  } else {
+    let upperTick = legend[0];
+    let lowerTick = legend[0];
+    for (let i = 1; i < legend.length; i++) {
+      if (value <= legend[i].value) {
+        upperTick = legend[i];
+        lowerTick = legend[i - 1];
+        break;
+      }
+    }
+    return am5.Color.interpolate(
+      (value - lowerTick.value) / (upperTick.value - lowerTick.value),
+      am5.color(lowerTick.color),
+      am5.color(upperTick.color)
+    );
+  }
 }
