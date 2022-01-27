@@ -11,6 +11,12 @@
       attribution: 'Attribution',
     },
   },
+  'icon-bar': {
+    'previous-day-tooltip': 'Previous Day',
+    'next-day-tooltip': 'Next Day',
+    'play-pause-tooltip': 'Play/Pause',
+    'fullscreen-tooltip': 'Fullscreen',
+  },
   sideBar: {
     placeholder: 'Sidebar Content',
   },
@@ -42,6 +48,7 @@
   search: 'Search',
   germany: 'Germany',
   'no-data': 'No Data',
+  'dlr-logo': 'DLR logo',
   lorem: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore\
     et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet\
     clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet,\

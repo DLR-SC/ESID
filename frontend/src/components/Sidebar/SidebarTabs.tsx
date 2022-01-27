@@ -1,23 +1,32 @@
-import {Box, Tabs, Tab} from '@mui/material';
+import {Box /*, Tabs, Tab*/} from '@mui/material';
 import {useTranslation} from 'react-i18next';
 import React from 'react';
 
 export default function SidebarTabs(): JSX.Element {
   const {t} = useTranslation('global');
 
+  /*
   const [value, setValue] = React.useState(0);
   const handleChange = (_: React.ChangeEvent<unknown>, newValue: number) => setValue(newValue);
+  */
 
   return (
     <Box
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'stretch',
+        alignItems: 'center',
+        justifyContent: 'center',
         width: '422px',
         height: '100%',
       }}
     >
+      {/* This is a placeholder for now. */}
+      <a href='https://www.dlr.de/' target='_blank' rel='noopener noreferrer' style={{width: '90%'}}>
+        <img src='assets/logo/DLRLogo.png' alt={t('dlr-logo')} width='100%' />
+      </a>
+
+      {/*
       <Tabs value={value} onChange={handleChange} aria-label='todo' variant='fullWidth'>
         <Tab label={t('history.Tabtitle')} {...a11yProps(0)} />
         <Tab label={t('details.Tabtitle')} {...a11yProps(0)} />
@@ -28,16 +37,17 @@ export default function SidebarTabs(): JSX.Element {
       <TabPanel value={value} index={1}>
         <p>Details</p>
       </TabPanel>
+      */}
     </Box>
   );
 }
 
+/*
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
   value: number;
 }
-
 function TabPanel(props: TabPanelProps) {
   const {children, value, index, ...other} = props;
 
@@ -61,3 +71,4 @@ function a11yProps(index: number) {
     'aria-controls': `sidebar-tabpanel-${index}`,
   };
 }
+*/

@@ -1,5 +1,6 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import i18n from '../util/i18n';
+import {dateToISOString} from '../util/util';
 
 /**
  * AGS is the abbreviation for "Amtlicher Gemeindeschlüssel" in German, which are IDs of areas in Germany. The AGS have
@@ -11,16 +12,21 @@ export type AGS = string;
 
 export interface DataSelection {
   district: {ags: AGS; name: string; type: string};
-  date: string;
-  scenario: number;
-  compartment: string;
+  date: string | null;
+  scenario: number | null;
+  compartment: string | null;
+
+  minDate: string | null;
+  maxDate: string | null;
 }
 
 const initialState: DataSelection = {
   district: {ags: '00000', name: i18n.t('germany'), type: ''},
-  date: '2021-01-01',
-  scenario: 0,
-  compartment: '',
+  date: null,
+  scenario: null,
+  compartment: null,
+  minDate: null,
+  maxDate: null,
 };
 
 /**
@@ -34,7 +40,32 @@ export const DataSelectionSlice = createSlice({
       state.district = action.payload;
     },
     selectDate(state, action: PayloadAction<string>) {
-      state.date = action.payload;
+      const newDate = action.payload;
+      if (state.maxDate && newDate > state.maxDate) {
+        state.date = state.maxDate;
+      } else if (state.minDate && newDate < state.minDate) {
+        state.date = state.minDate;
+      } else {
+        state.date = action.payload;
+      }
+    },
+    previousDay(state) {
+      if (state.date && state.date !== state.minDate) {
+        const date = new Date(state.date);
+        date.setUTCDate(date.getUTCDate() - 1);
+        state.date = dateToISOString(date);
+      }
+    },
+    nextDay(state) {
+      if (state.date && state.date !== state.maxDate) {
+        const date = new Date(state.date);
+        date.setUTCDate(date.getUTCDate() + 1);
+        state.date = dateToISOString(date);
+      }
+    },
+    setMinMaxDates(state, action: PayloadAction<{minDate: string; maxDate: string}>) {
+      state.minDate = action.payload.minDate;
+      state.maxDate = action.payload.maxDate;
     },
     selectScenario(state, action: PayloadAction<number>) {
       state.scenario = action.payload;
@@ -45,5 +76,6 @@ export const DataSelectionSlice = createSlice({
   },
 });
 
-export const {selectDistrict, selectDate, selectScenario, selectCompartment} = DataSelectionSlice.actions;
+export const {selectDistrict, selectDate, previousDay, nextDay, setMinMaxDates, selectScenario, selectCompartment} =
+  DataSelectionSlice.actions;
 export default DataSelectionSlice.reducer;

@@ -11,6 +11,12 @@
       attribution: 'Attribution',
     },
   },
+  'icon-bar': {
+    'previous-day-tooltip': 'Vorheriger Tag',
+    'next-day-tooltip': 'Nächster Tag',
+    'play-pause-tooltip': 'Start/Pause',
+    'fullscreen-tooltip': 'Vollbild',
+  },
   history: {
     placeholder: 'history',
   },
@@ -34,4 +40,5 @@
   germany: 'Deutschland',
   WIP: 'Diese Funktionalität befindet sich noch in der Entwicklung.',
   'no-data': 'Keine Daten',
+  'dlr-logo': 'DLR-Logo',
 }

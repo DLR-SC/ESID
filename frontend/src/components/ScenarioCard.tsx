@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {useTheme} from '@mui/material/styles';
 import {Box, List, ListItem, ListItemText, Typography} from '@mui/material';
 import {useAppSelector} from 'store/hooks';
@@ -17,17 +17,32 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
   const theme = useTheme();
   const {t, i18n} = useTranslation();
 
+  const compartmentsRef = useRef<HTMLUListElement | null>(null);
+
   const {formatNumber} = NumberFormatter(i18n.language, 3, 8);
 
   const [compartmentValues, setCompartmentValues] = useState<Dictionary<number> | null>(null);
 
   const compartments = useAppSelector((state) => state.scenarioList.compartments);
-  const node = useAppSelector((state) => state.dataSelection.district.ags);
+  const node = useAppSelector((state) => state.dataSelection.district?.ags);
   const day = useAppSelector((state) => state.dataSelection.date);
-  const {data} = useGetSingleSimulationEntryQuery({id: props.scenario.id, node, day, group: 'total'});
+  const {data} = useGetSingleSimulationEntryQuery(
+    {id: props.scenario.id, node: node, day: day ?? '', group: 'total'},
+    {skip: !day}
+  );
 
   useEffect(() => {
-    if (data) {
+    if (compartmentsRef.current) {
+      if (props.expandProperties) {
+        compartmentsRef.current.scrollTop = props.scrollTop;
+      } else {
+        compartmentsRef.current.scrollTop = 0;
+      }
+    }
+  }, [props.expandProperties, props.scrollTop]);
+
+  useEffect(() => {
+    if (data && data.results.length > 0) {
       setCompartmentValues(data.results[0].compartments);
     }
   }, [data]);
@@ -81,7 +96,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
           display: 'flex',
           alignItems: 'flex-end',
           height: '3rem',
-          marginBottom: theme.spacing(2),
+          marginBottom: theme.spacing(1),
         }}
       >
         <Typography
@@ -95,7 +110,15 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
           {props.scenario.label}
         </Typography>
       </Box>
-      <List dense={true} disablePadding={true}>
+      <List
+        ref={compartmentsRef}
+        dense={true}
+        disablePadding={true}
+        sx={{
+          maxHeight: props.expandProperties ? '248px' : 'auto',
+          overflowY: 'hidden',
+        }}
+      >
         {compartments.map((compartment, i) => (
           // hide compartment if expandProperties false and index > 4
           // highlight compartment if selectedProperty === compartment
@@ -162,6 +185,9 @@ interface ScenarioCardProps {
 
   /** Boolean value whether the properties list is expanded or only the first four are shown. */
   expandProperties: boolean;
+
+  /** To synchronize scrolling. */
+  scrollTop: number;
 
   startValues: Dictionary<number> | null;
 
