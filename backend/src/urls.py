@@ -13,7 +13,7 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
 from src.users.urls import users_router
-from src.api.urls import api_router, urlpatterns
+from src.api.urls import api_router, urlpatterns as api_urlpatterns
 
 schema_view = get_schema_view(
     openapi.Info(title="Pastebin API", default_version='v1'),
@@ -30,7 +30,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     # api
-    path('api/v1/', include(router.urls + urlpatterns)),
+    path('api/v1/', include(router.urls + api_urlpatterns)),
 
     # auth
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
@@ -44,4 +44,4 @@ urlpatterns = [
 
     # the 'api-root' from django rest-frameworks default router
     re_path(r'^$', RedirectView.as_view(url=reverse_lazy('api-root'), permanent=False)),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
