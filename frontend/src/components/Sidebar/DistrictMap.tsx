@@ -89,11 +89,16 @@ export default function DistrictMap(): JSX.Element {
       const item = e.target.dataItem.dataContext as IRegionPolygon;
       dispatch(selectDistrict({ags: item.RS, name: item.GEN, type: t(item.BEZ)}));
     });
+    // add hover state
+    const hs = polygonTemplate.states.create('hover');
+    hs.properties.stroke = am4core.color(theme.palette.primary.main);
+    // pull polygon to front on hover
+    polygonTemplate.events.on('over', (e) => {
+      e.target.zIndex = Number.MAX_VALUE;
+      e.target.toFront();
+    });
 
     polygonSeries.useGeodata = true;
-    // Create hover state and set alternative fill color
-    const hs = polygonTemplate.states.create('hover');
-    hs.properties.fill = am4core.color('#15abdc');
 
     // add heat legend container
     const legendContainer = am4core.create('legenddiv', am4core.Container);
@@ -129,7 +134,7 @@ export default function DistrictMap(): JSX.Element {
       seriesRef.current && seriesRef.current.dispose();
       heatLegendRef.current && heatLegendRef.current.dispose();
     };
-  }, [t, dispatch]);
+  }, [t, theme, dispatch]);
 
   useEffect(() => {
     if (seriesRef.current && selectedCompartment && selectedScenario) {
@@ -156,7 +161,11 @@ export default function DistrictMap(): JSX.Element {
           const regionPolygon = mapPolygon.dataItem.dataContext as IRegionPolygon;
           regionPolygon.value = dataMapped.get(regionPolygon.RS) || 0;
           mapPolygon.fill = getColor(regionPolygon.value, 0, maxValue);
-
+          // set background color to scenario
+          if (mapPolygon.tooltip) {
+            mapPolygon.tooltip.getFillFromObject = false;
+            mapPolygon.tooltip.background.fill = am4core.color(theme.custom.scenarios[selectedScenario - 1]);
+          }
           // add tooltipText, omit compartment if none selected
           mapPolygon.tooltipText = `${t(`BEZ.${regionPolygon.BEZ}`)} ${regionPolygon.GEN}`;
           // append compartment info if selected
@@ -173,7 +182,7 @@ export default function DistrictMap(): JSX.Element {
       };
     }
     return () => undefined;
-  }, [data, scenarioList, selectedCompartment, selectedScenario, t]);
+  }, [data, scenarioList, selectedCompartment, selectedScenario, t, theme]);
 
   return (
     <>
