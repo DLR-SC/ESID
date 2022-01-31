@@ -74,8 +74,7 @@ export default function SimulationChart(): JSX.Element {
     const rkiSeries = chart.series.push(new am4charts.LineSeries());
     rkiSeries.dataFields.valueY = 'rki';
     rkiSeries.dataFields.dateX = 'date';
-    rkiSeries.tensionX = 0.8;
-    rkiSeries.strokeWidth = 1;
+    rkiSeries.strokeWidth = 2;
     rkiSeries.fill = am4core.color('black');
     rkiSeries.stroke = am4core.color('black');
     rkiSeries.name = t('chart.rkiData');
@@ -86,8 +85,7 @@ export default function SimulationChart(): JSX.Element {
       const series = chart.series.push(new am4charts.LineSeries());
       series.dataFields.valueY = scenarioId;
       series.dataFields.dateX = 'date';
-      series.tensionX = 0.8;
-      series.strokeWidth = 1;
+      series.strokeWidth = 2;
       series.fill = am4core.color(theme.custom.scenarios[i % theme.custom.scenarios.length]); // loop around the color list if scenarios exceed color list
       series.stroke = series.fill;
       series.tooltipText = `[bold ${series.stroke.hex}]${scenario.label}:[/] {${scenarioId}}`;
@@ -98,7 +96,6 @@ export default function SimulationChart(): JSX.Element {
         seriesSTD.dataFields.valueY = `${scenarioId}STDup`;
         seriesSTD.dataFields.openValueY = `${scenarioId}STDdown`;
         seriesSTD.dataFields.dateX = 'date';
-        seriesSTD.tensionX = 0.8;
         seriesSTD.strokeWidth = 0;
         seriesSTD.fillOpacity = 0.3;
         series.fill = am4core.color(theme.custom.scenarios[i % theme.custom.scenarios.length]); // loop around the color list if scenarios exceed color list
