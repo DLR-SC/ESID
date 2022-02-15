@@ -15,7 +15,16 @@ services:
   backend:
     image: esid/backend:latest
     restart: always
-    env_file: .env.django
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DJANGO_DEBUG: 'False'
+      DJANGO_SETTINGS_MODULE: 'src.config.production'
+      DJANGO_SECRET_KEY: '#p7&kxb7y^yq8ahfw5%$xh=f8=&1y*5+a5($8w_f7kw!-qig(j'
+      SITE_URL: ${SITE_URL}
     build:
       context: .
       args:

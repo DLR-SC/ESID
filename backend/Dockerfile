@@ -17,9 +17,10 @@ RUN set -x && \
 CMD ["sh", "/entrypoint-startup.sh"]
 COPY ./docker/entrypoint-startup.sh /
 
-COPY ./requirements/${REQUIREMENTS_FILE} ./requirements.txt
+COPY ./requirements ./requirements
+
 RUN pip install numpy scipy pandas tqdm
-RUN pip install -r ./requirements.txt
+RUN pip install -r ./requirements/${REQUIREMENTS_FILE}
 
 COPY ./src ./src
 COPY ./manage.py ./manage.py

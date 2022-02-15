@@ -2,7 +2,6 @@ version: '3'
 services:
   db:
     image: postgres:13.3
-    user: ${USER_ID}:${GROUP_ID}
     restart: always
     ports:
       - 5432:5432
@@ -22,8 +21,17 @@ services:
     restart: always
     ports:
       - 8000:8000
-    env_file: .env.django
-    command: 'sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"'
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DJANGO_DEBUG: 'True'
+      DJANGO_SETTINGS_MODULE: 'src.config.local'
+      DJANGO_SECRET_KEY: '#p7&kxb7y^yq8ahfw5%$xh=f8=&1y*5+a5($8w_f7kw!-qig(j'
+      SITE_URL: 'http://localhost:8000'
+    command: 'sh -c "python manage.py migrate && python manage.py collectstatic --no-input && python manage.py runserver 0.0.0.0:8000"'
     volumes:
       - django-data:/localdata
       - ./:/app
