@@ -11,6 +11,7 @@ import {selectDistrict} from '../../store/DataSelectionSlice';
 import {useAppSelector} from '../../store/hooks';
 import {Box} from '@mui/material';
 import {useGetSimulationDataByDateQuery} from 'store/services/scenarioApi';
+import HeatLegend from './HeatLegend';
 
 const {useRef} = React;
 
@@ -136,6 +137,7 @@ export default function DistrictMap(): JSX.Element {
     // pull polygon to front on hover (to fix other polygons omitting outline)
     polygonTemplate.events.on('pointerover', (e) => {
       e.target.toFront();
+      // TODO: add heat legend tooltip? => pass heat legend ref back up
     });
 
     rootRef.current = root;
@@ -181,7 +183,18 @@ export default function DistrictMap(): JSX.Element {
 
   // Heat Legend TODO: review new heat legends & redo this
   useEffect(() => {
-    // add heat legend container
+    if (chartRef.current && rootRef.current) {
+      rootRef.current.container.children.push(
+        am5.HeatLegend.new(rootRef.current, {
+          orientation: 'horizontal',
+          startValue: dummyLegend[0].value,
+          startColor: am5.color(dummyLegend[0].color),
+          endValue: dummyLegend[dummyLegend.length - 1].value,
+          endColor: am5.color(dummyLegend[dummyLegend.length - 1].color),
+        })
+      );
+    }
+
     const legendContainer4 = am4core.create('legenddiv', am4core.Container);
     legendContainer4.width = am4core.percent(100);
     const heatLegend4 = legendContainer4.createChild(am4maps.HeatLegend);
@@ -254,6 +267,15 @@ export default function DistrictMap(): JSX.Element {
           height: '30px',
           backgroundColor: theme.palette.background.default,
         }}
+      />
+      <HeatLegend
+        legend={dummyLegend}
+        setLegend={() => {
+          console.log('setLegend callback');
+          return [];
+        }}
+        min={dummyLegend[0].value}
+        max={dummyLegend[dummyLegend.length - 1].value}
       />
     </>
   );
