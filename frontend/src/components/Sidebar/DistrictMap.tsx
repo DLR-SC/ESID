@@ -69,6 +69,7 @@ export default function DistrictMap(): JSX.Element {
 
   const chartRef = useRef<am5map.MapChart | null>(null);
   const rootRef = useRef<am5.Root | null>(null);
+  const legendRef = useRef<am5.HeatLegend | null>(null);
 
   const {t} = useTranslation('global');
   const theme = useTheme();
@@ -137,7 +138,9 @@ export default function DistrictMap(): JSX.Element {
     // pull polygon to front on hover (to fix other polygons omitting outline)
     polygonTemplate.events.on('pointerover', (e) => {
       e.target.toFront();
-      // TODO: add heat legend tooltip? => pass heat legend ref back up
+      if (legendRef.current) {
+        legendRef.current.showValue((e.target.dataItem?.dataContext as IRegionPolygon).value);
+      }
     });
 
     rootRef.current = root;
@@ -270,9 +273,8 @@ export default function DistrictMap(): JSX.Element {
       />
       <HeatLegend
         legend={dummyLegend}
-        setLegend={() => {
-          console.log('setLegend callback');
-          return [];
+        exposeLegend={(legend: am5.HeatLegend | null) => {
+          legendRef.current = legend;
         }}
         min={dummyLegend[0].value}
         max={dummyLegend[dummyLegend.length - 1].value}

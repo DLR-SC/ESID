@@ -10,7 +10,7 @@ interface IHeatmapLegendItem {
 export default function HeatLegend(props: {
   // add is_dynamic/absolute?
   legend: IHeatmapLegendItem[];
-  setLegend: () => IHeatmapLegendItem[];
+  exposeLegend: (legend: am5.HeatLegend | null) => void;
   min: number;
   max: number;
 }): JSX.Element {
@@ -42,8 +42,12 @@ export default function HeatLegend(props: {
       return gradient;
     });
 
+    // expose Legend element to District map (for tooltip on event)
+    props.exposeLegend(heatLegend);
+
     return () => {
       root.dispose();
+      props.exposeLegend(null);
     };
   }, [props]);
 
