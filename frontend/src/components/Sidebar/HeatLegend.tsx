@@ -16,7 +16,7 @@ export default function HeatLegend(props: {
 }): JSX.Element {
   useEffect(() => {
     const root = am5.Root.new('legend');
-    root.container.children.push(
+    const heatLegend = root.container.children.push(
       am5.HeatLegend.new(root, {
         orientation: 'horizontal',
         startValue: props.min,
@@ -26,7 +26,19 @@ export default function HeatLegend(props: {
       })
     );
 
-    // TODO: overwrite gradient & figure out ticks
+    // compile stop list
+    const stoplist: {color: am5.Color; opacity: number; offset: number}[] = [];
+    props.legend.forEach((item) => {
+      stoplist.push({
+        color: am5.color(item.color),
+        opacity: 1,
+        offset: (item.value - props.min) / (props.max - props.min),
+      });
+    });
+    heatLegend.markers.template.adapters.add('fillGradient', (gradient) => {
+      gradient?.set('stops', stoplist);
+      return gradient;
+    });
 
     return () => {
       root.dispose();
