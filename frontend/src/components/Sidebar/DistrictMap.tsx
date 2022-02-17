@@ -1,7 +1,5 @@
 import React, {useState} from 'react';
 import {useTheme} from '@mui/material/styles';
-/* deprecated */ import * as am4core from '@amcharts/amcharts4/core';
-/* deprecated */ import * as am4maps from '@amcharts/amcharts4/maps';
 import * as am5 from '@amcharts/amcharts5';
 import * as am5map from '@amcharts/amcharts5/map';
 import {useEffect} from 'react';
@@ -183,49 +181,6 @@ export default function DistrictMap(): JSX.Element {
       });
     }
   }, [selectedDistrict]);*/
-
-  // Heat Legend TODO: review new heat legends & redo this
-  useEffect(() => {
-    if (chartRef.current && rootRef.current) {
-      rootRef.current.container.children.push(
-        am5.HeatLegend.new(rootRef.current, {
-          orientation: 'horizontal',
-          startValue: dummyLegend[0].value,
-          startColor: am5.color(dummyLegend[0].color),
-          endValue: dummyLegend[dummyLegend.length - 1].value,
-          endColor: am5.color(dummyLegend[dummyLegend.length - 1].color),
-        })
-      );
-    }
-
-    const legendContainer4 = am4core.create('legenddiv', am4core.Container);
-    legendContainer4.width = am4core.percent(100);
-    const heatLegend4 = legendContainer4.createChild(am4maps.HeatLegend);
-    heatLegend4.valign = 'bottom';
-    heatLegend4.orientation = 'horizontal';
-    heatLegend4.height = am4core.percent(20);
-    heatLegend4.minValue = dummyLegend[0].value;
-    heatLegend4.maxValue = dummyLegend[dummyLegend.length - 1].value;
-    heatLegend4.minColor = am4core.color('#F2F2F2');
-    heatLegend4.maxColor = am4core.color('#F2F2F2');
-    heatLegend4.align = 'center';
-
-    // override heatLegend gradient
-    // function to normalize stop to 0..1 for gradient
-    const normalize = (x: number): number => {
-      return (x - dummyLegend[0].value) / (dummyLegend[dummyLegend.length - 1].value - dummyLegend[0].value);
-    };
-    // create new gradient and add color for each item in props, then add it to heatLegend to override
-    const gradient4 = new am4core.LinearGradient();
-    dummyLegend.forEach((item) => {
-      gradient4.addColor(am4core.color(item.color), 1, normalize(item.value));
-    });
-    heatLegend4.markers.template.adapter.add('fill', () => gradient4);
-
-    // resize and pack axis labels
-    heatLegend4.valueAxis.renderer.labels.template.fontSize = 9;
-    heatLegend4.valueAxis.renderer.minGridDistance = 20;
-  }, []);
 
   // Polygon
   useEffect(() => {
