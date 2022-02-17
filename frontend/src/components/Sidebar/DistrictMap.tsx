@@ -136,6 +136,7 @@ export default function DistrictMap(): JSX.Element {
     // pull polygon to front on hover (to fix other polygons omitting outline)
     polygonTemplate.events.on('pointerover', (e) => {
       e.target.toFront();
+      // show tooltip on heat legend
       if (legendRef.current) {
         legendRef.current.showValue((e.target.dataItem?.dataContext as IRegionPolygon).value);
       }
@@ -229,6 +230,7 @@ export default function DistrictMap(): JSX.Element {
       <HeatLegend
         legend={dummyLegend}
         exposeLegend={(legend: am5.HeatLegend | null) => {
+          // move exposed legend item (or null if disposed) into ref
           legendRef.current = legend;
         }}
         min={dummyLegend[0].value}

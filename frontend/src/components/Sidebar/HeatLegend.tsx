@@ -1,4 +1,5 @@
 import React, {useEffect} from 'react';
+import {useTheme} from '@mui/material/styles';
 import {Box} from '@mui/material';
 import * as am5 from '@amcharts/amcharts5';
 
@@ -14,15 +15,18 @@ export default function HeatLegend(props: {
   min: number;
   max: number;
 }): JSX.Element {
+  const theme = useTheme();
+
   useEffect(() => {
     const root = am5.Root.new('legend');
     const heatLegend = root.container.children.push(
       am5.HeatLegend.new(root, {
         orientation: 'horizontal',
         startValue: props.min,
-        startColor: am5.color(props.legend[0].color),
         endValue: props.max,
-        endColor: am5.color(props.legend[props.legend.length - 1].color),
+        // set start & end color to paper background as gradient is overwritten later and this sets the tooltip background color
+        startColor: am5.color(theme.palette.background.paper),
+        endColor: am5.color(theme.palette.background.paper),
       })
     );
 
@@ -49,7 +53,7 @@ export default function HeatLegend(props: {
       root.dispose();
       props.exposeLegend(null);
     };
-  }, [props]);
+  }, [props, theme]);
 
   return (
     <Box
