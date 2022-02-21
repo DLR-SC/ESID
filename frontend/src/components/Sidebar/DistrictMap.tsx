@@ -5,7 +5,7 @@ import * as am4maps from '@amcharts/amcharts4/maps';
 import {useTranslation} from 'react-i18next';
 import {useAppDispatch, useAppSelector} from '../../store/hooks';
 import {selectDistrict} from '../../store/DataSelectionSlice';
-import {Box, CircularProgress, Container} from '@mui/material';
+import {Box, CircularProgress} from '@mui/material';
 import {useGetSimulationDataByDateQuery} from 'store/services/scenarioApi';
 
 const {useRef} = React;
@@ -185,7 +185,7 @@ export default function DistrictMap(): JSX.Element {
   }, [data, scenarioList, selectedCompartment, selectedScenario, t, theme]);
 
   return (
-    <Container sx={{position: 'relative'}}>
+    <Box sx={{position: 'relative'}}>
       <Box id='mapdiv' height={'650px'} />
       <Box
         id='legenddiv'
@@ -207,7 +207,7 @@ export default function DistrictMap(): JSX.Element {
           }}
         />
       )}
-    </Container>
+    </Box>
   );
 }
 

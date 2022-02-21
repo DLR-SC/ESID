@@ -5,7 +5,7 @@ import am4lang_en_US from '@amcharts/amcharts4/lang/en_US';
 import am4lang_de_DE from '@amcharts/amcharts4/lang/de_DE';
 import {useAppDispatch, useAppSelector} from '../store/hooks';
 import {useTheme} from '@mui/material/styles';
-import {Box} from '@mui/material';
+import {Box, CircularProgress} from '@mui/material';
 import {selectDate} from '../store/DataSelectionSlice';
 import {useGetRkiByDistrictQuery} from '../store/services/rkiApi';
 import {dateToISOString} from 'util/util';
@@ -31,7 +31,12 @@ export default function SimulationChart(): JSX.Element {
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
   const selectedDate = useAppSelector((state) => state.dataSelection.date);
   const dispatch = useAppDispatch();
-  const {data: rkiData} = useGetRkiByDistrictQuery(
+  const {
+    data: rkiData,
+    isUninitialized: rkiUninitialized,
+    isLoading: rkiLoading,
+    isFetching: rkiFetching,
+  } = useGetRkiByDistrictQuery(
     {
       node: selectedDistrict,
       group: 'total',
@@ -40,7 +45,12 @@ export default function SimulationChart(): JSX.Element {
     {skip: !selectedCompartment}
   );
 
-  const {data: simulationData} = useGetMultipleSimulationDataByNodeQuery(
+  const {
+    data: simulationData,
+    isUninitialized: simulationUninitialized,
+    isLoading: simulationLoading,
+    isFetching: simulationFetching,
+  } = useGetMultipleSimulationDataByNodeQuery(
     {
       // take scenario ids and flatten them into array
       ids: Object.entries(scenarioList.scenarios).map(([, scn]) => scn.id),
@@ -221,18 +231,37 @@ export default function SimulationChart(): JSX.Element {
   }, [simulationData, rkiData, scenarioList, selectedCompartment, theme, formatNumber, t]);
 
   return (
-    <Box
-      id='chartdiv'
-      sx={{
-        height: '100%',
-        width: '100%',
-        margin: 0,
-        padding: 0,
-        backgroundColor: theme.palette.background.paper,
-        backgroundImage: 'radial-gradient(#E2E4E6 10%, transparent 11%)',
-        backgroundSize: '10px 10px',
-        cursor: 'crosshair',
-      }}
-    />
+    <Box sx={{position: 'relative', width: '100%', height: '100%'}}>
+      <Box
+        id='chartdiv'
+        sx={{
+          height: '100%',
+          width: '100%',
+          margin: 0,
+          padding: 0,
+          backgroundColor: theme.palette.background.paper,
+          backgroundImage: 'radial-gradient(#E2E4E6 10%, transparent 11%)',
+          backgroundSize: '10px 10px',
+          cursor: 'crosshair',
+        }}
+      />
+      {(rkiUninitialized ||
+        rkiLoading ||
+        rkiFetching ||
+        simulationUninitialized ||
+        simulationLoading ||
+        simulationFetching) && (
+        <CircularProgress
+          size={96}
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            marginTop: '-48px',
+            marginLeft: '-48px',
+          }}
+        />
+      )}
+    </Box>
   );
 }
