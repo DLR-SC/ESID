@@ -5,7 +5,7 @@ import * as am4maps from '@amcharts/amcharts4/maps';
 import {useTranslation} from 'react-i18next';
 import {useAppDispatch, useAppSelector} from '../../store/hooks';
 import {selectDistrict} from '../../store/DataSelectionSlice';
-import {Box} from '@mui/material';
+import {Box, CircularProgress, Container} from '@mui/material';
 import {useGetSimulationDataByDateQuery} from 'store/services/scenarioApi';
 
 const {useRef} = React;
@@ -43,7 +43,7 @@ export default function DistrictMap(): JSX.Element {
   const selectedDate = useAppSelector((state) => state.dataSelection.date);
   const scenarioList = useAppSelector((state) => state.scenarioList.scenarios);
 
-  const {data} = useGetSimulationDataByDateQuery(
+  const {data, isUninitialized, isLoading, isFetching} = useGetSimulationDataByDateQuery(
     {
       id: selectedScenario ?? 0,
       day: selectedDate ?? '',
@@ -185,7 +185,7 @@ export default function DistrictMap(): JSX.Element {
   }, [data, scenarioList, selectedCompartment, selectedScenario, t, theme]);
 
   return (
-    <>
+    <Container sx={{position: 'relative'}}>
       <Box id='mapdiv' height={'650px'} />
       <Box
         id='legenddiv'
@@ -195,7 +195,19 @@ export default function DistrictMap(): JSX.Element {
           backgroundColor: theme.palette.background.default,
         }}
       />
-    </>
+      {(isUninitialized || isLoading || isFetching) && (
+        <CircularProgress
+          size={96}
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            marginTop: '-48px',
+            marginLeft: '-48px',
+          }}
+        />
+      )}
+    </Container>
   );
 }
 
