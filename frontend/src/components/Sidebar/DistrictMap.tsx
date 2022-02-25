@@ -219,14 +219,6 @@ export default function DistrictMap(): JSX.Element {
   return (
     <>
       <Box id='mapdiv' height={'500px'} />
-      <Box
-        id='legenddiv'
-        sx={{
-          mt: 3,
-          height: '30px',
-          backgroundColor: theme.palette.background.default,
-        }}
-      />
       <HeatLegend
         legend={dummyLegend}
         exposeLegend={(legend: am5.HeatLegend | null) => {
