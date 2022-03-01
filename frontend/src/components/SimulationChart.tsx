@@ -31,12 +31,7 @@ export default function SimulationChart(): JSX.Element {
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
   const selectedDate = useAppSelector((state) => state.dataSelection.date);
   const dispatch = useAppDispatch();
-  const {
-    data: rkiData,
-    isUninitialized: rkiUninitialized,
-    isLoading: rkiLoading,
-    isFetching: rkiFetching,
-  } = useGetRkiByDistrictQuery(
+  const {data: rkiData, isFetching: rkiFetching} = useGetRkiByDistrictQuery(
     {
       node: selectedDistrict,
       group: 'total',
@@ -45,12 +40,7 @@ export default function SimulationChart(): JSX.Element {
     {skip: !selectedCompartment}
   );
 
-  const {
-    data: simulationData,
-    isUninitialized: simulationUninitialized,
-    isLoading: simulationLoading,
-    isFetching: simulationFetching,
-  } = useGetMultipleSimulationDataByNodeQuery(
+  const {data: simulationData, isFetching: simulationFetching} = useGetMultipleSimulationDataByNodeQuery(
     {
       // take scenario ids and flatten them into array
       ids: Object.entries(scenarioList.scenarios).map(([, scn]) => scn.id),
@@ -245,22 +235,28 @@ export default function SimulationChart(): JSX.Element {
           cursor: 'crosshair',
         }}
       />
-      {(rkiUninitialized ||
-        rkiLoading ||
-        rkiFetching ||
-        simulationUninitialized ||
-        simulationLoading ||
-        simulationFetching) && (
-        <CircularProgress
-          size={96}
+      {(rkiFetching || simulationFetching) && (
+        <Box
           sx={{
             position: 'absolute',
-            top: '50%',
-            left: '50%',
-            marginTop: '-48px',
-            marginLeft: '-48px',
+            top: '0',
+            left: '0',
+            width: '100%',
+            height: '100%',
+            backgroundColor: theme.palette.background.paper + 'E0',
           }}
-        />
+        >
+          <CircularProgress
+            size={96}
+            sx={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              marginTop: '-48px',
+              marginLeft: '-48px',
+            }}
+          />
+        </Box>
       )}
     </Box>
   );

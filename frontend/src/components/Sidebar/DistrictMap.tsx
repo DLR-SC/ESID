@@ -43,7 +43,7 @@ export default function DistrictMap(): JSX.Element {
   const selectedDate = useAppSelector((state) => state.dataSelection.date);
   const scenarioList = useAppSelector((state) => state.scenarioList.scenarios);
 
-  const {data, isUninitialized, isLoading, isFetching} = useGetSimulationDataByDateQuery(
+  const {data, isFetching} = useGetSimulationDataByDateQuery(
     {
       id: selectedScenario ?? 0,
       day: selectedDate ?? '',
@@ -140,40 +140,49 @@ export default function DistrictMap(): JSX.Element {
     if (seriesRef.current && selectedCompartment && selectedScenario) {
       const polygonSeries = seriesRef.current;
 
-      let maxValue = 0;
-      const dataMapped = new Map<string, number>();
-      data?.results.forEach((entry) => {
-        const rs = entry.name;
-        dataMapped.set(rs, entry.compartments[selectedCompartment]);
-        if (rs !== '00000') {
-          maxValue =
-            entry.compartments[selectedCompartment] > maxValue ? entry.compartments[selectedCompartment] : maxValue;
-        }
-      });
-
-      if (heatLegendRef.current) {
-        heatLegendRef.current.maxValue = Math.round(maxValue);
-      }
-
-      // Set values to each regions
-      const event = polygonSeries.events.on('validated', (event) => {
-        event.target.mapPolygons.each((mapPolygon) => {
-          const regionPolygon = mapPolygon.dataItem.dataContext as IRegionPolygon;
-          regionPolygon.value = dataMapped.get(regionPolygon.RS) || 0;
-          mapPolygon.fill = getColor(regionPolygon.value, 0, maxValue);
-          // set background color to scenario
-          if (mapPolygon.tooltip) {
-            mapPolygon.tooltip.getFillFromObject = false;
-            mapPolygon.tooltip.background.fill = am4core.color(theme.custom.scenarios[selectedScenario - 1]);
-          }
-          // add tooltipText, omit compartment if none selected
-          mapPolygon.tooltipText = `${t(`BEZ.${regionPolygon.BEZ}`)} ${regionPolygon.GEN}`;
-          // append compartment info if selected
-          if (scenarioList[selectedScenario] && selectedCompartment) {
-            mapPolygon.tooltipText += `\n${selectedCompartment}: ${regionPolygon.value.toFixed(0)}`;
+      let event: am4core.IDisposer;
+      if (!isFetching) {
+        let maxValue = 0;
+        const dataMapped = new Map<string, number>();
+        data?.results.forEach((entry) => {
+          const rs = entry.name;
+          dataMapped.set(rs, entry.compartments[selectedCompartment]);
+          if (rs !== '00000') {
+            maxValue =
+              entry.compartments[selectedCompartment] > maxValue ? entry.compartments[selectedCompartment] : maxValue;
           }
         });
-      });
+
+        if (heatLegendRef.current) {
+          heatLegendRef.current.maxValue = Math.round(maxValue);
+        }
+
+        // Set values to each regions
+        event = polygonSeries.events.on('validated', (event) => {
+          event.target.mapPolygons.each((mapPolygon) => {
+            const regionPolygon = mapPolygon.dataItem.dataContext as IRegionPolygon;
+            regionPolygon.value = dataMapped.get(regionPolygon.RS) || 0;
+            mapPolygon.fill = getColor(regionPolygon.value, 0, maxValue);
+            // set background color to scenario
+            if (mapPolygon.tooltip) {
+              mapPolygon.tooltip.getFillFromObject = false;
+              mapPolygon.tooltip.background.fill = am4core.color(theme.custom.scenarios[selectedScenario - 1]);
+            }
+            // add tooltipText, omit compartment if none selected
+            mapPolygon.tooltipText = `${t(`BEZ.${regionPolygon.BEZ}`)} ${regionPolygon.GEN}`;
+            // append compartment info if selected
+            if (scenarioList[selectedScenario] && selectedCompartment) {
+              mapPolygon.tooltipText += `\n${selectedCompartment}: ${regionPolygon.value.toFixed(0)}`;
+            }
+          });
+        });
+      } else {
+        event = polygonSeries.events.on('validated', (event) => {
+          event.target.mapPolygons.each((mapPolygon) => {
+            mapPolygon.fill = am4core.color('gray');
+          });
+        });
+      }
 
       polygonSeries.invalidateRawData();
 
@@ -182,7 +191,7 @@ export default function DistrictMap(): JSX.Element {
       };
     }
     return () => undefined;
-  }, [data, scenarioList, selectedCompartment, selectedScenario, t, theme]);
+  }, [data, scenarioList, selectedCompartment, selectedScenario, t, theme, isFetching]);
 
   return (
     <Box sx={{position: 'relative'}}>
@@ -195,17 +204,28 @@ export default function DistrictMap(): JSX.Element {
           backgroundColor: theme.palette.background.default,
         }}
       />
-      {(isUninitialized || isLoading || isFetching) && (
-        <CircularProgress
-          size={96}
+      {isFetching && (
+        <Box
           sx={{
             position: 'absolute',
-            top: '50%',
-            left: '50%',
-            marginTop: '-48px',
-            marginLeft: '-48px',
+            top: '0',
+            left: '0',
+            width: '100%',
+            height: '100%',
+            backgroundColor: theme.palette.background.default + 'E0',
           }}
-        />
+        >
+          <CircularProgress
+            size={96}
+            sx={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              marginTop: '-48px',
+              marginLeft: '-48px',
+            }}
+          />
+        </Box>
       )}
     </Box>
   );
