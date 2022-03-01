@@ -1,12 +1,10 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect, useMemo} from 'react';
 import {useTheme} from '@mui/material/styles';
 import * as am5 from '@amcharts/amcharts5';
 import * as am5map from '@amcharts/amcharts5/map';
-import {useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
-import {useAppDispatch} from '../../store/hooks';
+import {useAppDispatch, useAppSelector} from '../../store/hooks';
 import {selectDistrict} from '../../store/DataSelectionSlice';
-import {useAppSelector} from '../../store/hooks';
 import {Box} from '@mui/material';
 import {useGetSimulationDataByDateQuery} from 'store/services/scenarioApi';
 import HeatLegend from './HeatLegend';
@@ -33,20 +31,20 @@ interface IHeatmapLegendItem {
 
 // Dummy Props for Heat Legend
 const dummyLegend: IHeatmapLegendItem[] = [
-  {color: '#00FF00', value: 0},
-  {color: '#FFFF00', value: 35},
-  {color: '#FFA500', value: 50},
-  {color: '#FF0000', value: 100},
-  {color: '#800080', value: 200},
+  {color: 'rgb(161,217,155)', value: 0},
+  {color: 'rgb(255,255,204)', value: 1 / 11},
+  {color: 'rgb(255,237,160)', value: 2 / 11},
+  {color: 'rgb(255,237,160)', value: 3 / 11},
+  {color: 'rgb(254,217,118)', value: 4 / 11},
+  {color: 'rgb(254,178,76)', value: 5 / 11},
+  {color: 'rgb(253,141,60)', value: 6 / 11},
+  {color: 'rgb(252,78,42)', value: 7 / 11},
+  {color: 'rgb(227,26,28)', value: 8 / 11},
+  {color: 'rgb(189,0,38)', value: 9 / 11},
+  {color: 'rgb(128,0,38)', value: 10 / 11},
+  {color: 'rgb(0,0,0)', value: 1},
 ];
 
-/**
- * The Map component includes:
- * - A detailed Map of Germany
- * - Heat Legend container
- * - Zoom control
- * The colors depends on temporary values assigned to each region.
- */
 export default function DistrictMap(): JSX.Element {
   const [geodata, setGeodata] = useState<GeoJSON.GeoJSON | null>(null);
   //const selectedDistrict = useAppSelector((state) => state.dataSelection.district);
@@ -73,6 +71,20 @@ export default function DistrictMap(): JSX.Element {
   const theme = useTheme();
   const dispatch = useAppDispatch();
   //const lastSelectedPolygon = useRef<am5map.MapPolygon | null>(null);
+
+  // use Memoized to store aggregated max and only recalculate if parameters change
+  const aggregatedMax = useMemo(() => {
+    let max = 0;
+    if (data && selectedCompartment) {
+      data.results.forEach((entry) => {
+        if (entry.name !== '00000') {
+          max = entry.compartments[selectedCompartment] > max ? entry.compartments[selectedCompartment] : max;
+        }
+      });
+    }
+    console.log('Recalc Max:', max);
+    return max;
+  }, [selectedCompartment, data]);
 
   // fetch geojson
   useEffect(() => {
@@ -141,7 +153,6 @@ export default function DistrictMap(): JSX.Element {
         legendRef.current.showValue((e.target.dataItem?.dataContext as IRegionPolygon).value);
       }
     });
-
     rootRef.current = root;
     chartRef.current = chart;
     return () => {
@@ -183,9 +194,9 @@ export default function DistrictMap(): JSX.Element {
     }
   }, [selectedDistrict]);*/
 
-  // Polygon
+  // set Data
   useEffect(() => {
-    if (chartRef.current && chartRef.current.series.length > 0) {
+    if (chartRef.current && chartRef.current.series.length > 0 && selectedCompartment && selectedScenario) {
       const polygonSeries = chartRef.current.series.getIndex(0) as am5map.MapPolygonSeries;
 
       // Map compartment value to RS
@@ -208,47 +219,78 @@ export default function DistrictMap(): JSX.Element {
                 : `${t(`BEZ.${regionData.BEZ}`)} {GEN}`,
             // set fill color
             fill: Number.isNaN(regionData.value)
-              ? am5.color(theme.palette.background.default)
-              : getColorFromLegend(regionData.value, dummyLegend),
+              ? // set fill to background if value is NaN
+                am5.color(theme.palette.background.default)
+              : // else check if legend is normalized or not
+              dummyLegend[0].value == 0 && dummyLegend[dummyLegend.length - 1].value == 1
+              ? // use function with min/max if legend is normalized
+                getColorFromLegend(regionData.value, dummyLegend, 0, aggregatedMax)
+              : // use function w/o if legend has absolute values
+                getColorFromLegend(regionData.value, dummyLegend),
           });
         });
       }
     }
-  }, [scenarioList, selectedScenario, selectedCompartment, selectedDate, dispatch, t, data, theme]);
+  }, [scenarioList, selectedScenario, selectedCompartment, selectedDate, aggregatedMax, dispatch, t, data, theme]);
 
   return (
     <>
-      <Box id='mapdiv' height={'500px'} />
+      {console.log('Render Max:', aggregatedMax)}
+      <Box id='mapdiv' height={'650px'} />
       <HeatLegend
         legend={dummyLegend}
         exposeLegend={(legend: am5.HeatLegend | null) => {
           // move exposed legend item (or null if disposed) into ref
           legendRef.current = legend;
         }}
-        min={dummyLegend[0].value}
-        max={dummyLegend[dummyLegend.length - 1].value}
+        min={0}
+        max={aggregatedMax}
+        isNormalized={true}
       />
     </>
   );
 }
 
-function getColorFromLegend(value: number, legend: IHeatmapLegendItem[]): am5.Color {
-  if (value <= legend[0].value) {
+function getColorFromLegend(
+  value: number,
+  legend: IHeatmapLegendItem[],
+  aggregatedMin: number,
+  aggregatedMax: number
+): am5.Color;
+function getColorFromLegend(
+  value: number,
+  legend: IHeatmapLegendItem[],
+  aggregatedMin?: undefined,
+  aggregatedMax?: undefined
+): am5.Color;
+function getColorFromLegend(
+  value: number,
+  legend: IHeatmapLegendItem[],
+  aggregatedMin?: number,
+  aggregatedMax?: number
+) {
+  // assume legend stops are absolute
+  let normalizedValue = value;
+  // if aggregated values (min/max) are set, the legend items are already normalized => need to normalize value too
+  if (!(aggregatedMin === undefined || aggregatedMax === undefined)) {
+    normalizedValue = (value - aggregatedMin) / (aggregatedMax - aggregatedMin);
+  }
+  if (normalizedValue <= legend[0].value) {
     return am5.color(legend[0].color);
-  } else if (value >= legend[legend.length - 1].value) {
+  } else if (normalizedValue >= legend[legend.length - 1].value) {
     return am5.color(legend[legend.length - 1].color);
   } else {
     let upperTick = legend[0];
     let lowerTick = legend[0];
     for (let i = 1; i < legend.length; i++) {
-      if (value <= legend[i].value) {
+      if (normalizedValue <= legend[i].value) {
         upperTick = legend[i];
         lowerTick = legend[i - 1];
         break;
       }
     }
     return am5.Color.interpolate(
-      (value - lowerTick.value) / (upperTick.value - lowerTick.value),
+      (normalizedValue - lowerTick.value) / (upperTick.value - lowerTick.value),
       am5.color(lowerTick.color),
       am5.color(upperTick.color)
     );

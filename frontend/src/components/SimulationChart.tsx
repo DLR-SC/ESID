@@ -31,18 +31,26 @@ export default function SimulationChart(): JSX.Element {
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
   const selectedDate = useAppSelector((state) => state.dataSelection.date);
   const dispatch = useAppDispatch();
-  const {data: rkiData} = useGetRkiByDistrictQuery({
-    node: selectedDistrict,
-    group: 'total',
-    compartments: selectedCompartment ? [selectedCompartment] : null,
-  });
-  const {data: simulationData} = useGetMultipleSimulationDataByNodeQuery({
-    // take scenario ids and flatten them into array
-    ids: Object.entries(scenarioList.scenarios).map(([, scn]) => scn.id),
-    node: selectedDistrict,
-    group: '',
-    compartments: selectedCompartment ? [selectedCompartment] : null,
-  });
+  const {data: rkiData} = useGetRkiByDistrictQuery(
+    {
+      node: selectedDistrict,
+      group: 'total',
+      compartments: [selectedCompartment ?? ''],
+    },
+    {skip: !selectedCompartment}
+  );
+
+  const {data: simulationData} = useGetMultipleSimulationDataByNodeQuery(
+    {
+      // take scenario ids and flatten them into array
+      ids: Object.entries(scenarioList.scenarios).map(([, scn]) => scn.id),
+      node: selectedDistrict,
+      group: '',
+      compartments: [selectedCompartment ?? ''],
+    },
+    {skip: !selectedCompartment}
+  );
+
   const {formatNumber} = NumberFormatter(i18n.language, 3, 8);
 
   const chartRef = useRef<am4charts.XYChart | null>(null);
@@ -66,8 +74,7 @@ export default function SimulationChart(): JSX.Element {
     const rkiSeries = chart.series.push(new am4charts.LineSeries());
     rkiSeries.dataFields.valueY = 'rki';
     rkiSeries.dataFields.dateX = 'date';
-    rkiSeries.tensionX = 0.8;
-    rkiSeries.strokeWidth = 1;
+    rkiSeries.strokeWidth = 2;
     rkiSeries.fill = am4core.color('black');
     rkiSeries.stroke = am4core.color('black');
     rkiSeries.name = t('chart.rkiData');
@@ -78,8 +85,7 @@ export default function SimulationChart(): JSX.Element {
       const series = chart.series.push(new am4charts.LineSeries());
       series.dataFields.valueY = scenarioId;
       series.dataFields.dateX = 'date';
-      series.tensionX = 0.8;
-      series.strokeWidth = 1;
+      series.strokeWidth = 2;
       series.fill = am4core.color(theme.custom.scenarios[i % theme.custom.scenarios.length]); // loop around the color list if scenarios exceed color list
       series.stroke = series.fill;
       series.tooltipText = `[bold ${series.stroke.hex}]${scenario.label}:[/] {${scenarioId}}`;
@@ -90,7 +96,6 @@ export default function SimulationChart(): JSX.Element {
         seriesSTD.dataFields.valueY = `${scenarioId}STDup`;
         seriesSTD.dataFields.openValueY = `${scenarioId}STDdown`;
         seriesSTD.dataFields.dateX = 'date';
-        seriesSTD.tensionX = 0.8;
         seriesSTD.strokeWidth = 0;
         seriesSTD.fillOpacity = 0.3;
         series.fill = am4core.color(theme.custom.scenarios[i % theme.custom.scenarios.length]); // loop around the color list if scenarios exceed color list
@@ -101,7 +106,11 @@ export default function SimulationChart(): JSX.Element {
     });
 
     chart.events.on('hit', () => {
-      const date = new Date(dateAxis.tooltipDate.getTime());
+      // Timezone shenanigans could get us the wrong day ...
+      const date = new Date(dateAxis.tooltipDate);
+      date.setUTCFullYear(date.getFullYear());
+      date.setUTCMonth(date.getMonth());
+      date.setUTCDate(date.getDate());
       dispatch(selectDate(dateToISOString(date)));
     });
 
@@ -113,7 +122,7 @@ export default function SimulationChart(): JSX.Element {
 
   // Effect to add Guide when date selected
   useEffect(() => {
-    if (chartRef.current) {
+    if (chartRef.current && selectedDate) {
       const dateAxis = chartRef.current.xAxes.getIndex(0) as am4charts.DateAxis;
       const range = dateAxis.axisRanges.create();
       range.date = new Date(selectedDate);
@@ -139,7 +148,7 @@ export default function SimulationChart(): JSX.Element {
 
   // Effect to update Simulation and RKI Data
   useEffect(() => {
-    if (chartRef.current && simulationData && simulationData.length > 1) {
+    if (chartRef.current && simulationData && simulationData.length > 1 && selectedCompartment) {
       // clear data
       chartRef.current.data = [];
 
@@ -224,8 +233,6 @@ export default function SimulationChart(): JSX.Element {
         backgroundSize: '10px 10px',
         cursor: 'crosshair',
       }}
-    >
-      {' '}
-    </Box>
+    />
   );
 }

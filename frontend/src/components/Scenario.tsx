@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {useAppDispatch, useAppSelector} from '../store/hooks';
 import {useTheme} from '@mui/material/styles';
 import {useTranslation} from 'react-i18next';
-import {selectCompartment, selectDate, selectScenario} from 'store/DataSelectionSlice';
+import {selectCompartment, selectDate, selectScenario, setMinMaxDates} from 'store/DataSelectionSlice';
 import ScenarioCard from './ScenarioCard';
 import {Box, Button, List, ListItemButton, ListItemText, Typography} from '@mui/material';
 import {
@@ -28,8 +28,12 @@ export default function Scenario(): JSX.Element {
   const dispatch = useAppDispatch();
   const [expandProperties, setExpandProperties] = useState(false);
   const [simulationModelId, setSimulationModelId] = useState(0);
-  const [startDay, setStartDay] = useState<Date | null>();
   const [compartmentValues, setCompartmentValues] = useState<Dictionary<number> | null>(null);
+  const [scrollTop, setScrollTop] = useState(0);
+
+  function handleScroll(scrollEvent: React.UIEvent<HTMLElement>) {
+    setScrollTop(scrollEvent.currentTarget.scrollTop);
+  }
 
   const {formatNumber} = NumberFormatter(i18n.language, 3, 8);
 
@@ -44,22 +48,24 @@ export default function Scenario(): JSX.Element {
   const activeScenario = useAppSelector((state) => state.dataSelection.scenario);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
   const node = useAppSelector((state) => state.dataSelection.district.ags);
+  const startDay = useAppSelector((state) => state.dataSelection.minDate);
 
   const {data: scenarioListData} = useGetSimulationsQuery();
   const {data: simulationModelsData} = useGetSimulationModelsQuery();
-  const {data: simulationModelData} = useGetSimulationModelQuery(simulationModelId);
-  const {data: rkiData} = useGetRkiSingleSimulationEntryQuery({
-    node,
-    day: startDay ? dateToISOString(startDay) : '',
-    group: 'total',
-  });
+  const {data: simulationModelData} = useGetSimulationModelQuery(simulationModelId, {skip: simulationModelId === 0});
+  const {data: rkiData} = useGetRkiSingleSimulationEntryQuery(
+    {
+      node: node,
+      day: startDay ?? '',
+      group: 'total',
+    },
+    {skip: !startDay}
+  );
 
   useEffect(() => {
     if (simulationModelsData && simulationModelsData.results.length > 0) {
       const id = Number.parseInt(simulationModelsData.results[0].url.slice(-2, -1), 10);
       setSimulationModelId(id);
-    } else {
-      console.warn('Could not fetch simulation model data!');
     }
   }, [simulationModelsData]);
 
@@ -72,14 +78,14 @@ export default function Scenario(): JSX.Element {
   useEffect(() => {
     if (simulationModelData) {
       dispatch(setCompartments(simulationModelData.compartments));
-
-      if (simulationModelData.compartments.length > 0) {
-        dispatch(selectCompartment(simulationModelData.compartments[0]));
-      }
-    } else {
-      console.warn('Could not fetch simulation model data!');
     }
   }, [simulationModelData, dispatch]);
+
+  useEffect(() => {
+    if (scenarioList.compartments.length > 0) {
+      dispatch(selectCompartment(scenarioList.compartments[0]));
+    }
+  }, [dispatch, scenarioList.compartments]);
 
   useEffect(() => {
     if (scenarioListData) {
@@ -88,11 +94,13 @@ export default function Scenario(): JSX.Element {
 
       if (scenarios.length > 0) {
         // It seems, that the simulation data is only available from the second day forward.
-        const day = new Date(scenarioListData.results[0].startDay);
-        setStartDay(day);
+        const startDay = new Date(scenarioListData.results[0].startDay);
+        startDay.setUTCDate(startDay.getUTCDate() + 1);
 
-        const endDay = new Date(day);
-        endDay.setDate(endDay.getDate() + scenarioListData.results[0].numberOfDays);
+        const endDay = new Date(startDay);
+        endDay.setDate(endDay.getDate() + scenarioListData.results[0].numberOfDays - 1);
+
+        dispatch(setMinMaxDates({minDate: dateToISOString(startDay), maxDate: dateToISOString(endDay)}));
         dispatch(selectDate(dateToISOString(endDay)));
         dispatch(selectScenario(scenarios[0].id));
       }
@@ -144,10 +152,18 @@ export default function Scenario(): JSX.Element {
               fontSize: '13pt',
             }}
           >
-            {startDay ? startDay.toLocaleDateString(i18n.language) : t('today')}
+            {startDay ? new Date(startDay).toLocaleDateString(i18n.language) : t('today')}
           </Typography>
         </Box>
-        <List dense={true} disablePadding={true}>
+        <List
+          dense={true}
+          disablePadding={true}
+          sx={{
+            maxHeight: expandProperties ? '248px' : 'auto',
+            overflowY: 'auto',
+          }}
+          onScroll={handleScroll}
+        >
           {scenarioList.compartments.map((compartment, i) => (
             // map all compartments to display compartment list
             <ListItemButton
@@ -240,8 +256,9 @@ export default function Scenario(): JSX.Element {
             scenario={scenario}
             active={activeScenario === i + 1}
             color={theme.custom.scenarios[i]}
-            selectedProperty={selectedCompartment}
+            selectedProperty={selectedCompartment || ''}
             expandProperties={expandProperties}
+            scrollTop={scrollTop}
             startValues={compartmentValues}
             onClick={() => {
               // set active scenario to this one and send dispatches

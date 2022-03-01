@@ -14,6 +14,7 @@ export default function HeatLegend(props: {
   exposeLegend: (legend: am5.HeatLegend | null) => void;
   min: number;
   max: number;
+  isNormalized: boolean;
 }): JSX.Element {
   const theme = useTheme();
 
@@ -37,8 +38,8 @@ export default function HeatLegend(props: {
         color: am5.color(item.color),
         // opacity of the color between 0..1
         opacity: 1,
-        // offset is stop position normalized to 0..1
-        offset: (item.value - props.min) / (props.max - props.min),
+        // offset is stop position normalized to 0..1 unless already nomalized
+        offset: props.isNormalized ? item.value : (item.value - props.min) / (props.max - props.min),
       });
     });
     heatLegend.markers.template.adapters.add('fillGradient', (gradient) => {
