@@ -5,8 +5,9 @@ import * as am4maps from '@amcharts/amcharts4/maps';
 import {useTranslation} from 'react-i18next';
 import {useAppDispatch, useAppSelector} from '../../store/hooks';
 import {selectDistrict} from '../../store/DataSelectionSlice';
-import {Box, CircularProgress} from '@mui/material';
+import {Box} from '@mui/material';
 import {useGetSimulationDataByDateQuery} from 'store/services/scenarioApi';
+import LoadingOverlay from '../shared/LoadingOverlay';
 
 const {useRef} = React;
 
@@ -204,29 +205,7 @@ export default function DistrictMap(): JSX.Element {
           backgroundColor: theme.palette.background.default,
         }}
       />
-      {isFetching && (
-        <Box
-          sx={{
-            position: 'absolute',
-            top: '0',
-            left: '0',
-            width: '100%',
-            height: '100%',
-            backgroundColor: theme.palette.background.default + 'E0',
-          }}
-        >
-          <CircularProgress
-            size={96}
-            sx={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              marginTop: '-48px',
-              marginLeft: '-48px',
-            }}
-          />
-        </Box>
-      )}
+      <LoadingOverlay show={isFetching} backgroundColor={theme.palette.background.default} />
     </Box>
   );
 }

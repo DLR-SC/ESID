@@ -5,13 +5,14 @@ import am4lang_en_US from '@amcharts/amcharts4/lang/en_US';
 import am4lang_de_DE from '@amcharts/amcharts4/lang/de_DE';
 import {useAppDispatch, useAppSelector} from '../store/hooks';
 import {useTheme} from '@mui/material/styles';
-import {Box, CircularProgress} from '@mui/material';
+import {Box} from '@mui/material';
 import {selectDate} from '../store/DataSelectionSlice';
 import {useGetRkiByDistrictQuery} from '../store/services/rkiApi';
 import {dateToISOString} from 'util/util';
 import {useGetMultipleSimulationDataByNodeQuery} from 'store/services/scenarioApi';
 import {useTranslation} from 'react-i18next';
 import {NumberFormatter} from 'util/hooks';
+import LoadingOverlay from './shared/LoadingOverlay';
 
 /* This component displays the evolution of the pandemic for a specific compartment (hospitalized, dead, infected, etc.) regarding the different scenarios
  */
@@ -235,29 +236,7 @@ export default function SimulationChart(): JSX.Element {
           cursor: 'crosshair',
         }}
       />
-      {(rkiFetching || simulationFetching) && (
-        <Box
-          sx={{
-            position: 'absolute',
-            top: '0',
-            left: '0',
-            width: '100%',
-            height: '100%',
-            backgroundColor: theme.palette.background.paper + 'E0',
-          }}
-        >
-          <CircularProgress
-            size={96}
-            sx={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              marginTop: '-48px',
-              marginLeft: '-48px',
-            }}
-          />
-        </Box>
-      )}
+      <LoadingOverlay show={rkiFetching || simulationFetching} backgroundColor={theme.palette.background.paper} />
     </Box>
   );
 }
