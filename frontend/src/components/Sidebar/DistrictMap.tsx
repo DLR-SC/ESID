@@ -82,7 +82,6 @@ export default function DistrictMap(): JSX.Element {
         }
       });
     }
-    console.log('Recalc Max:', max);
     return max;
   }, [selectedCompartment, data]);
 
@@ -235,7 +234,6 @@ export default function DistrictMap(): JSX.Element {
 
   return (
     <>
-      {console.log('Render Max:', aggregatedMax)}
       <Box id='mapdiv' height={'650px'} />
       <HeatLegend
         legend={dummyLegend}
