@@ -78,7 +78,7 @@ export default function DistrictMap(): JSX.Element {
     if (data && selectedCompartment) {
       data.results.forEach((entry) => {
         if (entry.name !== '00000') {
-          max = entry.compartments[selectedCompartment] > max ? entry.compartments[selectedCompartment] : max;
+          max = Math.max(entry.compartments[selectedCompartment], max);
         }
       });
     }
