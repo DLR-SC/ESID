@@ -210,6 +210,18 @@ export default function DistrictMap(): JSX.Element {
           const regionData = polygon.dataItem?.dataContext as IRegionPolygon;
           regionData.value = dataMapped.get(regionData.RS) || Number.NaN;
 
+          // determine fill color
+          let fillColor = am5.color(theme.palette.background.default);
+          if (Number.isFinite(regionData.value)) {
+            if (dummyLegend[0].value == 0 && dummyLegend[dummyLegend.length - 1].value == 1) {
+              // if legend is normalized, also pass mix & max to color function
+              fillColor = getColorFromLegend(regionData.value, dummyLegend, [0, aggregatedMax]);
+            } else {
+              // if legend is not normalized, min & max are first and last stop of legend and don'T need to be passed
+              fillColor = getColorFromLegend(regionData.value, dummyLegend);
+            }
+          }
+
           polygon.setAll({
             // set tooltip
             tooltipText:
@@ -217,15 +229,7 @@ export default function DistrictMap(): JSX.Element {
                 ? `${t(`BEZ.${regionData.BEZ}`)} {GEN}\n${selectedCompartment}: {value}`
                 : `${t(`BEZ.${regionData.BEZ}`)} {GEN}`,
             // set fill color
-            fill: Number.isNaN(regionData.value)
-              ? // set fill to background if value is NaN
-                am5.color(theme.palette.background.default)
-              : // else check if legend is normalized or not
-              dummyLegend[0].value == 0 && dummyLegend[dummyLegend.length - 1].value == 1
-              ? // use function with min/max if legend is normalized
-                getColorFromLegend(regionData.value, dummyLegend, 0, aggregatedMax)
-              : // use function w/o if legend has absolute values
-                getColorFromLegend(regionData.value, dummyLegend),
+            fill: fillColor,
           });
         });
       }
@@ -249,29 +253,23 @@ export default function DistrictMap(): JSX.Element {
   );
 }
 
-function getColorFromLegend(
-  value: number,
-  legend: IHeatmapLegendItem[],
-  aggregatedMin: number,
-  aggregatedMax: number
-): am5.Color;
-function getColorFromLegend(
-  value: number,
-  legend: IHeatmapLegendItem[],
-  aggregatedMin?: undefined,
-  aggregatedMax?: undefined
-): am5.Color;
-function getColorFromLegend(
-  value: number,
-  legend: IHeatmapLegendItem[],
-  aggregatedMin?: number,
-  aggregatedMax?: number
-) {
+function getColorFromLegend(value: number, legend: IHeatmapLegendItem[], aggregatedMinMax?: number[]): am5.Color {
   // assume legend stops are absolute
   let normalizedValue = value;
-  // if aggregated values (min/max) are set, the legend items are already normalized => need to normalize value too
-  if (!(aggregatedMin === undefined || aggregatedMax === undefined)) {
+  // if aggregated values (min/max) are properly set, the legend items are already normalized => need to normalize value too
+  if (
+    aggregatedMinMax &&
+    aggregatedMinMax.length == 2 &&
+    aggregatedMinMax.every((val) => Number.isFinite(val)) &&
+    aggregatedMinMax[0] < aggregatedMinMax[1]
+  ) {
+    const [aggregatedMin, aggregatedMax] = aggregatedMinMax;
     normalizedValue = (value - aggregatedMin) / (aggregatedMax - aggregatedMin);
+  } else if (aggregatedMinMax !== undefined) {
+    // log error if any of the above checks fail
+    console.error('Error: invalid MinMax array in getColorFromLegend', [value, legend, aggregatedMinMax]);
+    // return completely transparent fill if errors occur
+    return am5.color('rgba(0,0,0,0)');
   }
   if (normalizedValue <= legend[0].value) {
     return am5.color(legend[0].color);
