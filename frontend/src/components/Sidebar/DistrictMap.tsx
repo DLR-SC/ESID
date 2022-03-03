@@ -8,6 +8,7 @@ import {selectDistrict} from '../../store/DataSelectionSlice';
 import {Box} from '@mui/material';
 import {useGetSimulationDataByDateQuery} from 'store/services/scenarioApi';
 import HeatLegend from './HeatLegend';
+import {NumberFormatter} from 'util/hooks';
 
 const {useRef} = React;
 
@@ -67,7 +68,8 @@ export default function DistrictMap(): JSX.Element {
   const rootRef = useRef<am5.Root | null>(null);
   const legendRef = useRef<am5.HeatLegend | null>(null);
 
-  const {t} = useTranslation('global');
+  const {t, i18n} = useTranslation();
+  const {formatNumber} = NumberFormatter(i18n.language, 3, 8);
   const theme = useTheme();
   const dispatch = useAppDispatch();
   //const lastSelectedPolygon = useRef<am5map.MapPolygon | null>(null);
@@ -149,7 +151,8 @@ export default function DistrictMap(): JSX.Element {
       e.target.toFront();
       // show tooltip on heat legend
       if (legendRef.current) {
-        legendRef.current.showValue((e.target.dataItem?.dataContext as IRegionPolygon).value);
+        const value = (e.target.dataItem?.dataContext as IRegionPolygon).value;
+        legendRef.current.showValue(value, formatNumber(value));
       }
     });
     rootRef.current = root;
@@ -158,7 +161,7 @@ export default function DistrictMap(): JSX.Element {
       chartRef.current && chartRef.current.dispose();
       rootRef.current && rootRef.current.dispose();
     };
-  }, [geodata, theme, t, dispatch]);
+  }, [geodata, theme, t, formatNumber, dispatch]);
 
   // TODO: district search for highlighting
   /*
@@ -226,7 +229,7 @@ export default function DistrictMap(): JSX.Element {
             // set tooltip
             tooltipText:
               scenarioList[selectedScenario] && selectedCompartment
-                ? `${t(`BEZ.${regionData.BEZ}`)} {GEN}\n${selectedCompartment}: {value}`
+                ? `${t(`BEZ.${regionData.BEZ}`)} {GEN}\n${selectedCompartment}: ${formatNumber(regionData.value)}`
                 : `${t(`BEZ.${regionData.BEZ}`)} {GEN}`,
             // set fill color
             fill: fillColor,
@@ -234,7 +237,18 @@ export default function DistrictMap(): JSX.Element {
         });
       }
     }
-  }, [scenarioList, selectedScenario, selectedCompartment, selectedDate, aggregatedMax, dispatch, t, data, theme]);
+  }, [
+    scenarioList,
+    selectedScenario,
+    selectedCompartment,
+    selectedDate,
+    aggregatedMax,
+    dispatch,
+    t,
+    formatNumber,
+    data,
+    theme,
+  ]);
 
   return (
     <>

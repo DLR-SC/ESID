@@ -2,6 +2,8 @@ import React, {useEffect} from 'react';
 import {useTheme} from '@mui/material/styles';
 import {Box} from '@mui/material';
 import * as am5 from '@amcharts/amcharts5';
+import {useTranslation} from 'react-i18next';
+import {NumberFormatter} from 'util/hooks';
 
 interface IHeatmapLegendItem {
   color: string;
@@ -16,6 +18,8 @@ export default function HeatLegend(props: {
   max: number;
   isNormalized: boolean;
 }): JSX.Element {
+  const {i18n: i18n} = useTranslation();
+  const {formatNumber} = NumberFormatter(i18n.language, 3, 8);
   const theme = useTheme();
 
   useEffect(() => {
@@ -24,7 +28,9 @@ export default function HeatLegend(props: {
       am5.HeatLegend.new(root, {
         orientation: 'horizontal',
         startValue: props.min,
+        startText: formatNumber(props.min),
         endValue: props.max,
+        endText: formatNumber(props.max),
         // set start & end color to paper background as gradient is overwritten later and this sets the tooltip background color
         startColor: am5.color(theme.palette.background.paper),
         endColor: am5.color(theme.palette.background.paper),
@@ -54,7 +60,7 @@ export default function HeatLegend(props: {
       root.dispose();
       props.exposeLegend(null);
     };
-  }, [props, theme]);
+  }, [props, formatNumber, theme]);
 
   return (
     <Box
