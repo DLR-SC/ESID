@@ -115,6 +115,7 @@ export default function DistrictMap(): JSX.Element {
     const chart = root.container.children.push(
       am5map.MapChart.new(root, {
         projection: am5map.geoMercator(),
+        maxPanOut: 0,
         zoomControl: am5map.ZoomControl.new(root, {
           paddingBottom: 25,
           opacity: 50,
@@ -218,7 +219,7 @@ export default function DistrictMap(): JSX.Element {
           if (Number.isFinite(regionData.value)) {
             if (dummyLegend[0].value == 0 && dummyLegend[dummyLegend.length - 1].value == 1) {
               // if legend is normalized, also pass mix & max to color function
-              fillColor = getColorFromLegend(regionData.value, dummyLegend, [0, aggregatedMax]);
+              fillColor = getColorFromLegend(regionData.value, dummyLegend, {min: 0, max: aggregatedMax});
             } else {
               // if legend is not normalized, min & max are first and last stop of legend and don'T need to be passed
               fillColor = getColorFromLegend(regionData.value, dummyLegend);
@@ -267,19 +268,18 @@ export default function DistrictMap(): JSX.Element {
   );
 }
 
-function getColorFromLegend(value: number, legend: IHeatmapLegendItem[], aggregatedMinMax?: number[]): am5.Color {
+function getColorFromLegend(
+  value: number,
+  legend: IHeatmapLegendItem[],
+  aggregatedMinMax?: {min: number; max: number}
+): am5.Color {
   // assume legend stops are absolute
   let normalizedValue = value;
   // if aggregated values (min/max) are properly set, the legend items are already normalized => need to normalize value too
-  if (
-    aggregatedMinMax &&
-    aggregatedMinMax.length == 2 &&
-    aggregatedMinMax.every((val) => Number.isFinite(val)) &&
-    aggregatedMinMax[0] < aggregatedMinMax[1]
-  ) {
-    const [aggregatedMin, aggregatedMax] = aggregatedMinMax;
+  if (aggregatedMinMax && aggregatedMinMax.min < aggregatedMinMax.max) {
+    const {min: aggregatedMin, max: aggregatedMax} = aggregatedMinMax;
     normalizedValue = (value - aggregatedMin) / (aggregatedMax - aggregatedMin);
-  } else if (aggregatedMinMax !== undefined) {
+  } else if (aggregatedMinMax) {
     // log error if any of the above checks fail
     console.error('Error: invalid MinMax array in getColorFromLegend', [value, legend, aggregatedMinMax]);
     // return completely transparent fill if errors occur
