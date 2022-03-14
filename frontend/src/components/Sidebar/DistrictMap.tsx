@@ -115,7 +115,8 @@ export default function DistrictMap(): JSX.Element {
     const chart = root.container.children.push(
       am5map.MapChart.new(root, {
         projection: am5map.geoMercator(),
-        maxPanOut: 0,
+        maxZoomLevel: 4,
+        maxPanOut: 0.4,
         zoomControl: am5map.ZoomControl.new(root, {
           paddingBottom: 25,
           opacity: 50,
