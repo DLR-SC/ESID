@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "description": "Visualization of infectious disease propagation.",
   "scripts": {
-    "build": "npm run collect-attributions && webpack --config ./webpack/webpack.prod.js",
-    "start": "webpack serve --open --config ./webpack/webpack.dev.js",
+    "build": "npm run collect-attributions && webpack --progress --config ./webpack/webpack.prod.js",
+    "start": "webpack serve --open --progress --config ./webpack/webpack.dev.js",
     "test": "jest",
     "coverage": "jest --collectCoverage --reporters='default'",
     "format": "prettier --write .",
