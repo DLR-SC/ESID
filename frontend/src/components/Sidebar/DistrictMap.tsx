@@ -135,7 +135,7 @@ export default function DistrictMap(): JSX.Element {
     // get template for polygons to attach events etc to each
     const polygonTemplate = polygonSeries.mapPolygons.template;
     polygonTemplate.setAll({
-      stroke: am5.color(theme.palette.divider),
+      stroke: am5.color(theme.palette.background.default),
       strokeWidth: 1,
     });
     // add click event
