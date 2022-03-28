@@ -211,8 +211,8 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': int(os.getenv('DJANGO_PAGINATION_LIMIT', 100)),
     'DATETIME_FORMAT': '%Y-%m-%dT%H:%M:%S.%fZ',
     'DEFAULT_RENDERER_CLASSES': (
-        'djangorestframework_camel_case.render.CamelCaseJSONRenderer',
-        'djangorestframework_camel_case.render.CamelCaseBrowsableAPIRenderer',
+        'src.common.renderer.CustomCamelCaseJSONRenderer',
+        'src.common.renderer.CustomCamelCaseBrowsableAPIRenderer',
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
     ),
