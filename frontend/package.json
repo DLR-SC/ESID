@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "description": "Visualization of infectious disease propagation.",
   "scripts": {
-    "build": "npm run collect-attributions && webpack --config ./webpack/webpack.prod.js",
-    "start": "webpack serve --open --config ./webpack/webpack.dev.js",
+    "build": "npm run collect-attributions && webpack --progress --config ./webpack/webpack.prod.js",
+    "start": "webpack serve --open --progress --config ./webpack/webpack.dev.js",
     "test": "jest",
     "coverage": "jest --collectCoverage --reporters='default'",
     "format": "prettier --write .",
@@ -64,6 +64,7 @@
   },
   "dependencies": {
     "@amcharts/amcharts4": "^4.10.17",
+    "@amcharts/amcharts5": "^5.1.8",
     "@emotion/react": "^11.7.0",
     "@emotion/styled": "^11.6.0",
     "@mui/icons-material": "^5.0.4",
@@ -72,6 +73,7 @@
     "@mui/styles": "^5.0.1",
     "@mui/system": "^5.2.2",
     "@reduxjs/toolkit": "^1.5.0",
+    "@types/geojson": "^7946.0.8",
     "i18next": "^20.2.4",
     "i18next-browser-languagedetector": "^6.1.1",
     "i18next-http-backend": "^1.2.4",
