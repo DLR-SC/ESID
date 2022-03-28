@@ -12,7 +12,7 @@ import {dateToISOString} from 'util/util';
 import {useGetMultipleSimulationDataByNodeQuery} from 'store/services/scenarioApi';
 import {useTranslation} from 'react-i18next';
 import {NumberFormatter} from 'util/hooks';
-import LoadingOverlay from './shared/LoadingOverlay';
+import LoadingContainer from './shared/LoadingContainer';
 
 /* This component displays the evolution of the pandemic for a specific compartment (hospitalized, dead, infected, etc.) regarding the different scenarios
  */
@@ -140,10 +140,14 @@ export default function SimulationChart(): JSX.Element {
 
     // remove old ranges before creating a new one
     return () => {
-      const ranges = chartRef.current?.xAxes.getIndex(0)?.axisRanges;
-      ranges?.values.forEach((range) => {
-        ranges.removeValue(range);
-      });
+      try {
+        const ranges = chartRef.current?.xAxes.getIndex(0)?.axisRanges;
+        ranges?.values.forEach((range) => {
+          ranges.removeValue(range);
+        });
+      } catch (e) {
+        console.error(e);
+      }
     };
   }, [scenarioList, selectedDate, theme, t, i18n.language]);
 
@@ -222,7 +226,11 @@ export default function SimulationChart(): JSX.Element {
   }, [simulationData, rkiData, scenarioList, selectedCompartment, theme, formatNumber, t]);
 
   return (
-    <Box sx={{position: 'relative', width: '100%', height: '100%'}}>
+    <LoadingContainer
+      sx={{width: '100%', height: '100%'}}
+      show={rkiFetching || simulationFetching}
+      backgroundColor={theme.palette.background.paper}
+    >
       <Box
         id='chartdiv'
         sx={{
@@ -236,7 +244,6 @@ export default function SimulationChart(): JSX.Element {
           cursor: 'crosshair',
         }}
       />
-      <LoadingOverlay show={rkiFetching || simulationFetching} backgroundColor={theme.palette.background.paper} />
-    </Box>
+    </LoadingContainer>
   );
 }
