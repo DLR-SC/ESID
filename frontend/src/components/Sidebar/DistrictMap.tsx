@@ -259,7 +259,7 @@ export default function DistrictMap(): JSX.Element {
   ]);
 
   return (
-    <LoadingContainer show={isFetching} backgroundColor={theme.palette.background.default}>
+    <LoadingContainer show={isFetching} overlayColor={theme.palette.background.default}>
       <Box id='mapdiv' height={'650px'} />
       <HeatLegend
         legend={dummyLegend}

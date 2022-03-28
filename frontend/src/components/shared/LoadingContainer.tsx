@@ -9,7 +9,7 @@ export default function LoadingContainer(props: LoadingContainerProps): JSX.Elem
   return (
     <Box sx={{...props.sx, position: 'relative'}}>
       {props.children}
-      <LoadingOverlay show={props.show} backgroundColor={props.backgroundColor} />
+      <LoadingOverlay show={props.show} overlayColor={props.overlayColor} />
     </Box>
   );
 }
@@ -21,8 +21,8 @@ interface LoadingContainerProps {
   /** Shows the loading indicator, if true. */
   show: boolean;
 
-  /** Set's the color of the overlay. */
-  backgroundColor: string;
+  /** The color of the overlay. */
+  overlayColor: string;
 
   /** React prop to allow nesting components. Do not set manually. */
   children: React.ReactNode;

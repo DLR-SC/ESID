@@ -1,7 +1,11 @@
 import React from 'react';
 import {Box, CircularProgress} from '@mui/material';
 
-export default function LoadingOverlay(props: {show: boolean; backgroundColor: string}): JSX.Element {
+/**
+ * Overlays a loading indicator over the previously declared components. It is recommended to use the LoadingContainer
+ * component instead, since it ensures correct ordering and layouting.
+ */
+export default function LoadingOverlay(props: {show: boolean; overlayColor: string}): JSX.Element {
   return props.show ? (
     <Box
       sx={{
@@ -10,7 +14,7 @@ export default function LoadingOverlay(props: {show: boolean; backgroundColor: s
         left: '0',
         width: '100%',
         height: '100%',
-        backgroundColor: props.backgroundColor + 'E0',
+        backgroundColor: props.overlayColor + 'E0',
       }}
     >
       <CircularProgress

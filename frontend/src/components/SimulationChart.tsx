@@ -229,7 +229,7 @@ export default function SimulationChart(): JSX.Element {
     <LoadingContainer
       sx={{width: '100%', height: '100%'}}
       show={rkiFetching || simulationFetching}
-      backgroundColor={theme.palette.background.paper}
+      overlayColor={theme.palette.background.paper}
     >
       <Box
         id='chartdiv'
