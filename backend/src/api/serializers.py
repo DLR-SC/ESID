@@ -1,6 +1,7 @@
 from .models import *
 from rest_framework import serializers
 from datetime import datetime
+import json
 
 
 class DistributionSerializer(serializers.ModelSerializer):
@@ -193,6 +194,50 @@ class SimulationNodeSerializer(serializers.ModelSerializer):
         serialized = CompartmentsDataEntrySerializer(instance=queryset, context=self.context, many=many)
 
         return serialized.data['compartments']
+
+class SimulationDataCompartmentsSerializer(serializers.BaseSerializer):
+
+    def to_representation(self, data):
+        compartments = self.context.get('compartments', None)
+
+        serialized = {}
+        if compartments is not None:
+            for compartment in compartments:
+                serialized[compartment] = data[compartment]
+        else:
+            serialized = {**data}
+
+        return serialized
+
+class SimulationDataSerializer(serializers.ModelSerializer):
+    """
+    JSON serializer for a simulation model parameter
+    """
+
+    name = serializers.CharField(source="node_name")
+    compartments = serializers.SerializerMethodField('get_compartments')
+
+    class Meta:
+        model = SimulationData
+        fields = ['name', 'day', 'compartments']
+
+    def get_compartments(self, instance):
+        return SimulationDataCompartmentsSerializer(instance=instance.data, context=self.context).data
+
+
+class DataByDaySerializer(serializers.BaseSerializer):
+
+    def to_representation(self, rows):
+        repr = []
+
+        for row in rows:
+            print(row)
+            repr.append({
+                'name': row[0],
+                'compartments': json.loads(row[1])
+            })
+
+        return repr
 
 
 class RkiNodeSerializer(serializers.ModelSerializer):

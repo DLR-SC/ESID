@@ -1,12 +1,17 @@
 # Create your views here.
 
 from datetime import datetime
+
+from django.db.models import Sum, F, Window
+from django.db import connection
+
+from rest_framework import views, viewsets, permissions, mixins, generics
 from rest_framework.response import Response
+
 from .models import *
 from .classes import DataEntryFilterMixin
-from rest_framework import viewsets, permissions, mixins, generics
-from rest_pandas import PandasViewSet, PandasSerializer
-from django.db.models import Sum, F, Window
+
+
 import src.api.serializers as serializers
 
 class RestrictionsViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
@@ -80,21 +85,12 @@ class SimulationDataByNodeView(DataEntryFilterMixin, generics.ListAPIView):
         simulationId = self.kwargs.get('id')
         nodeId = self.kwargs.get('nodeId')
 
+        print(simulationId, nodeId)
+
         simulation = Simulation.objects.get(id=simulationId)
         node = simulation.nodes.get(scenario_node__node__name=nodeId)
         
         return self.get_filtered_queryset(node.data).order_by('day')
-class SimulationDataByDayView(DataEntryFilterMixin, generics.ListAPIView):
-    
-    serializer_class = serializers.SimulationNodeSerializer
-    permission_classes = [permissions.AllowAny]
-
-    def get_queryset(self):
-        simulationId = self.kwargs.get('id')
-        
-        simulation = Simulation.objects.get(id=simulationId)
-
-        return simulation.nodes.order_by('scenario_node__node__name')
 
 class RkiDataByNodeView(DataEntryFilterMixin, generics.ListAPIView):
     
@@ -107,108 +103,32 @@ class RkiDataByNodeView(DataEntryFilterMixin, generics.ListAPIView):
 
         return self.get_filtered_queryset(node.data).order_by('day')
 
+class SimulationDataByDayView(DataEntryFilterMixin, generics.ListAPIView):
+    serializer_class = serializers.SimulationDataSerializer
+    permission_classes = [permissions.AllowAny]
+
+    def get_queryset(self):
+        simulationId = self.kwargs.get('id')
+        nodes = SimulationNode.objects.filter(simulation=simulationId)
+        
+        return self.get_filtered_queryset(SimulationData.objects.filter(simulationnode_id__in=nodes))
+
+    def paginate_queryset(self, queryset):
+        if 'all' in self.request.query_params:
+            return None
+
+        return super().paginate_queryset(queryset)
+
 class RkiDataByDayView(DataEntryFilterMixin, generics.ListAPIView):
 
-    serializer_class = serializers.RkiNodeSerializer
+    serializer_class = serializers.SimulationDataSerializer
     permission_classes = [permissions.AllowAny]
 
     def get_queryset(self):
-        queryset = RKINode.objects.all()
+        return self.get_filtered_queryset(RKIData.objects.all())
 
-        request_context = self.get_filter_context()
+    def paginate_queryset(self, queryset):
+        if 'all' in self.request.query_params:
+            return None
 
-        nodes = request_context.get('nodes', None)
-        if nodes is not None:
-            queryset = queryset.filter(node__name__in=nodes)
-
-        return queryset.order_by('node__name')
-
-
-
-
-'''
-class RKIByCountyViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
-    """
-    Return the rki data for the given county for all available past days
-    """
-    serializer_class = serializers.RKICountyEntrySerializer
-    permission_classes = [permissions.AllowAny]
-
-    lookup_field = "county"
-
-    def get_queryset(self):
-        window = {
-            'partition_by': [F('id_landkreis')],
-            'order_by': F('refdatum').asc(),
-        }
-
-        queryset = RKIEntry.objects\
-                .only('id_landkreis', 'refdatum')\
-                .distinct('id_landkreis', 'refdatum')\
-                .annotate(
-                    infectious=Window(
-                        expression=Sum('anzahl_fall'),
-                        **window
-                    ),
-                    deaths=Window(
-                        expression=Sum('anzahl_todesfall'), 
-                        **window
-                    ),
-                    recovered=Window(
-                        expression=Sum('anzahl_genesen'),
-                        **window
-                    )
-                )\
-                .order_by('id_landkreis', 'refdatum')
-
-        return queryset
-
-    def retrieve(self, request, **kwargs):
-        timesteps = list(self.get_queryset().filter(id_landkreis=kwargs.get('county')[-4:]))
-        county = RKICounty(kwargs.get('county'), timesteps)
-
-        return Response(data=serializers.RKICountySerializer(county).data)
-
-
-class RKIByDayViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
-    """
-    Return the rki data for all counties on the given date.
-    """
-    serializer_class = serializers.RKIDayEntrySerializer
-    permission_classes = [permissions.AllowAny]
-    # pagination_class = None
-    lookup_field = "day"
-
-    def get_queryset(self):
-        window = {
-            'partition_by': [F('id_landkreis')],
-            'order_by': F('refdatum').asc(),
-        }
-
-        queryset = RKIEntry.objects\
-                .only('id_landkreis', 'refdatum')\
-                .distinct('id_landkreis', 'refdatum')\
-                .annotate(
-                    infectious=Window(
-                        expression=Sum('anzahl_fall'),
-                        **window
-                    ),
-                    deaths=Window(
-                        expression=Sum('anzahl_todesfall'), 
-                        **window
-                    ),
-                    recovered=Window(
-                        expression=Sum('anzahl_genesen'),
-                        **window
-                    )
-                )\
-                .order_by('id_landkreis', 'refdatum')
-
-        return queryset
-
-    def retrieve(self, request, **kwargs):
-        counties = list(self.get_queryset().filter(refdatum=kwargs.get('day')))
-        day = RKIDay(kwargs.get('day'), counties)
-
-        return Response(data=serializers.RKIDaySerializer(day).data)
-'''
+        return super().paginate_queryset(queryset)

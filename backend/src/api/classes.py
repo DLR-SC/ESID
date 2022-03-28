@@ -43,7 +43,7 @@ class DataEntryFilterMixin:
 
         group = context.get('group', None)
         if group is not None:
-            queryset = queryset.filter(group__name=group)
+            queryset = queryset.filter(group=group)
 
         day = context.get('day', None)
         from_ = context.get('from', None)

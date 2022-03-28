@@ -1,3 +1,4 @@
+import os
 from django.conf import settings
 from django.urls import path, re_path, include, reverse_lazy
 from django.conf.urls.static import static
@@ -25,7 +26,13 @@ router = DefaultRouter()
 router.registry.extend(users_router.registry)
 router.registry.extend(api_router.registry)
 
-urlpatterns = [
+urlpatterns = []
+
+if os.getenv('DJANGO_SETTINGS_MODULE', 'src.config.local'):
+    from django.urls import include, path
+    urlpatterns += [path('__debug__/', include('debug_toolbar.urls'))]
+
+urlpatterns += [
     # admin panel
     path('admin/', admin.site.urls),
 

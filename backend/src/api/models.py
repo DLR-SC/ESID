@@ -273,6 +273,19 @@ class Simulation(models.Model):
         return 'Simulation(%s)'.format(self.name)
 
 
+class SimulationData(models.Model):
+    simulationnode = models.ForeignKey(SimulationNode, on_delete=models.DO_NOTHING)
+    node = models.ForeignKey(Node, on_delete=models.DO_NOTHING)
+    node_name = models.TextField()
+    group = models.TextField()
+    day = models.DateField()
+    percentile = models.IntegerField()
+    data = models.JSONField()
+
+    class Meta:
+        managed = False
+        db_table = 'api_simulationdata'
+
 class GenderChoice(models.TextChoices):
     """RKI gender choice definition."""
 
@@ -299,3 +312,17 @@ class RKINode(models.Model):
     @property
     def name(self):
         return self.node.name
+
+
+class RKIData(models.Model):
+    rkinode = models.ForeignKey(RKINode, on_delete=models.DO_NOTHING)
+    node = models.ForeignKey(Node, on_delete=models.DO_NOTHING)
+    node_name = models.TextField()
+    group = models.TextField()
+    day = models.DateField()
+    percentile = models.IntegerField()
+    data = models.JSONField()
+
+    class Meta:
+        managed = False
+        db_table = 'api_rkidata'
