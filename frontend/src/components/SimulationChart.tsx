@@ -9,7 +9,7 @@ import {Box} from '@mui/material';
 import {selectDate} from '../store/DataSelectionSlice';
 import {useGetRkiByDistrictQuery} from '../store/services/rkiApi';
 import {dateToISOString} from 'util/util';
-import {useGetMultipleSimulationDataByNodeQuery} from 'store/services/scenarioApi';
+import {useGetMultipleSimulationDataByNodeQuery, useGetPercentileDataQuery, PercentileDataByDay} from 'store/services/scenarioApi';
 import {useTranslation} from 'react-i18next';
 import {NumberFormatter} from 'util/hooks';
 
@@ -30,6 +30,7 @@ export default function SimulationChart(): JSX.Element {
   const selectedDistrict = useAppSelector((state) => state.dataSelection.district.ags);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
   const selectedDate = useAppSelector((state) => state.dataSelection.date);
+  const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
   const dispatch = useAppDispatch();
   const {data: rkiData} = useGetRkiByDistrictQuery(
     {
@@ -50,6 +51,18 @@ export default function SimulationChart(): JSX.Element {
     },
     {skip: !selectedCompartment}
   );
+
+  const {data: percentileData} = useGetPercentileDataQuery(
+    {
+      id: selectedScenario as number,
+      node: selectedDistrict,
+      group: '',
+      compartment: selectedCompartment as string,
+    },
+    {skip: !selectedScenario || !selectedCompartment}
+  );
+
+  
 
   const {formatNumber} = NumberFormatter(i18n.language, 3, 8);
 
@@ -74,17 +87,30 @@ export default function SimulationChart(): JSX.Element {
     const rkiSeries = chart.series.push(new am4charts.LineSeries());
     rkiSeries.dataFields.valueY = 'rki';
     rkiSeries.dataFields.dateX = 'date';
+    rkiSeries.id = "rki";
     rkiSeries.strokeWidth = 2;
     rkiSeries.fill = am4core.color('black');
     rkiSeries.stroke = am4core.color('black');
     rkiSeries.name = t('chart.rkiData');
     rkiSeries.tooltipText = `RKI Data: [bold]{rki}[/]`;
 
+    const percentileSeries = chart.series.push(new am4charts.LineSeries());
+    percentileSeries.dataFields.valueY = 'percentileUp';
+    percentileSeries.dataFields.openValueY = 'percentileDown';
+    percentileSeries.dataFields.dateX = 'date';
+    percentileSeries.id = "percentiles"
+    percentileSeries.strokeWidth = 0;
+    percentileSeries.fillOpacity = 0.3;
+    percentileSeries.name = t('chart.percentileData');
+    percentileSeries.tooltipText = `Percentile Data: [bold]{percentileUp}[/]`;
+
+
     // Add series for scenarios
     Object.entries(scenarioList.scenarios).forEach(([scenarioId, scenario], i) => {
       const series = chart.series.push(new am4charts.LineSeries());
       series.dataFields.valueY = scenarioId;
       series.dataFields.dateX = 'date';
+      series.id = scenarioId;
       series.strokeWidth = 2;
       series.fill = am4core.color(theme.custom.scenarios[i % theme.custom.scenarios.length]); // loop around the color list if scenarios exceed color list
       series.stroke = series.fill;
@@ -146,15 +172,16 @@ export default function SimulationChart(): JSX.Element {
     };
   }, [scenarioList, selectedDate, theme, t, i18n.language]);
 
+
   // Effect to update Simulation and RKI Data
   useEffect(() => {
-    if (chartRef.current && simulationData && simulationData.length > 1 && selectedCompartment) {
+    if (chartRef.current && simulationData && simulationData.length > 1 && selectedCompartment && percentileData && selectedScenario) {
       // clear data
       chartRef.current.data = [];
 
       // create map to match dates
       const dataMap = new Map<string, {[key: string]: number}>();
-
+  
       // cycle through scenarios
       Object.entries(scenarioList.scenarios).forEach(([scenarioId, scenario]) => {
         simulationData[scenario.id].results.forEach(({day, compartments}) => {
@@ -167,9 +194,25 @@ export default function SimulationChart(): JSX.Element {
         dataMap.set(entry.day, {...dataMap.get(entry.day), rki: entry.compartments[selectedCompartment]});
       });
 
+      //add 25th percentile data
+      percentileData[0].results?.forEach((entry : PercentileDataByDay) => {
+        dataMap.set(entry.day, {...dataMap.get(entry.day), percentileDown: entry.compartments[selectedCompartment]});
+      });
+
+      //add 75th percentile data
+      percentileData[1].results?.forEach((entry : PercentileDataByDay) => {
+        dataMap.set(entry.day, {...dataMap.get(entry.day), percentileUp: entry.compartments[selectedCompartment]});
+      });
+
+      //change fill color of percentile series to selected scenario color
+      const percentileSeries = chartRef.current.map.getKey("percentiles") as am4charts.LineSeries;
+      if(percentileSeries.fill !== am4core.color(theme.custom.scenarios[selectedScenario % theme.custom.scenarios.length])){
+        percentileSeries.fill = am4core.color(theme.custom.scenarios[selectedScenario -1 % theme.custom.scenarios.length]);
+      }
+
       // sort map by date
       const dataMapSorted = new Map(Array.from(dataMap).sort(([a], [b]) => String(a).localeCompare(b)));
-
+      
       // push DataMap into chart data
       dataMapSorted.forEach((values, day) => {
         chartRef.current?.data.push({
@@ -218,7 +261,7 @@ export default function SimulationChart(): JSX.Element {
       // invalidate/reload data
       chartRef.current.invalidateData();
     }
-  }, [simulationData, rkiData, scenarioList, selectedCompartment, theme, formatNumber, t]);
+  }, [selectedScenario, percentileData, simulationData, rkiData, scenarioList, selectedCompartment, theme, formatNumber, t]);
 
   return (
     <Box
@@ -236,3 +279,4 @@ export default function SimulationChart(): JSX.Element {
     />
   );
 }
+

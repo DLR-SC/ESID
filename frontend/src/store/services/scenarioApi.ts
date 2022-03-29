@@ -1,3 +1,4 @@
+import { Dictionary } from "util/util"
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 import {
   SimulationDataByDate,
@@ -93,8 +94,46 @@ export const scenarioApi = createApi({
         return {data: result};
       },
     }),
+
+    getPercentileData: builder.query<SelectedScenarioPercentileData[], SelectedScenario>({
+      async queryFn(arg, _queryApi, _extraOptions, fetchWithBQ) {
+        const group = arg.group || 'total';
+        const url = (percentile: number) =>
+          `simulation/${arg.id}/${arg.node}/${group}/?percentile=${percentile}&compartments=${arg.compartment}`;
+
+        const result: SelectedScenarioPercentileData[] = [];
+
+        const percentile25 = await fetchWithBQ(url(25));
+        result[0] = percentile25.data as SelectedScenarioPercentileData;
+      
+        const percentile75 = await fetchWithBQ(url(75));
+        result[1] = percentile75.data as SelectedScenarioPercentileData;
+          
+          
+        return {data: result};
+      },
+    }),
   }),
 });
+
+interface SelectedScenario {
+  id: number;
+  node: string;
+  group: string;
+  compartment: string;
+}
+
+export interface SelectedScenarioPercentileData {
+  count: number;
+  next: null;
+  previous: null;
+  results: Array<PercentileDataByDay> | null;
+}
+
+export interface PercentileDataByDay {
+  compartments: Dictionary<number>;
+  day: string;
+}
 
 interface SimulationDataByDateParameters {
   id: number;
@@ -132,4 +171,5 @@ export const {
   useGetSimulationDataByNodeQuery,
   useGetSingleSimulationEntryQuery,
   useGetMultipleSimulationDataByNodeQuery,
+  useGetPercentileDataQuery,
 } = scenarioApi;
