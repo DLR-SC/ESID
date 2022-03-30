@@ -1,4 +1,4 @@
-import { Dictionary } from "util/util"
+import {Dictionary} from 'util/util';
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 import {
   SimulationDataByDate,
@@ -105,11 +105,10 @@ export const scenarioApi = createApi({
 
         const percentile25 = await fetchWithBQ(url(25));
         result[0] = percentile25.data as SelectedScenarioPercentileData;
-      
+
         const percentile75 = await fetchWithBQ(url(75));
         result[1] = percentile75.data as SelectedScenarioPercentileData;
-          
-          
+
         return {data: result};
       },
     }),
