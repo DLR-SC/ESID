@@ -9,7 +9,11 @@ import {Box} from '@mui/material';
 import {selectDate} from '../store/DataSelectionSlice';
 import {useGetRkiByDistrictQuery} from '../store/services/rkiApi';
 import {dateToISOString} from 'util/util';
-import {useGetMultipleSimulationDataByNodeQuery} from 'store/services/scenarioApi';
+import {
+  useGetMultipleSimulationDataByNodeQuery,
+  useGetPercentileDataQuery,
+  PercentileDataByDay,
+} from 'store/services/scenarioApi';
 import {useTranslation} from 'react-i18next';
 import {NumberFormatter} from 'util/hooks';
 
@@ -30,6 +34,7 @@ export default function SimulationChart(): JSX.Element {
   const selectedDistrict = useAppSelector((state) => state.dataSelection.district.ags);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
   const selectedDate = useAppSelector((state) => state.dataSelection.date);
+  const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
   const dispatch = useAppDispatch();
   const {data: rkiData} = useGetRkiByDistrictQuery(
     {
@@ -49,6 +54,16 @@ export default function SimulationChart(): JSX.Element {
       compartments: [selectedCompartment ?? ''],
     },
     {skip: !selectedCompartment}
+  );
+
+  const {data: percentileData} = useGetPercentileDataQuery(
+    {
+      id: selectedScenario as number,
+      node: selectedDistrict,
+      group: '',
+      compartment: selectedCompartment as string,
+    },
+    {skip: !selectedScenario || !selectedCompartment}
   );
 
   const {formatNumber} = NumberFormatter(i18n.language, 3, 8);
@@ -74,17 +89,26 @@ export default function SimulationChart(): JSX.Element {
     const rkiSeries = chart.series.push(new am4charts.LineSeries());
     rkiSeries.dataFields.valueY = 'rki';
     rkiSeries.dataFields.dateX = 'date';
+    rkiSeries.id = 'rki';
     rkiSeries.strokeWidth = 2;
     rkiSeries.fill = am4core.color('black');
     rkiSeries.stroke = am4core.color('black');
     rkiSeries.name = t('chart.rkiData');
-    rkiSeries.tooltipText = `RKI Data: [bold]{rki}[/]`;
+
+    const percentileSeries = chart.series.push(new am4charts.LineSeries());
+    percentileSeries.dataFields.valueY = 'percentileUp';
+    percentileSeries.dataFields.openValueY = 'percentileDown';
+    percentileSeries.dataFields.dateX = 'date';
+    percentileSeries.id = 'percentiles';
+    percentileSeries.strokeWidth = 0;
+    percentileSeries.fillOpacity = 0.3;
 
     // Add series for scenarios
     Object.entries(scenarioList.scenarios).forEach(([scenarioId, scenario], i) => {
       const series = chart.series.push(new am4charts.LineSeries());
       series.dataFields.valueY = scenarioId;
       series.dataFields.dateX = 'date';
+      series.id = scenarioId;
       series.strokeWidth = 2;
       series.fill = am4core.color(theme.custom.scenarios[i % theme.custom.scenarios.length]); // loop around the color list if scenarios exceed color list
       series.stroke = series.fill;
@@ -148,7 +172,14 @@ export default function SimulationChart(): JSX.Element {
 
   // Effect to update Simulation and RKI Data
   useEffect(() => {
-    if (chartRef.current && simulationData && simulationData.length > 1 && selectedCompartment) {
+    if (
+      chartRef.current &&
+      simulationData &&
+      simulationData.length > 1 &&
+      selectedCompartment &&
+      percentileData &&
+      selectedScenario
+    ) {
       // clear data
       chartRef.current.data = [];
 
@@ -166,6 +197,27 @@ export default function SimulationChart(): JSX.Element {
       rkiData?.results.forEach((entry) => {
         dataMap.set(entry.day, {...dataMap.get(entry.day), rki: entry.compartments[selectedCompartment]});
       });
+
+      //add 25th percentile data
+      percentileData[0].results?.forEach((entry: PercentileDataByDay) => {
+        dataMap.set(entry.day, {...dataMap.get(entry.day), percentileDown: entry.compartments[selectedCompartment]});
+      });
+
+      //add 75th percentile data
+      percentileData[1].results?.forEach((entry: PercentileDataByDay) => {
+        dataMap.set(entry.day, {...dataMap.get(entry.day), percentileUp: entry.compartments[selectedCompartment]});
+      });
+
+      //change fill color of percentile series to selected scenario color
+      const percentileSeries = chartRef.current.map.getKey('percentiles') as am4charts.LineSeries;
+      if (
+        percentileSeries.fill !==
+        am4core.color(theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length])
+      ) {
+        percentileSeries.fill = am4core.color(
+          theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length]
+        );
+      }
 
       // sort map by date
       const dataMapSorted = new Map(Array.from(dataMap).sort(([a], [b]) => String(a).localeCompare(b)));
@@ -186,7 +238,38 @@ export default function SimulationChart(): JSX.Element {
           const text = [`<strong>{date.formatDate("${t('dateFormat')}")} (${selectedCompartment})</strong>`];
           text.push('<table>');
           chartRef.current?.series.each((s) => {
-            if (s.dataFields.valueY && (data as {[key: string]: number | string})[s.dataFields.valueY]) {
+            if (s.dataFields.openValueY && s.dataFields.valueY && scenarioList.scenarios[selectedScenario]) {
+              text.push('<tr>');
+              text.push(
+                `<th 
+                style='text-align:left; color:${
+                  theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length]
+                }; padding-right:${theme.spacing(2)}'>
+                <strong>${scenarioList.scenarios[selectedScenario].label} p25</strong>
+                </th>`
+              );
+              text.push(
+                `<td style='text-align:right'>${formatNumber(
+                  (data as {[key: string]: number})[s.dataFields.openValueY]
+                )}</td>`
+              );
+              text.push('</tr>');
+              text.push('<tr>');
+              text.push(
+                `<th 
+                style='text-align:left; color:${
+                  theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length]
+                }; padding-right:${theme.spacing(2)}'>
+                <strong>${scenarioList.scenarios[selectedScenario].label} p75</strong>
+                </th>`
+              );
+              text.push(
+                `<td style='text-align:right'>${formatNumber(
+                  (data as {[key: string]: number})[s.dataFields.valueY]
+                )}</td>`
+              );
+              text.push('</tr>');
+            } else if (s.dataFields.valueY && (data as {[key: string]: number | string})[s.dataFields.valueY]) {
               text.push('<tr>');
               text.push(
                 `<th 
@@ -218,7 +301,17 @@ export default function SimulationChart(): JSX.Element {
       // invalidate/reload data
       chartRef.current.invalidateData();
     }
-  }, [simulationData, rkiData, scenarioList, selectedCompartment, theme, formatNumber, t]);
+  }, [
+    selectedScenario,
+    percentileData,
+    simulationData,
+    rkiData,
+    scenarioList,
+    selectedCompartment,
+    theme,
+    formatNumber,
+    t,
+  ]);
 
   return (
     <Box
