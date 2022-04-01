@@ -18,6 +18,7 @@ import {NumberFormatter} from 'util/hooks';
 
 // deviations toggle (TODO)
 const drawDeviations = false;
+let over9000 = false;
 
 /**
  * React Component to render the Simulation Chart Section
@@ -151,6 +152,7 @@ export default function SimulationChart(): JSX.Element {
     if (chartRef.current && simulationData && simulationData.length > 1 && selectedCompartment) {
       // clear data
       chartRef.current.data = [];
+      over9000 = false;
 
       // create map to match dates
       const dataMap = new Map<string, {[key: string]: number}>();
@@ -159,12 +161,14 @@ export default function SimulationChart(): JSX.Element {
       Object.entries(scenarioList.scenarios).forEach(([scenarioId, scenario]) => {
         simulationData[scenario.id].results.forEach(({day, compartments}) => {
           dataMap.set(day, {...dataMap.get(day), [scenarioId]: compartments[selectedCompartment]});
+          if (compartments[selectedCompartment] > 9000) {over9000 = true;} 
         });
       });
 
       // add rki values
       rkiData?.results.forEach((entry) => {
         dataMap.set(entry.day, {...dataMap.get(entry.day), rki: entry.compartments[selectedCompartment]});
+        if (entry.compartments[selectedCompartment] > 9000) { over9000 = true; }
       });
 
       // sort map by date
@@ -220,6 +224,9 @@ export default function SimulationChart(): JSX.Element {
     }
   }, [simulationData, rkiData, scenarioList, selectedCompartment, theme, formatNumber, t]);
 
+  const bgimage = over9000 ? 'url("assets/9000.jpg")' : 'radial-gradient(#E2E4E6 10%, transparent 11%)';
+  const bgsize = over9000 ? 'cover' : '10px 10px';
+
   return (
     <Box
       id='chartdiv'
@@ -229,8 +236,8 @@ export default function SimulationChart(): JSX.Element {
         margin: 0,
         padding: 0,
         backgroundColor: theme.palette.background.paper,
-        backgroundImage: 'radial-gradient(#E2E4E6 10%, transparent 11%)',
-        backgroundSize: '10px 10px',
+        backgroundImage: bgimage,
+        backgroundSize: bgsize,
         cursor: 'crosshair',
       }}
     />
