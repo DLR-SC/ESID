@@ -161,14 +161,18 @@ export default function SimulationChart(): JSX.Element {
       Object.entries(scenarioList.scenarios).forEach(([scenarioId, scenario]) => {
         simulationData[scenario.id].results.forEach(({day, compartments}) => {
           dataMap.set(day, {...dataMap.get(day), [scenarioId]: compartments[selectedCompartment]});
-          if (compartments[selectedCompartment] > 9000) {over9000 = true;} 
+          if (compartments[selectedCompartment] > 9000) {
+            over9000 = true;
+          }
         });
       });
 
       // add rki values
       rkiData?.results.forEach((entry) => {
         dataMap.set(entry.day, {...dataMap.get(entry.day), rki: entry.compartments[selectedCompartment]});
-        if (entry.compartments[selectedCompartment] > 9000) { over9000 = true; }
+        if (entry.compartments[selectedCompartment] > 9000) {
+          over9000 = true;
+        }
       });
 
       // sort map by date
