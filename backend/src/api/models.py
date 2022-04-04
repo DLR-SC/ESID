@@ -1,9 +1,6 @@
 from django.db import models
-from django_pandas.managers import DataFrameManager
 
 # Create your models here.
-
-
 class Node(models.Model):
     """Model definition for a Node (i.e. counties)."""
 
@@ -19,18 +16,33 @@ class Node(models.Model):
         return 'Node(%s)'.format(self.name)
 
 
-class Group(models.Model):
-    """Model definition for a Group (i.e. age_group)."""
-
-    # Fields
-    name = models.CharField(max_length=100, unique=True)
+class GroupCategory(models.Model):
+    """RKI gender choice definition."""
+    key = models.CharField(max_length=20, primary_key=True)
+    name = models.CharField(max_length=50)
     description = models.TextField()
 
     class Meta:
         pass
 
     def __str__(self):
-        return 'Group(%s)'.format(self.name)
+        return 'GroupCategory(%s)'.format(self.key)
+
+
+class Group(models.Model):
+    """Model definition for a Group (i.e. age_group)."""
+
+    # Fields
+    key = models.CharField(max_length=20, primary_key=True)
+    name = models.CharField(max_length=50)
+    description = models.TextField()
+    category = models.ForeignKey(GroupCategory, on_delete=models.DO_NOTHING)
+
+    class Meta:
+        pass
+
+    def __str__(self):
+        return 'Group(%s)'.format(self.key)
 
 
 class Distribution(models.Model):
@@ -59,7 +71,8 @@ class Distribution(models.Model):
 class Restriction(models.Model):
     """Model definition for a Restriction."""
 
-    name = models.CharField(max_length=50, unique=True)
+    key = models.CharField(max_length=20, primary_key=True)
+    name = models.CharField(max_length=50)
     contact_rate = models.FloatField()
 
     class Meta:
@@ -95,19 +108,21 @@ class Intervention(models.Model):
 
 class Parameter(models.Model):
     """Model definition for a Simulation Parameter."""
-    name = models.CharField(max_length=100, unique=True)
+    key = models.CharField(max_length=100, primary_key=True)
+    name = models.CharField(max_length=100)
     description = models.TextField()
 
     class Meta:
         pass
 
     def __str__(self):
-        return 'Parameter(%s)'.format(self.name)
+        return 'Parameter(%s)'.format(self.key)
 
 
 class Compartment(models.Model):
     """Model definition for a Simulation Compartment."""
-    name = models.CharField(max_length=100, unique=True)
+    key = models.CharField(max_length=100, primary_key=True)
+    name = models.CharField(max_length=100)
     description = models.TextField()
 
     class Meta:
@@ -130,7 +145,8 @@ class DataEntry(models.Model):
 
 class SimulationModel(models.Model):
     """Model definition for a Simulation Model."""
-    name = models.CharField(max_length=100, unique=True)
+    key = models.CharField(max_length=20, primary_key=True)
+    name = models.CharField(max_length=100)
     description = models.TextField()
     parameters = models.ManyToManyField(Parameter)
     compartments = models.ManyToManyField(Compartment)
@@ -139,7 +155,7 @@ class SimulationModel(models.Model):
         pass
 
     def __str__(self):
-        return 'SimulationModel(%s)'.format(self.name)
+        return 'SimulationModel(%s)'.format(self.key)
 
 
 class ScenarioParameterGroup(models.Model):
@@ -197,7 +213,8 @@ class Scenario(models.Model):
     """Model definition for a scenario."""
 
     # Fields
-    name = models.CharField(max_length=100, unique=True)
+    key = models.CharField(max_length=20, unique=True)
+    name = models.CharField(max_length=100)
     description = models.TextField()
     simulation_model = models.ForeignKey(SimulationModel, related_name='simulation_model', on_delete=models.RESTRICT)
     number_of_groups = models.IntegerField()
@@ -258,7 +275,8 @@ class Simulation(models.Model):
     """Model definition for a simulation."""
 
     # Fields
-    name = models.CharField(max_length=100, unique=True)
+    key = models.CharField(max_length=20, unique=True)
+    name = models.CharField(max_length=100)
     description = models.TextField()
     start_day = models.DateField()
     number_of_days = models.IntegerField()
@@ -277,7 +295,7 @@ class SimulationData(models.Model):
     simulationnode = models.ForeignKey(SimulationNode, on_delete=models.DO_NOTHING)
     node = models.ForeignKey(Node, on_delete=models.DO_NOTHING)
     node_name = models.TextField()
-    group = models.TextField()
+    groups = models.TextField()
     day = models.DateField()
     percentile = models.IntegerField()
     data = models.JSONField()
@@ -285,21 +303,6 @@ class SimulationData(models.Model):
     class Meta:
         managed = False
         db_table = 'api_simulationdata'
-
-class GenderChoice(models.TextChoices):
-    """RKI gender choice definition."""
-
-    M = 'M', 'Männlich'
-    W = 'W', 'Weiblich'
-    U = 'U', 'Unbekannt'
-
-
-class FlagChoice(models.IntegerChoices):
-    """RKI flags definition."""
-    JA = 1, 'Ja'
-    NEIN = 0, 'Nein'
-    NA = -9, 'Nein'
-
 
 class RKINode(models.Model):
     """Model definition for one rki data entry."""
@@ -318,7 +321,7 @@ class RKIData(models.Model):
     rkinode = models.ForeignKey(RKINode, on_delete=models.DO_NOTHING)
     node = models.ForeignKey(Node, on_delete=models.DO_NOTHING)
     node_name = models.TextField()
-    group = models.TextField()
+    groups = models.TextField()
     day = models.DateField()
     percentile = models.IntegerField()
     data = models.JSONField()
