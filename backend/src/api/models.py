@@ -122,7 +122,7 @@ class DataEntry(models.Model):
     data = models.JSONField()
     percentile = models.IntegerField(default=50)
 
-    group = models.ForeignKey(Group, on_delete=models.RESTRICT)
+    groups = models.ManyToManyField(Group) 
 
     class Meta:
         pass

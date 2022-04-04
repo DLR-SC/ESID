@@ -21,9 +21,9 @@ def create_data_entries(self, start_day, n_days, compartments, dataset, group, n
     entries = []
 
     # check if data already exists
-    if node.data.filter(day__gte=start_day, group=group).exists():
+    # if node.data.filter(day__gte=start_day, group=group).exists():
         # self.stdout.write('Data for node {} group {} day {} already exist! Skipping.'.format(node.node.name, group.name, date))
-        return entries
+    #    return entries
         
     for day in range(0, n_days):
         date = start_day + timedelta(days=day)
@@ -35,7 +35,7 @@ def create_data_entries(self, start_day, n_days, compartments, dataset, group, n
 
             values[compartment] = dataset[day, index]
 
-        entry = models.DataEntry(day=date, group=group, data=values)
+        entry = models.DataEntry(day=date, data=values)
         entries.append(entry)
 
     return entries
@@ -64,20 +64,26 @@ def import_node(self, node, h5node, meta, start_day):
             self.stdout.write(self.style.ERROR('Compartment mapping must be of the same length as columns in dataset {}!={}'.format(len(order), n_compartments)))
             continue
 
+        # create data entry models
         entries = create_data_entries(self, start_day, n_days, order, dataset, group, rki_node)
+        
+        # save data entry models
+        entries = models.DataEntry.objects.bulk_create(entries)
+
+        # set groups on data entries
+        for entry in entries:
+            entry.groups.add(group)
+
         data_entries.extend(entries)
-
-    models.DataEntry.objects.bulk_create(data_entries)
-                        
     
-    [rki_node.data.add(entry) for entry in data_entries]
-    rki_node.save()
-
+    
+    rki_node.data.set(data_entries)
+    
     return rki_node
 
 
 class Command(BaseCommand):
-    help = 'Download and import RKI data'
+    help = 'Import RKI data'
 
     def add_arguments(self, parser):
         parser.add_argument('data_path', type=str)

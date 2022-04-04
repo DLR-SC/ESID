@@ -35,7 +35,7 @@ def create_data_entries(start_day, n_days, compartments, dataset, group, percent
 
             values[compartment] = dataset[day, index]
 
-        entry = models.DataEntry(day=date, group=group, data=values, percentile=percentile)
+        entry = models.DataEntry(day=date, data=values, percentile=percentile)
         entries.append(entry)
 
     return entries
@@ -43,7 +43,7 @@ def create_data_entries(start_day, n_days, compartments, dataset, group, percent
 
 def process_node(self, meta, h5node, compartments, order, start_day, percentile, simulation_node):
     data_entries = []
-
+    group_mapping = []
     for dataset_name in meta['datasets']:
         group_name = meta['groupMapping'][dataset_name] if 'groupMapping' in meta else dataset_name
         try:
@@ -64,10 +64,17 @@ def process_node(self, meta, h5node, compartments, order, start_day, percentile,
             self.stdout.write(self.style.ERROR('Compartment mapping must be of the same length as columns in dataset {}!={}'.format(len(order), n_compartments)))
             continue
 
+        # create data entry models
         entries = create_data_entries(start_day, n_days, order, dataset, group, percentile)
-        data_entries.extend(entries)
+        
+        # save data entry models
+        entries = models.DataEntry.objects.bulk_create(entries)
 
-    models.DataEntry.objects.bulk_create(data_entries)
+        # set groups on data entries
+        for entry in entries:
+            entry.groups.add(group)
+
+        data_entries.extend(entries)
     
     simulation_node.data.set(list(simulation_node.data.all()) + data_entries)
     simulation_node.save()
