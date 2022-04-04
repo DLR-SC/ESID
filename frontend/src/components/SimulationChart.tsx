@@ -16,6 +16,7 @@ import {
 } from 'store/services/scenarioApi';
 import {useTranslation} from 'react-i18next';
 import {NumberFormatter} from 'util/hooks';
+import LoadingContainer from './shared/LoadingContainer';
 
 /* This component displays the evolution of the pandemic for a specific compartment (hospitalized, dead, infected, etc.) regarding the different scenarios
  */
@@ -36,7 +37,7 @@ export default function SimulationChart(): JSX.Element {
   const selectedDate = useAppSelector((state) => state.dataSelection.date);
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
   const dispatch = useAppDispatch();
-  const {data: rkiData} = useGetRkiByDistrictQuery(
+  const {data: rkiData, isFetching: rkiFetching} = useGetRkiByDistrictQuery(
     {
       node: selectedDistrict,
       group: 'total',
@@ -45,7 +46,7 @@ export default function SimulationChart(): JSX.Element {
     {skip: !selectedCompartment}
   );
 
-  const {data: simulationData} = useGetMultipleSimulationDataByNodeQuery(
+  const {data: simulationData, isFetching: simulationFetching} = useGetMultipleSimulationDataByNodeQuery(
     {
       // take scenario ids and flatten them into array
       ids: Object.entries(scenarioList.scenarios).map(([, scn]) => scn.id),
@@ -163,10 +164,14 @@ export default function SimulationChart(): JSX.Element {
 
     // remove old ranges before creating a new one
     return () => {
-      const ranges = chartRef.current?.xAxes.getIndex(0)?.axisRanges;
-      ranges?.values.forEach((range) => {
-        ranges.removeValue(range);
-      });
+      try {
+        const ranges = chartRef.current?.xAxes.getIndex(0)?.axisRanges;
+        ranges?.values.forEach((range) => {
+          ranges.removeValue(range);
+        });
+      } catch (e) {
+        console.error(e);
+      }
     };
   }, [scenarioList, selectedDate, theme, t, i18n.language]);
 
@@ -314,18 +319,24 @@ export default function SimulationChart(): JSX.Element {
   ]);
 
   return (
-    <Box
-      id='chartdiv'
-      sx={{
-        height: '100%',
-        width: '100%',
-        margin: 0,
-        padding: 0,
-        backgroundColor: theme.palette.background.paper,
-        backgroundImage: 'radial-gradient(#E2E4E6 10%, transparent 11%)',
-        backgroundSize: '10px 10px',
-        cursor: 'crosshair',
-      }}
-    />
+    <LoadingContainer
+      sx={{width: '100%', height: '100%'}}
+      show={rkiFetching || simulationFetching}
+      overlayColor={theme.palette.background.paper}
+    >
+      <Box
+        id='chartdiv'
+        sx={{
+          height: '100%',
+          width: '100%',
+          margin: 0,
+          padding: 0,
+          backgroundColor: theme.palette.background.paper,
+          backgroundImage: 'radial-gradient(#E2E4E6 10%, transparent 11%)',
+          backgroundSize: '10px 10px',
+          cursor: 'crosshair',
+        }}
+      />
+    </LoadingContainer>
   );
 }
