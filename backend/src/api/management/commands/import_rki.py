@@ -51,7 +51,7 @@ def import_node(self, node, h5node, meta, start_day):
     for dataset_name in meta['datasets']:
         group_name = meta['groupMapping'][dataset_name] if 'groupMapping' in meta else dataset_name
         try:
-            group = models.Group.objects.get(name=group_name)
+            group = models.Group.objects.get(key=group_name)
         except models.Group.DoesNotExist:
             self.stdout.write(self.style.ERROR('No group for dataset {} found!'.format(group_name)))
             continue

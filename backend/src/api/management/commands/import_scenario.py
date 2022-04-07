@@ -34,6 +34,7 @@ class Command(BaseCommand):
 
         
         scenario = models.Scenario()
+        scenario.key = config['name']
         scenario.name = config['name']
         scenario.description = config.get('description', '')
         scenario.number_of_groups = config['numberOfGroups']
@@ -52,7 +53,7 @@ class Command(BaseCommand):
         # select group models and create if neccessary
         groups = []
         for group_info in tqdm(config['groups'], total=len(config['groups']), desc="Creating groups"):
-            [group, created] = models.Group.objects.get_or_create(name=group_info['name'])
+            [group, created] = models.Group.objects.get_or_create(key=group_info['name'])
             groups.append(group)
 
         nodes = config['nodes']
