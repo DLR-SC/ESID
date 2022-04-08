@@ -40,26 +40,32 @@ If you are familiar with Docker, then you just need [Docker](https://docs.docker
 
 ## Local Development
 
-First you need to create an '.env' file. The easiest way is to copy the template file.
+First you need to create an '.env' file. The easiest way is to copy the template file and adapt the values.
 
 ```bash
-cp .env.dist .env
+cp .env.template .env
 ```
 
 ### Development with Docker
 
-To develop with Docker we use Docker-Compose to create and spawn all necessary services.
-To start all services use:
+To develop with Docker we use Docker-Compose to create and spawn all necessary services. 
+It is however necessary to create the following three docker volumes in advance:
+- postgres-data
+- django-data
+- pgadmin-data
+
+\
+To start the development setup run:
 
 ```bash
-docker-compose up -d
+USER_ID=$(id -u) GROUP_ID=$(id -g) docker-compose -f docker-compose.dev.yml up -d
 ```
-
+\
 This creates following services:
 
 - db: PostgreSQL database
 
-- web: Django server reachable under [http://localhost:8000/](http://localhost:8001/)
+- backend: Django server reachable under the specified **SITE_URL** in the .env-file (default [http://localhost:8000/](http://localhost:8000/))
 
 - pgadmin: Postgres admin interface reachable under [http://localhost:5050/](http://localhost:5050/).
 	- Default user: 'admin@admin.com"
@@ -68,10 +74,10 @@ This creates following services:
 
 To run a command inside the docker container use:
 ```bash
-docker-compose run --rm [service] [command]
+USER_ID=$(id -u) GROUP_ID=$(id -g) docker-compose -f docker-compose.dev.yml run --rm [service] [command]
 
 example:
-docker-compose run --rm web python migrate.py makemigrations
+USER_ID=$(id -u) GROUP_ID=$(id -g) docker-compose -f docker-compose.dev.yml run --rm backend python migrate.py makemigrations
 ```
 
 
@@ -115,15 +121,15 @@ Then execute following commands:
 
 ```bash
 python manage.py migrate 	 # setup django database tables
-				 # this will also fill the database with initial data
+				             # this will also fill the database with initial data
 python manage.py createsuperuser # setup an django admin account
 ```
 
 or using docker
 
 ```bash
-docker-compose run --rm web python manage.py migrate
-docker-compose run --rm web python manage.py createsuperuser
+USER_ID=$(id -u) GROUP_ID=$(id -g) docker-compose -f docker-compose.dev.yml run --rm backend python manage.py migrate
+USER_ID=$(id -u) GROUP_ID=$(id -g) docker-compose -f docker-compose.dev.yml run --rm backend python manage.py createsuperuser
 ```
 
 
@@ -132,13 +138,13 @@ docker-compose run --rm web python manage.py createsuperuser
 To import the RKI data run
 
 ```bash
-python manage.py loadrki
+python manage.py import_rki <path to folder or zip>
 ```
 
 or
 
 ```bash
-docker-compose run --rm web python manage.py loadrki
+USER_ID=$(id -u) GROUP_ID=$(id -g) docker-compose -f docker-compose.dev.yml run --rm web python manage.py import_rki <path to folder or zip>
 ```
 
 ### Running Tests
@@ -152,7 +158,7 @@ python manage.py test
 or
 
 ```bash
-docker-compose run --rm web python manage.py test
+USER_ID=$(id -u) GROUP_ID=$(id -g) docker-compose -f docker-compose.dev.yml run --rm web python manage.py test
 ```
 
 ## Endpoints
