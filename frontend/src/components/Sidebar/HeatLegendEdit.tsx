@@ -1,12 +1,11 @@
 import React, {useEffect} from 'react';
 import {useTheme} from '@mui/material/styles';
 import {Box, Dialog, Grid, IconButton, Radio, Typography} from '@mui/material';
-import HeatLegend from "./HeatLegend";
-import EditIcon from "@mui/icons-material/Edit";
-import {useAppDispatch, useAppSelector} from "../../store/hooks";
-import {selectHeatmapLegend, setHeatmapLegends} from "../../store/UserPreferenceSlice";
-import {HeatmapLegend} from "../../types/heatmapLegend";
-
+import HeatLegend from './HeatLegend';
+import EditIcon from '@mui/icons-material/Edit';
+import {useAppDispatch, useAppSelector} from '../../store/hooks';
+import {selectHeatmapLegend, setHeatmapLegends} from '../../store/UserPreferenceSlice';
+import {HeatmapLegend} from '../../types/heatmapLegend';
 
 /**
  * This component displays an edit button to access a modal. In the modal you can edit the heatmap legend.
@@ -23,7 +22,7 @@ export default function HeatLegendEdit(): JSX.Element {
   };
   const handleClick = (preset: HeatmapLegend) => {
     dispatch(selectHeatmapLegend({legend: preset}));
-  }
+  };
 
   useEffect(() => {
     // get heatmap legend preset list from assets and select default
@@ -40,17 +39,16 @@ export default function HeatLegendEdit(): JSX.Element {
       .then(
         // Resolve Promise
         (presetList: HeatmapLegend[]) => {
-
           presetList.forEach((legend) => {
             if (legend.isNormalized) {
               legend.steps.forEach((step) => {
                 step.value = step.value / legend.steps[legend.steps.length - 1].value;
-              })
+              });
             }
-            if (legend.name == "Default") {
+            if (legend.name == 'Default') {
               dispatch(selectHeatmapLegend({legend: legend}));
             }
-          })
+          });
           // fill presets state with list
           dispatch(setHeatmapLegends({legends: presetList}));
         },
@@ -65,7 +63,9 @@ export default function HeatLegendEdit(): JSX.Element {
 
   return (
     <>
-      <IconButton onClick={heatLegendEditClicked}><EditIcon/></IconButton>
+      <IconButton onClick={heatLegendEditClicked}>
+        <EditIcon />
+      </IconButton>
       <Dialog maxWidth='lg' fullWidth={true} open={heatLegendEditOpen} onClose={() => setHeatLegendEditOpen(false)}>
         <Box
           sx={{
@@ -75,20 +75,29 @@ export default function HeatLegendEdit(): JSX.Element {
         >
           <Grid container>
             {presets.map((preset, i) => (
-              <Grid item container xs={12} md={6} key={"legendPreset" + i.toString()}>
-                <Grid item container xs={1} alignItems="center" justifyContent="flex-end">
-                  <Radio checked={preset.name === legend.name} name="radio-buttons" value={preset.name}
-                         onChange={() => handleClick(preset)}/>
+              <Grid item container xs={12} md={6} key={'legendPreset' + i.toString()}>
+                <Grid item container xs={1} alignItems='center' justifyContent='flex-end'>
+                  <Radio
+                    checked={preset.name === legend.name}
+                    name='radio-buttons'
+                    value={preset.name}
+                    onChange={() => handleClick(preset)}
+                  />
                 </Grid>
                 <Grid item xs={11}>
-                  <HeatLegend legend={preset}
-                              exposeLegend={() => {
-                                return
-                              }} min={0}
-                              max={preset.steps[preset.steps.length - 1].value}
-                              noText={preset.isNormalized}
-                              id={preset.name}/>
-                  <Typography variant="h2" align="center">{preset.name}</Typography>
+                  <HeatLegend
+                    legend={preset}
+                    exposeLegend={() => {
+                      return;
+                    }}
+                    min={0}
+                    max={preset.steps[preset.steps.length - 1].value}
+                    noText={preset.isNormalized}
+                    id={preset.name}
+                  />
+                  <Typography variant='h2' align='center'>
+                    {preset.name}
+                  </Typography>
                 </Grid>
               </Grid>
             ))}

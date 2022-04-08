@@ -9,8 +9,8 @@ import {Box, Grid} from '@mui/material';
 import {useGetSimulationDataByDateQuery} from 'store/services/scenarioApi';
 import HeatLegend from './HeatLegend';
 import {NumberFormatter} from 'util/hooks';
-import HeatLegendEdit from "./HeatLegendEdit";
-import {HeatmapLegend} from "../../types/heatmapLegend";
+import HeatLegendEdit from './HeatLegendEdit';
+import {HeatmapLegend} from '../../types/heatmapLegend';
 
 const {useRef} = React;
 
@@ -232,14 +232,12 @@ export default function DistrictMap(): JSX.Element {
     formatNumber,
     data,
     theme,
-    legend
+    legend,
   ]);
 
   return (
     <>
-
-
-      <Box id='mapdiv' height={'650px'}/>
+      <Box id='mapdiv' height={'650px'} />
       <Grid container>
         <Grid item xs={11}>
           <HeatLegend
@@ -251,17 +249,13 @@ export default function DistrictMap(): JSX.Element {
             min={0}
             max={legend.isNormalized ? aggregatedMax : legend.steps[legend.steps.length - 1].value}
             noText={false}
-            id={"legend"}
+            id={'legend'}
           />
         </Grid>
-        <Grid item container alignItems="flex-end" xs={1}>
-          <HeatLegendEdit/>
+        <Grid item container alignItems='flex-end' xs={1}>
+          <HeatLegendEdit />
         </Grid>
-
       </Grid>
-
-
-
     </>
   );
 }
@@ -269,7 +263,7 @@ export default function DistrictMap(): JSX.Element {
 function getColorFromLegend(
   value: number,
   legend: HeatmapLegend,
-  aggregatedMinMax?: { min: number; max: number }
+  aggregatedMinMax?: {min: number; max: number}
 ): am5.Color {
   // assume legend stops are absolute
   let normalizedValue = value;

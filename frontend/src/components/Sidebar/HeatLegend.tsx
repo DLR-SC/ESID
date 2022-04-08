@@ -4,8 +4,7 @@ import {Box} from '@mui/material';
 import * as am5 from '@amcharts/amcharts5';
 import {useTranslation} from 'react-i18next';
 import {NumberFormatter} from 'util/hooks';
-import {HeatmapLegend} from "../../types/heatmapLegend";
-
+import {HeatmapLegend} from '../../types/heatmapLegend';
 
 export default function HeatLegend(props: {
   // add is_dynamic/absolute?
@@ -26,9 +25,9 @@ export default function HeatLegend(props: {
       am5.HeatLegend.new(root, {
         orientation: 'horizontal',
         startValue: props.min,
-        startText: props.noText ? " " : formatNumber(props.min),
+        startText: props.noText ? ' ' : formatNumber(props.min),
         endValue: props.max,
-        endText: props.noText ? " " : formatNumber(props.max),
+        endText: props.noText ? ' ' : formatNumber(props.max),
         // set start & end color to paper background as gradient is overwritten later and this sets the tooltip background color
         startColor: am5.color(theme.palette.background.paper),
         endColor: am5.color(theme.palette.background.paper),
@@ -36,7 +35,7 @@ export default function HeatLegend(props: {
     );
 
     // compile stop list
-    const stoplist: { color: am5.Color; opacity: number; offset: number }[] = [];
+    const stoplist: {color: am5.Color; opacity: number; offset: number}[] = [];
     props.legend.steps.forEach((item) => {
       stoplist.push({
         color: am5.color(item.color),
