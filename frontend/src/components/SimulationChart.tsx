@@ -86,7 +86,7 @@ export default function SimulationChart(): JSX.Element {
       series.dataFields.valueY = scenarioId;
       series.dataFields.dateX = 'date';
       series.strokeWidth = 2;
-      series.fill = am4core.color(theme.custom.scenarios[i % theme.custom.scenarios.length]); // loop around the color list if scenarios exceed color list
+      series.fill = am4core.color(theme.custom.scenarios[i % theme.custom.scenarios.length][0]); // loop around the color list if scenarios exceed color list
       series.stroke = series.fill;
       series.tooltipText = `[bold ${series.stroke.hex}]${scenario.label}:[/] {${scenarioId}}`;
       series.name = scenario.label;
@@ -98,7 +98,7 @@ export default function SimulationChart(): JSX.Element {
         seriesSTD.dataFields.dateX = 'date';
         seriesSTD.strokeWidth = 0;
         seriesSTD.fillOpacity = 0.3;
-        series.fill = am4core.color(theme.custom.scenarios[i % theme.custom.scenarios.length]); // loop around the color list if scenarios exceed color list
+        series.fill = am4core.color(theme.custom.scenarios[i % theme.custom.scenarios.length][0]); // loop around the color list if scenarios exceed color list
         series.stroke = series.fill;
         // override tooltip
         series.tooltipText = `${scenario.label}: [bold]{${scenarioId}STDdown} ~ {${scenarioId}STDup}[/]`;

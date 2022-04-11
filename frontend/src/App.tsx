@@ -23,13 +23,13 @@ declare module '@mui/material/styles' {
 
   interface Theme {
     custom: {
-      scenarios: Array<string>;
+      scenarios: Array<Array<string>>;
     };
   }
 
   interface ThemeOptions {
     custom?: {
-      scenarios?: Array<string>;
+      scenarios?: Array<Array<string>>;
     };
   }
 }
@@ -126,7 +126,15 @@ const theme = createTheme({
   },
   spacing: [0, 4, 8, 12, 26],
   custom: {
-    scenarios: ['#3998DB', '#876BE3', '#CC5AC7', '#EBA73B', '#34C290', '#EB7651', '#34BEC7', '#9FC750'],
+
+    scenarios: [['#3998DB','#65B0E5','#7ECFF2','#B8EAFF','#8C8C8C'],
+      ['#876BE3','#9C85E5','#9AA3F5','#C2C8FF','#8C8C8C'],
+      ['#CC5AC7','#E581E1','#CF9EF0','#E4BDFF','#8C8C8C'],
+      ['#EBA73B','#F2C479','#F7DD8D','#FFF0A3','#8C8C8C'],
+      ['#34C290','#54E3B1','#8AEDDB','#8AEDDB','#8C8C8C'],
+      ['#EB7651','#F0987D','#F5BBA8','#FADDD4','#8C8C8C'],
+      ['#34BEC7','#67CED5','#9ADFE3','#CCEFF1','#8C8C8C'],
+      ['#9FC750','#B7D57C','#CFE3A8','#E7F1D3','#8C8C8C']]
   },
 });
 
