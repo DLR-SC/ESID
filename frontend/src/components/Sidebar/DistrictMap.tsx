@@ -238,7 +238,7 @@ export default function DistrictMap(): JSX.Element {
   return (
     <>
       <Box id='mapdiv' height={'650px'} />
-      <Grid container>
+      <Grid container p={2}>
         <Grid item xs={11}>
           <HeatLegend
             legend={legend}
