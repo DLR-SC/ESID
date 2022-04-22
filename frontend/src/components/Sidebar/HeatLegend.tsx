@@ -15,12 +15,13 @@ export default function HeatLegend(props: {
   noText: boolean;
   id: string;
 }): JSX.Element {
+  const id = props.id + String(Date.now() + Math.random()); // "guarantee" unique id
   const {i18n: i18n} = useTranslation();
   const {formatNumber} = NumberFormatter(i18n.language, 3, 8);
   const theme = useTheme();
 
   useEffect(() => {
-    const root = am5.Root.new(props.id);
+    const root = am5.Root.new(id);
     const heatLegend = root.container.children.push(
       am5.HeatLegend.new(root, {
         orientation: 'horizontal',
@@ -57,11 +58,11 @@ export default function HeatLegend(props: {
       root.dispose();
       props.exposeLegend(null);
     };
-  }, [props, formatNumber, theme]);
+  }, [props, formatNumber, theme, id]);
 
   return (
     <Box
-      id={props.id}
+      id={id}
       sx={{
         margin: '5px',
         height: '50px',
