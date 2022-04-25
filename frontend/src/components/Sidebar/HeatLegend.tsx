@@ -64,6 +64,7 @@ export default function HeatLegend(props: {
     <Box
       id={id}
       sx={{
+        width: '100%',
         margin: '5px',
         height: '50px',
       }}

@@ -5,12 +5,14 @@ import * as am5map from '@amcharts/amcharts5/map';
 import {useTranslation} from 'react-i18next';
 import {useAppDispatch, useAppSelector} from '../../store/hooks';
 import {selectDistrict} from '../../store/DataSelectionSlice';
-import {Box, Grid} from '@mui/material';
+import {Box, Grid, ToggleButton} from '@mui/material';
+import LockIcon from '@mui/icons-material/Lock';
 import {useGetSimulationDataByDateQuery} from 'store/services/scenarioApi';
 import HeatLegend from './HeatLegend';
 import {NumberFormatter} from 'util/hooks';
 import HeatLegendEdit from './HeatLegendEdit';
 import {HeatmapLegend} from '../../types/heatmapLegend';
+import {LockOpen} from '@mui/icons-material';
 
 const {useRef} = React;
 
@@ -55,9 +57,13 @@ export default function DistrictMap(): JSX.Element {
   const theme = useTheme();
   const dispatch = useAppDispatch();
   //const lastSelectedPolygon = useRef<am5map.MapPolygon | null>(null);
+  const [fixedLegendMaxValue, setFixedLegendMaxValue] = useState<number>(-1);
 
   // use Memoized to store aggregated max and only recalculate if parameters change
-  const aggregatedMax = useMemo(() => {
+  const aggregatedMax: number = useMemo(() => {
+    if (fixedLegendMaxValue != -1) {
+      return fixedLegendMaxValue;
+    }
     let max = 0;
     if (data && selectedCompartment) {
       data.results.forEach((entry) => {
@@ -67,7 +73,7 @@ export default function DistrictMap(): JSX.Element {
       });
     }
     return max;
-  }, [selectedCompartment, data]);
+  }, [selectedCompartment, data, fixedLegendMaxValue]);
 
   // fetch geojson
   useEffect(() => {
@@ -238,8 +244,8 @@ export default function DistrictMap(): JSX.Element {
   return (
     <>
       <Box id='mapdiv' height={'650px'} />
-      <Grid container p={2}>
-        <Grid item xs={11}>
+      <Grid container px={1}>
+        <Grid item container xs={11} alignItems='flex-end'>
           <HeatLegend
             legend={legend}
             exposeLegend={(legend: am5.HeatLegend | null) => {
@@ -252,7 +258,19 @@ export default function DistrictMap(): JSX.Element {
             id={'legend'}
           />
         </Grid>
-        <Grid item container alignItems='flex-end' xs={1}>
+        <Grid item container justifyContent='center' xs={1}>
+          <ToggleButton
+            aria-label={t('heatlegend.lock')}
+            value='check'
+            selected={fixedLegendMaxValue != -1}
+            onChange={() => {
+              setFixedLegendMaxValue(fixedLegendMaxValue == -1 ? aggregatedMax : -1);
+            }}
+            size='small'
+            sx={{border: 0, borderRadius: '100%', '&.Mui-selected': {backgroundColor: 'transparent'}}}
+          >
+            {fixedLegendMaxValue != -1 ? <LockIcon /> : <LockOpen />}
+          </ToggleButton>
           <HeatLegendEdit />
         </Grid>
       </Grid>
