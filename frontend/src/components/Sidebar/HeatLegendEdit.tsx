@@ -6,7 +6,6 @@ import {
   FormControl,
   Grid,
   IconButton,
-  InputLabel,
   MenuItem,
   Select,
   SelectChangeEvent,
@@ -22,6 +21,7 @@ import {
   setHeatmapLegends,
 } from '../../store/UserPreferenceSlice';
 import {HeatmapLegend} from '../../types/heatmapLegend';
+import {useTranslation} from 'react-i18next';
 
 /**
  * This component displays an edit button to access a modal. In the modal you can edit the heatmap legend.
@@ -32,6 +32,7 @@ export default function HeatLegendEdit(): JSX.Element {
   const legend = useAppSelector((state) => state.userPreference.selectedHeatmap);
   const presets = useAppSelector((state) => state.userPreference.heatmaps);
   const theme = useTheme();
+  const {t} = useTranslation();
 
   //modal state
   const [heatLegendEditOpen, setHeatLegendEditOpen] = React.useState(false);
@@ -106,7 +107,7 @@ export default function HeatLegendEdit(): JSX.Element {
 
   return (
     <>
-      <IconButton onClick={heatLegendEditClicked}>
+      <IconButton onClick={heatLegendEditClicked} aria-label={t('heatlegend.edit')} size='small'>
         <EditIcon />
       </IconButton>
       <Dialog maxWidth='lg' fullWidth={true} open={heatLegendEditOpen} onClose={() => setHeatLegendEditOpen(false)}>
@@ -117,14 +118,7 @@ export default function HeatLegendEdit(): JSX.Element {
           }}
         >
           <FormControl fullWidth>
-            <InputLabel id='heatmap-select-label'>Legend</InputLabel>
-            <Select
-              labelId='heatmap-select-label'
-              id='heatmap-select'
-              value={legend.name}
-              onChange={handleChange}
-              label='Legend'
-            >
+            <Select id='heatmap-select' aria-label={t('heatlegend.select')} value={legend.name} onChange={handleChange}>
               {presets.map((preset, i) => (
                 <MenuItem key={'legendPresetSelect' + i.toString()} value={preset.name}>
                   <Grid container maxWidth='lg'>

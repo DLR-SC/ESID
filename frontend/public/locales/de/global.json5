@@ -33,6 +33,11 @@
   chart: {
     rkiData: 'RKI-Daten',
   },
+  heatlegend: {
+    edit: 'Farblegende der Choroplethenkarte bearbeiten',
+    lock: 'Maximalwert feststellen',
+    select: 'Farblegende auswählen',
+  },
   today: 'Heute',
   more: 'Mehr',
   less: 'Weniger',

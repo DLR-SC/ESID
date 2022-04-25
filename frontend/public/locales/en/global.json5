@@ -42,6 +42,11 @@
   chart: {
     rkiData: 'RKI Data',
   },
+  heatlegend: {
+    edit: 'Edit heatmap colors',
+    lock: 'Lock maximum value',
+    select: 'Select heatmap preset',
+  },
   today: 'Today',
   more: 'More',
   less: 'Less',
