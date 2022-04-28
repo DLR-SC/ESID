@@ -35,7 +35,7 @@ class NodesViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
 class ScenarioViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     """
     retrieve:
-    Return all informations for the given scenario.
+    Return all information for the given scenario.
 
     list:
     Return a list of all available scenarios.
