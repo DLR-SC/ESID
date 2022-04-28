@@ -30,7 +30,7 @@
 
 ## API Docs
 
-API documentation is automatically generated using Swagger. You can view documention by visiting this [link](http://localhost:8000/swagger).
+API documentation is automatically generated using Swagger. You can view documention by visiting this [http://localhost:8000/swagger](http://localhost:8000/swagger).
 
 
 ## Prerequisites
