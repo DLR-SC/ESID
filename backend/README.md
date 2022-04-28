@@ -94,7 +94,7 @@ python3 -m venv env && source env/bin/activate # create and activate local envir
 or if you use Anaconda / Miniconda
 
 ```bash
-conad create -n esid python=3.8 && conda activate esid # activate venv
+conda create -n esid python=3.8 && conda activate esid
 ```
 
 Install all requirements with
