@@ -62,7 +62,7 @@ class SimulationsViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
 class SimulationModelViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     """
     retrieve:
-    Return all informations for the given simulation model.
+    Return all information for the given simulation model.
 
     list:
     Return a list of all available simulation models.
