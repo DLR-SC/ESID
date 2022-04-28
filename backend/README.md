@@ -35,7 +35,7 @@ API documentation is automatically generated using Swagger. You can view documen
 
 ## Prerequisites
 
-If you are familiar with Docker, then you just need [Docker](https://docs.docker.com/docker-for-mac/install/). If you don't want to use Docker, then you just need Python3 and Postgres installed.
+If you are familiar with Docker, you just need [Docker](https://docs.docker.com/desktop/). If you don't want to use Docker, you need Python3 and Postgres installed.
 
 
 ## Local Development
