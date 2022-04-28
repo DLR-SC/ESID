@@ -1,12 +1,6 @@
 # Create your views here.
 
-from datetime import datetime
-
-from django.db.models import Sum, F, Window
-from django.db import connection
-
-from rest_framework import views, viewsets, permissions, mixins, generics
-from rest_framework.response import Response
+from rest_framework import viewsets, permissions, mixins, generics
 
 from .models import *
 from .classes import DataEntryFilterMixin
