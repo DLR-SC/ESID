@@ -119,11 +119,14 @@ You need a working PostgreSQL database. Update the database configuration inside
 
 Then execute following commands:
 
-```bash
-python manage.py migrate 	 # setup django database tables
-				             # this will also fill the database with initial data
-python manage.py createsuperuser # setup an django admin account
-```
+1. To setup django database tables. This will also fill the database with initial data
+    ```bash
+    python manage.py migrate
+    ```
+2. To setup a django admin account
+    ```bash
+    python manage.py createsuperuser
+    ```
 
 or using docker
 
