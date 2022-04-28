@@ -1,6 +1,5 @@
 from .models import *
 from rest_framework import serializers
-from datetime import datetime
 import json
 
 

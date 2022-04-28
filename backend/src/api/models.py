@@ -172,7 +172,7 @@ class ScenarioParameterGroup(models.Model):
 
 
 class ScenarioParameter(models.Model):
-    """Model definition for a parameter belongng to a scenario."""
+    """Model definition for a parameter belonging to a scenario."""
     parameter = models.ForeignKey(Parameter, related_name='parameter', on_delete=models.RESTRICT)
     groups = models.ManyToManyField(ScenarioParameterGroup)
     

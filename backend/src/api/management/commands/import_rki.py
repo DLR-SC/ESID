@@ -1,9 +1,7 @@
 from django.core.management.base import BaseCommand, CommandError
 from datetime import datetime, timedelta
 from tqdm import tqdm
-from datetime import datetime
 import src.api.models as models
-import pandas as pd
 import zipfile
 import os
 import tempfile

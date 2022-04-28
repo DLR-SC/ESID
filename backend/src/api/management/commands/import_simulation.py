@@ -1,9 +1,7 @@
 from django.core.management.base import BaseCommand, CommandError
 from datetime import datetime, timedelta
 from tqdm import tqdm
-from datetime import datetime
 import src.api.models as models
-import pandas as pd
 import zipfile
 import os
 import tempfile
@@ -24,7 +22,7 @@ MANDATORY = [
 def create_data_entries(start_day, n_days, compartments, dataset, group, percentile):
     entries = []
 
-    # skip first data entry, because it only contains the inital rki data
+    # skip first data entry, because it only contains the initial rki data
     for day in range(1, n_days):
         date = start_day + timedelta(days=day)
 

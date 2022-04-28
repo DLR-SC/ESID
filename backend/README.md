@@ -88,7 +88,7 @@ USER_ID=$(id -u) GROUP_ID=$(id -g) docker-compose -f docker-compose.dev.yml run 
 We encourage you to create a new python environment.
 
 ```bash
-python3 -m venv env && source env/bin/activate # create and activate local environment
+python3 -m venv env && source env/bin/activate
 ```
 
 or if you use Anaconda / Miniconda
@@ -100,7 +100,7 @@ conda create -n esid python=3.8 && conda activate esid
 Install all requirements with
 
 ```bash
-pip install -r requirements/dev.txt # install requirements
+pip install -r requirements/dev.txt
 ```
 
 
@@ -115,7 +115,7 @@ python manage.py runserver
 
 ### Setup database
 
-You need a working PostgreSQL database. Update the database configuration inside '.env' to match your postgresql installation.
+You need a working PostgreSQL database. Update the database configuration inside '.env' to match your PostgreSQL installation.
 
 Then execute following commands:
 
@@ -135,7 +135,7 @@ USER_ID=$(id -u) GROUP_ID=$(id -g) docker-compose -f docker-compose.dev.yml run 
 
 ### RKI data
 
-To import the RKI data run
+To import the RKI data, run
 
 ```bash
 python manage.py import_rki <path to folder or zip>
@@ -149,7 +149,7 @@ USER_ID=$(id -u) GROUP_ID=$(id -g) docker-compose -f docker-compose.dev.yml run 
 
 ### Running Tests
 
-To run all tests with code-coverate report, simple run:
+To run all tests with code-coverate report, simply run:
 
 ```bash
 python manage.py test

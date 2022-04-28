@@ -1,7 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-from datetime import datetime
 from tqdm import tqdm
-import pandas as pd
 import src.api.models as models
 import json 
 

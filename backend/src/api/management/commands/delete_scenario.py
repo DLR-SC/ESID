@@ -1,8 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-import pandas as pd
-from datetime import datetime
 import src.api.models as models
-from tqdm import tqdm
 
 
 class Command(BaseCommand):
