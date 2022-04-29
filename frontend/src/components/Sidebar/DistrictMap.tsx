@@ -158,6 +158,12 @@ export default function DistrictMap(): JSX.Element {
         legendRef.current.showValue(value, formatNumber(value));
       }
     });
+    //hide tooltip on heat legend when not hovering anymore event
+    polygonTemplate.events.on('pointerout', () => {
+      if (legendRef.current) {
+        void legendRef.current.hideTooltip();
+      }
+    });
     rootRef.current = root;
     chartRef.current = chart;
     return () => {
