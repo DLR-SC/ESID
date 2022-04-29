@@ -1,0 +1,69 @@
+version: '3'
+services:
+  db:
+    image: postgres:13.3
+    restart: always
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      PGDATA: /data/postgres
+    volumes:
+      - postgres-data2:/data/postgres
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+    ports:
+      - '5050:80'
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    depends_on:
+      - db
+
+  backend:
+    image: esid/backend:latest
+    restart: always
+    env_file: backend/.env.production
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DJANGO_DEBUG: 'False'
+    build:
+      context: backend/
+      args:
+        REQUIREMENTS_FILE: prod.txt
+    ports:
+      - 8000:8000
+    volumes:
+      - django-data:/localdata
+    depends_on:
+      - db
+
+  frontend:
+    image: esid/frontend:latest
+    restart: always
+    build:
+      context: frontend/
+    environment:
+      API_HOST: backend
+      API_PORT: 8000
+      HOST: ${HOST}
+    ports:
+      - '8080:80'
+    depends_on:
+      - backend
+
+volumes:
+  django-data:
+    external: True
+  postgres-data2:
+    external: True
+  pgadmin-data:
+    external: True
