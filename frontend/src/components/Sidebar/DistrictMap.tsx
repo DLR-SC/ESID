@@ -13,6 +13,7 @@ import {NumberFormatter} from 'util/hooks';
 import HeatLegendEdit from './HeatLegendEdit';
 import {HeatmapLegend} from '../../types/heatmapLegend';
 import {LockOpen} from '@mui/icons-material';
+import LoadingContainer from '../shared/LoadingContainer';
 
 const {useRef} = React;
 
@@ -38,7 +39,7 @@ export default function DistrictMap(): JSX.Element {
   const scenarioList = useAppSelector((state) => state.scenarioList.scenarios);
   const legend = useAppSelector((state) => state.userPreference.selectedHeatmap);
 
-  const {data} = useGetSimulationDataByDateQuery(
+  const {data, isFetching} = useGetSimulationDataByDateQuery(
     {
       id: selectedScenario ?? 0,
       day: selectedDate ?? '',
@@ -191,17 +192,18 @@ export default function DistrictMap(): JSX.Element {
     if (chartRef.current && chartRef.current.series.length > 0 && selectedCompartment && selectedScenario) {
       const polygonSeries = chartRef.current.series.getIndex(0) as am5map.MapPolygonSeries;
 
-      // Map compartment value to RS
-      const dataMapped = new Map<string, number>();
-      data?.results.forEach((entry) => {
-        const rs = entry.name;
-        dataMapped.set(rs, entry.compartments[selectedCompartment]);
-      });
+      if (!isFetching) {
+        // Map compartment value to RS
+        const dataMapped = new Map<string, number>();
+        data?.results.forEach((entry) => {
+          const rs = entry.name;
+          dataMapped.set(rs, entry.compartments[selectedCompartment]);
+        });
 
-      if (dataMapped.size > 0) {
-        polygonSeries.mapPolygons.each((polygon) => {
-          const regionData = polygon.dataItem?.dataContext as IRegionPolygon;
-          regionData.value = dataMapped.get(regionData.RS) || Number.NaN;
+        if (dataMapped.size > 0) {
+          polygonSeries.mapPolygons.each((polygon) => {
+            const regionData = polygon.dataItem?.dataContext as IRegionPolygon;
+            regionData.value = dataMapped.get(regionData.RS) || Number.NaN;
 
           // determine fill color
           let fillColor = am5.color(theme.palette.background.default);
@@ -210,20 +212,23 @@ export default function DistrictMap(): JSX.Element {
               // if legend is normalized, also pass mix & max to color function
               fillColor = getColorFromLegend(regionData.value, legend, {min: 0, max: aggregatedMax});
             } else {
-              // if legend is not normalized, min & max are first and last stop of legend and don'T need to be passed
+              // if legend is not normalized, min & max are first and last stop of legend and don't need to be passed
               fillColor = getColorFromLegend(regionData.value, legend);
             }
           }
 
-          polygon.setAll({
-            // set tooltip
-            tooltipText:
-              scenarioList[selectedScenario] && selectedCompartment
-                ? `${t(`BEZ.${regionData.BEZ}`)} {GEN}\n${selectedCompartment}: ${formatNumber(regionData.value)}`
-                : `${t(`BEZ.${regionData.BEZ}`)} {GEN}`,
-            // set fill color
-            fill: fillColor,
+            polygon.setAll({
+              tooltipText:
+                scenarioList[selectedScenario] && selectedCompartment
+                  ? `${t(`BEZ.${regionData.BEZ}`)} {GEN}\n${selectedCompartment}: ${formatNumber(regionData.value)}`
+                  : `${t(`BEZ.${regionData.BEZ}`)} {GEN}`,
+              fill: fillColor,
+            });
           });
+        }
+      } else {
+        polygonSeries.mapPolygons.each((mapPolygon) => {
+          mapPolygon.set('fill', am5.color(theme.palette.text.disabled));
         });
       }
     }
@@ -238,11 +243,12 @@ export default function DistrictMap(): JSX.Element {
     formatNumber,
     data,
     theme,
+    isFetching,
     legend,
   ]);
 
   return (
-    <>
+    <LoadingContainer show={isFetching} overlayColor={theme.palette.background.default}>
       <Box id='mapdiv' height={'650px'} />
       <Grid container px={1}>
         <Grid item container xs={11} alignItems='flex-end'>
@@ -273,7 +279,7 @@ export default function DistrictMap(): JSX.Element {
           <HeatLegendEdit />
         </Grid>
       </Grid>
-    </>
+    </LoadingContainer>
   );
 }
 
