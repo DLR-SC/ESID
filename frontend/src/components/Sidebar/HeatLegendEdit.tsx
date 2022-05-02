@@ -2,6 +2,7 @@ import React, {useEffect} from 'react';
 import {useTheme} from '@mui/material/styles';
 import {
   Box,
+  Button,
   Dialog,
   FormControl,
   Grid,
@@ -9,6 +10,7 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
+  Tooltip,
   Typography,
 } from '@mui/material';
 import HeatLegend from './HeatLegend';
@@ -36,9 +38,6 @@ export default function HeatLegendEdit(): JSX.Element {
 
   //modal state
   const [heatLegendEditOpen, setHeatLegendEditOpen] = React.useState(false);
-  const heatLegendEditClicked = () => {
-    setHeatLegendEditOpen(true);
-  };
 
   const handleChange = (event: SelectChangeEvent) => {
     const preset = presets.find((preset) => preset.name == event.target.value);
@@ -107,9 +106,17 @@ export default function HeatLegendEdit(): JSX.Element {
 
   return (
     <>
-      <IconButton onClick={heatLegendEditClicked} aria-label={t('heatlegend.edit')} size='small'>
-        <EditIcon />
-      </IconButton>
+      <Tooltip title={t('heatlegend.edit').toString()} placement='right' arrow>
+        <IconButton
+          color={'primary'}
+          onClick={() => setHeatLegendEditOpen(true)}
+          aria-label={t('heatlegend.edit')}
+          size='small'
+          sx={{padding: theme.spacing(0), marginBottom: theme.spacing(1)}}
+        >
+          <EditIcon />
+        </IconButton>
+      </Tooltip>
       <Dialog maxWidth='lg' fullWidth={true} open={heatLegendEditOpen} onClose={() => setHeatLegendEditOpen(false)}>
         <Box
           sx={{
@@ -117,7 +124,7 @@ export default function HeatLegendEdit(): JSX.Element {
             background: theme.palette.background.paper,
           }}
         >
-          <FormControl fullWidth>
+          <FormControl fullWidth sx={{marginBottom: theme.spacing(3)}}>
             <Select id='heatmap-select' aria-label={t('heatlegend.select')} value={legend.name} onChange={handleChange}>
               {presets.map((preset, i) => (
                 <MenuItem key={'legendPresetSelect' + i.toString()} value={preset.name}>
@@ -130,7 +137,7 @@ export default function HeatLegendEdit(): JSX.Element {
                         }}
                         min={0}
                         max={preset.steps[preset.steps.length - 1].value}
-                        noText={preset.isNormalized}
+                        displayText={!preset.isNormalized}
                         id={preset.name}
                       />
                     </Grid>
@@ -144,6 +151,11 @@ export default function HeatLegendEdit(): JSX.Element {
               ))}
             </Select>
           </FormControl>
+          <Grid container item justifyContent={'flex-end'}>
+            <Button variant='contained' onClick={() => setHeatLegendEditOpen(false)}>
+              {t('okay')}
+            </Button>
+          </Grid>
         </Box>
       </Dialog>
     </>

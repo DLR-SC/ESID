@@ -34,7 +34,7 @@
     rkiData: 'RKI-Daten',
   },
   heatlegend: {
-    edit: 'Farblegende der Choroplethenkarte bearbeiten',
+    edit: 'Farblegende bearbeiten',
     lock: 'Maximalwert feststellen',
     select: 'Farblegende auswählen',
   },
@@ -46,4 +46,5 @@
   WIP: 'Diese Funktionalität befindet sich noch in der Entwicklung.',
   'no-data': 'Keine Daten',
   'dlr-logo': 'DLR-Logo',
+  okay: 'Okay'
 }
