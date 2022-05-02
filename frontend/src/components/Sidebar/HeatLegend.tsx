@@ -12,7 +12,7 @@ export default function HeatLegend(props: {
   exposeLegend: (legend: am5.HeatLegend | null) => void;
   min: number;
   max: number;
-  noText: boolean;
+  displayText: boolean;
   id: string;
 }): JSX.Element {
   const id = props.id + String(Date.now() + Math.random()); // "guarantee" unique id
@@ -26,9 +26,9 @@ export default function HeatLegend(props: {
       am5.HeatLegend.new(root, {
         orientation: 'horizontal',
         startValue: props.min,
-        startText: props.noText ? ' ' : formatNumber(props.min),
+        startText: props.displayText ? formatNumber(props.min) : ' ',
         endValue: props.max,
-        endText: props.noText ? ' ' : formatNumber(props.max),
+        endText: props.displayText ? formatNumber(props.max) : ' ',
         // set start & end color to paper background as gradient is overwritten later and this sets the tooltip background color
         startColor: am5.color(theme.palette.background.paper),
         endColor: am5.color(theme.palette.background.paper),
