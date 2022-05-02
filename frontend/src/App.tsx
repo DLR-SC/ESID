@@ -126,6 +126,7 @@ const theme = createTheme({
   },
   spacing: [0, 4, 8, 12, 26],
   custom: {
+    //scenario colors with gradations, so the main color of a scenario is at [scenario_index][0]
     scenarios: [
       ['#3998DB', '#65B0E5', '#7ECFF2', '#B8EAFF', '#8C8C8C'],
       ['#876BE3', '#9C85E5', '#9AA3F5', '#C2C8FF', '#8C8C8C'],
