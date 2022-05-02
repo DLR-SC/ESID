@@ -5,7 +5,7 @@ import * as am5map from '@amcharts/amcharts5/map';
 import {useTranslation} from 'react-i18next';
 import {useAppDispatch, useAppSelector} from '../../store/hooks';
 import {selectDistrict} from '../../store/DataSelectionSlice';
-import {Box, Grid, ToggleButton} from '@mui/material';
+import {Box, Grid, IconButton, Tooltip} from '@mui/material';
 import LockIcon from '@mui/icons-material/Lock';
 import {useGetSimulationDataByDateQuery} from 'store/services/scenarioApi';
 import HeatLegend from './HeatLegend';
@@ -57,11 +57,11 @@ export default function DistrictMap(): JSX.Element {
   const theme = useTheme();
   const dispatch = useAppDispatch();
   //const lastSelectedPolygon = useRef<am5map.MapPolygon | null>(null);
-  const [fixedLegendMaxValue, setFixedLegendMaxValue] = useState<number>(-1);
+  const [fixedLegendMaxValue, setFixedLegendMaxValue] = useState<number | null>(null);
 
   // use Memoized to store aggregated max and only recalculate if parameters change
   const aggregatedMax: number = useMemo(() => {
-    if (fixedLegendMaxValue != -1) {
+    if (fixedLegendMaxValue) {
       return fixedLegendMaxValue;
     }
     let max = 0;
@@ -254,23 +254,22 @@ export default function DistrictMap(): JSX.Element {
             }}
             min={0}
             max={legend.isNormalized ? aggregatedMax : legend.steps[legend.steps.length - 1].value}
-            noText={false}
+            displayText={true}
             id={'legend'}
           />
         </Grid>
         <Grid item container justifyContent='center' xs={1}>
-          <ToggleButton
-            aria-label={t('heatlegend.lock')}
-            value='check'
-            selected={fixedLegendMaxValue != -1}
-            onChange={() => {
-              setFixedLegendMaxValue(fixedLegendMaxValue == -1 ? aggregatedMax : -1);
-            }}
-            size='small'
-            sx={{border: 0, borderRadius: '100%', '&.Mui-selected': {backgroundColor: 'transparent'}}}
-          >
-            {fixedLegendMaxValue != -1 ? <LockIcon /> : <LockOpen />}
-          </ToggleButton>
+          <Tooltip title={t('heatlegend.lock').toString()} placement='right' arrow>
+            <IconButton
+              color={'primary'}
+              aria-label={t('heatlegend.lock')}
+              onClick={() => setFixedLegendMaxValue(fixedLegendMaxValue ? null : aggregatedMax)}
+              size='small'
+              sx={{padding: theme.spacing(0)}}
+            >
+              {fixedLegendMaxValue ? <LockIcon /> : <LockOpen />}
+            </IconButton>
+          </Tooltip>
           <HeatLegendEdit />
         </Grid>
       </Grid>
