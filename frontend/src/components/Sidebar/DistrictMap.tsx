@@ -205,17 +205,17 @@ export default function DistrictMap(): JSX.Element {
             const regionData = polygon.dataItem?.dataContext as IRegionPolygon;
             regionData.value = dataMapped.get(regionData.RS) || Number.NaN;
 
-          // determine fill color
-          let fillColor = am5.color(theme.palette.background.default);
-          if (Number.isFinite(regionData.value)) {
-            if (legend.steps[0].value == 0 && legend.steps[legend.steps.length - 1].value == 1) {
-              // if legend is normalized, also pass mix & max to color function
-              fillColor = getColorFromLegend(regionData.value, legend, {min: 0, max: aggregatedMax});
-            } else {
-              // if legend is not normalized, min & max are first and last stop of legend and don't need to be passed
-              fillColor = getColorFromLegend(regionData.value, legend);
+            // determine fill color
+            let fillColor = am5.color(theme.palette.background.default);
+            if (Number.isFinite(regionData.value)) {
+              if (legend.steps[0].value == 0 && legend.steps[legend.steps.length - 1].value == 1) {
+                // if legend is normalized, also pass mix & max to color function
+                fillColor = getColorFromLegend(regionData.value, legend, {min: 0, max: aggregatedMax});
+              } else {
+                // if legend is not normalized, min & max are first and last stop of legend and don't need to be passed
+                fillColor = getColorFromLegend(regionData.value, legend);
+              }
             }
-          }
 
             polygon.setAll({
               tooltipText:
