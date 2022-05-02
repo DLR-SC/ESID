@@ -28,7 +28,7 @@ router.registry.extend(api_router.registry)
 
 urlpatterns = []
 
-if os.getenv('DJANGO_SETTINGS_MODULE', 'src.config.local'):
+if os.getenv('DJANGO_SETTINGS_MODULE', 'src.config.local') == 'src.config.local':
     from django.urls import include, path
     urlpatterns += [path('__debug__/', include('debug_toolbar.urls'))]
 
