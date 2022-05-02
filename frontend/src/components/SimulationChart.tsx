@@ -217,10 +217,10 @@ export default function SimulationChart(): JSX.Element {
       const percentileSeries = chartRef.current.map.getKey('percentiles') as am4charts.LineSeries;
       if (
         percentileSeries.fill !==
-        am4core.color(theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length])
+        am4core.color(theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0])
       ) {
         percentileSeries.fill = am4core.color(
-          theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length]
+          theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0]
         );
       }
 
@@ -248,7 +248,7 @@ export default function SimulationChart(): JSX.Element {
               text.push(
                 `<th 
                 style='text-align:left; color:${
-                  theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length]
+                  theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0]
                 }; padding-right:${theme.spacing(2)}'>
                 <strong>${scenarioList.scenarios[selectedScenario].label} p25</strong>
                 </th>`
@@ -263,7 +263,7 @@ export default function SimulationChart(): JSX.Element {
               text.push(
                 `<th 
                 style='text-align:left; color:${
-                  theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length]
+                  theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0]
                 }; padding-right:${theme.spacing(2)}'>
                 <strong>${scenarioList.scenarios[selectedScenario].label} p75</strong>
                 </th>`
