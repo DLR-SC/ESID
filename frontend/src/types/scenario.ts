@@ -4,10 +4,11 @@ export interface SimulationModels {
   count: number;
   previous: string | null;
   next: string | null;
-  results: Array<{url: string; name: string}>;
+  results: Array<{key: string; name: string}>;
 }
 
 export interface SimulationModel {
+  key: string;
   name: string;
   description: string;
   parameters: Array<string>;
@@ -32,15 +33,9 @@ export interface SimulationMetaData {
 }
 
 export interface SimulationDataByDate {
-  count: number;
-  previous: string | null;
-  next: string | null;
   results: Array<{name: string; compartments: Dictionary<number>}>;
 }
 
 export interface SimulationDataByNode {
-  count: number;
-  previous: string | null;
-  next: string | null;
   results: Array<{day: string; compartments: Dictionary<number>}>;
 }
