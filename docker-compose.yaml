@@ -9,7 +9,7 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       PGDATA: /data/postgres
     volumes:
-      - postgres-data2:/data/postgres
+      - postgres-data:/data/postgres
 
   pgadmin:
     image: dpage/pgadmin4:latest
@@ -18,7 +18,7 @@ services:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
     ports:
-      - '5050:80'
+      - 5050:80
     volumes:
       - pgadmin-data:/var/lib/pgadmin
     depends_on:
@@ -27,7 +27,7 @@ services:
   backend:
     image: esid/backend:latest
     restart: always
-    env_file: backend/.env.production
+    env_file: backend/.env
     environment:
       DB_HOST: db
       DB_PORT: 5432
@@ -52,18 +52,18 @@ services:
     build:
       context: frontend/
     environment:
-      API_HOST: backend
-      API_PORT: 8000
+      PROXY_HOST: backend
+      PROXY_PORT: 8000
       HOST: ${HOST}
     ports:
-      - '8080:80'
+      - 8080:80
     depends_on:
       - backend
 
 volumes:
   django-data:
     external: True
-  postgres-data2:
+  postgres-data:
     external: True
   pgadmin-data:
     external: True
