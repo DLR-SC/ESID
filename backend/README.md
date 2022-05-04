@@ -147,7 +147,7 @@ python manage.py import_rki <path to folder or zip>
 or
 
 ```bash
-USER_ID=$(id -u) GROUP_ID=$(id -g) docker-compose -f docker-compose.dev.yml run --rm web python manage.py import_rki <path to folder or zip>
+USER_ID=$(id -u) GROUP_ID=$(id -g) docker-compose -f docker-compose.dev.yml run --rm backend python manage.py import_rki <path to folder or zip>
 ```
 
 ### Running Tests
@@ -161,7 +161,7 @@ python manage.py test
 or
 
 ```bash
-USER_ID=$(id -u) GROUP_ID=$(id -g) docker-compose -f docker-compose.dev.yml run --rm web python manage.py test
+USER_ID=$(id -u) GROUP_ID=$(id -g) docker-compose -f docker-compose.dev.yml run --rm backend python manage.py test
 ```
 
 ## Endpoints
