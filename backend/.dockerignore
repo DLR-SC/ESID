@@ -1,0 +1,12 @@
+.*
+!.coveragerc
+!.env
+
+
+deploy.sh
+docker-compose.yml
+docker-compose-swarm.yml
+Dockerfile
+
+README.md
+
