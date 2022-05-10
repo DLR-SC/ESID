@@ -42,6 +42,11 @@
   chart: {
     rkiData: 'RKI Data',
   },
+  heatlegend: {
+    edit: 'Edit heatmap colors',
+    lock: 'Lock maximum value',
+    select: 'Select heatmap preset',
+  },
   today: 'Today',
   more: 'More',
   less: 'Less',
@@ -56,4 +61,5 @@
     diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata\
     sanctus est Lorem ipsum dolor sit amet.',
   WIP: 'This functionality is still work in progress.',
+  okay: 'Okay',
 }

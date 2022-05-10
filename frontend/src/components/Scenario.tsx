@@ -255,7 +255,7 @@ export default function Scenario(): JSX.Element {
             key={i}
             scenario={scenario}
             active={activeScenario === i + 1}
-            color={theme.custom.scenarios[i]}
+            color={theme.custom.scenarios[i][0]}
             selectedProperty={selectedCompartment || ''}
             expandProperties={expandProperties}
             scrollTop={scrollTop}

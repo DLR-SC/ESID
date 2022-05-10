@@ -111,7 +111,7 @@ export default function SimulationChart(): JSX.Element {
       series.dataFields.dateX = 'date';
       series.id = scenarioId;
       series.strokeWidth = 2;
-      series.fill = am4core.color(theme.custom.scenarios[i % theme.custom.scenarios.length]); // loop around the color list if scenarios exceed color list
+      series.fill = am4core.color(theme.custom.scenarios[i % theme.custom.scenarios.length][0]); // loop around the color list if scenarios exceed color list
       series.stroke = series.fill;
       series.tooltipText = `[bold ${series.stroke.hex}]${scenario.label}:[/] {${scenarioId}}`;
       series.name = scenario.label;
@@ -123,7 +123,7 @@ export default function SimulationChart(): JSX.Element {
         seriesSTD.dataFields.dateX = 'date';
         seriesSTD.strokeWidth = 0;
         seriesSTD.fillOpacity = 0.3;
-        series.fill = am4core.color(theme.custom.scenarios[i % theme.custom.scenarios.length]); // loop around the color list if scenarios exceed color list
+        series.fill = am4core.color(theme.custom.scenarios[i % theme.custom.scenarios.length][0]); // loop around the color list if scenarios exceed color list
         series.stroke = series.fill;
         // override tooltip
         series.tooltipText = `${scenario.label}: [bold]{${scenarioId}STDdown} ~ {${scenarioId}STDup}[/]`;
@@ -217,10 +217,10 @@ export default function SimulationChart(): JSX.Element {
       const percentileSeries = chartRef.current.map.getKey('percentiles') as am4charts.LineSeries;
       if (
         percentileSeries.fill !==
-        am4core.color(theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length])
+        am4core.color(theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0])
       ) {
         percentileSeries.fill = am4core.color(
-          theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length]
+          theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0]
         );
       }
 
@@ -248,7 +248,7 @@ export default function SimulationChart(): JSX.Element {
               text.push(
                 `<th 
                 style='text-align:left; color:${
-                  theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length]
+                  theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0]
                 }; padding-right:${theme.spacing(2)}'>
                 <strong>${scenarioList.scenarios[selectedScenario].label} p25</strong>
                 </th>`
@@ -263,7 +263,7 @@ export default function SimulationChart(): JSX.Element {
               text.push(
                 `<th 
                 style='text-align:left; color:${
-                  theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length]
+                  theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0]
                 }; padding-right:${theme.spacing(2)}'>
                 <strong>${scenarioList.scenarios[selectedScenario].label} p75</strong>
                 </th>`

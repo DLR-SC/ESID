@@ -4,33 +4,31 @@ import {Box} from '@mui/material';
 import * as am5 from '@amcharts/amcharts5';
 import {useTranslation} from 'react-i18next';
 import {NumberFormatter} from 'util/hooks';
-
-interface IHeatmapLegendItem {
-  color: string;
-  value: number;
-}
+import {HeatmapLegend} from '../../types/heatmapLegend';
 
 export default function HeatLegend(props: {
   // add is_dynamic/absolute?
-  legend: IHeatmapLegendItem[];
+  legend: HeatmapLegend;
   exposeLegend: (legend: am5.HeatLegend | null) => void;
   min: number;
   max: number;
-  isNormalized: boolean;
+  displayText: boolean;
+  id: string;
 }): JSX.Element {
+  const id = props.id + String(Date.now() + Math.random()); // "guarantee" unique id
   const {i18n: i18n} = useTranslation();
   const {formatNumber} = NumberFormatter(i18n.language, 3, 8);
   const theme = useTheme();
 
   useEffect(() => {
-    const root = am5.Root.new('legend');
+    const root = am5.Root.new(id);
     const heatLegend = root.container.children.push(
       am5.HeatLegend.new(root, {
         orientation: 'horizontal',
         startValue: props.min,
-        startText: formatNumber(props.min),
+        startText: props.displayText ? formatNumber(props.min) : ' ',
         endValue: props.max,
-        endText: formatNumber(props.max),
+        endText: props.displayText ? formatNumber(props.max) : ' ',
         // set start & end color to paper background as gradient is overwritten later and this sets the tooltip background color
         startColor: am5.color(theme.palette.background.paper),
         endColor: am5.color(theme.palette.background.paper),
@@ -39,13 +37,13 @@ export default function HeatLegend(props: {
 
     // compile stop list
     const stoplist: {color: am5.Color; opacity: number; offset: number}[] = [];
-    props.legend.forEach((item) => {
+    props.legend.steps.forEach((item) => {
       stoplist.push({
         color: am5.color(item.color),
         // opacity of the color between 0..1
         opacity: 1,
         // offset is stop position normalized to 0..1 unless already nomalized
-        offset: props.isNormalized ? item.value : (item.value - props.min) / (props.max - props.min),
+        offset: props.legend.isNormalized ? item.value : (item.value - props.min) / (props.max - props.min),
       });
     });
     heatLegend.markers.template.adapters.add('fillGradient', (gradient) => {
@@ -60,12 +58,13 @@ export default function HeatLegend(props: {
       root.dispose();
       props.exposeLegend(null);
     };
-  }, [props, formatNumber, theme]);
+  }, [props, formatNumber, theme, id]);
 
   return (
     <Box
-      id='legend'
+      id={id}
       sx={{
+        width: '100%',
         margin: '5px',
         height: '50px',
       }}
