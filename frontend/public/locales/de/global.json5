@@ -29,6 +29,8 @@
   scenario: {
     add: 'Szenario hinzufügen',
     more: 'Mehr Eigenschaften',
+    activate: 'Scenario aktivieren',
+    deactivate: 'Scenario deaktivieren',
   },
   chart: {
     rkiData: 'RKI-Daten',

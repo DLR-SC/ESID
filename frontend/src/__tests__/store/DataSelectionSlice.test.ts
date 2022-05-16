@@ -6,6 +6,7 @@ describe('DataSelectionSlice', () => {
     date: null,
     scenario: null,
     compartment: null,
+    activeScenarios: [],
     minDate: null,
     maxDate: null,
   };
@@ -21,6 +22,7 @@ describe('DataSelectionSlice', () => {
       date: null,
       scenario: null,
       compartment: null,
+      activeScenarios: [],
       minDate: null,
       maxDate: null,
     });
@@ -33,6 +35,7 @@ describe('DataSelectionSlice', () => {
       date: '2020-09-21',
       scenario: null,
       compartment: null,
+      activeScenarios: [],
       minDate: null,
       maxDate: null,
     });
@@ -44,6 +47,7 @@ describe('DataSelectionSlice', () => {
       date: null,
       scenario: 1,
       compartment: null,
+      activeScenarios: [],
       minDate: null,
       maxDate: null,
     });
@@ -55,6 +59,7 @@ describe('DataSelectionSlice', () => {
       date: null,
       scenario: null,
       compartment: 'Test Compartment',
+      activeScenarios: [],
       minDate: null,
       maxDate: null,
     });

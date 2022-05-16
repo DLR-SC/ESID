@@ -195,10 +195,9 @@ export default function DistrictMap(): JSX.Element {
 
   // set Data
   useEffect(() => {
-    if (chartRef.current && chartRef.current.series.length > 0 && selectedCompartment && selectedScenario) {
+    if (chartRef.current && chartRef.current.series.length > 0) {
       const polygonSeries = chartRef.current.series.getIndex(0) as am5map.MapPolygonSeries;
-
-      if (!isFetching) {
+      if (selectedScenario && selectedCompartment && !isFetching) {
         // Map compartment value to RS
         const dataMapped = new Map<string, number>();
         data?.results.forEach((entry) => {
@@ -225,7 +224,7 @@ export default function DistrictMap(): JSX.Element {
 
             polygon.setAll({
               tooltipText:
-                scenarioList[selectedScenario] && selectedCompartment
+                selectedScenario && selectedCompartment
                   ? `${t(`BEZ.${regionData.BEZ}`)} {GEN}\n${selectedCompartment}: ${formatNumber(regionData.value)}`
                   : `${t(`BEZ.${regionData.BEZ}`)} {GEN}`,
               fill: fillColor,
@@ -233,8 +232,13 @@ export default function DistrictMap(): JSX.Element {
           });
         }
       } else {
-        polygonSeries.mapPolygons.each((mapPolygon) => {
-          mapPolygon.set('fill', am5.color(theme.palette.text.disabled));
+        polygonSeries.mapPolygons.each((polygon) => {
+          const regionData = polygon.dataItem?.dataContext as IRegionPolygon;
+          regionData.value = Number.NaN;
+          polygon.setAll({
+            tooltipText: `${t(`BEZ.${regionData.BEZ}`)} {GEN}`,
+            fill: am5.color(theme.palette.text.disabled),
+          });
         });
       }
     }

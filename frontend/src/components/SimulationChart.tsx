@@ -36,6 +36,7 @@ export default function SimulationChart(): JSX.Element {
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
   const selectedDate = useAppSelector((state) => state.dataSelection.date);
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
+  const activeScenarios = useAppSelector((state) => state.dataSelection.activeScenarios);
   const dispatch = useAppDispatch();
   const {data: rkiData, isFetching: rkiFetching} = useGetRkiByDistrictQuery(
     {
@@ -45,11 +46,12 @@ export default function SimulationChart(): JSX.Element {
     },
     {skip: !selectedCompartment}
   );
-
   const {data: simulationData, isFetching: simulationFetching} = useGetMultipleSimulationDataByNodeQuery(
     {
-      // take scenario ids and flatten them into array
+      //take scenario ids and flatten them into array
       ids: Object.entries(scenarioList.scenarios).map(([, scn]) => scn.id),
+      //TODO only fetch active scenarios
+      //ids: activeScenarios,
       node: selectedDistrict,
       group: '',
       compartments: [selectedCompartment ?? ''],
@@ -145,6 +147,36 @@ export default function SimulationChart(): JSX.Element {
     };
   }, [scenarioList, dispatch, i18n.language, t, theme]);
 
+  //Effect to hide disabled scenarios (and show them again if not hidden anymore)
+  useEffect(() => {
+    const allSeries = chartRef.current?.series;
+    if (allSeries) {
+      allSeries.each((series) => {
+        if (scenarioList.scenarios[+series.id] && !activeScenarios.includes(+series.id)) {
+          series.hide();
+        } else {
+          series.show();
+        }
+      });
+    }
+  }, [scenarioList.scenarios, activeScenarios]);
+
+  //effect to hide deviations if no scenario is selected
+  useEffect(() => {
+    const allSeries = chartRef.current?.series;
+    if (allSeries) {
+      allSeries.each((series) => {
+        if (series.id == 'percentiles') {
+          if (selectedScenario) {
+            series.show();
+          } else {
+            series.hide();
+          }
+        }
+      });
+    }
+  }, [selectedScenario]);
+
   // Effect to add Guide when date selected
   useEffect(() => {
     if (chartRef.current && selectedDate) {
@@ -192,10 +224,12 @@ export default function SimulationChart(): JSX.Element {
       const dataMap = new Map<string, {[key: string]: number}>();
 
       // cycle through scenarios
-      Object.entries(scenarioList.scenarios).forEach(([scenarioId, scenario]) => {
-        simulationData[scenario.id].results.forEach(({day, compartments}) => {
-          dataMap.set(day, {...dataMap.get(day), [scenarioId]: compartments[selectedCompartment]});
-        });
+      activeScenarios.forEach((scenarioId) => {
+        if (simulationData[scenarioId]) {
+          simulationData[scenarioId].results.forEach(({day, compartments}) => {
+            dataMap.set(day, {...dataMap.get(day), [scenarioId]: compartments[selectedCompartment]});
+          });
+        }
       });
 
       // add rki values
@@ -237,13 +271,19 @@ export default function SimulationChart(): JSX.Element {
 
       // set up tooltip
       // TODO: HTML Tooltip
+
       chartRef.current.series.each((series) => {
         series.adapter.add('tooltipHTML', (_, target) => {
           const data = target.tooltipDataItem.dataContext;
           const text = [`<strong>{date.formatDate("${t('dateFormat')}")} (${selectedCompartment})</strong>`];
           text.push('<table>');
           chartRef.current?.series.each((s) => {
-            if (s.dataFields.openValueY && s.dataFields.valueY && scenarioList.scenarios[selectedScenario]) {
+            if (
+              s.dataFields.openValueY &&
+              s.dataFields.valueY &&
+              scenarioList.scenarios[selectedScenario] &&
+              !s.isHidden
+            ) {
               text.push('<tr>');
               text.push(
                 `<th 
@@ -274,7 +314,7 @@ export default function SimulationChart(): JSX.Element {
                 )}</td>`
               );
               text.push('</tr>');
-            } else if (s.dataFields.valueY && (data as {[key: string]: number | string})[s.dataFields.valueY]) {
+            } else if (s.dataFields.valueY && data && (data as {[key: string]: number | string})[s.dataFields.valueY]) {
               text.push('<tr>');
               text.push(
                 `<th 
@@ -307,6 +347,7 @@ export default function SimulationChart(): JSX.Element {
       chartRef.current.invalidateData();
     }
   }, [
+    activeScenarios,
     selectedScenario,
     percentileData,
     simulationData,
