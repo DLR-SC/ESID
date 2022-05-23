@@ -6,9 +6,10 @@ import './App.scss';
 import TopBar from './components/TopBar';
 import Sidebar from './components/Sidebar';
 import MainContent from './components/MainContent';
-import Store from './store';
+import {Store, Persistor} from './store';
 import {Box} from '@mui/material';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
+import {PersistGate} from 'redux-persist/integration/react';
 
 // add List Element typography using module augmentation
 declare module '@mui/material/styles' {
@@ -149,13 +150,15 @@ export default function App(): JSX.Element {
     <Suspense fallback='loading'>
       <Provider store={Store}>
         <ThemeProvider theme={theme}>
-          <Box id='app' display='flex' flexDirection='column' style={{height: '100%'}}>
-            <TopBar />
-            <Box display='flex' flexDirection='row' flexGrow={1} alignItems='stretch'>
-              <Sidebar />
-              <MainContent />
+          <PersistGate loading={null} persistor={Persistor}>
+            <Box id='app' display='flex' flexDirection='column' style={{height: '100%'}}>
+              <TopBar />
+              <Box display='flex' flexDirection='row' flexGrow={1} alignItems='stretch'>
+                <Sidebar />
+                <MainContent />
+              </Box>
             </Box>
-          </Box>
+          </PersistGate>
         </ThemeProvider>
       </Provider>
     </Suspense>

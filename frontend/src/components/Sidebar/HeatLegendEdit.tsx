@@ -47,53 +47,56 @@ export default function HeatLegendEdit(): JSX.Element {
   };
 
   useEffect(() => {
-    // get heatmap legend preset list from assets and select default
-    fetch('assets/heatmap_legend_presets.json', {
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-    })
-      .then((response) => {
-        // interpret content as JSON
-        return response.json();
-      })
-      .then(
-        // Resolve Promise
-        (presetList: HeatmapLegend[]) => {
-          presetList.forEach((legend) => {
-            if (legend.isNormalized) {
-              legend.steps.forEach((step) => {
-                //set step to normalized values
-                step.value = step.value / legend.steps[legend.steps.length - 1].value;
-              });
-            }
-          });
-          //create default legends
-          const defaultLegends: HeatmapLegend[] = [];
-          const stepCount = theme.custom.scenarios[0].length - 1;
-          for (let i = 0; i < theme.custom.scenarios.length; i++) {
-            const steps = [];
-            for (let j = 0; j < stepCount; j++) {
-              steps.push({color: theme.custom.scenarios[i][stepCount - 1 - j], value: j / (stepCount - 1)});
-            }
-            defaultLegends.push({name: 'Default', isNormalized: true, steps});
-          }
-          dispatch(setDefaultLegends({legends: defaultLegends}));
-
-          //add default preset to the front of the presetList
-          presetList.unshift(defaultLegends[0]);
-          // fill presets state with list
-          dispatch(setHeatmapLegends({legends: presetList}));
-          // select default legend
-          dispatch(selectHeatmapLegend({legend: defaultLegends[0]}));
+    if (!presets || !legend) {
+      //
+      // get heatmap legend preset list from assets and select default
+      fetch('assets/heatmap_legend_presets.json', {
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
         },
-        // Reject Promise
-        () => {
-          console.warn('Did not receive proper heatmap legend presets');
-        }
-      );
-    // this init should only run once on first render
+      })
+        .then((response) => {
+          // interpret content as JSON
+          return response.json();
+        })
+        .then(
+          // Resolve Promise
+          (presetList: HeatmapLegend[]) => {
+            presetList.forEach((legend) => {
+              if (legend.isNormalized) {
+                legend.steps.forEach((step) => {
+                  //set step to normalized values
+                  step.value = step.value / legend.steps[legend.steps.length - 1].value;
+                });
+              }
+            });
+            //create default legends
+            const defaultLegends: HeatmapLegend[] = [];
+            const stepCount = theme.custom.scenarios[0].length - 1;
+            for (let i = 0; i < theme.custom.scenarios.length; i++) {
+              const steps = [];
+              for (let j = 0; j < stepCount; j++) {
+                steps.push({color: theme.custom.scenarios[i][stepCount - 1 - j], value: j / (stepCount - 1)});
+              }
+              defaultLegends.push({name: 'Default', isNormalized: true, steps});
+            }
+            dispatch(setDefaultLegends({legends: defaultLegends}));
+
+            //add default preset to the front of the presetList
+            presetList.unshift(defaultLegends[0]);
+            // fill presets state with list
+            dispatch(setHeatmapLegends({legends: presetList}));
+            // select default legend
+            dispatch(selectHeatmapLegend({legend: defaultLegends[0]}));
+          },
+          // Reject Promise
+          () => {
+            console.warn('Did not receive proper heatmap legend presets');
+          }
+        );
+      // this init should only run once on first render
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

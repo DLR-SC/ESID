@@ -50,7 +50,7 @@ export default function SimulationChart(): JSX.Element {
 
   const {data: simulationData, isFetching: simulationFetching} = useGetMultipleSimulationDataByNodeQuery(
     {
-      ids: activeScenarios,
+      ids: activeScenarios ? activeScenarios : [],
       node: selectedDistrict,
       group: '',
       compartments: [selectedCompartment ?? ''],
@@ -151,7 +151,7 @@ export default function SimulationChart(): JSX.Element {
     const allSeries = chartRef.current?.series;
     if (allSeries) {
       allSeries.each((series) => {
-        if (scenarioList.scenarios[+series.id] && !activeScenarios.includes(+series.id)) {
+        if (scenarioList.scenarios[+series.id] && !activeScenarios?.includes(+series.id)) {
           series.hide();
         } else {
           series.show();
@@ -223,7 +223,7 @@ export default function SimulationChart(): JSX.Element {
       const dataMap = new Map<string, {[key: string]: number}>();
 
       // cycle through scenarios
-      activeScenarios.forEach((scenarioId) => {
+      activeScenarios?.forEach((scenarioId) => {
         if (simulationData[scenarioId]) {
           simulationData[scenarioId].results.forEach(({day, compartments}) => {
             dataMap.set(day, {...dataMap.get(day), [scenarioId]: compartments[selectedCompartment]});

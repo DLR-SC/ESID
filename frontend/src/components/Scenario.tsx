@@ -1,8 +1,8 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useAppDispatch, useAppSelector} from '../store/hooks';
 import {useTheme} from '@mui/material/styles';
 import {useTranslation} from 'react-i18next';
-import {selectCompartment, selectDate, selectScenario, setMinMaxDates, toggleScenario} from 'store/DataSelectionSlice';
+import {selectCompartment, selectScenario, setMinMaxDates, toggleScenario} from 'store/DataSelectionSlice';
 import ScenarioCard from './ScenarioCard';
 import {Box, Button, List, ListItemButton, ListItemText, Typography} from '@mui/material';
 import {
@@ -10,7 +10,6 @@ import {
   useGetSimulationModelsQuery,
   useGetSimulationsQuery,
 } from '../store/services/scenarioApi';
-import {useEffect} from 'react';
 import {setCompartments, setScenarios} from 'store/ScenarioSlice';
 import {dateToISOString, Dictionary} from 'util/util';
 import {useGetRkiSingleSimulationEntryQuery} from '../store/services/rkiApi';
@@ -94,9 +93,11 @@ export default function Scenario(): JSX.Element {
       dispatch(setScenarios(scenarios));
 
       //activate all scenarios initially
-      scenarios.forEach((scenario) => {
-        dispatch(toggleScenario(scenario.id));
-      });
+      if (!activeScenarios) {
+        scenarios.forEach((scenario) => {
+          dispatch(toggleScenario(scenario.id));
+        });
+      }
 
       if (scenarios.length > 0) {
         // It seems, that the simulation data is only available from the second day forward.
@@ -107,18 +108,18 @@ export default function Scenario(): JSX.Element {
         endDay.setDate(endDay.getDate() + scenarioListData.results[0].numberOfDays - 1);
 
         dispatch(setMinMaxDates({minDate: dateToISOString(startDay), maxDate: dateToISOString(endDay)}));
-        dispatch(selectDate(dateToISOString(endDay)));
-        dispatch(selectScenario(scenarios[0].id));
       }
     }
-  }, [scenarioListData, dispatch]);
+  }, [activeScenarios, scenarioListData, dispatch]);
 
   //effect to switch active scenario
   useEffect(() => {
-    if (activeScenarios.length == 0) {
-      dispatch(selectScenario(null));
-    } else if (!selectedScenario || !activeScenarios.includes(selectedScenario)) {
-      dispatch(selectScenario(activeScenarios[0]));
+    if (activeScenarios) {
+      if (activeScenarios.length == 0) {
+        dispatch(selectScenario(null));
+      } else if (!selectedScenario || !activeScenarios.includes(selectedScenario)) {
+        dispatch(selectScenario(activeScenarios[0]));
+      }
     }
   }, [activeScenarios, selectedScenario, dispatch]);
 
@@ -270,7 +271,7 @@ export default function Scenario(): JSX.Element {
             key={i}
             scenario={scenario}
             selected={selectedScenario === scenario.id}
-            active={activeScenarios.includes(scenario.id)}
+            active={!!activeScenarios && activeScenarios.includes(scenario.id)}
             color={theme.custom.scenarios[i][0]}
             selectedProperty={selectedCompartment || ''}
             expandProperties={expandProperties}
