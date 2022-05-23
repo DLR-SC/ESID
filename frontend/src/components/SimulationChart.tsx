@@ -38,6 +38,7 @@ export default function SimulationChart(): JSX.Element {
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
   const activeScenarios = useAppSelector((state) => state.dataSelection.activeScenarios);
   const dispatch = useAppDispatch();
+
   const {data: rkiData, isFetching: rkiFetching} = useGetRkiByDistrictQuery(
     {
       node: selectedDistrict,
@@ -46,12 +47,10 @@ export default function SimulationChart(): JSX.Element {
     },
     {skip: !selectedCompartment}
   );
+
   const {data: simulationData, isFetching: simulationFetching} = useGetMultipleSimulationDataByNodeQuery(
     {
-      //take scenario ids and flatten them into array
-      ids: Object.entries(scenarioList.scenarios).map(([, scn]) => scn.id),
-      //TODO only fetch active scenarios
-      //ids: activeScenarios,
+      ids: activeScenarios,
       node: selectedDistrict,
       group: '',
       compartments: [selectedCompartment ?? ''],
@@ -282,7 +281,8 @@ export default function SimulationChart(): JSX.Element {
               s.dataFields.openValueY &&
               s.dataFields.valueY &&
               scenarioList.scenarios[selectedScenario] &&
-              !s.isHidden
+              !s.isHidden &&
+              data
             ) {
               text.push('<tr>');
               text.push(
