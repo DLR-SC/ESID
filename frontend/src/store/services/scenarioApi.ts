@@ -30,6 +30,32 @@ export const scenarioApi = createApi({
       },
     }),
 
+    getMultipleSimulationDataByDate: builder.query<SimulationDataByDate[], MultipleSimulationDataByDateParameters>({
+      async queryFn(arg, _queryApi, _extraOptions, fetchWithBQ) {
+        const group = arg.group || 'total';
+        const compartments = arg.compartments ? `&compartments=${arg.compartments.join(',')}` : '';
+        const url = (id:number, limit: number, offset: number) =>
+          `simulation/${id}/${arg.day}/${group}/?limit=${limit}&offset=${offset}${compartments}`;
+      
+        const result: SimulationDataByDate[] = [];
+
+        // fetch simulation data for each id
+        for (const id of arg.ids) {  
+           // fetch first entry to get total count
+           const preResult = await fetchWithBQ(url(id,1,0));
+           // return if errors occur
+           if (preResult.error) return {error: preResult.error};
+           const preData = preResult.data as SimulationDataByDate         
+           // fetch all enteries
+          const fullResult = await fetchWithBQ(url(id, preData.count, 0));
+          if (fullResult.error) return {error: fullResult.error};
+           // put result into list to return
+           result[id] = fullResult.data as SimulationDataByDate;
+      }
+      return {data:result};
+      },
+    }),
+
     getSimulationDataByDate: builder.query<SimulationDataByDate, SimulationDataByDateParameters>({
       async queryFn(arg, _queryApi, _extraOptions, fetchWithBQ) {
         const group = arg.group || 'total';
@@ -55,7 +81,6 @@ export const scenarioApi = createApi({
       query: (arg: SimulationDataByNodeParameters) => {
         const group = arg.group || 'total';
         const compartments = arg.compartments ? `?compartments=${arg.compartments.join(',')}` : '';
-
         return `simulation/${arg.id}/${arg.node}/${group}/${compartments}`;
       },
     }),
@@ -166,6 +191,14 @@ interface MultipleSimulationDataByNodeParameters {
   compartments: Array<string> | null;
 }
 
+interface MultipleSimulationDataByDateParameters {
+  ids: number[];
+  day: string;
+  node: string;
+  group: string | null;
+  compartments: Array<string> | null;
+}
+
 export const {
   useGetSimulationModelsQuery,
   useGetSimulationModelQuery,
@@ -174,5 +207,6 @@ export const {
   useGetSimulationDataByNodeQuery,
   useGetSingleSimulationEntryQuery,
   useGetMultipleSimulationDataByNodeQuery,
+  useGetMultipleSimulationDataByDateQuery,
   useGetPercentileDataQuery,
 } = scenarioApi;
