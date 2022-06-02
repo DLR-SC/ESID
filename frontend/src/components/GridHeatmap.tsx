@@ -184,7 +184,7 @@ export default function GridHeatmap(): JSX.Element {
     const compartmentAxis = chart.yAxes.push(
       am5xy.CategoryAxis.new(root, {
         renderer: yRenderer as am5xy.AxisRenderer,
-        categoryField: "key[1]"
+        categoryField: "compartment"
       })
     );
 
@@ -195,17 +195,23 @@ export default function GridHeatmap(): JSX.Element {
     });
 
     xRenderer.grid.template.set("visible", false);
+ 
 
     const districtAxis = chart.xAxes.push(
       am5xy.CategoryAxis.new(root, {
         renderer: xRenderer as am5xy.AxisRenderer,
-        categoryField: "key[0]"
+        categoryField: "district"
       })
     );
 
-    console.log("countyItem:", countyItem);
+    districtAxis.get("renderer").labels.template.setAll({
+      rotation: -90,
+      centerY: am5core.p50,
+      centerX: am5core.p100,
+      paddingRight: 15
+    });
     
-    const districtCategories = countyItem.map((county) => {return {category: county.RS}});
+    const districtCategories = countyItem.map((county) => {return {category: county.GEN}});
     districtAxis.data.setAll(districtCategories);
     console.log(districtCategories);
     
@@ -220,8 +226,8 @@ export default function GridHeatmap(): JSX.Element {
       clustered: false,
       xAxis: compartmentAxis,
       yAxis: districtAxis,
-      categoryXField: "key[0]",
-      categoryYField: "key[1]",
+      categoryXField: "district",
+      categoryYField: "compartment",
       valueField: "value",
     }));
 
@@ -253,7 +259,7 @@ export default function GridHeatmap(): JSX.Element {
       chartRef.current && chartRef.current.dispose();
       rootRef.current && rootRef.current.dispose();
     }; 
-  }, [scenarioList, dispatch, i18n.language, t, theme, formatNumber]);
+  }, [scenarioList, dispatch, i18n.language, t, theme, formatNumber, countyItem]);
 
 
    // Effect to update Simulation and RKI Data
@@ -286,8 +292,8 @@ export default function GridHeatmap(): JSX.Element {
           const result: any = [];
           dataMapped.forEach((value, key) => {
             result.push({
-                  'key[1]': key[1],
-                  'key[0]': key[0],
+                   'district': key[0],
+                  'compartment': key[1],
                   value: value
                 }, );
           });
@@ -356,7 +362,7 @@ export default function GridHeatmap(): JSX.Element {
         id='chartdiv'
         sx={{
           height: '100%',
-          minHeight: '200px',
+          minHeight: '700px',
           width: '100%',
           minWidth: '200px',
           margin: 0,
