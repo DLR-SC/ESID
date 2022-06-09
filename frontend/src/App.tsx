@@ -151,7 +151,7 @@ export default function App(): JSX.Element {
         <ThemeProvider theme={theme}>
           <Box id='app' display='flex' flexDirection='column' style={{height: '100%'}}>
             <TopBar />
-            <Box display='flex' flexDirection='row' flexGrow={1} alignItems='stretch'>
+            <Box display='flex' flexDirection='row' flexGrow={1}>
               <Sidebar />
               <MainContent />
             </Box>
