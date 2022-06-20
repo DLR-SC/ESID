@@ -29,9 +29,16 @@
   scenario: {
     add: 'Szenario hinzufügen',
     more: 'Mehr Eigenschaften',
+    activate: 'Scenario aktivieren',
+    deactivate: 'Scenario deaktivieren',
   },
   chart: {
     rkiData: 'RKI-Daten',
+  },
+  heatlegend: {
+    edit: 'Farblegende bearbeiten',
+    lock: 'Maximalwert feststellen',
+    select: 'Farblegende auswählen',
   },
   today: 'Heute',
   more: 'Mehr',
@@ -41,4 +48,5 @@
   WIP: 'Diese Funktionalität befindet sich noch in der Entwicklung.',
   'no-data': 'Keine Daten',
   'dlr-logo': 'DLR-Logo',
+  okay: 'Okay',
 }

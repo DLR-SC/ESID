@@ -1,21 +1,21 @@
-import React, { useEffect, useRef } from 'react';
+import React, {useEffect, useRef} from 'react';
 import * as am4core from '@amcharts/amcharts4/core';
 import * as am4charts from '@amcharts/amcharts4/charts';
 import am4lang_en_US from '@amcharts/amcharts4/lang/en_US';
 import am4lang_de_DE from '@amcharts/amcharts4/lang/de_DE';
-import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { useTheme } from '@mui/material/styles';
-import { Box } from '@mui/material';
-import { selectDate } from '../store/DataSelectionSlice';
-import { useGetRkiByDistrictQuery } from '../store/services/rkiApi';
-import { dateToISOString } from 'util/util';
+import {useAppDispatch, useAppSelector} from '../store/hooks';
+import {useTheme} from '@mui/material/styles';
+import {Box} from '@mui/material';
+import {selectDate} from '../store/DataSelectionSlice';
+import {useGetRkiByDistrictQuery} from '../store/services/rkiApi';
+import {dateToISOString} from 'util/util';
 import {
   useGetMultipleSimulationDataByNodeQuery,
   useGetPercentileDataQuery,
   PercentileDataByDay,
 } from 'store/services/scenarioApi';
-import { useTranslation } from 'react-i18next';
-import { NumberFormatter } from 'util/hooks';
+import {useTranslation} from 'react-i18next';
+import {NumberFormatter} from 'util/hooks';
 import LoadingContainer from './shared/LoadingContainer';
 
 /* This component displays the evolution of the pandemic for a specific compartment (hospitalized, dead, infected, etc.) regarding the different scenarios
@@ -29,52 +29,53 @@ const drawDeviations = false;
  * @returns {JSX.Element} JSX Element to render the scenario chart container and the scenario graph within.
  */
 export default function SimulationChart(): JSX.Element {
-  const { t, i18n } = useTranslation();
+  const {t, i18n} = useTranslation();
   const theme = useTheme();
   const scenarioList = useAppSelector((state) => state.scenarioList);
   const selectedDistrict = useAppSelector((state) => state.dataSelection.district.ags);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
   const selectedDate = useAppSelector((state) => state.dataSelection.date);
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
+  const activeScenarios = useAppSelector((state) => state.dataSelection.activeScenarios);
   const groupList = useAppSelector((state) => state.dataSelection.groups);
   const dispatch = useAppDispatch();
-  const { data: rkiData, isFetching: rkiFetching } = useGetRkiByDistrictQuery(
+  const {data: rkiData, isFetching: rkiFetching} = useGetRkiByDistrictQuery(
     {
       node: selectedDistrict,
       group: 'total',
       compartments: [selectedCompartment ?? ''],
     },
-    { skip: !selectedCompartment }
+    {skip: !selectedCompartment}
   );
 
-  const { data: simulationData, isFetching: simulationFetching } = useGetMultipleSimulationDataByNodeQuery(
+  const {data: simulationData, isFetching: simulationFetching} = useGetMultipleSimulationDataByNodeQuery(
     {
-      // take scenario ids and flatten them into array
-      ids: Object.entries(scenarioList.scenarios).map(([, scn]) => scn.id),
+      ids: activeScenarios,
       node: selectedDistrict,
       group: '',
       compartments: [selectedCompartment ?? ''],
     },
-    { skip: !selectedCompartment }
+    {skip: !selectedCompartment}
   );
 
-  const { data: percentileData } = useGetPercentileDataQuery(
+  const {data: percentileData} = useGetPercentileDataQuery(
     {
       id: selectedScenario as number,
       node: selectedDistrict,
       group: '',
       compartment: selectedCompartment as string,
     },
-    { skip: !selectedScenario || !selectedCompartment }
+    {skip: !selectedScenario || !selectedCompartment}
   );
 
-  const { formatNumber } = NumberFormatter(i18n.language, 3, 8);
+  const {formatNumber} = NumberFormatter(i18n.language, 3, 8);
 
   const chartRef = useRef<am4charts.XYChart | null>(null);
 
   useEffect(() => {
     // Create chart instance (is called when props.scenarios changes)
     const chart = am4core.create('chartdiv', am4charts.XYChart);
+
     // Set localization
     chart.language.locale = i18n.language === 'de' ? am4lang_de_DE : am4lang_en_US;
 
@@ -129,7 +130,7 @@ export default function SimulationChart(): JSX.Element {
       series.dataFields.dateX = 'date';
       series.id = scenarioId;
       series.strokeWidth = 2;
-      series.fill = am4core.color(theme.custom.scenarios[i % theme.custom.scenarios.length]); // loop around the color list if scenarios exceed color list
+      series.fill = am4core.color(theme.custom.scenarios[i % theme.custom.scenarios.length][0]); // loop around the color list if scenarios exceed color list
       series.stroke = series.fill;
       series.tooltipText = `[bold ${series.stroke.hex}]${scenario.label}:[/] {${scenarioId}}`;
       series.name = scenario.label;
@@ -141,7 +142,7 @@ export default function SimulationChart(): JSX.Element {
         seriesSTD.dataFields.dateX = 'date';
         seriesSTD.strokeWidth = 0;
         seriesSTD.fillOpacity = 0.3;
-        series.fill = am4core.color(theme.custom.scenarios[i % theme.custom.scenarios.length]); // loop around the color list if scenarios exceed color list
+        series.fill = am4core.color(theme.custom.scenarios[i % theme.custom.scenarios.length][0]); // loop around the color list if scenarios exceed color list
         series.stroke = series.fill;
         // override tooltip
         series.tooltipText = `${scenario.label}: [bold]{${scenarioId}STDdown} ~ {${scenarioId}STDup}[/]`;
@@ -162,6 +163,36 @@ export default function SimulationChart(): JSX.Element {
       chartRef.current?.dispose();
     };
   }, [scenarioList, groupList, dispatch, i18n.language, t, theme]);
+
+  //Effect to hide disabled scenarios (and show them again if not hidden anymore)
+  useEffect(() => {
+    const allSeries = chartRef.current?.series;
+    if (allSeries) {
+      allSeries.each((series) => {
+        if (scenarioList.scenarios[+series.id] && !activeScenarios.includes(+series.id)) {
+          series.hide();
+        } else {
+          series.show();
+        }
+      });
+    }
+  }, [scenarioList.scenarios, activeScenarios]);
+
+  //effect to hide deviations if no scenario is selected
+  useEffect(() => {
+    const allSeries = chartRef.current?.series;
+    if (allSeries) {
+      allSeries.each((series) => {
+        if (series.id == 'percentiles') {
+          if (selectedScenario) {
+            series.show();
+          } else {
+            series.hide();
+          }
+        }
+      });
+    }
+  }, [selectedScenario]);
 
   // Effect to add Guide when date selected
   useEffect(() => {
@@ -210,25 +241,27 @@ export default function SimulationChart(): JSX.Element {
       const dataMap = new Map<string, { [key: string]: number }>();
 
       // cycle through scenarios
-      Object.entries(scenarioList.scenarios).forEach(([scenarioId, scenario]) => {
-        simulationData[scenario.id].results.forEach(({ day, compartments }) => {
-          dataMap.set(day, { ...dataMap.get(day), [scenarioId]: compartments[selectedCompartment] });
-        });
+      activeScenarios.forEach((scenarioId) => {
+        if (simulationData[scenarioId]) {
+          simulationData[scenarioId].results.forEach(({day, compartments}) => {
+            dataMap.set(day, {...dataMap.get(day), [scenarioId]: compartments[selectedCompartment]});
+          });
+        }
       });
 
       // add rki values
       rkiData?.results.forEach((entry) => {
-        dataMap.set(entry.day, { ...dataMap.get(entry.day), rki: entry.compartments[selectedCompartment] });
+        dataMap.set(entry.day, {...dataMap.get(entry.day), rki: entry.compartments[selectedCompartment]});
       });
 
       //add 25th percentile data
       percentileData[0].results?.forEach((entry: PercentileDataByDay) => {
-        dataMap.set(entry.day, { ...dataMap.get(entry.day), percentileDown: entry.compartments[selectedCompartment] });
+        dataMap.set(entry.day, {...dataMap.get(entry.day), percentileDown: entry.compartments[selectedCompartment]});
       });
 
       //add 75th percentile data
       percentileData[1].results?.forEach((entry: PercentileDataByDay) => {
-        dataMap.set(entry.day, { ...dataMap.get(entry.day), percentileUp: entry.compartments[selectedCompartment] });
+        dataMap.set(entry.day, {...dataMap.get(entry.day), percentileUp: entry.compartments[selectedCompartment]});
       });
 
       if (groupList) {
@@ -246,10 +279,10 @@ export default function SimulationChart(): JSX.Element {
       const percentileSeries = chartRef.current.map.getKey('percentiles') as am4charts.LineSeries;
       if (
         percentileSeries.fill !==
-        am4core.color(theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length])
+        am4core.color(theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0])
       ) {
         percentileSeries.fill = am4core.color(
-          theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length]
+          theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0]
         );
       }
 
@@ -272,36 +305,44 @@ export default function SimulationChart(): JSX.Element {
           const text = [`<strong>{date.formatDate("${t('dateFormat')}")} (${selectedCompartment})</strong>`];
           text.push('<table>');
           chartRef.current?.series.each((s) => {
-            if (s.dataFields.openValueY && s.dataFields.valueY && scenarioList.scenarios[selectedScenario]) {
+            if (
+              s.dataFields.openValueY &&
+              s.dataFields.valueY &&
+              scenarioList.scenarios[selectedScenario] &&
+              !s.isHidden &&
+              data
+            ) {
               text.push('<tr>');
               text.push(
                 `<th 
-                style='text-align:left; color:${theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length]
+                style='text-align:left; color:${
+                  theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0]
                 }; padding-right:${theme.spacing(2)}'>
                 <strong>${scenarioList.scenarios[selectedScenario].label} p25</strong>
                 </th>`
               );
               text.push(
                 `<td style='text-align:right'>${formatNumber(
-                  (data as { [key: string]: number })[s.dataFields.openValueY]
+                  (data as {[key: string]: number})[s.dataFields.openValueY]
                 )}</td>`
               );
               text.push('</tr>');
               text.push('<tr>');
               text.push(
                 `<th 
-                style='text-align:left; color:${theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length]
+                style='text-align:left; color:${
+                  theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0]
                 }; padding-right:${theme.spacing(2)}'>
                 <strong>${scenarioList.scenarios[selectedScenario].label} p75</strong>
                 </th>`
               );
               text.push(
                 `<td style='text-align:right'>${formatNumber(
-                  (data as { [key: string]: number })[s.dataFields.valueY]
+                  (data as {[key: string]: number})[s.dataFields.valueY]
                 )}</td>`
               );
               text.push('</tr>');
-            } else if (s.dataFields.valueY && (data as { [key: string]: number | string })[s.dataFields.valueY]) {
+            } else if (s.dataFields.valueY && data && (data as {[key: string]: number | string})[s.dataFields.valueY]) {
               text.push('<tr>');
               text.push(
                 `<th 
@@ -311,7 +352,7 @@ export default function SimulationChart(): JSX.Element {
               );
               text.push(
                 `<td style='text-align:right'>${formatNumber(
-                  (data as { [key: string]: number })[s.dataFields.valueY]
+                  (data as {[key: string]: number})[s.dataFields.valueY]
                 )}</td>`
               );
               text.push('</tr>');
@@ -334,6 +375,7 @@ export default function SimulationChart(): JSX.Element {
       chartRef.current.invalidateData();
     }
   }, [
+    activeScenarios,
     selectedScenario,
     percentileData,
     simulationData,
@@ -348,15 +390,14 @@ export default function SimulationChart(): JSX.Element {
 
   return (
     <LoadingContainer
-      sx={{ width: '100%', height: '100%' }}
+      sx={{width: '100%', height: '100%'}}
       show={rkiFetching || simulationFetching}
       overlayColor={theme.palette.background.paper}
     >
       <Box
         id='chartdiv'
         sx={{
-          height: '100%',
-          width: '100%',
+          height: 'calc(100% - 4px)',
           margin: 0,
           padding: 0,
           backgroundColor: theme.palette.background.paper,

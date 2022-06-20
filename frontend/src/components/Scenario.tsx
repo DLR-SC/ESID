@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { useTheme } from '@mui/material/styles';
-import { useTranslation } from 'react-i18next';
-import { selectCompartment, selectDate, selectScenario, setMinMaxDates } from 'store/DataSelectionSlice';
+import React, {useState} from 'react';
+import {useAppDispatch, useAppSelector} from '../store/hooks';
+import {useTheme} from '@mui/material/styles';
+import {useTranslation} from 'react-i18next';
+import {selectCompartment, selectDate, selectScenario, setMinMaxDates, toggleScenario} from 'store/DataSelectionSlice';
 import ScenarioCard from './ScenarioCard';
 import {
   Box, Button, List, ListItemButton, ListItemText, Typography, Dialog
@@ -15,18 +15,17 @@ import {
   useGetSimulationModelsQuery,
   useGetSimulationsQuery,
 } from '../store/services/scenarioApi';
-import { useEffect } from 'react';
-import { setCompartments, setScenarios } from 'store/ScenarioSlice';
-import { dateToISOString, Dictionary } from 'util/util';
-import { useGetRkiSingleSimulationEntryQuery } from '../store/services/rkiApi';
-import { NumberFormatter } from '../util/hooks';
+import {useEffect} from 'react';
+import {setCompartments, setScenarios} from 'store/ScenarioSlice';
+import {dateToISOString, Dictionary} from 'util/util';
+import {useGetRkiSingleSimulationEntryQuery} from '../store/services/rkiApi';
+import {NumberFormatter} from '../util/hooks';
 
 /**
  * React Component to render the Scenario Cards Section
  * @returns {JSX.Element} JSX Element to render the scenario card container and the scenario cards within.
  * @see ScenarioCard
  */
-
 export default function Scenario(): JSX.Element {
   const [open, setOpen] = React.useState(false);
 
@@ -41,7 +40,7 @@ export default function Scenario(): JSX.Element {
 
   const dispatch = useAppDispatch();
   const [expandProperties, setExpandProperties] = useState(false);
-  const [simulationModelId, setSimulationModelId] = useState(0);
+  const [simulationModelKey, setSimulationModelKey] = useState<string>('unset');
   const [compartmentValues, setCompartmentValues] = useState<Dictionary<number> | null>(null);
   const [scrollTop, setScrollTop] = useState(0);
 
@@ -49,7 +48,7 @@ export default function Scenario(): JSX.Element {
     setScrollTop(scrollEvent.currentTarget.scrollTop);
   }
 
-  const { formatNumber } = NumberFormatter(i18n.language, 3, 8);
+  const {formatNumber} = NumberFormatter(i18n.language, 3, 8);
 
   const getCompartmentValue = (compartment: string): string => {
     if (compartmentValues && compartment in compartmentValues) {
@@ -59,27 +58,30 @@ export default function Scenario(): JSX.Element {
   };
 
   const scenarioList = useAppSelector((state) => state.scenarioList);
-  const activeScenario = useAppSelector((state) => state.dataSelection.scenario);
+  const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
   const node = useAppSelector((state) => state.dataSelection.district.ags);
   const startDay = useAppSelector((state) => state.dataSelection.minDate);
+  const activeScenarios = useAppSelector((state) => state.dataSelection.activeScenarios);
 
-  const { data: scenarioListData } = useGetSimulationsQuery();
-  const { data: simulationModelsData } = useGetSimulationModelsQuery();
-  const { data: simulationModelData } = useGetSimulationModelQuery(simulationModelId, { skip: simulationModelId === 0 });
-  const { data: rkiData } = useGetRkiSingleSimulationEntryQuery(
+  const {data: scenarioListData} = useGetSimulationsQuery();
+  const {data: simulationModelsData} = useGetSimulationModelsQuery();
+  const {data: simulationModelData} = useGetSimulationModelQuery(simulationModelKey, {
+    skip: simulationModelKey === 'unset',
+  });
+  const {data: rkiData} = useGetRkiSingleSimulationEntryQuery(
     {
       node: node,
       day: startDay ?? '',
       group: 'total',
     },
-    { skip: !startDay }
+    {skip: !startDay}
   );
 
   useEffect(() => {
     if (simulationModelsData && simulationModelsData.results.length > 0) {
-      const id = Number.parseInt(simulationModelsData.results[0].url.slice(-2, -1), 10);
-      setSimulationModelId(id);
+      const {key} = simulationModelsData.results[0];
+      setSimulationModelKey(key);
     }
   }, [simulationModelsData]);
 
@@ -91,7 +93,8 @@ export default function Scenario(): JSX.Element {
 
   useEffect(() => {
     if (simulationModelData) {
-      dispatch(setCompartments(simulationModelData.compartments));
+      const {compartments} = simulationModelData.results;
+      dispatch(setCompartments(compartments));
     }
   }, [simulationModelData, dispatch]);
 
@@ -106,6 +109,11 @@ export default function Scenario(): JSX.Element {
       const scenarios = scenarioListData.results.map((scenario) => ({ id: scenario.id, label: scenario.description }));
       dispatch(setScenarios(scenarios));
 
+      //activate all scenarios initially
+      scenarios.forEach((scenario) => {
+        dispatch(toggleScenario(scenario.id));
+      });
+
       if (scenarios.length > 0) {
         // It seems, that the simulation data is only available from the second day forward.
         const startDay = new Date(scenarioListData.results[0].startDay);
@@ -114,12 +122,21 @@ export default function Scenario(): JSX.Element {
         const endDay = new Date(startDay);
         endDay.setDate(endDay.getDate() + scenarioListData.results[0].numberOfDays - 1);
 
-        dispatch(setMinMaxDates({ minDate: dateToISOString(startDay), maxDate: dateToISOString(endDay) }));
+        dispatch(setMinMaxDates({minDate: dateToISOString(startDay), maxDate: dateToISOString(endDay)}));
         dispatch(selectDate(dateToISOString(endDay)));
         dispatch(selectScenario(scenarios[0].id));
       }
     }
   }, [scenarioListData, dispatch]);
+
+  //effect to switch active scenario
+  useEffect(() => {
+    if (activeScenarios.length == 0) {
+      dispatch(selectScenario(null));
+    } else if (!selectedScenario || !activeScenarios.includes(selectedScenario)) {
+      dispatch(selectScenario(activeScenarios[0]));
+    }
+  }, [activeScenarios, selectedScenario, dispatch]);
 
   return (
     <Box
@@ -175,7 +192,6 @@ export default function Scenario(): JSX.Element {
           sx={{
             maxHeight: expandProperties ? '248px' : 'auto',
             overflowY: 'auto',
-
           }}
           onScroll={handleScroll}
         >
@@ -190,8 +206,9 @@ export default function Scenario(): JSX.Element {
                 paddingRight: theme.spacing(3),
                 margin: theme.spacing(0),
                 marginTop: theme.spacing(1),
-                borderLeft: `2px ${selectedCompartment === compartment ? theme.palette.primary.main : 'transparent'
-                  } solid`,
+                borderLeft: `2px ${
+                  selectedCompartment === compartment ? theme.palette.primary.main : 'transparent'
+                } solid`,
                 '&.MuiListItemButton-root.Mui-selected': {
                   backgroundColor: theme.palette.background.paper,
                 },
@@ -268,8 +285,9 @@ export default function Scenario(): JSX.Element {
           <ScenarioCard
             key={i}
             scenario={scenario}
-            active={activeScenario === i + 1}
-            color={theme.custom.scenarios[i]}
+            selected={selectedScenario === scenario.id}
+            active={activeScenarios.includes(scenario.id)}
+            color={theme.custom.scenarios[i][0]}
             selectedProperty={selectedCompartment || ''}
             expandProperties={expandProperties}
             scrollTop={scrollTop}
@@ -277,6 +295,9 @@ export default function Scenario(): JSX.Element {
             onClick={() => {
               // set active scenario to this one and send dispatches
               dispatch(selectScenario(scenario.id));
+            }}
+            onToggle={() => {
+              dispatch(toggleScenario(scenario.id));
             }}
           />
         ))}

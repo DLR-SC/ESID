@@ -1,12 +1,12 @@
-import React, { useEffect, useRef } from 'react';
-import { useTheme } from '@mui/material/styles';
-import { Box, List, ListItem, ListItemText, Typography } from '@mui/material';
-import { useAppSelector } from 'store/hooks';
-import { useGetSingleSimulationEntryQuery } from 'store/services/scenarioApi';
-import { useState } from 'react';
-import { Dictionary } from '../util/util';
-import { useTranslation } from 'react-i18next';
-import { NumberFormatter } from '../util/hooks';
+import React, {useEffect, useRef, useState} from 'react';
+import {useTheme} from '@mui/material/styles';
+import {Box, IconButton, List, ListItem, ListItemText, Tooltip, Typography} from '@mui/material';
+import {useAppSelector} from 'store/hooks';
+import {useGetSingleSimulationEntryQuery} from 'store/services/scenarioApi';
+import {Dictionary} from '../util/util';
+import {useTranslation} from 'react-i18next';
+import {NumberFormatter} from '../util/hooks';
+import {CheckBoxOutlineBlank, CheckBox} from '@mui/icons-material';
 
 /**
  * React Component to render individual Scenario Card
@@ -15,27 +15,28 @@ import { NumberFormatter } from '../util/hooks';
  */
 export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
   const theme = useTheme();
-  const { t, i18n } = useTranslation();
+  const {t, i18n} = useTranslation();
 
   const compartmentsRef = useRef<HTMLUListElement | null>(null);
 
-  const { formatNumber } = NumberFormatter(i18n.language, 3, 8);
+  const {formatNumber} = NumberFormatter(i18n.language, 3, 8);
 
   const [compartmentValues, setCompartmentValues] = useState<Dictionary<number> | null>(null);
-
 
   const compartments = useAppSelector((state) => state.scenarioList.compartments);
   const node = useAppSelector((state) => state.dataSelection.district?.ags);
   const day = useAppSelector((state) => state.dataSelection.date);
-  const { data } = useGetSingleSimulationEntryQuery(
-    { id: props.scenario.id, node: node, day: day ?? '', group: 'total' },
-    { skip: !day }
+  const {data} = useGetSingleSimulationEntryQuery(
+    {id: props.scenario.id, node: node, day: day ?? '', group: 'total'},
+    {skip: !day}
   );
 
-  const [folded, fold] = React.useState(true);
-  const [backgroundColor, setColor] = React.useState(props.color);
-  const [groupInfoWidth, setGroupInfoWidth] = React.useState("3rem");
-  const [groupInfoHeight, setGroupInfoHeight] = React.useState("11rem");
+  const [hover, setHover] = useState<boolean>(false);
+
+  const [folded, fold] = useState(true);
+  const [backgroundColor, setColor] = useState(props.color);
+  const [groupInfoWidth, setGroupInfoWidth] = useState('3rem');
+  const [groupInfoHeight, setGroupInfoHeight] = useState('11rem');
 
   useEffect(() => {
     if (compartmentsRef.current) {
@@ -56,17 +57,14 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
   useEffect(() => {
     if (folded == true) {
       setColor(props.color);
-      setGroupInfoWidth("3rem");
-      setGroupInfoHeight("11rem");
+      setGroupInfoWidth('3rem');
+      setGroupInfoHeight('11rem');
     } else {
       setColor(theme.palette.background.paper);
-      setGroupInfoWidth("10rem");
-      setGroupInfoHeight("min-content");
+      setGroupInfoWidth('10rem');
+      setGroupInfoHeight('min-content');
     }
-  }, [folded, props.color, theme.palette.background.paper])
-
-
-
+  }, [folded, props.color, theme.palette.background.paper]);
 
 
   const getCompartmentValue = (compartment: string): string => {
@@ -94,7 +92,6 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
 
     return 'N/A';
   };
-
 
 
   const groupInfo = (): JSX.Element => {
@@ -148,121 +145,198 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
     } else {
       return (<Box></Box>);
     }
-  }
-
+  };
 
 
   return (
     <Box
       sx={{
-        display: "flex",
-        flexDirection: "row",
-        alignSelf: "center",
-        justifyContent: "center",
-        alignItems: "center",
-        marginRight: "-2rem",
+        display: 'flex',
+        flexDirection: 'row',
+        alignSelf: 'center',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginRight: '-2rem',
       }}
     >
 
       <Box
         sx={{
+          position: 'relative',
+          zIndex: 0,
           flexGrow: 0,
           flexShrink: 0,
-          flexBasis: '160px',
+          flexBasis: '172px',
           boxSizing: 'border-box',
-          height: 'min-content',
-          margin: theme.spacing(3),
-          marginRight: "-1rem",
-          padding: theme.spacing(2),
-          paddingRight: "-1rem",
-          border: `2px solid ${props.color}`,
-          borderRadius: '3px',
-          background: theme.palette.background.paper,
-          color: props.color,
-          boxShadow: props.active ? '0px 0px 8px 3px' : 'none',
-          zIndex: "2",
+          marginX: '2px',
+          marginY: theme.spacing(2),
+          mb: 0,
         }}
-        onClick={() => props.onClick()}
+        onMouseLeave={() => setHover(false)}
       >
+        {/*hover-state*/}
         <Box
           sx={{
-            display: 'flex',
+            position: 'absolute',
+            zIndex: -1,
+            width: '100%',
+            height: '100%',
+            borderRadius: '9px', //matching the radius of the box shadow
+            background: hexToRGB(props.color, 0.4),
+            display: hover ? 'flex' : 'none',
             alignItems: 'flex-end',
-            height: '3rem',
-            marginBottom: theme.spacing(1),
           }}
         >
-          <Typography
-            variant='h2'
+          <Tooltip
+            title={props.active ? t('scenario.deactivate').toString() : t('scenario.activate').toString()}
+            arrow={true}
+          >
+            <IconButton
+              color={'primary'}
+              onClick={() => props.onToggle()}
+              aria-label={props.active ? t('scenario.deactivate') : t('scenario.activate')}
+            >
+              {props.active ? <CheckBox /> : <CheckBoxOutlineBlank />}
+            </IconButton>
+          </Tooltip>
+        </Box>
+        <Box
+          sx={{
+            position: 'relative',
+            zIndex: 0,
+            boxSizing: 'border-box',
+            height: 'min-content',
+            padding: theme.spacing(2),
+            border: `2px solid ${props.color}`,
+            borderRadius: '3px',
+            margin: '6px',
+            background: theme.palette.background.paper,
+            color: props.color,
+            boxShadow: props.selected && !hover ? `0px 0px 0px 6px ${hexToRGB(props.color, 0.4)}` : 'none',
+            transition: 'transform 0.5s',
+            transformStyle: 'preserve-3d',
+            transform: !props.active ? 'rotateY(180deg)' : 'none',
+          }}
+          onClick={props.active ? () => props.onClick() : () => true}
+          onMouseEnter={() => setHover(true)}
+        >
+          {/*back*/}
+          <Box
             sx={{
-              height: 'min-content',
-              fontWeight: 'bold',
-              fontSize: '13pt',
+              position: 'absolute',
+              backfaceVisibility: 'hidden',
+              transform: 'rotateY(180deg)',
             }}
           >
-            {props.scenario.label}
-          </Typography>
-        </Box>
-        <List
-          ref={compartmentsRef}
-          dense={true}
-          disablePadding={true}
-          sx={{
-            maxHeight: props.expandProperties ? '248px' : 'auto',
-            overflowY: 'hidden',
-          }}
-        >
-          {compartments.map((compartment, i) => (
-            // hide compartment if expandProperties false and index > 4
-            // highlight compartment if selectedProperty === compartment
-            <ListItem
-              key={compartment}
+            <Box
               sx={{
-                display: props.expandProperties || i < 4 ? 'flex' : 'none',
-                color: props.selectedProperty === compartment ? theme.palette.text.primary : theme.palette.text.disabled,
-                padding: theme.spacing(1),
-                margin: theme.spacing(0),
-                marginTop: theme.spacing(1),
+                display: 'flex',
+                alignItems: 'flex-end',
+                height: '3rem',
+                marginLeft: theme.spacing(2),
               }}
             >
-              <ListItemText
-                primary={getCompartmentValue(compartment)}
-                // disable child typography overriding this
-                disableTypography={true}
+              <Typography
+                variant='h2'
                 sx={{
-                  typography: 'listElement',
-                  textAlign: 'right',
-                  flexBasis: '55%',
-                }}
-              />
-              <ListItemText
-                primary={getCompartmentRate(compartment)}
-                // disable child typography overriding this
-                disableTypography={true}
-                sx={{
-                  typography: 'listElement',
+                  height: 'min-content',
                   fontWeight: 'bold',
-                  textAlign: 'right',
-                  flexBasis: '45%',
+                  fontSize: '13pt',
                 }}
-              />
-            </ListItem>
-          ))}
-        </List>
-      </Box>
-      <Box
-        sx={{
-          marginLeft: "-1rem",
-          border: `2px solid ${props.color}`,
-          zIndex: "1",
-          width: groupInfoWidth,
-          height: groupInfoHeight,
-          borderRadius: "10px",
-          background: backgroundColor,
-        }}
-        onClick={() => fold(!folded)}
-      >
-        {groupInfo()}
+              >
+                {props.scenario.label}
+              </Typography>
+            </Box>
+          </Box>
+          {/*front*/}
+          <Box
+            sx={{
+              transform: 'rotateY(0deg)', //firefox ignores backface-visibility if the object is not rotated
+              backfaceVisibility: 'hidden',
+            }}
+          >
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'flex-end',
+                height: '3rem',
+                marginBottom: theme.spacing(1),
+              }}
+            >
+              <Typography
+                variant='h2'
+                sx={{
+                  height: 'min-content',
+                  fontWeight: 'bold',
+                  fontSize: '13pt',
+                }}
+              >
+                {props.scenario.label}
+              </Typography>
+            </Box>
+            <List
+              ref={compartmentsRef}
+              dense={true}
+              disablePadding={true}
+              sx={{
+                maxHeight: props.expandProperties ? '248px' : 'auto',
+                overflowY: 'hidden',
+              }}
+            >
+              {compartments.map((compartment, i) => (
+                // hide compartment if expandProperties false and index > 4
+                // highlight compartment if selectedProperty === compartment
+                <ListItem
+                  key={compartment}
+                  sx={{
+                    display: props.expandProperties || i < 4 ? 'flex' : 'none',
+                    color:
+                      props.selectedProperty === compartment ? theme.palette.text.primary : theme.palette.text.disabled,
+                    padding: theme.spacing(1),
+                    margin: theme.spacing(0),
+                    marginTop: theme.spacing(1),
+                  }}
+                >
+                  <ListItemText
+                    primary={getCompartmentValue(compartment)}
+                    // disable child typography overriding this
+                    disableTypography={true}
+                    sx={{
+                      typography: 'listElement',
+                      textAlign: 'right',
+                      flexBasis: '55%',
+                    }}
+                  />
+                  <ListItemText
+                    primary={getCompartmentRate(compartment)}
+                    // disable child typography overriding this
+                    disableTypography={true}
+                    sx={{
+                      typography: 'listElement',
+                      fontWeight: 'bold',
+                      textAlign: 'right',
+                      flexBasis: '45%',
+                    }}
+                  />
+                </ListItem>
+              ))}
+            </List>
+          </Box>
+        </Box>
+        <Box
+          sx={{
+            marginLeft: '-1rem',
+            border: `2px solid ${props.color}`,
+            zIndex: '1',
+            width: groupInfoWidth,
+            height: groupInfoHeight,
+            borderRadius: '10px',
+            background: backgroundColor,
+          }}
+          onClick={() => fold(!folded)}
+        >
+          {groupInfo()}
+        </Box>
       </Box>
     </Box>
   );
@@ -283,6 +357,9 @@ interface ScenarioCardProps {
   key: number;
 
   /** Boolean value whether the scenario is the selected scenario. */
+  selected: boolean;
+
+  /** Boolean value whether the scenario is active (not flipped). */
   active: boolean;
 
   /** The color of the card. */
@@ -301,4 +378,19 @@ interface ScenarioCardProps {
 
   /** The function that is executed when the scenario card is clicked. */
   onClick: () => void;
+
+  /** The function that is executed when the disable toggle is clicked. */
+  onToggle: () => void;
+}
+
+function hexToRGB(hex: string, alpha: number): string {
+  const r = parseInt(hex.slice(1, 3), 16),
+    g = parseInt(hex.slice(3, 5), 16),
+    b = parseInt(hex.slice(5, 7), 16);
+
+  if (alpha) {
+    return 'rgba(' + r.toString() + ', ' + g.toString() + ', ' + b.toString() + ', ' + alpha.toString() + ')';
+  } else {
+    return 'rgb(' + r.toString() + ', ' + g.toString() + ', ' + b.toString() + ')';
+  }
 }
