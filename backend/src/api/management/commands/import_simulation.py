@@ -196,7 +196,7 @@ class Command(BaseCommand):
                 raise CommandError('Mandatory key "{}" is missing in metadata file!'.format(key))
 
         try:
-            scenario = models.Scenario.objects.get(name=meta['scenario'])
+            scenario = models.Scenario.objects.get(key=meta['scenario'])
         except models.Scenario.DoesNotExist:
             raise CommandError('Scenario {} does not exist!'.format(meta['scenario']))
 
@@ -212,7 +212,7 @@ class Command(BaseCommand):
         simulation = None
 
         try:
-            simulation = models.Simulation.objects.get(name=meta['name'])
+            simulation = models.Simulation.objects.get(key=meta['key'])
             
             self.stdout.write('Simulation {} already exists! \n What do you want to do?'.format(meta['name']))
             action = input("(1) replace simulation, (2) append simulation data \n")
@@ -232,6 +232,7 @@ class Command(BaseCommand):
 
         if simulation is None:
             simulation = models.Simulation( \
+                key=meta['key'], \
                 name=meta['name'], \
                 description=meta['description'], \
                 scenario=scenario, \

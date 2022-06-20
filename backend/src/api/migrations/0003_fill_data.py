@@ -55,7 +55,7 @@ def fillin_simulation_models(apps, schema_editor):
         parameters = m.get('parameters')
         compartments = m.get('compartments')
 
-        model = SimulationModel(name=s)
+        model = SimulationModel(key=s, name=s)
         model.save()
 
         for p in parameters:
@@ -81,7 +81,7 @@ def fillin_nodes(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('api', '0001_initial'),
+        ('api', '0002_create_views'),
     ]
 
     operations = [

@@ -129,13 +129,13 @@ class CompartmentsDataEntrySerializer(serializers.ModelSerializer):
         return serialized
 
 
-class SimulationModelSerializerMeta(serializers.HyperlinkedModelSerializer):
+class SimulationModelSerializerMeta(serializers.ModelSerializer):
     """
     JSON serializer for a simulation model meta data
     """
     class Meta:
         model = SimulationModel
-        fields = ['url', 'name']
+        fields = ['key', 'name']
 
 class SimulationModelSerializerFull(serializers.ModelSerializer):
     """
@@ -146,7 +146,7 @@ class SimulationModelSerializerFull(serializers.ModelSerializer):
 
     class Meta:
         model = SimulationModel
-        fields = ['name', 'description', 'parameters', 'compartments']
+        fields = ['key', 'name', 'description', 'parameters', 'compartments']
 
 class SimulationSerializerMeta(serializers.HyperlinkedModelSerializer):
     """
