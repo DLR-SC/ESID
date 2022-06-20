@@ -1,6 +1,6 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import i18n from '../util/i18n';
-import {dateToISOString} from '../util/util';
+import { dateToISOString } from '../util/util';
 
 /**
  * AGS is the abbreviation for "Amtlicher Gemeindeschlüssel" in German, which are IDs of areas in Germany. The AGS have
@@ -10,24 +10,39 @@ import {dateToISOString} from '../util/util';
  */
 export type AGS = string;
 
+export interface group {
+  name: string | null;
+  age: Array<string> | null;
+  gender: Array<string> | null;
+  toggle: boolean | null;
+  testData: number | null;
+}
+
 export interface DataSelection {
-  district: {ags: AGS; name: string; type: string};
+  district: { ags: AGS; name: string; type: string };
   date: string | null;
   scenario: number | null;
   compartment: string | null;
 
   minDate: string | null;
   maxDate: string | null;
+  groups: Array<group> | null;
 }
 
 const initialState: DataSelection = {
-  district: {ags: '00000', name: i18n.t('germany'), type: ''},
+  district: { ags: '00000', name: i18n.t('germany'), type: '' },
   date: null,
   scenario: null,
   compartment: null,
   minDate: null,
   maxDate: null,
+  groups: null
 };
+
+
+
+
+
 
 /**
  * This slice manages all state that is selecting data.
@@ -36,7 +51,7 @@ export const DataSelectionSlice = createSlice({
   name: 'DataSelection',
   initialState,
   reducers: {
-    selectDistrict(state, action: PayloadAction<{ags: AGS; name: string; type: string}>) {
+    selectDistrict(state, action: PayloadAction<{ ags: AGS; name: string; type: string }>) {
       state.district = action.payload;
     },
     selectDate(state, action: PayloadAction<string>) {
@@ -63,7 +78,7 @@ export const DataSelectionSlice = createSlice({
         state.date = dateToISOString(date);
       }
     },
-    setMinMaxDates(state, action: PayloadAction<{minDate: string; maxDate: string}>) {
+    setMinMaxDates(state, action: PayloadAction<{ minDate: string; maxDate: string }>) {
       state.minDate = action.payload.minDate;
       state.maxDate = action.payload.maxDate;
     },
@@ -73,9 +88,36 @@ export const DataSelectionSlice = createSlice({
     selectCompartment(state, action: PayloadAction<string>) {
       state.compartment = action.payload;
     },
+    addGroup(state, action: PayloadAction<group>) {
+      if (state.groups) {
+        state.groups = state.groups.concat(action.payload);
+      }
+      else {
+        state.groups = new Array<group>().concat(action.payload);
+      }
+    },
+    deleteGroup(state, action: PayloadAction<string>) {
+      if (state.groups) {
+        for (let i = 0; i < state.groups.length; i++) {
+          if (state.groups[i].name == action.payload) {
+            state.groups.splice(i, 1)
+          }
+        }
+      }
+    },
+    toggleGroup(state, action: PayloadAction<string>) {
+      if (state.groups) {
+        for (let i = 0; i < state.groups.length; i++) {
+          if (state.groups[i].name == action.payload) {
+            state.groups[i].toggle = !state.groups[i].toggle
+          }
+        }
+      }
+    }
   },
 });
 
-export const {selectDistrict, selectDate, previousDay, nextDay, setMinMaxDates, selectScenario, selectCompartment} =
+export const { selectDistrict, selectDate, previousDay, nextDay, setMinMaxDates, selectScenario,
+  selectCompartment, addGroup, deleteGroup, toggleGroup } =
   DataSelectionSlice.actions;
 export default DataSelectionSlice.reducer;

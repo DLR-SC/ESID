@@ -1,5 +1,5 @@
-import {Dictionary} from 'util/util';
-import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
+import { Dictionary } from 'util/util';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import {
   SimulationDataByDate,
   SimulationDataByNode,
@@ -10,7 +10,7 @@ import {
 
 export const scenarioApi = createApi({
   reducerPath: 'scenarioApi',
-  baseQuery: fetchBaseQuery({baseUrl: `${process.env.API_URL || ''}/api/v1/`}),
+  baseQuery: fetchBaseQuery({ baseUrl: `${process.env.API_URL || ''}/api/v1/` }),
   endpoints: (builder) => ({
     getSimulationModels: builder.query<SimulationModels, void>({
       query: () => {
@@ -40,14 +40,14 @@ export const scenarioApi = createApi({
         // We fetch 1 entry.
         const firstResult = await fetchWithBQ(url(1, 0));
         // When an error occurs, we return it.
-        if (firstResult.error) return {error: firstResult.error};
+        if (firstResult.error) return { error: firstResult.error };
 
         const currResult = await fetchWithBQ(url((firstResult.data as SimulationDataByDate).count, 0));
-        if (currResult.error) return {error: currResult.error};
+        if (currResult.error) return { error: currResult.error };
 
         const data = currResult.data as SimulationDataByDate;
 
-        return {data};
+        return { data };
       },
     }),
 
@@ -78,20 +78,20 @@ export const scenarioApi = createApi({
           // fetch first entry to get total count
           const preResult = await fetchWithBQ(url(id, 1, 0));
           // return if errors occur
-          if (preResult.error) return {error: preResult.error};
+          if (preResult.error) return { error: preResult.error };
 
           const preData = preResult.data as SimulationDataByNode;
 
           // fetch all entries
           const fullResult = await fetchWithBQ(url(id, preData.count, 0));
           // return if errors occur
-          if (fullResult.error) return {error: fullResult.error};
+          if (fullResult.error) return { error: fullResult.error };
 
           // put result into list to return
           result[id] = fullResult.data as SimulationDataByNode;
         }
 
-        return {data: result};
+        return { data: result };
       },
     }),
 
@@ -104,16 +104,16 @@ export const scenarioApi = createApi({
         const result: SelectedScenarioPercentileData[] = [];
 
         const percentile25 = await fetchWithBQ(url(25));
-        //retunr if errors occur
-        if (percentile25.error) return {error: percentile25.error};
+        //return if errors occur
+        if (percentile25.error) return { error: percentile25.error };
         result[0] = percentile25.data as SelectedScenarioPercentileData;
 
         const percentile75 = await fetchWithBQ(url(75));
-        //retunr if errors occur
-        if (percentile75.error) return {error: percentile75.error};
+        //return if errors occur
+        if (percentile75.error) return { error: percentile75.error };
         result[1] = percentile75.data as SelectedScenarioPercentileData;
 
-        return {data: result};
+        return { data: result };
       },
     }),
   }),

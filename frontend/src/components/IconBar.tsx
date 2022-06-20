@@ -1,20 +1,30 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 /*import AutorenewIcon from '@mui/icons-material/Autorenew';
 import RedoIcon from '@mui/icons-material/Redo';
 import UndoIcon from '@mui/icons-material/Undo';
 import ShareIcon from '@mui/icons-material/Share';*/
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
-import {useFullscreen} from 'rooks';
-import {Box, Button, Tooltip} from '@mui/material';
-import {SkipNextRounded, SkipPreviousRounded} from '@mui/icons-material';
-import {useAppDispatch, useAppSelector} from '../store/hooks';
-import {nextDay, previousDay, selectDate} from '../store/DataSelectionSlice';
-import {useTranslation} from 'react-i18next';
+import ListIcon from '@mui/icons-material/List';
+import { useFullscreen } from 'rooks';
+import { Box, Button, Dialog, Tooltip } from '@mui/material';
+import { SkipNextRounded, SkipPreviousRounded } from '@mui/icons-material';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { nextDay, previousDay, selectDate } from '../store/DataSelectionSlice';
+import { useTranslation } from 'react-i18next';
+import ChartToggle from "./ChartToggle";
 
 export default function IconBar(): JSX.Element {
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleOpen = () => {
+    setOpen(true);
+  }
+
+
   const fsApi = useFullscreen();
   const dispatch = useAppDispatch();
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [justStarted, setJustStarted] = useState(false);
@@ -105,6 +115,18 @@ export default function IconBar(): JSX.Element {
         <ShareIcon />
       </Button>
       */}
+      <Tooltip title={"Filter Chart Anzeigen"}>
+        <Button onClick={() => { handleOpen() }}>
+          <ListIcon />
+        </Button>
+      </Tooltip>
+      < Dialog
+        maxWidth="lg"
+        fullWidth={true}
+        open={open}
+      >
+        <ChartToggle onclose={() => setOpen(false)} />
+      </Dialog>
     </Box>
   );
 }

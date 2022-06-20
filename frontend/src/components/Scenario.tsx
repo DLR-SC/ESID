@@ -1,28 +1,42 @@
-import React, {useState} from 'react';
-import {useAppDispatch, useAppSelector} from '../store/hooks';
-import {useTheme} from '@mui/material/styles';
-import {useTranslation} from 'react-i18next';
-import {selectCompartment, selectDate, selectScenario, setMinMaxDates} from 'store/DataSelectionSlice';
+import React, { useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { useTheme } from '@mui/material/styles';
+import { useTranslation } from 'react-i18next';
+import { selectCompartment, selectDate, selectScenario, setMinMaxDates } from 'store/DataSelectionSlice';
 import ScenarioCard from './ScenarioCard';
-import {Box, Button, List, ListItemButton, ListItemText, Typography} from '@mui/material';
+import {
+  Box, Button, List, ListItemButton, ListItemText, Typography, Dialog
+} from '@mui/material';
+
+import CreateFilter from "./CreateFilter";
+
 import {
   useGetSimulationModelQuery,
   useGetSimulationModelsQuery,
   useGetSimulationsQuery,
 } from '../store/services/scenarioApi';
-import {useEffect} from 'react';
-import {setCompartments, setScenarios} from 'store/ScenarioSlice';
-import {dateToISOString, Dictionary} from 'util/util';
-import {useGetRkiSingleSimulationEntryQuery} from '../store/services/rkiApi';
-import {NumberFormatter} from '../util/hooks';
+import { useEffect } from 'react';
+import { setCompartments, setScenarios } from 'store/ScenarioSlice';
+import { dateToISOString, Dictionary } from 'util/util';
+import { useGetRkiSingleSimulationEntryQuery } from '../store/services/rkiApi';
+import { NumberFormatter } from '../util/hooks';
 
 /**
  * React Component to render the Scenario Cards Section
  * @returns {JSX.Element} JSX Element to render the scenario card container and the scenario cards within.
  * @see ScenarioCard
  */
+
 export default function Scenario(): JSX.Element {
-  const {t, i18n} = useTranslation();
+  const [open, setOpen] = React.useState(false);
+
+  const handleOpen = () => {
+    setOpen(true);
+  }
+
+
+
+  const { t, i18n } = useTranslation();
   const theme = useTheme();
 
   const dispatch = useAppDispatch();
@@ -35,7 +49,7 @@ export default function Scenario(): JSX.Element {
     setScrollTop(scrollEvent.currentTarget.scrollTop);
   }
 
-  const {formatNumber} = NumberFormatter(i18n.language, 3, 8);
+  const { formatNumber } = NumberFormatter(i18n.language, 3, 8);
 
   const getCompartmentValue = (compartment: string): string => {
     if (compartmentValues && compartment in compartmentValues) {
@@ -50,16 +64,16 @@ export default function Scenario(): JSX.Element {
   const node = useAppSelector((state) => state.dataSelection.district.ags);
   const startDay = useAppSelector((state) => state.dataSelection.minDate);
 
-  const {data: scenarioListData} = useGetSimulationsQuery();
-  const {data: simulationModelsData} = useGetSimulationModelsQuery();
-  const {data: simulationModelData} = useGetSimulationModelQuery(simulationModelId, {skip: simulationModelId === 0});
-  const {data: rkiData} = useGetRkiSingleSimulationEntryQuery(
+  const { data: scenarioListData } = useGetSimulationsQuery();
+  const { data: simulationModelsData } = useGetSimulationModelsQuery();
+  const { data: simulationModelData } = useGetSimulationModelQuery(simulationModelId, { skip: simulationModelId === 0 });
+  const { data: rkiData } = useGetRkiSingleSimulationEntryQuery(
     {
       node: node,
       day: startDay ?? '',
       group: 'total',
     },
-    {skip: !startDay}
+    { skip: !startDay }
   );
 
   useEffect(() => {
@@ -89,7 +103,7 @@ export default function Scenario(): JSX.Element {
 
   useEffect(() => {
     if (scenarioListData) {
-      const scenarios = scenarioListData.results.map((scenario) => ({id: scenario.id, label: scenario.description}));
+      const scenarios = scenarioListData.results.map((scenario) => ({ id: scenario.id, label: scenario.description }));
       dispatch(setScenarios(scenarios));
 
       if (scenarios.length > 0) {
@@ -100,7 +114,7 @@ export default function Scenario(): JSX.Element {
         const endDay = new Date(startDay);
         endDay.setDate(endDay.getDate() + scenarioListData.results[0].numberOfDays - 1);
 
-        dispatch(setMinMaxDates({minDate: dateToISOString(startDay), maxDate: dateToISOString(endDay)}));
+        dispatch(setMinMaxDates({ minDate: dateToISOString(startDay), maxDate: dateToISOString(endDay) }));
         dispatch(selectDate(dateToISOString(endDay)));
         dispatch(selectScenario(scenarios[0].id));
       }
@@ -161,6 +175,7 @@ export default function Scenario(): JSX.Element {
           sx={{
             maxHeight: expandProperties ? '248px' : 'auto',
             overflowY: 'auto',
+
           }}
           onScroll={handleScroll}
         >
@@ -175,9 +190,8 @@ export default function Scenario(): JSX.Element {
                 paddingRight: theme.spacing(3),
                 margin: theme.spacing(0),
                 marginTop: theme.spacing(1),
-                borderLeft: `2px ${
-                  selectedCompartment === compartment ? theme.palette.primary.main : 'transparent'
-                } solid`,
+                borderLeft: `2px ${selectedCompartment === compartment ? theme.palette.primary.main : 'transparent'
+                  } solid`,
                 '&.MuiListItemButton-root.Mui-selected': {
                   backgroundColor: theme.palette.background.paper,
                 },
@@ -271,29 +285,26 @@ export default function Scenario(): JSX.Element {
         sx={{
           borderLeft: `1px solid`,
           borderColor: 'divider',
-          flexGrow: 0,
-          flexShrink: 0,
-          flexBasis: '185px',
           minHeight: '20vh',
           paddingLeft: theme.spacing(3),
           paddingRight: theme.spacing(3),
           display: 'flex',
+          flexDirection: "column",
         }}
       >
         <Button
           variant='outlined'
           color='success'
           sx={{
-            flexGrow: 0,
-            flexShrink: 0,
-            flexBasis: '160px',
-            height: '212px',
+            height: '205px',
+            width: "160px",
             margin: theme.spacing(3),
             fontWeight: 'bolder',
             fontSize: '3rem',
             border: `2px ${theme.palette.divider} dashed`,
             borderRadius: '3px',
             color: theme.palette.divider,
+            alignSelf: "top",
 
             '&:hover': {
               border: `2px ${theme.palette.divider} dashed`,
@@ -304,7 +315,34 @@ export default function Scenario(): JSX.Element {
         >
           +
         </Button>
+
+        <Button
+          variant='outlined'
+          color='primary'
+          sx={{
+            height: '30px',
+            width: "160px",
+            margin: theme.spacing(2),
+            fontSize: '0.7rem',
+            borderRadius: '3px',
+            alignSelf: "center",
+          }}
+
+          onClick={() => {
+            handleOpen();
+          }}
+        >
+          Filter erstellen
+        </Button>
       </Box>
-    </Box>
+      < Dialog
+        maxWidth="lg"
+        fullWidth={true}
+        open={open}
+      >
+        <CreateFilter onclose={() => setOpen(false)} />
+      </Dialog>
+    </Box >
+
   );
 }
