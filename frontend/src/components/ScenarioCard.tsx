@@ -66,7 +66,6 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
     }
   }, [folded, props.color, theme.palette.background.paper]);
 
-
   const getCompartmentValue = (compartment: string): string => {
     if (compartmentValues && compartment in compartmentValues) {
       return formatNumber(compartmentValues[compartment]);
@@ -93,10 +92,9 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
     return 'N/A';
   };
 
-
   const groupInfo = (): JSX.Element => {
-    if (folded == false) {
-      return (<List
+    return (
+      <List
         ref={compartmentsRef}
         dense={true}
         disablePadding={true}
@@ -141,25 +139,17 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
             />
           </ListItem>
         ))}
-      </List>);
-    } else {
-      return (<Box></Box>);
-    }
+      </List>
+    );
   };
-
 
   return (
     <Box
       sx={{
         display: 'flex',
         flexDirection: 'row',
-        alignSelf: 'center',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginRight: '-2rem',
       }}
     >
-
       <Box
         sx={{
           position: 'relative',
@@ -178,7 +168,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
         <Box
           sx={{
             position: 'absolute',
-            zIndex: -1,
+            zIndex: -2,
             width: '100%',
             height: '100%',
             borderRadius: '9px', //matching the radius of the box shadow
@@ -323,20 +313,20 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
             </List>
           </Box>
         </Box>
-        <Box
-          sx={{
-            marginLeft: '-1rem',
-            border: `2px solid ${props.color}`,
-            zIndex: '1',
-            width: groupInfoWidth,
-            height: groupInfoHeight,
-            borderRadius: '10px',
-            background: backgroundColor,
-          }}
-          onClick={() => fold(!folded)}
-        >
-          {groupInfo()}
-        </Box>
+      </Box>
+      <Box
+        sx={{
+          display: props.active ? 'inline' : 'none',
+          marginLeft: '-1rem',
+          border: `2px solid ${props.color}`,
+          width: groupInfoWidth,
+          height: groupInfoHeight,
+          borderRadius: '10px',
+          background: backgroundColor,
+        }}
+        onClick={() => fold(!folded)}
+      >
+        {!folded ? groupInfo() : ''}
       </Box>
     </Box>
   );
