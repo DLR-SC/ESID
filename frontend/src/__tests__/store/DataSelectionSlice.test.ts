@@ -1,4 +1,10 @@
-import reducer, {selectDistrict, selectDate, selectScenario, selectCompartment} from '../../store/DataSelectionSlice';
+import reducer, {
+  selectDistrict,
+  selectDate,
+  selectScenario,
+  selectCompartment,
+  toggleScenario,
+} from '../../store/DataSelectionSlice';
 
 describe('DataSelectionSlice', () => {
   const initialState = {
@@ -6,6 +12,7 @@ describe('DataSelectionSlice', () => {
     date: null,
     scenario: null,
     compartment: null,
+    activeScenarios: [],
     minDate: null,
     maxDate: null,
   };
@@ -21,6 +28,7 @@ describe('DataSelectionSlice', () => {
       date: null,
       scenario: null,
       compartment: null,
+      activeScenarios: [],
       minDate: null,
       maxDate: null,
     });
@@ -33,6 +41,7 @@ describe('DataSelectionSlice', () => {
       date: '2020-09-21',
       scenario: null,
       compartment: null,
+      activeScenarios: [],
       minDate: null,
       maxDate: null,
     });
@@ -44,6 +53,7 @@ describe('DataSelectionSlice', () => {
       date: null,
       scenario: 1,
       compartment: null,
+      activeScenarios: [],
       minDate: null,
       maxDate: null,
     });
@@ -55,6 +65,38 @@ describe('DataSelectionSlice', () => {
       date: null,
       scenario: null,
       compartment: 'Test Compartment',
+      activeScenarios: [],
+      minDate: null,
+      maxDate: null,
+    });
+  });
+
+  test('Toggle Scenario', () => {
+    expect(reducer(initialState, toggleScenario(2))).toEqual({
+      district: {ags: '00000', name: 'germany', type: ''},
+      date: null,
+      scenario: null,
+      compartment: null,
+      activeScenarios: [2],
+      minDate: null,
+      maxDate: null,
+    });
+    const state = {
+      district: {ags: '00000', name: 'germany', type: ''},
+      date: null,
+      scenario: null,
+      compartment: null,
+      activeScenarios: [1, 2, 4],
+      minDate: null,
+      maxDate: null,
+    };
+
+    expect(reducer(state, toggleScenario(2))).toEqual({
+      district: {ags: '00000', name: 'germany', type: ''},
+      date: null,
+      scenario: null,
+      compartment: null,
+      activeScenarios: [1, 4],
       minDate: null,
       maxDate: null,
     });

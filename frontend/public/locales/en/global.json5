@@ -38,6 +38,8 @@
   scenario: {
     add: 'Add scenario',
     more: 'More properties',
+    activate: 'Activate scenario',
+    deactivate: 'Deactivate scenario',
   },
   chart: {
     rkiData: 'RKI Data',

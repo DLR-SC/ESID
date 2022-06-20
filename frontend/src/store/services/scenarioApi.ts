@@ -88,12 +88,12 @@ export const scenarioApi = createApi({
         const result: SelectedScenarioPercentileData[] = [];
 
         const percentile25 = await fetchWithBQ(url(25));
-        //retunr if errors occur
+        //return if errors occur
         if (percentile25.error) return {error: percentile25.error};
         result[0] = percentile25.data as SelectedScenarioPercentileData;
 
         const percentile75 = await fetchWithBQ(url(75));
-        //retunr if errors occur
+        //return if errors occur
         if (percentile75.error) return {error: percentile75.error};
         result[1] = percentile75.data as SelectedScenarioPercentileData;
 
