@@ -127,3 +127,19 @@ class RkiDataByDayView(DataEntryFilterMixin, generics.ListAPIView):
             return None
 
         return super().paginate_queryset(queryset)
+
+class GroupCategoriesViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    """
+    Return a list of all available group categories.
+    """
+    queryset = GroupCategory.objects.all().order_by('name')
+    serializer_class = serializers.GroupCategorySerializer
+    permission_classes = [permissions.AllowAny]
+
+class GroupsViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    """
+    Return a list of all available groups.
+    """
+    queryset = Group.objects.all().order_by('name')
+    serializer_class = serializers.GroupSerializer
+    permission_classes = [permissions.AllowAny]

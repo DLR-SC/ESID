@@ -266,3 +266,21 @@ class RkiNodeSerializer(serializers.ModelSerializer):
         serialized = CompartmentsDataEntrySerializer(instance=queryset, context=self.context, many=many)
 
         return {'node': node.name, **serialized.data}
+
+
+class GroupCategorySerializer(serializers.ModelSerializer):
+    """
+    JSON serializer for a group categories
+    """
+    class Meta:
+        model = GroupCategory
+        fields = ["key", "name", "description"]
+
+
+class GroupSerializer(serializers.ModelSerializer):
+    """
+    JSON serializer for a group
+    """
+    class Meta:
+        model = Group
+        fields = ["key", "name", "description", "category"]
