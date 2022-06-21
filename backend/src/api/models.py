@@ -160,7 +160,7 @@ class SimulationModel(models.Model):
 
 class ScenarioParameterGroup(models.Model):
     distribution = models.ForeignKey(Distribution, related_name='distribution', on_delete=models.RESTRICT)
-    group = models.ForeignKey(Group, related_name='group', on_delete=models.RESTRICT)
+    groups = models.ManyToManyField(Group)
     
     @property
     def min(self):

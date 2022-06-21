@@ -75,6 +75,7 @@ export default function SimulationChart(): JSX.Element {
   useEffect(() => {
     // Create chart instance (is called when props.scenarios changes)
     const chart = am4core.create('chartdiv', am4charts.XYChart);
+
     // Set localization
     chart.language.locale = i18n.language === 'de' ? am4lang_de_DE : am4lang_en_US;
 
@@ -368,8 +369,7 @@ export default function SimulationChart(): JSX.Element {
       <Box
         id='chartdiv'
         sx={{
-          height: '100%',
-          width: '100%',
+          height: 'calc(100% - 4px)',
           margin: 0,
           padding: 0,
           backgroundColor: theme.palette.background.paper,

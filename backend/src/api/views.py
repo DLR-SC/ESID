@@ -62,8 +62,9 @@ class SimulationModelViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, v
     Return a list of all available simulation models.
     """
     queryset = SimulationModel.objects.all().order_by('name')
-    permission_classes = [permissions.AllowAny]
+    lookup_field = 'key'
 
+    permission_classes = [permissions.AllowAny]
     serializers_ = {'list': serializers.SimulationModelSerializerMeta, 'retrieve': serializers.SimulationModelSerializerFull}
 
     def get_serializer_class(self):

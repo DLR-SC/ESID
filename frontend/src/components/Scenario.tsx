@@ -26,7 +26,7 @@ export default function Scenario(): JSX.Element {
 
   const dispatch = useAppDispatch();
   const [expandProperties, setExpandProperties] = useState(false);
-  const [simulationModelId, setSimulationModelId] = useState(0);
+  const [simulationModelKey, setSimulationModelKey] = useState<string>('unset');
   const [compartmentValues, setCompartmentValues] = useState<Dictionary<number> | null>(null);
   const [scrollTop, setScrollTop] = useState(0);
 
@@ -52,7 +52,9 @@ export default function Scenario(): JSX.Element {
 
   const {data: scenarioListData} = useGetSimulationsQuery();
   const {data: simulationModelsData} = useGetSimulationModelsQuery();
-  const {data: simulationModelData} = useGetSimulationModelQuery(simulationModelId, {skip: simulationModelId === 0});
+  const {data: simulationModelData} = useGetSimulationModelQuery(simulationModelKey, {
+    skip: simulationModelKey === 'unset',
+  });
   const {data: rkiData} = useGetRkiSingleSimulationEntryQuery(
     {
       node: node,
@@ -64,8 +66,8 @@ export default function Scenario(): JSX.Element {
 
   useEffect(() => {
     if (simulationModelsData && simulationModelsData.results.length > 0) {
-      const id = Number.parseInt(simulationModelsData.results[0].url.slice(-2, -1), 10);
-      setSimulationModelId(id);
+      const {key} = simulationModelsData.results[0];
+      setSimulationModelKey(key);
     }
   }, [simulationModelsData]);
 
@@ -77,7 +79,8 @@ export default function Scenario(): JSX.Element {
 
   useEffect(() => {
     if (simulationModelData) {
-      dispatch(setCompartments(simulationModelData.compartments));
+      const {compartments} = simulationModelData.results;
+      dispatch(setCompartments(compartments));
     }
   }, [simulationModelData, dispatch]);
 

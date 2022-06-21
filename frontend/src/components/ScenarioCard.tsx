@@ -5,9 +5,8 @@ import {useAppSelector} from 'store/hooks';
 import {useGetSingleSimulationEntryQuery} from 'store/services/scenarioApi';
 import {Dictionary} from '../util/util';
 import {useTranslation} from 'react-i18next';
-import ClearIcon from '@mui/icons-material/Clear';
-import CheckIcon from '@mui/icons-material/Check';
 import {NumberFormatter} from '../util/hooks';
+import {CheckBoxOutlineBlank, CheckBox} from '@mui/icons-material';
 
 /**
  * React Component to render individual Scenario Card
@@ -113,7 +112,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
             onClick={() => props.onToggle()}
             aria-label={props.active ? t('scenario.deactivate') : t('scenario.activate')}
           >
-            {props.active ? <ClearIcon /> : <CheckIcon />}
+            {props.active ? <CheckBox /> : <CheckBoxOutlineBlank />}
           </IconButton>
         </Tooltip>
       </Box>

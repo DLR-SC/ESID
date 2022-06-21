@@ -9,19 +9,10 @@ export const rkiApi = createApi({
     getRkiByDistrict: builder.query<RKIDataByNode, RKIDataByDistrictParameters>({
       async queryFn(arg, _queryApi, _extraOptions, fetchWithBQ) {
         const group = arg.group || 'total';
-        const compartments = arg.compartments ? `&compartments=${arg.compartments.join(',')}` : '';
-        const url = (limit: number, offset: number) =>
-          `/${arg.node}/${group}/?limit=${limit}&offset=${offset}${compartments}`;
-
-        // fetch the first entry to get the total count
-        const firstResult = await fetchWithBQ(url(1, 0));
-        // return error if any occurs
-        if (firstResult.error) return {error: firstResult.error};
-
-        const firstData = firstResult.data as RKIDataByNode;
+        const compartments = arg.compartments ? `?compartments=${arg.compartments.join(',')}` : '';
 
         // fetch all days
-        const secondResult = await fetchWithBQ(url(firstData.count, 0));
+        const secondResult = await fetchWithBQ(`/${arg.node}/${group}/${compartments}&all`);
         // return error if any occurs
         if (secondResult.error) return {error: secondResult.error};
 
@@ -33,19 +24,10 @@ export const rkiApi = createApi({
     getRkiByDate: builder.query<RKIDataByDate, RKIDataByDateParameters>({
       async queryFn(arg, _queryApi, _extraOptions, fetchWithBQ) {
         const group = arg.group || 'total';
-        const compartments = arg.compartments ? `&compartments=${arg.compartments.join(',')}` : '';
-        const url = (limit: number, offset: number) =>
-          `/${arg.day}/${group}/?limit=${limit}&offset=${offset}${compartments}`;
-
-        // fetch the first entry to get the total count
-        const firstResult = await fetchWithBQ(url(1, 0));
-        // return error if any occurs
-        if (firstResult.error) return {error: firstResult.error};
-
-        const firstData = firstResult.data as RKIDataByDate;
+        const compartments = arg.compartments ? `?compartments=${arg.compartments.join(',')}` : '';
 
         // fetch all days
-        const secondResult = await fetchWithBQ(url(firstData.count, 0));
+        const secondResult = await fetchWithBQ(`/${arg.day}/${group}/${compartments}&all`);
         // return error if any occurs
         if (secondResult.error) return {error: secondResult.error};
 
