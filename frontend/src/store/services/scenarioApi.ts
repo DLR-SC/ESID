@@ -18,9 +18,9 @@ export const scenarioApi = createApi({
       },
     }),
 
-    getSimulationModel: builder.query<SimulationModel, number>({
-      query: (id: number) => {
-        return `simulationmodels/${id}/`;
+    getSimulationModel: builder.query<{results: SimulationModel}, string>({
+      query: (key: string) => {
+        return `simulationmodels/${key}/`;
       },
     }),
 
@@ -59,16 +59,9 @@ export const scenarioApi = createApi({
     getSimulationDataByDate: builder.query<SimulationDataByDate, SimulationDataByDateParameters>({
       async queryFn(arg, _queryApi, _extraOptions, fetchWithBQ) {
         const group = arg.group || 'total';
-        const compartments = arg.compartments ? `&compartments=${arg.compartments.join(',')}` : '';
-        const url = (limit: number, offset: number) =>
-          `simulation/${arg.id}/${arg.day}/${group}/?limit=${limit}&offset=${offset}${compartments}`;
+        const compartments = arg.compartments ? `compartments=${arg.compartments.join(',')}` : '';
 
-        // We fetch 1 entry.
-        const firstResult = await fetchWithBQ(url(1, 0));
-        // When an error occurs, we return it.
-        if (firstResult.error) return {error: firstResult.error};
-
-        const currResult = await fetchWithBQ(url((firstResult.data as SimulationDataByDate).count, 0));
+        const currResult = await fetchWithBQ(`simulation/${arg.id}/${arg.day}/${group}/?${compartments}&all`);
         if (currResult.error) return {error: currResult.error};
 
         const data = currResult.data as SimulationDataByDate;
@@ -80,7 +73,8 @@ export const scenarioApi = createApi({
     getSimulationDataByNode: builder.query<SimulationDataByNode, SimulationDataByNodeParameters>({
       query: (arg: SimulationDataByNodeParameters) => {
         const group = arg.group || 'total';
-        const compartments = arg.compartments ? `?compartments=${arg.compartments.join(',')}` : '';
+        const compartments = arg.compartments ? `?compartments=${arg.compartments.join(',')}&all` : '';
+
         return `simulation/${arg.id}/${arg.node}/${group}/${compartments}`;
       },
     }),
@@ -92,23 +86,14 @@ export const scenarioApi = createApi({
     getMultipleSimulationDataByNode: builder.query<SimulationDataByNode[], MultipleSimulationDataByNodeParameters>({
       async queryFn(arg, _queryApi, _extraOptions, fetchWithBQ) {
         const group = arg.group || 'total';
-        const compartments = arg.compartments ? `&compartments=${arg.compartments.join(',')}` : '';
-        const url = (id: number, limit: number, offset: number) =>
-          `simulation/${id}/${arg.node}/${group}/?limit=${limit}&offset=${offset}${compartments}`;
+        const compartments = arg.compartments ? `compartments=${arg.compartments.join(',')}` : '';
 
         const result: SimulationDataByNode[] = [];
 
         // fetch simulation data for each id
         for (const id of arg.ids) {
-          // fetch first entry to get total count
-          const preResult = await fetchWithBQ(url(id, 1, 0));
-          // return if errors occur
-          if (preResult.error) return {error: preResult.error};
-
-          const preData = preResult.data as SimulationDataByNode;
-
           // fetch all entries
-          const fullResult = await fetchWithBQ(url(id, preData.count, 0));
+          const fullResult = await fetchWithBQ(`simulation/${id}/${arg.node}/${group}/?${compartments}`);
           // return if errors occur
           if (fullResult.error) return {error: fullResult.error};
 
@@ -129,12 +114,12 @@ export const scenarioApi = createApi({
         const result: SelectedScenarioPercentileData[] = [];
 
         const percentile25 = await fetchWithBQ(url(25));
-        //retunr if errors occur
+        //return if errors occur
         if (percentile25.error) return {error: percentile25.error};
         result[0] = percentile25.data as SelectedScenarioPercentileData;
 
         const percentile75 = await fetchWithBQ(url(75));
-        //retunr if errors occur
+        //return if errors occur
         if (percentile75.error) return {error: percentile75.error};
         result[1] = percentile75.data as SelectedScenarioPercentileData;
 

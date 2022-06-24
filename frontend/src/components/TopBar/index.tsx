@@ -15,7 +15,6 @@ export default function TopBar(): JSX.Element {
   return (
     <Grid
       sx={{
-        width: '100%',
         height: '56px',
         backgroundColor: theme.palette.background.default,
         borderBottom: `1px solid ${theme.palette.divider}`,
