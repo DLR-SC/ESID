@@ -7,21 +7,20 @@ import {Divider, Grid} from '@mui/material';
 import {useTheme} from '@mui/material/styles';
 
 //  Including horizontal tabs 
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import GridHeatmap from './GridHeatmap';
+
+//import Typography from '@mui/material/Typography';
+//import Box from '@mui/material/Box';
+
 
 
 // Definition of tab panel interface and its functions
-interface TabPanelProps {
+/* interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
   value: number;
-}
+} */
 
-function TabPanel(props: TabPanelProps) {
+/* function TabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
 
   return (
@@ -39,14 +38,14 @@ function TabPanel(props: TabPanelProps) {
       )}
     </div>
   );
-}
+} */
 
 export default function MainContent(): JSX.Element {
   const theme = useTheme();
-  const [value, setValue] = React.useState(0);
+  /* const [value, setValue] = React.useState(0);
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue); 
-  };
+  }; */
   return (
     <Grid
       container
@@ -76,9 +75,10 @@ export default function MainContent(): JSX.Element {
           }}
         />
       </Grid>
-      <Grid item sx={{flexGrow: 2}}>
-      {/* <Box sx={{ borderBottom: 1, borderColor: 'divider' }}> */}
-      <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+     {/*  /<Grid item sx={{flexGrow: 1}}> */}
+      <Grid item >
+      
+      {/* <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
         <Tab label="Simulation Chart" />
         <Tab label="Detailed View"  />
       </Tabs>
@@ -87,8 +87,9 @@ export default function MainContent(): JSX.Element {
       </TabPanel>
       <TabPanel value={value} index={1}>
       <GridHeatmap />
-      </TabPanel>
-      {/* </Box> */}
+      </TabPanel> */}
+{/*       <SimulationChart />
+ */}      
       </Grid>
     </Grid>
   );

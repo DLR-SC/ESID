@@ -64,6 +64,7 @@ export default function Scenario(): JSX.Element {
 
   useEffect(() => {
     if (simulationModelsData && simulationModelsData.results.length > 0) {
+      console.log("simulationModelsData.results", simulationModelsData.results)
       const id = Number.parseInt(simulationModelsData.results[0].url.slice(-2, -1), 10);
       setSimulationModelId(id);
     }
