@@ -47,8 +47,9 @@ export default function HeatLegendEdit(): JSX.Element {
   };
 
   useEffect(() => {
-    if (!presets || !legend) {
-      //
+    //if the initial placeholder legend is still selected, we need to fetch the heat legends from the json,
+    //else they are already there from localstorage
+    if (legend.name == 'uninitialized') {
       // get heatmap legend preset list from assets and select default
       fetch('assets/heatmap_legend_presets.json', {
         headers: {
