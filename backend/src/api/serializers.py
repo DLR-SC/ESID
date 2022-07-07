@@ -270,7 +270,7 @@ class RkiNodeSerializer(serializers.ModelSerializer):
 
 class GroupCategorySerializer(serializers.ModelSerializer):
     """
-    JSON serializer for a group categories
+    JSON serializer for a category of groups
     """
     class Meta:
         model = GroupCategory
