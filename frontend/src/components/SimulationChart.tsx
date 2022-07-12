@@ -372,7 +372,7 @@ export default function SimulationChart(): JSX.Element {
           height: 'calc(100% - 4px)',
           margin: 0,
           padding: 0,
-          minHeight: '500px',
+          minHeight: '300px',
           minWidth: '200px',
           backgroundColor: theme.palette.background.paper,
           backgroundImage: 'radial-gradient(#E2E4E6 10%, transparent 11%)',

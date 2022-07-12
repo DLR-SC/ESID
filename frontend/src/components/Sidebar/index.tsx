@@ -30,9 +30,9 @@ export default function Sidebar(): JSX.Element {
       <Box>
         <DistrictMap /> 
       </Box>
-{/*       <Box>
+     <Box>
         <GridHeatmap/>
-      </Box> */}
+      </Box> 
 
         
       <Container disableGutters sx={{flexGrow: 0}}>
