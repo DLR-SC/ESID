@@ -88,8 +88,8 @@ export default function MainContent(): JSX.Element {
       <TabPanel value={value} index={1}>
       <GridHeatmap />
       </TabPanel> */}
-{/*       <SimulationChart />
- */}      
+      <SimulationChart />
+     
       </Grid>
     </Grid>
   );

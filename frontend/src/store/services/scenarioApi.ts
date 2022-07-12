@@ -45,9 +45,8 @@ export const scenarioApi = createApi({
            const preResult = await fetchWithBQ(url(id,1,0));
            // return if errors occur
            if (preResult.error) return {error: preResult.error};
-           const preData = preResult.data as SimulationDataByDate         
            // fetch all enteries
-          const fullResult = await fetchWithBQ(url(id, preData.count, 0));
+          const fullResult = await fetchWithBQ(`simulation/${id}/${arg.day}/${group}/?${compartments}`);
           if (fullResult.error) return {error: fullResult.error};
            // put result into list to return
            result[id] = fullResult.data as SimulationDataByDate;
