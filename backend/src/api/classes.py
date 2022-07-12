@@ -8,6 +8,7 @@ from rest_framework.response import Response
 
 def map_groups(groups):
     return map(
+        # Searches for group names in a list separated by commas
         lambda g: Q(groups__regex=rf"^([^,]*,)*{re.escape(g)}(,[^,]*)*$"), 
         groups
     )
