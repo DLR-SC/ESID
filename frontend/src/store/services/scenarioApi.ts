@@ -32,7 +32,7 @@ export const scenarioApi = createApi({
 
     getSimulationDataByDate: builder.query<SimulationDataByDate, SimulationDataByDateParameters>({
       async queryFn(arg, _queryApi, _extraOptions, fetchWithBQ) {
-        const groups = (arg.groups && arg.groups.length > 0) ? `&groups=${arg.groups.join(',')}` : '&groups=total';
+        const groups = arg.groups && arg.groups.length > 0 ? `&groups=${arg.groups.join(',')}` : '&groups=total';
         const compartments = arg.compartments ? `&compartments=${arg.compartments.join(',')}` : '';
 
         const currResult = await fetchWithBQ(`simulation/${arg.id}/${arg.day}/?all${groups}${compartments}`);
@@ -46,7 +46,7 @@ export const scenarioApi = createApi({
 
     getSimulationDataByNode: builder.query<SimulationDataByNode, SimulationDataByNodeParameters>({
       query: (arg: SimulationDataByNodeParameters) => {
-        const groups = (arg.groups && arg.groups.length > 0) ? `&groups=${arg.groups.join(',')}` : '&groups=total';
+        const groups = arg.groups && arg.groups.length > 0 ? `&groups=${arg.groups.join(',')}` : '&groups=total';
         const compartments = arg.compartments ? `&compartments=${arg.compartments.join(',')}&all` : '';
 
         return `simulation/${arg.id}/${arg.node}/?all${groups}${compartments}`;
@@ -54,12 +54,15 @@ export const scenarioApi = createApi({
     }),
 
     getSingleSimulationEntry: builder.query<SimulationDataByNode, SingleSimulationEntryParameters>({
-      query: (arg: SingleSimulationEntryParameters) => `simulation/${arg.id}/${arg.node}/?all&day=${arg.day}&groups=${(arg.groups && arg.groups.length > 0) ? arg.groups.join(',') : 'total'}`,
+      query: (arg: SingleSimulationEntryParameters) =>
+        `simulation/${arg.id}/${arg.node}/?all&day=${arg.day}&groups=${
+          arg.groups && arg.groups.length > 0 ? arg.groups.join(',') : 'total'
+        }`,
     }),
 
     getMultipleSimulationDataByNode: builder.query<SimulationDataByNode[], MultipleSimulationDataByNodeParameters>({
       async queryFn(arg, _queryApi, _extraOptions, fetchWithBQ) {
-        const groups = (arg.groups && arg.groups.length > 0) ? `&groups=${arg.groups.join(',')}` : '&groups=total';
+        const groups = arg.groups && arg.groups.length > 0 ? `&groups=${arg.groups.join(',')}` : '&groups=total';
         const compartments = arg.compartments ? `&compartments=${arg.compartments.join(',')}` : '';
 
         const result: SimulationDataByNode[] = [];
@@ -81,7 +84,7 @@ export const scenarioApi = createApi({
 
     getPercentileData: builder.query<SelectedScenarioPercentileData[], SelectedScenario>({
       async queryFn(arg, _queryApi, _extraOptions, fetchWithBQ) {
-        const groups = (arg.groups && arg.groups.length > 0) ? `&groups=${arg.groups.join(',')}` : '&groups=total';
+        const groups = arg.groups && arg.groups.length > 0 ? `&groups=${arg.groups.join(',')}` : '&groups=total';
         const url = (percentile: number) =>
           `simulation/${arg.id}/${arg.node}/?all&percentile=${percentile}&compartments=${arg.compartment}${groups}`;
 

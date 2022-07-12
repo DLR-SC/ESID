@@ -8,7 +8,7 @@ export const rkiApi = createApi({
   endpoints: (builder) => ({
     getRkiByDistrict: builder.query<RKIDataByNode, RKIDataByDistrictParameters>({
       async queryFn(arg, _queryApi, _extraOptions, fetchWithBQ) {
-        const groups = (arg.groups && arg.groups.length > 0) ? `&groups=${arg.groups.join(',')}` : '&groups=total';
+        const groups = arg.groups && arg.groups.length > 0 ? `&groups=${arg.groups.join(',')}` : '&groups=total';
         const compartments = arg.compartments ? `&compartments=${arg.compartments.join(',')}` : '';
 
         // fetch all days
@@ -23,7 +23,7 @@ export const rkiApi = createApi({
 
     getRkiByDate: builder.query<RKIDataByDate, RKIDataByDateParameters>({
       async queryFn(arg, _queryApi, _extraOptions, fetchWithBQ) {
-        const groups = (arg.groups && arg.groups.length > 0) ? `&groups=${arg.groups.join(',')}` : '&groups=total';
+        const groups = arg.groups && arg.groups.length > 0 ? `&groups=${arg.groups.join(',')}` : '&groups=total';
         const compartments = arg.compartments ? `&compartments=${arg.compartments.join(',')}` : '';
 
         // fetch all days
@@ -37,7 +37,10 @@ export const rkiApi = createApi({
     }),
 
     getRkiSingleSimulationEntry: builder.query<SimulationDataByNode, RKISingleSimulationEntryParameters>({
-      query: (arg: RKISingleSimulationEntryParameters) => `${arg.node}/?all&day=${arg.day}&groups=${(arg.groups && arg.groups.length > 0) ? arg.groups.join(',') : 'total'}`,
+      query: (arg: RKISingleSimulationEntryParameters) =>
+        `${arg.node}/?all&day=${arg.day}&groups=${
+          arg.groups && arg.groups.length > 0 ? arg.groups.join(',') : 'total'
+        }`,
     }),
   }),
 });

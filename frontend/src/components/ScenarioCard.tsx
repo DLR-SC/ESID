@@ -31,7 +31,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
       id: props.scenario.id,
       node: node,
       day: day ?? '',
-      groups: ['total']
+      groups: ['total'],
     },
     {skip: !day}
   );
