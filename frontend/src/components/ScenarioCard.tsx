@@ -27,7 +27,12 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
   const node = useAppSelector((state) => state.dataSelection.district?.ags);
   const day = useAppSelector((state) => state.dataSelection.date);
   const {data} = useGetSingleSimulationEntryQuery(
-    {id: props.scenario.id, node: node, day: day ?? '', group: 'total'},
+    {
+      id: props.scenario.id,
+      node: node,
+      day: day ?? '',
+      groups: ['total']
+    },
     {skip: !day}
   );
 

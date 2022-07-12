@@ -60,7 +60,7 @@ export default function Scenario(): JSX.Element {
     {
       node: node,
       day: startDay ?? '',
-      group: 'total',
+      groups: ['total'],
     },
     {skip: !startDay}
   );

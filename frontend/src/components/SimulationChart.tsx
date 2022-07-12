@@ -42,7 +42,7 @@ export default function SimulationChart(): JSX.Element {
   const {data: rkiData, isFetching: rkiFetching} = useGetRkiByDistrictQuery(
     {
       node: selectedDistrict,
-      group: 'total',
+      groups: ['total'],
       compartments: [selectedCompartment ?? ''],
     },
     {skip: !selectedCompartment}
@@ -52,7 +52,7 @@ export default function SimulationChart(): JSX.Element {
     {
       ids: activeScenarios,
       node: selectedDistrict,
-      group: '',
+      groups: ['total'],
       compartments: [selectedCompartment ?? ''],
     },
     {skip: !selectedCompartment}
@@ -62,7 +62,7 @@ export default function SimulationChart(): JSX.Element {
     {
       id: selectedScenario as number,
       node: selectedDistrict,
-      group: '',
+      groups: ['total'],
       compartment: selectedCompartment as string,
     },
     {skip: !selectedScenario || !selectedCompartment}
