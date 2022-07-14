@@ -24,7 +24,7 @@ class DataEntryFilterMixin:
             "to": values.get('to', None),
             "nodes": values.get('nodes', None),
             "compartments": values.get('compartments', None),
-            "percentile": values.get('percentile', 50),
+            "percentile": values.get('percentile', None),
         }
 
     def get_filter_context(self):
