@@ -17,7 +17,7 @@ def map_groups(groups):
 class DataEntryFilterMixin:
 
     def extract_filters(self, values):
-        return {
+        filters = {
             "day": values.get('day', None),
             "groups": values.get('groups', None),
             "from": values.get('from', None),
@@ -27,32 +27,35 @@ class DataEntryFilterMixin:
             "percentile": values.get('percentile', None),
         }
 
+        # remove all keys with value 'None'
+        return {k: v for k, v in filters.items() if v is not None}
+
     def get_filter_context(self):
         
         context = self.extract_filters(self.request.query_params)
 
         if self.request.data is not None:
-            context.update({k: v for k, v in self.extract_filters(self.request.data).items() if v is not None})
+            context.update(self.extract_filters(self.request.data))
 
         if self.kwargs.get('day', None) is not None:
             context["day"] = self.kwargs.get('day', None)
 
-        if context["day"] is not None:
+        if context.get("day") is not None:
             context["day"] = datetime.strptime(context["day"], "%Y-%m-%d")
 
-        if context["from"] is not None:
+        if context.get("from") is not None:
             context["from"] = datetime.strptime(context["from"], "%Y-%m-%d")
 
-        if context["to"] is not None:
+        if context.get("to") is not None:
             context["to"] = datetime.strptime(context["to"], "%Y-%m-%d")
 
-        if context["nodes"] is not None:
+        if context.get("nodes") is not None:
             context["nodes"] = context["nodes"].split(',')
 
-        if context["compartments"] is not None and isinstance(context["compartments"], str):
+        if context.get("compartments") is not None and isinstance(context["compartments"], str):
             context["compartments"] = context["compartments"].split(',')
 
-        if context["groups"] is not None and isinstance(context["groups"], str):
+        if context.get("groups") is not None and isinstance(context["groups"], str):
             context["groups"] = context["groups"].split(',')
 
         return context
