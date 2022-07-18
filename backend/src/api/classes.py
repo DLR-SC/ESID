@@ -1,33 +1,62 @@
 from datetime import datetime
+import collections, functools, itertools, operator
+import re
+
+from django.db.models import Q
+
+from rest_framework.response import Response
+
+def map_groups(groups):
+    return map(
+        # Searches for group names in a list separated by commas
+        lambda g: Q(groups__regex=rf"^([^,]*,)*{re.escape(g)}(,[^,]*)*$"), 
+        groups
+    )
+
+
 class DataEntryFilterMixin:
 
+    def extract_filters(self, values):
+        filters = {
+            "day": values.get('day', None),
+            "groups": values.get('groups', None),
+            "from": values.get('from', None),
+            "to": values.get('to', None),
+            "nodes": values.get('nodes', None),
+            "compartments": values.get('compartments', None),
+            "percentile": values.get('percentile', None),
+        }
+
+        # remove all keys with value 'None'
+        return {k: v for k, v in filters.items() if v is not None}
+
     def get_filter_context(self):
-        context = {}
-        context["group"] = self.kwargs.get('group', None)
-        context["day"] = self.kwargs.get('day', self.request.query_params.get('day', None))
+        
+        context = self.extract_filters(self.request.query_params)
 
-        context["from"] = self.request.query_params.get('from', None)
-        context["to"] = self.request.query_params.get('to', None)
+        if self.request.data is not None:
+            context.update(self.extract_filters(self.request.data))
 
-        context["nodes"] = self.request.query_params.get('nodes', None)
+        if self.kwargs.get('day', None) is not None:
+            context["day"] = self.kwargs.get('day', None)
 
-        context["compartments"] = self.request.query_params.get('compartments', None)
-        context["percentile"] = self.request.query_params.get('percentile', 50)
-
-        if context["day"] is not None:
+        if context.get("day") is not None:
             context["day"] = datetime.strptime(context["day"], "%Y-%m-%d")
 
-        if context["from"] is not None:
+        if context.get("from") is not None:
             context["from"] = datetime.strptime(context["from"], "%Y-%m-%d")
 
-        if context["to"] is not None:
+        if context.get("to") is not None:
             context["to"] = datetime.strptime(context["to"], "%Y-%m-%d")
 
-        if context["nodes"] is not None:
+        if context.get("nodes") is not None:
             context["nodes"] = context["nodes"].split(',')
 
-        if context["compartments"] is not None:
+        if context.get("compartments") is not None and isinstance(context["compartments"], str):
             context["compartments"] = context["compartments"].split(',')
+
+        if context.get("groups") is not None and isinstance(context["groups"], str):
+            context["groups"] = context["groups"].split(',')
 
         return context
 
@@ -35,15 +64,34 @@ class DataEntryFilterMixin:
     def get_serializer_context(self):
         return {**super().get_serializer_context(), **self.get_filter_context()}
 
-
     def get_filtered_queryset(self, queryset):
         context = self.get_filter_context()
 
         queryset = queryset.filter(percentile=context.get('percentile', 50))
 
-        group = context.get('group', None)
-        if group is not None:
-            queryset = queryset.filter(groups=group)
+        groups = context.get('groups', None)
+        if groups is not None:
+            if isinstance(groups, list):
+                queryset = queryset.filter(
+                    functools.reduce(
+                        lambda a, b: a | b, 
+                        map_groups(groups)
+                    )
+                )
+            elif isinstance(groups, dict):
+                categories = groups.keys()
+                filter_condition = functools.reduce(
+                    lambda a, b: a & b,
+                    map(
+                        lambda category: functools.reduce(
+                            lambda a, b: a | b, 
+                            map_groups(groups.get(category))
+                        ), 
+                        categories
+                    )
+                )
+
+                queryset = queryset.filter(filter_condition)
 
         day = context.get('day', None)
         from_ = context.get('from', None)
@@ -59,3 +107,34 @@ class DataEntryFilterMixin:
             queryset = queryset.filter(day__lte=to)
 
         return queryset
+
+    def aggregateBy(self, field):
+        data = self.paginate_queryset(self.get_queryset())
+        serializer = self.get_serializer(data, many=True)
+
+        reduced = []
+
+        for key, group in itertools.groupby(serializer.data, key=lambda x: x[field]):
+            entries = list(group)
+            reduced.append(dict(entries[0], **{
+                "compartments": dict(
+                    functools.reduce(
+                        operator.add, 
+                        map(collections.Counter, list([g['compartments'] for g in entries]))
+                    )
+                )
+            }))
+
+        return self.get_paginated_response(reduced)
+
+    def paginate_queryset(self, queryset):
+        if 'all' in self.request.query_params:
+            return queryset
+
+        return super().paginate_queryset(queryset)
+
+    def get_paginated_response(self, data):
+        if 'all' in self.request.query_params:
+            return Response(data)
+        else:
+            return super().get_paginated_response(data)
