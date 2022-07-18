@@ -85,10 +85,10 @@ export default function Scenario(): JSX.Element {
   }, [simulationModelData, dispatch]);
 
   useEffect(() => {
-    if (scenarioList.compartments.length > 0) {
+    if (!selectedCompartment && scenarioList.compartments.length > 0) {
       dispatch(selectCompartment(scenarioList.compartments[0]));
     }
-  }, [dispatch, scenarioList.compartments]);
+  }, [dispatch, scenarioList.compartments, selectedCompartment]);
 
   useEffect(() => {
     if (scenarioListData) {
