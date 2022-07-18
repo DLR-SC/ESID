@@ -4,6 +4,8 @@ from src.api import views
 
 api_router = SimpleRouter()
 
+api_router.register(r'groupcategories', views.GroupCategoriesViewSet, basename='groupcategory')
+api_router.register(r'groups', views.GroupsViewSet, basename='group')
 api_router.register(r'restrictions', views.RestrictionsViewSet, basename='restriction')
 api_router.register(r'scenarios', views.ScenarioViewSet, basename='scenario')
 api_router.register(r'simulationmodels', views.SimulationModelViewSet, basename='simulationmodel')
