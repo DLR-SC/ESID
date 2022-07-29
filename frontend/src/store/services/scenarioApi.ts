@@ -1,5 +1,5 @@
-import {Dictionary} from 'util/util';
-import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
+import { Dictionary } from 'util/util';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import {
   SimulationDataByDate,
   SimulationDataByNode,
@@ -10,7 +10,7 @@ import {
 
 export const scenarioApi = createApi({
   reducerPath: 'scenarioApi',
-  baseQuery: fetchBaseQuery({baseUrl: `${process.env.API_URL || ''}/api/v1/`}),
+  baseQuery: fetchBaseQuery({ baseUrl: `${process.env.API_URL || ''}/api/v1/` }),
   endpoints: (builder) => ({
     getSimulationModels: builder.query<SimulationModels, void>({
       query: () => {
@@ -18,7 +18,7 @@ export const scenarioApi = createApi({
       },
     }),
 
-    getSimulationModel: builder.query<{results: SimulationModel}, string>({
+    getSimulationModel: builder.query<{ results: SimulationModel }, string>({
       query: (key: string) => {
         return `simulationmodels/${key}/`;
       },
@@ -36,11 +36,11 @@ export const scenarioApi = createApi({
         const compartments = arg.compartments ? `&compartments=${arg.compartments.join(',')}` : '';
 
         const currResult = await fetchWithBQ(`simulation/${arg.id}/${arg.day}/?all${groups}${compartments}`);
-        if (currResult.error) return {error: currResult.error};
+        if (currResult.error) return { error: currResult.error };
 
         const data = currResult.data as SimulationDataByDate;
 
-        return {data};
+        return { data };
       },
     }),
 
@@ -55,8 +55,7 @@ export const scenarioApi = createApi({
 
     getSingleSimulationEntry: builder.query<SimulationDataByNode, SingleSimulationEntryParameters>({
       query: (arg: SingleSimulationEntryParameters) =>
-        `simulation/${arg.id}/${arg.node}/?all&day=${arg.day}&groups=${
-          arg.groups && arg.groups.length > 0 ? arg.groups.join(',') : 'total'
+        `simulation/${arg.id}/${arg.node}/?all&day=${arg.day}&groups=${arg.groups && arg.groups.length > 0 ? arg.groups.join(',') : 'total'
         }`,
     }),
 
@@ -72,13 +71,13 @@ export const scenarioApi = createApi({
           // fetch all entries
           const fullResult = await fetchWithBQ(`simulation/${id}/${arg.node}/?all${groups}${compartments}`);
           // return if errors occur
-          if (fullResult.error) return {error: fullResult.error};
+          if (fullResult.error) return { error: fullResult.error };
 
           // put result into list to return
           result[id] = fullResult.data as SimulationDataByNode;
         }
 
-        return {data: result};
+        return { data: result };
       },
     }),
 
@@ -92,15 +91,15 @@ export const scenarioApi = createApi({
 
         const percentile25 = await fetchWithBQ(url(25));
         //return if errors occur
-        if (percentile25.error) return {error: percentile25.error};
+        if (percentile25.error) return { error: percentile25.error };
         result[0] = percentile25.data as SelectedScenarioPercentileData;
 
         const percentile75 = await fetchWithBQ(url(75));
         //return if errors occur
-        if (percentile75.error) return {error: percentile75.error};
+        if (percentile75.error) return { error: percentile75.error };
         result[1] = percentile75.data as SelectedScenarioPercentileData;
 
-        return {data: result};
+        return { data: result };
       },
     }),
   }),

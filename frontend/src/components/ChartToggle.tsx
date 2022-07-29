@@ -1,23 +1,41 @@
 import React from 'react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { toggleGroup } from 'store/DataSelectionSlice';
+import { toggleFilter } from 'store/DataSelectionSlice';
 import {
-    Box, Button, ListItem, IconButton,
+    Box, Button, FormControlLabel, Checkbox, FormGroup,
 } from '@mui/material';
 //Checkbox, FormControlLabel, FormGroup, TextField,
 // 
-import DeleteIcon from '@mui/icons-material/Delete';
 
 interface ChartToggleProps {
     onclose: () => void;
 }
 
 export default function ChartToggle(props: ChartToggleProps): JSX.Element {
-    const groupList = useAppSelector((state) => state.dataSelection.groups);
+    const filterList = useAppSelector((state) => state.dataSelection.filter);
     const dispatch = useAppDispatch();
 
     const checkboxChecked = (name: string) => {
-        dispatch(toggleGroup(name))
+        dispatch(toggleFilter(name))
+    };
+
+
+
+
+    const listfilter = () => {
+        if (filterList && filterList.length >= 1) {
+            return (
+                filterList.map((filterItem) => (
+                    activefilters(filterItem.toggle as boolean, filterItem.name as string)
+                ))
+            );
+        } else {
+            return (<Box><p>Es wurden keine Filter erstellt</p></Box>);
+        }
+    }
+
+    const activefilters = (filterToggle: boolean, filterName: string): JSX.Element => {
+        return (<FormControlLabel control={<Checkbox onClick={() => { checkboxChecked(filterName) }} checked={filterToggle} />} label={filterName} key={filterName} />);
     };
 
 
@@ -29,24 +47,24 @@ export default function ChartToggle(props: ChartToggleProps): JSX.Element {
                 flexDirection: "column",
                 justifyContent: "center",
                 alignItems: "center",
+                marginRight: "2rem",
+                marginLeft: "2rem",
+                marginTop: "0.5rem",
             }}>
-            <Box>
-
-                {
-                    groupList?.map((groupItem, i) => (
-                        <ListItem
-                            key={i}
-                            secondaryAction={
-                                <IconButton edge="end" aria-label="delete" onClick={() => checkboxChecked(groupItem.name as string)} >
-                                    <DeleteIcon />
-                                </IconButton>
-                            }
-                        >
-                            {groupItem.name}
-                        </ListItem>
-                    ))
-                }
-
+            <legend>Aktive Filter</legend>
+            <Box
+                sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                }}
+            >
+                <FormGroup>
+                    {
+                        listfilter()
+                    }
+                </FormGroup>
             </Box>
             <Box>
                 <Button

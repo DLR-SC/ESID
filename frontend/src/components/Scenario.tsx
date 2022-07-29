@@ -1,8 +1,8 @@
-import React, {useState} from 'react';
-import {useAppDispatch, useAppSelector} from '../store/hooks';
-import {useTheme} from '@mui/material/styles';
-import {useTranslation} from 'react-i18next';
-import {selectCompartment, selectDate, selectScenario, setMinMaxDates, toggleScenario} from 'store/DataSelectionSlice';
+import React, { useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { useTheme } from '@mui/material/styles';
+import { useTranslation } from 'react-i18next';
+import { selectCompartment, selectDate, selectScenario, setMinMaxDates, toggleScenario } from 'store/DataSelectionSlice';
 import ScenarioCard from './ScenarioCard';
 import {
   Box, Button, List, ListItemButton, ListItemText, Typography, Dialog
@@ -15,11 +15,11 @@ import {
   useGetSimulationModelsQuery,
   useGetSimulationsQuery,
 } from '../store/services/scenarioApi';
-import {useEffect} from 'react';
-import {setCompartments, setScenarios} from 'store/ScenarioSlice';
-import {dateToISOString, Dictionary} from 'util/util';
-import {useGetRkiSingleSimulationEntryQuery} from '../store/services/rkiApi';
-import {NumberFormatter} from '../util/hooks';
+import { useEffect } from 'react';
+import { setCompartments, setScenarios } from 'store/ScenarioSlice';
+import { dateToISOString, Dictionary } from 'util/util';
+import { useGetRkiSingleSimulationEntryQuery } from '../store/services/rkiApi';
+import { NumberFormatter } from '../util/hooks';
 
 /**
  * React Component to render the Scenario Cards Section
@@ -48,7 +48,7 @@ export default function Scenario(): JSX.Element {
     setScrollTop(scrollEvent.currentTarget.scrollTop);
   }
 
-  const {formatNumber} = NumberFormatter(i18n.language, 3, 8);
+  const { formatNumber } = NumberFormatter(i18n.language, 3, 8);
 
   const getCompartmentValue = (compartment: string): string => {
     if (compartmentValues && compartment in compartmentValues) {
@@ -64,23 +64,23 @@ export default function Scenario(): JSX.Element {
   const startDay = useAppSelector((state) => state.dataSelection.minDate);
   const activeScenarios = useAppSelector((state) => state.dataSelection.activeScenarios);
 
-  const {data: scenarioListData} = useGetSimulationsQuery();
-  const {data: simulationModelsData} = useGetSimulationModelsQuery();
-  const {data: simulationModelData} = useGetSimulationModelQuery(simulationModelKey, {
+  const { data: scenarioListData } = useGetSimulationsQuery();
+  const { data: simulationModelsData } = useGetSimulationModelsQuery();
+  const { data: simulationModelData } = useGetSimulationModelQuery(simulationModelKey, {
     skip: simulationModelKey === 'unset',
   });
-  const {data: rkiData} = useGetRkiSingleSimulationEntryQuery(
+  const { data: rkiData } = useGetRkiSingleSimulationEntryQuery(
     {
       node: node,
       day: startDay ?? '',
       groups: ['total'],
     },
-    {skip: !startDay}
+    { skip: !startDay }
   );
 
   useEffect(() => {
     if (simulationModelsData && simulationModelsData.results.length > 0) {
-      const {key} = simulationModelsData.results[0];
+      const { key } = simulationModelsData.results[0];
       setSimulationModelKey(key);
     }
   }, [simulationModelsData]);
@@ -93,7 +93,7 @@ export default function Scenario(): JSX.Element {
 
   useEffect(() => {
     if (simulationModelData) {
-      const {compartments} = simulationModelData.results;
+      const { compartments } = simulationModelData.results;
       dispatch(setCompartments(compartments));
     }
   }, [simulationModelData, dispatch]);
@@ -122,7 +122,7 @@ export default function Scenario(): JSX.Element {
         const endDay = new Date(startDay);
         endDay.setDate(endDay.getDate() + scenarioListData.results[0].numberOfDays - 1);
 
-        dispatch(setMinMaxDates({minDate: dateToISOString(startDay), maxDate: dateToISOString(endDay)}));
+        dispatch(setMinMaxDates({ minDate: dateToISOString(startDay), maxDate: dateToISOString(endDay) }));
         dispatch(selectDate(dateToISOString(endDay)));
         dispatch(selectScenario(scenarios[0].id));
       }
@@ -206,9 +206,8 @@ export default function Scenario(): JSX.Element {
                 paddingRight: theme.spacing(3),
                 margin: theme.spacing(0),
                 marginTop: theme.spacing(1),
-                borderLeft: `2px ${
-                  selectedCompartment === compartment ? theme.palette.primary.main : 'transparent'
-                } solid`,
+                borderLeft: `2px ${selectedCompartment === compartment ? theme.palette.primary.main : 'transparent'
+                  } solid`,
                 '&.MuiListItemButton-root.Mui-selected': {
                   backgroundColor: theme.palette.background.paper,
                 },

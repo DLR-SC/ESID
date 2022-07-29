@@ -1,12 +1,13 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {useTheme} from '@mui/material/styles';
-import {Box, IconButton, List, ListItem, ListItemText, Tooltip, Typography} from '@mui/material';
-import {useAppSelector} from 'store/hooks';
-import {useGetSingleSimulationEntryQuery} from 'store/services/scenarioApi';
-import {Dictionary} from '../util/util';
-import {useTranslation} from 'react-i18next';
-import {NumberFormatter} from '../util/hooks';
-import {CheckBoxOutlineBlank, CheckBox} from '@mui/icons-material';
+import React, { useEffect, useRef, useState } from 'react';
+import { useTheme } from '@mui/material/styles';
+import { Box, IconButton, List, ListItem, ListItemText, Tooltip, Typography } from '@mui/material';
+import { useAppSelector } from 'store/hooks';
+import { useGetSingleSimulationEntryQuery } from 'store/services/scenarioApi';
+import { Dictionary } from '../util/util';
+import { useTranslation } from 'react-i18next';
+import { NumberFormatter } from '../util/hooks';
+import { CheckBoxOutlineBlank, CheckBox } from '@mui/icons-material';
+import { groupData } from "../types/group";
 
 /**
  * React Component to render individual Scenario Card
@@ -15,33 +16,33 @@ import {CheckBoxOutlineBlank, CheckBox} from '@mui/icons-material';
  */
 export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
   const theme = useTheme();
-  const {t, i18n} = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const compartmentsRef = useRef<HTMLUListElement | null>(null);
 
-  const {formatNumber} = NumberFormatter(i18n.language, 3, 8);
+  const { formatNumber } = NumberFormatter(i18n.language, 3, 8);
 
   const [compartmentValues, setCompartmentValues] = useState<Dictionary<number> | null>(null);
 
   const compartments = useAppSelector((state) => state.scenarioList.compartments);
   const node = useAppSelector((state) => state.dataSelection.district?.ags);
   const day = useAppSelector((state) => state.dataSelection.date);
-  const {data} = useGetSingleSimulationEntryQuery(
+  const filterList = useAppSelector((state) => state.dataSelection.filter);
+  const filterData = useAppSelector((state) => state.dataSelection.filterData);
+
+  const { data } = useGetSingleSimulationEntryQuery(
     {
       id: props.scenario.id,
       node: node,
       day: day ?? '',
       groups: ['total'],
     },
-    {skip: !day}
+    { skip: !day }
   );
 
   const [hover, setHover] = useState<boolean>(false);
 
   const [folded, fold] = useState(true);
-  const [backgroundColor, setColor] = useState(props.color);
-  const [groupInfoWidth, setGroupInfoWidth] = useState('3rem');
-  const [groupInfoHeight, setGroupInfoHeight] = useState('11rem');
 
   useEffect(() => {
     if (compartmentsRef.current) {
@@ -59,17 +60,51 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
     }
   }, [data]);
 
-  useEffect(() => {
-    if (folded == true) {
-      setColor(props.color);
-      setGroupInfoWidth('3rem');
-      setGroupInfoHeight('11rem');
-    } else {
-      setColor(theme.palette.background.paper);
-      setGroupInfoWidth('10rem');
-      setGroupInfoHeight('min-content');
+  const getIndexByDay = (filter: groupData[]): number => {
+    for (let i = 0; i < filter.length; i++) {
+      if (filter[i].day == day) {
+        return i;
+      }
     }
-  }, [folded, props.color, theme.palette.background.paper]);
+    return 0;
+  }
+
+  const filterCompartmentValues = (filterName: string, dateIndex: number): JSX.Element | null => {
+    if (filterData) {
+      return (<Box>{Object.keys(filterData[filterName][dateIndex].compartments).map((compartment, i) => {
+
+        return (
+          // hide compartment if expandProperties false and index > 4
+          // highlight compartment if selectedProperty === compartment
+          <ListItem
+            key={compartment}
+            sx={{
+              display: props.expandProperties || i < 4 ? 'flex' : 'none',
+              color: props.selectedProperty === compartment ? theme.palette.text.primary : theme.palette.text.disabled,
+              alignContent: "center",
+              padding: "4px",
+              margin: "0px",
+              marginTop: "4px",
+              marginRight: "1rem",
+            }}
+          >
+            <ListItemText
+              primary={formatNumber(filterData[filterName][dateIndex].compartments[compartment])}
+              // disable child typography overriding this
+              disableTypography={true}
+              sx={{
+                typography: 'listElement',
+                alignContent: 'center',
+                flexBasis: '55%',
+              }}
+            />
+          </ListItem>
+        )
+      })}</Box>)
+    } else {
+      return null;
+    }
+  };
 
   const getCompartmentValue = (compartment: string): string => {
     if (compartmentValues && compartment in compartmentValues) {
@@ -97,62 +132,108 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
     return 'N/A';
   };
 
-  const groupInfo = (): JSX.Element => {
-    return (
-      <List
-        ref={compartmentsRef}
-        dense={true}
-        disablePadding={true}
-        sx={{
-          maxHeight: props.expandProperties ? '248px' : 'auto',
-          overflowY: 'hidden',
-        }}
-      >
-        {compartments.map((compartment, i) => (
-          // hide compartment if expandProperties false and index > 4
-          // highlight compartment if selectedProperty === compartment
-          <ListItem
-            key={compartment}
-            sx={{
-              display: props.expandProperties || i < 4 ? 'flex' : 'none',
-              color: props.selectedProperty === compartment ? theme.palette.text.primary : theme.palette.text.disabled,
-              padding: theme.spacing(1),
-              margin: theme.spacing(0),
-              marginTop: theme.spacing(1),
-            }}
-          >
-            <ListItemText
-              primary={getCompartmentValue(compartment)}
-              // disable child typography overriding this
-              disableTypography={true}
-              sx={{
-                typography: 'listElement',
-                textAlign: 'right',
-                flexBasis: '55%',
-              }}
-            />
-            <ListItemText
-              primary={getCompartmentRate(compartment)}
-              // disable child typography overriding this
-              disableTypography={true}
-              sx={{
-                typography: 'listElement',
-                fontWeight: 'bold',
-                textAlign: 'right',
-                flexBasis: '45%',
-              }}
-            />
-          </ListItem>
-        ))}
-      </List>
-    );
+  const FilterInfo = (): JSX.Element | null => {
+    if (filterList && filterList.length >= 1 && filterData && filterList[0].name) {
+      const dateIndex = getIndexByDay(filterData[filterList[0].name]);
+      console.log(dateIndex);
+      return (
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+          }}>
+
+          {Object.keys(filterData).map((filterName, i) => {
+            return (
+              <Box
+                key={filterName}
+                sx={{
+                  marginLeft: i == 0 ? "2.3rem" : "0rem",
+                  paddingTop: "1.6rem",
+                  marginTop: "0rem",
+                  alignContent: "center",
+                  borderLeft: i == 0 ? null : `1px solid`,
+                  borderColor: i == 0 ? null : 'divider',
+                  paddingLeft: "1.5rem",
+                  marginRight: i == Object.keys(filterData).length - 1 ? "0rem" : "1rem",
+                }}>
+
+                <Typography
+                  variant='h3'
+                  sx={{
+                    height: 'min-content',
+                    fontWeight: 'bold',
+                    fontSize: '13pt',
+                    marginRight: "1rem",
+                  }}
+                >
+                  {filterName}
+                </Typography>
+                <List
+                  ref={compartmentsRef}
+                  dense={true}
+                  disablePadding={true}
+                  sx={{
+                    maxHeight: props.expandProperties ? '248px' : 'auto',
+                    overflowY: 'hidden',
+                    width: "fit-content",
+                    alignContent: "right",
+                    padding: theme.spacing(1),
+                    margin: theme.spacing(0),
+                    marginTop: theme.spacing(1),
+                  }}
+                >
+
+                </List>
+                {filterCompartmentValues(filterName, dateIndex)}
+              </Box>
+            )
+          }
+          )}
+
+        </Box>)
+
+    } else {
+      return null
+    }
   };
+
+  const activateFilters = (): JSX.Element | null => {
+    if (filterList && filterList.length >= 1) {
+      for (let i = 0; i < filterList.length; i++) {
+        if (filterList[i].toggle) {
+          return (
+            <Box
+              sx={{
+                display: props.active ? 'inline-flex' : 'none',
+                marginLeft: '-2rem',
+                marginTop: "1rem",
+                border: `2px solid ${props.color}`,
+                width: folded ? "3rem" : "fit-content",
+                height: "12.6rem",
+                borderRadius: '10px',
+                background: folded ? props.color : theme.palette.background.paper,
+                flexDirection: "row",
+              }}
+              onClick={() => fold(!folded)}
+            >
+              {!folded ? FilterInfo() : ''}
+            </Box>)
+        }
+      }
+      return null
+    } else {
+      return null
+    }
+  }
+
 
   return (
     <Box
       sx={{
         display: 'flex',
         flexDirection: 'row',
+        color: props.color,
       }}
     >
       <Box
@@ -319,20 +400,8 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
           </Box>
         </Box>
       </Box>
-      <Box
-        sx={{
-          display: props.active ? 'inline' : 'none',
-          marginLeft: '-1rem',
-          border: `2px solid ${props.color}`,
-          width: groupInfoWidth,
-          height: groupInfoHeight,
-          borderRadius: '10px',
-          background: backgroundColor,
-        }}
-        onClick={() => fold(!folded)}
-      >
-        {!folded ? groupInfo() : ''}
-      </Box>
+
+      {activateFilters()}
     </Box>
   );
 }

@@ -1,23 +1,24 @@
-import React, {useEffect, useRef} from 'react';
+import React, { useEffect, useRef } from 'react';
 import * as am4core from '@amcharts/amcharts4/core';
 import * as am4charts from '@amcharts/amcharts4/charts';
 import am4lang_en_US from '@amcharts/amcharts4/lang/en_US';
 import am4lang_de_DE from '@amcharts/amcharts4/lang/de_DE';
-import {useAppDispatch, useAppSelector} from '../store/hooks';
-import {useTheme} from '@mui/material/styles';
-import {Box} from '@mui/material';
-import {selectDate} from '../store/DataSelectionSlice';
-import {useGetRkiByDistrictQuery} from '../store/services/rkiApi';
-import {dateToISOString} from 'util/util';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { useTheme } from '@mui/material/styles';
+import { Box } from '@mui/material';
+import { selectDate, addFilterData } from '../store/DataSelectionSlice';
+import { useGetRkiByDistrictQuery } from '../store/services/rkiApi';
+import { dateToISOString } from 'util/util';
 import {
   useGetMultipleSimulationDataByNodeQuery,
   useGetPercentileDataQuery,
   PercentileDataByDay,
 } from 'store/services/scenarioApi';
-import {useTranslation} from 'react-i18next';
-import {NumberFormatter} from 'util/hooks';
+import { useTranslation } from 'react-i18next';
+import { NumberFormatter } from 'util/hooks';
 import LoadingContainer from './shared/LoadingContainer';
-
+import { useGetGroupDataMutation, post } from "store/services/groupApi";
+import { groupData, groupResponse } from 'types/group';
 /* This component displays the evolution of the pandemic for a specific compartment (hospitalized, dead, infected, etc.) regarding the different scenarios
  */
 
@@ -29,7 +30,7 @@ const drawDeviations = false;
  * @returns {JSX.Element} JSX Element to render the scenario chart container and the scenario graph within.
  */
 export default function SimulationChart(): JSX.Element {
-  const {t, i18n} = useTranslation();
+  const { t, i18n } = useTranslation();
   const theme = useTheme();
   const scenarioList = useAppSelector((state) => state.scenarioList);
   const selectedDistrict = useAppSelector((state) => state.dataSelection.district.ags);
@@ -37,38 +38,73 @@ export default function SimulationChart(): JSX.Element {
   const selectedDate = useAppSelector((state) => state.dataSelection.date);
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
   const activeScenarios = useAppSelector((state) => state.dataSelection.activeScenarios);
-  const groupList = useAppSelector((state) => state.dataSelection.groups);
+  const filterList = useAppSelector((state) => state.dataSelection.filter);
+  const filterData = useAppSelector((state) => state.dataSelection.filterData);
   const dispatch = useAppDispatch();
-  const {data: rkiData, isFetching: rkiFetching} = useGetRkiByDistrictQuery(
+
+
+  const [getGroupData] = useGetGroupDataMutation();
+
+
+  useEffect(() => {
+    if (filterList) {
+      for (let i = 0; i < filterList.length; i++) {
+
+
+        const postData = {
+          id: selectedScenario,
+          node: selectedDistrict,
+          postGroup: { "groups": filterList[i].groups },
+        } as post;
+
+        getGroupData(postData).then((result) => {
+          const data = Object.values(result)[0] as groupResponse;
+          if (data.results) {
+            dispatch(addFilterData({ name: filterList[i].name as string, data: data.results }));
+            console.log(data.results);
+          }
+        }).catch((err) => console.log(err));
+
+      }
+
+    }
+  }, [filterList, selectedScenario, selectedDistrict, getGroupData, activeScenarios, dispatch]);
+
+
+  const { data: rkiData, isFetching: rkiFetching } = useGetRkiByDistrictQuery(
     {
       node: selectedDistrict,
       groups: ['total'],
       compartments: [selectedCompartment ?? ''],
     },
-    {skip: !selectedCompartment}
+    { skip: !selectedCompartment }
   );
 
-  const {data: simulationData, isFetching: simulationFetching} = useGetMultipleSimulationDataByNodeQuery(
+  const { data: simulationData, isFetching: simulationFetching } = useGetMultipleSimulationDataByNodeQuery(
     {
       ids: activeScenarios,
       node: selectedDistrict,
       groups: ['total'],
       compartments: [selectedCompartment ?? ''],
     },
-    {skip: !selectedCompartment}
+    { skip: !selectedCompartment }
   );
 
-  const {data: percentileData} = useGetPercentileDataQuery(
+  const { data: percentileData } = useGetPercentileDataQuery(
     {
       id: selectedScenario as number,
       node: selectedDistrict,
       groups: ['total'],
       compartment: selectedCompartment as string,
     },
-    {skip: !selectedScenario || !selectedCompartment}
+    { skip: !selectedScenario || !selectedCompartment }
   );
 
-  const {formatNumber} = NumberFormatter(i18n.language, 3, 8);
+
+
+
+
+  const { formatNumber } = NumberFormatter(i18n.language, 3, 8);
 
   const chartRef = useRef<am4charts.XYChart | null>(null);
 
@@ -106,18 +142,22 @@ export default function SimulationChart(): JSX.Element {
     percentileSeries.strokeWidth = 0;
     percentileSeries.fillOpacity = 0.3;
 
-    if (groupList) {
+    if (filterList) {
       //Add series for groups
-      for (let i = 0; i < groupList.length; i++) {
+      const filterStrokes = ["2,4", "8,4", "8,4,2,4"] as string[];
+      for (let i = 0; i < filterList.length; i++) {
         const series = chart.series.push(new am4charts.LineSeries());
-        series.dataFields.valueY = groupList[i].name as string;
+        series.dataFields.valueY = filterList[i].name as string;
         series.dataFields.dateX = 'date';
-        series.id = groupList[i].name as string;
+        series.id = filterList[i].name as string;
         series.strokeWidth = 2;
-        series.fill = am4core.color("red");
+        series.fill = am4core.color(theme.custom.scenarios[(selectedScenario as number - 1) % theme.custom.scenarios.length][0]);
         series.stroke = series.fill;
-        series.tooltipText = `[bold ${series.stroke.hex}]${groupList[i].name as string}:[/] {${i}}`;
-        series.name = groupList[i].name as string;
+        if (i < filterStrokes.length) {
+          series.strokeDasharray = filterStrokes[i];
+        }
+        series.tooltipText = `[bold ${series.stroke.hex}]${filterList[i].name as string}:[/] {${i}}`;
+        series.name = filterList[i].name as string;
 
       };
     }
@@ -134,6 +174,8 @@ export default function SimulationChart(): JSX.Element {
       series.stroke = series.fill;
       series.tooltipText = `[bold ${series.stroke.hex}]${scenario.label}:[/] {${scenarioId}}`;
       series.name = scenario.label;
+
+
 
       if (drawDeviations) {
         const seriesSTD = chart.series.push(new am4charts.LineSeries());
@@ -162,7 +204,7 @@ export default function SimulationChart(): JSX.Element {
     return () => {
       chartRef.current?.dispose();
     };
-  }, [scenarioList, groupList, dispatch, i18n.language, t, theme]);
+  }, [scenarioList, filterList, dispatch, i18n.language, t, theme, filterData, selectedScenario]);
 
   //Effect to hide disabled scenarios (and show them again if not hidden anymore)
   useEffect(() => {
@@ -222,7 +264,7 @@ export default function SimulationChart(): JSX.Element {
         console.error(e);
       }
     };
-  }, [scenarioList, selectedDate, theme, t, i18n.language]);
+  }, [scenarioList, selectedDate, theme, t, i18n.language, filterData]);
 
   // Effect to update Simulation and RKI Data
   useEffect(() => {
@@ -243,34 +285,35 @@ export default function SimulationChart(): JSX.Element {
       // cycle through scenarios
       activeScenarios.forEach((scenarioId) => {
         if (simulationData[scenarioId]) {
-          simulationData[scenarioId].results.forEach(({day, compartments}) => {
-            dataMap.set(day, {...dataMap.get(day), [scenarioId]: compartments[selectedCompartment]});
+          simulationData[scenarioId].results.forEach(({ day, compartments }) => {
+            dataMap.set(day, { ...dataMap.get(day), [scenarioId]: compartments[selectedCompartment] });
           });
         }
       });
 
       // add rki values
       rkiData?.results.forEach((entry) => {
-        dataMap.set(entry.day, {...dataMap.get(entry.day), rki: entry.compartments[selectedCompartment]});
+        dataMap.set(entry.day, { ...dataMap.get(entry.day), rki: entry.compartments[selectedCompartment] });
       });
 
       //add 25th percentile data
       percentileData[0].results?.forEach((entry: PercentileDataByDay) => {
-        dataMap.set(entry.day, {...dataMap.get(entry.day), percentileDown: entry.compartments[selectedCompartment]});
+        dataMap.set(entry.day, { ...dataMap.get(entry.day), percentileDown: entry.compartments[selectedCompartment] });
       });
 
       //add 75th percentile data
       percentileData[1].results?.forEach((entry: PercentileDataByDay) => {
-        dataMap.set(entry.day, {...dataMap.get(entry.day), percentileUp: entry.compartments[selectedCompartment]});
+        dataMap.set(entry.day, { ...dataMap.get(entry.day), percentileUp: entry.compartments[selectedCompartment] });
       });
 
-      if (groupList) {
-        // groups use 75th percentile * random as dummy data
-        for (let i = 0; i < groupList.length; i++) {
-          if (groupList[i].testData && groupList[i].toggle == true) {
-            percentileData[1].results?.forEach((entry: PercentileDataByDay) => {
-              dataMap.set(entry.day, { ...dataMap.get(entry.day), [groupList[i].name as string]: entry.compartments[selectedCompartment] * (groupList[i].testData as number) });
-            });
+      if (filterList && filterData) {
+        for (let i = 0; i < filterList.length; i++) {
+          if (filterList[i] && filterList[i].toggle == true) {
+            if (filterData[filterList[i].name as string]) {
+              filterData[filterList[i].name as string].forEach((entry: groupData) => {
+                dataMap.set(entry.day, { ...dataMap.get(entry.day), [filterList[i].name as string]: entry.compartments[selectedCompartment] });
+              });
+            }
           }
         }
       }
@@ -315,34 +358,32 @@ export default function SimulationChart(): JSX.Element {
               text.push('<tr>');
               text.push(
                 `<th 
-                style='text-align:left; color:${
-                  theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0]
+                style='text-align:left; color:${theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0]
                 }; padding-right:${theme.spacing(2)}'>
                 <strong>${scenarioList.scenarios[selectedScenario].label} p25</strong>
                 </th>`
               );
               text.push(
                 `<td style='text-align:right'>${formatNumber(
-                  (data as {[key: string]: number})[s.dataFields.openValueY]
+                  (data as { [key: string]: number })[s.dataFields.openValueY]
                 )}</td>`
               );
               text.push('</tr>');
               text.push('<tr>');
               text.push(
                 `<th 
-                style='text-align:left; color:${
-                  theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0]
+                style='text-align:left; color:${theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0]
                 }; padding-right:${theme.spacing(2)}'>
                 <strong>${scenarioList.scenarios[selectedScenario].label} p75</strong>
                 </th>`
               );
               text.push(
                 `<td style='text-align:right'>${formatNumber(
-                  (data as {[key: string]: number})[s.dataFields.valueY]
+                  (data as { [key: string]: number })[s.dataFields.valueY]
                 )}</td>`
               );
               text.push('</tr>');
-            } else if (s.dataFields.valueY && data && (data as {[key: string]: number | string})[s.dataFields.valueY]) {
+            } else if (s.dataFields.valueY && data && (data as { [key: string]: number | string })[s.dataFields.valueY]) {
               text.push('<tr>');
               text.push(
                 `<th 
@@ -352,7 +393,7 @@ export default function SimulationChart(): JSX.Element {
               );
               text.push(
                 `<td style='text-align:right'>${formatNumber(
-                  (data as {[key: string]: number})[s.dataFields.valueY]
+                  (data as { [key: string]: number })[s.dataFields.valueY]
                 )}</td>`
               );
               text.push('</tr>');
@@ -383,14 +424,15 @@ export default function SimulationChart(): JSX.Element {
     scenarioList,
     selectedCompartment,
     theme,
-    groupList,
+    filterList,
     formatNumber,
     t,
+    filterData,
   ]);
 
   return (
     <LoadingContainer
-      sx={{width: '100%', height: '100%'}}
+      sx={{ width: '100%', height: '100%' }}
       show={rkiFetching || simulationFetching}
       overlayColor={theme.palette.background.paper}
     >

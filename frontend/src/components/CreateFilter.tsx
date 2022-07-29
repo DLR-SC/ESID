@@ -1,44 +1,68 @@
 import React from 'react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { deleteGroup, addGroup, group } from 'store/DataSelectionSlice';
+import { useGetGroupCategoriesQuery, useGetGroupSubcategoriesQuery, groupSubcategory, groupCategory } from "store/services/groupApi"
+import { deleteFilter, addFilter, filter, deleteFilterData } from 'store/DataSelectionSlice';
 import {
-    Box, Button, Checkbox, FormControlLabel, FormGroup, TextField, ListItem, IconButton,
+    Box, Button, FormControlLabel, FormGroup, TextField, ListItem, IconButton,
 } from '@mui/material';
+import { Dictionary } from "util/util";
 import DeleteIcon from '@mui/icons-material/Delete';
+
+
 
 interface CreateFilterProps {
     onclose: () => void;
 }
 
 export default function CreateFilter(props: CreateFilterProps): JSX.Element {
-    const groupList = useAppSelector((state) => state.dataSelection.groups);
+    const filterList = useAppSelector((state) => state.dataSelection.filter);
     const [err, raiseError] = React.useState(false);
     const [errText, setErrText] = React.useState("");
 
     const dispatch = useAppDispatch();
-    const tempAge = [] as Array<string>;
-    const tempGender = [] as Array<string>;
     const [currentName, setCurrentName] = React.useState("");
 
 
-    const checkboxChecked = (type: string, id: string) => {
-        if (type == "age") {
-            if (tempAge.includes(id)) {
-                tempAge.splice(tempAge.indexOf(id), 1);
-            }
-            else {
-                tempAge.push(id);
-            }
-        }
-        else if (type == "gender") {
-            if (tempGender.includes(id)) {
-                tempGender.splice(tempGender.indexOf(id), 1);
-            }
-            else {
-                tempGender.push(id);
-            }
-        }
+    const { data: groupSubcategories } = useGetGroupSubcategoriesQuery();
+    const { data: groupCategories } = useGetGroupCategoriesQuery();
+
+
+
+
+
+
+
+
+    const createSubcategories = (subcategory: groupSubcategory): JSX.Element => {
+        return (
+            <FormControlLabel key={subcategory.key} control={<input type={"checkbox"} id={subcategory.key} onClick={() => null} />} label={subcategory.description} />
+        )
     };
+
+
+
+    const createCategories = (category: groupCategory, subcategories: Array<groupSubcategory>): JSX.Element => {
+
+
+        return (
+            <Box
+                key={category.key}
+                sx={{
+                    flexGrow: "1"
+                }}
+            >
+                <legend>{category.description}</legend>
+                <FormGroup key={category.key}>
+                    {
+                        subcategories?.map((subcategory) =>
+                            subcategory.category == category.key ? createSubcategories(subcategory) : null
+                        )
+                    }
+                </FormGroup>
+            </Box>
+        )
+    };
+
 
     const groupName = (name: string) => {
         setCurrentName(name);
@@ -47,14 +71,37 @@ export default function CreateFilter(props: CreateFilterProps): JSX.Element {
     };
 
     const createGroup = () => {
+        const selectedGroups = {} as Dictionary<string[]>;
+        if (groupCategories && groupSubcategories) {
+            if (groupCategories.results && groupSubcategories.results) {
 
-        const groupNames = Array<string>();
-        if (groupList) {
-            for (let i = 0; i < groupList.length; i++) {
-                groupNames.push(groupList[i].name as string);
+                groupCategories.results.forEach((category) => {
+
+                    selectedGroups[category.key] = [] as string[];
+
+                    groupSubcategories.results?.forEach((subCategory) => {
+
+                        if (category.key == subCategory.category) {
+
+                            //cast HTMLElement to HTMLInputElement to read checked attribute
+                            if ((document.getElementById(subCategory.key) as HTMLInputElement).checked) {
+                                selectedGroups[category.key].push(subCategory.key);
+                            }
+                        }
+
+                    })
+                })
             }
         }
-        if (groupNames.includes(currentName)) {
+
+
+        const filterNames = Array<string>();
+        if (filterList) {
+            for (let i = 0; i < filterList.length; i++) {
+                filterNames.push(filterList[i].name as string);
+            }
+        }
+        if (filterNames.includes(currentName)) {
             raiseError(true);
             setErrText("Gruppenname existiert bereits.");
         }
@@ -63,20 +110,20 @@ export default function CreateFilter(props: CreateFilterProps): JSX.Element {
             setErrText("Gruppe braucht einen Namen");
         }
         else {
-            const tempGroup: group = {
+            const tempFilter: filter = {
                 name: currentName,
-                age: { ...tempAge },
-                gender: { ...tempGender },
                 toggle: true,
-                testData: Math.random() + 0.5,
+                groups: selectedGroups,
             };
-            dispatch(addGroup(tempGroup));
+            dispatch(addFilter(tempFilter));
         }
+
     };
 
     const delGroup = (name: string | null) => {
         if (name) {
-            dispatch(deleteGroup(name));
+            dispatch(deleteFilter(name));
+            dispatch(deleteFilterData(name))
         }
     };
 
@@ -102,7 +149,7 @@ export default function CreateFilter(props: CreateFilterProps): JSX.Element {
                     onChange={(event) => { groupName(event.target.value) }}
                     id="TextFieldGroupName"
                     size="small"
-                    label="Gruppenname"
+                    label="Filtername"
                     variant="outlined"
                     name="testtt"
                     error={err}
@@ -129,52 +176,37 @@ export default function CreateFilter(props: CreateFilterProps): JSX.Element {
                     }}
                 >
 
-                    <Box
-                        sx={{
-                            flexGrow: "1"
-                        }}
-                    >
-                        <legend>Altersgruppen</legend>
-                        <FormGroup>
-                            <FormControlLabel control={<Checkbox onClick={() => { checkboxChecked("age", "0-10") }} />} label="unter 10" />
-                            <FormControlLabel control={<Checkbox onClick={() => { checkboxChecked("age", "10-20") }} />} label="10-20" />
-                            <FormControlLabel control={<Checkbox onClick={() => { checkboxChecked("age", "20-30") }} />} label="20-30" />
-                            <FormControlLabel control={<Checkbox onClick={() => { checkboxChecked("age", "30-50") }} />} label="30-50" />
-                            <FormControlLabel control={<Checkbox onClick={() => { checkboxChecked("age", "50-80") }} />} label="50-80" />
-                            <FormControlLabel control={<Checkbox onClick={() => { checkboxChecked("age", "über 80") }} />} label="über 80" />
-                        </FormGroup>
-                    </Box>
-                    <Box
-                        sx={{
-                            flexGrow: "1"
-                        }}
-                    >
-                        <legend>Geschlecht</legend>
-                        <FormGroup>
-                            <FormControlLabel control={<Checkbox onClick={() => { checkboxChecked("gender", "Männlich") }} />} label="Männlich" />
-                            <FormControlLabel control={<Checkbox onClick={() => { checkboxChecked("gender", "Weiblich") }} />} label="Weiblich" />
-                        </FormGroup>
-                    </Box>
+                    {
+                        groupCategories?.results?.map((groupCategory) =>
+                            createCategories(groupCategory, groupSubcategories?.results as Array<groupSubcategory>)
+                        )
+                    }
                 </Box>
 
                 <Box
                     sx={{
-                        width: "20%",
+                        borderLeft: `1px solid`,
+                        borderColor: 'divider',
+                        minHeight: '20vh',
+                        paddingLeft: "3rem",
+                        paddingRight: "3rem",
+                        display: 'flex',
+                        flexDirection: "column",
                     }}
                 >
-
+                    <legend>Erstellte Filter</legend>
 
                     {
-                        groupList?.map((groupItem, i) => (
+                        filterList?.map((filterItem, i) => (
                             <ListItem
                                 key={i}
                                 secondaryAction={
-                                    <IconButton edge="end" aria-label="delete" onClick={() => delGroup(groupItem.name)} >
+                                    <IconButton edge="end" aria-label="delete" onClick={() => delGroup(filterItem.name)} >
                                         <DeleteIcon />
                                     </IconButton>
                                 }
                             >
-                                {groupItem.name}
+                                {filterItem.name}
                             </ListItem>
                         ))
                     }
