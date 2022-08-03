@@ -6,7 +6,7 @@ import ShareIcon from '@mui/icons-material/Share';*/
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import {useFullscreen} from 'rooks';
 import {Box, Button, Tooltip} from '@mui/material';
-import {SkipNextRounded, SkipPreviousRounded} from '@mui/icons-material';
+import {PauseRounded, PlayArrowRounded, SkipNextRounded, SkipPreviousRounded} from '@mui/icons-material';
 import {useAppDispatch, useAppSelector} from '../store/hooks';
 import {nextDay, previousDay, selectDate} from '../store/DataSelectionSlice';
 import {useTranslation} from 'react-i18next';
@@ -47,7 +47,7 @@ export default function IconBar(): JSX.Element {
         } else {
           dispatch(nextDay());
         }
-      }, 500);
+      }, 1000);
 
       return () => clearTimeout(intervalId);
     }
@@ -72,11 +72,9 @@ export default function IconBar(): JSX.Element {
           </Button>
         </span>
       </Tooltip>
-      {/* The Play/Pause feature is currently not feasible due to performance problems.
       <Tooltip title={t<string>('icon-bar.play-pause-tooltip')}>
         <Button onClick={() => setIsPlaying(!isPlaying)}>{isPlaying ? <PauseRounded /> : <PlayArrowRounded />}</Button>
       </Tooltip>
-      */}
       <Tooltip title={t<string>('icon-bar.next-day-tooltip')}>
         <span>
           <Button disabled={selectedDay === maxDate || isPlaying} onClick={() => dispatch(nextDay())}>

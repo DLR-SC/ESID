@@ -32,6 +32,8 @@ interface IRegionPolygon {
 
 export default function DistrictMap(): JSX.Element {
   const [geodata, setGeodata] = useState<GeoJSON.GeoJSON | null>(null);
+  const [longLoad, setLongLoad] = useState(false);
+  const [longLoadTimeout, setLongLoadTimeout] = useState<number>();
   const selectedDistrict = useAppSelector((state) => state.dataSelection.district);
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
@@ -75,6 +77,20 @@ export default function DistrictMap(): JSX.Element {
     }
     return max;
   }, [selectedCompartment, data, fixedLegendMaxValue]);
+
+  // This effect is responsible for showing the loading indicator if the data is not ready within 1 second. This
+  // prevents that the indicator is showing for every little change.
+  useEffect(() => {
+    if (isFetching) {
+      setLongLoadTimeout(window.setTimeout(() => {
+        setLongLoad(true);
+      }, 1000));
+    } else {
+      clearTimeout(longLoadTimeout);
+      setLongLoad(false);
+    }
+    // eslint-disable-next-line
+  }, [isFetching, setLongLoad, setLongLoadTimeout]); // longLoadTimeout is deliberately ignored here.
 
   // fetch geojson
   useEffect(() => {
@@ -238,14 +254,16 @@ export default function DistrictMap(): JSX.Element {
           });
         }
       } else {
-        polygonSeries.mapPolygons.each((polygon) => {
-          const regionData = polygon.dataItem?.dataContext as IRegionPolygon;
-          regionData.value = Number.NaN;
-          polygon.setAll({
-            tooltipText: `${t(`BEZ.${regionData.BEZ}`)} {GEN}`,
-            fill: am5.color(theme.palette.text.disabled),
+        if (longLoad) {
+          polygonSeries.mapPolygons.each((polygon) => {
+            const regionData = polygon.dataItem?.dataContext as IRegionPolygon;
+            regionData.value = Number.NaN;
+            polygon.setAll({
+              tooltipText: `${t(`BEZ.${regionData.BEZ}`)} {GEN}`,
+              fill: am5.color(theme.palette.text.disabled),
+            });
           });
-        });
+        }
       }
     }
   }, [
@@ -261,10 +279,11 @@ export default function DistrictMap(): JSX.Element {
     theme,
     isFetching,
     legend,
+    longLoad,
   ]);
 
   return (
-    <LoadingContainer show={isFetching} overlayColor={theme.palette.background.default}>
+    <LoadingContainer show={isFetching && longLoad} overlayColor={theme.palette.background.default}>
       <Box id='mapdiv' height={'650px'} />
       <Grid container px={1}>
         <Grid item container xs={11} alignItems='flex-end'>
