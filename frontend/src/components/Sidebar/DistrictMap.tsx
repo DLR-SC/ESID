@@ -82,9 +82,11 @@ export default function DistrictMap(): JSX.Element {
   // prevents that the indicator is showing for every little change.
   useEffect(() => {
     if (isFetching) {
-      setLongLoadTimeout(window.setTimeout(() => {
-        setLongLoad(true);
-      }, 1000));
+      setLongLoadTimeout(
+        window.setTimeout(() => {
+          setLongLoad(true);
+        }, 1000)
+      );
     } else {
       clearTimeout(longLoadTimeout);
       setLongLoad(false);
