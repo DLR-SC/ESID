@@ -91,6 +91,7 @@
   "devDependencies": {
     "@axe-core/react": "^4.2.2",
     "@babel/preset-react": "^7.12.13",
+    "@saehrimnir/hagrid": "^0.1.1",
     "@testing-library/dom": "^8.11.1",
     "@testing-library/react": "^11.2.6",
     "@testing-library/react-hooks": "^7.0.2",

@@ -1,0 +1,2453 @@
+[
+  [
+    {
+      "position": [
+        0,
+        24
+      ], "RS": "03452", "GEN": "Aurich", "BEZ": "LK"
+    },
+    {
+      "position": [
+        1,
+        24
+      ], "RS": "03462", "GEN": "Wittmund", "BEZ": "LK"
+    },
+    {
+      "position": [
+        2,
+        24
+      ], "RS": "03455", "GEN": "Friesland", "BEZ": "LK"
+    },
+    {
+      "position": [
+        3,
+        24
+      ], "RS": "03405", "GEN": "Wilhelmshaven", "BEZ": "KS"
+    },
+    {
+      "position": [
+        4,
+        24
+      ], "RS": "01054", "GEN": "Nordfriesland", "BEZ": "K"
+    },
+    {
+      "position": [
+        5,
+        24
+      ], "RS": "01051", "GEN": "Dithmarschen", "BEZ": "K"
+    },
+    {
+      "position": [
+        6,
+        24
+      ], "RS": "01001", "GEN": "Flensburg", "BEZ": "KS"
+    },
+    {
+      "position": [
+        7,
+        24
+      ], "RS": "01059", "GEN": "Schleswig-Flensburg", "BEZ": "K"
+    },
+    {
+      "position": [
+        8,
+        24
+      ], "RS": "01058", "GEN": "Rendsburg-Eckernförde", "BEZ": "K"
+    },
+    {
+      "position": [
+        9,
+        24
+      ], "RS": "01002", "GEN": "Kiel", "BEZ": "KS"
+    },
+    {
+      "position": [
+        10,
+        24
+      ], "RS": "01057", "GEN": "Plön", "BEZ": "K"
+    },
+    {
+      "position": [
+        11,
+        24
+      ], "RS": "01055", "GEN": "Ostholstein", "BEZ": "K"
+    },
+    {
+      "position": [
+        12,
+        24
+      ], "RS": "13003", "GEN": "Rostock", "BEZ": "KS"
+    },
+    {
+      "position": [
+        13,
+        24
+      ], "RS": "13072", "GEN": "Rostock", "BEZ": "LK"
+    },
+    {
+      "position": [
+        14,
+        24
+      ], "RS": "13073", "GEN": "Vorpommern-Rügen", "BEZ": "LK"
+    },
+    {
+      "position": [
+        15,
+        24
+      ], "RS": "13075", "GEN": "Vorpommern-Greifswald", "BEZ": "LK"
+    }
+  ],
+  [
+    {
+      "position": [
+        0,
+        23
+      ], "RS": "03402", "GEN": "Emden", "BEZ": "KS"
+    },
+    {
+      "position": [
+        1,
+        23
+      ], "RS": "03457", "GEN": "Leer", "BEZ": "LK"
+    },
+    {
+      "position": [
+        2,
+        23
+      ], "RS": "03451", "GEN": "Ammerland", "BEZ": "LK"
+    },
+    {
+      "position": [
+        3,
+        23
+      ], "RS": "03461", "GEN": "Wesermarsch", "BEZ": "LK"
+    },
+    {
+      "position": [
+        4,
+        23
+      ], "RS": "04012", "GEN": "Bremerhaven", "BEZ": "KS"
+    },
+    {
+      "position": [
+        5,
+        23
+      ], "RS": "03352", "GEN": "Cuxhaven", "BEZ": "LK"
+    },
+    {
+      "position": [
+        6,
+        23
+      ], "RS": "03359", "GEN": "Stade", "BEZ": "LK"
+    },
+    {
+      "position": [
+        7,
+        23
+      ], "RS": "01061", "GEN": "Steinburg", "BEZ": "K"
+    },
+    {
+      "position": [
+        8,
+        23
+      ], "RS": "01004", "GEN": "Neumünster", "BEZ": "KS"
+    },
+    {
+      "position": [
+        9,
+        23
+      ], "RS": "01060", "GEN": "Segeberg", "BEZ": "K"
+    },
+    {
+      "position": [
+        10,
+        23
+      ], "RS": "01062", "GEN": "Stormarn", "BEZ": "K"
+    },
+    {
+      "position": [
+        11,
+        23
+      ], "RS": "01003", "GEN": "Lübeck", "BEZ": "KS"
+    },
+    {
+      "position": [
+        12,
+        23
+      ], "RS": "13074", "GEN": "Nordwestmecklenburg", "BEZ": "LK"
+    },
+    {
+      "position": [
+        13,
+        23
+      ], "RS": "13076", "GEN": "Ludwigslust-Parchim", "BEZ": "LK"
+    },
+    {
+      "position": [
+        14,
+        23
+      ], "RS": "13071", "GEN": "Mecklenburgische Seenplatte", "BEZ": "LK"
+    },
+    {
+      "position": [
+        15,
+        23
+      ], "RS": "12073", "GEN": "Uckermark", "BEZ": "LK"
+    }
+  ],
+  [
+    {
+      "position": [
+        0,
+        22
+      ], "RS": "03454", "GEN": "Emsland", "BEZ": "LK"
+    },
+    {
+      "position": [
+        1,
+        22
+      ], "RS": "03453", "GEN": "Cloppenburg", "BEZ": "LK"
+    },
+    {
+      "position": [
+        2,
+        22
+      ], "RS": "03403", "GEN": "Oldenburg (Oldb)", "BEZ": "KS"
+    },
+    {
+      "position": [
+        3,
+        22
+      ], "RS": "03458", "GEN": "Oldenburg", "BEZ": "LK"
+    },
+    {
+      "position": [
+        4,
+        22
+      ], "RS": "04011", "GEN": "Bremen", "BEZ": "KS"
+    },
+    {
+      "position": [
+        5,
+        22
+      ], "RS": "03356", "GEN": "Osterholz", "BEZ": "LK"
+    },
+    {
+      "position": [
+        6,
+        22
+      ], "RS": "03357", "GEN": "Rotenburg (Wümme)", "BEZ": "LK"
+    },
+    {
+      "position": [
+        7,
+        22
+      ], "RS": "01056", "GEN": "Pinneberg", "BEZ": "K"
+    },
+    {
+      "position": [
+        8,
+        22
+      ], "RS": "03353", "GEN": "Harburg", "BEZ": "LK"
+    },
+    {
+      "position": [
+        9,
+        22
+      ], "RS": "02000", "GEN": "Hamburg", "BEZ": "KS"
+    },
+    {
+      "position": [
+        10,
+        22
+      ], "RS": "03355", "GEN": "Lüneburg", "BEZ": "LK"
+    },
+    {
+      "position": [
+        11,
+        22
+      ], "RS": "01053", "GEN": "Herzogtum Lauenburg", "BEZ": "K"
+    },
+    {
+      "position": [
+        12,
+        22
+      ], "RS": "13004", "GEN": "Schwerin", "BEZ": "KS"
+    },
+    {
+      "position": [
+        13,
+        22
+      ], "RS": "12070", "GEN": "Prignitz", "BEZ": "LK"
+    },
+    {
+      "position": [
+        14,
+        22
+      ], "RS": "12068", "GEN": "Ostprignitz-Ruppin", "BEZ": "LK"
+    },
+    {
+      "position": [
+        15,
+        22
+      ], "RS": "12065", "GEN": "Oberhavel", "BEZ": "LK"
+    }
+  ],
+  [
+    {
+      "position": [
+        0,
+        21
+      ], "RS": "03456", "GEN": "Grafschaft Bentheim", "BEZ": "LK"
+    },
+    {
+      "position": [
+        1,
+        21
+      ], "RS": "05566", "GEN": "Steinfurt", "BEZ": "K"
+    },
+    {
+      "position": [
+        2,
+        21
+      ], "RS": "03459", "GEN": "Osnabrück", "BEZ": "LK"
+    },
+    {
+      "position": [
+        3,
+        21
+      ], "RS": "03460", "GEN": "Vechta", "BEZ": "LK"
+    },
+    {
+      "position": [
+        4,
+        21
+      ], "RS": "03401", "GEN": "Delmenhorst", "BEZ": "KS"
+    },
+    {
+      "position": [
+        5,
+        21
+      ], "RS": "03251", "GEN": "Diepholz", "BEZ": "LK"
+    },
+    {
+      "position": [
+        6,
+        21
+      ], "RS": "03361", "GEN": "Verden", "BEZ": "LK"
+    },
+    {
+      "position": [
+        7,
+        21
+      ], "RS": "03241", "GEN": "Region Hannover", "BEZ": "LK"
+    },
+    {
+      "position": [
+        8,
+        21
+      ], "RS": "03358", "GEN": "Heidekreis", "BEZ": "LK"
+    },
+    {
+      "position": [
+        9,
+        21
+      ], "RS": "03360", "GEN": "Uelzen", "BEZ": "LK"
+    },
+    {
+      "position": [
+        10,
+        21
+      ], "RS": "03354", "GEN": "Lüchow-Dannenberg", "BEZ": "LK"
+    },
+    {
+      "position": [
+        11,
+        21
+      ], "RS": "15081", "GEN": "Altmarkkreis Salzwedel", "BEZ": "LK"
+    },
+    {
+      "position": [
+        12,
+        21
+      ], "RS": "15090", "GEN": "Stendal", "BEZ": "LK"
+    },
+    {
+      "position": [
+        13,
+        21
+      ], "RS": "12063", "GEN": "Havelland", "BEZ": "LK"
+    },
+    {
+      "position": [
+        14,
+        21
+      ], "RS": "12060", "GEN": "Barnim", "BEZ": "LK"
+    },
+    {
+      "position": [
+        15,
+        21
+      ], "RS": "12064", "GEN": "Märkisch-Oderland", "BEZ": "LK"
+    }
+  ],
+  [
+    {
+      "position": [
+        0,
+        20
+      ], "RS": "05554", "GEN": "Borken", "BEZ": "K"
+    },
+    {
+      "position": [
+        1,
+        20
+      ], "RS": "05515", "GEN": "Münster", "BEZ": "KS"
+    },
+    {
+      "position": [
+        2,
+        20
+      ], "RS": "03404", "GEN": "Osnabrück", "BEZ": "KS"
+    },
+    {
+      "position": [
+        3,
+        20
+      ], "RS": "05711", "GEN": "Bielefeld", "BEZ": "KS"
+    },
+    {
+      "position": [
+        4,
+        20
+      ], "RS": "05770", "GEN": "Minden-Lübbecke", "BEZ": "K"
+    },
+    {
+      "position": [
+        5,
+        20
+      ], "RS": "03256", "GEN": "Nienburg (Weser)", "BEZ": "LK"
+    },
+    {
+      "position": [
+        6,
+        20
+      ], "RS": "03257", "GEN": "Schaumburg", "BEZ": "LK"
+    },
+    {
+      "position": [
+        7,
+        20
+      ], "RS": "03252", "GEN": "Hameln-Pyrmont", "BEZ": "LK"
+    },
+    {
+      "position": [
+        8,
+        20
+      ], "RS": "03351", "GEN": "Celle", "BEZ": "LK"
+    },
+    {
+      "position": [
+        9,
+        20
+      ], "RS": "03101", "GEN": "Braunschweig", "BEZ": "KS"
+    },
+    {
+      "position": [
+        10,
+        20
+      ], "RS": "03151", "GEN": "Gifhorn", "BEZ": "LK"
+    },
+    {
+      "position": [
+        11,
+        20
+      ], "RS": "03103", "GEN": "Wolfsburg", "BEZ": "KS"
+    },
+    {
+      "position": [
+        12,
+        20
+      ], "RS": "15086", "GEN": "Jerichower Land", "BEZ": "LK"
+    },
+    {
+      "position": [
+        13,
+        20
+      ], "RS": "12051", "GEN": "Brandenburg an der Havel", "BEZ": "KS"
+    },
+    {
+      "position": [
+        14,
+        20
+      ], "RS": "11000", "GEN": "Berlin", "BEZ": "KS"
+    },
+    {
+      "position": [
+        15,
+        20
+      ], "RS": "12053", "GEN": "Frankfurt (Oder)", "BEZ": "KS"
+    }
+  ],
+  [
+    {
+      "position": [
+        0,
+        19
+      ], "RS": "05562", "GEN": "Recklinghausen", "BEZ": "K"
+    },
+    {
+      "position": [
+        1,
+        19
+      ], "RS": "05558", "GEN": "Coesfeld", "BEZ": "K"
+    },
+    {
+      "position": [
+        2,
+        19
+      ], "RS": "05570", "GEN": "Warendorf", "BEZ": "K"
+    },
+    {
+      "position": [
+        3,
+        19
+      ], "RS": "05754", "GEN": "Gütersloh", "BEZ": "K"
+    },
+    {
+      "position": [
+        4,
+        19
+      ], "RS": "05758", "GEN": "Herford", "BEZ": "K"
+    },
+    {
+      "position": [
+        5,
+        19
+      ], "RS": "05766", "GEN": "Lippe", "BEZ": "K"
+    },
+    {
+      "position": [
+        6,
+        19
+      ], "RS": "05762", "GEN": "Höxter", "BEZ": "K"
+    },
+    {
+      "position": [
+        7,
+        19
+      ], "RS": "03255", "GEN": "Holzminden", "BEZ": "LK"
+    },
+    {
+      "position": [
+        8,
+        19
+      ], "RS": "03157", "GEN": "Peine", "BEZ": "LK"
+    },
+    {
+      "position": [
+        9,
+        19
+      ], "RS": "03102", "GEN": "Salzgitter", "BEZ": "KS"
+    },
+    {
+      "position": [
+        10,
+        19
+      ], "RS": "03158", "GEN": "Wolfenbüttel", "BEZ": "LK"
+    },
+    {
+      "position": [
+        11,
+        19
+      ], "RS": "03154", "GEN": "Helmstedt", "BEZ": "LK"
+    },
+    {
+      "position": [
+        12,
+        19
+      ], "RS": "15083", "GEN": "Börde", "BEZ": "LK"
+    },
+    {
+      "position": [
+        13,
+        19
+      ], "RS": "12069", "GEN": "Potsdam-Mittelmark", "BEZ": "LK"
+    },
+    {
+      "position": [
+        14,
+        19
+      ], "RS": "12054", "GEN": "Potsdam", "BEZ": "KS"
+    },
+    {
+      "position": [
+        15,
+        19
+      ], "RS": "12067", "GEN": "Oder-Spree", "BEZ": "LK"
+    }
+  ],
+  [
+    {
+      "position": [
+        0,
+        18
+      ], "RS": "05154", "GEN": "Kleve", "BEZ": "K"
+    },
+    {
+      "position": [
+        1,
+        18
+      ], "RS": "05170", "GEN": "Wesel", "BEZ": "K"
+    },
+    {
+      "position": [
+        2,
+        18
+      ], "RS": "05512", "GEN": "Bottrop", "BEZ": "KS"
+    },
+    {
+      "position": [
+        3,
+        18
+      ], "RS": "05513", "GEN": "Gelsenkirchen", "BEZ": "KS"
+    },
+    {
+      "position": [
+        4,
+        18
+      ], "RS": "05916", "GEN": "Herne", "BEZ": "KS"
+    },
+    {
+      "position": [
+        5,
+        18
+      ], "RS": "05978", "GEN": "Unna", "BEZ": "K"
+    },
+    {
+      "position": [
+        6,
+        18
+      ], "RS": "05915", "GEN": "Hamm", "BEZ": "KS"
+    },
+    {
+      "position": [
+        7,
+        18
+      ], "RS": "05774", "GEN": "Paderborn", "BEZ": "K"
+    },
+    {
+      "position": [
+        8,
+        18
+      ], "RS": "03254", "GEN": "Hildesheim", "BEZ": "LK"
+    },
+    {
+      "position": [
+        9,
+        18
+      ], "RS": "03153", "GEN": "Goslar", "BEZ": "LK"
+    },
+    {
+      "position": [
+        10,
+        18
+      ], "RS": "15089", "GEN": "Salzlandkreis", "BEZ": "LK"
+    },
+    {
+      "position": [
+        11,
+        18
+      ], "RS": "15003", "GEN": "Magdeburg", "BEZ": "KS"
+    },
+    {
+      "position": [
+        12,
+        18
+      ], "RS": "15001", "GEN": "Dessau-Roßlau", "BEZ": "KS"
+    },
+    {
+      "position": [
+        13,
+        18
+      ], "RS": "15091", "GEN": "Wittenberg", "BEZ": "LK"
+    },
+    {
+      "position": [
+        14,
+        18
+      ], "RS": "12072", "GEN": "Teltow-Fläming", "BEZ": "LK"
+    },
+    {
+      "position": [
+        15,
+        18
+      ], "RS": "12061", "GEN": "Dahme-Spreewald", "BEZ": "LK"
+    }
+  ],
+  [
+    {
+      "position": [
+        0,
+        17
+      ], "RS": "05114", "GEN": "Krefeld", "BEZ": "KS"
+    },
+    {
+      "position": [
+        1,
+        17
+      ], "RS": "05119", "GEN": "Oberhausen", "BEZ": "KS"
+    },
+    {
+      "position": [
+        2,
+        17
+      ], "RS": "05117", "GEN": "Mülheim an der Ruhr", "BEZ": "KS"
+    },
+    {
+      "position": [
+        3,
+        17
+      ], "RS": "05113", "GEN": "Essen", "BEZ": "KS"
+    },
+    {
+      "position": [
+        4,
+        17
+      ], "RS": "05911", "GEN": "Bochum", "BEZ": "KS"
+    },
+    {
+      "position": [
+        5,
+        17
+      ], "RS": "05913", "GEN": "Dortmund", "BEZ": "KS"
+    },
+    {
+      "position": [
+        6,
+        17
+      ], "RS": "05974", "GEN": "Soest", "BEZ": "K"
+    },
+    {
+      "position": [
+        7,
+        17
+      ], "RS": "06633", "GEN": "Kassel", "BEZ": "LK"
+    },
+    {
+      "position": [
+        8,
+        17
+      ], "RS": "03155", "GEN": "Northeim", "BEZ": "LK"
+    },
+    {
+      "position": [
+        9,
+        17
+      ], "RS": "16062", "GEN": "Nordhausen", "BEZ": "LK"
+    },
+    {
+      "position": [
+        10,
+        17
+      ], "RS": "15085", "GEN": "Harz", "BEZ": "LK"
+    },
+    {
+      "position": [
+        11,
+        17
+      ], "RS": "15087", "GEN": "Mansfeld-Südharz", "BEZ": "LK"
+    },
+    {
+      "position": [
+        12,
+        17
+      ], "RS": "15082", "GEN": "Anhalt-Bitterfeld", "BEZ": "LK"
+    },
+    {
+      "position": [
+        13,
+        17
+      ], "RS": "14730", "GEN": "Nordsachsen", "BEZ": "LK"
+    },
+    {
+      "position": [
+        14,
+        17
+      ], "RS": "12066", "GEN": "Oberspreewald-Lausitz", "BEZ": "LK"
+    },
+    {
+      "position": [
+        15,
+        17
+      ], "RS": "12052", "GEN": "Cottbus", "BEZ": "KS"
+    }
+  ],
+  [
+    {
+      "position": [
+        0,
+        16
+      ], "RS": "05166", "GEN": "Viersen", "BEZ": "K"
+    },
+    {
+      "position": [
+        1,
+        16
+      ], "RS": "05112", "GEN": "Duisburg", "BEZ": "KS"
+    },
+    {
+      "position": [
+        2,
+        16
+      ], "RS": "05158", "GEN": "Mettmann", "BEZ": "K"
+    },
+    {
+      "position": [
+        3,
+        16
+      ], "RS": "05124", "GEN": "Wuppertal", "BEZ": "KS"
+    },
+    {
+      "position": [
+        4,
+        16
+      ], "RS": "05954", "GEN": "Ennepe-Ruhr-Kreis", "BEZ": "K"
+    },
+    {
+      "position": [
+        5,
+        16
+      ], "RS": "05914", "GEN": "Hagen", "BEZ": "KS"
+    },
+    {
+      "position": [
+        6,
+        16
+      ], "RS": "05958", "GEN": "Hochsauerlandkreis", "BEZ": "K"
+    },
+    {
+      "position": [
+        7,
+        16
+      ], "RS": "06611", "GEN": "Kassel", "BEZ": "KS"
+    },
+    {
+      "position": [
+        8,
+        16
+      ], "RS": "03159", "GEN": "Göttingen", "BEZ": "LK"
+    },
+    {
+      "position": [
+        9,
+        16
+      ], "RS": "16061", "GEN": "Eichsfeld", "BEZ": "LK"
+    },
+    {
+      "position": [
+        10,
+        16
+      ], "RS": "16065", "GEN": "Kyffhäuserkreis", "BEZ": "LK"
+    },
+    {
+      "position": [
+        11,
+        16
+      ], "RS": "15088", "GEN": "Saalekreis", "BEZ": "LK"
+    },
+    {
+      "position": [
+        12,
+        16
+      ], "RS": "15002", "GEN": "Halle (Saale)", "BEZ": "KS"
+    },
+    {
+      "position": [
+        13,
+        16
+      ], "RS": "14713", "GEN": "Leipzig", "BEZ": "KS"
+    },
+    {
+      "position": [
+        14,
+        16
+      ], "RS": "12062", "GEN": "Elbe-Elster", "BEZ": "LK"
+    },
+    {
+      "position": [
+        15,
+        16
+      ], "RS": "12071", "GEN": "Spree-Neiße", "BEZ": "LK"
+    }
+  ],
+  [
+    {
+      "position": [
+        0,
+        15
+      ], "RS": "05116", "GEN": "Mönchengladbach", "BEZ": "KS"
+    },
+    {
+      "position": [
+        1,
+        15
+      ], "RS": "05162", "GEN": "Rhein-Kreis Neuss", "BEZ": "K"
+    },
+    {
+      "position": [
+        2,
+        15
+      ], "RS": "05111", "GEN": "Düsseldorf", "BEZ": "KS"
+    },
+    {
+      "position": [
+        3,
+        15
+      ], "RS": "05122", "GEN": "Solingen", "BEZ": "KS"
+    },
+    {
+      "position": [
+        4,
+        15
+      ], "RS": "05120", "GEN": "Remscheid", "BEZ": "KS"
+    },
+    {
+      "position": [
+        5,
+        15
+      ], "RS": "05962", "GEN": "Märkischer Kreis", "BEZ": "K"
+    },
+    {
+      "position": [
+        6,
+        15
+      ], "RS": "06635", "GEN": "Waldeck-Frankenberg", "BEZ": "LK"
+    },
+    {
+      "position": [
+        7,
+        15
+      ], "RS": "06634", "GEN": "Schwalm-Eder-Kreis", "BEZ": "LK"
+    },
+    {
+      "position": [
+        8,
+        15
+      ], "RS": "06636", "GEN": "Werra-Meißner-Kreis", "BEZ": "LK"
+    },
+    {
+      "position": [
+        9,
+        15
+      ], "RS": "16064", "GEN": "Unstrut-Hainich-Kreis", "BEZ": "LK"
+    },
+    {
+      "position": [
+        10,
+        15
+      ], "RS": "16068", "GEN": "Sömmerda", "BEZ": "LK"
+    },
+    {
+      "position": [
+        11,
+        15
+      ], "RS": "15084", "GEN": "Burgenlandkreis", "BEZ": "LK"
+    },
+    {
+      "position": [
+        12,
+        15
+      ], "RS": "16077", "GEN": "Altenburger Land", "BEZ": "LK"
+    },
+    {
+      "position": [
+        13,
+        15
+      ], "RS": "14729", "GEN": "Leipzig", "BEZ": "LK"
+    },
+    {
+      "position": [
+        14,
+        15
+      ], "RS": "14627", "GEN": "Meißen", "BEZ": "LK"
+    },
+    {
+      "position": [
+        15,
+        15
+      ], "RS": "14625", "GEN": "Bautzen", "BEZ": "LK"
+    }
+  ],
+  [
+    {
+      "position": [
+        0,
+        14
+      ], "RS": "05370", "GEN": "Heinsberg", "BEZ": "K"
+    },
+    {
+      "position": [
+        1,
+        14
+      ], "RS": "05362", "GEN": "Rhein-Erft-Kreis", "BEZ": "K"
+    },
+    {
+      "position": [
+        2,
+        14
+      ], "RS": "05316", "GEN": "Leverkusen", "BEZ": "KS"
+    },
+    {
+      "position": [
+        3,
+        14
+      ], "RS": "05378", "GEN": "Rheinisch-Bergischer Kreis", "BEZ": "K"
+    },
+    {
+      "position": [
+        4,
+        14
+      ], "RS": "05374", "GEN": "Oberbergischer Kreis", "BEZ": "K"
+    },
+    {
+      "position": [
+        5,
+        14
+      ], "RS": "05966", "GEN": "Olpe", "BEZ": "K"
+    },
+    {
+      "position": [
+        6,
+        14
+      ], "RS": "05970", "GEN": "Siegen-Wittgenstein", "BEZ": "K"
+    },
+    {
+      "position": [
+        7,
+        14
+      ], "RS": "06632", "GEN": "Hersfeld-Rotenburg", "BEZ": "LK"
+    },
+    {
+      "position": [
+        8,
+        14
+      ], "RS": "16067", "GEN": "Gotha", "BEZ": "LK"
+    },
+    {
+      "position": [
+        9,
+        14
+      ], "RS": "16051", "GEN": "Erfurt", "BEZ": "KS"
+    },
+    {
+      "position": [
+        10,
+        14
+      ], "RS": "16055", "GEN": "Weimar", "BEZ": "KS"
+    },
+    {
+      "position": [
+        11,
+        14
+      ], "RS": "16053", "GEN": "Jena", "BEZ": "KS"
+    },
+    {
+      "position": [
+        12,
+        14
+      ], "RS": "16052", "GEN": "Gera", "BEZ": "KS"
+    },
+    {
+      "position": [
+        13,
+        14
+      ], "RS": "14511", "GEN": "Chemnitz", "BEZ": "KS"
+    },
+    {
+      "position": [
+        14,
+        14
+      ], "RS": "14612", "GEN": "Dresden", "BEZ": "KS"
+    },
+    {
+      "position": [
+        15,
+        14
+      ], "RS": "14626", "GEN": "Görlitz", "BEZ": "LK"
+    }
+  ],
+  [
+    {
+      "position": [
+        0,
+        13
+      ], "RS": "05334", "GEN": "Städteregion Aachen", "BEZ": "K"
+    },
+    {
+      "position": [
+        1,
+        13
+      ], "RS": "05358", "GEN": "Düren", "BEZ": "K"
+    },
+    {
+      "position": [
+        2,
+        13
+      ], "RS": "05315", "GEN": "Köln", "BEZ": "KS"
+    },
+    {
+      "position": [
+        3,
+        13
+      ], "RS": "05314", "GEN": "Bonn", "BEZ": "KS"
+    },
+    {
+      "position": [
+        4,
+        13
+      ], "RS": "05382", "GEN": "Rhein-Sieg-Kreis", "BEZ": "K"
+    },
+
+    {
+      "position": [
+        5,
+        13
+      ], "RS": "06532", "GEN": "Lahn-Dill-Kreis", "BEZ": "LK"
+    },
+    {
+      "position": [
+        6,
+        13
+      ], "RS": "06531", "GEN": "Gießen", "BEZ": "LK"
+    },
+    {
+      "position": [
+        7,
+        13
+      ], "RS": "06534", "GEN": "Marburg-Biedenkopf", "BEZ": "LK"
+    },
+    {
+      "position": [
+        8,
+        13
+      ], "RS": "16063", "GEN": "Wartburgkreis", "BEZ": "LK"
+    },
+    {
+      "position": [
+        9,
+        13
+      ], "RS": "16070", "GEN": "Ilm-Kreis", "BEZ": "LK"
+    },
+    {
+      "position": [
+        10,
+        13
+      ], "RS": "16071", "GEN": "Weimarer Land", "BEZ": "LK"
+    },
+    {
+      "position": [
+        11,
+        13
+      ], "RS": "16074", "GEN": "Saale-Holzland-Kreis", "BEZ": "LK"
+    },
+    {
+      "position": [
+        12,
+        13
+      ], "RS": "16076", "GEN": "Greiz", "BEZ": "LK"
+    },
+    {
+      "position": [
+        13,
+        13
+      ], "RS": "14524", "GEN": "Zwickau", "BEZ": "LK"
+    },
+    {
+      "position": [
+        14,
+        13
+      ], "RS": "14522", "GEN": "Mittelsachsen", "BEZ": "LK"
+    },
+    {
+      "position": [
+        15,
+        13
+      ], "RS": "14628", "GEN": "Sächsische Schweiz-Osterzgebirge", "BEZ": "LK"
+    }
+  ],
+  [
+    {
+      "position": [
+        0,
+        12
+      ], "RS": "05366", "GEN": "Euskirchen", "BEZ": "K"
+    },
+    {
+      "position": [
+        1,
+        12
+      ], "RS": "07131", "GEN": "Ahrweiler", "BEZ": "LK"
+    },
+    {
+      "position": [
+        2,
+        12
+      ], "RS": "07138", "GEN": "Neuwied", "BEZ": "LK"
+    },
+    {
+      "position": [
+        3,
+        12
+      ], "RS": "07143", "GEN": "Westerwaldkreis", "BEZ": "LK"
+    },
+    {
+      "position": [
+        4,
+        12
+      ], "RS": "07132", "GEN": "Altenkirchen (Westerwald)", "BEZ": "LK"
+    },
+    {
+      "position": [
+        5,
+        12
+      ], "RS": "06434", "GEN": "Hochtaunuskreis", "BEZ": "LK"
+    },
+    {
+      "position": [
+        6,
+        12
+      ], "RS": "06535", "GEN": "Vogelsbergkreis", "BEZ": "LK"
+    },
+    {
+      "position": [
+        7,
+        12
+      ], "RS": "06631", "GEN": "Fulda", "BEZ": "LK"
+    },
+    {
+      "position": [
+        8,
+        12
+      ], "RS": "09673", "GEN": "Rhön-Grabfeld", "BEZ": "LK"
+    },
+    {
+      "position": [
+        9,
+        12
+      ], "RS": "16066", "GEN": "Schmalkalden-Meiningen", "BEZ": "LK"
+    },
+    {
+      "position": [
+        10,
+        12
+      ], "RS": "16054", "GEN": "Suhl", "BEZ": "KS"
+    },
+    {
+      "position": [
+        11,
+        12
+      ], "RS": "16069", "GEN": "Hildburghausen", "BEZ": "LK"
+    },
+    {
+      "position": [
+        12,
+        12
+      ], "RS": "16072", "GEN": "Sonneberg", "BEZ": "LK"
+    },
+    {
+      "position": [
+        13,
+        12
+      ], "RS": "16073", "GEN": "Saalfeld-Rudolstadt", "BEZ": "LK"
+    },
+    {
+      "position": [
+        14,
+        12
+      ], "RS": "16075", "GEN": "Saale-Orla-Kreis", "BEZ": "LK"
+    },
+    {
+      "position": [
+        15,
+        12
+      ], "RS": "14521", "GEN": "Erzgebirgskreis", "BEZ": "LK"
+    }
+  ],
+  [
+    {
+      "position": [
+        0,
+        11
+      ], "RS": "07233", "GEN": "Vulkaneifel", "BEZ": "LK"
+    },
+    {
+      "position": [
+        1,
+        11
+      ], "RS": "07137", "GEN": "Mayen-Koblenz", "BEZ": "LK"
+    },
+    {
+      "position": [
+        2,
+        11
+      ], "RS": "07111", "GEN": "Koblenz", "BEZ": "KS"
+    },
+    {
+      "position": [
+        3,
+        11
+      ], "RS": "06533", "GEN": "Limburg-Weilburg", "BEZ": "LK"
+    },
+    {
+      "position": [
+        4,
+        11
+      ], "RS": "06436", "GEN": "Main-Taunus-Kreis", "BEZ": "LK"
+    },
+    {
+      "position": [
+        5,
+        11
+      ], "RS": "06412", "GEN": "Frankfurt am Main", "BEZ": "KS"
+    },
+    {
+      "position": [
+        6,
+        11
+      ], "RS": "06440", "GEN": "Wetteraukreis", "BEZ": "LK"
+    },
+    {
+      "position": [
+        7,
+        11
+      ], "RS": "06435", "GEN": "Main-Kinzig-Kreis", "BEZ": "LK"
+    },
+    {
+      "position": [
+        8,
+        11
+      ], "RS": "09672", "GEN": "Bad Kissingen", "BEZ": "LK"
+    },
+    {
+      "position": [
+        9,
+        11
+      ], "RS": "09674", "GEN": "Haßberge", "BEZ": "LK"
+    },
+    {
+      "position": [
+        10,
+        11
+      ], "RS": "09471", "GEN": "Bamberg", "BEZ": "LK"
+    },
+    {
+      "position": [
+        11,
+        11
+      ], "RS": "09473", "GEN": "Coburg", "BEZ": "LK"
+    },
+    {
+      "position": [
+        12,
+        11
+      ], "RS": "09476", "GEN": "Kronach", "BEZ": "LK"
+    },
+    {
+      "position": [
+        13,
+        11
+      ], "RS": "09477", "GEN": "Kulmbach", "BEZ": "LK"
+    },
+    {
+      "position": [
+        14,
+        11
+      ], "RS": "09464", "GEN": "Hof", "BEZ": "KS"
+    },
+    {
+      "position": [
+        15,
+        11
+      ], "RS": "14523", "GEN": "Vogtlandkreis", "BEZ": "LK"
+    }
+  ],
+  [
+    {
+      "position": [
+        0,
+        10
+      ], "RS": "07232", "GEN": "Eifelkreis Bitburg-Prüm", "BEZ": "LK"
+    },
+    {
+      "position": [
+        1,
+        10
+      ], "RS": "07135", "GEN": "Cochem-Zell", "BEZ": "LK"
+    },
+    {
+      "position": [
+        2,
+        10
+      ], "RS": "07141", "GEN": "Rhein-Lahn-Kreis", "BEZ": "LK"
+    },
+    {
+      "position": [
+        3,
+        10
+      ], "RS": "06439", "GEN": "Rheingau-Taunus-Kreis", "BEZ": "LK"
+    },
+    {
+      "position": [
+        4,
+        10
+      ], "RS": "06414", "GEN": "Wiesbaden", "BEZ": "KS"
+    },
+    {
+      "position": [
+        5,
+        10
+      ], "RS": "06413", "GEN": "Offenbach am Main", "BEZ": "KS"
+    },
+    {
+      "position": [
+        6,
+        10
+      ], "RS": "06438", "GEN": "Offenbach", "BEZ": "LK"
+    },
+    {
+      "position": [
+        7,
+        10
+      ], "RS": "09671", "GEN": "Aschaffenburg", "BEZ": "LK"
+    },
+    {
+      "position": [
+        8,
+        10
+      ], "RS": "09662", "GEN": "Schweinfurt", "BEZ": "KS"
+    },
+    {
+      "position": [
+        9,
+        10
+      ], "RS": "09678", "GEN": "Schweinfurt", "BEZ": "LK"
+    },
+    {
+      "position": [
+        10,
+        10
+      ], "RS": "09461", "GEN": "Bamberg", "BEZ": "KS"
+    },
+    {
+      "position": [
+        11,
+        10
+      ], "RS": "09463", "GEN": "Coburg", "BEZ": "KS"
+    },
+    {
+      "position": [
+        12,
+        10
+      ], "RS": "09478", "GEN": "Lichtenfels", "BEZ": "LK"
+    },
+    {
+      "position": [
+        13,
+        10
+      ], "RS": "09462", "GEN": "Bayreuth", "BEZ": "KS"
+    },
+    {
+      "position": [
+        14,
+        10
+      ], "RS": "09475", "GEN": "Hof", "BEZ": "LK"
+    },
+    {
+      "position": [
+        15,
+        10
+      ], "RS": "09479", "GEN": "Wunsiedel i. Fichtelgebirge", "BEZ": "LK"
+    }
+  ],
+  [
+    {
+      "position": [
+        0,
+        9
+      ], "RS": "07211", "GEN": "Trier", "BEZ": "KS"
+    },
+    {
+      "position": [
+        1,
+        9
+      ], "RS": "07231", "GEN": "Bernkastel-Wittlich", "BEZ": "LK"
+    },
+    {
+      "position": [
+        2,
+        9
+      ], "RS": "07140", "GEN": "Rhein-Hunsrück-Kreis", "BEZ": "LK"
+    },
+    {
+      "position": [
+        3,
+        9
+      ], "RS": "07315", "GEN": "Mainz", "BEZ": "KS"
+    },
+    {
+      "position": [
+        4,
+        9
+      ], "RS": "06433", "GEN": "Groß-Gerau", "BEZ": "LK"
+    },
+    {
+      "position": [
+        5,
+        9
+      ], "RS": "06411", "GEN": "Darmstadt", "BEZ": "KS"
+    },
+    {
+      "position": [
+        6,
+        9
+      ], "RS": "09661", "GEN": "Aschaffenburg", "BEZ": "KS"
+    },
+    {
+      "position": [
+        7,
+        9
+      ], "RS": "09677", "GEN": "Main-Spessart", "BEZ": "LK"
+    },
+    {
+      "position": [
+        8,
+        9
+      ], "RS": "09663", "GEN": "Würzburg", "BEZ": "KS"
+    },
+    {
+      "position": [
+        9,
+        9
+      ], "RS": "09675", "GEN": "Kitzingen", "BEZ": "LK"
+    },
+    {
+      "position": [
+        10,
+        9
+      ], "RS": "09572", "GEN": "Erlangen-Höchstadt", "BEZ": "LK"
+    },
+    {
+      "position": [
+        11,
+        9
+      ], "RS": "09562", "GEN": "Erlangen", "BEZ": "KS"
+    },
+    {
+      "position": [
+        12,
+        9
+      ], "RS": "09474", "GEN": "Forchheim", "BEZ": "LK"
+    },
+    {
+      "position": [
+        13,
+        9
+      ], "RS": "09472", "GEN": "Bayreuth", "BEZ": "LK"
+    },
+    {
+      "position": [
+        14,
+        9
+      ], "RS": "09374", "GEN": "Neustadt a.d. Waldnaab", "BEZ": "LK"
+    },
+    {
+      "position": [
+        15,
+        9
+      ], "RS": "09377", "GEN": "Tirschenreuth", "BEZ": "LK"
+    }
+  ],
+  [
+    {
+      "position": [
+        0,
+        8
+      ], "RS": "07235", "GEN": "Trier-Saarburg", "BEZ": "LK"
+    },
+    {
+      "position": [
+        1,
+        8
+      ], "RS": "07134", "GEN": "Birkenfeld", "BEZ": "LK"
+    },
+    {
+      "position": [
+        2,
+        8
+      ], "RS": "07133", "GEN": "Bad Kreuznach", "BEZ": "LK"
+    },
+    {
+      "position": [
+        3,
+        8
+      ], "RS": "07339", "GEN": "Mainz-Bingen", "BEZ": "LK"
+    },
+    {
+      "position": [
+        4,
+        8
+      ], "RS": "07319", "GEN": "Worms", "BEZ": "KS"
+    },
+    {
+      "position": [
+        5,
+        8
+      ], "RS": "06431", "GEN": "Bergstraße", "BEZ": "LK"
+    },
+    {
+      "position": [
+        6,
+        8
+      ], "RS": "06432", "GEN": "Darmstadt-Dieburg", "BEZ": "LK"
+    },
+    {
+      "position": [
+        7,
+        8
+      ], "RS": "09676", "GEN": "Miltenberg", "BEZ": "LK"
+    },
+    {
+      "position": [
+        8,
+        8
+      ], "RS": "09679", "GEN": "Würzburg", "BEZ": "LK"
+    },
+    {
+      "position": [
+        9,
+        8
+      ], "RS": "09561", "GEN": "Ansbach", "BEZ": "KS"
+    },
+    {
+      "position": [
+        10,
+        8
+      ], "RS": "09563", "GEN": "Fürth", "BEZ": "KS"
+    },
+    {
+      "position": [
+        11,
+        8
+      ], "RS": "09564", "GEN": "Nürnberg", "BEZ": "KS"
+    },
+    {
+      "position": [
+        12,
+        8
+      ], "RS": "09574", "GEN": "Nürnberger Land", "BEZ": "LK"
+    },
+    {
+      "position": [
+        13,
+        8
+      ], "RS": "09371", "GEN": "Amberg-Sulzbach", "BEZ": "LK"
+    },
+    {
+      "position": [
+        14,
+        8
+      ], "RS": "09363", "GEN": "Weiden i.d. OPf.", "BEZ": "KS"
+    },
+    {
+      "position": [
+        15,
+        8
+      ], "RS": "09376", "GEN": "Schwandorf", "BEZ": "LK"
+    }
+  ],
+  [
+    {
+      "position": [
+        0,
+        7
+      ], "RS": "10046", "GEN": "St. Wendel", "BEZ": "LK"
+    },
+    {
+      "position": [
+        1,
+        7
+      ], "RS": "07336", "GEN": "Kusel", "BEZ": "LK"
+    },
+    {
+      "position": [
+        2,
+        7
+      ], "RS": "07333", "GEN": "Donnersbergkreis", "BEZ": "LK"
+    },
+    {
+      "position": [
+        3,
+        7
+      ], "RS": "07331", "GEN": "Alzey-Worms", "BEZ": "LK"
+    },
+    {
+      "position": [
+        4,
+        7
+      ], "RS": "07311", "GEN": "Frankenthal (Pfalz)", "BEZ": "KS"
+    },
+    {
+      "position": [
+        5,
+        7
+      ], "RS": "08222", "GEN": "Mannheim", "BEZ": "SK"
+    },
+    {
+      "position": [
+        6,
+        7
+      ], "RS": "06437", "GEN": "Odenwaldkreis", "BEZ": "LK"
+    },
+    {
+      "position": [
+        7,
+        7
+      ], "RS": "08128", "GEN": "Main-Tauber-Kreis", "BEZ": "LK"
+    },
+    {
+      "position": [
+        8,
+        7
+      ], "RS": "09575", "GEN": "Neustadt a.d. Aisch-Bad Windsheim", "BEZ": "LK"
+    },
+    {
+      "position": [
+        9,
+        7
+      ], "RS": "09571", "GEN": "Ansbach", "BEZ": "LK"
+    },
+    {
+      "position": [
+        10,
+        7
+      ], "RS": "09573", "GEN": "Fürth", "BEZ": "LK"
+    },
+    {
+      "position": [
+        11,
+        7
+      ], "RS": "09565", "GEN": "Schwabach", "BEZ": "KS"
+    },
+    {
+      "position": [
+        12,
+        7
+      ], "RS": "09576", "GEN": "Roth", "BEZ": "LK"
+    },
+    {
+      "position": [
+        13,
+        7
+      ], "RS": "09373", "GEN": "Neumarkt i.d. OPf.", "BEZ": "LK"
+    },
+    {
+      "position": [
+        14,
+        7
+      ], "RS": "09361", "GEN": "Amberg", "BEZ": "KS"
+    },
+    {
+      "position": [
+        15,
+        7
+      ], "RS": "09372", "GEN": "Cham", "BEZ": "LK"
+    }
+  ],
+  [
+    {
+      "position": [
+        0,
+        6
+      ], "RS": "10042", "GEN": "Merzig-Wadern", "BEZ": "LK"
+    },
+    {
+      "position": [
+        1,
+        6
+      ], "RS": "07335", "GEN": "Kaiserslautern", "BEZ": "LK"
+    },
+    {
+      "position": [
+        2,
+        6
+      ], "RS": "07332", "GEN": "Bad Dürkheim", "BEZ": "LK"
+    },
+    {
+      "position": [
+        3,
+        6
+      ], "RS": "07314", "GEN": "Ludwigshafen am Rhein", "BEZ": "KS"
+    },
+    {
+      "position": [
+        4,
+        6
+      ], "RS": "08221", "GEN": "Heidelberg", "BEZ": "SK"
+    },
+    {
+      "position": [
+        5,
+        6
+      ], "RS": "08226", "GEN": "Rhein-Neckar-Kreis", "BEZ": "LK"
+    },
+    {
+      "position": [
+        6,
+        6
+      ], "RS": "08225", "GEN": "Neckar-Odenwald-Kreis", "BEZ": "LK"
+    },
+    {
+      "position": [
+        7,
+        6
+      ], "RS": "08126", "GEN": "Hohenlohekreis", "BEZ": "LK"
+    },
+    {
+      "position": [
+        8,
+        6
+      ], "RS": "08127", "GEN": "Schwäbisch Hall", "BEZ": "LK"
+    },
+    {
+      "position": [
+        9,
+        6
+      ], "RS": "08136", "GEN": "Ostalbkreis", "BEZ": "LK"
+    },
+    {
+      "position": [
+        10,
+        6
+      ], "RS": "09577", "GEN": "Weißenburg-Gunzenhausen", "BEZ": "LK"
+    },
+    {
+      "position": [
+        11,
+        6
+      ], "RS": "09176", "GEN": "Eichstätt", "BEZ": "LK"
+    },
+    {
+      "position": [
+        12,
+        6
+      ], "RS": "09362", "GEN": "Regensburg", "BEZ": "KS"
+    },
+    {
+      "position": [
+        13,
+        6
+      ], "RS": "09375", "GEN": "Regensburg", "BEZ": "LK"
+    },
+    {
+      "position": [
+        14,
+        6
+      ], "RS": "09276", "GEN": "Regen", "BEZ": "LK"
+    },
+    {
+      "position": [
+        15,
+        6
+      ], "RS": "09272", "GEN": "Freyung-Grafenau", "BEZ": "LK"
+    }
+  ],
+  [
+    {
+      "position": [
+        0,
+        5
+      ], "RS": "10044", "GEN": "Saarlouis", "BEZ": "LK"
+    },
+    {
+      "position": [
+        1,
+        5
+      ], "RS": "10043", "GEN": "Neunkirchen", "BEZ": "LK"
+    },
+    {
+      "position": [
+        2,
+        5
+      ], "RS": "07312", "GEN": "Kaiserslautern", "BEZ": "KS"
+    },
+    {
+      "position": [
+        3,
+        5
+      ], "RS": "07338", "GEN": "Rhein-Pfalz-Kreis", "BEZ": "LK"
+    },
+    {
+      "position": [
+        4,
+        5
+      ], "RS": "08215", "GEN": "Karlsruhe", "BEZ": "LK"
+    },
+    {
+      "position": [
+        5,
+        5
+      ], "RS": "08118", "GEN": "Ludwigsburg", "BEZ": "LK"
+    },
+    {
+      "position": [
+        6,
+        5
+      ], "RS": "08121", "GEN": "Heilbronn", "BEZ": "SK"
+    },
+    {
+      "position": [
+        7,
+        5
+      ], "RS": "08125", "GEN": "Heilbronn", "BEZ": "LK"
+    },
+    {
+      "position": [
+        8,
+        5
+      ], "RS": "08135", "GEN": "Heidenheim", "BEZ": "LK"
+    },
+    {
+      "position": [
+        9,
+        5
+      ], "RS": "09773", "GEN": "Dillingen a.d. Donau", "BEZ": "LK"
+    },
+    {
+      "position": [
+        10,
+        5
+      ], "RS": "09779", "GEN": "Donau-Ries", "BEZ": "LK"
+    },
+    {
+      "position": [
+        11,
+        5
+      ], "RS": "09161", "GEN": "Ingolstadt", "BEZ": "KS"
+    },
+    {
+      "position": [
+        12,
+        5
+      ], "RS": "09273", "GEN": "Kelheim", "BEZ": "LK"
+    },
+    {
+      "position": [
+        13,
+        5
+      ], "RS": "09278", "GEN": "Straubing-Bogen", "BEZ": "LK"
+    },
+    {
+      "position": [
+        14,
+        5
+      ], "RS": "09271", "GEN": "Deggendorf", "BEZ": "LK"
+    },
+    {
+      "position": [
+        15,
+        5
+      ], "RS": "09262", "GEN": "Passau", "BEZ": "KS"
+    }
+  ],
+  [
+    {
+      "position": [
+        0,
+        4
+      ], "RS": "10041", "GEN": "Regionalverband Saarbrücken", "BEZ": "LK"
+    },
+    {
+      "position": [
+        1,
+        4
+      ], "RS": "07320", "GEN": "Zweibrücken", "BEZ": "KS"
+    },
+    {
+      "position": [
+        2,
+        4
+      ], "RS": "07316", "GEN": "Neustadt an der Weinstraße", "BEZ": "KS"
+    },
+    {
+      "position": [
+        3,
+        4
+      ], "RS": "07318", "GEN": "Speyer", "BEZ": "KS"
+    },
+    {
+      "position": [
+        4,
+        4
+      ], "RS": "08231", "GEN": "Pforzheim", "BEZ": "SK"
+    },
+    {
+      "position": [
+        5,
+        4
+      ], "RS": "08236", "GEN": "Enzkreis", "BEZ": "LK"
+    },
+    {
+      "position": [
+        6,
+        4
+      ], "RS": "08111", "GEN": "Stuttgart", "BEZ": "SK"
+    },
+    {
+      "position": [
+        7,
+        4
+      ], "RS": "08119", "GEN": "Rems-Murr-Kreis", "BEZ": "LK"
+    },
+    {
+      "position": [
+        8,
+        4
+      ], "RS": "08421", "GEN": "Ulm", "BEZ": "SK"
+    },
+    {
+      "position": [
+        9,
+        4
+      ], "RS": "09774", "GEN": "Günzburg", "BEZ": "LK"
+    },
+    {
+      "position": [
+        10,
+        4
+      ], "RS": "09771", "GEN": "Aichach-Friedberg", "BEZ": "LK"
+    },
+    {
+      "position": [
+        11,
+        4
+      ], "RS": "09185", "GEN": "Neuburg-Schrobenhausen", "BEZ": "LK"
+    },
+    {
+      "position": [
+        12,
+        4
+      ], "RS": "09186", "GEN": "Pfaffenhofen a.d. Ilm", "BEZ": "LK"
+    },
+    {
+      "position": [
+        13,
+        4
+      ], "RS": "09263", "GEN": "Straubing", "BEZ": "KS"
+    },
+    {
+      "position": [
+        14,
+        4
+      ], "RS": "09279", "GEN": "Dingolfing-Landau", "BEZ": "LK"
+    },
+    {
+      "position": [
+        15,
+        4
+      ], "RS": "09275", "GEN": "Passau", "BEZ": "LK"
+    }
+  ],
+  [
+    {
+      "position": [
+        0,
+        3
+      ], "RS": "10045", "GEN": "Saarpfalz-Kreis", "BEZ": "LK"
+    },
+    {
+      "position": [
+        1,
+        3
+      ], "RS": "07340", "GEN": "Südwestpfalz", "BEZ": "LK"
+    },
+    {
+      "position": [
+        2,
+        3
+      ], "RS": "07313", "GEN": "Landau in der Pfalz", "BEZ": "KS"
+    },
+    {
+      "position": [
+        3,
+        3
+      ], "RS": "07334", "GEN": "Germersheim", "BEZ": "LK"
+    },
+    {
+      "position": [
+        4,
+        3
+      ], "RS": "08235", "GEN": "Calw", "BEZ": "LK"
+    },
+    {
+      "position": [
+        5,
+        3
+      ], "RS": "08115", "GEN": "Böblingen", "BEZ": "LK"
+    },
+    {
+      "position": [
+        6,
+        3
+      ], "RS": "08116", "GEN": "Esslingen", "BEZ": "LK"
+    },
+    {
+      "position": [
+        7,
+        3
+      ], "RS": "08117", "GEN": "Göppingen", "BEZ": "LK"
+    },
+    {
+      "position": [
+        8,
+        3
+      ], "RS": "09775", "GEN": "Neu-Ulm", "BEZ": "LK"
+    },
+    {
+      "position": [
+        9,
+        3
+      ], "RS": "09778", "GEN": "Unterallgäu", "BEZ": "LK"
+    },
+    {
+      "position": [
+        10,
+        3
+      ], "RS": "09772", "GEN": "Augsburg", "BEZ": "LK"
+    },
+    {
+      "position": [
+        11,
+        3
+      ], "RS": "09174", "GEN": "Dachau", "BEZ": "LK"
+    },
+    {
+      "position": [
+        12,
+        3
+      ], "RS": "09178", "GEN": "Freising", "BEZ": "LK"
+    },
+    {
+      "position": [
+        13,
+        3
+      ], "RS": "09177", "GEN": "Erding", "BEZ": "LK"
+    },
+    {
+      "position": [
+        14,
+        3
+      ], "RS": "09274", "GEN": "Landshut", "BEZ": "LK"
+    },
+    {
+      "position": [
+        15,
+        3
+      ], "RS": "09277", "GEN": "Rottal-Inn", "BEZ": "LK"
+    }
+  ],
+  [
+    {
+      "position": [
+        0,
+        2
+      ], "RS": "08317", "GEN": "Ortenaukreis", "BEZ": "LK"
+    },
+    {
+      "position": [
+        1,
+        2
+      ], "RS": "07317", "GEN": "Pirmasens", "BEZ": "KS"
+    },
+    {
+      "position": [
+        2,
+        2
+      ], "RS": "07337", "GEN": "Südliche Weinstraße", "BEZ": "LK"
+    },
+    {
+      "position": [
+        3,
+        2
+      ], "RS": "08212", "GEN": "Karlsruhe", "BEZ": "SK"
+    },
+    {
+      "position": [
+        4,
+        2
+      ], "RS": "08237", "GEN": "Freudenstadt", "BEZ": "LK"
+    },
+    {
+      "position": [
+        5,
+        2
+      ], "RS": "08416", "GEN": "Tübingen", "BEZ": "LK"
+    },
+    {
+      "position": [
+        6,
+        2
+      ], "RS": "08415", "GEN": "Reutlingen", "BEZ": "LK"
+    },
+    {
+      "position": [
+        7,
+        2
+      ], "RS": "08425", "GEN": "Alb-Donau-Kreis", "BEZ": "LK"
+    },
+    {
+      "position": [
+        8,
+        2
+      ], "RS": "09764", "GEN": "Memmingen", "BEZ": "KS"
+    },
+    {
+      "position": [
+        9,
+        2
+      ], "RS": "09762", "GEN": "Kaufbeuren", "BEZ": "KS"
+    },
+    {
+      "position": [
+        10,
+        2
+      ], "RS": "09761", "GEN": "Augsburg", "BEZ": "KS"
+    },
+    {
+      "position": [
+        11,
+        2
+      ], "RS": "09179", "GEN": "Fürstenfeldbruck", "BEZ": "LK"
+    },
+    {
+      "position": [
+        12,
+        2
+      ], "RS": "09162", "GEN": "München", "BEZ": "KS"
+    },
+    {
+      "position": [
+        13,
+        2
+      ], "RS": "09175", "GEN": "Ebersberg", "BEZ": "LK"
+    },
+    {
+      "position": [
+        14,
+        2
+      ], "RS": "09261", "GEN": "Landshut", "BEZ": "KS"
+    },
+    {
+      "position": [
+        15,
+        2
+      ], "RS": "09183", "GEN": "Mühldorf a. Inn", "BEZ": "LK"
+    }
+  ],
+  [
+    {
+      "position": [
+        0,
+        1
+      ], "RS": "08311", "GEN": "Freiburg im Breisgau", "BEZ": "SK"
+    },
+    {
+      "position": [
+        1,
+        1
+      ], "RS": "08316", "GEN": "Emmendingen", "BEZ": "LK"
+    },
+    {
+      "position": [
+        2,
+        1
+      ], "RS": "08211", "GEN": "Baden-Baden", "BEZ": "SK"
+    },
+    {
+      "position": [
+        3,
+        1
+      ], "RS": "08216", "GEN": "Rastatt", "BEZ": "LK"
+    },
+    {
+      "position": [
+        4,
+        1
+      ], "RS": "08325", "GEN": "Rottweil", "BEZ": "LK"
+    },
+    {
+      "position": [
+        5,
+        1
+      ], "RS": "08417", "GEN": "Zollernalbkreis", "BEZ": "LK"
+    },
+    {
+      "position": [
+        6,
+        1
+      ], "RS": "08437", "GEN": "Sigmaringen", "BEZ": "LK"
+    },
+    {
+      "position": [
+        7,
+        1
+      ], "RS": "08426", "GEN": "Biberach", "BEZ": "LK"
+    },
+    {
+      "position": [
+        8,
+        1
+      ], "RS": "09776", "GEN": "Lindau (Bodensee)", "BEZ": "LK"
+    },
+    {
+      "position": [
+        9,
+        1
+      ], "RS": "09777", "GEN": "Ostallgäu", "BEZ": "LK"
+    },
+    {
+      "position": [
+        10,
+        1
+      ], "RS": "09181", "GEN": "Landsberg am Lech", "BEZ": "LK"
+    },
+    {
+      "position": [
+        11,
+        1
+      ], "RS": "09188", "GEN": "Starnberg", "BEZ": "LK"
+    },
+    {
+      "position": [
+        12,
+        1
+      ], "RS": "09184", "GEN": "München", "BEZ": "LK"
+    },
+    {
+      "position": [
+        13,
+        1
+      ], "RS": "09163", "GEN": "Rosenheim", "BEZ": "KS"
+    },
+    {
+      "position": [
+        14,
+        1
+      ], "RS": "09189", "GEN": "Traunstein", "BEZ": "LK"
+    },
+    {
+      "position": [
+        15,
+        1
+      ], "RS": "09171", "GEN": "Altötting", "BEZ": "LK"
+    }
+  ],
+  [
+    {
+      "position": [
+        0,
+        0
+      ], "RS": "08336", "GEN": "Lörrach", "BEZ": "LK"
+    },
+    {
+      "position": [
+        1,
+        0
+      ], "RS": "08315", "GEN": "Breisgau-Hochschwarzwald", "BEZ": "LK"
+    },
+    {
+      "position": [
+        2,
+        0
+      ], "RS": "08337", "GEN": "Waldshut", "BEZ": "LK"
+    },
+    {
+      "position": [
+        3,
+        0
+      ], "RS": "08326", "GEN": "Schwarzwald-Baar-Kreis", "BEZ": "LK"
+    },
+    {
+      "position": [
+        4,
+        0
+      ], "RS": "08327", "GEN": "Tuttlingen", "BEZ": "LK"
+    },
+    {
+      "position": [
+        5,
+        0
+      ], "RS": "08335", "GEN": "Konstanz", "BEZ": "LK"
+    },
+    {
+      "position": [
+        6,
+        0
+      ], "RS": "08435", "GEN": "Bodenseekreis", "BEZ": "LK"
+    },
+    {
+      "position": [
+        7,
+        0
+      ], "RS": "08436", "GEN": "Ravensburg", "BEZ": "LK"
+    },
+    {
+      "position": [
+        8,
+        0
+      ], "RS": "09780", "GEN": "Oberallgäu", "BEZ": "LK"
+    },
+    {
+      "position": [
+        9,
+        0
+      ], "RS": "09763", "GEN": "Kempten (Allgäu)", "BEZ": "KS"
+    },
+    {
+      "position": [
+        10,
+        0
+      ], "RS": "09190", "GEN": "Weilheim-Schongau", "BEZ": "LK"
+    },
+    {
+      "position": [
+        11,
+        0
+      ], "RS": "09180", "GEN": "Garmisch-Partenkirchen", "BEZ": "LK"
+    },
+    {
+      "position": [
+        12,
+        0
+      ], "RS": "09173", "GEN": "Bad Tölz-Wolfratshausen", "BEZ": "LK"
+    },
+    {
+      "position": [
+        13,
+        0
+      ], "RS": "09182", "GEN": "Miesbach", "BEZ": "LK"
+    },
+    {
+      "position": [
+        14,
+        0
+      ], "RS": "09187", "GEN": "Rosenheim", "BEZ": "LK"
+    },
+    {
+      "position": [
+        15,
+        0
+      ], "RS": "09172", "GEN": "Berchtesgadener Land", "BEZ": "LK"
+    }
+  ]
+]
