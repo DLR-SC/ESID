@@ -9,6 +9,7 @@ import {NumberFormatter} from '../util/hooks';
 import {CheckBoxOutlineBlank, CheckBox} from '@mui/icons-material';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 
 /**
  * React Component to render individual Scenario Card
@@ -72,10 +73,13 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
         const sign = result === 0 ? '\u00B1' : result > 0 ? '+' : '-';
         return sign + Math.abs(result).toFixed() + '%';
       }
+
+   
     }
 
     return 'N/A';
   };
+
 
   return (
     <Box
@@ -245,9 +249,14 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
                 <ArrowDropUpIcon
                 color={'error'}
                 fontSize={'large'}
-                sx={{display: parseFloat(getCompartmentRate(compartment)) <= 0 ? 'none':'block'}}
+                sx={{display: parseFloat(getCompartmentRate(compartment)) >= 0  && compartment != "Dead" ? 'block':'none'}}
                 >
                 </ArrowDropUpIcon>
+                <ArrowRightIcon  
+                color={'action'} 
+                fontSize={'large'}
+                sx={{display: compartment === "Dead"  ? 'block':'none'}}
+                ></ArrowRightIcon>
               </ListItem>
               
             ))}

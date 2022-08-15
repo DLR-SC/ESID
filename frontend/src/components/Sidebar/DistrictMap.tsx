@@ -269,7 +269,8 @@ export default function DistrictMap(): JSX.Element {
               legendRef.current = legend;
             }}
             min={0}
-            max={legend.isNormalized ? aggregatedMax : legend.steps[legend.steps.length - 1].value}
+            // used math.round to convert the number in integers and used +1 to avoid having legend max value as 0
+            max={legend.isNormalized ? Math.round(aggregatedMax)+1 : Math.round(legend.steps[legend.steps.length - 1].value)+1}
             displayText={true}
             id={'legend'}
           />
@@ -301,7 +302,7 @@ function getColorFromLegend(
   // assume legend stops are absolute
   let normalizedValue = value;
   // if aggregated values (min/max) are properly set, the legend items are already normalized => need to normalize value too
-  if (aggregatedMinMax && aggregatedMinMax.min < aggregatedMinMax.max) {
+    if (aggregatedMinMax && aggregatedMinMax.min < aggregatedMinMax.max) {
     const {min: aggregatedMin, max: aggregatedMax} = aggregatedMinMax;
     normalizedValue = (value - aggregatedMin) / (aggregatedMax - aggregatedMin);
   } else if (aggregatedMinMax) {
