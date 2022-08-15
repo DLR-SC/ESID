@@ -73,13 +73,10 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
         const sign = result === 0 ? '\u00B1' : result > 0 ? '+' : '-';
         return sign + Math.abs(result).toFixed() + '%';
       }
-
-   
     }
 
     return 'N/A';
   };
-
 
   return (
     <Box
@@ -208,7 +205,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
             {compartments.map((compartment, i) => (
               // hide compartment if expandProperties false and index > 4
               // highlight compartment if selectedProperty === compartment
-              
+
               <ListItem
                 key={compartment}
                 sx={{
@@ -242,23 +239,24 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
                   }}
                 />
                 <ArrowDropDownIcon
-                color={'success'} 
-                fontSize={'large'}
-                sx={{display: parseFloat(getCompartmentRate(compartment)) <= 0  ? 'block':'none'}}
+                  color={'success'}
+                  fontSize={'large'}
+                  sx={{display: parseFloat(getCompartmentRate(compartment)) <= 0 ? 'block' : 'none'}}
                 ></ArrowDropDownIcon>
                 <ArrowDropUpIcon
-                color={'error'}
-                fontSize={'large'}
-                sx={{display: parseFloat(getCompartmentRate(compartment)) >= 0  && compartment != "Dead" ? 'block':'none'}}
-                >
-                </ArrowDropUpIcon>
-                <ArrowRightIcon  
-                color={'action'} 
-                fontSize={'large'}
-                sx={{display: compartment === "Dead"  ? 'block':'none'}}
+                  color={'error'}
+                  fontSize={'large'}
+                  sx={{
+                    display:
+                      parseFloat(getCompartmentRate(compartment)) >= 0 && compartment != 'Dead' ? 'block' : 'none',
+                  }}
+                ></ArrowDropUpIcon>
+                <ArrowRightIcon
+                  color={'action'}
+                  fontSize={'large'}
+                  sx={{display: compartment === 'Dead' ? 'block' : 'none'}}
                 ></ArrowRightIcon>
               </ListItem>
-              
             ))}
           </List>
         </Box>
