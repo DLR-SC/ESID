@@ -9,6 +9,7 @@ import {NumberFormatter} from '../util/hooks';
 import {CheckBoxOutlineBlank, CheckBox} from '@mui/icons-material';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 
 /**
  * React Component to render individual Scenario Card
@@ -204,7 +205,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
             {compartments.map((compartment, i) => (
               // hide compartment if expandProperties false and index > 4
               // highlight compartment if selectedProperty === compartment
-              
+
               <ListItem
                 key={compartment}
                 sx={{
@@ -238,18 +239,24 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
                   }}
                 />
                 <ArrowDropDownIcon
-                color={'success'} 
-                fontSize={'large'}
-                sx={{display: parseFloat(getCompartmentRate(compartment)) <= 0  ? 'block':'none'}}
+                  color={'success'}
+                  fontSize={'medium'}
+                  sx={{display: parseFloat(getCompartmentRate(compartment)) <= 0 ? 'block' : 'none'}}
                 ></ArrowDropDownIcon>
                 <ArrowDropUpIcon
-                color={'error'}
-                fontSize={'large'}
-                sx={{display: parseFloat(getCompartmentRate(compartment)) <= 0 ? 'none':'block'}}
-                >
-                </ArrowDropUpIcon>
+                  color={'error'}
+                  fontSize={'medium'}
+                  sx={{
+                    display:
+                      parseFloat(getCompartmentRate(compartment)) >= 0 && compartment != 'Dead' ? 'block' : 'none',
+                  }}
+                ></ArrowDropUpIcon>
+                <ArrowRightIcon
+                  color={'action'}
+                  fontSize={'medium'}
+                  sx={{display: compartment === 'Dead' ? 'block' : 'none'}}
+                ></ArrowRightIcon>
               </ListItem>
-              
             ))}
           </List>
         </Box>
