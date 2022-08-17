@@ -65,17 +65,20 @@ export default function DistrictMap(): JSX.Element {
     if (fixedLegendMaxValue) {
       return fixedLegendMaxValue;
     }
-    let max = 0;
+    let max = 1; // if min of legend is 0, then default max is 1
     if (data && selectedCompartment) {
       data.results.forEach((entry) => {
         if (entry.name !== '00000') {
+          // console.log("max before", max)
           max = Math.max(entry.compartments[selectedCompartment], max);
+          // max = Math.round(max)+1;
+          // console.log("max", max)
         }
       });
     }
     return max;
   }, [selectedCompartment, data, fixedLegendMaxValue]);
-
+  //console.log("aggregatedMax", aggregatedMax);
   // fetch geojson
   useEffect(() => {
     fetch('assets/lk_germany_reduced.geojson', {
@@ -208,7 +211,7 @@ export default function DistrictMap(): JSX.Element {
         if (dataMapped.size > 0) {
           polygonSeries.mapPolygons.each((polygon) => {
             const regionData = polygon.dataItem?.dataContext as IRegionPolygon;
-            regionData.value = dataMapped.get(regionData.RS) || Number.NaN;
+            regionData.value = dataMapped.get(regionData.RS) || 0;
 
             // determine fill color
             let fillColor = am5.color(theme.palette.background.default);
@@ -269,7 +272,10 @@ export default function DistrictMap(): JSX.Element {
               legendRef.current = legend;
             }}
             min={0}
-            max={legend.isNormalized ? aggregatedMax : legend.steps[legend.steps.length - 1].value}
+            // used math.round to convert the number in integers and used +1 to avoid having legend max value as 0 or NaN
+            max={
+              legend.isNormalized ? Math.round(aggregatedMax) : Math.round(legend.steps[legend.steps.length - 1].value)
+            }
             displayText={true}
             id={'legend'}
           />
@@ -311,16 +317,20 @@ function getColorFromLegend(
     return am5.color('rgba(0,0,0,0)');
   }
   if (normalizedValue <= legend.steps[0].value) {
+    //console.log("normalizedValue <= legend.steps[0].value",  normalizedValue, legend.steps[0].value)
     return am5.color(legend.steps[0].color);
   } else if (normalizedValue >= legend.steps[legend.steps.length - 1].value) {
+    //console.log("normalizedValue >= legend.steps[legend.steps.length - 1].value",  normalizedValue, legend.steps[legend.steps.length - 1].value)
     return am5.color(legend.steps[legend.steps.length - 1].color);
   } else {
     let upperTick = legend.steps[0];
     let lowerTick = legend.steps[0];
     for (let i = 1; i < legend.steps.length; i++) {
+      //console.log("legend.steps.length", legend.steps.length)
       if (normalizedValue <= legend.steps[i].value) {
         upperTick = legend.steps[i];
         lowerTick = legend.steps[i - 1];
+        // console.log("upperTick, normalizedValue <= legend.steps[i].value", upperTick, Math.round(normalizedValue),  legend.steps[i].value)
         break;
       }
     }
