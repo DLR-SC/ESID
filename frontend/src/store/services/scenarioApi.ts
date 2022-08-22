@@ -30,6 +30,27 @@ export const scenarioApi = createApi({
       },
     }),
 
+    getMultipleSimulationDataByDate: builder.query<SimulationDataByDate[], MultipleSimulationDataByDateParameters>({
+      async queryFn(arg, _queryApi, _extraOptions, fetchWithBQ) {
+        const group = arg.group || 'total';
+        const compartments = arg.compartments ? `&compartments=${arg.compartments.join(',')}` : '';
+        const url = (id: number) => `simulation/${id}/${arg.day}/${group}/?${compartments}&all`;
+
+        const result: SimulationDataByDate[] = [];
+
+        // fetch simulation data for each id
+        for (const id of arg.ids) {
+          // fetch all enteries for the simulation
+          const simResult = await fetchWithBQ(url(id));
+
+          if (simResult.error) return {error: simResult.error};
+          // put result into list to return
+          result[id] = simResult.data as SimulationDataByDate;
+        }
+        return {data: result};
+      },
+    }),
+
     getSimulationDataByDate: builder.query<SimulationDataByDate, SimulationDataByDateParameters>({
       async queryFn(arg, _queryApi, _extraOptions, fetchWithBQ) {
         const group = arg.group || 'total';
@@ -150,6 +171,14 @@ interface MultipleSimulationDataByNodeParameters {
   compartments: Array<string> | null;
 }
 
+interface MultipleSimulationDataByDateParameters {
+  ids: number[];
+  day: string;
+  node: string;
+  group: string | null;
+  compartments: Array<string> | null;
+}
+
 export const {
   useGetSimulationModelsQuery,
   useGetSimulationModelQuery,
@@ -158,5 +187,6 @@ export const {
   useGetSimulationDataByNodeQuery,
   useGetSingleSimulationEntryQuery,
   useGetMultipleSimulationDataByNodeQuery,
+  useGetMultipleSimulationDataByDateQuery,
   useGetPercentileDataQuery,
 } = scenarioApi;

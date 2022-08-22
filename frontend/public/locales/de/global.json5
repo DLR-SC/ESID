@@ -17,6 +17,11 @@
     'play-pause-tooltip': 'Start/Pause',
     'fullscreen-tooltip': 'Vollbild',
   },
+  sideBar: {
+    placeholder: 'Sidebar Inhalt',
+    activeSimulation: 'Aktive Simulation',
+    multipleSimulations: 'Mehrere Simulationen'
+  },
   history: {
     placeholder: 'history',
   },

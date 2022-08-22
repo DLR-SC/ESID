@@ -3,8 +3,10 @@ import {Tab} from '@mui/material';
 import DistrictMap from './DistrictMap';
 import {TabContext, TabList, TabPanel} from '@mui/lab';
 import SquareMap from './SquareMap';
+import {useTranslation} from 'react-i18next';
 
 export default function Maps(): JSX.Element {
+  const {t} = useTranslation();
   const [tab, setTab] = useState<string>('0');
   const handleTabChange = (_: React.SyntheticEvent, newTab: string) => {
     setTab(newTab);
@@ -12,8 +14,8 @@ export default function Maps(): JSX.Element {
   return (
     <TabContext value={tab}>
       <TabList onChange={handleTabChange}>
-        <Tab label='Default' value='0' />
-        <Tab label='test' value='1' />
+        <Tab label={t('sideBar.activeSimulation')} value='0' />
+        <Tab label={t('sideBar.multipleSimulations')} value='1' />
       </TabList>
       <TabPanel value='0'>
         <DistrictMap />

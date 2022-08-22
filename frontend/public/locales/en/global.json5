@@ -19,7 +19,10 @@
   },
   sideBar: {
     placeholder: 'Sidebar Content',
+    activeSimulation: 'Active Simulation',
+    multipleSimulations: 'Multiple Simulations'
   },
+
   mainContent: {
     placeholder: 'Main Content',
   },
