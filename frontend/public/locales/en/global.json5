@@ -20,7 +20,7 @@
   sideBar: {
     placeholder: 'Sidebar Content',
     activeSimulation: 'Active Simulation',
-    multipleSimulations: 'Multiple Simulations'
+    multipleSimulations: 'Multiple Simulations',
   },
 
   mainContent: {

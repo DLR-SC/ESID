@@ -20,7 +20,7 @@
   sideBar: {
     placeholder: 'Sidebar Inhalt',
     activeSimulation: 'Aktive Simulation',
-    multipleSimulations: 'Mehrere Simulationen'
+    multipleSimulations: 'Mehrere Simulationen',
   },
   history: {
     placeholder: 'history',
