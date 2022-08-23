@@ -191,12 +191,18 @@ For answers to common questions about this code of conduct, see
 https://www.contributor-covenant.org/faq
 
 
-## Contributors
+## Current Contributors
 German Aerospace Center (DLR):
 - Martin Kühn
-- Margrit Klitz
 - Jonas Gilg
 - Luca Spataro
+- Moritz Zeumer
+- Laurin Kerkloh
+
+## Previous Contributors
+German Aerospace Center (DLR):
+- Margrit Klitz
+- Kerem Balci
 - Selma Dahmani
 
 Hochschule für Gestaltung Schwäbisch Gmünd (HfG):
@@ -204,7 +210,7 @@ Hochschule für Gestaltung Schwäbisch Gmünd (HfG):
 - Valerie Grappendorf
 
 ## License
-Copyright 2021 German Aerospace Center (DLR)
+Copyright 2021-2023 German Aerospace Center (DLR)
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
