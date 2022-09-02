@@ -68,15 +68,18 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
     ) {
       const value = compartmentValues[compartment];
       const startValue = props.startValues[compartment];
+      const temp = 100 * (value / startValue) - 100;
       const result = Math.round(100 * (value / startValue) - 100);
       if (isFinite(result)) {
         const sign = result === 0 ? '\u00B1' : result > 0 ? '+' : '-';
+        console.log("result", result, temp, value, startValue, sign)
         return sign + Math.abs(result).toFixed() + '%';
       }
     }
-
+   
     return 'N/A';
   };
+ 
 
   return (
     <Box
@@ -241,20 +244,20 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
                 <ArrowDropDownIcon
                   color={'success'}
                   fontSize={'medium'}
-                  sx={{display: parseFloat(getCompartmentRate(compartment)) <= 0 ? 'block' : 'none'}}
+                  sx={{display: parseFloat(getCompartmentRate(compartment)) < 0 ? 'block' : 'none'}}
                 ></ArrowDropDownIcon>
                 <ArrowDropUpIcon
                   color={'error'}
                   fontSize={'medium'}
                   sx={{
                     display:
-                      parseFloat(getCompartmentRate(compartment)) >= 0 && compartment != 'Dead' ? 'block' : 'none',
+                      parseFloat(getCompartmentRate(compartment)) > 3  ? 'block' : 'none'
                   }}
                 ></ArrowDropUpIcon>
                 <ArrowRightIcon
                   color={'action'}
                   fontSize={'medium'}
-                  sx={{display: compartment === 'Dead' ? 'block' : 'none'}}
+                  sx={{display: parseFloat(getCompartmentRate(compartment)) >=0 && parseFloat(getCompartmentRate(compartment)) <=2.9? 'block' : 'none'}}
                 ></ArrowRightIcon>
               </ListItem>
             ))}

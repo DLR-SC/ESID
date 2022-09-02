@@ -14,7 +14,7 @@ import HeatLegendEdit from './HeatLegendEdit';
 import {HeatmapLegend} from '../../types/heatmapLegend';
 import {LockOpen} from '@mui/icons-material';
 import LoadingContainer from '../shared/LoadingContainer';
-
+import HomeIcon from '@mui/icons-material/Home';
 const {useRef} = React;
 
 interface IRegionPolygon {
@@ -32,7 +32,7 @@ interface IRegionPolygon {
 
 export default function DistrictMap(): JSX.Element {
   const [geodata, setGeodata] = useState<GeoJSON.GeoJSON | null>(null);
-  //const selectedDistrict = useAppSelector((state) => state.dataSelection.district);
+  const selectedDistrict = useAppSelector((state) => state.dataSelection.district);
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
   const selectedDate = useAppSelector((state) => state.dataSelection.date);
@@ -256,7 +256,11 @@ export default function DistrictMap(): JSX.Element {
     isFetching,
     legend,
   ]);
-
+  useEffect(()=>{
+    // search polygon list for selected district
+    // apply hover effect or highlight hovering effect.
+    console.log("selectedDistrict", selectedDistrict);
+  }, [selectedDistrict]);
   return (
     <LoadingContainer show={isFetching} overlayColor={theme.palette.background.default}>
       <Box id='mapdiv' height={'650px'} />
@@ -275,6 +279,17 @@ export default function DistrictMap(): JSX.Element {
           />
         </Grid>
         <Grid item container justifyContent='center' xs={1}>
+          <HomeIcon color='primary' fontSize="large"
+          onClick =  
+        {() =>  
+          
+          {
+            dispatch(
+            selectDistrict({ags: '00000', name: t('germany'), type: ''})
+          );// console.log("ags", selectedDistrict)
+        } 
+        } 
+          />
           <Tooltip title={t('heatlegend.lock').toString()} placement='right' arrow>
             <IconButton
               color={'primary'}

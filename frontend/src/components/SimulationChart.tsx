@@ -142,7 +142,7 @@ export default function SimulationChart(): JSX.Element {
     });
 
     chartRef.current = chart;
-    return () => {
+    return () => { 
       chartRef.current?.dispose();
     };
   }, [scenarioList, dispatch, i18n.language, t, theme]);
