@@ -257,7 +257,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
                 <ArrowRightIcon
                   color={'action'}
                   fontSize={'medium'}
-                  sx={{display: parseFloat(getCompartmentRate(compartment)) >=0 && parseFloat(getCompartmentRate(compartment)) <=2.9? 'block' : 'none'}}
+                  sx={{display: parseFloat(getCompartmentRate(compartment)) >=0 && parseFloat(getCompartmentRate(compartment)) <=3? 'block' : 'none'}}
                 ></ArrowRightIcon>
               </ListItem>
             ))}
