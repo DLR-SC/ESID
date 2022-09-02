@@ -146,6 +146,14 @@ export default function DistrictMap(): JSX.Element {
       strokeWidth: 2,
       layer: 1,
     });
+
+    //show tooltip on heat legend when hovering
+    polygonTemplate.events.on('pointerover', (e) => {
+      if (legendRef.current) {
+        const value = (e.target.dataItem?.dataContext as IRegionPolygon).value;
+        legendRef.current.showValue(value, formatNumber(value));
+      }
+    });
     //hide tooltip on heat legend when not hovering anymore event
     polygonTemplate.events.on('pointerout', () => {
       if (legendRef.current) {
