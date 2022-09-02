@@ -208,7 +208,7 @@ export default function DistrictMap(): JSX.Element {
         if (dataMapped.size > 0) {
           polygonSeries.mapPolygons.each((polygon) => {
             const regionData = polygon.dataItem?.dataContext as IRegionPolygon;
-            regionData.value = dataMapped.get(regionData.RS) || Number.NaN;
+            regionData.value = dataMapped.get(regionData.RS) || Number.NaN; 
 
             // determine fill color
             let fillColor = am5.color(theme.palette.background.default);
@@ -279,14 +279,12 @@ export default function DistrictMap(): JSX.Element {
           />
         </Grid>
         <Grid item container justifyContent='center' xs={1}>
-          <HomeIcon color='primary' fontSize="large"
+        <HomeIcon color='primary' fontSize="large"
           onClick =  
-        {() =>  
-          
-          {
+        {() =>  {
             dispatch(
             selectDistrict({ags: '00000', name: t('germany'), type: ''})
-          );// console.log("ags", selectedDistrict)
+          )
         } 
         } 
           />
