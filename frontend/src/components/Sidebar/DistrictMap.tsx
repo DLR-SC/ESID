@@ -57,7 +57,7 @@ export default function DistrictMap(): JSX.Element {
   const {formatNumber} = NumberFormatter(i18n.language, 3, 8);
   const theme = useTheme();
   const dispatch = useAppDispatch();
-  //const lastSelectedPolygon = useRef<am5map.MapPolygon | null>(null);
+  const lastSelectedPolygon = useRef<am5map.MapPolygon | null>(null);
   const [fixedLegendMaxValue, setFixedLegendMaxValue] = useState<number | null>(null);
 
   // use Memoized to store aggregated max and only recalculate if parameters change
@@ -125,8 +125,10 @@ export default function DistrictMap(): JSX.Element {
       am5map.MapPolygonSeries.new(root, {
         geoJSON: geodata ?? undefined,
         tooltipPosition: 'fixed',
+        layer: 0,
       })
     );
+
     // get template for polygons to attach events etc to each
     const polygonTemplate = polygonSeries.mapPolygons.template;
     polygonTemplate.setAll({
@@ -142,15 +144,7 @@ export default function DistrictMap(): JSX.Element {
     polygonTemplate.states.create('hover', {
       stroke: am5.color(theme.palette.primary.main),
       strokeWidth: 2,
-    });
-    // pull polygon to front on hover (to fix other polygons omitting outline)
-    polygonTemplate.events.on('pointerover', (e) => {
-      e.target.toFront();
-      // show tooltip on heat legend
-      if (legendRef.current) {
-        const value = (e.target.dataItem?.dataContext as IRegionPolygon).value;
-        legendRef.current.showValue(value, formatNumber(value));
-      }
+      layer: 1,
     });
     //hide tooltip on heat legend when not hovering anymore event
     polygonTemplate.events.on('pointerout', () => {
@@ -166,8 +160,7 @@ export default function DistrictMap(): JSX.Element {
     };
   }, [geodata, theme, t, formatNumber, dispatch]);
 
-  // TODO: district search for highlighting
-  /*
+  const polygonSeriesLength = (chartRef.current?.series.getIndex(0) as am5map.MapPolygonSeries)?.mapPolygons.length; //needed as trigger for the following effect
   useEffect(() => {
     // unselect previous
     if (chartRef.current && lastSelectedPolygon.current) {
@@ -175,29 +168,25 @@ export default function DistrictMap(): JSX.Element {
       lastSelectedPolygon.current.setAll({
         stroke: am5.color(theme.palette.background.default),
         strokeWidth: 1,
-        showTooltipOn: 'hover',
+        layer: 0,
       });
     }
-    if (chartRef.current && chartRef.current.series.length > 0) {
+    if (selectedDistrict.ags !== '00000' && chartRef.current && chartRef.current.series.length > 0) {
       const series = chartRef.current.series.getIndex(0) as am5map.MapPolygonSeries;
       series.mapPolygons.each((polygon) => {
-        // TODO: change this to a map lookup?
         const data = polygon.dataItem?.dataContext as IRegionPolygon;
         if (data.RS === selectedDistrict.ags) {
-          // pull to front (z-level)
-          polygon.toFront();
-          // apply hover style
           polygon.setAll({
             stroke: am5.color(theme.palette.primary.main),
             strokeWidth: 2,
-            showTooltipOn: 'always',
+            layer: 2,
           });
           // save polygon
           lastSelectedPolygon.current = polygon;
         }
       });
     }
-  }, [selectedDistrict]);*/
+  }, [selectedDistrict, theme, polygonSeriesLength]);
 
   // set Data
   useEffect(() => {
