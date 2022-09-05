@@ -173,22 +173,26 @@ export default function DistrictMap(): JSX.Element {
     // unselect previous
     if (chartRef.current && lastSelectedPolygon.current) {
       // reset style
-      lastSelectedPolygon.current.setAll({
+      lastSelectedPolygon.current.states.create('default', {
         stroke: am5.color(theme.palette.background.default),
         strokeWidth: 1,
         layer: 0,
       });
+      lastSelectedPolygon.current.states.apply('default');
     }
     if (selectedDistrict.ags !== '00000' && chartRef.current && chartRef.current.series.length > 0) {
       const series = chartRef.current.series.getIndex(0) as am5map.MapPolygonSeries;
       series.mapPolygons.each((polygon) => {
         const data = polygon.dataItem?.dataContext as IRegionPolygon;
         if (data.RS === selectedDistrict.ags) {
-          polygon.setAll({
+          polygon.states.create('default', {
             stroke: am5.color(theme.palette.primary.main),
             strokeWidth: 2,
             layer: 2,
           });
+          if (!polygon.isHover()) {
+            polygon.states.apply('default');
+          }
           // save polygon
           lastSelectedPolygon.current = polygon;
         }
