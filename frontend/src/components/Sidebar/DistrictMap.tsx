@@ -43,7 +43,7 @@ export default function DistrictMap(): JSX.Element {
     {
       id: selectedScenario ?? 0,
       day: selectedDate ?? '',
-      group: 'total',
+      groups: ['total'],
       compartments: [selectedCompartment ?? ''],
     },
     {skip: !selectedScenario || !selectedCompartment || !selectedDate}
