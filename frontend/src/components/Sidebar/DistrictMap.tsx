@@ -211,9 +211,7 @@ export default function DistrictMap(): JSX.Element {
         if (dataMapped.size > 0) {
           polygonSeries.mapPolygons.each((polygon) => {
             const regionData = polygon.dataItem?.dataContext as IRegionPolygon;
-            const temp = dataMapped.get(regionData.RS)
-            regionData.value = temp != undefined ? temp : Number.NaN;
-            
+            regionData.value = dataMapped.get(regionData.RS) || 0;
 
             // determine fill color
             let fillColor = am5.color(theme.palette.background.default);
