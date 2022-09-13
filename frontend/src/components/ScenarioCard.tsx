@@ -1,13 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { useTheme } from '@mui/material/styles';
-import { Box, IconButton, List, ListItem, ListItemText, Tooltip, Typography } from '@mui/material';
-import { useAppSelector } from 'store/hooks';
-import { useGetSingleSimulationEntryQuery } from 'store/services/scenarioApi';
-import { Dictionary } from '../util/util';
-import { useTranslation } from 'react-i18next';
-import { NumberFormatter } from '../util/hooks';
-import { CheckBoxOutlineBlank, CheckBox } from '@mui/icons-material';
-import { groupData } from "../types/group";
+import React, {useEffect, useRef, useState} from 'react';
+import {useTheme} from '@mui/material/styles';
+import {Box, IconButton, List, ListItem, ListItemText, Tooltip, Typography} from '@mui/material';
+import {useAppSelector} from 'store/hooks';
+import {useGetSingleSimulationEntryQuery} from 'store/services/scenarioApi';
+import {Dictionary} from '../util/util';
+import {useTranslation} from 'react-i18next';
+import {NumberFormatter} from '../util/hooks';
+import {CheckBoxOutlineBlank, CheckBox} from '@mui/icons-material';
+import {groupData} from '../types/group';
 
 /**
  * React Component to render individual Scenario Card
@@ -16,11 +16,11 @@ import { groupData } from "../types/group";
  */
 export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
   const theme = useTheme();
-  const { t, i18n } = useTranslation();
+  const {t, i18n} = useTranslation();
 
   const compartmentsRef = useRef<HTMLUListElement | null>(null);
 
-  const { formatNumber } = NumberFormatter(i18n.language, 3, 8);
+  const {formatNumber} = NumberFormatter(i18n.language, 3, 8);
 
   const [compartmentValues, setCompartmentValues] = useState<Dictionary<number> | null>(null);
 
@@ -30,14 +30,14 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
   const filterList = useAppSelector((state) => state.dataSelection.filter);
   const filterData = useAppSelector((state) => state.dataSelection.filterData);
 
-  const { data } = useGetSingleSimulationEntryQuery(
+  const {data} = useGetSingleSimulationEntryQuery(
     {
       id: props.scenario.id,
       node: node,
       day: day ?? '',
       groups: ['total'],
     },
-    { skip: !day }
+    {skip: !day}
   );
 
   const [hover, setHover] = useState<boolean>(false);
@@ -67,43 +67,6 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
       }
     }
     return 0;
-  }
-
-  const filterCompartmentValues = (filterName: string, dateIndex: number): JSX.Element | null => {
-    if (filterData) {
-      return (<Box>{Object.keys(filterData[filterName][dateIndex].compartments).map((compartment, i) => {
-
-        return (
-          // hide compartment if expandProperties false and index > 4
-          // highlight compartment if selectedProperty === compartment
-          <ListItem
-            key={compartment}
-            sx={{
-              display: props.expandProperties || i < 4 ? 'flex' : 'none',
-              color: props.selectedProperty === compartment ? theme.palette.text.primary : theme.palette.text.disabled,
-              alignContent: "center",
-              padding: "4px",
-              margin: "0px",
-              marginTop: "4px",
-              marginRight: "1rem",
-            }}
-          >
-            <ListItemText
-              primary={formatNumber(filterData[filterName][dateIndex].compartments[compartment])}
-              // disable child typography overriding this
-              disableTypography={true}
-              sx={{
-                typography: 'listElement',
-                alignContent: 'center',
-                flexBasis: '55%',
-              }}
-            />
-          </ListItem>
-        )
-      })}</Box>)
-    } else {
-      return null;
-    }
   };
 
   const getCompartmentValue = (compartment: string): string => {
@@ -132,69 +95,104 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
     return 'N/A';
   };
 
+  const filterCompartmentValues = (filterName: string, dateIndex: number): JSX.Element | null => {
+    if (filterData) {
+      return (
+        <List
+          ref={compartmentsRef}
+          dense={true}
+          disablePadding={true}
+          sx={{
+            maxHeight: props.expandProperties ? '248px' : 'auto',
+            overflowY: 'hidden',
+            width: 'fit-content',
+            alignContent: 'right',
+            padding: theme.spacing(1),
+            margin: theme.spacing(0),
+            marginTop: theme.spacing(1),
+          }}
+        >
+          {Object.keys(filterData[filterName][dateIndex].compartments).map((compartment, i) => {
+            return (
+              // hide compartment if expandProperties false and index > 4
+              // highlight compartment if selectedProperty === compartment
+              <ListItem
+                key={compartment}
+                sx={{
+                  display: props.expandProperties || i < 4 ? 'flex' : 'none',
+                  color:
+                    props.selectedProperty === compartment ? theme.palette.text.primary : theme.palette.text.disabled,
+                  alignContent: 'center',
+                  padding: '4px',
+                  margin: '0px',
+                  marginTop: '4px',
+                  marginRight: '1rem',
+                }}
+              >
+                <ListItemText
+                  primary={formatNumber(filterData[filterName][dateIndex].compartments[compartment])}
+                  // disable child typography overriding this
+                  disableTypography={true}
+                  sx={{
+                    typography: 'listElement',
+                    alignContent: 'center',
+                    flexBasis: '55%',
+                  }}
+                />
+              </ListItem>
+            );
+          })}
+        </List>
+      );
+    } else {
+      return null;
+    }
+  };
+
   const FilterInfo = (): JSX.Element | null => {
     if (filterList && filterList.length >= 1 && filterData && filterList[0].name) {
       const dateIndex = getIndexByDay(filterData[filterList[0].name]);
-      console.log(dateIndex);
       return (
         <Box
           sx={{
-            display: "flex",
-            flexDirection: "row",
-          }}>
-
+            display: 'flex',
+            flexDirection: 'row',
+          }}
+        >
           {Object.keys(filterData).map((filterName, i) => {
             return (
               <Box
                 key={filterName}
                 sx={{
-                  marginLeft: i == 0 ? "2.3rem" : "0rem",
-                  paddingTop: "1.6rem",
-                  marginTop: "0rem",
-                  alignContent: "center",
+                  marginLeft: i == 0 ? '2.3rem' : '0rem',
+                  paddingTop: '1.6rem',
+                  marginTop: '0rem',
+                  alignContent: 'center',
                   borderLeft: i == 0 ? null : `1px solid`,
                   borderColor: i == 0 ? null : 'divider',
-                  paddingLeft: "1.5rem",
-                  marginRight: i == Object.keys(filterData).length - 1 ? "0rem" : "1rem",
-                }}>
-
+                  paddingLeft: '1.5rem',
+                  marginRight: i == Object.keys(filterData).length - 1 ? '0rem' : '1rem',
+                }}
+              >
                 <Typography
                   variant='h3'
                   sx={{
                     height: 'min-content',
                     fontWeight: 'bold',
                     fontSize: '13pt',
-                    marginRight: "1rem",
+                    marginRight: '1rem',
                   }}
                 >
                   {filterName}
                 </Typography>
-                <List
-                  ref={compartmentsRef}
-                  dense={true}
-                  disablePadding={true}
-                  sx={{
-                    maxHeight: props.expandProperties ? '248px' : 'auto',
-                    overflowY: 'hidden',
-                    width: "fit-content",
-                    alignContent: "right",
-                    padding: theme.spacing(1),
-                    margin: theme.spacing(0),
-                    marginTop: theme.spacing(1),
-                  }}
-                >
-
-                </List>
                 {filterCompartmentValues(filterName, dateIndex)}
               </Box>
-            )
-          }
-          )}
-
-        </Box>)
-
+            );
+          })}
+        </Box>
+      );
     } else {
-      return null
+      return null;
     }
   };
 
@@ -207,26 +205,26 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
               sx={{
                 display: props.active ? 'inline-flex' : 'none',
                 marginLeft: '-2rem',
-                marginTop: "1rem",
+                marginTop: '1rem',
                 border: `2px solid ${props.color}`,
-                width: folded ? "3rem" : "fit-content",
-                height: "12.6rem",
+                width: folded ? '3rem' : 'fit-content',
+                height: '12.6rem',
                 borderRadius: '10px',
                 background: folded ? props.color : theme.palette.background.paper,
-                flexDirection: "row",
+                flexDirection: 'row',
               }}
               onClick={() => fold(!folded)}
             >
               {!folded ? FilterInfo() : ''}
-            </Box>)
+            </Box>
+          );
         }
       }
-      return null
+      return null;
     } else {
-      return null
+      return null;
     }
-  }
-
+  };
 
   return (
     <Box

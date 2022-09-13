@@ -6,7 +6,7 @@ import {scenarioApi} from './services/scenarioApi';
 import UserPreferenceReducer from './UserPreferenceSlice';
 import {persistReducer, persistStore} from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import { groupApi } from './services/groupApi';
+import {groupApi} from './services/groupApi';
 
 const persistConfig = {
   key: 'root',

@@ -10,7 +10,7 @@ import reducer, {
 
 describe('DataSelectionSlice', () => {
   const initialState = {
-    district: { ags: '00000', name: 'germany', type: '' },
+    district: {ags: '00000', name: 'germany', type: ''},
     date: null,
     scenario: null,
     compartment: null,
@@ -22,13 +22,13 @@ describe('DataSelectionSlice', () => {
   };
 
   test('Initial State', () => {
-    expect(reducer(undefined, { type: null })).toEqual(initialState);
+    expect(reducer(undefined, {type: null})).toEqual(initialState);
   });
 
   test('Select District', () => {
-    const newDistrict = { ags: '12345', name: 'Test District', type: 'Test Type' };
+    const newDistrict = {ags: '12345', name: 'Test District', type: 'Test Type'};
     expect(reducer(initialState, selectDistrict(newDistrict))).toEqual({
-      district: { ags: '12345', name: 'Test District', type: 'Test Type' },
+      district: {ags: '12345', name: 'Test District', type: 'Test Type'},
       date: null,
       scenario: null,
       compartment: null,
@@ -43,7 +43,7 @@ describe('DataSelectionSlice', () => {
   test('Select Date', () => {
     const newDate = '2020-09-21';
     expect(reducer(initialState, selectDate(newDate))).toEqual({
-      district: { ags: '00000', name: 'germany', type: '' },
+      district: {ags: '00000', name: 'germany', type: ''},
       date: '2020-09-21',
       scenario: null,
       compartment: null,
@@ -57,7 +57,7 @@ describe('DataSelectionSlice', () => {
 
   test('Select Scenario', () => {
     expect(reducer(initialState, selectScenario(1))).toEqual({
-      district: { ags: '00000', name: 'germany', type: '' },
+      district: {ags: '00000', name: 'germany', type: ''},
       date: null,
       scenario: 1,
       compartment: null,
@@ -71,7 +71,7 @@ describe('DataSelectionSlice', () => {
 
   test('Select Compartment', () => {
     expect(reducer(initialState, selectCompartment('Test Compartment'))).toEqual({
-      district: { ags: '00000', name: 'germany', type: '' },
+      district: {ags: '00000', name: 'germany', type: ''},
       date: null,
       scenario: null,
       compartment: 'Test Compartment',
@@ -83,7 +83,7 @@ describe('DataSelectionSlice', () => {
 
   test('Toggle Scenario', () => {
     expect(reducer(initialState, toggleScenario(2))).toEqual({
-      district: { ags: '00000', name: 'germany', type: '' },
+      district: {ags: '00000', name: 'germany', type: ''},
       date: null,
       scenario: null,
       compartment: null,
@@ -92,7 +92,7 @@ describe('DataSelectionSlice', () => {
       maxDate: null,
     });
     const state = {
-      district: { ags: '00000', name: 'germany', type: '' },
+      district: {ags: '00000', name: 'germany', type: ''},
       date: null,
       scenario: null,
       compartment: null,
@@ -104,7 +104,7 @@ describe('DataSelectionSlice', () => {
     };
 
     expect(reducer(state, toggleScenario(2))).toEqual({
-      district: { ags: '00000', name: 'germany', type: '' },
+      district: {ags: '00000', name: 'germany', type: ''},
       date: null,
       scenario: null,
       compartment: null,
@@ -117,9 +117,13 @@ describe('DataSelectionSlice', () => {
   });
 
   test('addFilter', () => {
-    const newFilter = { name: "Test Group", groups: { "age": ["age_1", "age_2"], "gender": ["male", "female"] }, toggle: false };
+    const newFilter = {
+      name: 'Test Group',
+      groups: {age: ['age_1', 'age_2'], gender: ['male', 'female']},
+      toggle: false,
+    };
     expect(reducer(initialState, addFilter(newFilter))).toEqual({
-      district: { ags: '00000', name: 'germany', type: '' },
+      district: {ags: '00000', name: 'germany', type: ''},
       date: null,
       scenario: null,
       compartment: null,
