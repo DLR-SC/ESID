@@ -32,7 +32,7 @@ interface IRegionPolygon {
 
 export default function DistrictMap(): JSX.Element {
   const [geodata, setGeodata] = useState<GeoJSON.GeoJSON | null>(null);
-  //const selectedDistrict = useAppSelector((state) => state.dataSelection.district);
+  const selectedDistrict = useAppSelector((state) => state.dataSelection.district);
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
   const selectedDate = useAppSelector((state) => state.dataSelection.date);
@@ -43,7 +43,7 @@ export default function DistrictMap(): JSX.Element {
     {
       id: selectedScenario ?? 0,
       day: selectedDate ?? '',
-      group: 'total',
+      groups: ['total'],
       compartments: [selectedCompartment ?? ''],
     },
     {skip: !selectedScenario || !selectedCompartment || !selectedDate}
@@ -97,6 +97,13 @@ export default function DistrictMap(): JSX.Element {
       );
   }, []);
 
+  //select germany as district if no district is selcted
+  useEffect(() => {
+    if (!selectedDistrict || selectedDistrict.name == 'germany') {
+      dispatch(selectDistrict({ags: '00000', name: t('germany'), type: ''}));
+    }
+  }, [dispatch, t, selectedDistrict]);
+
   // Setup Map
   useEffect(() => {
     // Create map instance
@@ -112,7 +119,6 @@ export default function DistrictMap(): JSX.Element {
         }),
       })
     );
-    dispatch(selectDistrict({ags: '00000', name: t('germany'), type: ''}));
 
     // Create polygon series
     const polygonSeries = chart.series.push(
