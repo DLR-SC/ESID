@@ -14,7 +14,7 @@ import HeatLegendEdit from './HeatLegendEdit';
 import {HeatmapLegend} from '../../types/heatmapLegend';
 import {LockOpen} from '@mui/icons-material';
 import LoadingContainer from '../shared/LoadingContainer';
-import HomeIcon from '@mui/icons-material/Home';
+import ZoomOutMapIcon from '@mui/icons-material/ZoomOutMap';
 //import { RestoreFromTrashRounded } from '@mui/icons-material';
 const {useRef} = React;
 
@@ -287,7 +287,7 @@ export default function DistrictMap(): JSX.Element {
           />
         </Grid>
         <Grid item container justifyContent='center' xs={1}>
-          <HomeIcon
+          <ZoomOutMapIcon
             id='home'
             color='primary'
             fontSize='large'
