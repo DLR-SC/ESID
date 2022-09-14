@@ -14,7 +14,8 @@ import HeatLegendEdit from './HeatLegendEdit';
 import {HeatmapLegend} from '../../types/heatmapLegend';
 import {LockOpen} from '@mui/icons-material';
 import LoadingContainer from '../shared/LoadingContainer';
-
+import HomeIcon from '@mui/icons-material/Home';
+//import { RestoreFromTrashRounded } from '@mui/icons-material';
 const {useRef} = React;
 
 interface IRegionPolygon {
@@ -111,7 +112,7 @@ export default function DistrictMap(): JSX.Element {
     const chart = root.container.children.push(
       am5map.MapChart.new(root, {
         projection: am5map.geoMercator(),
-        maxZoomLevel: 4,
+        maxZoomLevel: 5,
         maxPanOut: 0.4,
         zoomControl: am5map.ZoomControl.new(root, {
           paddingBottom: 25,
@@ -286,6 +287,17 @@ export default function DistrictMap(): JSX.Element {
           />
         </Grid>
         <Grid item container justifyContent='center' xs={1}>
+          <HomeIcon
+            id='home'
+            color='primary'
+            fontSize='large'
+            // if the chart is zoomed then, it will bring the chart to its default state, plus change the values to Germany wide.
+
+            onClick={() => {
+              dispatch(selectDistrict({ags: '00000', name: t('germany'), type: ''}));
+              chartRef.current?.goHome();
+            }}
+          />
           <Tooltip title={t('heatlegend.lock').toString()} placement='right' arrow>
             <IconButton
               color={'primary'}

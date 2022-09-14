@@ -150,13 +150,9 @@ export default function SearchBar(): JSX.Element {
                 }`}
               />
               <RestartAltIcon
-                fontSize="medium"
-                color= "primary"
-                onClick={() =>  dispatch(
-                  selectDistrict({ags: '00000', name: t('germany'), type: ''})
-                )}
-              
-
+                fontSize='medium'
+                color='primary'
+                onClick={() => dispatch(selectDistrict({ags: '00000', name: t('germany'), type: ''}))}
               />
             </div>
           )}
