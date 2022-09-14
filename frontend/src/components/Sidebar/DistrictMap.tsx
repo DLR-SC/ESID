@@ -269,7 +269,7 @@ export default function DistrictMap(): JSX.Element {
               legendRef.current = legend;
             }}
             min={0}
-            // used math.round to convert the number in integers and used +1 to avoid having legend max value as 0 or NaN
+            // used math.round to convert the numbers to integers
             max={
               legend.isNormalized ? Math.round(aggregatedMax) : Math.round(legend.steps[legend.steps.length - 1].value)
             }
@@ -314,20 +314,16 @@ function getColorFromLegend(
     return am5.color('rgba(0,0,0,0)');
   }
   if (normalizedValue <= legend.steps[0].value) {
-    //console.log("normalizedValue <= legend.steps[0].value",  normalizedValue, legend.steps[0].value)
     return am5.color(legend.steps[0].color);
   } else if (normalizedValue >= legend.steps[legend.steps.length - 1].value) {
-    //console.log("normalizedValue >= legend.steps[legend.steps.length - 1].value",  normalizedValue, legend.steps[legend.steps.length - 1].value)
     return am5.color(legend.steps[legend.steps.length - 1].color);
   } else {
     let upperTick = legend.steps[0];
     let lowerTick = legend.steps[0];
     for (let i = 1; i < legend.steps.length; i++) {
-      //console.log("legend.steps.length", legend.steps.length)
       if (normalizedValue <= legend.steps[i].value) {
         upperTick = legend.steps[i];
         lowerTick = legend.steps[i - 1];
-        // console.log("upperTick, normalizedValue <= legend.steps[i].value", upperTick, Math.round(normalizedValue),  legend.steps[i].value)
         break;
       }
     }
