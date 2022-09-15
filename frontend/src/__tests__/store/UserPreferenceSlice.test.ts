@@ -10,7 +10,7 @@ import {HeatmapLegend} from '../../types/heatmapLegend';
 describe('DataSelectionSlice', () => {
   const initialState: UserPreference = {
     selectedHeatmap: {
-      name: 'error',
+      name: 'uninitialized',
       isNormalized: true,
       steps: [
         {color: 'rgb(255,255,255)', value: 0},
@@ -91,7 +91,7 @@ describe('DataSelectionSlice', () => {
 
     expect(reducer(initialState, setHeatmapLegends({legends: legends}))).toEqual({
       selectedHeatmap: {
-        name: 'error',
+        name: 'uninitialized',
         isNormalized: true,
         steps: [
           {color: 'rgb(255,255,255)', value: 0},
@@ -105,7 +105,7 @@ describe('DataSelectionSlice', () => {
   test('Set Default Legends', () => {
     expect(reducer(initialState, setDefaultLegends({legends: defaultHeatmaps}))).toEqual({
       selectedHeatmap: {
-        name: 'error',
+        name: 'uninitialized',
         isNormalized: true,
         steps: [
           {color: 'rgb(255,255,255)', value: 0},

@@ -200,7 +200,7 @@ class SimulationDataCompartmentsSerializer(serializers.BaseSerializer):
         compartments = self.context.get('compartments', None)
 
         serialized = {}
-        if compartments is not None:
+        if compartments is not None and isinstance(compartments, list):
             for compartment in compartments:
                 serialized[compartment] = data[compartment]
         else:
