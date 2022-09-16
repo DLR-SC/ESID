@@ -10,6 +10,7 @@ import {SkipNextRounded, SkipPreviousRounded} from '@mui/icons-material';
 import {useAppDispatch, useAppSelector} from '../store/hooks';
 import {nextDay, previousDay, selectDate} from '../store/DataSelectionSlice';
 import {useTranslation} from 'react-i18next';
+import { GermanyIcon } from 'util/customIcons';
 
 export default function IconBar(): JSX.Element {
   const fsApi = useFullscreen();
@@ -105,6 +106,9 @@ export default function IconBar(): JSX.Element {
         <ShareIcon />
       </Button>
       */}
+      <Button disabled>
+        <GermanyIcon />
+      </Button>    
     </Box>
   );
 }
