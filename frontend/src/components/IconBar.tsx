@@ -104,7 +104,7 @@ export default function IconBar(): JSX.Element {
       <Button disabled>
         <ShareIcon />
       </Button>
-      */} 
+      */}
     </Box>
   );
 }
