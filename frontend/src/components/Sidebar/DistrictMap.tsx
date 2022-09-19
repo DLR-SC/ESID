@@ -14,6 +14,7 @@ import HeatLegendEdit from './HeatLegendEdit';
 import {HeatmapLegend} from '../../types/heatmapLegend';
 import {LockOpen} from '@mui/icons-material';
 import LoadingContainer from '../shared/LoadingContainer';
+import * as am5plugins_exporting from "@amcharts/amcharts5/plugins/exporting";
 
 const {useRef} = React;
 
@@ -52,7 +53,7 @@ export default function DistrictMap(): JSX.Element {
   const chartRef = useRef<am5map.MapChart | null>(null);
   const rootRef = useRef<am5.Root | null>(null);
   const legendRef = useRef<am5.HeatLegend | null>(null);
-
+  
   const {t, i18n} = useTranslation();
   const {formatNumber} = NumberFormatter(i18n.language, 3, 8);
   const theme = useTheme();
@@ -136,6 +137,21 @@ export default function DistrictMap(): JSX.Element {
       stroke: am5.color(theme.palette.background.default),
       strokeWidth: 1,
     });
+    
+    // To export map
+  
+     if (legendRef.current)
+     {
+    const exporting = am5plugins_exporting.Exporting.new(root, {
+      menu: am5plugins_exporting.ExportingMenu.new(root, {}),
+      extraImages: [{
+        source: legendRef.current.root,
+        marginTop: 20
+      }]
+    });
+
+  }
+ 
     // add click event
     polygonTemplate.events.on('click', (e) => {
       const item = e.target.dataItem?.dataContext as IRegionPolygon;
@@ -213,7 +229,8 @@ export default function DistrictMap(): JSX.Element {
           const rs = entry.name;
           dataMapped.set(rs, entry.compartments[selectedCompartment]);
         });
-
+        
+        console.log("legendRef.current?.root", legendRef.current?.root)
         if (dataMapped.size > 0) {
           polygonSeries.mapPolygons.each((polygon) => {
             const regionData = polygon.dataItem?.dataContext as IRegionPolygon;

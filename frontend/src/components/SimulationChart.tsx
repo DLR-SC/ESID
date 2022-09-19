@@ -88,6 +88,9 @@ export default function SimulationChart(): JSX.Element {
     chart.cursor = new am4charts.XYCursor();
     chart.cursor.xAxis = dateAxis;
 
+    // To export charts
+    chart.exporting.menu = new am4core.ExportMenu();
+
     // Add series for RKI Data
     const rkiSeries = chart.series.push(new am4charts.LineSeries());
     rkiSeries.dataFields.valueY = 'rki';
