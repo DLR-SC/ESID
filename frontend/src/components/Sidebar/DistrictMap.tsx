@@ -14,7 +14,7 @@ import HeatLegendEdit from './HeatLegendEdit';
 import {HeatmapLegend} from '../../types/heatmapLegend';
 import {LockOpen} from '@mui/icons-material';
 import LoadingContainer from '../shared/LoadingContainer';
-import ZoomOutMapIcon from '@mui/icons-material/ZoomOutMap';
+import {GermanyIcon} from '../../util/customIcons';
 //import { RestoreFromTrashRounded } from '@mui/icons-material';
 const {useRef} = React;
 
@@ -134,6 +134,7 @@ export default function DistrictMap(): JSX.Element {
       stroke: am5.color(theme.palette.background.default),
       strokeWidth: 1,
     });
+
     // add click event
     polygonTemplate.events.on('click', (e) => {
       const item = e.target.dataItem?.dataContext as IRegionPolygon;
@@ -287,7 +288,7 @@ export default function DistrictMap(): JSX.Element {
           />
         </Grid>
         <Grid item container justifyContent='center' xs={1}>
-          <ZoomOutMapIcon
+          <GermanyIcon
             id='home'
             color='primary'
             fontSize='large'
