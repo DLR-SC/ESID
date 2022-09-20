@@ -180,6 +180,7 @@ export default function DistrictMap(): JSX.Element {
           {
             source: legendRef.current.root,
             marginTop: 20,
+            marginLeft: 20,
           },
         ],
       });

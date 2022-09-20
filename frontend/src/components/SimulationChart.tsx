@@ -88,9 +88,6 @@ export default function SimulationChart(): JSX.Element {
     chart.cursor = new am4charts.XYCursor();
     chart.cursor.xAxis = dateAxis;
 
-    // To export charts
-    chart.exporting.menu = new am4core.ExportMenu();
-
     // Add series for RKI Data
     const rkiSeries = chart.series.push(new am4charts.LineSeries());
     rkiSeries.dataFields.valueY = 'rki';
@@ -134,6 +131,18 @@ export default function SimulationChart(): JSX.Element {
         series.tooltipText = `${scenario.label}: [bold]{${scenarioId}STDdown} ~ {${scenarioId}STDup}[/]`;
       }
     });
+
+    // To export this chart
+    chart.exporting.menu = new am4core.ExportMenu();
+    chart.exporting.dataFields = {
+      date: 'Date',
+      rki: 'RKI',
+      '1': 'Scenario 1',
+      '2': 'Scenario 2',
+      percentileUp: 'PercentileUp',
+      percentileDown: 'PercentileDown',
+    };
+    chart.exporting.filePrefix = 'Covid Simulaton Data';
 
     chart.events.on('hit', () => {
       // Timezone shenanigans could get us the wrong day ...
