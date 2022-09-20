@@ -20,7 +20,10 @@ export const groupApi = createApi({
 
     getGroupData: builder.mutation<groupResponse, post>({
       query: (arg: post) => ({
-        url: `simulation/${arg.id}/${arg.node}/?all`,
+        url:
+          `simulation/${arg.id}/${arg.node}/?all` +
+          (arg.day ? `&day=${arg.day}` : '') +
+          (arg.compartment ? `&compartments=${arg.compartment}` : ''),
         method: 'POST',
         body: arg.postGroup,
       }),
@@ -32,6 +35,8 @@ export interface post {
   id: number;
   node: string;
   postGroup: Dictionary<Dictionary<string[]>>;
+  day?: string;
+  compartment?: string;
 }
 
 export interface groupCategory {

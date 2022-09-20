@@ -6,8 +6,9 @@ import {useGetSingleSimulationEntryQuery} from 'store/services/scenarioApi';
 import {Dictionary} from '../util/util';
 import {useTranslation} from 'react-i18next';
 import {NumberFormatter} from '../util/hooks';
-import {CheckBoxOutlineBlank, CheckBox} from '@mui/icons-material';
-import {groupData} from '../types/group';
+import {CheckBox, CheckBoxOutlineBlank} from '@mui/icons-material';
+import {groupData, groupResponse} from '../types/group';
+import {post, useGetGroupDataMutation} from '../store/services/groupApi';
 
 /**
  * React Component to render individual Scenario Card
@@ -19,6 +20,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
   const {t, i18n} = useTranslation();
 
   const compartmentsRef = useRef<HTMLUListElement | null>(null);
+  const groupCompartmentsRef = useRef<Array<HTMLUListElement | null>>([]);
 
   const {formatNumber} = NumberFormatter(i18n.language, 3, 8);
 
@@ -28,7 +30,6 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
   const node = useAppSelector((state) => state.dataSelection.district?.ags);
   const day = useAppSelector((state) => state.dataSelection.date);
   const filterList = useAppSelector((state) => state.dataSelection.filter);
-  const filterData = useAppSelector((state) => state.dataSelection.filterData);
 
   const {data} = useGetSingleSimulationEntryQuery(
     {
@@ -40,10 +41,45 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
     {skip: !day}
   );
 
+  const [filterData, setFilterData] = useState<Dictionary<groupData> | null>(null);
+
   const [hover, setHover] = useState<boolean>(false);
 
   const [folded, fold] = useState(true);
 
+  const [getGroupData] = useGetGroupDataMutation();
+
+  //ref Array Size
+  useEffect(() => {
+    if (filterList) {
+      groupCompartmentsRef.current.slice(0, filterList.length);
+    }
+  }, [filterList]);
+  useEffect(() => {
+    if (filterList) {
+      const dataList: Dictionary<groupData> = {};
+      for (let i = 0; i < filterList.length; i++) {
+        const postData = {
+          id: props.scenario.id,
+          node: node,
+          day: day,
+          postGroup: {groups: filterList[i].groups},
+        } as post;
+
+        getGroupData(postData)
+          .then((result) => {
+            const data = Object.values(result)[0] as groupResponse;
+            if (data.results) {
+              console.log(filterList[i].name);
+              console.log(data.results);
+              dataList[filterList[i].name as string] = data.results[0];
+            }
+          })
+          .catch((err) => console.log(err));
+      }
+      setFilterData(dataList);
+    }
+  }, [filterList, day, node, getGroupData, props.scenario.id]);
   useEffect(() => {
     if (compartmentsRef.current) {
       if (props.expandProperties) {
@@ -52,6 +88,17 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
         compartmentsRef.current.scrollTop = 0;
       }
     }
+    if (groupCompartmentsRef.current) {
+      groupCompartmentsRef.current.forEach((ref) => {
+        if (ref) {
+          if (props.expandProperties) {
+            ref.scrollTop = props.scrollTop;
+          } else {
+            ref.scrollTop = 0;
+          }
+        }
+      });
+    }
   }, [props.expandProperties, props.scrollTop]);
 
   useEffect(() => {
@@ -59,15 +106,6 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
       setCompartmentValues(data.results[0].compartments);
     }
   }, [data]);
-
-  const getIndexByDay = (filter: groupData[]): number => {
-    for (let i = 0; i < filter.length; i++) {
-      if (filter[i].day == day) {
-        return i;
-      }
-    }
-    return 0;
-  };
 
   const getCompartmentValue = (compartment: string): string => {
     if (compartmentValues && compartment in compartmentValues) {
@@ -95,11 +133,11 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
     return 'N/A';
   };
 
-  const filterCompartmentValues = (filterName: string, dateIndex: number): JSX.Element | null => {
-    if (filterData) {
+  const filterCompartmentValues = (filterName: string, filterIndex: number): JSX.Element | null => {
+    if (filterData && filterData[filterName]) {
       return (
         <List
-          ref={compartmentsRef}
+          ref={(el) => (groupCompartmentsRef.current[filterIndex] = el)}
           dense={true}
           disablePadding={true}
           sx={{
@@ -112,7 +150,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
             marginTop: theme.spacing(1),
           }}
         >
-          {Object.keys(filterData[filterName][dateIndex].compartments).map((compartment, i) => {
+          {compartments.map((compartment, i) => {
             return (
               // hide compartment if expandProperties false and index > 4
               // highlight compartment if selectedProperty === compartment
@@ -130,7 +168,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
                 }}
               >
                 <ListItemText
-                  primary={formatNumber(filterData[filterName][dateIndex].compartments[compartment])}
+                  primary={formatNumber(filterData[filterName].compartments[compartment])}
                   // disable child typography overriding this
                   disableTypography={true}
                   sx={{
@@ -151,7 +189,6 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
 
   const FilterInfo = (): JSX.Element | null => {
     if (filterList && filterList.length >= 1 && filterData && filterList[0].name) {
-      const dateIndex = getIndexByDay(filterData[filterList[0].name]);
       return (
         <Box
           sx={{
@@ -164,7 +201,8 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
               <Box
                 key={filterName}
                 sx={{
-                  marginLeft: i == 0 ? '2.3rem' : '0rem',
+                  //marginLeft: i == 0 ? '2.3rem' : '0rem',
+
                   paddingTop: '1.6rem',
                   marginTop: '0rem',
                   alignContent: 'center',
@@ -185,7 +223,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
                 >
                   {filterName}
                 </Typography>
-                {filterCompartmentValues(filterName, dateIndex)}
+                {filterCompartmentValues(filterName, i)}
               </Box>
             );
           })}

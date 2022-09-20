@@ -50,6 +50,7 @@ export default function SimulationChart(): JSX.Element {
         const postData = {
           id: selectedScenario,
           node: selectedDistrict,
+          compartment: selectedCompartment,
           postGroup: {groups: filterList[i].groups},
         } as post;
 
@@ -63,7 +64,7 @@ export default function SimulationChart(): JSX.Element {
           .catch((err) => console.log(err));
       }
     }
-  }, [filterList, selectedScenario, selectedDistrict, getGroupData, activeScenarios, dispatch]);
+  }, [filterList, selectedScenario, selectedDistrict, getGroupData, activeScenarios, dispatch, selectedCompartment]);
 
   const {data: rkiData, isFetching: rkiFetching} = useGetRkiByDistrictQuery(
     {
