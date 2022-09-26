@@ -335,43 +335,11 @@ export default function SimulationChart(): JSX.Element {
           text.push('<table>');
           chartRef.current?.series.each((s) => {
             if (
-              s.dataFields.openValueY &&
               s.dataFields.valueY &&
-              scenarioList.scenarios[selectedScenario] &&
-              !s.isHidden &&
-              data
+              data &&
+              (data as {[key: string]: number | string})[s.dataFields.valueY] &&
+              s.id !== 'percentiles'
             ) {
-              text.push('<tr>');
-              text.push(
-                `<th 
-                style='text-align:left; color:${
-                  theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0]
-                }; padding-right:${theme.spacing(2)}'>
-                <strong>${scenarioList.scenarios[selectedScenario].label} p25</strong>
-                </th>`
-              );
-              text.push(
-                `<td style='text-align:right'>${formatNumber(
-                  (data as {[key: string]: number})[s.dataFields.openValueY]
-                )}</td>`
-              );
-              text.push('</tr>');
-              text.push('<tr>');
-              text.push(
-                `<th 
-                style='text-align:left; color:${
-                  theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0]
-                }; padding-right:${theme.spacing(2)}'>
-                <strong>${scenarioList.scenarios[selectedScenario].label} p75</strong>
-                </th>`
-              );
-              text.push(
-                `<td style='text-align:right'>${formatNumber(
-                  (data as {[key: string]: number})[s.dataFields.valueY]
-                )}</td>`
-              );
-              text.push('</tr>');
-            } else if (s.dataFields.valueY && data && (data as {[key: string]: number | string})[s.dataFields.valueY]) {
               text.push('<tr>');
               text.push(
                 `<th 
@@ -384,6 +352,18 @@ export default function SimulationChart(): JSX.Element {
                   (data as {[key: string]: number})[s.dataFields.valueY]
                 )}</td>`
               );
+              if (
+                s.id == scenarioList.scenarios[selectedScenario].id.toString() &&
+                percentileSeries.dataFields.openValueY &&
+                percentileSeries.dataFields.valueY
+              ) {
+                text.push(
+                  `<td>[${formatNumber((data as {[key: string]: number})[percentileSeries.dataFields.openValueY])} - 
+                    ${formatNumber((data as {[key: string]: number})[percentileSeries.dataFields.valueY])}]</td>`
+                );
+              } else {
+                text.push('<td/>');
+              }
               text.push('</tr>');
             }
           });
