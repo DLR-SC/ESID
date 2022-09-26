@@ -4,7 +4,7 @@ export interface groupResponse {
   count: number;
   next: string | null;
   previous: string | null;
-  results: Array<{compartments: Dictionary<number>; day: string; name: string}>;
+  results: Array<groupData>;
 }
 
 export interface groupData {
@@ -13,7 +13,8 @@ export interface groupData {
   name: string;
 }
 
-export interface groupDataSelection {
+export interface filter {
   name: string;
-  data: groupData[];
+  toggle: boolean | null;
+  groups: Dictionary<string[]>;
 }

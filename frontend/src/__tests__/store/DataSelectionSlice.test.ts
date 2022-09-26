@@ -5,8 +5,8 @@ import reducer, {
   selectCompartment,
   toggleScenario,
   addFilter,
-  filter,
 } from '../../store/DataSelectionSlice';
+import {filter} from '../../types/group';
 
 describe('DataSelectionSlice', () => {
   const initialState = {

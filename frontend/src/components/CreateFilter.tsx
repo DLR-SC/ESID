@@ -6,10 +6,11 @@ import {
   groupSubcategory,
   groupCategory,
 } from 'store/services/groupApi';
-import {deleteFilter, addFilter, filter, deleteFilterData} from 'store/DataSelectionSlice';
+import {deleteFilter, addFilter} from 'store/DataSelectionSlice';
 import {Box, Button, FormControlLabel, FormGroup, TextField, ListItem, IconButton} from '@mui/material';
 import {Dictionary} from 'util/util';
 import DeleteIcon from '@mui/icons-material/Delete';
+import {filter} from '../types/group';
 
 interface CreateFilterProps {
   onclose: () => void;
@@ -82,7 +83,7 @@ export default function CreateFilter(props: CreateFilterProps): JSX.Element {
     const filterNames = Array<string>();
     if (filterList) {
       for (let i = 0; i < filterList.length; i++) {
-        filterNames.push(filterList[i].name as string);
+        filterNames.push(filterList[i].name);
       }
     }
     if (filterNames.includes(currentName)) {
@@ -104,7 +105,6 @@ export default function CreateFilter(props: CreateFilterProps): JSX.Element {
   const delGroup = (name: string | null) => {
     if (name) {
       dispatch(deleteFilter(name));
-      dispatch(deleteFilterData(name));
     }
   };
 

@@ -1,8 +1,7 @@
-import {Dictionary} from 'util/util';
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import i18n from '../util/i18n';
 import {dateToISOString} from '../util/util';
-import {groupData, groupDataSelection} from 'types/group';
+import {filter} from 'types/group';
 
 /**
  * AGS is the abbreviation for "Amtlicher Gemeindeschlüssel" in German, which are IDs of areas in Germany. The AGS have
@@ -11,12 +10,6 @@ import {groupData, groupDataSelection} from 'types/group';
  * Germany, in case no AGS is selected.
  */
 export type AGS = string;
-
-export interface filter {
-  name: string | null;
-  toggle: boolean | null;
-  groups: Dictionary<string[]>;
-}
 
 export interface DataSelection {
   district: {ags: AGS; name: string; type: string};
@@ -28,7 +21,6 @@ export interface DataSelection {
   minDate: string | null;
   maxDate: string | null;
   filter: Array<filter> | null;
-  filterData: Dictionary<groupData[]> | null;
 }
 
 const initialState: DataSelection = {
@@ -41,7 +33,6 @@ const initialState: DataSelection = {
   minDate: null,
   maxDate: null,
   filter: null,
-  filterData: null,
 };
 
 /**
@@ -129,19 +120,6 @@ export const DataSelectionSlice = createSlice({
         }
       }
     },
-    addFilterData(state, action: PayloadAction<groupDataSelection>) {
-      if (state.filterData) {
-        state.filterData[action.payload.name] = action.payload.data;
-      } else {
-        state.filterData = {} as Dictionary<groupData[]>;
-        state.filterData[action.payload.name] = action.payload.data;
-      }
-    },
-    deleteFilterData(state, action: PayloadAction<string>) {
-      if (state.filterData && state.filterData[action.payload]) {
-        delete state.filterData[action.payload];
-      }
-    },
   },
 });
 
@@ -157,7 +135,5 @@ export const {
   deleteFilter,
   toggleFilter,
   toggleScenario,
-  addFilterData,
-  deleteFilterData,
 } = DataSelectionSlice.actions;
 export default DataSelectionSlice.reducer;

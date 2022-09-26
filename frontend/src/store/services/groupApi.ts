@@ -1,6 +1,6 @@
 import {Dictionary} from 'util/util';
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
-import {groupResponse} from 'types/group';
+import {filter, groupResponse} from 'types/group';
 
 export const groupApi = createApi({
   reducerPath: 'groupApi',
@@ -18,23 +18,33 @@ export const groupApi = createApi({
       },
     }),
 
-    getGroupData: builder.mutation<groupResponse, post>({
-      query: (arg: post) => ({
-        url:
-          `simulation/${arg.id}/${arg.node}/?all` +
-          (arg.day ? `&day=${arg.day}` : '') +
-          (arg.compartment ? `&compartments=${arg.compartment}` : ''),
-        method: 'POST',
-        body: arg.postGroup,
-      }),
+    getMultipleFilterData: builder.query<Dictionary<groupResponse>, postFilter[]>({
+      async queryFn(arg, _queryApi, _extraOptions, fetchWithBQ) {
+        const result: Dictionary<groupResponse> = {};
+        for (const post of arg) {
+          const singleResult = await fetchWithBQ({
+            url:
+              `simulation/${post.id}/${post.node}/?all` +
+              (post.day ? `&day=${post.day}` : '') +
+              (post.compartment ? `&compartments=${post.compartment}` : ''),
+            method: 'POST',
+            body: {groups: post.filter.groups},
+          });
+
+          if (singleResult.error) return {error: singleResult.error};
+
+          result[post.filter.name] = singleResult.data as groupResponse;
+        }
+        return {data: result};
+      },
     }),
   }),
 });
 
-export interface post {
+export interface postFilter {
   id: number;
   node: string;
-  postGroup: Dictionary<Dictionary<string[]>>;
+  filter: filter;
   day?: string;
   compartment?: string;
 }
@@ -66,4 +76,4 @@ interface groupSubcategories {
   results: Array<groupSubcategory> | null;
 }
 
-export const {useGetGroupCategoriesQuery, useGetGroupSubcategoriesQuery, useGetGroupDataMutation} = groupApi;
+export const {useGetGroupCategoriesQuery, useGetGroupSubcategoriesQuery, useGetMultipleFilterDataQuery} = groupApi;

@@ -7,8 +7,7 @@ import {Dictionary} from '../util/util';
 import {useTranslation} from 'react-i18next';
 import {NumberFormatter} from '../util/hooks';
 import {CheckBox, CheckBoxOutlineBlank} from '@mui/icons-material';
-import {groupData, groupResponse} from '../types/group';
-import {post, useGetGroupDataMutation} from '../store/services/groupApi';
+import {useGetMultipleFilterDataQuery} from '../store/services/groupApi';
 
 /**
  * React Component to render individual Scenario Card
@@ -41,13 +40,26 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
     {skip: !day}
   );
 
-  const [filterData, setFilterData] = useState<Dictionary<groupData> | null>(null);
+  const {data: filterData} = useGetMultipleFilterDataQuery(
+    filterList && day
+      ? filterList
+          .filter((filter) => {
+            return filter.toggle;
+          })
+          .map((filter) => {
+            return {
+              id: props.scenario.id,
+              node: node,
+              day: day,
+              filter: filter,
+            };
+          })
+      : []
+  );
 
   const [hover, setHover] = useState<boolean>(false);
 
   const [folded, fold] = useState(true);
-
-  const [getGroupData] = useGetGroupDataMutation();
 
   //ref Array Size
   useEffect(() => {
@@ -55,31 +67,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
       groupCompartmentsRef.current.slice(0, filterList.length);
     }
   }, [filterList]);
-  useEffect(() => {
-    if (filterList) {
-      const dataList: Dictionary<groupData> = {};
-      for (let i = 0; i < filterList.length; i++) {
-        const postData = {
-          id: props.scenario.id,
-          node: node,
-          day: day,
-          postGroup: {groups: filterList[i].groups},
-        } as post;
 
-        getGroupData(postData)
-          .then((result) => {
-            const data = Object.values(result)[0] as groupResponse;
-            if (data.results) {
-              console.log(filterList[i].name);
-              console.log(data.results);
-              dataList[filterList[i].name as string] = data.results[0];
-            }
-          })
-          .catch((err) => console.log(err));
-      }
-      setFilterData(dataList);
-    }
-  }, [filterList, day, node, getGroupData, props.scenario.id]);
   useEffect(() => {
     if (compartmentsRef.current) {
       if (props.expandProperties) {
@@ -168,7 +156,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
                 }}
               >
                 <ListItemText
-                  primary={formatNumber(filterData[filterName].compartments[compartment])}
+                  primary={formatNumber(filterData[filterName].results[0]?.compartments[compartment])}
                   // disable child typography overriding this
                   disableTypography={true}
                   sx={{

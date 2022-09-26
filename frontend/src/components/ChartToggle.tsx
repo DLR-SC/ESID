@@ -19,7 +19,7 @@ export default function ChartToggle(props: ChartToggleProps): JSX.Element {
 
   const listfilter = () => {
     if (filterList && filterList.length >= 1) {
-      return filterList.map((filterItem) => activefilters(filterItem.toggle as boolean, filterItem.name as string));
+      return filterList.map((filterItem) => activefilters(filterItem.toggle as boolean, filterItem.name));
     } else {
       return (
         <Box>

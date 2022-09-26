@@ -6,19 +6,19 @@ import am4lang_de_DE from '@amcharts/amcharts4/lang/de_DE';
 import {useAppDispatch, useAppSelector} from '../store/hooks';
 import {useTheme} from '@mui/material/styles';
 import {Box} from '@mui/material';
-import {selectDate, addFilterData} from '../store/DataSelectionSlice';
+import {selectDate} from '../store/DataSelectionSlice';
 import {useGetRkiByDistrictQuery} from '../store/services/rkiApi';
 import {dateToISOString} from 'util/util';
 import {
+  PercentileDataByDay,
   useGetMultipleSimulationDataByNodeQuery,
   useGetPercentileDataQuery,
-  PercentileDataByDay,
 } from 'store/services/scenarioApi';
 import {useTranslation} from 'react-i18next';
 import {NumberFormatter} from 'util/hooks';
 import LoadingContainer from './shared/LoadingContainer';
-import {useGetGroupDataMutation, post} from 'store/services/groupApi';
-import {groupData, groupResponse} from 'types/group';
+import {useGetMultipleFilterDataQuery} from 'store/services/groupApi';
+import {groupData} from 'types/group';
 /* This component displays the evolution of the pandemic for a specific compartment (hospitalized, dead, infected, etc.) regarding the different scenarios
  */
 
@@ -39,32 +39,26 @@ export default function SimulationChart(): JSX.Element {
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
   const activeScenarios = useAppSelector((state) => state.dataSelection.activeScenarios);
   const filterList = useAppSelector((state) => state.dataSelection.filter);
-  const filterData = useAppSelector((state) => state.dataSelection.filterData);
   const dispatch = useAppDispatch();
 
-  const [getGroupData] = useGetGroupDataMutation();
-
-  useEffect(() => {
-    if (filterList) {
-      for (let i = 0; i < filterList.length; i++) {
-        const postData = {
-          id: selectedScenario,
-          node: selectedDistrict,
-          compartment: selectedCompartment,
-          postGroup: {groups: filterList[i].groups},
-        } as post;
-
-        getGroupData(postData)
-          .then((result) => {
-            const data = Object.values(result)[0] as groupResponse;
-            if (data.results) {
-              dispatch(addFilterData({name: filterList[i].name as string, data: data.results}));
-            }
+  const {data: filterData} = useGetMultipleFilterDataQuery(
+    filterList && selectedScenario && selectedDistrict && selectedCompartment
+      ? filterList
+          .filter((filter) => {
+            return filter.toggle;
           })
-          .catch((err) => console.log(err));
-      }
-    }
-  }, [filterList, selectedScenario, selectedDistrict, getGroupData, activeScenarios, dispatch, selectedCompartment]);
+          .map((filter) => {
+            return {
+              id: selectedScenario,
+              node: selectedDistrict,
+              compartment: selectedCompartment,
+              filter: filter,
+            };
+          })
+      : []
+  );
+
+  console.log(filterData);
 
   const {data: rkiData, isFetching: rkiFetching} = useGetRkiByDistrictQuery(
     {
@@ -138,9 +132,9 @@ export default function SimulationChart(): JSX.Element {
       const filterStrokes = ['2,4', '8,4', '8,4,2,4'] as string[];
       for (let i = 0; i < filterList.length; i++) {
         const series = chart.series.push(new am4charts.LineSeries());
-        series.dataFields.valueY = filterList[i].name as string;
+        series.dataFields.valueY = filterList[i].name;
         series.dataFields.dateX = 'date';
-        series.id = filterList[i].name as string;
+        series.id = filterList[i].name;
         series.strokeWidth = 2;
         series.fill = am4core.color(
           theme.custom.scenarios[((selectedScenario as number) - 1) % theme.custom.scenarios.length][0]
@@ -149,8 +143,8 @@ export default function SimulationChart(): JSX.Element {
         if (i < filterStrokes.length) {
           series.strokeDasharray = filterStrokes[i];
         }
-        series.tooltipText = `[bold ${series.stroke.hex}]${filterList[i].name as string}:[/] {${i}}`;
-        series.name = filterList[i].name as string;
+        series.tooltipText = `[bold ${series.stroke.hex}]${filterList[i].name}:[/] {${i}}`;
+        series.name = filterList[i].name;
       }
     }
 
@@ -193,7 +187,7 @@ export default function SimulationChart(): JSX.Element {
     return () => {
       chartRef.current?.dispose();
     };
-  }, [scenarioList, filterList, dispatch, i18n.language, t, theme, filterData, selectedScenario]);
+  }, [scenarioList, filterList, dispatch, i18n.language, t, theme, selectedScenario]);
 
   //Effect to hide disabled scenarios (and show them again if not hidden anymore)
   useEffect(() => {
@@ -298,11 +292,11 @@ export default function SimulationChart(): JSX.Element {
       if (filterList && filterData) {
         for (let i = 0; i < filterList.length; i++) {
           if (filterList[i] && filterList[i].toggle == true) {
-            if (filterData[filterList[i].name as string]) {
-              filterData[filterList[i].name as string].forEach((entry: groupData) => {
+            if (filterData[filterList[i].name]) {
+              filterData[filterList[i].name].results.forEach((entry: groupData) => {
                 dataMap.set(entry.day, {
                   ...dataMap.get(entry.day),
-                  [filterList[i].name as string]: entry.compartments[selectedCompartment],
+                  [filterList[i].name]: entry.compartments[selectedCompartment],
                 });
               });
             }
