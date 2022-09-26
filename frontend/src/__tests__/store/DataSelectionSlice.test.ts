@@ -1,12 +1,11 @@
 import reducer, {
-  selectDistrict,
-  selectDate,
-  selectScenario,
-  selectCompartment,
-  toggleScenario,
   addFilter,
+  selectCompartment,
+  selectDate,
+  selectDistrict,
+  selectScenario,
+  toggleScenario,
 } from '../../store/DataSelectionSlice';
-import {filter} from '../../types/group';
 
 describe('DataSelectionSlice', () => {
   const initialState = {
@@ -18,7 +17,6 @@ describe('DataSelectionSlice', () => {
     minDate: null,
     maxDate: null,
     filter: null,
-    filterData: null,
   };
 
   test('Initial State', () => {
@@ -36,7 +34,6 @@ describe('DataSelectionSlice', () => {
       minDate: null,
       maxDate: null,
       filter: null,
-      filterData: null,
     });
   });
 
@@ -51,7 +48,6 @@ describe('DataSelectionSlice', () => {
       minDate: null,
       maxDate: null,
       filter: null,
-      filterData: null,
     });
   });
 
@@ -65,7 +61,6 @@ describe('DataSelectionSlice', () => {
       minDate: null,
       maxDate: null,
       filter: null,
-      filterData: null,
     });
   });
 
@@ -78,6 +73,7 @@ describe('DataSelectionSlice', () => {
       activeScenarios: null,
       minDate: null,
       maxDate: null,
+      filter: null,
     });
   });
 
@@ -90,7 +86,9 @@ describe('DataSelectionSlice', () => {
       activeScenarios: [2],
       minDate: null,
       maxDate: null,
+      filter: null,
     });
+
     const state = {
       district: {ags: '00000', name: 'germany', type: ''},
       date: null,
@@ -100,7 +98,6 @@ describe('DataSelectionSlice', () => {
       minDate: null,
       maxDate: null,
       filter: null,
-      filterData: null,
     };
 
     expect(reducer(state, toggleScenario(2))).toEqual({
@@ -112,7 +109,6 @@ describe('DataSelectionSlice', () => {
       minDate: null,
       maxDate: null,
       filter: null,
-      filterData: null,
     });
   });
 
@@ -127,9 +123,10 @@ describe('DataSelectionSlice', () => {
       date: null,
       scenario: null,
       compartment: null,
+      activeScenarios: null,
       minDate: null,
       maxDate: null,
-      filter: Array<filter>().push(newFilter),
+      filter: [newFilter],
     });
   });
 });
