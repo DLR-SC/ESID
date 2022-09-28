@@ -43,9 +43,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
   const {data: filterData} = useGetMultipleFilterDataQuery(
     filterList && day
       ? filterList
-          .filter((filter) => {
-            return filter.toggle;
-          })
+          .filter((filter) => filter.toggle)
           .map((filter) => {
             return {
               id: props.scenario.id,
@@ -133,9 +131,6 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
             overflowY: 'hidden',
             width: 'fit-content',
             alignContent: 'right',
-            padding: theme.spacing(1),
-            margin: theme.spacing(0),
-            marginTop: theme.spacing(1),
           }}
         >
           {compartments.map((compartment, i) => {
@@ -189,28 +184,33 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
               <Box
                 key={filterName}
                 sx={{
-                  //marginLeft: i == 0 ? '2.3rem' : '0rem',
-
-                  paddingTop: '1.6rem',
-                  marginTop: '0rem',
+                  marginLeft: i == 0 ? '1.5rem' : '0rem',
+                  paddingX: theme.spacing(2),
+                  paddingY: theme.spacing(1),
                   alignContent: 'center',
                   borderLeft: i == 0 ? null : `1px solid`,
                   borderColor: i == 0 ? null : 'divider',
-                  paddingLeft: '1.5rem',
-                  marginRight: i == Object.keys(filterData).length - 1 ? '0rem' : '1rem',
                 }}
               >
-                <Typography
-                  variant='h3'
+                <Box
                   sx={{
-                    height: 'min-content',
-                    fontWeight: 'bold',
-                    fontSize: '13pt',
-                    marginRight: '1rem',
+                    display: 'flex',
+                    alignItems: 'flex-end',
+                    height: '3rem',
+                    marginBottom: theme.spacing(1),
                   }}
                 >
-                  {filterName}
-                </Typography>
+                  <Typography
+                    variant='h3'
+                    sx={{
+                      height: 'min-content',
+                      fontWeight: 'bold',
+                      fontSize: '13pt',
+                    }}
+                  >
+                    {filterName}
+                  </Typography>
+                </Box>
                 {filterCompartmentValues(filterName, i)}
               </Box>
             );
@@ -229,15 +229,14 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
           return (
             <Box
               sx={{
-                display: props.active ? 'inline-flex' : 'none',
+                display: props.active ? 'block' : 'none',
                 marginLeft: '-2rem',
-                marginTop: '1rem',
+                marginTop: '18px',
                 border: `2px solid ${props.color}`,
                 width: folded ? '3rem' : 'fit-content',
-                height: '12.6rem',
+                height: folded ? (props.expandProperties ? '308px' : '204px') : 'fit-content',
                 borderRadius: '10px',
                 background: folded ? props.color : theme.palette.background.paper,
-                flexDirection: 'row',
               }}
               onClick={() => fold(!folded)}
             >
@@ -258,6 +257,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
         display: 'flex',
         flexDirection: 'row',
         color: props.color,
+        width: 'min-content',
       }}
     >
       <Box
@@ -266,7 +266,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
           zIndex: 0,
           flexGrow: 0,
           flexShrink: 0,
-          flexBasis: '172px',
+          width: '172px',
           boxSizing: 'border-box',
           marginX: '2px',
           marginY: theme.spacing(2),
@@ -424,7 +424,6 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
           </Box>
         </Box>
       </Box>
-
       {activateFilters()}
     </Box>
   );
