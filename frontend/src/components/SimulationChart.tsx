@@ -44,9 +44,7 @@ export default function SimulationChart(): JSX.Element {
   const {data: filterData} = useGetMultipleFilterDataQuery(
     filterList && selectedScenario && selectedDistrict && selectedCompartment
       ? filterList
-          .filter((filter) => {
-            return filter.toggle;
-          })
+          .filter((filter) => filter.toggle)
           .map((filter) => {
             return {
               id: selectedScenario,
@@ -57,8 +55,6 @@ export default function SimulationChart(): JSX.Element {
           })
       : []
   );
-
-  console.log(filterData);
 
   const {data: rkiData, isFetching: rkiFetching} = useGetRkiByDistrictQuery(
     {
@@ -127,27 +123,6 @@ export default function SimulationChart(): JSX.Element {
     percentileSeries.strokeWidth = 0;
     percentileSeries.fillOpacity = 0.3;
 
-    if (filterList) {
-      //Add series for groups
-      const filterStrokes = ['2,4', '8,4', '8,4,2,4'] as string[];
-      for (let i = 0; i < filterList.length; i++) {
-        const series = chart.series.push(new am4charts.LineSeries());
-        series.dataFields.valueY = filterList[i].name;
-        series.dataFields.dateX = 'date';
-        series.id = filterList[i].name;
-        series.strokeWidth = 2;
-        series.fill = am4core.color(
-          theme.custom.scenarios[((selectedScenario as number) - 1) % theme.custom.scenarios.length][0]
-        );
-        series.stroke = series.fill;
-        if (i < filterStrokes.length) {
-          series.strokeDasharray = filterStrokes[i];
-        }
-        series.tooltipText = `[bold ${series.stroke.hex}]${filterList[i].name}:[/] {${i}}`;
-        series.name = filterList[i].name;
-      }
-    }
-
     // Add series for scenarios
     Object.entries(scenarioList.scenarios).forEach(([scenarioId, scenario], i) => {
       const series = chart.series.push(new am4charts.LineSeries());
@@ -173,6 +148,29 @@ export default function SimulationChart(): JSX.Element {
         series.tooltipText = `${scenario.label}: [bold]{${scenarioId}STDdown} ~ {${scenarioId}STDup}[/]`;
       }
     });
+
+    //Add series for filter
+    if (filterList && selectedScenario) {
+      const filterStrokes = ['2,4', '8,4', '8,4,2,4'] as string[];
+      filterList
+        .filter((filter) => filter.toggle)
+        .forEach((filter, i) => {
+          const series = chart.series.push(new am4charts.LineSeries());
+          series.dataFields.valueY = filter.name;
+          series.dataFields.dateX = 'date';
+          series.id = 'filter-' + filter.name;
+          series.strokeWidth = 2;
+          series.fill = am4core.color(
+            theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0]
+          );
+          series.stroke = series.fill;
+          if (i < filterStrokes.length) {
+            series.strokeDasharray = filterStrokes[i];
+          }
+          series.tooltipText = `[bold ${series.stroke.hex}]${filter.name}:[/] {${i}}`;
+          series.name = filter.name;
+        });
+    }
 
     chart.events.on('hit', () => {
       // Timezone shenanigans could get us the wrong day ...
@@ -289,19 +287,20 @@ export default function SimulationChart(): JSX.Element {
         dataMap.set(entry.day, {...dataMap.get(entry.day), percentileUp: entry.compartments[selectedCompartment]});
       });
 
+      //add filter data
       if (filterList && filterData) {
-        for (let i = 0; i < filterList.length; i++) {
-          if (filterList[i] && filterList[i].toggle == true) {
-            if (filterData[filterList[i].name]) {
-              filterData[filterList[i].name].results.forEach((entry: groupData) => {
+        filterList.forEach((filter) => {
+          if (filter && filter.toggle) {
+            if (filterData[filter.name]) {
+              filterData[filter.name].results.forEach((entry: groupData) => {
                 dataMap.set(entry.day, {
                   ...dataMap.get(entry.day),
-                  [filterList[i].name]: entry.compartments[selectedCompartment],
+                  [filter.name]: entry.compartments[selectedCompartment],
                 });
               });
             }
           }
-        }
+        });
       }
 
       //change fill color of percentile series to selected scenario color
@@ -338,7 +337,8 @@ export default function SimulationChart(): JSX.Element {
               s.dataFields.valueY &&
               data &&
               (data as {[key: string]: number | string})[s.dataFields.valueY] &&
-              s.id !== 'percentiles'
+              s.id !== 'percentiles' &&
+              !s.id.startsWith('filter-')
             ) {
               text.push('<tr>');
               text.push(
@@ -361,10 +361,33 @@ export default function SimulationChart(): JSX.Element {
                   `<td>[${formatNumber((data as {[key: string]: number})[percentileSeries.dataFields.openValueY])} - 
                     ${formatNumber((data as {[key: string]: number})[percentileSeries.dataFields.valueY])}]</td>`
                 );
+                chartRef.current?.series.each((filterSeries) => {
+                  if (
+                    filterSeries.id.startsWith('filter-') &&
+                    filterSeries.dataFields.valueY &&
+                    data &&
+                    (data as {[key: string]: number | string})[filterSeries.dataFields.valueY]
+                  ) {
+                    text.push('<tr>');
+                    text.push(
+                      `<th 
+                style='text-align:left; color:${
+                  (filterSeries.stroke as am4core.Color).hex
+                }; padding-right:${theme.spacing(2)}; padding-left:${theme.spacing(4)}'>
+                <strong>${filterSeries.name}</strong>
+                </th>`
+                    );
+                    text.push(
+                      `<td style='text-align:right'>${formatNumber(
+                        (data as {[key: string]: number})[filterSeries.dataFields.valueY]
+                      )}</td>`
+                    );
+                  }
+                });
               } else {
                 text.push('<td/>');
+                text.push('</tr>');
               }
-              text.push('</tr>');
             }
           });
           text.push('</table>');
