@@ -49,4 +49,26 @@
   'no-data': 'Keine Daten',
   'dlr-logo': 'DLR-Logo',
   okay: 'Okay',
+  compartments: {
+    i: {
+      sus: 'Virusanfällig',
+      exp: 'Dem Virus Ausgesetzt',
+      car: 'Virusträger',
+      inf: 'Infiziert',
+      hos: 'Hospitalisiert',
+      icu: 'Intensivstation',
+      rec: 'Genesen',
+      ded: 'Verstorben',
+    },
+    v: {
+      v1: 'Einfach Geimpft',
+      v2: 'Zweifach Geimpft',
+      nai: 'Keine Immunität',
+      par: 'Teilweise Immunität',
+      imp: 'Vollständige Immunität',
+    },
+    t: {
+      tru: 'Bestätigt',
+    }
+  }
 }

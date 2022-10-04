@@ -64,4 +64,26 @@
     sanctus est Lorem ipsum dolor sit amet.',
   WIP: 'This functionality is still work in progress.',
   okay: 'Okay',
+  compartments: {
+    i: {
+      sus: 'Susceptible',
+      exp: 'Exposed',
+      car: 'Carrier',
+      inf: 'Infected',
+      hos: 'Hospitalized',
+      icu: 'ICU',
+      rec: 'Recovered',
+      ded: 'Dead',
+    },
+    v: {
+      v1: 'Vaccinated Once',
+      v2: 'Vaccinated Twice',
+      nai: 'No Immunity',
+      par: 'Partial Immunity',
+      imp: 'Improved Immunity',
+    },
+    t: {
+      tru: 'Confirmed',
+    }
+  }
 }
