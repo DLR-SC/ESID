@@ -3,7 +3,7 @@
  */
 
 /** Enums for the different states in the infection model/chain (value is localization string) */
-export const enum InfectionTags {
+export enum InfectionTags {
   Susceptible   = 'compartments.i.sus',
   Exposed       = 'compartments.i.exp',
   Carrier       = 'compartments.i.car',
@@ -15,20 +15,20 @@ export const enum InfectionTags {
 }
 
 /** Old Enums for the amount of vaccinations (value is localization sting) */
-export const enum VaccinationTags_OLD {
+export enum VaccinationTags_OLD {
   V1 = 'compartments.v.v1',
   V2 = 'compartments.v.v2',
 }
 
 /** Enums for the grade of vaccination */
-export const enum VaccinationTags {
+export enum VaccinationTags {
   Naive             = 'compartments.v.nai',
   PartialImmunity   = 'compartments.v.par',
   ImprovedImmunity  = 'compartments.v.imp',
 }
 
 /** Enums if the data has be confirmed by a positive test */
-export const enum ConfirmedTags {
+export enum ConfirmedTags {
   Confirmed = 'compartments.t.tru',
 }
 
