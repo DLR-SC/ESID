@@ -14,6 +14,7 @@ import HeatLegendEdit from './HeatLegendEdit';
 import {HeatmapLegend} from '../../types/heatmapLegend';
 import {LockOpen} from '@mui/icons-material';
 import LoadingContainer from '../shared/LoadingContainer';
+import * as am5plugins_exporting from '@amcharts/amcharts5/plugins/exporting';
 
 const {useRef} = React;
 
@@ -153,6 +154,7 @@ export default function DistrictMap(): JSX.Element {
       stroke: am5.color(theme.palette.background.default),
       strokeWidth: 1,
     });
+
     // add click event
     polygonTemplate.events.on('click', (e) => {
       const item = e.target.dataItem?.dataContext as IRegionPolygon;
@@ -186,7 +188,24 @@ export default function DistrictMap(): JSX.Element {
     };
   }, [geodata, theme, t, formatNumber, dispatch]);
 
+  useEffect(() => {
+    // To export map
+    if (legendRef.current && rootRef.current) {
+      am5plugins_exporting.Exporting.new(rootRef.current, {
+        menu: am5plugins_exporting.ExportingMenu.new(rootRef.current, {}),
+        extraImages: [
+          {
+            source: legendRef.current.root,
+            marginTop: 20,
+            marginLeft: 20,
+          },
+        ],
+      });
+    }
+  });
+
   const polygonSeriesLength = (chartRef.current?.series.getIndex(0) as am5map.MapPolygonSeries)?.mapPolygons.length; //needed as trigger for the following effect
+
   useEffect(() => {
     // unselect previous
     if (chartRef.current && lastSelectedPolygon.current) {

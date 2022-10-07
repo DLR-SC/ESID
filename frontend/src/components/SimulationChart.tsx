@@ -132,6 +132,18 @@ export default function SimulationChart(): JSX.Element {
       }
     });
 
+    // To export this chart
+    chart.exporting.menu = new am4core.ExportMenu();
+    chart.exporting.dataFields = {
+      date: 'Date',
+      rki: 'RKI',
+      '1': 'Scenario 1',
+      '2': 'Scenario 2',
+      percentileUp: 'PercentileUp',
+      percentileDown: 'PercentileDown',
+    };
+    chart.exporting.filePrefix = 'Covid Simulaton Data';
+
     chart.events.on('hit', () => {
       // Timezone shenanigans could get us the wrong day ...
       const date = new Date(dateAxis.tooltipDate);
