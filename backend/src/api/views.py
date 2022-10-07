@@ -1,10 +1,10 @@
 # Create your views here.
-
 from rest_framework import viewsets, permissions, mixins, generics
 
-from .models import *
-from .classes import DataEntryFilterMixin
+from django.db.models import Q
 
+from src.api.models import *
+from src.api.classes import DataEntryFilterMixin
 
 import src.api.serializers as serializers
 
@@ -71,34 +71,46 @@ class SimulationModelViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, v
         return self.serializers_.get(self.action, serializers.SimulationModelSerializerMeta)
 
 
-class SimulationDataByNodeView(DataEntryFilterMixin, generics.ListAPIView):
+class SimulationDataByNodeView(DataEntryFilterMixin, generics.GenericAPIView):
     
-    serializer_class = serializers.CompartmentsDataEntrySerializer
+    serializer_class = serializers.SimulationDataSerializer
     permission_classes = [permissions.AllowAny]
 
     def get_queryset(self):
         simulationId = self.kwargs.get('id')
         nodeId = self.kwargs.get('nodeId')
 
-        print(simulationId, nodeId)
-
         simulation = Simulation.objects.get(id=simulationId)
         node = simulation.nodes.get(scenario_node__node__name=nodeId)
-        
-        return self.get_filtered_queryset(node.data).order_by('day')
 
-class RkiDataByNodeView(DataEntryFilterMixin, generics.ListAPIView):
+        return self.get_filtered_queryset(SimulationData.objects.filter(simulationnode_id=node)).order_by('day')
+
+    def get(self, request, id, nodeId, format=None):
+        return self.aggregateBy("day")
+
+    def post(self, request, id, nodeId, format=None):
+        return self.aggregateBy("day")
+
+
+class RkiDataByNodeView(DataEntryFilterMixin, generics.GenericAPIView):
     
-    serializer_class = serializers.CompartmentsDataEntrySerializer
+    serializer_class = serializers.SimulationDataSerializer
     permission_classes = [permissions.AllowAny]
 
     def get_queryset(self):
         nodeId = self.kwargs.get('nodeId')
         node = RKINode.objects.get(node__name=nodeId)
 
-        return self.get_filtered_queryset(node.data).order_by('day')
+        return self.get_filtered_queryset(RKIData.objects.filter(rkinode_id=node)).order_by('day')
 
-class SimulationDataByDayView(DataEntryFilterMixin, generics.ListAPIView):
+    def get(self, request, nodeId, format=None):
+        return self.aggregateBy('day')
+
+    def post(self, request, nodeId, format=None):
+        return self.aggregateBy('day')
+
+
+class SimulationDataByDayView(DataEntryFilterMixin, generics.GenericAPIView):
     serializer_class = serializers.SimulationDataSerializer
     permission_classes = [permissions.AllowAny]
 
@@ -108,13 +120,14 @@ class SimulationDataByDayView(DataEntryFilterMixin, generics.ListAPIView):
         
         return self.get_filtered_queryset(SimulationData.objects.filter(simulationnode_id__in=nodes))
 
-    def paginate_queryset(self, queryset):
-        if 'all' in self.request.query_params:
-            return None
+    def get(self, request, id, day, format=None):
+        return self.aggregateBy('name')
 
-        return super().paginate_queryset(queryset)
+    def post(self, request, id, day, format=None):
+        return self.aggregateBy('name')
 
-class RkiDataByDayView(DataEntryFilterMixin, generics.ListAPIView):
+
+class RkiDataByDayView(DataEntryFilterMixin, generics.GenericAPIView):
 
     serializer_class = serializers.SimulationDataSerializer
     permission_classes = [permissions.AllowAny]
@@ -122,11 +135,12 @@ class RkiDataByDayView(DataEntryFilterMixin, generics.ListAPIView):
     def get_queryset(self):
         return self.get_filtered_queryset(RKIData.objects.all())
 
-    def paginate_queryset(self, queryset):
-        if 'all' in self.request.query_params:
-            return None
+    def get(self, request, day, format=None):
+        return self.aggregateBy('name')
 
-        return super().paginate_queryset(queryset)
+    def post(self, request, day, format=None):
+        return self.aggregateBy('name')
+
 
 class GroupCategoriesViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     """

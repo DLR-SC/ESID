@@ -15,7 +15,7 @@ export interface DataSelection {
   date: string | null;
   scenario: number | null;
   compartment: string | null;
-  activeScenarios: number[];
+  activeScenarios: number[] | null;
 
   minDate: string | null;
   maxDate: string | null;
@@ -26,7 +26,7 @@ const initialState: DataSelection = {
   date: null,
   scenario: null,
   compartment: null,
-  activeScenarios: [],
+  activeScenarios: null,
 
   minDate: null,
   maxDate: null,
@@ -69,11 +69,19 @@ export const DataSelectionSlice = createSlice({
     setMinMaxDates(state, action: PayloadAction<{minDate: string; maxDate: string}>) {
       state.minDate = action.payload.minDate;
       state.maxDate = action.payload.maxDate;
+      if (!state.date || state.date > state.maxDate) {
+        state.date = state.maxDate;
+      } else if (!state.date || state.date < state.minDate) {
+        state.date = state.minDate;
+      }
     },
     selectScenario(state, action: PayloadAction<number | null>) {
       state.scenario = action.payload;
     },
     toggleScenario(state, action: PayloadAction<number>) {
+      if (!state.activeScenarios) {
+        state.activeScenarios = [];
+      }
       const index = state.activeScenarios.indexOf(action.payload);
       if (index == -1) {
         state.activeScenarios.push(action.payload);
