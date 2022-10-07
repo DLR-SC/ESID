@@ -14,7 +14,6 @@ import HeatLegendEdit from './HeatLegendEdit';
 import {HeatmapLegend} from '../../types/heatmapLegend';
 import {LockOpen} from '@mui/icons-material';
 import LoadingContainer from '../shared/LoadingContainer';
-import * as am5plugins_exporting from '@amcharts/amcharts5/plugins/exporting';
 
 const {useRef} = React;
 
@@ -68,7 +67,7 @@ export default function DistrictMap(): JSX.Element {
     if (fixedLegendMaxValue) {
       return fixedLegendMaxValue;
     }
-    let max = 0;
+    let max = 1;
     if (data && selectedCompartment) {
       data.results.forEach((entry) => {
         if (entry.name !== '00000') {
@@ -188,22 +187,6 @@ export default function DistrictMap(): JSX.Element {
     };
   }, [geodata, theme, t, formatNumber, dispatch]);
 
-  useEffect(() => {
-    // To export map
-    if (legendRef.current && rootRef.current) {
-      am5plugins_exporting.Exporting.new(rootRef.current, {
-        menu: am5plugins_exporting.ExportingMenu.new(rootRef.current, {}),
-        extraImages: [
-          {
-            source: legendRef.current.root,
-            marginTop: 20,
-            marginLeft: 20,
-          },
-        ],
-      });
-    }
-  });
-
   const polygonSeriesLength = (chartRef.current?.series.getIndex(0) as am5map.MapPolygonSeries)?.mapPolygons.length; //needed as trigger for the following effect
 
   useEffect(() => {
@@ -317,7 +300,6 @@ export default function DistrictMap(): JSX.Element {
               legendRef.current = legend;
             }}
             min={0}
-
             // used math.round to convert the numbers to integers
             max={
               legend.isNormalized ? Math.round(aggregatedMax) : Math.round(legend.steps[legend.steps.length - 1].value)
