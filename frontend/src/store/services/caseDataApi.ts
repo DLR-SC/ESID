@@ -63,4 +63,5 @@ interface CaseDataSingleSimulationEntryParameters {
   groups: Array<string> | null;
 }
 
-export const {useGetCaseDataByDateQuery, useGetCaseDataByDistrictQuery, useGetCaseDataSingleSimulationEntryQuery} = caseDataApi;
+export const {useGetCaseDataByDateQuery, useGetCaseDataByDistrictQuery, useGetCaseDataSingleSimulationEntryQuery} =
+  caseDataApi;
