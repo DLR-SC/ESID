@@ -7,7 +7,7 @@ import {useAppDispatch, useAppSelector} from '../store/hooks';
 import {useTheme} from '@mui/material/styles';
 import {Box} from '@mui/material';
 import {selectDate} from '../store/DataSelectionSlice';
-import {useGetRkiByDistrictQuery} from '../store/services/rkiApi';
+import {useGetCaseDataByDistrictQuery} from '../store/services/caseDataApi';
 import {dateToISOString} from 'util/util';
 import {
   PercentileDataByDay,
@@ -39,7 +39,7 @@ export default function SimulationChart(): JSX.Element {
   const activeScenarios = useAppSelector((state) => state.dataSelection.activeScenarios);
   const dispatch = useAppDispatch();
 
-  const {data: rkiData, isFetching: rkiFetching} = useGetRkiByDistrictQuery(
+  const {data: caseData, isFetching: caseDataFetching} = useGetCaseDataByDistrictQuery(
     {
       node: selectedDistrict,
       groups: ['total'],
@@ -88,15 +88,15 @@ export default function SimulationChart(): JSX.Element {
     chart.cursor = new am4charts.XYCursor();
     chart.cursor.xAxis = dateAxis;
 
-    // Add series for RKI Data
-    const rkiSeries = chart.series.push(new am4charts.LineSeries());
-    rkiSeries.dataFields.valueY = 'rki';
-    rkiSeries.dataFields.dateX = 'date';
-    rkiSeries.id = 'rki';
-    rkiSeries.strokeWidth = 2;
-    rkiSeries.fill = am4core.color('black');
-    rkiSeries.stroke = am4core.color('black');
-    rkiSeries.name = t('chart.rkiData');
+    // Add series for case data
+    const caseDataSeries = chart.series.push(new am4charts.LineSeries());
+    caseDataSeries.dataFields.valueY = 'caseData';
+    caseDataSeries.dataFields.dateX = 'date';
+    caseDataSeries.id = 'caseData';
+    caseDataSeries.strokeWidth = 2;
+    caseDataSeries.fill = am4core.color('black');
+    caseDataSeries.stroke = am4core.color('black');
+    caseDataSeries.name = t('chart.caseData');
 
     const percentileSeries = chart.series.push(new am4charts.LineSeries());
     percentileSeries.dataFields.valueY = 'percentileUp';
@@ -207,7 +207,7 @@ export default function SimulationChart(): JSX.Element {
     };
   }, [scenarioList, selectedDate, theme, t, i18n.language]);
 
-  // Effect to update Simulation and RKI Data
+  // Effect to update Simulation and case data
   useEffect(() => {
     if (
       chartRef.current &&
@@ -232,9 +232,9 @@ export default function SimulationChart(): JSX.Element {
         }
       });
 
-      // add rki values
-      rkiData?.results.forEach((entry) => {
-        dataMap.set(entry.day, {...dataMap.get(entry.day), rki: entry.compartments[selectedCompartment]});
+      // add case data values
+      caseData?.results.forEach((entry) => {
+        dataMap.set(entry.day, {...dataMap.get(entry.day), caseData: entry.compartments[selectedCompartment]});
       });
 
       //add 25th percentile data
@@ -331,7 +331,7 @@ export default function SimulationChart(): JSX.Element {
     selectedScenario,
     percentileData,
     simulationData,
-    rkiData,
+    caseData,
     scenarioList,
     selectedCompartment,
     theme,
@@ -342,7 +342,7 @@ export default function SimulationChart(): JSX.Element {
   return (
     <LoadingContainer
       sx={{width: '100%', height: '100%'}}
-      show={rkiFetching || simulationFetching}
+      show={caseDataFetching || simulationFetching}
       overlayColor={theme.palette.background.paper}
     >
       <Box

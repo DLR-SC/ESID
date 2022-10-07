@@ -42,7 +42,7 @@
     deactivate: 'Deactivate scenario',
   },
   chart: {
-    rkiData: 'RKI Data',
+    caseData: 'Case Data',
   },
   heatlegend: {
     edit: 'Edit heatmap colors',
