@@ -15,6 +15,7 @@ import {HeatmapLegend} from '../../types/heatmapLegend';
 import {LockOpen} from '@mui/icons-material';
 import LoadingContainer from '../shared/LoadingContainer';
 import HomeIcon from '@mui/icons-material/Home';
+import * as am5plugins_exporting from '@amcharts/amcharts5/plugins/exporting';
 const {useRef} = React;
 
 interface IRegionPolygon {
@@ -32,6 +33,8 @@ interface IRegionPolygon {
 
 export default function DistrictMap(): JSX.Element {
   const [geodata, setGeodata] = useState<GeoJSON.GeoJSON | null>(null);
+  const [longLoad, setLongLoad] = useState(false);
+  const [longLoadTimeout, setLongLoadTimeout] = useState<number>();
   const selectedDistrict = useAppSelector((state) => state.dataSelection.district);
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
@@ -43,7 +46,7 @@ export default function DistrictMap(): JSX.Element {
     {
       id: selectedScenario ?? 0,
       day: selectedDate ?? '',
-      group: 'total',
+      groups: ['total'],
       compartments: [selectedCompartment ?? ''],
     },
     {skip: !selectedScenario || !selectedCompartment || !selectedDate}
@@ -57,7 +60,7 @@ export default function DistrictMap(): JSX.Element {
   const {formatNumber} = NumberFormatter(i18n.language, 3, 8);
   const theme = useTheme();
   const dispatch = useAppDispatch();
-  //const lastSelectedPolygon = useRef<am5map.MapPolygon | null>(null);
+  const lastSelectedPolygon = useRef<am5map.MapPolygon | null>(null);
   const [fixedLegendMaxValue, setFixedLegendMaxValue] = useState<number | null>(null);
 
   // use Memoized to store aggregated max and only recalculate if parameters change
@@ -75,6 +78,22 @@ export default function DistrictMap(): JSX.Element {
     }
     return max;
   }, [selectedCompartment, data, fixedLegendMaxValue]);
+
+  // This effect is responsible for showing the loading indicator if the data is not ready within 1 second. This
+  // prevents that the indicator is showing for every little change.
+  useEffect(() => {
+    if (isFetching) {
+      setLongLoadTimeout(
+        window.setTimeout(() => {
+          setLongLoad(true);
+        }, 1000)
+      );
+    } else {
+      clearTimeout(longLoadTimeout);
+      setLongLoad(false);
+    }
+    // eslint-disable-next-line
+  }, [isFetching, setLongLoad, setLongLoadTimeout]); // longLoadTimeout is deliberately ignored here.
 
   // fetch geojson
   useEffect(() => {
@@ -97,6 +116,13 @@ export default function DistrictMap(): JSX.Element {
       );
   }, []);
 
+  //select germany as district if no district is selcted
+  useEffect(() => {
+    if (!selectedDistrict || selectedDistrict.name == 'germany') {
+      dispatch(selectDistrict({ags: '00000', name: t('germany'), type: ''}));
+    }
+  }, [dispatch, t, selectedDistrict]);
+
   // Setup Map
   useEffect(() => {
     // Create map instance
@@ -112,21 +138,23 @@ export default function DistrictMap(): JSX.Element {
         }),
       })
     );
-    dispatch(selectDistrict({ags: '00000', name: t('germany'), type: ''}));
 
     // Create polygon series
     const polygonSeries = chart.series.push(
       am5map.MapPolygonSeries.new(root, {
         geoJSON: geodata ?? undefined,
         tooltipPosition: 'fixed',
+        layer: 0,
       })
     );
+
     // get template for polygons to attach events etc to each
     const polygonTemplate = polygonSeries.mapPolygons.template;
     polygonTemplate.setAll({
       stroke: am5.color(theme.palette.background.default),
       strokeWidth: 1,
     });
+
     // add click event
     polygonTemplate.events.on('click', (e) => {
       const item = e.target.dataItem?.dataContext as IRegionPolygon;
@@ -136,11 +164,11 @@ export default function DistrictMap(): JSX.Element {
     polygonTemplate.states.create('hover', {
       stroke: am5.color(theme.palette.primary.main),
       strokeWidth: 2,
+      layer: 1,
     });
-    // pull polygon to front on hover (to fix other polygons omitting outline)
+
+    //show tooltip on heat legend when hovering
     polygonTemplate.events.on('pointerover', (e) => {
-      e.target.toFront();
-      // show tooltip on heat legend
       if (legendRef.current) {
         const value = (e.target.dataItem?.dataContext as IRegionPolygon).value;
         legendRef.current.showValue(value, formatNumber(value));
@@ -160,38 +188,54 @@ export default function DistrictMap(): JSX.Element {
     };
   }, [geodata, theme, t, formatNumber, dispatch]);
 
-  // TODO: district search for highlighting
-  /*
+  useEffect(() => {
+    // To export map
+    if (legendRef.current && rootRef.current) {
+      am5plugins_exporting.Exporting.new(rootRef.current, {
+        menu: am5plugins_exporting.ExportingMenu.new(rootRef.current, {}),
+        extraImages: [
+          {
+            source: legendRef.current.root,
+            marginTop: 20,
+            marginLeft: 20,
+          },
+        ],
+      });
+    }
+  });
+
+  const polygonSeriesLength = (chartRef.current?.series.getIndex(0) as am5map.MapPolygonSeries)?.mapPolygons.length; //needed as trigger for the following effect
+
   useEffect(() => {
     // unselect previous
     if (chartRef.current && lastSelectedPolygon.current) {
       // reset style
-      lastSelectedPolygon.current.setAll({
+      lastSelectedPolygon.current.states.create('default', {
         stroke: am5.color(theme.palette.background.default),
         strokeWidth: 1,
-        showTooltipOn: 'hover',
+        layer: 0,
       });
+      lastSelectedPolygon.current.states.apply('default');
     }
-    if (chartRef.current && chartRef.current.series.length > 0) {
+    if (selectedDistrict.ags !== '00000' && chartRef.current && chartRef.current.series.length > 0) {
       const series = chartRef.current.series.getIndex(0) as am5map.MapPolygonSeries;
       series.mapPolygons.each((polygon) => {
-        // TODO: change this to a map lookup?
         const data = polygon.dataItem?.dataContext as IRegionPolygon;
         if (data.RS === selectedDistrict.ags) {
-          // pull to front (z-level)
-          polygon.toFront();
-          // apply hover style
-          polygon.setAll({
+          polygon.states.create('default', {
             stroke: am5.color(theme.palette.primary.main),
             strokeWidth: 2,
-            showTooltipOn: 'always',
+            layer: 2,
           });
+          if (!polygon.isHover()) {
+            polygon.states.apply('default');
+          }
           // save polygon
           lastSelectedPolygon.current = polygon;
         }
       });
     }
-  }, [selectedDistrict]);*/
+  }, [selectedDistrict, theme, polygonSeriesLength]);
 
   // set Data
   useEffect(() => {
@@ -232,14 +276,16 @@ export default function DistrictMap(): JSX.Element {
           });
         }
       } else {
-        polygonSeries.mapPolygons.each((polygon) => {
-          const regionData = polygon.dataItem?.dataContext as IRegionPolygon;
-          regionData.value = Number.NaN;
-          polygon.setAll({
-            tooltipText: `${t(`BEZ.${regionData.BEZ}`)} {GEN}`,
-            fill: am5.color(theme.palette.text.disabled),
+        if (longLoad) {
+          polygonSeries.mapPolygons.each((polygon) => {
+            const regionData = polygon.dataItem?.dataContext as IRegionPolygon;
+            regionData.value = Number.NaN;
+            polygon.setAll({
+              tooltipText: `${t(`BEZ.${regionData.BEZ}`)} {GEN}`,
+              fill: am5.color(theme.palette.text.disabled),
+            });
           });
-        });
+        }
       }
     }
   }, [
@@ -255,13 +301,14 @@ export default function DistrictMap(): JSX.Element {
     theme,
     isFetching,
     legend,
+    longLoad,
   ]);
   useEffect(() => {
     // search polygon list for selected district
     // apply hover effect or highlight hovering effect.
   }, [selectedDistrict]);
   return (
-    <LoadingContainer show={isFetching} overlayColor={theme.palette.background.default}>
+    <LoadingContainer show={isFetching && longLoad} overlayColor={theme.palette.background.default}>
       <Box id='mapdiv' height={'650px'} />
       <Grid container px={1}>
         <Grid item container xs={11} alignItems='flex-end'>

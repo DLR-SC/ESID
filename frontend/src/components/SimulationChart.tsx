@@ -10,9 +10,9 @@ import {selectDate} from '../store/DataSelectionSlice';
 import {useGetRkiByDistrictQuery} from '../store/services/rkiApi';
 import {dateToISOString} from 'util/util';
 import {
+  PercentileDataByDay,
   useGetMultipleSimulationDataByNodeQuery,
   useGetPercentileDataQuery,
-  PercentileDataByDay,
 } from 'store/services/scenarioApi';
 import {useTranslation} from 'react-i18next';
 import {NumberFormatter} from 'util/hooks';
@@ -42,7 +42,7 @@ export default function SimulationChart(): JSX.Element {
   const {data: rkiData, isFetching: rkiFetching} = useGetRkiByDistrictQuery(
     {
       node: selectedDistrict,
-      group: 'total',
+      groups: ['total'],
       compartments: [selectedCompartment ?? ''],
     },
     {skip: !selectedCompartment}
@@ -50,9 +50,9 @@ export default function SimulationChart(): JSX.Element {
 
   const {data: simulationData, isFetching: simulationFetching} = useGetMultipleSimulationDataByNodeQuery(
     {
-      ids: activeScenarios,
+      ids: activeScenarios ? activeScenarios : [],
       node: selectedDistrict,
-      group: '',
+      groups: ['total'],
       compartments: [selectedCompartment ?? ''],
     },
     {skip: !selectedCompartment}
@@ -62,7 +62,7 @@ export default function SimulationChart(): JSX.Element {
     {
       id: selectedScenario as number,
       node: selectedDistrict,
-      group: '',
+      groups: ['total'],
       compartment: selectedCompartment as string,
     },
     {skip: !selectedScenario || !selectedCompartment}
@@ -132,6 +132,18 @@ export default function SimulationChart(): JSX.Element {
       }
     });
 
+    // To export this chart
+    chart.exporting.menu = new am4core.ExportMenu();
+    chart.exporting.dataFields = {
+      date: 'Date',
+      rki: 'RKI',
+      '1': 'Scenario 1',
+      '2': 'Scenario 2',
+      percentileUp: 'PercentileUp',
+      percentileDown: 'PercentileDown',
+    };
+    chart.exporting.filePrefix = 'Covid Simulaton Data';
+
     chart.events.on('hit', () => {
       // Timezone shenanigans could get us the wrong day ...
       const date = new Date(dateAxis.tooltipDate);
@@ -152,7 +164,7 @@ export default function SimulationChart(): JSX.Element {
     const allSeries = chartRef.current?.series;
     if (allSeries) {
       allSeries.each((series) => {
-        if (scenarioList.scenarios[+series.id] && !activeScenarios.includes(+series.id)) {
+        if (scenarioList.scenarios[+series.id] && !activeScenarios?.includes(+series.id)) {
           series.hide();
         } else {
           series.show();
@@ -224,7 +236,7 @@ export default function SimulationChart(): JSX.Element {
       const dataMap = new Map<string, {[key: string]: number}>();
 
       // cycle through scenarios
-      activeScenarios.forEach((scenarioId) => {
+      activeScenarios?.forEach((scenarioId) => {
         if (simulationData[scenarioId]) {
           simulationData[scenarioId].results.forEach(({day, compartments}) => {
             dataMap.set(day, {...dataMap.get(day), [scenarioId]: compartments[selectedCompartment]});
@@ -271,7 +283,6 @@ export default function SimulationChart(): JSX.Element {
 
       // set up tooltip
       // TODO: HTML Tooltip
-
       chartRef.current.series.each((series) => {
         series.adapter.add('tooltipHTML', (_, target) => {
           const data = target.tooltipDataItem.dataContext;
@@ -279,43 +290,11 @@ export default function SimulationChart(): JSX.Element {
           text.push('<table>');
           chartRef.current?.series.each((s) => {
             if (
-              s.dataFields.openValueY &&
               s.dataFields.valueY &&
-              scenarioList.scenarios[selectedScenario] &&
-              !s.isHidden &&
-              data
+              data &&
+              (data as {[key: string]: number | string})[s.dataFields.valueY] &&
+              s.id !== 'percentiles'
             ) {
-              text.push('<tr>');
-              text.push(
-                `<th 
-                style='text-align:left; color:${
-                  theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0]
-                }; padding-right:${theme.spacing(2)}'>
-                <strong>${scenarioList.scenarios[selectedScenario].label} p25</strong>
-                </th>`
-              );
-              text.push(
-                `<td style='text-align:right'>${formatNumber(
-                  (data as {[key: string]: number})[s.dataFields.openValueY]
-                )}</td>`
-              );
-              text.push('</tr>');
-              text.push('<tr>');
-              text.push(
-                `<th 
-                style='text-align:left; color:${
-                  theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0]
-                }; padding-right:${theme.spacing(2)}'>
-                <strong>${scenarioList.scenarios[selectedScenario].label} p75</strong>
-                </th>`
-              );
-              text.push(
-                `<td style='text-align:right'>${formatNumber(
-                  (data as {[key: string]: number})[s.dataFields.valueY]
-                )}</td>`
-              );
-              text.push('</tr>');
-            } else if (s.dataFields.valueY && data && (data as {[key: string]: number | string})[s.dataFields.valueY]) {
               text.push('<tr>');
               text.push(
                 `<th 
@@ -328,6 +307,18 @@ export default function SimulationChart(): JSX.Element {
                   (data as {[key: string]: number})[s.dataFields.valueY]
                 )}</td>`
               );
+              if (
+                s.id == scenarioList.scenarios[selectedScenario].id.toString() &&
+                percentileSeries.dataFields.openValueY &&
+                percentileSeries.dataFields.valueY
+              ) {
+                text.push(
+                  `<td>[${formatNumber((data as {[key: string]: number})[percentileSeries.dataFields.openValueY])} - 
+                    ${formatNumber((data as {[key: string]: number})[percentileSeries.dataFields.valueY])}]</td>`
+                );
+              } else {
+                text.push('<td/>');
+              }
               text.push('</tr>');
             }
           });
