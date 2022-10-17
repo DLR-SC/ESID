@@ -1,9 +1,9 @@
 import {Box /*, Tabs, Tab*/} from '@mui/material';
-import {useTranslation} from 'react-i18next';
+// import {useTranslation} from 'react-i18next';
 import React from 'react';
 
 export default function SidebarTabs(): JSX.Element {
-  const {t} = useTranslation('global');
+  // const {t} = useTranslation('global');
 
   /*
   const [value, setValue] = React.useState(0);
@@ -22,9 +22,9 @@ export default function SidebarTabs(): JSX.Element {
       }}
     >
       {/* This is a placeholder for now. */}
-      <a href='https://www.dlr.de/' target='_blank' rel='noopener noreferrer' style={{width: '90%'}}>
-        <img src='assets/logo/DLRLogo.png' alt={t('dlr-logo')} width='100%' />
-      </a>
+      {/*<a href='https://www.dlr.de/' target='_blank' rel='noopener noreferrer' style={{width: '90%'}}>*/}
+      {/*  <img src='assets/logo/DLRLogo.png' alt={t('dlr-logo')} width='100%' />*/}
+      {/*</a>*/}
 
       {/*
       <Tabs value={value} onChange={handleChange} aria-label='todo' variant='fullWidth'>

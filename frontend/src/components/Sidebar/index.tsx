@@ -1,9 +1,9 @@
 import React from 'react';
 import {useTheme} from '@mui/material/styles';
 import SearchBar from './SearchBar';
-import DistrictMap from './DistrictMap';
 import SidebarTabs from './SidebarTabs';
 import {Box, Container, Stack} from '@mui/material';
+import Maps from './Maps';
 
 export default function Sidebar(): JSX.Element {
   const theme = useTheme();
@@ -24,7 +24,7 @@ export default function Sidebar(): JSX.Element {
         <SearchBar />
       </Box>
       <Box>
-        <DistrictMap />
+        <Maps />
       </Box>
       <Container disableGutters sx={{flexGrow: 1}}>
         <SidebarTabs />
