@@ -112,7 +112,7 @@ export default function DistrictMap(): JSX.Element {
     const chart = root.container.children.push(
       am5map.MapChart.new(root, {
         projection: am5map.geoMercator(),
-        maxZoomLevel: 5,
+        maxZoomLevel: 4,
         maxPanOut: 0.4,
         zoomControl: am5map.ZoomControl.new(root, {
           paddingBottom: 25,
@@ -278,11 +278,7 @@ export default function DistrictMap(): JSX.Element {
             }}
             min={0}
             // used math.round to convert the number in integers and used +1 to avoid having legend max value as 0
-            max={
-              legend.isNormalized
-                ? Math.round(aggregatedMax) + 1
-                : Math.round(legend.steps[legend.steps.length - 1].value) + 1
-            }
+            max={legend.isNormalized ? aggregatedMax + 1 : legend.steps[legend.steps.length - 1].value + 1}
             displayText={true}
             id={'legend'}
           />
@@ -295,7 +291,6 @@ export default function DistrictMap(): JSX.Element {
             // if the chart is zoomed then, it will bring the chart to its default state, plus change the values to Germany wide.
 
             onClick={() => {
-              dispatch(selectDistrict({ags: '00000', name: t('germany'), type: ''}));
               chartRef.current?.goHome();
             }}
           />
