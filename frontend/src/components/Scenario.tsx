@@ -4,7 +4,7 @@ import {useTheme} from '@mui/material/styles';
 import {useTranslation} from 'react-i18next';
 import {selectCompartment, selectScenario, setMinMaxDates, toggleScenario} from 'store/DataSelectionSlice';
 import ScenarioCard from './ScenarioCard';
-import {Box, Button, List, ListItemButton, ListItemText, Typography} from '@mui/material';
+import {Box, Button, Dialog, List, ListItemButton, ListItemText, Typography} from '@mui/material';
 import {
   useGetSimulationModelQuery,
   useGetSimulationModelsQuery,
@@ -14,6 +14,7 @@ import {setCompartments, setScenarios} from 'store/ScenarioSlice';
 import {dateToISOString, Dictionary} from 'util/util';
 import {useGetRkiSingleSimulationEntryQuery} from '../store/services/rkiApi';
 import {NumberFormatter} from '../util/hooks';
+import ManageCompartment from './ManageCompartment';
 
 /**
  * React Component to render the Scenario Cards Section
@@ -29,6 +30,10 @@ export default function Scenario(): JSX.Element {
   const [simulationModelKey, setSimulationModelKey] = useState<string>('unset');
   const [compartmentValues, setCompartmentValues] = useState<Dictionary<number> | null>(null);
   const [scrollTop, setScrollTop] = useState(0);
+  const [open, setOpen] = React.useState(false);
+  const compartmentOpen = () => {
+      setOpen(true);
+    };
 
   function handleScroll(scrollEvent: React.UIEvent<HTMLElement>) {
     setScrollTop(scrollEvent.currentTarget.scrollTop);
@@ -258,6 +263,25 @@ export default function Scenario(): JSX.Element {
         >
           {expandProperties ? t('less') : t('more')}
         </Button>
+        <Button
+          variant='outlined'
+          color='primary'
+          sx={{
+            margin: theme.spacing(3),
+            marginTop: theme.spacing(4),
+            marginBottom: 0,
+            padding: theme.spacing(1),
+          }}
+          aria-label={'Manage Compartments'}
+          onClick={() => {
+                console.log("button clicked")
+                compartmentOpen();
+                
+          }}
+        >
+          Manage Compartments
+        </Button>
+
       </Box>
       <Box
         sx={{
@@ -328,6 +352,9 @@ export default function Scenario(): JSX.Element {
           +
         </Button>
       </Box>
+      <Dialog maxWidth='lg' fullWidth={true} open={open}>
+        <ManageCompartment onclose={() => setOpen(false)} />
+      </Dialog>
     </Box>
   );
 }
