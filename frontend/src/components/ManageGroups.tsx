@@ -7,16 +7,16 @@ import {
   groupCategory,
 } from 'store/services/groupApi';
 import {deleteFilter, addFilter} from 'store/DataSelectionSlice';
-import {Box, Button, FormControlLabel, FormGroup, TextField, ListItem, IconButton} from '@mui/material';
+import { Box, Button, FormControlLabel, FormGroup, TextField, ListItem, IconButton, Checkbox } from "@mui/material";
 import {Dictionary} from 'util/util';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {filter} from '../types/group';
 
-interface CreateFilterProps {
+interface ManageGroupsProps {
   onclose: () => void;
 }
 
-export default function CreateFilter(props: CreateFilterProps): JSX.Element {
+export default function ManageGroups(props: ManageGroupsProps): JSX.Element {
   const filterList = useAppSelector((state) => state.dataSelection.filter);
   const [err, raiseError] = React.useState(false);
   const [errText, setErrText] = React.useState('');
@@ -181,7 +181,13 @@ export default function CreateFilter(props: CreateFilterProps): JSX.Element {
                 </IconButton>
               }
             >
-              {filterItem.name}
+              <FormControlLabel
+                control={
+                  <Checkbox checked={!!filterItem.toggle} />
+                }
+                label={filterItem.name}
+                key={filterItem.name}
+              />
             </ListItem>
           ))}
         </Box>

@@ -6,8 +6,6 @@ import {selectCompartment, selectScenario, setMinMaxDates, toggleScenario} from 
 import ScenarioCard from './ScenarioCard';
 import {Box, Button, List, ListItemButton, ListItemText, Typography, Dialog} from '@mui/material';
 
-import CreateFilter from './CreateFilter';
-
 import {
   useGetSimulationModelQuery,
   useGetSimulationModelsQuery,
@@ -17,6 +15,7 @@ import {setCompartments, setScenarios} from 'store/ScenarioSlice';
 import {dateToISOString, Dictionary} from 'util/util';
 import {useGetRkiSingleSimulationEntryQuery} from '../store/services/rkiApi';
 import {NumberFormatter} from '../util/hooks';
+import { ManageGroupDialog } from "./ManageGroupDialog";
 
 /**
  * React Component to render the Scenario Cards Section
@@ -349,11 +348,14 @@ export default function Scenario(): JSX.Element {
             handleOpen();
           }}
         >
-          Filter erstellen
+          {t('scenario.manage-groups')}
         </Button>
       </Box>
-      <Dialog maxWidth='lg' fullWidth={true} open={open}>
-        <CreateFilter onclose={() => setOpen(false)} />
+      {/*<Dialog maxWidth="lg" fullWidth={true} open={open}>
+        <ManageGroups onclose={() => setOpen(false)} />
+      </Dialog>*/}
+      <Dialog maxWidth='lg' fullWidth={true} open={open} onClose={() => setOpen(false)}>
+        <ManageGroupDialog />
       </Dialog>
     </Box>
   );

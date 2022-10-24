@@ -31,6 +31,12 @@
     more: 'Mehr Eigenschaften',
     activate: 'Scenario aktivieren',
     deactivate: 'Scenario deaktivieren',
+    'manage-groups': 'Gruppen Verwalten',
+  },
+  'group-filters': {
+    'title': 'Gruppen Verwalten',
+    'list-title': 'Verfügbare Gruppen',
+    'nothing-selected': 'Wählen sie eine Gruppe aus um diese zu bearbeiten oder erstellen sie eine neue Gruppe.'
   },
   chart: {
     rkiData: 'RKI-Daten',
