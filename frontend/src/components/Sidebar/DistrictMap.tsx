@@ -14,8 +14,6 @@ import HeatLegendEdit from './HeatLegendEdit';
 import {HeatmapLegend} from '../../types/heatmapLegend';
 import {LockOpen} from '@mui/icons-material';
 import LoadingContainer from '../shared/LoadingContainer';
-import * as am5plugins_exporting from '@amcharts/amcharts5/plugins/exporting';
-
 const {useRef} = React;
 
 interface IRegionPolygon {
@@ -35,7 +33,7 @@ export default function DistrictMap(): JSX.Element {
   const [geodata, setGeodata] = useState<GeoJSON.GeoJSON | null>(null);
   const [longLoad, setLongLoad] = useState(false);
   const [longLoadTimeout, setLongLoadTimeout] = useState<number>();
-  const selectedDistrict = useAppSelector((state) => state.dataSelection.district);
+  //const selectedDistrict = useAppSelector((state) => state.dataSelection.district);
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
   const selectedDate = useAppSelector((state) => state.dataSelection.date);
@@ -55,12 +53,11 @@ export default function DistrictMap(): JSX.Element {
   const chartRef = useRef<am5map.MapChart | null>(null);
   const rootRef = useRef<am5.Root | null>(null);
   const legendRef = useRef<am5.HeatLegend | null>(null);
-
   const {t, i18n} = useTranslation();
   const {formatNumber} = NumberFormatter(i18n.language, 3, 8);
   const theme = useTheme();
   const dispatch = useAppDispatch();
-  const lastSelectedPolygon = useRef<am5map.MapPolygon | null>(null);
+  //const lastSelectedPolygon = useRef<am5map.MapPolygon | null>(null);
   const [fixedLegendMaxValue, setFixedLegendMaxValue] = useState<number | null>(null);
 
   // use Memoized to store aggregated max and only recalculate if parameters change
@@ -115,13 +112,6 @@ export default function DistrictMap(): JSX.Element {
         }
       );
   }, []);
-
-  //select germany as district if no district is selcted
-  useEffect(() => {
-    if (!selectedDistrict || selectedDistrict.name == 'germany') {
-      dispatch(selectDistrict({ags: '00000', name: t('germany'), type: ''}));
-    }
-  }, [dispatch, t, selectedDistrict]);
 
   // Setup Map
   useEffect(() => {
@@ -188,25 +178,9 @@ export default function DistrictMap(): JSX.Element {
     };
   }, [geodata, theme, t, formatNumber, dispatch]);
 
-  useEffect(() => {
-    // To export map
-    if (legendRef.current && rootRef.current) {
-      am5plugins_exporting.Exporting.new(rootRef.current, {
-        menu: am5plugins_exporting.ExportingMenu.new(rootRef.current, {}),
-        extraImages: [
-          {
-            source: legendRef.current.root,
-            marginTop: 20,
-            marginLeft: 20,
-          },
-        ],
-      });
-    }
-  });
+  //const polygonSeriesLength = (chartRef.current?.series.getIndex(0) as am5map.MapPolygonSeries)?.mapPolygons.length; //needed as trigger for the following effect
 
-  const polygonSeriesLength = (chartRef.current?.series.getIndex(0) as am5map.MapPolygonSeries)?.mapPolygons.length; //needed as trigger for the following effect
-
-  useEffect(() => {
+  /*  useEffect(() => {
     // unselect previous
     if (chartRef.current && lastSelectedPolygon.current) {
       // reset style
@@ -236,7 +210,7 @@ export default function DistrictMap(): JSX.Element {
       });
     }
   }, [selectedDistrict, theme, polygonSeriesLength]);
-
+ */
   // set Data
   useEffect(() => {
     if (chartRef.current && chartRef.current.series.length > 0) {
@@ -303,7 +277,10 @@ export default function DistrictMap(): JSX.Element {
     legend,
     longLoad,
   ]);
-
+  /*   useEffect(() => {
+    // search polygon list for selected district
+    // apply hover effect or highlight hovering effect.
+  }, [selectedDistrict]); */
   return (
     <LoadingContainer show={isFetching && longLoad} overlayColor={theme.palette.background.default}>
       <Box id='mapdiv' height={'650px'} />
