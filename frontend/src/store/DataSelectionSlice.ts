@@ -1,7 +1,7 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import i18n from '../util/i18n';
 import {dateToISOString} from '../util/util';
-
+import {filter} from 'types/group';
 /**
  * AGS is the abbreviation for "Amtlicher Gemeindeschlüssel" in German, which are IDs of areas in Germany. The AGS have
  * a structure to them that describes a hierarchy from a state level to a district level (and even smaller). Since we
@@ -19,6 +19,7 @@ export interface DataSelection {
 
   minDate: string | null;
   maxDate: string | null;
+  filter: Array<filter> | null;
 }
 
 const initialState: DataSelection = {
@@ -30,6 +31,7 @@ const initialState: DataSelection = {
 
   minDate: null,
   maxDate: null,
+  filter:null,
 };
 
 /**
@@ -92,6 +94,31 @@ export const DataSelectionSlice = createSlice({
     selectCompartment(state, action: PayloadAction<string>) {
       state.compartment = action.payload;
     },
+    addFilter(state, action: PayloadAction<filter>) {
+      if (state.filter) {
+        state.filter = state.filter.concat(action.payload);
+      } else {
+        state.filter = new Array<filter>().concat(action.payload);
+      }
+    },
+    deleteFilter(state, action: PayloadAction<string>) {
+      if (state.filter) {
+        for (let i = 0; i < state.filter.length; i++) {
+          if (state.filter[i].name == action.payload) {
+            state.filter.splice(i, 1);
+          }
+        }
+      }
+    },
+    toggleFilter(state, action: PayloadAction<string>) {
+      if (state.filter) {
+        for (let i = 0; i < state.filter.length; i++) {
+          if (state.filter[i].name == action.payload) {
+            state.filter[i].toggle = !state.filter[i].toggle;
+          }
+        }
+      }
+    },
   },
 });
 
@@ -104,5 +131,8 @@ export const {
   selectScenario,
   toggleScenario,
   selectCompartment,
+  addFilter,
+  deleteFilter,
+  toggleFilter,
 } = DataSelectionSlice.actions;
 export default DataSelectionSlice.reducer;
