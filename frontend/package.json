@@ -64,7 +64,7 @@
   },
   "dependencies": {
     "@amcharts/amcharts4": "^4.10.17",
-    "@amcharts/amcharts5": "^5.1.8",
+    "@amcharts/amcharts5": "^5.2.11",
     "@emotion/react": "^11.7.0",
     "@emotion/styled": "^11.6.0",
     "@mui/icons-material": "^5.0.4",
