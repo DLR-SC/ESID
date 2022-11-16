@@ -16,7 +16,7 @@ describe('DataSelectionSlice', () => {
     activeScenarios: null,
     minDate: null,
     maxDate: null,
-    filter: null,
+    filter: {},
   };
 
   test('Initial State', () => {
@@ -62,6 +62,7 @@ describe('DataSelectionSlice', () => {
 
   test('addFilter', () => {
     const newFilter = {
+      id: crypto.randomUUID(),
       name: 'Test Group',
       groups: {age: ['age_1', 'age_2'], gender: ['male', 'female']},
       toggle: false,

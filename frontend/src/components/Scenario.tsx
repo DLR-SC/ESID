@@ -15,7 +15,7 @@ import {setCompartments, setScenarios} from 'store/ScenarioSlice';
 import {dateToISOString, Dictionary} from 'util/util';
 import {useGetRkiSingleSimulationEntryQuery} from '../store/services/rkiApi';
 import {NumberFormatter} from '../util/hooks';
-import { ManageGroupDialog } from "./ManageGroupDialog";
+import {ManageGroupDialog} from './ManageGroupDialog';
 
 /**
  * React Component to render the Scenario Cards Section
@@ -337,11 +337,8 @@ export default function Scenario(): JSX.Element {
           variant='outlined'
           color='primary'
           sx={{
-            height: '30px',
             width: '160px',
             margin: theme.spacing(2),
-            fontSize: '0.7rem',
-            borderRadius: '3px',
             alignSelf: 'center',
           }}
           onClick={() => {

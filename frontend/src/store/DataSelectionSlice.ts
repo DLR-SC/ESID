@@ -1,7 +1,7 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import i18n from '../util/i18n';
-import {dateToISOString} from '../util/util';
-import {filter} from 'types/group';
+import {dateToISOString, Dictionary} from '../util/util';
+import {GroupFilter} from 'types/group';
 
 /**
  * AGS is the abbreviation for "Amtlicher Gemeindeschlüssel" in German, which are IDs of areas in Germany. The AGS have
@@ -20,7 +20,7 @@ export interface DataSelection {
 
   minDate: string | null;
   maxDate: string | null;
-  filter: Array<filter> | null;
+  filter: Dictionary<GroupFilter>;
 }
 
 const initialState: DataSelection = {
@@ -32,7 +32,7 @@ const initialState: DataSelection = {
 
   minDate: null,
   maxDate: null,
-  filter: null,
+  filter: {},
 };
 
 /**
@@ -95,29 +95,25 @@ export const DataSelectionSlice = createSlice({
     selectCompartment(state, action: PayloadAction<string>) {
       state.compartment = action.payload;
     },
-    addFilter(state, action: PayloadAction<filter>) {
-      if (state.filter) {
-        state.filter = state.filter.concat(action.payload);
-      } else {
-        state.filter = new Array<filter>().concat(action.payload);
-      }
+    addFilter(state, action: PayloadAction<GroupFilter>) {
+      state.filter[action.payload.id] = action.payload;
     },
     deleteFilter(state, action: PayloadAction<string>) {
-      if (state.filter) {
-        for (let i = 0; i < state.filter.length; i++) {
-          if (state.filter[i].name == action.payload) {
-            state.filter.splice(i, 1);
-          }
-        }
-      }
+      delete state.filter[action.payload];
     },
     toggleFilter(state, action: PayloadAction<string>) {
-      if (state.filter) {
-        for (let i = 0; i < state.filter.length; i++) {
-          if (state.filter[i].name == action.payload) {
-            state.filter[i].toggle = !state.filter[i].toggle;
-          }
-        }
+      if (state.filter[action.payload]) {
+        state.filter[action.payload].toggle = !state.filter[action.payload].toggle;
+      }
+    },
+    setFilterName(state, action: PayloadAction<{id: string; name: string}>) {
+      if (state.filter[action.payload.id]) {
+        state.filter[action.payload.id].name = action.payload.name;
+      }
+    },
+    setFilterGroups(state, action: PayloadAction<{id: string; groups: Dictionary<string[]>}>) {
+      if (state.filter[action.payload.id]) {
+        state.filter[action.payload.id].groups = action.payload.groups;
       }
     },
   },
@@ -134,6 +130,8 @@ export const {
   addFilter,
   deleteFilter,
   toggleFilter,
+  setFilterName,
+  setFilterGroups,
   toggleScenario,
 } = DataSelectionSlice.actions;
 export default DataSelectionSlice.reducer;

@@ -40,12 +40,15 @@
     more: 'More properties',
     activate: 'Activate scenario',
     deactivate: 'Deactivate scenario',
-    'manage-groups': 'Manage Groups'
+    'manage-groups': 'Manage',
   },
   'group-filters': {
-    'title': 'Manage Groups',
-    'list-title': 'Available Group Filters',
-    'nothing-selected': 'Select a group to edit or create a new one.'
+    title: 'Manage Groups',
+    'nothing-selected': 'Select a group to edit or create a new one.',
+    'add-group': 'Add new group',
+    name: 'Name',
+    close: 'Cancel',
+    apply: 'Apply',
   },
   chart: {
     rkiData: 'RKI Data',

@@ -18,7 +18,7 @@ import {useTranslation} from 'react-i18next';
 import {NumberFormatter} from 'util/hooks';
 import LoadingContainer from './shared/LoadingContainer';
 import {useGetMultipleFilterDataQuery} from 'store/services/groupApi';
-import {groupData} from 'types/group';
+import {GroupData} from 'types/group';
 /* This component displays the evolution of the pandemic for a specific compartment (hospitalized, dead, infected, etc.) regarding the different scenarios
  */
 
@@ -43,7 +43,7 @@ export default function SimulationChart(): JSX.Element {
 
   const {data: filterData} = useGetMultipleFilterDataQuery(
     filterList && selectedScenario && selectedDistrict && selectedCompartment
-      ? filterList
+      ? Object.values(filterList)
           .filter((filter) => filter.toggle)
           .map((filter) => {
             return {
@@ -152,7 +152,7 @@ export default function SimulationChart(): JSX.Element {
     //Add series for filter
     if (filterList && selectedScenario) {
       const filterStrokes = ['2,4', '8,4', '8,4,2,4'] as string[];
-      filterList
+      Object.values(filterList)
         .filter((filter) => filter.toggle)
         .forEach((filter, i) => {
           const series = chart.series.push(new am4charts.LineSeries());
@@ -289,10 +289,10 @@ export default function SimulationChart(): JSX.Element {
 
       //add filter data
       if (filterList && filterData) {
-        filterList.forEach((filter) => {
+        Object.values(filterList).forEach((filter) => {
           if (filter && filter.toggle) {
             if (filterData[filter.name]) {
-              filterData[filter.name].results.forEach((entry: groupData) => {
+              filterData[filter.name].results.forEach((entry: GroupData) => {
                 dataMap.set(entry.day, {
                   ...dataMap.get(entry.day),
                   [filter.name]: entry.compartments[selectedCompartment],

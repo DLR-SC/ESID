@@ -42,7 +42,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
 
   const {data: filterData} = useGetMultipleFilterDataQuery(
     filterList && day
-      ? filterList
+      ? Object.values(filterList)
           .filter((filter) => filter.toggle)
           .map((filter) => {
             return {
@@ -62,7 +62,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
   //ref Array Size
   useEffect(() => {
     if (filterList) {
-      groupCompartmentsRef.current.slice(0, filterList.length);
+      groupCompartmentsRef.current.slice(0, Object.values(filterList).length);
     }
   }, [filterList]);
 
@@ -171,7 +171,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
   };
 
   const FilterInfo = (): JSX.Element | null => {
-    if (filterList && filterList.length >= 1 && filterData && filterList[0].name) {
+    if (filterList && Object.values(filterList).length > 0 && filterData && Object.values(filterList)[0].name) {
       return (
         <Box
           sx={{
@@ -223,9 +223,9 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
   };
 
   const activateFilters = (): JSX.Element | null => {
-    if (filterList && filterList.length >= 1) {
-      for (let i = 0; i < filterList.length; i++) {
-        if (filterList[i].toggle) {
+    if (filterList && Object.values(filterList).length >= 1) {
+      for (let i = 0; i < Object.values(filterList).length; i++) {
+        if (Object.values(filterList)[i].toggle) {
           return (
             <Box
               sx={{

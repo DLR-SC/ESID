@@ -25,9 +25,9 @@ export default function IconBar(): JSX.Element {
 
   const toggleFullscreen = () => {
     if (fsApi?.isFullscreen) {
-      fsApi?.exit();
+      void fsApi?.exit();
     } else {
-      fsApi?.request();
+      void fsApi?.request();
     }
   };
 
