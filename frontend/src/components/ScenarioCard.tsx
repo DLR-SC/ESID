@@ -83,21 +83,22 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
     return 'N/A';
   };
 
-  const getArrow = (compartment: string): JSX.Element => {
-    // shows downwards green arrows if getCompartmentRate < 0%
+  const TrendArrow = (props: { compartment: string }): JSX.Element => {
+    const compartment = props.compartment;
+    // Shows downwards green arrows if getCompartmentRate < 0%.
     if (parseFloat(getCompartmentRate(compartment)) < 0) {
-      return <ArrowDropDownIcon color={'success'} fontSize={'medium'} sx={{display: 'block'}}></ArrowDropDownIcon>;
+      return <ArrowDropDownIcon color={'success'} fontSize={'medium'} sx={{display: 'block'}} />;
     }
-    // shows upwards red arrows if getCompartmentRate > 3%. If there is no RKI value for that compartment i.e., getCompartmentRate is Null, then it will check the getCompartmentValue (scenario values only) which will always me positive.
+    // Shows upwards red arrows if getCompartmentRate > 3%. If there is no RKI value for that compartment i.e., getCompartmentRate is Null, then it will check the getCompartmentValue (scenario values only) which will always be positive.
     else if (
       parseFloat(getCompartmentRate(compartment)) > 3 ||
       (parseFloat(getCompartmentValue(compartment)) > 0 && getCompartmentRate(compartment) === 'N/A')
     ) {
-      return <ArrowDropUpIcon color={'error'} fontSize={'medium'} sx={{display: 'block'}}></ArrowDropUpIcon>;
+      return <ArrowDropUpIcon color={'error'} fontSize={'medium'} sx={{display: 'block'}} />;
     }
-    // shows grey arrows (stagnation) if getCompartmentRate is between 0 and 3 % or if there is no RKI value.
+    // Shows grey arrows (stagnation) if getCompartmentRate is between 0 and 3 % or if there is no RKI value.
     else {
-      return <ArrowRightIcon color={'action'} fontSize={'medium'} sx={{display: 'block'}}></ArrowRightIcon>;
+      return <ArrowRightIcon color={'action'} fontSize={'medium'} sx={{display: 'block'}} />;
     }
   };
 
@@ -261,10 +262,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
                     flexBasis: '45%',
                   }}
                 />
-                {
-                  // get arrow to display
-                  getArrow(compartment)
-                }
+<TrendArrow compartment={compartment} />
               </ListItem>
             ))}
           </List>
