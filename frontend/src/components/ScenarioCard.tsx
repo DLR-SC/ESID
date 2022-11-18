@@ -83,7 +83,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
     return 'N/A';
   };
 
-  const TrendArrow = (props: { compartment: string }): JSX.Element => {
+  const TrendArrow = (props: {compartment: string}): JSX.Element => {
     const compartment = props.compartment;
     // Shows downwards green arrows if getCompartmentRate < 0%.
     if (parseFloat(getCompartmentRate(compartment)) < 0) {
@@ -262,7 +262,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
                     flexBasis: '45%',
                   }}
                 />
-<TrendArrow compartment={compartment} />
+                <TrendArrow compartment={compartment} />
               </ListItem>
             ))}
           </List>
