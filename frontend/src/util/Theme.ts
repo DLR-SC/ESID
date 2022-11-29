@@ -116,6 +116,15 @@ export default createTheme({
     },
   },
   spacing: [0, 4, 8, 12, 26],
+  components: {
+    MuiDialog: {
+      styleOverrides: {
+        root: {
+          backdropFilter: 'blur(5px)'
+        }
+      }
+    }
+  },
   custom: {
     //scenario colors with gradations, so the main color of a scenario is at [scenario_index][0]
     scenarios: [

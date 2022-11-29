@@ -40,6 +40,8 @@
     name: 'Name',
     close: 'Abbrechen',
     apply: 'Anwenden',
+    'confirm-deletion-title': 'Gruppe Löschen',
+    'confirm-deletion-text': 'Sind sie sicher, dass sie die Gruppe "{{groupName}}" wirklich löschen wollen?',
   },
   chart: {
     rkiData: 'RKI-Daten',
