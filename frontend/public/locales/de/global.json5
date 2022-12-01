@@ -49,4 +49,9 @@
   'no-data': 'Keine Daten',
   'dlr-logo': 'DLR-Logo',
   okay: 'Okay',
+  export: {
+    date: 'Datum',
+    scenario: 'Szenario',
+    percentile: 'Prozentil'
+  }
 }
