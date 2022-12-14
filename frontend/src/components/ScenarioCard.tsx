@@ -288,7 +288,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
         paddingRight: theme.spacing(3),
       }}
     >
-    <Box
+      <Box
         sx={{
           position: 'relative',
           zIndex: 0,
@@ -461,7 +461,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
                         flexBasis: '45%',
                       }}
                     />
-                <TrendArrow compartment={compartment} />
+                    <TrendArrow compartment={compartment} />
                   </ListItem>
                 ))}
               </List>
