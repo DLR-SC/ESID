@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from 'react';
 import {
   Box,
   Button,
@@ -12,27 +12,23 @@ import {
   FormGroup,
   IconButton,
   TextField,
-  Typography
-} from "@mui/material";
-import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { useTranslation } from "react-i18next";
-import { DeleteForever, GroupAdd, Visibility, VisibilityOffOutlined } from "@mui/icons-material";
-import { useTheme } from "@mui/material/styles";
-import { GroupFilter } from "../types/group";
-import {
-  GroupSubcategory,
-  useGetGroupCategoriesQuery,
-  useGetGroupSubcategoriesQuery
-} from "../store/services/groupApi";
-import { addFilter, deleteFilter, toggleFilter } from "../store/DataSelectionSlice";
-import { Dictionary } from "../util/util";
-import ConfirmDialog from "./shared/ConfirmDialog";
+  Typography,
+} from '@mui/material';
+import {useAppDispatch, useAppSelector} from '../store/hooks';
+import {useTranslation} from 'react-i18next';
+import {DeleteForever, GroupAdd, Visibility, VisibilityOffOutlined} from '@mui/icons-material';
+import {useTheme} from '@mui/material/styles';
+import {GroupFilter} from '../types/group';
+import {GroupSubcategory, useGetGroupCategoriesQuery, useGetGroupSubcategoriesQuery} from '../store/services/groupApi';
+import {addFilter, deleteFilter, toggleFilter} from '../store/DataSelectionSlice';
+import {Dictionary} from '../util/util';
+import ConfirmDialog from './shared/ConfirmDialog';
 
 export function ManageGroupDialog(): JSX.Element {
-  const { t } = useTranslation();
+  const {t} = useTranslation();
   const theme = useTheme();
 
-  const { data: groupCategories } = useGetGroupCategoriesQuery();
+  const {data: groupCategories} = useGetGroupCategoriesQuery();
 
   const [selectedFilter, setSelectedFilter] = useState<GroupFilter | null>(null);
   const filterList = useAppSelector((state) => state.dataSelection.filter);
@@ -40,31 +36,31 @@ export function ManageGroupDialog(): JSX.Element {
   return (
     <Box
       sx={{
-        display: "flex",
-        flexDirection: "column",
-        flexGrow: "1",
+        display: 'flex',
+        flexDirection: 'column',
+        flexGrow: '1',
         padding: theme.spacing(4),
-        alignItems: "center"
+        alignItems: 'center',
       }}
     >
-      <Typography variant="h1" sx={{ marginBottom: theme.spacing(2) }}>
-        {t("group-filters.title")}
+      <Typography variant='h1' sx={{marginBottom: theme.spacing(2)}}>
+        {t('group-filters.title')}
       </Typography>
-      <Divider orientation="horizontal" variant="middle" flexItem />
+      <Divider orientation='horizontal' variant='middle' flexItem />
       <Box
         sx={{
-          display: "flex",
-          flexDirection: "row",
-          flexGrow: "1",
-          width: "100%"
+          display: 'flex',
+          flexDirection: 'row',
+          flexGrow: '1',
+          width: '100%',
         }}
       >
         <Box
           sx={{
-            minWidth: "300px",
+            minWidth: '300px',
             marginRight: theme.spacing(3),
             marginTop: theme.spacing(2),
-            padding: theme.spacing(2)
+            padding: theme.spacing(2),
           }}
         >
           {Object.values(filterList)?.map((item) => (
@@ -76,40 +72,40 @@ export function ManageGroupDialog(): JSX.Element {
             />
           ))}
           <Card
-            variant="outlined"
+            variant='outlined'
             sx={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
               marginTop: theme.spacing(1),
-              borderColor: theme.palette.primary.main
+              borderColor: theme.palette.primary.main,
             }}
           >
             <CardActionArea
-              aria-label={t("group-filters.add-group")}
+              aria-label={t('group-filters.add-group')}
               onClick={() => {
                 const groups: Dictionary<Array<string>> = {};
                 groupCategories?.results?.forEach((group) => (groups[group.key] = []));
-                setSelectedFilter({ id: crypto.randomUUID(), name: "", toggle: false, groups: groups });
+                setSelectedFilter({id: crypto.randomUUID(), name: '', toggle: false, groups: groups});
               }}
             >
               <CardContent
                 sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between"
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
                 }}
               >
-                <Typography variant="button" sx={{ color: theme.palette.primary.main }}>
-                  {t("group-filters.add-group")}
+                <Typography variant='button' sx={{color: theme.palette.primary.main}}>
+                  {t('group-filters.add-group')}
                 </Typography>
-                <GroupAdd color="primary" />
+                <GroupAdd color='primary' />
               </CardContent>
             </CardActionArea>
           </Card>
         </Box>
-        <Divider orientation="vertical" flexItem />
+        <Divider orientation='vertical' flexItem />
         {selectedFilter ? (
           <GroupFilterEditor
             key={selectedFilter.id}
@@ -119,25 +115,25 @@ export function ManageGroupDialog(): JSX.Element {
         ) : (
           <Box
             sx={{
-              display: "flex",
-              flexGrow: "1",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center"
+              display: 'flex',
+              flexGrow: '1',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
             }}
           >
-            <Typography variant="body1">{t("group-filters.nothing-selected")}</Typography>
+            <Typography variant='body1'>{t('group-filters.nothing-selected')}</Typography>
             <Button
-              variant="outlined"
-              aria-label={t("group-filters.add-group")}
-              sx={{ marginTop: theme.spacing(2) }}
+              variant='outlined'
+              aria-label={t('group-filters.add-group')}
+              sx={{marginTop: theme.spacing(2)}}
               onClick={() => {
                 const groups: Dictionary<Array<string>> = {};
                 groupCategories?.results?.forEach((group) => (groups[group.key] = []));
-                setSelectedFilter({ id: crypto.randomUUID(), name: "", toggle: false, groups: groups });
+                setSelectedFilter({id: crypto.randomUUID(), name: '', toggle: false, groups: groups});
               }}
             >
-              <GroupAdd color="primary" />
+              <GroupAdd color='primary' />
             </Button>
           </Box>
         )}
@@ -154,19 +150,19 @@ interface GroupFilterCardParams {
 
 function GroupFilterCard(props: GroupFilterCardParams) {
   const theme = useTheme();
-  const { t } = useTranslation();
+  const {t} = useTranslation();
   const dispatch = useAppDispatch();
 
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
 
   return (
     <Card
-      variant="outlined"
+      variant='outlined'
       sx={{
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        marginTop: theme.spacing(1)
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: theme.spacing(1),
       }}
     >
       <CardActionArea
@@ -174,36 +170,37 @@ function GroupFilterCard(props: GroupFilterCardParams) {
           props.selectFilterCallback(props.selected ? null : props.item);
         }}
       >
-        <CardContent
-          sx={{ backgroundColor: props.selected ? theme.palette.info.main : theme.palette.background.paper }}>
+        <CardContent sx={{backgroundColor: props.selected ? theme.palette.info.main : theme.palette.background.paper}}>
           <Typography
-            variant="body1"
-            sx={{ color: props.selected ? theme.palette.info.contrastText : theme.palette.text.primary }}
+            variant='body1'
+            sx={{color: props.selected ? theme.palette.info.contrastText : theme.palette.text.primary}}
           >
             {props.item.name}
           </Typography>
         </CardContent>
       </CardActionArea>
-      <Divider orientation="vertical" variant="middle" flexItem />
+      <Divider orientation='vertical' variant='middle' flexItem />
       <CardActions>
         <Checkbox
           checkedIcon={<Visibility />}
-          icon={<VisibilityOffOutlined color="disabled" />}
+          icon={<VisibilityOffOutlined color='disabled' />}
           checked={props.item.toggle}
           onClick={() => {
             dispatch(toggleFilter(props.item.id));
           }}
         />
-        <ConfirmDialog open={confirmDialogOpen}
-                       title={t("group-filters.confirm-deletion-title")}
-                       text={t("group-filters.confirm-deletion-text", { groupName: props.item.name })}
-                       onAnswer={(answer) => {
-                         if (answer) {
-                           dispatch(deleteFilter(props.item.id));
-                           props.selectFilterCallback(null);
-                         }
-                         setConfirmDialogOpen(false);
-                       }} />
+        <ConfirmDialog
+          open={confirmDialogOpen}
+          title={t('group-filters.confirm-deletion-title')}
+          text={t('group-filters.confirm-deletion-text', {groupName: props.item.name})}
+          onAnswer={(answer) => {
+            if (answer) {
+              dispatch(deleteFilter(props.item.id));
+              props.selectFilterCallback(null);
+            }
+            setConfirmDialogOpen(false);
+          }}
+        />
         <IconButton onClick={() => setConfirmDialogOpen(true)}>
           <DeleteForever />
         </IconButton>
@@ -216,12 +213,12 @@ function GroupFilterEditor(props: {
   filter: GroupFilter;
   selectFilterCallback: (name: GroupFilter | null) => void;
 }): JSX.Element {
-  const { t } = useTranslation();
+  const {t} = useTranslation();
   const theme = useTheme();
   const dispatch = useAppDispatch();
 
-  const { data: groupCategories } = useGetGroupCategoriesQuery();
-  const { data: groupSubCategories } = useGetGroupSubcategoriesQuery();
+  const {data: groupCategories} = useGetGroupCategoriesQuery();
+  const {data: groupSubCategories} = useGetGroupSubcategoriesQuery();
 
   const [name, setName] = useState(props.filter.name);
   const [groups, setGroups] = useState(props.filter.groups);
@@ -242,22 +239,22 @@ function GroupFilterEditor(props: {
 
     setGroups({
       ...groups,
-      [subGroup.category]: category
+      [subGroup.category]: category,
     });
   }
 
   return (
     <Box
       sx={{
-        display: "flex",
-        flexGrow: "1",
-        flexDirection: "column",
-        margin: theme.spacing(3)
+        display: 'flex',
+        flexGrow: '1',
+        flexDirection: 'column',
+        margin: theme.spacing(3),
       }}
     >
       <TextField
-        label={t("group-filters.name")}
-        variant="outlined"
+        label={t('group-filters.name')}
+        variant='outlined'
         defaultValue={name}
         autoFocus={true}
         error={name.length === 0}
@@ -266,24 +263,24 @@ function GroupFilterEditor(props: {
       />
       <Box
         sx={{
-          display: "flex",
-          flexGrow: "1",
-          flexDirection: "row",
+          display: 'flex',
+          flexGrow: '1',
+          flexDirection: 'row',
           marginTop: theme.spacing(2),
-          marginBottom: theme.spacing(2)
+          marginBottom: theme.spacing(2),
         }}
       >
         {groupCategories?.results?.map((group) => (
           <Box
             key={group.key}
             sx={{
-              display: "flex",
-              flexDirection: "column"
+              display: 'flex',
+              flexDirection: 'column',
             }}
           >
             <Typography
               color={groups[group.key].length > 0 ? theme.palette.text.primary : theme.palette.error.main}
-              variant="h2"
+              variant='h2'
             >
               {group.description}
             </Typography>
@@ -308,31 +305,31 @@ function GroupFilterEditor(props: {
       </Box>
       <Box
         sx={{
-          display: "flex",
-          flexGrow: "1",
-          flexDirection: "row",
-          justifyContent: "flex-end"
+          display: 'flex',
+          flexGrow: '1',
+          flexDirection: 'row',
+          justifyContent: 'flex-end',
         }}
       >
         <Button
-          variant="outlined"
-          color="error"
-          sx={{ marginRight: theme.spacing(2) }}
+          variant='outlined'
+          color='error'
+          sx={{marginRight: theme.spacing(2)}}
           onClick={() => props.selectFilterCallback(null)}
         >
-          {t("group-filters.close")}
+          {t('group-filters.close')}
         </Button>
         <Button
-          variant="outlined"
-          color="primary"
+          variant='outlined'
+          color='primary'
           disabled={!valid}
           onClick={() => {
-            const newFilter = { id: props.filter.id, name: name, toggle: true, groups: groups };
+            const newFilter = {id: props.filter.id, name: name, toggle: true, groups: groups};
             dispatch(addFilter(newFilter));
             props.selectFilterCallback(newFilter);
           }}
         >
-          {t("group-filters.apply")}
+          {t('group-filters.apply')}
         </Button>
       </Box>
     </Box>

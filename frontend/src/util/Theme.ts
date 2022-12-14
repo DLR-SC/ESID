@@ -120,10 +120,10 @@ export default createTheme({
     MuiDialog: {
       styleOverrides: {
         root: {
-          backdropFilter: 'blur(5px)'
-        }
-      }
-    }
+          backdropFilter: 'blur(5px)',
+        },
+      },
+    },
   },
   custom: {
     //scenario colors with gradations, so the main color of a scenario is at [scenario_index][0]

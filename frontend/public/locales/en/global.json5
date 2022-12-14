@@ -50,7 +50,7 @@
     close: 'Cancel',
     apply: 'Apply',
     'confirm-deletion-title': 'Delete Group',
-    'confirm-deletion-text': 'Are you sure you want to delete the "{{groupName}}" group?'
+    'confirm-deletion-text': 'Are you sure you want to delete the "{{groupName}}" group?',
   },
   chart: {
     rkiData: 'RKI Data',

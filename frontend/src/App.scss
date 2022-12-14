@@ -7,4 +7,39 @@ body {
 #root {
   width: 100vw;
   height: 100vh;
+  overflow: hidden;
+}
+
+/* If this class is applied to an element with scrollable content the scrollbar is invisible, but scrolling is still
+ * possible. */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* ===== Scrollbar CSS ===== */
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #543cf0 transparent;
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #543cf0;
+  border-radius: 13px;
+  border: 3px solid transparent;
 }
