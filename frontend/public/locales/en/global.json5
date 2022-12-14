@@ -53,7 +53,7 @@
     'confirm-deletion-text': 'Are you sure you want to delete the "{{groupName}}" group?',
   },
   chart: {
-    rkiData: 'RKI Data',
+    caseData: 'Case Data',
   },
   heatlegend: {
     edit: 'Edit heatmap colors',

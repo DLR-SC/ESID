@@ -14,7 +14,7 @@ import {
 } from '../store/services/scenarioApi';
 import {setCompartments, setScenarios} from 'store/ScenarioSlice';
 import {dateToISOString, Dictionary} from 'util/util';
-import {useGetRkiSingleSimulationEntryQuery} from '../store/services/rkiApi';
+import {useGetCaseDataSingleSimulationEntryQuery} from '../store/services/caseDataApi';
 import {NumberFormatter} from '../util/hooks';
 import {ManageGroupDialog} from './ManageGroupDialog';
 
@@ -59,7 +59,7 @@ export default function Scenario(): JSX.Element {
   const {data: simulationModelData} = useGetSimulationModelQuery(simulationModelKey, {
     skip: simulationModelKey === 'unset',
   });
-  const {data: rkiData} = useGetRkiSingleSimulationEntryQuery(
+  const {data: caseData} = useGetCaseDataSingleSimulationEntryQuery(
     {
       node: node,
       day: startDay ?? '',
@@ -76,10 +76,10 @@ export default function Scenario(): JSX.Element {
   }, [simulationModelsData]);
 
   useEffect(() => {
-    if (rkiData) {
-      setCompartmentValues(rkiData.results[0].compartments);
+    if (caseData) {
+      setCompartmentValues(caseData.results[0].compartments);
     }
-  }, [rkiData]);
+  }, [caseData]);
 
   useEffect(() => {
     if (simulationModelData) {

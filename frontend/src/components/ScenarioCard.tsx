@@ -9,6 +9,9 @@ import {NumberFormatter} from '../util/hooks';
 import {CheckBox, CheckBoxOutlineBlank, ChevronLeft, ChevronRight} from '@mui/icons-material';
 import {useGetMultipleFilterDataQuery} from '../store/services/groupApi';
 import {ScrollSyncPane} from 'react-scroll-sync';
+import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 
 /**
  * React Component to render individual Scenario Card
@@ -94,6 +97,25 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
     }
 
     return 'N/A';
+  };
+
+  const TrendArrow = (props: {compartment: string}): JSX.Element => {
+    const compartment = props.compartment;
+    // Shows downwards green arrows if getCompartmentRate < 0%.
+    if (parseFloat(getCompartmentRate(compartment)) < 0) {
+      return <ArrowDropDownIcon color={'success'} fontSize={'medium'} sx={{display: 'block'}} />;
+    }
+    // Shows upwards red arrows if getCompartmentRate > 3%. If there is no RKI value for that compartment i.e., getCompartmentRate is Null, then it will check the getCompartmentValue (scenario values only) which will always be positive.
+    else if (
+      parseFloat(getCompartmentRate(compartment)) > 3 ||
+      (parseFloat(getCompartmentValue(compartment)) > 0 && getCompartmentRate(compartment) === 'N/A')
+    ) {
+      return <ArrowDropUpIcon color={'error'} fontSize={'medium'} sx={{display: 'block'}} />;
+    }
+    // Shows grey arrows (stagnation) if getCompartmentRate is between 0 and 3 % or if there is no RKI value.
+    else {
+      return <ArrowRightIcon color={'action'} fontSize={'medium'} sx={{display: 'block'}} />;
+    }
   };
 
   const FilterCompartmentValues = (props: {
@@ -266,8 +288,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
         paddingRight: theme.spacing(3),
       }}
     >
-      <Box
-        id={`scenario-card-settings-root-${props.scenario.id}`}
+    <Box
         sx={{
           position: 'relative',
           zIndex: 0,
@@ -440,6 +461,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
                         flexBasis: '45%',
                       }}
                     />
+                <TrendArrow compartment={compartment} />
                   </ListItem>
                 ))}
               </List>
