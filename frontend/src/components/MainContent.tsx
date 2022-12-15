@@ -12,13 +12,17 @@ export default function MainContent(): JSX.Element {
   const theme = useTheme();
   return (
     <Grid
+      id='main-content-root'
       container
       direction='column'
       sx={{
         background: theme.palette.background.default,
+        maxWidth: 'calc(100% - 423px)',
+        width: 'calc(100% - 423px)'
       }}
     >
       <Grid
+        id='main-content-icon-bar-wrapper'
         item
         sx={{
           marginLeft: 'auto',
@@ -27,10 +31,10 @@ export default function MainContent(): JSX.Element {
       >
         <IconBar />
       </Grid>
-      <Grid item>
+      <Grid sx={{width: '100%', maxWidth: '100%'}} id='main-content-scenario-wrapper' item>
         <Scenario />
       </Grid>
-      <Grid item>
+      <Grid id='main-content-horizontal-spacer' item>
         <Divider
           sx={{
             borderBottom: `1px solid ${theme.palette.divider}`,
@@ -39,7 +43,7 @@ export default function MainContent(): JSX.Element {
           }}
         />
       </Grid>
-      <Grid item sx={{flexGrow: 1}}>
+      <Grid id='main-content-simulation-chart-wrapper' item sx={{flexGrow: 1}}>
         <SimulationChart />
       </Grid>
     </Grid>

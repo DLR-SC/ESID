@@ -110,7 +110,7 @@ export default createTheme({
     },
     overline: undefined,
     listElement: {
-      fontSize: '13pt',
+      fontSize: '11pt',
       fontWeight: 500,
       fontFeatureSettings: `'tnum' on`,
     },

@@ -80,6 +80,19 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
     return t('no-data');
   };
 
+  const getGroupValue = (filterName: string, compartment: string): string => {
+    if (!filterData || !filterData[filterName]) {
+      return t('no-data');
+    }
+
+    const filterResults = filterData[filterName].results;
+    if (filterResults.length === 0 || !(compartment in filterResults[0].compartments)) {
+      return t('no-data');
+    }
+
+    return formatNumber(filterResults[0].compartments[compartment]);
+  };
+
   const getCompartmentRate = (compartment: string): string => {
     if (
       compartmentValues &&
@@ -96,7 +109,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
       }
     }
 
-    return 'N/A';
+    return '\u2012';
   };
 
   const TrendArrow = (props: {compartment: string}): JSX.Element => {
@@ -108,7 +121,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
     // Shows upwards red arrows if getCompartmentRate > 3%. If there is no RKI value for that compartment i.e., getCompartmentRate is Null, then it will check the getCompartmentValue (scenario values only) which will always be positive.
     else if (
       parseFloat(getCompartmentRate(compartment)) > 3 ||
-      (parseFloat(getCompartmentValue(compartment)) > 0 && getCompartmentRate(compartment) === 'N/A')
+      (parseFloat(getCompartmentValue(compartment)) > 0 && getCompartmentRate(compartment) === '\u2012')
     ) {
       return <ArrowDropUpIcon color={'error'} fontSize={'medium'} sx={{display: 'block'}} />;
     }
@@ -159,7 +172,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
                   }}
                 >
                   <ListItemText
-                    primary={formatNumber(filterData[props.filterName].results[0]?.compartments[compartment])}
+                    primary={getGroupValue(props.filterName, compartment)}
                     // disable child typography overriding this
                     disableTypography={true}
                     sx={{

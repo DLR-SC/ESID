@@ -7,7 +7,7 @@ body {
 #root {
   width: 100vw;
   height: 100vh;
-  overflow: hidden;
+  overflow: auto;
 }
 
 /* If this class is applied to an element with scrollable content the scrollbar is invisible, but scrolling is still
