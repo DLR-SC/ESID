@@ -18,7 +18,7 @@ export default function MainContent(): JSX.Element {
       sx={{
         background: theme.palette.background.default,
         maxWidth: 'calc(100% - 423px)',
-        width: 'calc(100% - 423px)'
+        width: 'calc(100% - 423px)',
       }}
     >
       <Grid

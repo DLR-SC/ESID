@@ -138,7 +138,7 @@ export default function Scenario(): JSX.Element {
           display: 'flex',
           cursor: 'default',
           background: theme.palette.background.default,
-          maxWidth: '100%'
+          maxWidth: '100%',
         }}
       >
         <Box
@@ -292,7 +292,7 @@ export default function Scenario(): JSX.Element {
             display: 'flex',
             overflowX: 'auto',
             marginLeft: theme.spacing(3),
-            minWidth: '400px'
+            minWidth: '400px',
           }}
         >
           {Object.entries(scenarioList.scenarios).map(([, scenario], i) => (

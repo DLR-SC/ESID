@@ -1,16 +1,16 @@
-import React, { Suspense } from "react";
-import { Provider } from "react-redux";
+import React, {Suspense} from 'react';
+import {Provider} from 'react-redux';
 
-import "./App.scss";
+import './App.scss';
 
-import TopBar from "./components/TopBar";
-import Sidebar from "./components/Sidebar";
-import MainContent from "./components/MainContent";
-import { Store, Persistor } from "./store";
-import { Box } from "@mui/material";
-import { ThemeProvider } from "@mui/material/styles";
-import Theme from "./util/Theme";
-import { PersistGate } from "redux-persist/integration/react";
+import TopBar from './components/TopBar';
+import Sidebar from './components/Sidebar';
+import MainContent from './components/MainContent';
+import {Store, Persistor} from './store';
+import {Box} from '@mui/material';
+import {ThemeProvider} from '@mui/material/styles';
+import Theme from './util/Theme';
+import {PersistGate} from 'redux-persist/integration/react';
 
 /**
  * This is the root element of the React application. It divides the main screen area into the three main components.
@@ -18,21 +18,22 @@ import { PersistGate } from "redux-persist/integration/react";
  */
 export default function App(): JSX.Element {
   return (
-    <Suspense fallback="loading">
+    <Suspense fallback='loading'>
       <Provider store={Store}>
         <ThemeProvider theme={Theme}>
           <PersistGate loading={null} persistor={Persistor}>
-            <Box id="app" display="flex" flexDirection="column" sx={{ height: "100%", width: "100%" }}>
+            <Box id='app' display='flex' flexDirection='column' sx={{height: '100%', width: '100%'}}>
               <TopBar />
               <Box
-                id="app-content"
+                id='app-content'
                 sx={{
-                  display: "flex",
-                  flexDirection: "row",
+                  display: 'flex',
+                  flexDirection: 'row',
                   flexGrow: 1,
-                  alignItems: "stretch",
-                  width: "100%"
-                }}>
+                  alignItems: 'stretch',
+                  width: '100%',
+                }}
+              >
                 <Sidebar />
                 <MainContent />
               </Box>

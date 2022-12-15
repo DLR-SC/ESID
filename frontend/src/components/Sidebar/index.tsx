@@ -15,7 +15,7 @@ export default function Sidebar(): JSX.Element {
       alignItems='stretch'
       justifyContent='flex-start'
       sx={{
-        width: "422px",
+        width: '422px',
         borderRight: `1px solid ${theme.palette.divider}`,
         background: theme.palette.background.default,
       }}
