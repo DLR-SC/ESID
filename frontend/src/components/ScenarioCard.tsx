@@ -7,6 +7,9 @@ import {Dictionary} from '../util/util';
 import {useTranslation} from 'react-i18next';
 import {NumberFormatter} from '../util/hooks';
 import {CheckBoxOutlineBlank, CheckBox} from '@mui/icons-material';
+import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 
 /**
  * React Component to render individual Scenario Card
@@ -78,6 +81,25 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
     }
 
     return 'N/A';
+  };
+
+  const TrendArrow = (props: {compartment: string}): JSX.Element => {
+    const compartment = props.compartment;
+    // Shows downwards green arrows if getCompartmentRate < 0%.
+    if (parseFloat(getCompartmentRate(compartment)) < 0) {
+      return <ArrowDropDownIcon color={'success'} fontSize={'medium'} sx={{display: 'block'}} />;
+    }
+    // Shows upwards red arrows if getCompartmentRate > 3%. If there is no RKI value for that compartment i.e., getCompartmentRate is Null, then it will check the getCompartmentValue (scenario values only) which will always be positive.
+    else if (
+      parseFloat(getCompartmentRate(compartment)) > 3 ||
+      (parseFloat(getCompartmentValue(compartment)) > 0 && getCompartmentRate(compartment) === 'N/A')
+    ) {
+      return <ArrowDropUpIcon color={'error'} fontSize={'medium'} sx={{display: 'block'}} />;
+    }
+    // Shows grey arrows (stagnation) if getCompartmentRate is between 0 and 3 % or if there is no RKI value.
+    else {
+      return <ArrowRightIcon color={'action'} fontSize={'medium'} sx={{display: 'block'}} />;
+    }
   };
 
   return (
@@ -207,6 +229,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
             {compartments.map((compartment, i) => (
               // hide compartment if expandProperties false and index > 4
               // highlight compartment if selectedProperty === compartment
+
               <ListItem
                 key={compartment}
                 sx={{
@@ -239,6 +262,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
                     flexBasis: '45%',
                   }}
                 />
+                <TrendArrow compartment={compartment} />
               </ListItem>
             ))}
           </List>

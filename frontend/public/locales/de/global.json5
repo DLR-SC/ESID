@@ -33,7 +33,7 @@
     deactivate: 'Scenario deaktivieren',
   },
   chart: {
-    rkiData: 'RKI-Daten',
+    caseData: 'Falldaten',
   },
   heatlegend: {
     edit: 'Farblegende bearbeiten',
