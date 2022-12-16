@@ -14,7 +14,6 @@ import HeatLegendEdit from './HeatLegendEdit';
 import {HeatmapLegend} from '../../types/heatmapLegend';
 import {LockOpen} from '@mui/icons-material';
 import LoadingContainer from '../shared/LoadingContainer';
-
 const {useRef} = React;
 
 interface IRegionPolygon {
@@ -59,7 +58,7 @@ export default function DistrictMap(): JSX.Element {
   const {formatNumber} = NumberFormatter(i18n.language, 3, 8);
   const theme = useTheme();
   const dispatch = useAppDispatch();
-  const lastSelectedPolygon = useRef<am5map.MapPolygon | null>(null);
+  //const lastSelectedPolygon = useRef<am5map.MapPolygon | null>(null);
   const [fixedLegendMaxValue, setFixedLegendMaxValue] = useState<number | null>(null);
 
   // use Memoized to store aggregated max and only recalculate if parameters change
@@ -187,7 +186,7 @@ export default function DistrictMap(): JSX.Element {
     };
   }, [geodata, theme, t, formatNumber, dispatch]);
 
-  const polygonSeriesLength = (chartRef.current?.series.getIndex(0) as am5map.MapPolygonSeries)?.mapPolygons.length; //needed as trigger for the following effect
+  /*const polygonSeriesLength = (chartRef.current?.series.getIndex(0) as am5map.MapPolygonSeries)?.mapPolygons.length; //needed as trigger for the following effect
 
   useEffect(() => {
     // unselect previous
@@ -219,6 +218,7 @@ export default function DistrictMap(): JSX.Element {
       });
     }
   }, [selectedDistrict, theme, polygonSeriesLength]);
+  */
 
   // set Data
   useEffect(() => {
