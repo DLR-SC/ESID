@@ -83,6 +83,25 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
     return 'N/A';
   };
 
+  const TrendArrow = (props: {compartment: string}): JSX.Element => {
+    const compartment = props.compartment;
+    // Shows downwards green arrows if getCompartmentRate < 0%.
+    if (parseFloat(getCompartmentRate(compartment)) < 0) {
+      return <ArrowDropDownIcon color={'success'} fontSize={'medium'} sx={{display: 'block'}} />;
+    }
+    // Shows upwards red arrows if getCompartmentRate > 3%. If there is no RKI value for that compartment i.e., getCompartmentRate is Null, then it will check the getCompartmentValue (scenario values only) which will always be positive.
+    else if (
+      parseFloat(getCompartmentRate(compartment)) > 3 ||
+      (parseFloat(getCompartmentValue(compartment)) > 0 && getCompartmentRate(compartment) === 'N/A')
+    ) {
+      return <ArrowDropUpIcon color={'error'} fontSize={'medium'} sx={{display: 'block'}} />;
+    }
+    // Shows grey arrows (stagnation) if getCompartmentRate is between 0 and 3 % or if there is no RKI value.
+    else {
+      return <ArrowRightIcon color={'action'} fontSize={'medium'} sx={{display: 'block'}} />;
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -243,37 +262,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
                     flexBasis: '45%',
                   }}
                 />
-                <ArrowDropDownIcon
-                  color={'success'}
-                  fontSize={'medium'}
-                  // shows downwards green arrows if getCompartmentRate < 0%
-                  sx={{display: parseFloat(getCompartmentRate(compartment)) < 0 ? 'block' : 'none'}}
-                ></ArrowDropDownIcon>
-                <ArrowDropUpIcon
-                  color={'error'}
-                  fontSize={'medium'}
-                  sx={{
-                    display:
-                      // shows upwards red arrows if getCompartmentRate > 3%. If there is no RKI value for that compartment i.e., getCompartmentRate is Null, then it will check the getCompartmentValue (scenario values only) which will always me positive.
-                      parseFloat(getCompartmentRate(compartment)) > 3 ||
-                      (parseFloat(getCompartmentValue(compartment)) > 0 && getCompartmentRate(compartment) === 'N/A')
-                        ? 'block'
-                        : 'none',
-                  }}
-                ></ArrowDropUpIcon>
-                <ArrowRightIcon
-                  color={'action'}
-                  fontSize={'medium'}
-                  // shows grey arrows (stagnation) if getCompartmentRate is between 0 and 3 %. If there is no RKI value and then it checks for getCompartmentValue.
-                  sx={{
-                    display:
-                      (parseFloat(getCompartmentRate(compartment)) >= 0 &&
-                        parseFloat(getCompartmentRate(compartment)) <= 3) ||
-                      parseFloat(getCompartmentValue(compartment)) === 0
-                        ? 'block'
-                        : 'none',
-                  }}
-                ></ArrowRightIcon>
+                <TrendArrow compartment={compartment} />
               </ListItem>
             ))}
           </List>

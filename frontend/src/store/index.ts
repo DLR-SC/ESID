@@ -1,6 +1,6 @@
 import {combineReducers, configureStore} from '@reduxjs/toolkit';
 import DataSelectionReducer from './DataSelectionSlice';
-import {rkiApi} from './services/rkiApi';
+import {caseDataApi} from './services/caseDataApi';
 import ScenarioReducer from './ScenarioSlice';
 import {scenarioApi} from './services/scenarioApi';
 import UserPreferenceReducer from './UserPreferenceSlice';
@@ -17,7 +17,7 @@ const rootReducer = combineReducers({
   dataSelection: DataSelectionReducer,
   scenarioList: ScenarioReducer,
   userPreference: UserPreferenceReducer,
-  [rkiApi.reducerPath]: rkiApi.reducer,
+  [caseDataApi.reducerPath]: caseDataApi.reducer,
   [scenarioApi.reducerPath]: scenarioApi.reducer,
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -29,7 +29,7 @@ export const Store = configureStore({
       serializableCheck: {
         ignoredActions: ['persist/PERSIST'],
       },
-    }).concat(rkiApi.middleware, scenarioApi.middleware),
+    }).concat(caseDataApi.middleware, scenarioApi.middleware),
 });
 
 export const Persistor = persistStore(Store);

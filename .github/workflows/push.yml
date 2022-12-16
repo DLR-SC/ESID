@@ -16,6 +16,12 @@ jobs:
       - name: Setup
         run: npm install
 
+      - name: Formatting
+        run: npx prettier --check .
+
+      - name: Linting
+        run: npx eslint src
+
       - name: Build
         run: npm run build
 
@@ -35,9 +41,3 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path-to-lcov: frontend/reports/lcov.info
           base-path: frontend
-
-      - name: Formatting
-        run: npx prettier --check .
-
-      - name: Linting
-        run: npx eslint src

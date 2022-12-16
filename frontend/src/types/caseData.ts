@@ -1,13 +1,13 @@
 import {Dictionary} from 'util/util';
 
-export interface RKIDataByNode {
+export interface CaseDataByNode {
   count: number;
   next: string | null;
   previous: string | null;
   results: Array<{day: string; compartments: Dictionary<number>}>;
 }
 
-export interface RKIDataByDate {
+export interface CaseDataByDate {
   count: number;
   next: string | null;
   previous: string | null;

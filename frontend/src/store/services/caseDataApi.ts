@@ -1,12 +1,12 @@
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
-import {RKIDataByDate, RKIDataByNode} from '../../types/rki';
+import {CaseDataByDate, CaseDataByNode} from '../../types/caseData';
 import {SimulationDataByNode} from '../../types/scenario';
 
-export const rkiApi = createApi({
-  reducerPath: 'rkiApi',
+export const caseDataApi = createApi({
+  reducerPath: 'caseDataApi',
   baseQuery: fetchBaseQuery({baseUrl: `${process.env.API_URL || ''}/api/v1/rki/`}),
   endpoints: (builder) => ({
-    getRkiByDistrict: builder.query<RKIDataByNode, RKIDataByDistrictParameters>({
+    getCaseDataByDistrict: builder.query<CaseDataByNode, CaseDataByDistrictParameters>({
       async queryFn(arg, _queryApi, _extraOptions, fetchWithBQ) {
         const groups = arg.groups && arg.groups.length > 0 ? `&groups=${arg.groups.join(',')}` : '&groups=total';
         const compartments = arg.compartments ? `&compartments=${arg.compartments.join(',')}` : '';
@@ -16,12 +16,12 @@ export const rkiApi = createApi({
         // return error if any occurs
         if (secondResult.error) return {error: secondResult.error};
 
-        const result = secondResult.data as RKIDataByNode;
+        const result = secondResult.data as CaseDataByNode;
         return {data: result};
       },
     }),
 
-    getRkiByDate: builder.query<RKIDataByDate, RKIDataByDateParameters>({
+    getCaseDataByDate: builder.query<CaseDataByDate, CaseDataByDateParameters>({
       async queryFn(arg, _queryApi, _extraOptions, fetchWithBQ) {
         const groups = arg.groups && arg.groups.length > 0 ? `&groups=${arg.groups.join(',')}` : '&groups=total';
         const compartments = arg.compartments ? `&compartments=${arg.compartments.join(',')}` : '';
@@ -31,13 +31,13 @@ export const rkiApi = createApi({
         // return error if any occurs
         if (secondResult.error) return {error: secondResult.error};
 
-        const result = secondResult.data as RKIDataByDate;
+        const result = secondResult.data as CaseDataByDate;
         return {data: result};
       },
     }),
 
-    getRkiSingleSimulationEntry: builder.query<SimulationDataByNode, RKISingleSimulationEntryParameters>({
-      query: (arg: RKISingleSimulationEntryParameters) =>
+    getCaseDataSingleSimulationEntry: builder.query<SimulationDataByNode, CaseDataSingleSimulationEntryParameters>({
+      query: (arg: CaseDataSingleSimulationEntryParameters) =>
         `${arg.node}/?all&day=${arg.day}&groups=${
           arg.groups && arg.groups.length > 0 ? arg.groups.join(',') : 'total'
         }`,
@@ -45,22 +45,23 @@ export const rkiApi = createApi({
   }),
 });
 
-interface RKIDataByDistrictParameters {
+interface CaseDataByDistrictParameters {
   node: string;
   groups: Array<string> | null;
   compartments: Array<string> | null;
 }
 
-interface RKIDataByDateParameters {
+interface CaseDataByDateParameters {
   day: string;
   groups: Array<string> | null;
   compartments: Array<string> | null;
 }
 
-interface RKISingleSimulationEntryParameters {
+interface CaseDataSingleSimulationEntryParameters {
   node: string;
   day: string;
   groups: Array<string> | null;
 }
 
-export const {useGetRkiByDateQuery, useGetRkiByDistrictQuery, useGetRkiSingleSimulationEntryQuery} = rkiApi;
+export const {useGetCaseDataByDateQuery, useGetCaseDataByDistrictQuery, useGetCaseDataSingleSimulationEntryQuery} =
+  caseDataApi;

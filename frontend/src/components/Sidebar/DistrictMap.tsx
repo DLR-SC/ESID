@@ -15,7 +15,6 @@ import {HeatmapLegend} from '../../types/heatmapLegend';
 import {LockOpen} from '@mui/icons-material';
 import LoadingContainer from '../shared/LoadingContainer';
 import {GermanyIcon} from '../../util/customIcons';
-//import { RestoreFromTrashRounded } from '@mui/icons-material';
 const {useRef} = React;
 
 interface IRegionPolygon {
@@ -33,7 +32,9 @@ interface IRegionPolygon {
 
 export default function DistrictMap(): JSX.Element {
   const [geodata, setGeodata] = useState<GeoJSON.GeoJSON | null>(null);
-  const selectedDistrict = useAppSelector((state) => state.dataSelection.district);
+  const [longLoad, setLongLoad] = useState(false);
+  const [longLoadTimeout, setLongLoadTimeout] = useState<number>();
+  //const selectedDistrict = useAppSelector((state) => state.dataSelection.district);
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
   const selectedDate = useAppSelector((state) => state.dataSelection.date);
@@ -53,7 +54,6 @@ export default function DistrictMap(): JSX.Element {
   const chartRef = useRef<am5map.MapChart | null>(null);
   const rootRef = useRef<am5.Root | null>(null);
   const legendRef = useRef<am5.HeatLegend | null>(null);
-
   const {t, i18n} = useTranslation();
   const {formatNumber} = NumberFormatter(i18n.language, 3, 8);
   const theme = useTheme();
@@ -77,6 +77,22 @@ export default function DistrictMap(): JSX.Element {
     return max;
   }, [selectedCompartment, data, fixedLegendMaxValue]);
 
+  // This effect is responsible for showing the loading indicator if the data is not ready within 1 second. This
+  // prevents that the indicator is showing for every little change.
+  useEffect(() => {
+    if (isFetching) {
+      setLongLoadTimeout(
+        window.setTimeout(() => {
+          setLongLoad(true);
+        }, 1000)
+      );
+    } else {
+      clearTimeout(longLoadTimeout);
+      setLongLoad(false);
+    }
+    // eslint-disable-next-line
+  }, [isFetching, setLongLoad, setLongLoadTimeout]); // longLoadTimeout is deliberately ignored here.
+
   // fetch geojson
   useEffect(() => {
     fetch('assets/lk_germany_reduced.geojson', {
@@ -97,13 +113,6 @@ export default function DistrictMap(): JSX.Element {
         }
       );
   }, []);
-
-  //select germany as district if no district is selcted
-  useEffect(() => {
-    if (!selectedDistrict || selectedDistrict.name == 'germany') {
-      dispatch(selectDistrict({ags: '00000', name: t('germany'), type: ''}));
-    }
-  }, [dispatch, t, selectedDistrict]);
 
   // Setup Map
   useEffect(() => {
@@ -126,8 +135,10 @@ export default function DistrictMap(): JSX.Element {
       am5map.MapPolygonSeries.new(root, {
         geoJSON: geodata ?? undefined,
         tooltipPosition: 'fixed',
+        layer: 0,
       })
     );
+
     // get template for polygons to attach events etc to each
     const polygonTemplate = polygonSeries.mapPolygons.template;
     polygonTemplate.setAll({
@@ -144,11 +155,11 @@ export default function DistrictMap(): JSX.Element {
     polygonTemplate.states.create('hover', {
       stroke: am5.color(theme.palette.primary.main),
       strokeWidth: 2,
+      layer: 1,
     });
-    // pull polygon to front on hover (to fix other polygons omitting outline)
+
+    //show tooltip on heat legend when hovering
     polygonTemplate.events.on('pointerover', (e) => {
-      e.target.toFront();
-      // show tooltip on heat legend
       if (legendRef.current) {
         const value = (e.target.dataItem?.dataContext as IRegionPolygon).value;
         legendRef.current.showValue(value, formatNumber(value));
@@ -168,39 +179,39 @@ export default function DistrictMap(): JSX.Element {
     };
   }, [geodata, theme, t, formatNumber, dispatch]);
 
-  // TODO: district search for highlighting
-  /*
-  useEffect(() => {
+  //const polygonSeriesLength = (chartRef.current?.series.getIndex(0) as am5map.MapPolygonSeries)?.mapPolygons.length; //needed as trigger for the following effect
+
+  /*  useEffect(() => {
     // unselect previous
     if (chartRef.current && lastSelectedPolygon.current) {
       // reset style
-      lastSelectedPolygon.current.setAll({
+      lastSelectedPolygon.current.states.create('default', {
         stroke: am5.color(theme.palette.background.default),
         strokeWidth: 1,
-        showTooltipOn: 'hover',
+        layer: 0,
       });
+      lastSelectedPolygon.current.states.apply('default');
     }
-    if (chartRef.current && chartRef.current.series.length > 0) {
+    if (selectedDistrict.ags !== '00000' && chartRef.current && chartRef.current.series.length > 0) {
       const series = chartRef.current.series.getIndex(0) as am5map.MapPolygonSeries;
       series.mapPolygons.each((polygon) => {
-        // TODO: change this to a map lookup?
         const data = polygon.dataItem?.dataContext as IRegionPolygon;
         if (data.RS === selectedDistrict.ags) {
-          // pull to front (z-level)
-          polygon.toFront();
-          // apply hover style
-          polygon.setAll({
+          polygon.states.create('default', {
             stroke: am5.color(theme.palette.primary.main),
             strokeWidth: 2,
-            showTooltipOn: 'always',
+            layer: 2,
           });
+          if (!polygon.isHover()) {
+            polygon.states.apply('default');
+          }
           // save polygon
           lastSelectedPolygon.current = polygon;
         }
       });
     }
-  }, [selectedDistrict]);*/
-
+  }, [selectedDistrict, theme, polygonSeriesLength]);
+ */
   // set Data
   useEffect(() => {
     if (chartRef.current && chartRef.current.series.length > 0) {
@@ -240,14 +251,16 @@ export default function DistrictMap(): JSX.Element {
           });
         }
       } else {
-        polygonSeries.mapPolygons.each((polygon) => {
-          const regionData = polygon.dataItem?.dataContext as IRegionPolygon;
-          regionData.value = Number.NaN;
-          polygon.setAll({
-            tooltipText: `${t(`BEZ.${regionData.BEZ}`)} {GEN}`,
-            fill: am5.color(theme.palette.text.disabled),
+        if (longLoad) {
+          polygonSeries.mapPolygons.each((polygon) => {
+            const regionData = polygon.dataItem?.dataContext as IRegionPolygon;
+            regionData.value = Number.NaN;
+            polygon.setAll({
+              tooltipText: `${t(`BEZ.${regionData.BEZ}`)} {GEN}`,
+              fill: am5.color(theme.palette.text.disabled),
+            });
           });
-        });
+        }
       }
     }
   }, [
@@ -263,10 +276,14 @@ export default function DistrictMap(): JSX.Element {
     theme,
     isFetching,
     legend,
+    longLoad,
   ]);
-
+  /*   useEffect(() => {
+    // search polygon list for selected district
+    // apply hover effect or highlight hovering effect.
+  }, [selectedDistrict]); */
   return (
-    <LoadingContainer show={isFetching} overlayColor={theme.palette.background.default}>
+    <LoadingContainer show={isFetching && longLoad} overlayColor={theme.palette.background.default}>
       <Box id='mapdiv' height={'650px'} />
       <Grid container px={1}>
         <Grid item container xs={11} alignItems='flex-end'>
