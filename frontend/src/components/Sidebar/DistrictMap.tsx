@@ -211,7 +211,7 @@ export default function DistrictMap(): JSX.Element {
     }
   }, [selectedDistrict, theme, polygonSeriesLength]);
   */
-  
+
   // set Data
   useEffect(() => {
     if (chartRef.current && chartRef.current.series.length > 0) {
