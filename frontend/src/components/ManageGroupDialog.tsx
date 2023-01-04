@@ -16,7 +16,7 @@ import {
 } from '@mui/material';
 import {useAppDispatch, useAppSelector} from '../store/hooks';
 import {useTranslation} from 'react-i18next';
-import {DeleteForever, GroupAdd, Visibility, VisibilityOffOutlined} from '@mui/icons-material';
+import { Close, DeleteForever, GroupAdd, Visibility, VisibilityOffOutlined } from "@mui/icons-material";
 import {useTheme} from '@mui/material/styles';
 import {GroupFilter} from '../types/group';
 import {GroupSubcategory, useGetGroupCategoriesQuery, useGetGroupSubcategoriesQuery} from '../store/services/groupApi';
@@ -24,7 +24,7 @@ import {addFilter, deleteFilter, toggleFilter} from '../store/DataSelectionSlice
 import {Dictionary} from '../util/util';
 import ConfirmDialog from './shared/ConfirmDialog';
 
-export function ManageGroupDialog(): JSX.Element {
+export function ManageGroupDialog(props: { onClose: () => void }): JSX.Element {
   const {t} = useTranslation();
   const theme = useTheme();
 
@@ -43,9 +43,23 @@ export function ManageGroupDialog(): JSX.Element {
         alignItems: 'center',
       }}
     >
-      <Typography variant='h1' sx={{marginBottom: theme.spacing(2)}}>
-        {t('group-filters.title')}
-      </Typography>
+      <Box id='group-filter-dialog-title-bar' sx={{
+        display: 'grid',
+        gridTemplateColumns: '1fr repeat(1, auto) 1fr',
+        gridColumnGap: '5px',
+        alignItems: 'center',
+        justifyItems: 'center',
+        width: '100%',
+        marginBottom: theme.spacing(2)
+      }}>
+        <div/>
+        <Typography variant='h1'>
+          {t('group-filters.title')}
+        </Typography>
+        <IconButton color="primary" sx={{ marginLeft: 'auto' }} onClick={props.onClose}>
+          <Close />
+        </IconButton>
+      </Box>
       <Divider orientation='horizontal' variant='middle' flexItem />
       <Box
         sx={{
