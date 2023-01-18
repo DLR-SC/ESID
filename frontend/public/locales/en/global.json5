@@ -41,6 +41,15 @@
     activate: 'Activate scenario',
     deactivate: 'Deactivate scenario',
   },
+   'compartment-filters': {
+    title: 'Manage Compartment',
+    'nothing-selected': 'Select a compartment to edit or create a new one.',
+    'add-group': 'Add new compartment',
+    name: 'Name',
+    close: 'Cancel',
+    apply: 'Apply',
+    'confirm-deletion-title': 'Delete Compartment',
+    'confirm-deletion-text': 'Are you sure you want to delete the "{{groupName}}" compartment?',
   chart: {
     rkiData: 'RKI Data',
   },

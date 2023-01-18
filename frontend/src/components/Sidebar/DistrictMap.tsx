@@ -95,7 +95,7 @@ export default function DistrictMap(): JSX.Element {
           console.warn('Failed to fetch geoJSON');
         }
       );
-  }, []);
+  }, [setGeodata]);
 
   //select germany as district if no district is selcted
   useEffect(() => {

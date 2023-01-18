@@ -14,7 +14,7 @@ import {setCompartments, setScenarios} from 'store/ScenarioSlice';
 import {dateToISOString, Dictionary} from 'util/util';
 import {useGetRkiSingleSimulationEntryQuery} from '../store/services/rkiApi';
 import {NumberFormatter} from '../util/hooks';
-import ManageCompartment from './ManageCompartment';
+import {ManageCompartment} from './ManageCompartment';
 
 /**
  * React Component to render the Scenario Cards Section
@@ -353,7 +353,7 @@ export default function Scenario(): JSX.Element {
         </Button>
       </Box>
       <Dialog maxWidth='lg' fullWidth={true} open={open}>
-        <ManageCompartment onclose={() => setOpen(false)} />
+        <ManageCompartment onClose={() => setOpen(false)} />
       </Dialog>
     </Box>
   );

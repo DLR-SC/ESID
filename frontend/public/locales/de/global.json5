@@ -32,6 +32,18 @@
     activate: 'Scenario aktivieren',
     deactivate: 'Scenario deaktivieren',
   },
+
+  'compartment-filters': {
+    title: 'Kompartimente Verwalten',
+    'nothing-selected': 'Wählen sie eine Kompartimente aus um diese zu bearbeiten oder erstellen sie ein neue Kompartiment.',
+    'add-group': 'Neue Kompartiment Erstellen',
+    name: 'Name',
+    close: 'Abbrechen',
+    apply: 'Anwenden',
+    'confirm-deletion-title': 'Kompartment Löschen',
+    'confirm-deletion-text': 'Sind sie sicher, dass sie die Kompartiment "{{compartmentName}}" wirklich löschen wollen?',
+  },
+
   chart: {
     rkiData: 'RKI-Daten',
   },

@@ -1,20 +1,21 @@
 import {Dictionary} from 'util/util';
 
-export interface groupResponse {
+export interface GroupResponse {
   count: number;
   next: string | null;
   previous: string | null;
-  results: Array<groupData>;
+  results: Array<GroupData>;
 }
 
-export interface groupData {
+export interface GroupData {
   compartments: Dictionary<number>;
   day: string;
   name: string;
 }
 
-export interface filter {
+export interface GroupFilter {
+  id: string;
   name: string;
-  toggle: boolean | null;
-  groups: Dictionary<string[]>| Array<string[]>;
+  toggle: boolean;
+  groups: Dictionary<string[]>;
 }
