@@ -49,7 +49,7 @@
     close: 'Cancel',
     apply: 'Apply',
     'confirm-deletion-title': 'Delete Compartment',
-    'confirm-deletion-text': 'Are you sure you want to delete the "{{groupName}}" compartment?',
+    'confirm-deletion-text': 'Are you sure you want to delete the "{{groupName}}" compartment?'},
   chart: {
     rkiData: 'RKI Data',
   },

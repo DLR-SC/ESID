@@ -1,4 +1,4 @@
- /* import React, {useEffect, useState} from 'react';
+/* import React, {useEffect, useState} from 'react';
 import {
   Box,
   Button,
@@ -79,6 +79,7 @@ export function ManageCompartment(props: {onClose: () => void}): JSX.Element {
           }}
         >
           {Object.values(filterList)?.map((item) => (
+                
             <GroupFilterCard
               key={item.id}
               item={item}
@@ -182,7 +183,7 @@ function GroupFilterCard(props: GroupFilterCardParams) {
     >
       <CardActionArea
         onClick={() => {
-          props.selectFilterCallback(props.selected ? null : props.item);
+          props.selectFilterCallback(props.selected ? null : props.item); console.log("cicked here", props.item.id);
         }}
       >
         <CardContent sx={{backgroundColor: props.selected ? theme.palette.info.main : theme.palette.background.paper}}>
@@ -349,8 +350,7 @@ function GroupFilterEditor(props: {
       </Box>
     </Box>
   );
-} 
- */
+} */
 
 import React, {useEffect, useState} from 'react';
 import {
@@ -371,7 +371,7 @@ import {
 } from '@mui/material';
 import {useAppDispatch, useAppSelector} from '../store/hooks';
 import {useTranslation} from 'react-i18next';
-import {Close, DeleteForever, FilterSharp, GroupAdd, SettingsBackupRestoreTwoTone, Visibility, VisibilityOffOutlined} from '@mui/icons-material';
+import {Close, ConstructionOutlined, DeleteForever, FilterSharp, GroupAdd, SettingsBackupRestoreTwoTone, Visibility, VisibilityOffOutlined} from '@mui/icons-material';
 import {useTheme} from '@mui/material/styles';
 import {GroupFilter} from '../types/group';
 import {GroupSubcategory, useGetGroupCategoriesQuery, useGetGroupSubcategoriesQuery} from '../store/services/groupApi';
@@ -450,8 +450,11 @@ export function ManageCompartment(props: {onClose: () => void}): JSX.Element {
               selected={selectedFilter?.id === item.id}
               selectFilterCallback={(filter) => setSelectedFilter(filter)}
             />
-          ))} 
-{/*           <Card   // Area under the group filter listing
+          )
+          )}
+
+            
+           <Card   // Area under the group filter listing. Only needed if reset button is needed over there
             variant='outlined'
             sx={{
               display: 'flex',
@@ -484,7 +487,7 @@ export function ManageCompartment(props: {onClose: () => void}): JSX.Element {
                 <GroupAdd color='primary' />
               </CardContent>
             </CardActionArea> 
-          </Card>  */}
+          </Card>  
         </Box>
         <Divider orientation='vertical' flexItem />
         
@@ -494,6 +497,7 @@ export function ManageCompartment(props: {onClose: () => void}): JSX.Element {
             filter={selectedFilter}
             selectFilterCallback={(filter) => setSelectedFilter(filter)}
           />
+         
         ) : ( // if filter is not selected it will show a button to add a filter.
           <Box
             sx={{
@@ -511,8 +515,7 @@ export function ManageCompartment(props: {onClose: () => void}): JSX.Element {
               sx={{marginTop: theme.spacing(2)}}
               onClick={() => {
                 const groups: Dictionary<Array<string>> = {};
-              //  groupCategories?.results?.forEach((group) => (groups[group.key] = []));
-              // setSelectedFilter({id: crypto.getRandomValues.name, name: '', toggle: false, groups: groups});
+             
                setSelectedFilter({id: crypto.randomUUID(), name: '', toggle: false, groups: groups});
               }}
             >
@@ -529,6 +532,7 @@ interface GroupFilterCardParams {
   item: GroupFilter;
   selected: boolean;
   selectFilterCallback: (name: GroupFilter | null) => void;
+  
 }
 
 function GroupFilterCard(props: GroupFilterCardParams) {
@@ -537,6 +541,7 @@ function GroupFilterCard(props: GroupFilterCardParams) {
   const dispatch = useAppDispatch();
 
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+  console.log("GroupFilterCardParams", props);
  
   return (
     <Card
@@ -550,7 +555,8 @@ function GroupFilterCard(props: GroupFilterCardParams) {
     >
       <CardActionArea
         onClick={() => {
-          props.selectFilterCallback(props.selected ? null : props.item);
+          props.selectFilterCallback(props.item); console.log("clicked here", props.item.id, props.item.groups, props.selectFilterCallback(props.item));
+         // props.selectFilterCallback(props.selected ? null : props.item);
         }}
       >
         <CardContent sx={{backgroundColor: props.selected ? theme.palette.info.main : theme.palette.background.paper}}>
@@ -578,7 +584,6 @@ function GroupFilterCard(props: GroupFilterCardParams) {
           text={t('compartment-filters.confirm-deletion-text', {groupName: props.item.name})}
           onAnswer={(answer) => {
             if (answer) {
-              console.log("answer, props.item.id", answer, props.item.id)
               dispatch(deleteFilter(props.item.id));
               props.selectFilterCallback(null);
             }
@@ -612,36 +617,44 @@ function GroupFilterEditor(props: {
   CompartmentTags.push(...Object.entries(InfectionTags), ...Object.entries(VaccinationTags_OLD), ...Object.entries(VaccinationTags), ...Object.entries(ConfirmedTags))
   const [currentIdx, setCurrentIdx] = useState(1);
 
-   const [select, setSelected] = useState<any>([
+  const [select, setSelected] = useState<any>([
     {selection:[], idx:0}
   ]);
 
-  console.log("groups, select", groups, select)
   const removeAutocomplete = (i:number) => {
-    console.log("removeAutocomplete");
+   
     const list = [...select];
     list.splice(i, 1)
     setSelected(list);
   };
   
   const addAutocomplete = () => {
-    console.log("addAutocomplete");
+    
     setSelected([...select, {selection: [], idx: currentIdx}]);
     setCurrentIdx(currentIdx + 1)
-    console.log("select now", select)
+    
   };
 
 
   useEffect(() => {
     setValid(name.length > 0);
   }, [name]);
- 
-/*   useEffect(() => {
-    console.log("New Select: ", select);
-  }, [select])
- */
 
+  function toggleGroup(subGroup: GroupSubcategory) {
+    let category = groups[subGroup.category];
+    if (category.includes(subGroup.key)) {
+      category = category.filter((key) => key !== subGroup.key);
+    } else {
+      category.push(subGroup.key);
+    }
 
+    setGroups({
+      ...groups,
+      [subGroup.category]: category,
+    });
+  }
+
+  
   return (
     <Box
       sx={{
@@ -678,7 +691,7 @@ function GroupFilterEditor(props: {
             }}
           >
      {select.map((item: { selection: any[] | undefined; idx: string | number;})=>{  
-        console.log("select.map: ", item);
+        
       return(
             <FormGroup
             row 
@@ -693,7 +706,6 @@ function GroupFilterEditor(props: {
                       (params) => (
                       <TextField
                           {...params}
-                        //checked={groups[group.key].includes(subGroup.key)}
                         label="Select"
                         size="medium"
                         margin="dense"
@@ -706,12 +718,11 @@ function GroupFilterEditor(props: {
                       />)
                     }
                     onChange={(event, value) =>{
-                     // groups =[value]
-                     console.log("item.idx: ", item.idx);
+                    
                     
                     select[item.idx] = value
                     setSelected(select)
-                     console.log("select",[select])
+                    
                    
                     }}
 
@@ -722,8 +733,6 @@ function GroupFilterEditor(props: {
           flexGrow: '1',
           flexDirection: 'row',
           alignItems:"center",
-         // justifyContent: 'flex-end',
-         //align-items:"center"
           margin:2
         }}
       >           
@@ -737,8 +746,7 @@ function GroupFilterEditor(props: {
           </Box>
 
           </Box>
-
-                 
+  
 
       <Box
         sx={{
@@ -765,9 +773,8 @@ function GroupFilterEditor(props: {
           disabled={!valid}
           onClick={() => {
             const newFilter = {id: props.filter.id, name: name, toggle: true, groups: select};
-            console.log("newFilter",newFilter, newFilter.id)
             dispatch(addFilter(newFilter));
-            /* //props.selectFilterCallback(null) */
+            console.log("new filter", newFilter)
           }}
         >
           {t('compartment-filters.apply')}
