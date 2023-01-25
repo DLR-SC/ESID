@@ -41,3 +41,14 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path-to-lcov: frontend/reports/lcov.info
           base-path: frontend
+          
+  lighthouseci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 16
+      - run: cd frontend && npm install && npm install -g @lhci/cli@0.8.x
+      - run: cd frontend && npm run build
+      - run: cd frontend && lhci autorun
