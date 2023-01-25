@@ -44,13 +44,13 @@ jobs:
           
   lighthouseci:
     runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
           node-version: 16
-      - if: ${{ github.event_name == 'pull_request' }}
-        run: |
+      - run: |
           cd frontend && npm install && npm install -g @lhci/cli@0.8.x
           npm run build
           lhci autorun --collect.psiStrategy=desktop --upload.target=temporary-public-storage
