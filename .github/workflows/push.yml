@@ -49,8 +49,10 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 16
-      - run: cd frontend && npm install && npm install -g @lhci/cli@0.8.x
-      - run: cd frontend && npm run build
-      - run: cd frontend && lhci autorun --collect.psiStrategy=desktop --upload.target=temporary-public-storage
+      - if: ${{ github.event_name == 'pull_request' }}
+        run: |
+          cd frontend && npm install && npm install -g @lhci/cli@0.8.x
+          npm run build
+          lhci autorun --collect.psiStrategy=desktop --upload.target=temporary-public-storage
     env:
       LHCI_GITHUB_APP_TOKEN: ${{ secrets.LIGHTHOUSE_CI }}
