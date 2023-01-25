@@ -53,6 +53,6 @@ jobs:
       - run: |
           cd frontend && npm install && npm install -g @lhci/cli@0.8.x
           npm run build
-          lhci autorun --collect.psiStrategy=desktop --upload.target=temporary-public-storage
+      - run: cd frontend && lhci autorun --collect.psiStrategy=desktop --upload.target=temporary-public-storage
     env:
       LHCI_GITHUB_APP_TOKEN: ${{ secrets.LIGHTHOUSE_CI }}
