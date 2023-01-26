@@ -204,6 +204,14 @@ All code should be tested:
 - Pure TypeScript should be tested using unit tests with a 100% coverage.
 - UI code should be tested using the react-testing-library.
 
+### Performance
+
+New code should be checked for Performance degradation.
+Use the Browser Based Profiling Tools (Chrome/Firefox):
+- [React Developer Tools](https://beta.reactjs.org/learn/react-developer-tools) (Profiler)
+- Performance insights (Chrome)
+- Lighthouse (Chrome)
+
 ### Documentation
 
 Code should be documented as much as possible. Each class and function should contain a detailed description of what it
