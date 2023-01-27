@@ -12,7 +12,7 @@ import HeatLegend from './HeatLegend';
 import {NumberFormatter} from 'util/hooks';
 import HeatLegendEdit from './HeatLegendEdit';
 import {HeatmapLegend} from '../../types/heatmapLegend';
-import {LockOpen} from '@mui/icons-material';
+import LockOpen from '@mui/icons-material/LockOpen';
 import LoadingContainer from '../shared/LoadingContainer';
 const {useRef} = React;
 

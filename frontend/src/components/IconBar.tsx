@@ -6,7 +6,10 @@ import ShareIcon from '@mui/icons-material/Share';*/
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import {useFullscreen} from 'rooks';
 import {Box, Button, Tooltip} from '@mui/material';
-import {PauseRounded, PlayArrowRounded, SkipNextRounded, SkipPreviousRounded} from '@mui/icons-material';
+import PauseRounded from '@mui/icons-material/PauseRounded';
+import PlayArrowRounded from '@mui/icons-material/PlayArrowRounded';
+import SkipNextRounded from '@mui/icons-material/SkipNextRounded';
+import SkipPreviousRounded from '@mui/icons-material/SkipPreviousRounded';
 import {useAppDispatch, useAppSelector} from '../store/hooks';
 import {nextDay, previousDay, selectDate} from '../store/DataSelectionSlice';
 import {useTranslation} from 'react-i18next';
