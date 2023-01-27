@@ -26,7 +26,7 @@ It allows displaying historical data, as well as analyzing simulation results of
 
 
 ## Features
-**TODO**
+You can find a list of the latest changes in the [changelog](docs/changelog.md).
 
 
 ## Developer Documentation
