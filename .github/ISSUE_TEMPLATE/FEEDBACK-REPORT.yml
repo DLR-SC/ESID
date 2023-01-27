@@ -1,0 +1,42 @@
+name: Feedback Report
+description: Send in Feedback
+title: "[Feedback]: "
+labels: ["FEEDBACK"]
+assignees:
+  - NXXR
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for your feedback!
+  - type: textarea
+    id: feedback
+    attributes:
+      label: Feedback
+      placeholder: Tell us about your feedback.
+    validations:
+      required: true
+  - type: input
+    id: contact
+    attributes:
+      label: Contact Details
+      description: Please leave a way for us to contact you if you want to be contacted off Github.
+      placeholder: e.g. email@address.net
+    validations:
+      required: false
+  - type: markdown
+    attributes:
+      value: |
+        ## Additional Information
+  - type: dropdown
+    id: browsers
+    attributes:
+      label: What browser(s) are you using?
+      multiple: true
+      options:
+        - Microsoft Edge
+        - Chrome
+        - Firefox
+        - Safari
+        - Opera
+        - Internet Explorer
