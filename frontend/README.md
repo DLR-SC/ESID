@@ -1,11 +1,10 @@
 # ESID - Frontend Developer Documentation
 
 ## Table of Contents
-
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Initializing](#initializing)
-  - [Develop](#development-server)
+  - [Development](#development)
   - [Running Tests](#running-tests)
   - [Generating Coverage Reports](#generating-coverage-reports)
   - [Formatting Code](#formatting-code)
@@ -18,8 +17,10 @@
   - [Redux](#redux)
   - [Design and Layout](#design-and-layout)
   - [Testing](#testing)
+  - [Performance](#performance)
   - [Documentation](#documentation)
   - [Internationalization](#internationalization)
+  - [Accessibility](#accessibility)
   - [Code Style](#code-style)
 
 ## Getting Started
@@ -39,7 +40,7 @@ cd ESID/frontend
 npm install
 ```
 
-### Development Server
+### Development
 
 You can set up and start a development server with the command:
 
