@@ -1,6 +1,7 @@
 # ESID - Frontend Developer Documentation
 
 ## Table of Contents
+
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Initializing](#initializing)
@@ -209,6 +210,7 @@ All code should be tested:
 
 New code should be checked for Performance degradation.
 Use the Browser Based Profiling Tools (Chrome/Firefox):
+
 - [React Developer Tools](https://beta.reactjs.org/learn/react-developer-tools) (Profiler)
 - Performance insights (Chrome)
 - Lighthouse (Chrome)
