@@ -1,11 +1,9 @@
 import React, {useEffect, useState} from 'react';
-/*import AutorenewIcon from '@mui/icons-material/Autorenew';
-import RedoIcon from '@mui/icons-material/Redo';
-import UndoIcon from '@mui/icons-material/Undo';
-import ShareIcon from '@mui/icons-material/Share';*/
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import {useFullscreen} from 'rooks';
-import {Box, Button, Tooltip} from '@mui/material';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Tooltip from '@mui/material/Tooltip';
 import PauseRounded from '@mui/icons-material/PauseRounded';
 import PlayArrowRounded from '@mui/icons-material/PlayArrowRounded';
 import SkipNextRounded from '@mui/icons-material/SkipNextRounded';

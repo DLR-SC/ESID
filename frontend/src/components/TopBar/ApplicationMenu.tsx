@@ -5,7 +5,14 @@ import ImprintDialog from './PopUps/ImprintDialog';
 import PrivacyPolicyDialog from './PopUps/PrivacyPolicyDialog';
 import AccessibilityDialog from './PopUps/AccessibilityDialog';
 import AttributionDialog from './PopUps/AttributionDialog';
-import {Alert, Button, Dialog, Divider, Grid, Menu, MenuItem, Snackbar} from '@mui/material';
+import Alert from '@mui/material/Alert';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import Divider from '@mui/material/Divider';
+import Grid from '@mui/material/Grid';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import Snackbar from '@mui/material/Snackbar';
 
 /**
  * This menu is found at the top right of the application and is reachable from everywhere. It contains ways to access

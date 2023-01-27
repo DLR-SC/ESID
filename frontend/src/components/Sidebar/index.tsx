@@ -3,7 +3,9 @@ import {useTheme} from '@mui/material/styles';
 import SearchBar from './SearchBar';
 import DistrictMap from './DistrictMap';
 import SidebarTabs from './SidebarTabs';
-import {Box, Container, Stack} from '@mui/material';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Stack from '@mui/material/Stack';
 
 export default function Sidebar(): JSX.Element {
   const theme = useTheme();
