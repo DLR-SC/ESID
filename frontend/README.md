@@ -250,7 +250,7 @@ export default function HelloWorld(): JSX.Element {
 
 The application should conform to modern accessibility (a11y) guidelines. We use
 [Lighthouse](https://developer.chrome.com/docs/lighthouse/overview/) to check for a11y problems. During a pull request
-a Lighthouse report is automatically generated during the CI checks.  
+a Lighthouse report is automatically generated during the CI checks.
 
 ### Code Style
 
@@ -284,6 +284,7 @@ To optimize the final size of the bundle it is important to make imports as gran
 dead code removal. This is especially important for the material icons package.
 
 Example:
+
 ```tsx
 // DON'T DO THIS, it will import ALL the material icons into our application:
 import {LockIcon} from '@mui/icons-material';
