@@ -36,7 +36,7 @@ If the PR is trivial you may remove this section
 
 ### Checklist
 
-I, the author of this PR checked the following requirements for good software quality:
+**I, the author of this PR checked the following requirements for good software quality:**
 
 - [ ] The code is properly formatted (I ran the formatter)
 - [ ] The code is written with our software quality standards (I ran the linter)
@@ -48,8 +48,9 @@ I, the author of this PR checked the following requirements for good software qu
   - [ ] German
 - [ ] I tried addressing all new accessibility problems displayed in the console and documented if they can't be fixed
 - [ ] I attached performance measurements to prevent performance degradation
+- [ ] I added the changes to the next release section of the [changelog](../docs/changelog.md)
 
-I, the reviewer checked the following things:
+**I, the reviewer checked the following things:**
 
 - [ ] I ran the software once and tried all new and related functionality to this PR
 - [ ] I looked at all new and changed lines of code and commented on possible problems
@@ -57,3 +58,4 @@ I, the reviewer checked the following things:
 - [ ] I checked the added tests for completeness
 - [ ] I checked the internationalized strings for spelling errors
 - [ ] I checked the performance metrics for problems or unexplained degradation
+- [ ] I checked that the changes are noted in the [changelog](../docs/changelog.md)

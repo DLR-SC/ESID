@@ -5,7 +5,7 @@
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Initializing](#initializing)
-  - [Develop](#development-server)
+  - [Development](#development)
   - [Running Tests](#running-tests)
   - [Generating Coverage Reports](#generating-coverage-reports)
   - [Formatting Code](#formatting-code)
@@ -18,8 +18,10 @@
   - [Redux](#redux)
   - [Design and Layout](#design-and-layout)
   - [Testing](#testing)
+  - [Performance](#performance)
   - [Documentation](#documentation)
   - [Internationalization](#internationalization)
+  - [Accessibility](#accessibility)
   - [Code Style](#code-style)
 
 ## Getting Started
@@ -39,7 +41,7 @@ cd ESID/frontend
 npm install
 ```
 
-### Development Server
+### Development
 
 You can set up and start a development server with the command:
 
@@ -208,6 +210,7 @@ All code should be tested:
 
 New code should be checked for Performance degradation.
 Use the Browser Based Profiling Tools (Chrome/Firefox):
+
 - [React Developer Tools](https://beta.reactjs.org/learn/react-developer-tools) (Profiler)
 - Performance insights (Chrome)
 - Lighthouse (Chrome)

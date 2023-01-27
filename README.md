@@ -21,12 +21,13 @@ It allows displaying historical data, as well as analyzing simulation results of
   - [Scope](#scope)
   - [Enforcement](#enforcement)
   - [Attribution](#attribution)
-- [Contributors](#contributors)
+- [Current Contributors](#current-contributors)
+  - [Previous Contributors](#previous-contributors)
 - [License](#license)
 
 
 ## Features
-**TODO**
+You can find a list of the latest changes in the [changelog](docs/changelog.md).
 
 
 ## Developer Documentation
@@ -197,13 +198,13 @@ German Aerospace Center (DLR):
 - Jonas Gilg
 - Luca Spataro
 - Moritz Zeumer
-- Laurin Kerkloh
 
-## Previous Contributors
+### Previous Contributors
 German Aerospace Center (DLR):
 - Margrit Klitz
 - Kerem Balci
 - Selma Dahmani
+- Laurin Kerkloh
 
 Hochschule für Gestaltung Schwäbisch Gmünd (HfG):
 - Julien Stoll
