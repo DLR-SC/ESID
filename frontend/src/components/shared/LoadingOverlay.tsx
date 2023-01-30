@@ -1,5 +1,6 @@
 import React from 'react';
-import {Box, CircularProgress} from '@mui/material';
+import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
 
 /**
  * Overlays a loading indicator over the previously declared components. It is recommended to use the LoadingContainer

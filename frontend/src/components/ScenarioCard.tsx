@@ -1,6 +1,12 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {useTheme} from '@mui/material/styles';
-import {Box, IconButton, List, ListItem, ListItemText, Tooltip, Typography} from '@mui/material';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
 import {useAppSelector} from 'store/hooks';
 import {useGetSingleSimulationEntryQuery} from 'store/services/scenarioApi';
 import {Dictionary} from '../util/util';

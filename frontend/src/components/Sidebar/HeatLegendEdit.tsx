@@ -1,18 +1,15 @@
 import React, {useEffect} from 'react';
 import {useTheme} from '@mui/material/styles';
-import {
-  Box,
-  Button,
-  Dialog,
-  FormControl,
-  Grid,
-  IconButton,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  Tooltip,
-  Typography,
-} from '@mui/material';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import FormControl from '@mui/material/FormControl';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
+import MenuItem from '@mui/material/MenuItem';
+import Select, {SelectChangeEvent} from '@mui/material/Select';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
 import HeatLegend from './HeatLegend';
 import EditIcon from '@mui/icons-material/Edit';
 import {useAppDispatch, useAppSelector} from '../../store/hooks';

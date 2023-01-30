@@ -4,7 +4,9 @@ import {useAppSelector} from '../../store/hooks';
 import {useAppDispatch} from '../../store/hooks';
 import {selectDistrict} from '../../store/DataSelectionSlice';
 import SearchIcon from '@mui/icons-material/Search';
-import {Autocomplete, Box, Container} from '@mui/material';
+import Autocomplete from '@mui/material/Autocomplete';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
 import {useTranslation} from 'react-i18next';
 
 /** Type definition for the CountyItems of the Autocomplete field
