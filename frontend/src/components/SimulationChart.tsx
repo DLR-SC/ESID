@@ -5,7 +5,7 @@ import am4lang_en_US from '@amcharts/amcharts4/lang/en_US';
 import am4lang_de_DE from '@amcharts/amcharts4/lang/de_DE';
 import {useAppDispatch, useAppSelector} from '../store/hooks';
 import {useTheme} from '@mui/material/styles';
-import {Box} from '@mui/material';
+import Box from '@mui/material/Box';
 import {selectDate} from '../store/DataSelectionSlice';
 import {useGetCaseDataByDistrictQuery} from '../store/services/caseDataApi';
 import {dateToISOString} from 'util/util';

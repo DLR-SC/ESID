@@ -5,7 +5,7 @@
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Initializing](#initializing)
-  - [Develop](#development-server)
+  - [Development](#development)
   - [Running Tests](#running-tests)
   - [Generating Coverage Reports](#generating-coverage-reports)
   - [Formatting Code](#formatting-code)
@@ -18,8 +18,10 @@
   - [Redux](#redux)
   - [Design and Layout](#design-and-layout)
   - [Testing](#testing)
+  - [Performance](#performance)
   - [Documentation](#documentation)
   - [Internationalization](#internationalization)
+  - [Accessibility](#accessibility)
   - [Code Style](#code-style)
 
 ## Getting Started
@@ -39,7 +41,7 @@ cd ESID/frontend
 npm install
 ```
 
-### Development Server
+### Development
 
 You can set up and start a development server with the command:
 
@@ -166,7 +168,7 @@ would be difficult to handle with React's `props` alone.
   - <details>
     <summary>It can be accessed in components like this: <i>(-- Click to expand --)</i></summary>
 
-    ```typescript
+    ```tsx
     import {useTheme} from '@mui/material/styles';
 
     export default function MyComponent(): JSX.Element {
@@ -180,7 +182,7 @@ would be difficult to handle with React's `props` alone.
              */
             // accessing theme variables
             background: theme.palette.background.default,
-            border: `1px solid ${theme.palette.divider}`
+            border: `1px solid ${theme.palette.divider}`,
 
             // accessing theme typography
             typography: theme.typography.h1,
@@ -203,6 +205,15 @@ All code should be tested:
 
 - Pure TypeScript should be tested using unit tests with a 100% coverage.
 - UI code should be tested using the react-testing-library.
+
+### Performance
+
+New code should be checked for Performance degradation.
+Use the Browser Based Profiling Tools (Chrome/Firefox):
+
+- [React Developer Tools](https://beta.reactjs.org/learn/react-developer-tools) (Profiler)
+- Performance insights (Chrome)
+- Lighthouse (Chrome)
 
 ### Documentation
 
@@ -249,9 +260,8 @@ export default function HelloWorld(): JSX.Element {
 ### Accessibility
 
 The application should conform to modern accessibility (a11y) guidelines. We use
-[Axe](https://github.com/dequelabs/axe-core) to check for a11y problems. Axe, automatically posts a11y issues in the
-console, when they arise. This is only enabled in the development mode with `npm run start`. In production Axe is not
-running.
+[Lighthouse](https://developer.chrome.com/docs/lighthouse/overview/) to check for a11y problems. During a pull request
+a Lighthouse report is automatically generated during the CI checks.
 
 ### Code Style
 
@@ -278,3 +288,18 @@ class MyClass {
 ```
 
 Try to use `const` as much as possible and use `let` otherwise. Never use `var`!
+
+### Imports
+
+To optimize the final size of the bundle it is important to make imports as granular as possible to allow for the best
+dead code removal. This is especially important for the material icons package.
+
+Example:
+
+```tsx
+// DON'T DO THIS, it will import ALL the material icons into our application:
+import {LockIcon} from '@mui/icons-material';
+
+// Instead do this, to insure only the used icons are being imported:
+import LockIcon from '@mui/icons-material/Lock';
+```

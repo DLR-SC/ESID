@@ -4,9 +4,14 @@ import {useTheme} from '@mui/material/styles';
 import {useTranslation} from 'react-i18next';
 import {selectCompartment, selectScenario, setMinMaxDates, toggleScenario} from 'store/DataSelectionSlice';
 import ScenarioCard from './ScenarioCard';
-import {Box, Button, List, ListItemButton, ListItemText, Typography, Dialog} from '@mui/material';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import List from '@mui/material/List';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
+import Dialog from '@mui/material/Dialog';
 import {ScrollSync, ScrollSyncPane} from 'react-scroll-sync';
-
 import {
   useGetSimulationModelQuery,
   useGetSimulationModelsQuery,

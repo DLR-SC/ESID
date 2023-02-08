@@ -5,7 +5,8 @@ import IconBar from './IconBar';
 //import Aggregator from './AggregationEditor';
 
 import SimulationChart from './SimulationChart';
-import {Divider, Grid} from '@mui/material';
+import Divider from '@mui/material/Divider';
+import Grid from '@mui/material/Grid';
 import {useTheme} from '@mui/material/styles';
 
 export default function MainContent(): JSX.Element {

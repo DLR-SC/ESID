@@ -1,17 +1,28 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {useTheme} from '@mui/material/styles';
-import {Box, Button, Collapse, IconButton, List, ListItem, ListItemText, Tooltip, Typography} from '@mui/material';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Collapse from '@mui/material/Collapse';
+import IconButton from '@mui/material/IconButton';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
 import {useAppSelector} from 'store/hooks';
 import {useGetSingleSimulationEntryQuery} from 'store/services/scenarioApi';
 import {Dictionary} from '../util/util';
 import {useTranslation} from 'react-i18next';
 import {NumberFormatter} from '../util/hooks';
-import {CheckBox, CheckBoxOutlineBlank, ChevronLeft, ChevronRight} from '@mui/icons-material';
-import {useGetMultipleGroupFilterDataQuery} from '../store/services/groupApi';
-import {ScrollSyncPane} from 'react-scroll-sync';
+import CheckBoxOutlineBlank from '@mui/icons-material/CheckBoxOutlineBlank';
+import CheckBox from '@mui/icons-material/CheckBox';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
+import ChevronLeft from '@mui/icons-material/ChevronLeft';
+import ChevronRight from '@mui/icons-material/ChevronRight';
+import {useGetMultipleGroupFilterDataQuery} from '../store/services/groupApi';
+import {ScrollSyncPane} from 'react-scroll-sync';
 
 /**
  * React Component to render individual Scenario Card

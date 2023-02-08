@@ -7,7 +7,7 @@ import TopBar from './components/TopBar';
 import Sidebar from './components/Sidebar';
 import MainContent from './components/MainContent';
 import {Store, Persistor} from './store';
-import {Box} from '@mui/material';
+import Box from '@mui/material/Box';
 import {ThemeProvider} from '@mui/material/styles';
 import Theme from './util/Theme';
 import {PersistGate} from 'redux-persist/integration/react';

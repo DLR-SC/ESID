@@ -5,6 +5,7 @@
   "scripts": {
     "build": "npm run collect-attributions && webpack --progress --config ./webpack/webpack.prod.js",
     "start": "webpack serve --open --progress --config ./webpack/webpack.dev.js",
+    "start-prod": "webpack serve --open --progress --config ./webpack/webpack.prod.js",
     "test": "jest",
     "coverage": "jest --collectCoverage --reporters='default'",
     "format": "prettier --write .",
@@ -21,6 +22,7 @@
     "url": "https://github.com/DLR-SC/ESID/issues"
   },
   "homepage": "https://github.com/DLR-SC/ESID#readme",
+  "sideEffects": false,
   "jest": {
     "testEnvironment": "jsdom",
     "preset": "ts-jest",
@@ -91,7 +93,6 @@
     "simplebar": "^5.3.5"
   },
   "devDependencies": {
-    "@axe-core/react": "^4.2.2",
     "@babel/preset-react": "^7.12.13",
     "@testing-library/dom": "^8.11.1",
     "@testing-library/react": "^11.2.6",
