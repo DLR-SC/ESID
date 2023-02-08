@@ -286,6 +286,7 @@ function GroupFilterEditor(props: GroupFilterEditorProps): JSX.Element {
   }, [name, groups]);
 
   const toggleGroup = useCallback((subGroup: GroupSubcategory) => {
+    // We need to make a copy before we modify the entry.
     let category = [...groups[subGroup.category]];
 
     if (category.includes(subGroup.key)) {
