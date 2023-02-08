@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useCallback, useEffect, useState } from "react";
 import {useAppDispatch, useAppSelector} from '../store/hooks';
 import {useTranslation} from 'react-i18next';
 import Box from '@mui/material/Box';
@@ -22,7 +22,7 @@ import VisibilityOffOutlined from '@mui/icons-material/VisibilityOffOutlined';
 import {useTheme} from '@mui/material/styles';
 import {GroupFilter} from '../types/group';
 import {GroupSubcategory, useGetGroupCategoriesQuery, useGetGroupSubcategoriesQuery} from '../store/services/groupApi';
-import {addGroupFilter, deleteGroupFilter, toggleGroupFilter} from '../store/DataSelectionSlice';
+import {setGroupFilter, deleteGroupFilter, toggleGroupFilter} from '../store/DataSelectionSlice';
 import {Dictionary} from '../util/util';
 import ConfirmDialog from './shared/ConfirmDialog';
 
@@ -166,13 +166,26 @@ export function ManageGroupDialog(props: {onCloseRequest: () => void}): JSX.Elem
   );
 }
 
-interface GroupFilterCardParams {
+interface GroupFilterCardProps {
+  /** The GroupFilter item to be displayed. */
   item: GroupFilter;
+
+  /** Whether the filter is selected or not. If it is selected, the detail view is displaying this filter's config. */
   selected: boolean;
-  selectFilterCallback: (name: GroupFilter | null) => void;
+
+  /**
+   * Callback function that is called when the filter is selected or unselected.
+   *
+   * @param groupFilter - Either this filter, if it was selected or null, if it was unselected.
+   */
+  selectFilterCallback: (groupFilter: GroupFilter | null) => void;
 }
 
-function GroupFilterCard(props: GroupFilterCardParams) {
+/**
+ * GroupFilterCard component displays a card that represents a single filter for the group filter list. The card shows
+ * the filter name, a toggle switch to turn on or off the filter, and a delete button to remove the filter.
+ */
+function GroupFilterCard(props: GroupFilterCardProps) {
   const theme = useTheme();
   const {t} = useTranslation();
   const dispatch = useAppDispatch();
@@ -233,10 +246,28 @@ function GroupFilterCard(props: GroupFilterCardParams) {
   );
 }
 
-function GroupFilterEditor(props: {
+interface GroupFilterEditorProps {
+  /** The GroupFilter item to be edited. */
   groupFilter: GroupFilter;
-  selectGroupFilterCallback: (name: GroupFilter | null) => void;
-}): JSX.Element {
+
+  /**
+   * Callback function that is called, when a new filter is created, so it will be selected immediately or when the user
+   * wants to close the editor.
+   *
+   * @param groupFilter - Either the current filter or null when the user wants to close the current filter's editor.
+   */
+  selectGroupFilterCallback: (groupFilter: (GroupFilter | null)) => void;
+}
+
+/**
+ * This is the detail view of the GroupFilter dialog. It allows to edit and create groups. It has a text field for the
+ * name at the top and columns of checkboxes for groups in the center. It requires that at least one checkbox of each
+ * group is selected before the apply button becomes available. It is also possible to discard changes by clicking the
+ * abort button before applying the changes.
+ *
+ * @param props
+ */
+function GroupFilterEditor(props: GroupFilterEditorProps): JSX.Element {
   const {t} = useTranslation();
   const theme = useTheme();
   const dispatch = useAppDispatch();
@@ -247,14 +278,16 @@ function GroupFilterEditor(props: {
   const [name, setName] = useState(props.groupFilter.name);
   const [groups, setGroups] = useState(props.groupFilter.groups);
 
+  // Every group must have at least one element selected to be valid.
   const [valid, setValid] = useState(name.length > 0 && Object.values(groups).every((group) => group.length > 0));
 
   useEffect(() => {
     setValid(name.length > 0 && Object.values(groups).every((group) => group.length > 0));
   }, [name, groups]);
 
-  function toggleGroup(subGroup: GroupSubcategory) {
-    let category = groups[subGroup.category];
+  const toggleGroup = useCallback((subGroup: GroupSubcategory) => {
+    let category = [...groups[subGroup.category]];
+
     if (category.includes(subGroup.key)) {
       category = category.filter((key) => key !== subGroup.key);
     } else {
@@ -265,7 +298,7 @@ function GroupFilterEditor(props: {
       ...groups,
       [subGroup.category]: category,
     });
-  }
+  }, [groups, setGroups]);
 
   return (
     <Box
@@ -349,7 +382,7 @@ function GroupFilterEditor(props: {
           disabled={!valid}
           onClick={() => {
             const newFilter = {id: props.groupFilter.id, name: name, toggle: true, groups: groups};
-            dispatch(addGroupFilter(newFilter));
+            dispatch(setGroupFilter(newFilter));
             props.selectGroupFilterCallback(newFilter);
           }}
         >

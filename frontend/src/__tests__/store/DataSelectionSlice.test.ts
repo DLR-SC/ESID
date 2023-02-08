@@ -1,5 +1,5 @@
 import reducer, {
-  addGroupFilter,
+  setGroupFilter,
   selectCompartment,
   selectDate,
   selectDistrict,
@@ -67,7 +67,7 @@ describe('DataSelectionSlice', () => {
       groups: {age: ['age_1', 'age_2'], gender: ['male', 'female']},
       toggle: false,
     };
-    expect(reducer(initialState, addGroupFilter(newFilter))).toEqual(
+    expect(reducer(initialState, setGroupFilter(newFilter))).toEqual(
       Object.assign(initialState, {groupFilters: {'c9c241fb-c0bd-4710-94b9-f4c9ad98072b': newFilter}})
     );
   });

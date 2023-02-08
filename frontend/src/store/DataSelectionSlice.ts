@@ -95,7 +95,7 @@ export const DataSelectionSlice = createSlice({
     selectCompartment(state, action: PayloadAction<string>) {
       state.compartment = action.payload;
     },
-    addGroupFilter(state, action: PayloadAction<GroupFilter>) {
+    setGroupFilter(state, action: PayloadAction<GroupFilter>) {
       state.groupFilters[action.payload.id] = action.payload;
     },
     deleteGroupFilter(state, action: PayloadAction<string>) {
@@ -105,17 +105,7 @@ export const DataSelectionSlice = createSlice({
       if (state.groupFilters[action.payload]) {
         state.groupFilters[action.payload].toggle = !state.groupFilters[action.payload].toggle;
       }
-    },
-    setGroupFilterName(state, action: PayloadAction<{id: string; name: string}>) {
-      if (state.groupFilters[action.payload.id]) {
-        state.groupFilters[action.payload.id].name = action.payload.name;
-      }
-    },
-    setGroupFilters(state, action: PayloadAction<{id: string; groups: Dictionary<string[]>}>) {
-      if (state.groupFilters[action.payload.id]) {
-        state.groupFilters[action.payload.id].groups = action.payload.groups;
-      }
-    },
+    }
   },
 });
 
@@ -127,11 +117,10 @@ export const {
   setMinMaxDates,
   selectScenario,
   selectCompartment,
-  addGroupFilter,
+  setGroupFilter,
   deleteGroupFilter,
   toggleGroupFilter,
-  setGroupFilterName,
-  setGroupFilters,
   toggleScenario,
 } = DataSelectionSlice.actions;
+
 export default DataSelectionSlice.reducer;
