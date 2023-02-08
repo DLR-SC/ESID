@@ -1,5 +1,5 @@
 import reducer, {
-  addFilter,
+  addGroupFilter,
   selectCompartment,
   selectDate,
   selectDistrict,
@@ -16,7 +16,7 @@ describe('DataSelectionSlice', () => {
     activeScenarios: null,
     minDate: null,
     maxDate: null,
-    filter: {},
+    groupFilters: {},
   };
 
   test('Initial State', () => {
@@ -67,8 +67,8 @@ describe('DataSelectionSlice', () => {
       groups: {age: ['age_1', 'age_2'], gender: ['male', 'female']},
       toggle: false,
     };
-    expect(reducer(initialState, addFilter(newFilter))).toEqual(
-      Object.assign(initialState, {filter: {'c9c241fb-c0bd-4710-94b9-f4c9ad98072b': newFilter}})
+    expect(reducer(initialState, addGroupFilter(newFilter))).toEqual(
+      Object.assign(initialState, {groupFilters: {'c9c241fb-c0bd-4710-94b9-f4c9ad98072b': newFilter}})
     );
   });
 });

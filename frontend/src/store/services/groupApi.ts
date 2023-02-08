@@ -18,7 +18,7 @@ export const groupApi = createApi({
       },
     }),
 
-    getMultipleFilterData: builder.query<Dictionary<GroupResponse>, PostFilter[]>({
+    getMultipleGroupFilterData: builder.query<Dictionary<GroupResponse>, PostFilter[]>({
       async queryFn(arg, _queryApi, _extraOptions, fetchWithBQ) {
         const result: Dictionary<GroupResponse> = {};
         for (const post of arg) {
@@ -28,12 +28,12 @@ export const groupApi = createApi({
               (post.day ? `&day=${post.day}` : '') +
               (post.compartment ? `&compartments=${post.compartment}` : ''),
             method: 'POST',
-            body: {groups: post.filter.groups},
+            body: {groups: post.groupFilter.groups},
           });
 
           if (singleResult.error) return {error: singleResult.error};
 
-          result[post.filter.name] = singleResult.data as GroupResponse;
+          result[post.groupFilter.name] = singleResult.data as GroupResponse;
         }
         return {data: result};
       },
@@ -44,7 +44,7 @@ export const groupApi = createApi({
 export interface PostFilter {
   id: number;
   node: string;
-  filter: GroupFilter;
+  groupFilter: GroupFilter;
   day?: string;
   compartment?: string;
 }
@@ -76,4 +76,4 @@ interface GroupSubcategories {
   results: Array<GroupSubcategory> | null;
 }
 
-export const {useGetGroupCategoriesQuery, useGetGroupSubcategoriesQuery, useGetMultipleFilterDataQuery} = groupApi;
+export const {useGetGroupCategoriesQuery, useGetGroupSubcategoriesQuery, useGetMultipleGroupFilterDataQuery} = groupApi;

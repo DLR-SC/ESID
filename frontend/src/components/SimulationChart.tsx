@@ -17,7 +17,7 @@ import {
 import {useTranslation} from 'react-i18next';
 import {NumberFormatter} from 'util/hooks';
 import LoadingContainer from './shared/LoadingContainer';
-import {useGetMultipleFilterDataQuery} from 'store/services/groupApi';
+import {useGetMultipleGroupFilterDataQuery} from 'store/services/groupApi';
 import {GroupData} from 'types/group';
 /* This component displays the evolution of the pandemic for a specific compartment (hospitalized, dead, infected, etc.) regarding the different scenarios
  */
@@ -38,19 +38,19 @@ export default function SimulationChart(): JSX.Element {
   const selectedDate = useAppSelector((state) => state.dataSelection.date);
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
   const activeScenarios = useAppSelector((state) => state.dataSelection.activeScenarios);
-  const filterList = useAppSelector((state) => state.dataSelection.filter);
+  const groupFilterList = useAppSelector((state) => state.dataSelection.groupFilters);
   const dispatch = useAppDispatch();
 
-  const {data: filterData} = useGetMultipleFilterDataQuery(
-    filterList && selectedScenario && selectedDistrict && selectedCompartment
-      ? Object.values(filterList)
-          .filter((filter) => filter.toggle)
-          .map((filter) => {
+  const {data: groupFilterData} = useGetMultipleGroupFilterDataQuery(
+    groupFilterList && selectedScenario && selectedDistrict && selectedCompartment
+      ? Object.values(groupFilterList)
+          .filter((groupFilter) => groupFilter.toggle)
+          .map((groupFilter) => {
             return {
               id: selectedScenario,
               node: selectedDistrict,
               compartment: selectedCompartment,
-              filter: filter,
+              groupFilter: groupFilter,
             };
           })
       : []
@@ -161,26 +161,26 @@ export default function SimulationChart(): JSX.Element {
     };
     chart.exporting.filePrefix = 'Covid Simulaton Data';
 
-    //Add series for filter
-    if (filterList && selectedScenario) {
-      const filterStrokes = ['2,4', '8,4', '8,4,2,4'] as string[];
-      Object.values(filterList)
-        .filter((filter) => filter.toggle)
-        .forEach((filter, i) => {
+    // Add series for groupFilter
+    if (groupFilterList && selectedScenario) {
+      const groupFilterStrokes = ['2,4', '8,4', '8,4,2,4'];
+      Object.values(groupFilterList)
+        .filter((groupFilter) => groupFilter.toggle)
+        .forEach((groupFilter, i) => {
           const series = chart.series.push(new am4charts.LineSeries());
-          series.dataFields.valueY = filter.name;
+          series.dataFields.valueY = groupFilter.name;
           series.dataFields.dateX = 'date';
-          series.id = 'filter-' + filter.name;
+          series.id = 'group-filter-' + groupFilter.name;
           series.strokeWidth = 2;
           series.fill = am4core.color(
             theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0]
           );
           series.stroke = series.fill;
-          if (i < filterStrokes.length) {
-            series.strokeDasharray = filterStrokes[i];
+          if (i < groupFilterStrokes.length) {
+            series.strokeDasharray = groupFilterStrokes[i];
           }
-          series.tooltipText = `[bold ${series.stroke.hex}]${filter.name}:[/] {${i}}`;
-          series.name = filter.name;
+          series.tooltipText = `[bold ${series.stroke.hex}]${groupFilter.name}:[/] {${i}}`;
+          series.name = groupFilter.name;
         });
     }
 
@@ -197,7 +197,7 @@ export default function SimulationChart(): JSX.Element {
     return () => {
       chartRef.current?.dispose();
     };
-  }, [scenarioList, filterList, dispatch, i18n.language, t, theme, selectedScenario]);
+  }, [scenarioList, groupFilterList, dispatch, i18n.language, t, theme, selectedScenario]);
 
   //Effect to hide disabled scenarios (and show them again if not hidden anymore)
   useEffect(() => {
@@ -257,7 +257,7 @@ export default function SimulationChart(): JSX.Element {
         console.error(e);
       }
     };
-  }, [scenarioList, selectedDate, theme, t, i18n.language, filterData]);
+  }, [scenarioList, selectedDate, theme, t, i18n.language, groupFilterData]);
 
   // Effect to update Simulation and case data
   useEffect(() => {
@@ -299,15 +299,15 @@ export default function SimulationChart(): JSX.Element {
         dataMap.set(entry.day, {...dataMap.get(entry.day), percentileUp: entry.compartments[selectedCompartment]});
       });
 
-      //add filter data
-      if (filterList && filterData) {
-        Object.values(filterList).forEach((filter) => {
-          if (filter && filter.toggle) {
-            if (filterData[filter.name]) {
-              filterData[filter.name].results.forEach((entry: GroupData) => {
+      // Add groupFilter data
+      if (groupFilterList && groupFilterData) {
+        Object.values(groupFilterList).forEach((groupFilter) => {
+          if (groupFilter && groupFilter.toggle) {
+            if (groupFilterData[groupFilter.name]) {
+              groupFilterData[groupFilter.name].results.forEach((entry: GroupData) => {
                 dataMap.set(entry.day, {
                   ...dataMap.get(entry.day),
-                  [filter.name]: entry.compartments[selectedCompartment],
+                  [groupFilter.name]: entry.compartments[selectedCompartment],
                 });
               });
             }
@@ -350,7 +350,7 @@ export default function SimulationChart(): JSX.Element {
               data &&
               (data as {[key: string]: number | string})[s.dataFields.valueY] &&
               s.id !== 'percentiles' &&
-              !s.id.startsWith('filter-')
+              !s.id.startsWith('group-filter-')
             ) {
               text.push('<tr>');
               text.push(
@@ -373,25 +373,25 @@ export default function SimulationChart(): JSX.Element {
                   `<td>[${formatNumber((data as {[key: string]: number})[percentileSeries.dataFields.openValueY])} - 
                     ${formatNumber((data as {[key: string]: number})[percentileSeries.dataFields.valueY])}]</td>`
                 );
-                chartRef.current?.series.each((filterSeries) => {
+                chartRef.current?.series.each((groupFilterSeries) => {
                   if (
-                    filterSeries.id.startsWith('filter-') &&
-                    filterSeries.dataFields.valueY &&
+                    groupFilterSeries.id.startsWith('group-filter-') &&
+                    groupFilterSeries.dataFields.valueY &&
                     data &&
-                    (data as {[key: string]: number | string})[filterSeries.dataFields.valueY]
+                    (data as {[key: string]: number | string})[groupFilterSeries.dataFields.valueY]
                   ) {
                     text.push('<tr>');
                     text.push(
                       `<th 
                 style='text-align:left; color:${
-                  (filterSeries.stroke as am4core.Color).hex
+                  (groupFilterSeries.stroke as am4core.Color).hex
                 }; padding-right:${theme.spacing(2)}; padding-left:${theme.spacing(4)}'>
-                <strong>${filterSeries.name}</strong>
+                <strong>${groupFilterSeries.name}</strong>
                 </th>`
                     );
                     text.push(
                       `<td style='text-align:right'>${formatNumber(
-                        (data as {[key: string]: number})[filterSeries.dataFields.valueY]
+                        (data as {[key: string]: number})[groupFilterSeries.dataFields.valueY]
                       )}</td>`
                     );
                   }
@@ -427,10 +427,10 @@ export default function SimulationChart(): JSX.Element {
     scenarioList,
     selectedCompartment,
     theme,
-    filterList,
+    groupFilterList,
     formatNumber,
     t,
-    filterData,
+    groupFilterData,
   ]);
 
   return (

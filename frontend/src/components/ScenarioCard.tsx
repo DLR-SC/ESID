@@ -7,7 +7,7 @@ import {Dictionary} from '../util/util';
 import {useTranslation} from 'react-i18next';
 import {NumberFormatter} from '../util/hooks';
 import {CheckBox, CheckBoxOutlineBlank, ChevronLeft, ChevronRight} from '@mui/icons-material';
-import {useGetMultipleFilterDataQuery} from '../store/services/groupApi';
+import {useGetMultipleGroupFilterDataQuery} from '../store/services/groupApi';
 import {ScrollSyncPane} from 'react-scroll-sync';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
@@ -305,17 +305,17 @@ function ActivateFilters(props: {
   color: string;
 }): JSX.Element | null {
   const theme = useTheme();
-  const filterList = useAppSelector((state) => state.dataSelection.filter);
+  const groupFilterList = useAppSelector((state) => state.dataSelection.groupFilters);
 
   const [folded, fold] = useState(true);
 
-  if (!props.active || !filterList) {
+  if (!props.active || !groupFilterList) {
     return null;
   }
 
-  const filterArray = Object.values(filterList);
-  for (let i = 0; i < filterArray.length; i++) {
-    if (filterArray[i].toggle) {
+  const groupFilterArray = Object.values(groupFilterList);
+  for (let i = 0; i < groupFilterArray.length; i++) {
+    if (groupFilterArray[i].toggle) {
       return (
         <Box
           sx={{
@@ -341,7 +341,7 @@ function ActivateFilters(props: {
             {folded ? <ChevronLeft /> : <ChevronRight />}
           </Button>
           <Collapse in={folded} orientation='horizontal'>
-            <FilterInfo id={props.id} selectedProperty={props.selectedProperty} expanded={props.expanded} />
+            <GroupFilterInfo id={props.id} selectedProperty={props.selectedProperty} expanded={props.expanded} />
           </Collapse>
         </Box>
       );
@@ -351,30 +351,30 @@ function ActivateFilters(props: {
   return null;
 }
 
-function FilterInfo(props: {id: number; selectedProperty: string; expanded: boolean}): JSX.Element | null {
+function GroupFilterInfo(props: {id: number; selectedProperty: string; expanded: boolean}): JSX.Element | null {
   const theme = useTheme();
 
   const day = useAppSelector((state) => state.dataSelection.date);
   const node = useAppSelector((state) => state.dataSelection.district?.ags);
 
-  const filterList = useAppSelector((state) => state.dataSelection.filter);
+  const groupFilterList = useAppSelector((state) => state.dataSelection.groupFilters);
 
-  const {data: filterData} = useGetMultipleFilterDataQuery(
-    filterList && day
-      ? Object.values(filterList)
-          .filter((filter) => filter.toggle)
-          .map((filter) => {
+  const {data: groupFilterData} = useGetMultipleGroupFilterDataQuery(
+    groupFilterList && day
+      ? Object.values(groupFilterList)
+          .filter((groupFilter) => groupFilter.toggle)
+          .map((groupFilter) => {
             return {
               id: props.id,
               node: node,
               day: day,
-              filter: filter,
+              groupFilter: groupFilter,
             };
           })
       : []
   );
 
-  if (filterList && Object.values(filterList).length > 0 && filterData && Object.values(filterList)[0].name) {
+  if (groupFilterList && Object.values(groupFilterList).length > 0 && groupFilterData && Object.values(groupFilterList)[0].name) {
     return (
       <Box
         id={`scenario-card-${props.id}-group-filter-list`}
@@ -383,11 +383,11 @@ function FilterInfo(props: {id: number; selectedProperty: string; expanded: bool
           flexDirection: 'row',
         }}
       >
-        {Object.keys(filterData).map((filterName, i) => {
+        {Object.keys(groupFilterData).map((groupFilterName, i) => {
           return (
             <Box
               id={`scenario-card-${props.id}-group-filter-root-${i}`}
-              key={filterName}
+              key={groupFilterName}
               sx={{
                 padding: theme.spacing(2),
                 margin: '6px',
@@ -412,15 +412,15 @@ function FilterInfo(props: {id: number; selectedProperty: string; expanded: bool
                     fontSize: '13pt',
                   }}
                 >
-                  {filterName}
+                  {groupFilterName}
                 </Typography>
               </Box>
               <FilterCompartmentValues
                 id={props.id}
                 selectedProperty={props.selectedProperty}
                 expanded={props.expanded}
-                filterName={filterName}
-                filterIndex={i}
+                groupFilterName={groupFilterName}
+                groupFilterIndex={i}
               />
             </Box>
           );
@@ -433,8 +433,8 @@ function FilterInfo(props: {id: number; selectedProperty: string; expanded: bool
 }
 
 function FilterCompartmentValues(props: {
-  filterName: string;
-  filterIndex: number;
+  groupFilterName: string;
+  groupFilterIndex: number;
   id: number;
   selectedProperty: string;
   expanded: boolean;
@@ -444,21 +444,21 @@ function FilterCompartmentValues(props: {
 
   const {formatNumber} = NumberFormatter(i18n.language, 1, 0);
 
-  const filterList = useAppSelector((state) => state.dataSelection.filter);
+  const groupFilterList = useAppSelector((state) => state.dataSelection.groupFilters);
   const day = useAppSelector((state) => state.dataSelection.date);
   const node = useAppSelector((state) => state.dataSelection.district?.ags);
   const compartments = useAppSelector((state) => state.scenarioList.compartments);
 
-  const {data: filterData} = useGetMultipleFilterDataQuery(
-    filterList && day
-      ? Object.values(filterList)
-          .filter((filter) => filter.toggle)
-          .map((filter) => {
+  const {data: groupFilterData} = useGetMultipleGroupFilterDataQuery(
+    groupFilterList && day
+      ? Object.values(groupFilterList)
+          .filter((groupFilter) => groupFilter.toggle)
+          .map((groupFilter) => {
             return {
               id: props.id,
               node: node,
               day: day,
-              filter: filter,
+              groupFilter: groupFilter,
             };
           })
       : []
@@ -468,31 +468,31 @@ function FilterCompartmentValues(props: {
 
   //ref Array Size
   useEffect(() => {
-    if (filterList) {
-      groupCompartmentsRef.current.slice(0, Object.values(filterList).length);
+    if (groupFilterList) {
+      groupCompartmentsRef.current.slice(0, Object.values(groupFilterList).length);
     }
-  }, [filterList]);
+  }, [groupFilterList]);
 
-  const getGroupValue = (filterName: string, compartment: string): string => {
-    if (!filterData || !filterData[filterName]) {
+  const getGroupValue = (groupFilterName: string, compartment: string): string => {
+    if (!groupFilterData || !groupFilterData[groupFilterName]) {
       return t('no-data');
     }
 
-    const filterResults = filterData[filterName].results;
-    if (filterResults.length === 0 || !(compartment in filterResults[0].compartments)) {
+    const groupFilterResults = groupFilterData[groupFilterName].results;
+    if (groupFilterResults.length === 0 || !(compartment in groupFilterResults[0].compartments)) {
       return t('no-data');
     }
 
-    return formatNumber(filterResults[0].compartments[compartment]);
+    return formatNumber(groupFilterResults[0].compartments[compartment]);
   };
 
-  if (filterData && filterData[props.filterName]) {
+  if (groupFilterData && groupFilterData[props.groupFilterName]) {
     return (
       <ScrollSyncPane group='compartments'>
         <List
-          id={`scenario-card-${props.id}-group-filter-compartment-list-${props.filterIndex}`}
+          id={`scenario-card-${props.id}-group-filter-compartment-list-${props.groupFilterIndex}`}
           className='hide-scrollbar'
-          ref={(el) => (groupCompartmentsRef.current[props.filterIndex] = el)}
+          ref={(el) => (groupCompartmentsRef.current[props.groupFilterIndex] = el)}
           dense={true}
           disablePadding={true}
           sx={{
@@ -520,7 +520,7 @@ function FilterCompartmentValues(props: {
                 }}
               >
                 <ListItemText
-                  primary={getGroupValue(props.filterName, compartment)}
+                  primary={getGroupValue(props.groupFilterName, compartment)}
                   // disable child typography overriding this
                   disableTypography={true}
                   sx={{

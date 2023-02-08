@@ -20,18 +20,26 @@ import {Close, DeleteForever, GroupAdd, Visibility, VisibilityOffOutlined} from 
 import {useTheme} from '@mui/material/styles';
 import {GroupFilter} from '../types/group';
 import {GroupSubcategory, useGetGroupCategoriesQuery, useGetGroupSubcategoriesQuery} from '../store/services/groupApi';
-import {addFilter, deleteFilter, toggleFilter} from '../store/DataSelectionSlice';
+import {addGroupFilter, deleteGroupFilter, toggleGroupFilter} from '../store/DataSelectionSlice';
 import {Dictionary} from '../util/util';
 import ConfirmDialog from './shared/ConfirmDialog';
 
-export function ManageGroupDialog(props: {onClose: () => void}): JSX.Element {
+/**
+ * This dialog provides an editor to create, edit, toggle and delete group filters. It uses a classic master detail view
+ * with the available filters on the left and the filter configuration on the right.
+ *
+ * @param props Contains an onCloseRequest function, which is called, when the close button is called. So please handle
+ * it and allow the dialog to close!
+ */
+export function ManageGroupDialog(props: {onCloseRequest: () => void}): JSX.Element {
   const {t} = useTranslation();
   const theme = useTheme();
 
   const {data: groupCategories} = useGetGroupCategoriesQuery();
 
-  const [selectedFilter, setSelectedFilter] = useState<GroupFilter | null>(null);
-  const filterList = useAppSelector((state) => state.dataSelection.filter);
+
+  const [selectedGroupFilter, setSelectedGroupFilter] = useState<GroupFilter | null>(null);
+  const groupFilterList = useAppSelector((state) => state.dataSelection.groupFilters);
 
   return (
     <Box
@@ -57,7 +65,7 @@ export function ManageGroupDialog(props: {onClose: () => void}): JSX.Element {
       >
         <div />
         <Typography variant='h1'>{t('group-filters.title')}</Typography>
-        <IconButton color='primary' sx={{marginLeft: 'auto'}} onClick={props.onClose}>
+        <IconButton color='primary' sx={{marginLeft: 'auto'}} onClick={props.onCloseRequest}>
           <Close />
         </IconButton>
       </Box>
@@ -78,12 +86,12 @@ export function ManageGroupDialog(props: {onClose: () => void}): JSX.Element {
             padding: theme.spacing(2),
           }}
         >
-          {Object.values(filterList)?.map((item) => (
+          {Object.values(groupFilterList)?.map((item) => (
             <GroupFilterCard
               key={item.id}
               item={item}
-              selected={selectedFilter?.id === item.id}
-              selectFilterCallback={(filter) => setSelectedFilter(filter)}
+              selected={selectedGroupFilter?.id === item.id}
+              selectFilterCallback={(groupFilter) => setSelectedGroupFilter(groupFilter)}
             />
           ))}
           <Card
@@ -101,7 +109,7 @@ export function ManageGroupDialog(props: {onClose: () => void}): JSX.Element {
               onClick={() => {
                 const groups: Dictionary<Array<string>> = {};
                 groupCategories?.results?.forEach((group) => (groups[group.key] = []));
-                setSelectedFilter({id: crypto.randomUUID(), name: '', toggle: false, groups: groups});
+                setSelectedGroupFilter({id: crypto.randomUUID(), name: '', toggle: false, groups: groups});
               }}
             >
               <CardContent
@@ -121,11 +129,11 @@ export function ManageGroupDialog(props: {onClose: () => void}): JSX.Element {
           </Card>
         </Box>
         <Divider orientation='vertical' flexItem />
-        {selectedFilter ? (
+        {selectedGroupFilter ? (
           <GroupFilterEditor
-            key={selectedFilter.id}
-            filter={selectedFilter}
-            selectFilterCallback={(filter) => setSelectedFilter(filter)}
+            key={selectedGroupFilter.id}
+            groupFilter={selectedGroupFilter}
+            selectGroupFilterCallback={(groupFilter) => setSelectedGroupFilter(groupFilter)}
           />
         ) : (
           <Box
@@ -145,7 +153,7 @@ export function ManageGroupDialog(props: {onClose: () => void}): JSX.Element {
               onClick={() => {
                 const groups: Dictionary<Array<string>> = {};
                 groupCategories?.results?.forEach((group) => (groups[group.key] = []));
-                setSelectedFilter({id: crypto.randomUUID(), name: '', toggle: false, groups: groups});
+                setSelectedGroupFilter({id: crypto.randomUUID(), name: '', toggle: false, groups: groups});
               }}
             >
               <GroupAdd color='primary' />
@@ -201,7 +209,7 @@ function GroupFilterCard(props: GroupFilterCardParams) {
           icon={<VisibilityOffOutlined color='disabled' />}
           checked={props.item.toggle}
           onClick={() => {
-            dispatch(toggleFilter(props.item.id));
+            dispatch(toggleGroupFilter(props.item.id));
           }}
         />
         <ConfirmDialog
@@ -210,7 +218,7 @@ function GroupFilterCard(props: GroupFilterCardParams) {
           text={t('group-filters.confirm-deletion-text', {groupName: props.item.name})}
           onAnswer={(answer) => {
             if (answer) {
-              dispatch(deleteFilter(props.item.id));
+              dispatch(deleteGroupFilter(props.item.id));
               props.selectFilterCallback(null);
             }
             setConfirmDialogOpen(false);
@@ -225,8 +233,8 @@ function GroupFilterCard(props: GroupFilterCardParams) {
 }
 
 function GroupFilterEditor(props: {
-  filter: GroupFilter;
-  selectFilterCallback: (name: GroupFilter | null) => void;
+  groupFilter: GroupFilter;
+  selectGroupFilterCallback: (name: GroupFilter | null) => void;
 }): JSX.Element {
   const {t} = useTranslation();
   const theme = useTheme();
@@ -235,8 +243,8 @@ function GroupFilterEditor(props: {
   const {data: groupCategories} = useGetGroupCategoriesQuery();
   const {data: groupSubCategories} = useGetGroupSubcategoriesQuery();
 
-  const [name, setName] = useState(props.filter.name);
-  const [groups, setGroups] = useState(props.filter.groups);
+  const [name, setName] = useState(props.groupFilter.name);
+  const [groups, setGroups] = useState(props.groupFilter.groups);
 
   const [valid, setValid] = useState(name.length > 0 && Object.values(groups).every((group) => group.length > 0));
 
@@ -330,7 +338,7 @@ function GroupFilterEditor(props: {
           variant='outlined'
           color='error'
           sx={{marginRight: theme.spacing(2)}}
-          onClick={() => props.selectFilterCallback(null)}
+          onClick={() => props.selectGroupFilterCallback(null)}
         >
           {t('group-filters.close')}
         </Button>
@@ -339,9 +347,9 @@ function GroupFilterEditor(props: {
           color='primary'
           disabled={!valid}
           onClick={() => {
-            const newFilter = {id: props.filter.id, name: name, toggle: true, groups: groups};
-            dispatch(addFilter(newFilter));
-            props.selectFilterCallback(newFilter);
+            const newFilter = {id: props.groupFilter.id, name: name, toggle: true, groups: groups};
+            dispatch(addGroupFilter(newFilter));
+            props.selectGroupFilterCallback(newFilter);
           }}
         >
           {t('group-filters.apply')}

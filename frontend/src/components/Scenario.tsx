@@ -366,7 +366,7 @@ export default function Scenario(): JSX.Element {
           </Button>
         </Box>
         <Dialog maxWidth='lg' fullWidth={true} open={open} onClose={() => setOpen(false)}>
-          <ManageGroupDialog onClose={() => setOpen(false)} />
+          <ManageGroupDialog onCloseRequest={() => setOpen(false)} />
         </Dialog>
       </Box>
     </ScrollSync>
