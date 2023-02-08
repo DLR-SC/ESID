@@ -385,7 +385,12 @@ function GroupFilterInfo(props: {id: number; selectedProperty: string; expanded:
       : []
   );
 
-  if (groupFilterList && Object.values(groupFilterList).length > 0 && groupFilterData && Object.values(groupFilterList)[0].name) {
+  if (
+    groupFilterList &&
+    Object.values(groupFilterList).length > 0 &&
+    groupFilterData &&
+    Object.values(groupFilterList)[0].name
+  ) {
     return (
       <Box
         id={`scenario-card-${props.id}-group-filter-list`}
