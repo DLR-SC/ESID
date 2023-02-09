@@ -44,7 +44,7 @@ export default function SimulationChart(): JSX.Element {
   const {data: groupFilterData} = useGetMultipleGroupFilterDataQuery(
     groupFilterList && selectedScenario && selectedDistrict && selectedCompartment
       ? Object.values(groupFilterList)
-          .filter((groupFilter) => groupFilter.toggle)
+          .filter((groupFilter) => groupFilter.isVisible)
           .map((groupFilter) => {
             return {
               id: selectedScenario,
@@ -165,7 +165,7 @@ export default function SimulationChart(): JSX.Element {
     if (groupFilterList && selectedScenario) {
       const groupFilterStrokes = ['2,4', '8,4', '8,4,2,4'];
       Object.values(groupFilterList)
-        .filter((groupFilter) => groupFilter.toggle)
+        .filter((groupFilter) => groupFilter.isVisible)
         .forEach((groupFilter, i) => {
           const series = chart.series.push(new am4charts.LineSeries());
           series.dataFields.valueY = groupFilter.name;
@@ -302,7 +302,7 @@ export default function SimulationChart(): JSX.Element {
       // Add groupFilter data
       if (groupFilterList && groupFilterData) {
         Object.values(groupFilterList).forEach((groupFilter) => {
-          if (groupFilter && groupFilter.toggle) {
+          if (groupFilter && groupFilter.isVisible) {
             if (groupFilterData[groupFilter.name]) {
               groupFilterData[groupFilter.name].results.forEach((entry: GroupData) => {
                 dataMap.set(entry.day, {

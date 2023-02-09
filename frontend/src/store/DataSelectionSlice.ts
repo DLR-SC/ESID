@@ -16,6 +16,7 @@ export interface DataSelection {
   date: string | null;
   scenario: number | null;
   compartment: string | null;
+  compartmentsExpanded: boolean | null;
   activeScenarios: number[] | null;
 
   minDate: string | null;
@@ -28,6 +29,7 @@ const initialState: DataSelection = {
   date: null,
   scenario: null,
   compartment: null,
+  compartmentsExpanded: null,
   activeScenarios: null,
 
   minDate: null,
@@ -95,6 +97,9 @@ export const DataSelectionSlice = createSlice({
     selectCompartment(state, action: PayloadAction<string>) {
       state.compartment = action.payload;
     },
+    toggleCompartmentExpansion(state) {
+      state.compartmentsExpanded = !state.compartmentsExpanded;
+    },
     setGroupFilter(state, action: PayloadAction<GroupFilter>) {
       state.groupFilters[action.payload.id] = action.payload;
     },
@@ -103,9 +108,9 @@ export const DataSelectionSlice = createSlice({
     },
     toggleGroupFilter(state, action: PayloadAction<string>) {
       if (state.groupFilters[action.payload]) {
-        state.groupFilters[action.payload].toggle = !state.groupFilters[action.payload].toggle;
+        state.groupFilters[action.payload].isVisible = !state.groupFilters[action.payload].isVisible;
       }
-    }
+    },
   },
 });
 
@@ -117,6 +122,7 @@ export const {
   setMinMaxDates,
   selectScenario,
   selectCompartment,
+  toggleCompartmentExpansion,
   setGroupFilter,
   deleteGroupFilter,
   toggleGroupFilter,

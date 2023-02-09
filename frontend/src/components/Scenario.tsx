@@ -2,7 +2,13 @@ import React, {useEffect, useState} from 'react';
 import {useAppDispatch, useAppSelector} from '../store/hooks';
 import {useTheme} from '@mui/material/styles';
 import {useTranslation} from 'react-i18next';
-import {selectCompartment, selectScenario, setMinMaxDates, toggleScenario} from 'store/DataSelectionSlice';
+import {
+  selectCompartment,
+  selectScenario,
+  setMinMaxDates,
+  toggleCompartmentExpansion,
+  toggleScenario,
+} from 'store/DataSelectionSlice';
 import ScenarioCard from './ScenarioCard';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -39,7 +45,6 @@ export default function Scenario(): JSX.Element {
   const theme = useTheme();
 
   const dispatch = useAppDispatch();
-  const [expandProperties, setExpandProperties] = useState(false);
   const [simulationModelKey, setSimulationModelKey] = useState<string>('unset');
   const [compartmentValues, setCompartmentValues] = useState<Dictionary<number> | null>(null);
 
@@ -55,6 +60,7 @@ export default function Scenario(): JSX.Element {
   const scenarioList = useAppSelector((state) => state.scenarioList);
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
+  const compartmentsExpanded = useAppSelector((state) => state.dataSelection.compartmentsExpanded);
   const node = useAppSelector((state) => state.dataSelection.district.ags);
   const startDay = useAppSelector((state) => state.dataSelection.minDate);
   const activeScenarios = useAppSelector((state) => state.dataSelection.activeScenarios);
@@ -136,7 +142,7 @@ export default function Scenario(): JSX.Element {
   }, [activeScenarios, selectedScenario, dispatch]);
 
   return (
-    <ScrollSync enabled={expandProperties}>
+    <ScrollSync enabled={compartmentsExpanded || false}>
       <Box
         id='scenario-view-root'
         sx={{
@@ -198,7 +204,7 @@ export default function Scenario(): JSX.Element {
               dense={true}
               disablePadding={true}
               sx={{
-                maxHeight: expandProperties ? '248px' : 'auto',
+                maxHeight: compartmentsExpanded ? '248px' : 'auto',
                 overflowY: 'auto',
               }}
             >
@@ -207,7 +213,7 @@ export default function Scenario(): JSX.Element {
                 <ListItemButton
                   key={compartment}
                   sx={{
-                    display: expandProperties || i < 4 ? 'flex' : 'none',
+                    display: compartmentsExpanded || i < 4 ? 'flex' : 'none',
                     padding: theme.spacing(1),
                     paddingLeft: theme.spacing(3),
                     paddingRight: theme.spacing(3),
@@ -272,8 +278,7 @@ export default function Scenario(): JSX.Element {
             }}
             aria-label={t('scenario.more')}
             onClick={() => {
-              setExpandProperties(!expandProperties);
-              // unselect Property if hidden through show less button
+              dispatch(toggleCompartmentExpansion());
               if (
                 scenarioList.compartments.findIndex((o) => {
                   return o === selectedCompartment;
@@ -285,7 +290,7 @@ export default function Scenario(): JSX.Element {
               }
             }}
           >
-            {expandProperties ? t('less') : t('more')}
+            {compartmentsExpanded ? t('less') : t('more')}
           </Button>
         </Box>
         <Box
@@ -307,8 +312,6 @@ export default function Scenario(): JSX.Element {
               selected={selectedScenario === scenario.id}
               active={!!activeScenarios && activeScenarios.includes(scenario.id)}
               color={theme.custom.scenarios[i][0]}
-              selectedProperty={selectedCompartment || ''}
-              expandProperties={expandProperties}
               startValues={compartmentValues}
               onClick={() => {
                 // set active scenario to this one and send dispatches
@@ -335,9 +338,10 @@ export default function Scenario(): JSX.Element {
             variant='outlined'
             color='success'
             sx={{
-              height: '205px',
-              width: '160px',
+              height: '244px',
+              width: '200px',
               margin: theme.spacing(3),
+              marginTop: theme.spacing(2),
               fontWeight: 'bolder',
               fontSize: '3rem',
               border: `2px ${theme.palette.divider} dashed`,
@@ -359,7 +363,7 @@ export default function Scenario(): JSX.Element {
             variant='outlined'
             color='primary'
             sx={{
-              width: '160px',
+              width: '200px',
               margin: theme.spacing(2),
               alignSelf: 'center',
             }}

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, {useCallback, useEffect, useState} from 'react';
 import {useAppDispatch, useAppSelector} from '../store/hooks';
 import {useTranslation} from 'react-i18next';
 import Box from '@mui/material/Box';
@@ -110,7 +110,7 @@ export function ManageGroupDialog(props: {onCloseRequest: () => void}): JSX.Elem
               onClick={() => {
                 const groups: Dictionary<Array<string>> = {};
                 groupCategories?.results?.forEach((group) => (groups[group.key] = []));
-                setSelectedGroupFilter({id: crypto.randomUUID(), name: '', toggle: false, groups: groups});
+                setSelectedGroupFilter({id: crypto.randomUUID(), name: '', isVisible: false, groups: groups});
               }}
             >
               <CardContent
@@ -154,7 +154,7 @@ export function ManageGroupDialog(props: {onCloseRequest: () => void}): JSX.Elem
               onClick={() => {
                 const groups: Dictionary<Array<string>> = {};
                 groupCategories?.results?.forEach((group) => (groups[group.key] = []));
-                setSelectedGroupFilter({id: crypto.randomUUID(), name: '', toggle: false, groups: groups});
+                setSelectedGroupFilter({id: crypto.randomUUID(), name: '', isVisible: false, groups: groups});
               }}
             >
               <GroupAdd color='primary' />
@@ -221,7 +221,7 @@ function GroupFilterCard(props: GroupFilterCardProps) {
         <Checkbox
           checkedIcon={<Visibility />}
           icon={<VisibilityOffOutlined color='disabled' />}
-          checked={props.item.toggle}
+          checked={props.item.isVisible}
           onClick={() => {
             dispatch(toggleGroupFilter(props.item.id));
           }}
@@ -256,7 +256,7 @@ interface GroupFilterEditorProps {
    *
    * @param groupFilter - Either the current filter or null when the user wants to close the current filter's editor.
    */
-  selectGroupFilterCallback: (groupFilter: (GroupFilter | null)) => void;
+  selectGroupFilterCallback: (groupFilter: GroupFilter | null) => void;
 }
 
 /**
@@ -285,21 +285,24 @@ function GroupFilterEditor(props: GroupFilterEditorProps): JSX.Element {
     setValid(name.length > 0 && Object.values(groups).every((group) => group.length > 0));
   }, [name, groups]);
 
-  const toggleGroup = useCallback((subGroup: GroupSubcategory) => {
-    // We need to make a copy before we modify the entry.
-    let category = [...groups[subGroup.category]];
+  const toggleGroup = useCallback(
+    (subGroup: GroupSubcategory) => {
+      // We need to make a copy before we modify the entry.
+      let category = [...groups[subGroup.category]];
 
-    if (category.includes(subGroup.key)) {
-      category = category.filter((key) => key !== subGroup.key);
-    } else {
-      category.push(subGroup.key);
-    }
+      if (category.includes(subGroup.key)) {
+        category = category.filter((key) => key !== subGroup.key);
+      } else {
+        category.push(subGroup.key);
+      }
 
-    setGroups({
-      ...groups,
-      [subGroup.category]: category,
-    });
-  }, [groups, setGroups]);
+      setGroups({
+        ...groups,
+        [subGroup.category]: category,
+      });
+    },
+    [groups, setGroups]
+  );
 
   return (
     <Box
@@ -382,7 +385,7 @@ function GroupFilterEditor(props: GroupFilterEditorProps): JSX.Element {
           color='primary'
           disabled={!valid}
           onClick={() => {
-            const newFilter = {id: props.groupFilter.id, name: name, toggle: true, groups: groups};
+            const newFilter = {id: props.groupFilter.id, name: name, isVisible: true, groups: groups};
             dispatch(setGroupFilter(newFilter));
             props.selectGroupFilterCallback(newFilter);
           }}

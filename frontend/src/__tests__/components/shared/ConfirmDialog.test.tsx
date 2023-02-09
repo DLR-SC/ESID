@@ -1,6 +1,6 @@
 import React from 'react';
-import { render, fireEvent, screen } from '@testing-library/react';
-import ConfirmDialog from "../../../components/shared/ConfirmDialog";
+import {render, fireEvent, screen} from '@testing-library/react';
+import ConfirmDialog from '../../../components/shared/ConfirmDialog';
 
 describe('ConfirmDialog', () => {
   it('renders the correct title and text', () => {
@@ -9,9 +9,7 @@ describe('ConfirmDialog', () => {
     const title = 'Confirm Action';
     const text = 'Are you sure you want to perform this action?';
 
-    render(
-      <ConfirmDialog open title={title} text={text} onAnswer={handleAnswer} />
-    );
+    render(<ConfirmDialog open title={title} text={text} onAnswer={handleAnswer} />);
 
     screen.getByText(title);
     screen.getByText(text);
@@ -20,9 +18,7 @@ describe('ConfirmDialog', () => {
   it('calls the onAnswer prop with the correct answer', () => {
     const handleAnswer = jest.fn();
 
-    render(
-      <ConfirmDialog open title='Confirm Action' text='Are you sure?' onAnswer={handleAnswer} />
-    );
+    render(<ConfirmDialog open title='Confirm Action' text='Are you sure?' onAnswer={handleAnswer} />);
 
     const abortButton = screen.getByText('Abort');
     fireEvent.click(abortButton);

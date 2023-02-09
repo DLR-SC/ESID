@@ -38,6 +38,23 @@ export const groupApi = createApi({
         return {data: result};
       },
     }),
+
+    getSingleGroupFilterData: builder.query<GroupResponse, PostFilter>({
+      async queryFn(arg, _queryApi, _extraOptions, fetchWithBQ) {
+        const result = await fetchWithBQ({
+          url:
+            `simulation/${arg.id}/${arg.node}/?all` +
+            (arg.day ? `&day=${arg.day}` : '') +
+            (arg.compartment ? `&compartments=${arg.compartment}` : ''),
+          method: 'POST',
+          body: {groups: arg.groupFilter.groups},
+        });
+
+        if (result.error) return {error: result.error};
+
+        return {data: result.data as GroupResponse};
+      },
+    }),
   }),
 });
 
@@ -76,4 +93,9 @@ interface GroupSubcategories {
   results: Array<GroupSubcategory> | null;
 }
 
-export const {useGetGroupCategoriesQuery, useGetGroupSubcategoriesQuery, useGetMultipleGroupFilterDataQuery} = groupApi;
+export const {
+  useGetGroupCategoriesQuery,
+  useGetGroupSubcategoriesQuery,
+  useGetSingleGroupFilterDataQuery,
+  useGetMultipleGroupFilterDataQuery,
+} = groupApi;

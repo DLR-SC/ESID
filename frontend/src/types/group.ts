@@ -16,6 +16,6 @@ export interface GroupData {
 export interface GroupFilter {
   id: string;
   name: string;
-  toggle: boolean;
+  isVisible: boolean;
   groups: Dictionary<string[]>;
 }

@@ -13,6 +13,7 @@ describe('DataSelectionSlice', () => {
     date: null,
     scenario: null,
     compartment: null,
+    compartmentsExpanded: null,
     activeScenarios: null,
     minDate: null,
     maxDate: null,
@@ -60,12 +61,12 @@ describe('DataSelectionSlice', () => {
     expect(reducer(state, toggleScenario(2))).toEqual(Object.assign(initialState, {activeScenarios: [1, 4]}));
   });
 
-  test('addFilter', () => {
+  test('Add Group Filter', () => {
     const newFilter = {
       id: 'c9c241fb-c0bd-4710-94b9-f4c9ad98072b',
       name: 'Test Group',
       groups: {age: ['age_1', 'age_2'], gender: ['male', 'female']},
-      toggle: false,
+      isVisible: false,
     };
     expect(reducer(initialState, setGroupFilter(newFilter))).toEqual(
       Object.assign(initialState, {groupFilters: {'c9c241fb-c0bd-4710-94b9-f4c9ad98072b': newFilter}})
