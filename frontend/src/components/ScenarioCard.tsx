@@ -253,8 +253,8 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
                 }}
               >
                 {compartments.map((compartment, i) => (
-                  // hide compartment if expandProperties false and index > 4
-                  // highlight compartment if selectedProperty === compartment
+                  // hide compartment if compartmentsExpanded false and index > 4
+                  // highlight compartment if selectedCompartment === compartment
                   <ListItem
                     key={compartment}
                     sx={{

@@ -124,8 +124,8 @@ function GroupFilterCardCompartmentValues(props: GroupFilterCardProps): JSX.Elem
         >
           {compartments.map((compartment, i) => {
             return (
-              // hide compartment if expandProperties false and index > 4
-              // highlight compartment if selectedProperty === compartment
+              // hide compartment if compartmentsExpanded false and index > 4
+              // highlight compartment if selectedCompartment === compartment
               <ListItem
                 key={compartment}
                 sx={{
