@@ -28,7 +28,7 @@
 ### New Features
 - Scenario Cards
   - selectable compartments
-  - selectable scenarions
+  - selectable scenarios
   - cards displaying scenario values, rate of change compared to case data of start date, and trend arrow indicating positive or negative changes
   - additional compartments after main 4 are hidden behind an expand button
 - Line Chart
