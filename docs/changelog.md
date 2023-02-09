@@ -11,10 +11,12 @@
     - Example of a group filter: "All people of any gender aged 35 or more"
     - Example of a group filter: "All males of any age"
   - The scenario cards now show the active group filters as an collapsable addon to the right.
+  - The line chart displays the group filters with a different line style.
   
 ### Improvements
 - All numbers now show as integers only.
 - The cards are now bigger, so it is less likely for text to overflow.
+- The app now saves, if the compartments were expanded between sessions.
 
 ### Bug fixes
 
