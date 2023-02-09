@@ -4,7 +4,18 @@
 **Release Date:** TBD
 
 ### New Features
-### Imporvements
+- Group Filters
+  - There is a new button below the '+' card on the top right called 'Groups'.
+  - This opens the group filter editor. Here you can create, toggle, edit and delete customizable groups.
+    - Example of a group filter: "All people of any gender aged 35 or less"
+    - Example of a group filter: "All people of any gender aged 35 or more"
+    - Example of a group filter: "All males of any age"
+  - The scenario cards now show the active group filters as an collapsable addon to the right.
+  
+### Improvements
+- All numbers now show as integers only.
+- The cards are now bigger, so it is less likely for text to overflow.
+
 ### Bug fixes
 
 ---
