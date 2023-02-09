@@ -6,6 +6,6 @@ export interface CompartmentFilter {
     id: string;
     name: string;
     toggle: boolean;
-    compartments: Dictionary<{selection: [string, any][]}[]>;
+    compartments: Array<{selection: [string, any][]}>;
   }
   
