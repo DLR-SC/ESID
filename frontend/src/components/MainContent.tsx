@@ -2,8 +2,6 @@ import React from 'react';
 import Scenario from './Scenario';
 import IconBar from './IconBar';
 
-//import Aggregator from './AggregationEditor';
-
 import SimulationChart from './SimulationChart';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';

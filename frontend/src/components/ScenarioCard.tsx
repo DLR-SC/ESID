@@ -84,6 +84,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
       }
     }
 
+    // Return a Figure Dash (‒) where a rate cannot be calculated.
     return '\u2012';
   };
 
@@ -181,7 +182,6 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
           onClick={props.active ? () => props.onClick() : () => true}
           onMouseEnter={() => setHover(true)}
         >
-          {/*back*/}
           <Box
             id={`scenario-card-back-${props.scenario.id}`}
             sx={{
@@ -211,7 +211,6 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
               </Typography>
             </Box>
           </Box>
-          {/*front*/}
           <Box
             id={`scenario-card-front-${props.scenario.id}`}
             sx={{
@@ -253,11 +252,11 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
                 }}
               >
                 {compartments.map((compartment, i) => (
-                  // hide compartment if compartmentsExpanded false and index > 4
-                  // highlight compartment if selectedCompartment === compartment
                   <ListItem
                     key={compartment}
                     sx={{
+                      // hide compartment if compartmentsExpanded false and index > 4
+                      // highlight compartment if selectedCompartment === compartment
                       display: compartmentsExpanded || i < 4 ? 'flex' : 'none',
                       color:
                         selectedCompartment === compartment ? theme.palette.text.primary : theme.palette.text.disabled,
@@ -310,7 +309,7 @@ function GroupFilterAppendage(props: GroupFilterAppendageProps): JSX.Element | n
   const theme = useTheme();
   const groupFilterList = useAppSelector((state) => state.dataSelection.groupFilters);
 
-  const [folded, fold] = useState(true);
+  const [folded, setFolded] = useState(true);
 
   if (!groupFilterList) {
     return null;
@@ -343,7 +342,7 @@ function GroupFilterAppendage(props: GroupFilterAppendageProps): JSX.Element | n
           minWidth: '26px',
           borderRight: `1px solid ${theme.palette.divider}`,
         }}
-        onClick={() => fold(!folded)}
+        onClick={() => setFolded(!folded)}
       >
         {folded ? <ChevronLeft /> : <ChevronRight />}
       </Button>

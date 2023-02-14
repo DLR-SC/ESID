@@ -104,30 +104,6 @@ export default function IconBar(): JSX.Element {
         <ShareIcon />
       </Button>
       */}
-      {/*
-      <Tooltip title={'Filter Chart Anzeigen'}>
-        <Button
-          onClick={() => {
-            handleOpen();
-          }}
-        >
-          <ListIcon />
-        </Button>
-      </Tooltip>
-      <Dialog
-        maxWidth='lg'
-        sx={{
-          display: 'flex',
-          width: '100%',
-          justifyContent: 'center',
-          alignSelf: 'center',
-        }}
-        fullWidth={true}
-        open={open}
-      >
-        <ChartToggle onclose={() => setOpen(false)} />
-      </Dialog>
-      */}
     </Box>
   );
 }

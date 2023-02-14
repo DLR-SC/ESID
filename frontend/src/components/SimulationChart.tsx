@@ -383,17 +383,18 @@ export default function SimulationChart(): JSX.Element {
                     text.push('<tr>');
                     text.push(
                       `<th 
-                style='text-align:left; color:${
-                  (groupFilterSeries.stroke as am4core.Color).hex
-                }; padding-right:${theme.spacing(2)}; padding-left:${theme.spacing(4)}'>
-                <strong>${groupFilterSeries.name}</strong>
-                </th>`
+                         style='text-align:left; color:${
+                           (groupFilterSeries.stroke as am4core.Color).hex
+                         }; padding-right:${theme.spacing(2)}; padding-left:${theme.spacing(4)}'>
+                       <strong>${groupFilterSeries.name}</strong>
+                       </th>`
                     );
                     text.push(
                       `<td style='text-align:right'>${formatNumber(
                         (data as {[key: string]: number})[groupFilterSeries.dataFields.valueY]
                       )}</td>`
                     );
+                    text.push(`</tr>`);
                   }
                 });
               } else {

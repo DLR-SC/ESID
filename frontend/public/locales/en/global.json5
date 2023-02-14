@@ -40,7 +40,7 @@
     more: 'More properties',
     activate: 'Activate scenario',
     deactivate: 'Deactivate scenario',
-    'manage-groups': 'Manage',
+    'manage-groups': 'Groups',
   },
   'group-filters': {
     title: 'Manage Groups',

@@ -124,12 +124,12 @@ function GroupFilterCardCompartmentValues(props: GroupFilterCardProps): JSX.Elem
         >
           {compartments.map((compartment, i) => {
             return (
-              // hide compartment if compartmentsExpanded false and index > 4
-              // highlight compartment if selectedCompartment === compartment
               <ListItem
                 key={compartment}
                 sx={{
+                  // hide compartment if compartmentsExpanded false and index > 4
                   display: compartmentsExpanded || i < 4 ? 'flex' : 'none',
+                  // highlight compartment if selectedCompartment === compartment
                   color: selectedCompartment === compartment ? theme.palette.text.primary : theme.palette.text.disabled,
                   alignContent: 'center',
                   padding: theme.spacing(1),

@@ -35,11 +35,8 @@ import {ManageGroupDialog} from './ManageGroupDialog';
  * @see ScenarioCard
  */
 export default function Scenario(): JSX.Element {
+  // State for the groups management dialog
   const [open, setOpen] = React.useState(false);
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
 
   const {t, i18n} = useTranslation();
   const theme = useTheme();
@@ -368,9 +365,10 @@ export default function Scenario(): JSX.Element {
               alignSelf: 'center',
             }}
             onClick={() => {
-              handleOpen();
+              setOpen(true);
             }}
           >
+            aria-label={t('group-filters.title')}
             {t('scenario.manage-groups')}
           </Button>
         </Box>

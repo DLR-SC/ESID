@@ -35,13 +35,13 @@
   },
   'group-filters': {
     title: 'Gruppen Verwalten',
-    'nothing-selected': 'Wählen sie eine Gruppe aus um diese zu bearbeiten oder erstellen sie eine neue Gruppe.',
+    'nothing-selected': 'Wählen Sie eine Gruppe aus um diese zu bearbeiten oder erstellen Sie eine neue Gruppe.',
     'add-group': 'Neue Gruppe Erstellen',
     name: 'Name',
     close: 'Abbrechen',
     apply: 'Anwenden',
     'confirm-deletion-title': 'Gruppe Löschen',
-    'confirm-deletion-text': 'Sind sie sicher, dass sie die Gruppe "{{groupName}}" wirklich löschen wollen?',
+    'confirm-deletion-text': 'Sind Sie sicher, dass Sie die Gruppe "{{groupName}}" wirklich löschen wollen?',
   },
   chart: {
     caseData: 'Falldaten',
