@@ -56,7 +56,7 @@ export function ManageGroupDialog(props: {onCloseRequest: () => void}): JSX.Elem
         id='group-filter-dialog-title-bar'
         sx={{
           display: 'grid',
-          gridTemplateColumns: '1fr repeat(1, auto) 1fr',
+          gridTemplateColumns: '1fr auto 1fr',
           gridColumnGap: '5px',
           alignItems: 'center',
           justifyItems: 'center',

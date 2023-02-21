@@ -16,6 +16,7 @@ export default function MainContent(): JSX.Element {
       direction='column'
       sx={{
         background: theme.palette.background.default,
+        // The sidebar currently has a fixed width of 423px, so the main content takes up the remaining space.
         maxWidth: 'calc(100% - 423px)',
         width: 'calc(100% - 423px)',
       }}

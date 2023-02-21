@@ -1,6 +1,6 @@
 import {useTheme} from '@mui/material/styles';
 import {useAppSelector} from '../store/hooks';
-import React, {useEffect, useRef} from 'react';
+import React from 'react';
 import Box from '@mui/material/Box';
 import {useGetSingleGroupFilterDataQuery} from '../store/services/groupApi';
 import Typography from '@mui/material/Typography';
@@ -69,7 +69,6 @@ function GroupFilterCardCompartmentValues(props: GroupFilterCardProps): JSX.Elem
 
   const {formatNumber} = NumberFormatter(i18n.language, 1, 0);
 
-  const groupFilterList = useAppSelector((state) => state.dataSelection.groupFilters);
   const day = useAppSelector((state) => state.dataSelection.date);
   const node = useAppSelector((state) => state.dataSelection.district?.ags);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
@@ -85,14 +84,6 @@ function GroupFilterCardCompartmentValues(props: GroupFilterCardProps): JSX.Elem
     },
     {skip: !day}
   );
-
-  const groupCompartmentsRef = useRef<Array<HTMLUListElement | null>>([]);
-
-  useEffect(() => {
-    if (groupFilterList) {
-      groupCompartmentsRef.current.slice(0, Object.values(groupFilterList).length);
-    }
-  }, [groupFilterList]);
 
   const getGroupValue = (compartment: string): string => {
     if (!groupFilterData) {
@@ -113,7 +104,6 @@ function GroupFilterCardCompartmentValues(props: GroupFilterCardProps): JSX.Elem
         <List
           id={`scenario-card-${props.scenarioId}-group-filter-compartment-list-${props.groupFilterIndex}`}
           className='hide-scrollbar'
-          ref={(el) => (groupCompartmentsRef.current[props.groupFilterIndex] = el)}
           dense={true}
           disablePadding={true}
           sx={{

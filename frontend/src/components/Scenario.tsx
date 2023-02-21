@@ -367,8 +367,8 @@ export default function Scenario(): JSX.Element {
             onClick={() => {
               setOpen(true);
             }}
-          >
             aria-label={t('group-filters.title')}
+          >
             {t('scenario.manage-groups')}
           </Button>
         </Box>
