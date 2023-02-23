@@ -36,7 +36,7 @@ export default function DistrictMap(): JSX.Element {
   const [geodata, setGeodata] = useState<GeoJSON.GeoJSON | null>(null);
   const [longLoad, setLongLoad] = useState(false);
   const [longLoadTimeout, setLongLoadTimeout] = useState<number>();
-  //const selectedDistrict = useAppSelector((state) => state.dataSelection.district);
+  const selectedDistrict = useAppSelector((state) => state.dataSelection.district);
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
   const selectedDate = useAppSelector((state) => state.dataSelection.date);
@@ -60,7 +60,7 @@ export default function DistrictMap(): JSX.Element {
   const {formatNumber} = NumberFormatter(i18n.language, 3, 8);
   const theme = useTheme();
   const dispatch = useAppDispatch();
-  //const lastSelectedPolygon = useRef<am5map.MapPolygon | null>(null);
+  const lastSelectedPolygon = useRef<am5map.MapPolygon | null>(null);
   const [fixedLegendMaxValue, setFixedLegendMaxValue] = useState<number | null>(null);
 
   // use Memoized to store aggregated max and only recalculate if parameters change
@@ -181,9 +181,9 @@ export default function DistrictMap(): JSX.Element {
     };
   }, [geodata, theme, t, formatNumber, dispatch]);
 
-  //const polygonSeriesLength = (chartRef.current?.series.getIndex(0) as am5map.MapPolygonSeries)?.mapPolygons.length; //needed as trigger for the following effect
+  const polygonSeriesLength = (chartRef.current?.series.getIndex(0) as am5map.MapPolygonSeries)?.mapPolygons.length; //needed as trigger for the following effect
 
-  /*  useEffect(() => {
+  useEffect(() => {
     // unselect previous
     if (chartRef.current && lastSelectedPolygon.current) {
       // reset style
@@ -194,6 +194,7 @@ export default function DistrictMap(): JSX.Element {
       });
       lastSelectedPolygon.current.states.apply('default');
     }
+    // select new
     if (selectedDistrict.ags !== '00000' && chartRef.current && chartRef.current.series.length > 0) {
       const series = chartRef.current.series.getIndex(0) as am5map.MapPolygonSeries;
       series.mapPolygons.each((polygon) => {
@@ -213,7 +214,7 @@ export default function DistrictMap(): JSX.Element {
       });
     }
   }, [selectedDistrict, theme, polygonSeriesLength]);
- */
+
   // set Data
   useEffect(() => {
     if (chartRef.current && chartRef.current.series.length > 0) {
@@ -280,10 +281,7 @@ export default function DistrictMap(): JSX.Element {
     legend,
     longLoad,
   ]);
-  /*   useEffect(() => {
-    // search polygon list for selected district
-    // apply hover effect or highlight hovering effect.
-  }, [selectedDistrict]); */
+
   return (
     <LoadingContainer show={isFetching && longLoad} overlayColor={theme.palette.background.default}>
       <Box id='mapdiv' height={'650px'} />
