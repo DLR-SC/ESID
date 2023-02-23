@@ -12,20 +12,20 @@ export default function Sidebar(): JSX.Element {
 
   return (
     <Stack
+      id='sidebar-root'
       direction='column'
       alignItems='stretch'
       justifyContent='flex-start'
       sx={{
-        width: 422,
-        height: 1,
+        width: '422px',
         borderRight: `1px solid ${theme.palette.divider}`,
         background: theme.palette.background.default,
       }}
     >
-      <Box>
+      <Box id='sidebar-map-search-bar-wrapper'>
         <SearchBar />
       </Box>
-      <Box>
+      <Box id='sidebar-map-wrapper'>
         <DistrictMap />
       </Box>
       <Container disableGutters sx={{flexGrow: 1}}>

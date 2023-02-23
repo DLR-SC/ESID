@@ -1,6 +1,7 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import i18n from '../util/i18n';
-import {dateToISOString} from '../util/util';
+import {dateToISOString, Dictionary} from '../util/util';
+import {GroupFilter} from 'types/group';
 
 /**
  * AGS is the abbreviation for "Amtlicher Gemeindeschlüssel" in German, which are IDs of areas in Germany. The AGS have
@@ -15,10 +16,12 @@ export interface DataSelection {
   date: string | null;
   scenario: number | null;
   compartment: string | null;
+  compartmentsExpanded: boolean | null;
   activeScenarios: number[] | null;
 
   minDate: string | null;
   maxDate: string | null;
+  groupFilters: Dictionary<GroupFilter>;
 }
 
 const initialState: DataSelection = {
@@ -26,10 +29,12 @@ const initialState: DataSelection = {
   date: null,
   scenario: null,
   compartment: null,
+  compartmentsExpanded: null,
   activeScenarios: null,
 
   minDate: null,
   maxDate: null,
+  groupFilters: {},
 };
 
 /**
@@ -92,6 +97,20 @@ export const DataSelectionSlice = createSlice({
     selectCompartment(state, action: PayloadAction<string>) {
       state.compartment = action.payload;
     },
+    toggleCompartmentExpansion(state) {
+      state.compartmentsExpanded = !state.compartmentsExpanded;
+    },
+    setGroupFilter(state, action: PayloadAction<GroupFilter>) {
+      state.groupFilters[action.payload.id] = action.payload;
+    },
+    deleteGroupFilter(state, action: PayloadAction<string>) {
+      delete state.groupFilters[action.payload];
+    },
+    toggleGroupFilter(state, action: PayloadAction<string>) {
+      if (state.groupFilters[action.payload]) {
+        state.groupFilters[action.payload].isVisible = !state.groupFilters[action.payload].isVisible;
+      }
+    },
   },
 });
 
@@ -102,7 +121,12 @@ export const {
   nextDay,
   setMinMaxDates,
   selectScenario,
-  toggleScenario,
   selectCompartment,
+  toggleCompartmentExpansion,
+  setGroupFilter,
+  deleteGroupFilter,
+  toggleGroupFilter,
+  toggleScenario,
 } = DataSelectionSlice.actions;
+
 export default DataSelectionSlice.reducer;

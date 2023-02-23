@@ -10,6 +10,10 @@ module.exports = {
       version: 'detect',
     },
   },
+  globals: {
+    crypto: 'readonly',
+    window: 'readonly',
+  },
   plugins: ['@typescript-eslint', 'jest', 'react', 'react-hooks'],
   extends: [
     'eslint:recommended',

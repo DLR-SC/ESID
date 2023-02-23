@@ -6,6 +6,7 @@ import {scenarioApi} from './services/scenarioApi';
 import UserPreferenceReducer from './UserPreferenceSlice';
 import {persistReducer, persistStore} from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
+import {groupApi} from './services/groupApi';
 
 const persistConfig = {
   key: 'root',
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
   userPreference: UserPreferenceReducer,
   [caseDataApi.reducerPath]: caseDataApi.reducer,
   [scenarioApi.reducerPath]: scenarioApi.reducer,
+  [groupApi.reducerPath]: groupApi.reducer,
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 

@@ -22,9 +22,18 @@ export default function App(): JSX.Element {
       <Provider store={Store}>
         <ThemeProvider theme={Theme}>
           <PersistGate loading={null} persistor={Persistor}>
-            <Box id='app' display='flex' flexDirection='column' style={{height: '100%'}}>
+            <Box id='app' display='flex' flexDirection='column' sx={{height: '100%', width: '100%'}}>
               <TopBar />
-              <Box display='flex' flexDirection='row' flexGrow={1} alignItems='stretch'>
+              <Box
+                id='app-content'
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  flexGrow: 1,
+                  alignItems: 'stretch',
+                  width: '100%',
+                }}
+              >
                 <Sidebar />
                 <MainContent />
               </Box>
