@@ -31,6 +31,17 @@
     more: 'Mehr Eigenschaften',
     activate: 'Scenario aktivieren',
     deactivate: 'Scenario deaktivieren',
+    'manage-groups': 'Gruppen',
+  },
+  'group-filters': {
+    title: 'Gruppen Verwalten',
+    'nothing-selected': 'Wählen Sie eine Gruppe aus um diese zu bearbeiten oder erstellen Sie eine neue Gruppe.',
+    'add-group': 'Neue Gruppe Erstellen',
+    name: 'Name',
+    close: 'Abbrechen',
+    apply: 'Anwenden',
+    'confirm-deletion-title': 'Gruppe Löschen',
+    'confirm-deletion-text': 'Sind Sie sicher, dass Sie die Gruppe "{{groupName}}" wirklich löschen wollen?',
   },
   chart: {
     caseData: 'Falldaten',

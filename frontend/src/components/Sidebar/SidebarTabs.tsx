@@ -1,4 +1,4 @@
-import {Box /*, Tabs, Tab*/} from '@mui/material';
+import Box from '@mui/material/Box';
 import {useTranslation} from 'react-i18next';
 import React from 'react';
 

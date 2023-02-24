@@ -3,7 +3,10 @@ import {useTheme} from '@mui/material/styles';
 import {useTranslation} from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
 import LazyLoad from 'react-lazyload';
-import {Box, CircularProgress, Grid, Typography} from '@mui/material';
+import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
 
 interface DependencyData {
   name: string;

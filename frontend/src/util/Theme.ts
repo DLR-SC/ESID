@@ -73,16 +73,16 @@ export default createTheme({
     fontFamily: ['Inter', 'Arial', 'sans-serif'].join(','),
     fontSize: 13,
     h1: {
-      fontSize: 16,
+      fontSize: '16pt',
       fontWeight: 700,
       lineHeight: 1.2,
     },
     h2: {
-      fontSize: 13,
+      fontSize: '13pt',
       fontWeight: 600,
     },
     h3: {
-      fontSize: 12,
+      fontSize: '12pt',
       fontWeight: 600,
       lineHeight: 1.15,
     },
@@ -92,30 +92,39 @@ export default createTheme({
     subtitle1: undefined,
     subtitle2: undefined,
     body1: {
-      fontSize: 13,
+      fontSize: '13pt',
       fontWeight: 400,
     },
     body2: {
-      fontSize: 12,
+      fontSize: '12pt',
       fontWeight: 400,
     },
     button: {
-      fontSize: 12,
+      fontSize: '12pt',
       fontWeight: 500,
     },
     caption: {
-      fontSize: 10,
+      fontSize: '10pt',
       fontWeight: 600,
       // monospace Inter font does not exist
     },
     overline: undefined,
     listElement: {
-      fontSize: 13,
+      fontSize: '11pt',
       fontWeight: 500,
       fontFeatureSettings: `'tnum' on`,
     },
   },
   spacing: [0, 4, 8, 12, 26],
+  components: {
+    MuiDialog: {
+      styleOverrides: {
+        root: {
+          backdropFilter: 'blur(5px)',
+        },
+      },
+    },
+  },
   custom: {
     //scenario colors with gradations, so the main color of a scenario is at [scenario_index][0]
     scenarios: [
@@ -123,7 +132,7 @@ export default createTheme({
       ['#876BE3', '#9C85E5', '#9AA3F5', '#C2C8FF', '#8C8C8C'],
       ['#CC5AC7', '#E581E1', '#CF9EF0', '#E4BDFF', '#8C8C8C'],
       ['#EBA73B', '#F2C479', '#F7DD8D', '#FFF0A3', '#8C8C8C'],
-      ['#34C290', '#54E3B1', '#8AEDDB', '#8AEDDB', '#8C8C8C'],
+      ['#34C290', '#54E3B1', '#8AEDDB', '#B5FFF1', '#8C8C8C'],
       ['#EB7651', '#F0987D', '#F5BBA8', '#FADDD4', '#8C8C8C'],
       ['#34BEC7', '#67CED5', '#9ADFE3', '#CCEFF1', '#8C8C8C'],
       ['#9FC750', '#B7D57C', '#CFE3A8', '#E7F1D3', '#8C8C8C'],

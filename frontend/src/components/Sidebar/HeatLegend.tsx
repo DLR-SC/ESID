@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {useTheme} from '@mui/material/styles';
-import {Box} from '@mui/material';
+import Box from '@mui/material/Box';
 import * as am5 from '@amcharts/amcharts5';
 import {useTranslation} from 'react-i18next';
 import {NumberFormatter} from 'util/hooks';

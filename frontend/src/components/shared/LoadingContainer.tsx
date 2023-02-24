@@ -1,6 +1,7 @@
 import React from 'react';
-import {Box, SxProps} from '@mui/material';
+import Box from '@mui/material/Box';
 import LoadingOverlay from './LoadingOverlay';
+import {SxProps} from '@mui/system';
 
 /**
  * This is a wrapper component for a container that can have a loading indicator overlayed.

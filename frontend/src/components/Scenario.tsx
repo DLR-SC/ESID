@@ -2,9 +2,22 @@ import React, {useEffect, useState} from 'react';
 import {useAppDispatch, useAppSelector} from '../store/hooks';
 import {useTheme} from '@mui/material/styles';
 import {useTranslation} from 'react-i18next';
-import {selectCompartment, selectScenario, setMinMaxDates, toggleScenario} from 'store/DataSelectionSlice';
+import {
+  selectCompartment,
+  selectScenario,
+  setMinMaxDates,
+  toggleCompartmentExpansion,
+  toggleScenario,
+} from 'store/DataSelectionSlice';
 import ScenarioCard from './ScenarioCard';
-import {Box, Button, List, ListItemButton, ListItemText, Typography} from '@mui/material';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import List from '@mui/material/List';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
+import Dialog from '@mui/material/Dialog';
+import {ScrollSync, ScrollSyncPane} from 'react-scroll-sync';
 import {
   useGetSimulationModelQuery,
   useGetSimulationModelsQuery,
@@ -14,6 +27,7 @@ import {setCompartments, setScenarios} from 'store/ScenarioSlice';
 import {dateToISOString, Dictionary} from 'util/util';
 import {useGetCaseDataSingleSimulationEntryQuery} from '../store/services/caseDataApi';
 import {NumberFormatter} from '../util/hooks';
+import {ManageGroupDialog} from './ManageGroupDialog';
 
 /**
  * React Component to render the Scenario Cards Section
@@ -21,18 +35,15 @@ import {NumberFormatter} from '../util/hooks';
  * @see ScenarioCard
  */
 export default function Scenario(): JSX.Element {
+  // State for the groups management dialog
+  const [open, setOpen] = React.useState(false);
+
   const {t, i18n} = useTranslation();
   const theme = useTheme();
 
   const dispatch = useAppDispatch();
-  const [expandProperties, setExpandProperties] = useState(false);
   const [simulationModelKey, setSimulationModelKey] = useState<string>('unset');
   const [compartmentValues, setCompartmentValues] = useState<Dictionary<number> | null>(null);
-  const [scrollTop, setScrollTop] = useState(0);
-
-  function handleScroll(scrollEvent: React.UIEvent<HTMLElement>) {
-    setScrollTop(scrollEvent.currentTarget.scrollTop);
-  }
 
   const {formatNumber} = NumberFormatter(i18n.language, 3, 8);
 
@@ -46,6 +57,7 @@ export default function Scenario(): JSX.Element {
   const scenarioList = useAppSelector((state) => state.scenarioList);
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
+  const compartmentsExpanded = useAppSelector((state) => state.dataSelection.compartmentsExpanded);
   const node = useAppSelector((state) => state.dataSelection.district.ags);
   const startDay = useAppSelector((state) => state.dataSelection.minDate);
   const activeScenarios = useAppSelector((state) => state.dataSelection.activeScenarios);
@@ -127,207 +139,243 @@ export default function Scenario(): JSX.Element {
   }, [activeScenarios, selectedScenario, dispatch]);
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        cursor: 'default',
-        background: theme.palette.background.default,
-      }}
-    >
+    <ScrollSync enabled={compartmentsExpanded || false}>
       <Box
+        id='scenario-view-root'
         sx={{
-          borderRight: `2px dashed ${theme.palette.divider}`,
-          flexGrow: 0,
-          flexShrink: 0,
-          flexBasis: '274px',
-          minHeight: '20vh',
           display: 'flex',
-          flexDirection: 'column',
-          marginTop: theme.spacing(3),
-          borderTop: '2px solid transparent', // invisible border for alignment with the scenario card
-          paddingBottom: 0,
-          paddingTop: theme.spacing(2),
-          paddingLeft: 0,
-          paddingRight: 0,
+          cursor: 'default',
+          background: theme.palette.background.default,
+          maxWidth: '100%',
         }}
       >
         <Box
+          id='scenario-view-compartment-list-root'
           sx={{
-            display: 'flex',
-            alignItems: 'flex-end',
-            height: '3rem',
-            marginLeft: 'auto',
-            marginRight: 0,
-            marginBottom: theme.spacing(1),
-            paddingRight: theme.spacing(3),
-          }}
-        >
-          <Typography
-            variant='h2'
-            sx={{
-              textAlign: 'right',
-              height: 'min-content',
-              fontWeight: 'bold',
-              fontSize: '13pt',
-            }}
-          >
-            {startDay ? new Date(startDay).toLocaleDateString(i18n.language) : t('today')}
-          </Typography>
-        </Box>
-        <List
-          dense={true}
-          disablePadding={true}
-          sx={{
-            maxHeight: expandProperties ? '248px' : 'auto',
-            overflowY: 'auto',
-          }}
-          onScroll={handleScroll}
-        >
-          {scenarioList.compartments.map((compartment, i) => (
-            // map all compartments to display compartment list
-            <ListItemButton
-              key={compartment}
-              sx={{
-                display: expandProperties || i < 4 ? 'flex' : 'none',
-                padding: theme.spacing(1),
-                paddingLeft: theme.spacing(3),
-                paddingRight: theme.spacing(3),
-                margin: theme.spacing(0),
-                marginTop: theme.spacing(1),
-                borderLeft: `2px ${
-                  selectedCompartment === compartment ? theme.palette.primary.main : 'transparent'
-                } solid`,
-                '&.MuiListItemButton-root.Mui-selected': {
-                  backgroundColor: theme.palette.background.paper,
-                },
-              }}
-              selected={selectedCompartment === compartment}
-              onClick={() => {
-                // dispatch new compartment name
-                dispatch(selectCompartment(compartment));
-              }}
-            >
-              <ListItemText
-                primary={compartment}
-                // disable child typography overriding this
-                disableTypography={true}
-                sx={{
-                  typography: 'listElement',
-                  fontWeight: selectedCompartment === compartment ? 'bold' : 'normal',
-                  flexGrow: 1,
-                  flexBasis: 100,
-                }}
-              />
-              <ListItemText
-                primary={getCompartmentValue(compartment)}
-                // disable child typography overriding this
-                disableTypography={true}
-                sx={{
-                  typography: 'listElement',
-                  color: selectedCompartment === compartment ? theme.palette.text.primary : theme.palette.text.disabled,
-                  textAlign: 'right',
-                  flexGrow: 1,
-                }}
-              />
-            </ListItemButton>
-          ))}
-        </List>
-        <Button
-          variant='outlined'
-          color='primary'
-          sx={{
-            margin: theme.spacing(3),
-            marginTop: theme.spacing(4),
-            marginBottom: 0,
-            padding: theme.spacing(1),
-          }}
-          aria-label={t('scenario.more')}
-          onClick={() => {
-            setExpandProperties(!expandProperties);
-            // unselect Property if hidden through show less button
-            if (
-              scenarioList.compartments.findIndex((o) => {
-                return o === selectedCompartment;
-              }) > 4
-            ) {
-              if (scenarioList.compartments.length > 0) {
-                dispatch(selectCompartment(scenarioList.compartments[0]));
-              }
-            }
-          }}
-        >
-          {expandProperties ? t('less') : t('more')}
-        </Button>
-      </Box>
-      <Box
-        sx={{
-          flexGrow: 1,
-          flexShrink: 1,
-          flexBasis: '100%',
-          display: 'flex',
-          overflowX: 'auto',
-          marginLeft: theme.spacing(3),
-        }}
-      >
-        {Object.entries(scenarioList.scenarios).map(([, scenario], i) => (
-          <ScenarioCard
-            key={i}
-            scenario={scenario}
-            selected={selectedScenario === scenario.id}
-            active={!!activeScenarios && activeScenarios.includes(scenario.id)}
-            color={theme.custom.scenarios[i][0]}
-            selectedProperty={selectedCompartment || ''}
-            expandProperties={expandProperties}
-            scrollTop={scrollTop}
-            startValues={compartmentValues}
-            onClick={() => {
-              // set active scenario to this one and send dispatches
-              dispatch(selectScenario(scenario.id));
-            }}
-            onToggle={() => {
-              dispatch(toggleScenario(scenario.id));
-            }}
-          />
-        ))}
-      </Box>
-      <Box
-        sx={{
-          borderLeft: `1px solid`,
-          borderColor: 'divider',
-          flexGrow: 0,
-          flexShrink: 0,
-          flexBasis: '185px',
-          minHeight: '20vh',
-          paddingLeft: theme.spacing(3),
-          paddingRight: theme.spacing(3),
-          display: 'flex',
-        }}
-      >
-        <Button
-          variant='outlined'
-          color='success'
-          sx={{
+            borderRight: `2px dashed ${theme.palette.divider}`,
             flexGrow: 0,
             flexShrink: 0,
-            flexBasis: '160px',
-            height: '212px',
-            margin: theme.spacing(3),
-            fontWeight: 'bolder',
-            fontSize: '3rem',
-            border: `2px ${theme.palette.divider} dashed`,
-            borderRadius: '3px',
-            color: theme.palette.divider,
-
-            '&:hover': {
-              border: `2px ${theme.palette.divider} dashed`,
-              background: '#E7E7E7',
-            },
+            flexBasis: '274px',
+            minHeight: '20vh',
+            maxWidth: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            marginTop: theme.spacing(3),
+            borderTop: '2px solid transparent', // invisible border for alignment with the scenario card
+            paddingBottom: 0,
+            paddingTop: theme.spacing(2),
+            paddingLeft: 0,
+            paddingRight: 0,
           }}
-          aria-label={t('scenario.add')}
         >
-          +
-        </Button>
+          <Box
+            id='scenario-view-compartment-list-date'
+            sx={{
+              display: 'flex',
+              alignItems: 'flex-end',
+              height: '3rem',
+              marginLeft: 'auto',
+              marginRight: 0,
+              marginBottom: theme.spacing(1),
+              paddingRight: theme.spacing(3),
+
+              // This invisible border mirrors the existing border of the scenario cards and ensures correct alignment.
+              borderTop: '2px solid transparent',
+            }}
+          >
+            <Typography
+              variant='h2'
+              sx={{
+                textAlign: 'right',
+                height: 'min-content',
+                fontWeight: 'bold',
+                fontSize: '13pt',
+              }}
+            >
+              {startDay ? new Date(startDay).toLocaleDateString(i18n.language) : t('today')}
+            </Typography>
+          </Box>
+          <ScrollSyncPane group='compartments'>
+            <List
+              id='scenario-view-compartment-list'
+              dense={true}
+              disablePadding={true}
+              sx={{
+                maxHeight: compartmentsExpanded ? '248px' : 'auto',
+                overflowY: 'auto',
+              }}
+            >
+              {scenarioList.compartments.map((compartment, i) => (
+                // map all compartments to display compartment list
+                <ListItemButton
+                  key={compartment}
+                  sx={{
+                    display: compartmentsExpanded || i < 4 ? 'flex' : 'none',
+                    padding: theme.spacing(1),
+                    paddingLeft: theme.spacing(3),
+                    paddingRight: theme.spacing(3),
+                    margin: theme.spacing(0),
+                    marginTop: theme.spacing(1),
+                    borderLeft: `2px ${
+                      selectedCompartment === compartment ? theme.palette.primary.main : 'transparent'
+                    } solid`,
+                    borderTop: `2px ${
+                      selectedCompartment === compartment ? theme.palette.background.paper : 'transparent'
+                    } solid`,
+                    borderBottom: `2px ${
+                      selectedCompartment === compartment ? theme.palette.background.paper : 'transparent'
+                    } solid`,
+                    '&.MuiListItemButton-root.Mui-selected': {
+                      backgroundColor: theme.palette.background.paper,
+                    },
+                  }}
+                  selected={selectedCompartment === compartment}
+                  onClick={() => {
+                    // dispatch new compartment name
+                    dispatch(selectCompartment(compartment));
+                  }}
+                >
+                  <ListItemText
+                    primary={compartment}
+                    // disable child typography overriding this
+                    disableTypography={true}
+                    sx={{
+                      typography: 'listElement',
+                      fontWeight: selectedCompartment === compartment ? 'bold' : 'normal',
+                      flexGrow: 1,
+                      flexBasis: 100,
+                      zIndex: 20,
+                    }}
+                  />
+                  <ListItemText
+                    primary={getCompartmentValue(compartment)}
+                    // disable child typography overriding this
+                    disableTypography={true}
+                    sx={{
+                      typography: 'listElement',
+                      color:
+                        selectedCompartment === compartment ? theme.palette.text.primary : theme.palette.text.disabled,
+                      textAlign: 'right',
+                      flexGrow: 1,
+                      zIndex: 20,
+                    }}
+                  />
+                </ListItemButton>
+              ))}
+            </List>
+          </ScrollSyncPane>
+          <Button
+            variant='outlined'
+            color='primary'
+            sx={{
+              margin: theme.spacing(3),
+              marginTop: theme.spacing(4),
+              marginBottom: 0,
+              padding: theme.spacing(1),
+            }}
+            aria-label={t('scenario.more')}
+            onClick={() => {
+              dispatch(toggleCompartmentExpansion());
+              if (
+                scenarioList.compartments.findIndex((o) => {
+                  return o === selectedCompartment;
+                }) > 4
+              ) {
+                if (scenarioList.compartments.length > 0) {
+                  dispatch(selectCompartment(scenarioList.compartments[0]));
+                }
+              }
+            }}
+          >
+            {compartmentsExpanded ? t('less') : t('more')}
+          </Button>
+        </Box>
+        <Box
+          id='scenario-view-scenario-card-list'
+          sx={{
+            flexGrow: 1,
+            flexShrink: 1,
+            flexBasis: '100%',
+            display: 'flex',
+            overflowX: 'auto',
+            marginLeft: theme.spacing(3),
+            minWidth: '400px',
+          }}
+        >
+          {Object.entries(scenarioList.scenarios).map(([, scenario], i) => (
+            <ScenarioCard
+              key={i}
+              scenario={scenario}
+              selected={selectedScenario === scenario.id}
+              active={!!activeScenarios && activeScenarios.includes(scenario.id)}
+              color={theme.custom.scenarios[i][0]}
+              startValues={compartmentValues}
+              onClick={() => {
+                // set active scenario to this one and send dispatches
+                dispatch(selectScenario(scenario.id));
+              }}
+              onToggle={() => {
+                dispatch(toggleScenario(scenario.id));
+              }}
+            />
+          ))}
+        </Box>
+        <Box
+          sx={{
+            borderLeft: `1px solid`,
+            borderColor: 'divider',
+            minHeight: '20vh',
+            paddingLeft: theme.spacing(3),
+            paddingRight: theme.spacing(3),
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
+          <Button
+            variant='outlined'
+            color='success'
+            sx={{
+              height: '244px',
+              width: '200px',
+              margin: theme.spacing(3),
+              marginTop: theme.spacing(2),
+              fontWeight: 'bolder',
+              fontSize: '3rem',
+              border: `2px ${theme.palette.divider} dashed`,
+              borderRadius: '3px',
+              color: theme.palette.divider,
+              alignSelf: 'top',
+
+              '&:hover': {
+                border: `2px ${theme.palette.divider} dashed`,
+                background: '#E7E7E7',
+              },
+            }}
+            aria-label={t('scenario.add')}
+          >
+            +
+          </Button>
+
+          <Button
+            variant='outlined'
+            color='primary'
+            sx={{
+              width: '200px',
+              margin: theme.spacing(2),
+              alignSelf: 'center',
+            }}
+            onClick={() => {
+              setOpen(true);
+            }}
+            aria-label={t('group-filters.title')}
+          >
+            {t('scenario.manage-groups')}
+          </Button>
+        </Box>
+        <Dialog maxWidth='lg' fullWidth={true} open={open} onClose={() => setOpen(false)}>
+          <ManageGroupDialog onCloseRequest={() => setOpen(false)} />
+        </Dialog>
       </Box>
-    </Box>
+    </ScrollSync>
   );
 }

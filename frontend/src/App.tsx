@@ -7,7 +7,7 @@ import TopBar from './components/TopBar';
 import Sidebar from './components/Sidebar';
 import MainContent from './components/MainContent';
 import {Store, Persistor} from './store';
-import {Box} from '@mui/material';
+import Box from '@mui/material/Box';
 import {ThemeProvider} from '@mui/material/styles';
 import Theme from './util/Theme';
 import {PersistGate} from 'redux-persist/integration/react';
@@ -22,9 +22,18 @@ export default function App(): JSX.Element {
       <Provider store={Store}>
         <ThemeProvider theme={Theme}>
           <PersistGate loading={null} persistor={Persistor}>
-            <Box id='app' display='flex' flexDirection='column' style={{height: '100%'}}>
+            <Box id='app' display='flex' flexDirection='column' sx={{height: '100%', width: '100%'}}>
               <TopBar />
-              <Box display='flex' flexDirection='row' flexGrow={1} alignItems='stretch'>
+              <Box
+                id='app-content'
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  flexGrow: 1,
+                  alignItems: 'stretch',
+                  width: '100%',
+                }}
+              >
                 <Sidebar />
                 <MainContent />
               </Box>
