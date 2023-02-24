@@ -11,6 +11,11 @@ import {GroupFilter} from 'types/group';
  */
 export type AGS = string;
 
+/**
+ * This contains all the state, that the user can configure directly.
+ *
+ * IMPORTANT: ALL NEW ADDITIONS MUST BE NULLABLE TO ENSURE EXISTING CACHES DOESN'T BREAK ON UPDATES!
+ */
 export interface DataSelection {
   district: {ags: AGS; name: string; type: string};
   date: string | null;
@@ -21,7 +26,7 @@ export interface DataSelection {
 
   minDate: string | null;
   maxDate: string | null;
-  groupFilters: Dictionary<GroupFilter>;
+  groupFilters: Dictionary<GroupFilter> | null;
 }
 
 const initialState: DataSelection = {
@@ -101,12 +106,24 @@ export const DataSelectionSlice = createSlice({
       state.compartmentsExpanded = !state.compartmentsExpanded;
     },
     setGroupFilter(state, action: PayloadAction<GroupFilter>) {
+      if (!state.groupFilters) {
+        state.groupFilters = {};
+      }
+
       state.groupFilters[action.payload.id] = action.payload;
     },
     deleteGroupFilter(state, action: PayloadAction<string>) {
+      if (!state.groupFilters) {
+        state.groupFilters = {};
+      }
+
       delete state.groupFilters[action.payload];
     },
     toggleGroupFilter(state, action: PayloadAction<string>) {
+      if (!state.groupFilters) {
+        state.groupFilters = {};
+      }
+
       if (state.groupFilters[action.payload]) {
         state.groupFilters[action.payload].isVisible = !state.groupFilters[action.payload].isVisible;
       }

@@ -87,7 +87,7 @@ export function ManageGroupDialog(props: {onCloseRequest: () => void}): JSX.Elem
             padding: theme.spacing(2),
           }}
         >
-          {Object.values(groupFilterList)?.map((item) => (
+          {Object.values(groupFilterList || {})?.map((item) => (
             <GroupFilterCard
               key={item.id}
               item={item}
