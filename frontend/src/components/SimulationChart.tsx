@@ -5,7 +5,7 @@ import am4lang_en_US from '@amcharts/amcharts4/lang/en_US';
 import am4lang_de_DE from '@amcharts/amcharts4/lang/de_DE';
 import {useAppDispatch, useAppSelector} from '../store/hooks';
 import {useTheme} from '@mui/material/styles';
-import {Box} from '@mui/material';
+import Box from '@mui/material/Box';
 import {selectDate} from '../store/DataSelectionSlice';
 import {useGetCaseDataByDistrictQuery} from '../store/services/caseDataApi';
 import {dateToISOString} from 'util/util';
@@ -17,7 +17,8 @@ import {
 import {useTranslation} from 'react-i18next';
 import {NumberFormatter} from 'util/hooks';
 import LoadingContainer from './shared/LoadingContainer';
-
+import {useGetMultipleGroupFilterDataQuery} from 'store/services/groupApi';
+import {GroupData} from 'types/group';
 /* This component displays the evolution of the pandemic for a specific compartment (hospitalized, dead, infected, etc.) regarding the different scenarios
  */
 
@@ -37,7 +38,23 @@ export default function SimulationChart(): JSX.Element {
   const selectedDate = useAppSelector((state) => state.dataSelection.date);
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
   const activeScenarios = useAppSelector((state) => state.dataSelection.activeScenarios);
+  const groupFilterList = useAppSelector((state) => state.dataSelection.groupFilters);
   const dispatch = useAppDispatch();
+
+  const {data: groupFilterData} = useGetMultipleGroupFilterDataQuery(
+    groupFilterList && selectedScenario && selectedDistrict && selectedCompartment
+      ? Object.values(groupFilterList)
+          .filter((groupFilter) => groupFilter.isVisible)
+          .map((groupFilter) => {
+            return {
+              id: selectedScenario,
+              node: selectedDistrict,
+              compartment: selectedCompartment,
+              groupFilter: groupFilter,
+            };
+          })
+      : []
+  );
 
   const {data: caseData, isFetching: caseDataFetching} = useGetCaseDataByDistrictQuery(
     {
@@ -144,6 +161,29 @@ export default function SimulationChart(): JSX.Element {
     };
     chart.exporting.filePrefix = 'Covid Simulaton Data';
 
+    // Add series for groupFilter
+    if (groupFilterList && selectedScenario) {
+      const groupFilterStrokes = ['2,4', '8,4', '8,4,2,4'];
+      Object.values(groupFilterList)
+        .filter((groupFilter) => groupFilter.isVisible)
+        .forEach((groupFilter, i) => {
+          const series = chart.series.push(new am4charts.LineSeries());
+          series.dataFields.valueY = groupFilter.name;
+          series.dataFields.dateX = 'date';
+          series.id = 'group-filter-' + groupFilter.name;
+          series.strokeWidth = 2;
+          series.fill = am4core.color(
+            theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0]
+          );
+          series.stroke = series.fill;
+          if (i < groupFilterStrokes.length) {
+            series.strokeDasharray = groupFilterStrokes[i];
+          }
+          series.tooltipText = `[bold ${series.stroke.hex}]${groupFilter.name}:[/] {${i}}`;
+          series.name = groupFilter.name;
+        });
+    }
+
     chart.events.on('hit', () => {
       // Timezone shenanigans could get us the wrong day ...
       const date = new Date(dateAxis.tooltipDate);
@@ -157,7 +197,7 @@ export default function SimulationChart(): JSX.Element {
     return () => {
       chartRef.current?.dispose();
     };
-  }, [scenarioList, dispatch, i18n.language, t, theme]);
+  }, [scenarioList, groupFilterList, dispatch, i18n.language, t, theme, selectedScenario]);
 
   //Effect to hide disabled scenarios (and show them again if not hidden anymore)
   useEffect(() => {
@@ -217,7 +257,7 @@ export default function SimulationChart(): JSX.Element {
         console.error(e);
       }
     };
-  }, [scenarioList, selectedDate, theme, t, i18n.language]);
+  }, [scenarioList, selectedDate, theme, t, i18n.language, groupFilterData]);
 
   // Effect to update Simulation and case data
   useEffect(() => {
@@ -259,6 +299,22 @@ export default function SimulationChart(): JSX.Element {
         dataMap.set(entry.day, {...dataMap.get(entry.day), percentileUp: entry.compartments[selectedCompartment]});
       });
 
+      // Add groupFilter data
+      if (groupFilterList && groupFilterData) {
+        Object.values(groupFilterList).forEach((groupFilter) => {
+          if (groupFilter && groupFilter.isVisible) {
+            if (groupFilterData[groupFilter.name]) {
+              groupFilterData[groupFilter.name].results.forEach((entry: GroupData) => {
+                dataMap.set(entry.day, {
+                  ...dataMap.get(entry.day),
+                  [groupFilter.name]: entry.compartments[selectedCompartment],
+                });
+              });
+            }
+          }
+        });
+      }
+
       //change fill color of percentile series to selected scenario color
       const percentileSeries = chartRef.current.map.getKey('percentiles') as am4charts.LineSeries;
       if (
@@ -293,7 +349,8 @@ export default function SimulationChart(): JSX.Element {
               s.dataFields.valueY &&
               data &&
               (data as {[key: string]: number | string})[s.dataFields.valueY] &&
-              s.id !== 'percentiles'
+              s.id !== 'percentiles' &&
+              !s.id.startsWith('group-filter-')
             ) {
               text.push('<tr>');
               text.push(
@@ -316,10 +373,34 @@ export default function SimulationChart(): JSX.Element {
                   `<td>[${formatNumber((data as {[key: string]: number})[percentileSeries.dataFields.openValueY])} - 
                     ${formatNumber((data as {[key: string]: number})[percentileSeries.dataFields.valueY])}]</td>`
                 );
+                chartRef.current?.series.each((groupFilterSeries) => {
+                  if (
+                    groupFilterSeries.id.startsWith('group-filter-') &&
+                    groupFilterSeries.dataFields.valueY &&
+                    data &&
+                    (data as {[key: string]: number | string})[groupFilterSeries.dataFields.valueY]
+                  ) {
+                    text.push('<tr>');
+                    text.push(
+                      `<th 
+                         style='text-align:left; color:${
+                           (groupFilterSeries.stroke as am4core.Color).hex
+                         }; padding-right:${theme.spacing(2)}; padding-left:${theme.spacing(4)}'>
+                       <strong>${groupFilterSeries.name}</strong>
+                       </th>`
+                    );
+                    text.push(
+                      `<td style='text-align:right'>${formatNumber(
+                        (data as {[key: string]: number})[groupFilterSeries.dataFields.valueY]
+                      )}</td>`
+                    );
+                    text.push(`</tr>`);
+                  }
+                });
               } else {
                 text.push('<td/>');
+                text.push('</tr>');
               }
-              text.push('</tr>');
             }
           });
           text.push('</table>');
@@ -347,8 +428,10 @@ export default function SimulationChart(): JSX.Element {
     scenarioList,
     selectedCompartment,
     theme,
+    groupFilterList,
     formatNumber,
     t,
+    groupFilterData,
   ]);
 
   return (
