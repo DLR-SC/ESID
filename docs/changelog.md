@@ -1,7 +1,7 @@
 # ESID Changelog
 
 ## Next Release
-**Release Date:** TBD
+**27.02.2023:** v0.2.0-alpha
 
 ### New Features
 - Group Filters
@@ -24,7 +24,7 @@
 
 ---
 
-## v0.1
+## v0.1.0-alpha
 **Release Date:** 01.01.2023
 
 ### New Features
