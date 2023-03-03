@@ -1,6 +1,16 @@
 # ESID Changelog
 
 ## Next Release
+**TBD:** vX.X.X-alpha
+
+### New Features
+
+### Improvements
+- Added a label to the scenario start day.
+
+### Bug fixes
+
+## Next Release
 **27.02.2023:** v0.2.0-alpha
 
 ### New Features
