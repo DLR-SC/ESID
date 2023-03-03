@@ -192,6 +192,7 @@ export default function Scenario(): JSX.Element {
                 fontSize: '13pt',
               }}
             >
+              {t('scenario.simulation-start-day')}:{' '}
               {startDay ? new Date(startDay).toLocaleDateString(i18n.language) : t('today')}
             </Typography>
           </Box>

@@ -32,6 +32,7 @@
     activate: 'Scenario aktivieren',
     deactivate: 'Scenario deaktivieren',
     'manage-groups': 'Gruppen',
+    'simulation-start-day': 'Simulationsstart',
   },
   'group-filters': {
     title: 'Gruppen Verwalten',
