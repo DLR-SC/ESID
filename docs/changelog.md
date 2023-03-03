@@ -10,8 +10,8 @@
 
 ### Bug fixes
 
-## Next Release
-**27.02.2023:** v0.2.0-alpha
+## v0.2.0-alpha
+**Release Date:** 27.02.2023
 
 ### New Features
 - Group Filters
