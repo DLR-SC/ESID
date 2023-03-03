@@ -126,16 +126,17 @@ export default createTheme({
     },
   },
   custom: {
-    //scenario colors with gradations, so the main color of a scenario is at [scenario_index][0]
+    //scenario colors with graduations
     scenarios: [
-      ['#3998DB', '#65B0E5', '#7ECFF2', '#B8EAFF', '#8C8C8C'],
-      ['#876BE3', '#9C85E5', '#9AA3F5', '#C2C8FF', '#8C8C8C'],
-      ['#CC5AC7', '#E581E1', '#CF9EF0', '#E4BDFF', '#8C8C8C'],
-      ['#EBA73B', '#F2C479', '#F7DD8D', '#FFF0A3', '#8C8C8C'],
-      ['#34C290', '#54E3B1', '#8AEDDB', '#B5FFF1', '#8C8C8C'],
-      ['#EB7651', '#F0987D', '#F5BBA8', '#FADDD4', '#8C8C8C'],
-      ['#34BEC7', '#67CED5', '#9ADFE3', '#CCEFF1', '#8C8C8C'],
-      ['#9FC750', '#B7D57C', '#CFE3A8', '#E7F1D3', '#8C8C8C'],
+      // Main   | Grad-1   | Grad-2   | Grad-3   | Grad-4   | Grad-5   | Disabled  |
+      ['#3998db', '#56a8e3', '#6cb6eb', '#7fc1f0', '#94cef7', '#b8e1ff', '#8c8c8c'], // Scenario 1
+      ['#876be3', '#987feb', '#a892f0', '#b5a2f5', '#c0affa', '#d0c2ff', '#8c8c8c'], // Scenario 2
+      ['#cc5ac7', '#e070db', '#eb7ce6', '#f291ee', '#faa0f6', '#fcb6f9', '#8c8c8c'], // Scenario 3
+      ['#eba73b', '#f2b552', '#f5c06c', '#faca7d', '#fad393', '#ffdea8', '#8c8c8c'], // Scenario 4
+      ['#34c290', '#3ecf9c', '#50deac', '#66edbe', '#76f5c8', '#87fad2', '#8c8c8c'], // Scenario 5
+      ['#ed6137', '#f8683b', '#f87c56', '#f89374', '#f9b19b', '#fbcfc2', '#8c8c8c'], // Scenario 6
+      ['#21b3c0', '#23c3d3', '#37ccd8', '#57d6de', '#85e2e7', '#b5edf0', '#8c8c8c'], // Scenario 7
+      ['#90b748', '#a0c750', '#aed06a', '#bdd885', '#d0e3a8', '#e3eeca', '#8c8c8c'], // Scenario 8
     ],
   },
 });
