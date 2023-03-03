@@ -190,7 +190,8 @@ export default function Scenario(): JSX.Element {
                 height: 'min-content',
                 // fontWeight: 'bold',
                 fontSize: '13pt',
-              }}>
+              }}
+            >
               {t('scenario.simulation-start-day')}:
             </Typography>
             <Typography
