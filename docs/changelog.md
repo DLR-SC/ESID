@@ -1,7 +1,17 @@
 # ESID Changelog
 
 ## Next Release
-**27.02.2023:** v0.2.0-alpha
+**TBD:** vX.X.X-alpha
+
+### New Features
+
+### Improvements
+- Added a label to the scenario start day.
+
+### Bug fixes
+
+## v0.2.0-alpha
+**Release Date:** 27.02.2023
 
 ### New Features
 - Group Filters

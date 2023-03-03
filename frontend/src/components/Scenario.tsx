@@ -172,9 +172,9 @@ export default function Scenario(): JSX.Element {
             id='scenario-view-compartment-list-date'
             sx={{
               display: 'flex',
-              alignItems: 'flex-end',
+              justifyContent: 'space-between',
               height: '3rem',
-              marginLeft: 'auto',
+              marginLeft: theme.spacing(3),
               marginRight: 0,
               marginBottom: theme.spacing(1),
               paddingRight: theme.spacing(3),
@@ -183,6 +183,17 @@ export default function Scenario(): JSX.Element {
               borderTop: '2px solid transparent',
             }}
           >
+            <Typography
+              variant='h2'
+              sx={{
+                textAlign: 'left',
+                height: 'min-content',
+                // fontWeight: 'bold',
+                fontSize: '13pt',
+              }}
+            >
+              {t('scenario.simulation-start-day')}:
+            </Typography>
             <Typography
               variant='h2'
               sx={{

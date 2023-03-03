@@ -41,6 +41,7 @@
     activate: 'Activate scenario',
     deactivate: 'Deactivate scenario',
     'manage-groups': 'Groups',
+    'simulation-start-day': 'Simulation start',
   },
   'group-filters': {
     title: 'Manage Groups',
