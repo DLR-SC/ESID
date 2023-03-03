@@ -7,6 +7,7 @@
 
 ### Improvements
 - Added a label to the scenario start day.
+- All numbers on in the scenario overview now show as integers.
 
 ### Bug fixes
 
