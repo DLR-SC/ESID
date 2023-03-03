@@ -17,7 +17,7 @@
 - All numbers on scenario cards now show as integers only.
 - The cards are now bigger, so it is less likely for text to overflow.
 - The app now saves, if the compartments were expanded between sessions.
-- The selected district is now highlighted with a outline on the district map.
+- The selected district is now highlighted with an outline on the district map.
 
 ### Bug fixes
 
