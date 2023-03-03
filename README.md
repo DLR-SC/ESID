@@ -2,6 +2,10 @@
   <img src ="docs/images/logo-200x66.svg" />
 </p>
 
+<p align="center"> 
+  <img src ="docs/images/Overview.png" />
+</p>
+
 # ESID - Epidemiologisches Simulationstool für den Infektionsschutz in Deutschland
 ESID is a visualization of infectious disease propagation developed at the [German Aerospace Center (DLR)](https://www.dlr.de/).
 It allows displaying historical data, as well as analyzing simulation results of pandemics.
