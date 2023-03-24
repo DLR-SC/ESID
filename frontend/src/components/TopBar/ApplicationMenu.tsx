@@ -13,7 +13,7 @@ import Grid from '@mui/material/Grid';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Snackbar from '@mui/material/Snackbar';
-import ChangelogDialog from "./PopUps/ChangelogDialog";
+import ChangelogDialog from './PopUps/ChangelogDialog';
 
 /**
  * This menu is found at the top right of the application and is reachable from everywhere. It contains ways to access
