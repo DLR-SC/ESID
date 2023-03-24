@@ -9,6 +9,8 @@
       'privacy-policy': 'Datenschutzerklärung',
       accessibility: 'Barrierefreiheit',
       attribution: 'Attribution',
+      changelog: 'Änderungshistorie',
+      'changelog-path':'locales/de/changelog-de.md'
     },
   },
   'icon-bar': {

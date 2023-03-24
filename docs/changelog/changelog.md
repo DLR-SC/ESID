@@ -1,15 +1,18 @@
 # ESID Changelog
 
-## Next Release
-**TBD:** vX.X.X-alpha
+## vX.X.X-alpha
+**Release Date:** TBD
 
 ### New Features
+- The changelog can now be viewed shown using the burger menu in the top right corner.
 
 ### Improvements
 - Added a label to the scenario start day.
 - All numbers on in the scenario overview now show as integers.
 
 ### Bug fixes
+
+---
 
 ## v0.2.0-alpha
 **Release Date:** 27.02.2023
@@ -27,7 +30,7 @@
 ### Improvements
 - All numbers on scenario cards now show as integers only.
 - The cards are now bigger, so it is less likely for text to overflow.
-- The app now saves, if the compartments were expanded between sessions.
+- The app now saves, if the infection states were expanded between sessions.
 - The selected district is now highlighted with an outline on the district map.
 
 ### Bug fixes
