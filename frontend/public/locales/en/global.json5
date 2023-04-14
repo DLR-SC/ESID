@@ -56,7 +56,7 @@
     'confirm-deletion-text': 'Are you sure you want to delete the "{{groupName}}" group?',
     'confirm-discard-title': 'Discard Changes',
     'confirm-discard-text': 'You have unsaved changes. Do you want to discard them?',
-    discard: 'Discard'
+    discard: 'Discard',
   },
   chart: {
     caseData: 'Case Data',

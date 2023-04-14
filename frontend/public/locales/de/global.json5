@@ -47,7 +47,7 @@
     'confirm-deletion-text': 'Sind Sie sicher, dass Sie die Gruppe "{{groupName}}" wirklich löschen wollen?',
     'confirm-discard-title': 'Änderungen Verwerfen',
     'confirm-discard-text': 'Sie haben ungespeicherte Änderungen. Wollen sie diese verwerfen?',
-    discard: 'Verwerfen'
+    discard: 'Verwerfen',
   },
   chart: {
     caseData: 'Falldaten',
