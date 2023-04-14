@@ -1,33 +1,34 @@
-import React, {useEffect, useState} from 'react';
-import {useAppDispatch, useAppSelector} from '../store/hooks';
-import {useTheme} from '@mui/material/styles';
-import {useTranslation} from 'react-i18next';
+import React, { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { useTheme } from "@mui/material/styles";
+import { useTranslation } from "react-i18next";
 import {
   selectCompartment,
   selectScenario,
   setMinMaxDates,
   toggleCompartmentExpansion,
-  toggleScenario,
-} from 'store/DataSelectionSlice';
-import ScenarioCard from './ScenarioCard';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import Typography from '@mui/material/Typography';
-import Dialog from '@mui/material/Dialog';
-import {ScrollSync, ScrollSyncPane} from 'react-scroll-sync';
+  toggleScenario
+} from "store/DataSelectionSlice";
+import ScenarioCard from "./ScenarioCard";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import List from "@mui/material/List";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
+import Typography from "@mui/material/Typography";
+import Dialog from "@mui/material/Dialog";
+import { ScrollSync, ScrollSyncPane } from "react-scroll-sync";
 import {
   useGetSimulationModelQuery,
   useGetSimulationModelsQuery,
-  useGetSimulationsQuery,
-} from '../store/services/scenarioApi';
-import {setCompartments, setScenarios} from 'store/ScenarioSlice';
-import {dateToISOString, Dictionary} from 'util/util';
-import {useGetCaseDataSingleSimulationEntryQuery} from '../store/services/caseDataApi';
-import {NumberFormatter} from '../util/hooks';
-import {ManageGroupDialog} from './ManageGroupDialog';
+  useGetSimulationsQuery
+} from "../store/services/scenarioApi";
+import { setCompartments, setScenarios } from "store/ScenarioSlice";
+import { dateToISOString, Dictionary } from "util/util";
+import { useGetCaseDataSingleSimulationEntryQuery } from "../store/services/caseDataApi";
+import { NumberFormatter } from "../util/hooks";
+import { ManageGroupDialog } from "./ManageGroupDialog";
+import ConfirmDialog from "./shared/ConfirmDialog";
 
 /**
  * React Component to render the Scenario Cards Section
@@ -38,20 +39,20 @@ export default function Scenario(): JSX.Element {
   // State for the groups management dialog
   const [open, setOpen] = React.useState(false);
 
-  const {t, i18n} = useTranslation();
+  const { t, i18n } = useTranslation();
   const theme = useTheme();
 
   const dispatch = useAppDispatch();
-  const [simulationModelKey, setSimulationModelKey] = useState<string>('unset');
+  const [simulationModelKey, setSimulationModelKey] = useState<string>("unset");
   const [compartmentValues, setCompartmentValues] = useState<Dictionary<number> | null>(null);
 
-  const {formatNumber} = NumberFormatter(i18n.language, 1, 0);
+  const { formatNumber } = NumberFormatter(i18n.language, 1, 0);
 
   const getCompartmentValue = (compartment: string): string => {
     if (compartmentValues && compartment in compartmentValues) {
       return formatNumber(compartmentValues[compartment]);
     }
-    return t('no-data');
+    return t("no-data");
   };
 
   const scenarioList = useAppSelector((state) => state.scenarioList);
@@ -62,23 +63,26 @@ export default function Scenario(): JSX.Element {
   const startDay = useAppSelector((state) => state.dataSelection.minDate);
   const activeScenarios = useAppSelector((state) => state.dataSelection.activeScenarios);
 
-  const {data: scenarioListData} = useGetSimulationsQuery();
-  const {data: simulationModelsData} = useGetSimulationModelsQuery();
-  const {data: simulationModelData} = useGetSimulationModelQuery(simulationModelKey, {
-    skip: simulationModelKey === 'unset',
+  const [groupEditorUnsavedChanges, setGroupEditorUnsavedChanges] = useState(false);
+  const [closeDialogOpen, setCloseDialogOpen] = useState(false);
+
+  const { data: scenarioListData } = useGetSimulationsQuery();
+  const { data: simulationModelsData } = useGetSimulationModelsQuery();
+  const { data: simulationModelData } = useGetSimulationModelQuery(simulationModelKey, {
+    skip: simulationModelKey === "unset"
   });
-  const {data: caseData} = useGetCaseDataSingleSimulationEntryQuery(
+  const { data: caseData } = useGetCaseDataSingleSimulationEntryQuery(
     {
       node: node,
-      day: startDay ?? '',
-      groups: ['total'],
+      day: startDay ?? "",
+      groups: ["total"]
     },
-    {skip: !startDay}
+    { skip: !startDay }
   );
 
   useEffect(() => {
     if (simulationModelsData && simulationModelsData.results.length > 0) {
-      const {key} = simulationModelsData.results[0];
+      const { key } = simulationModelsData.results[0];
       setSimulationModelKey(key);
     }
   }, [simulationModelsData]);
@@ -91,7 +95,7 @@ export default function Scenario(): JSX.Element {
 
   useEffect(() => {
     if (simulationModelData) {
-      const {compartments} = simulationModelData.results;
+      const { compartments } = simulationModelData.results;
       dispatch(setCompartments(compartments));
     }
   }, [simulationModelData, dispatch]);
@@ -104,7 +108,7 @@ export default function Scenario(): JSX.Element {
 
   useEffect(() => {
     if (scenarioListData) {
-      const scenarios = scenarioListData.results.map((scenario) => ({id: scenario.id, label: scenario.description}));
+      const scenarios = scenarioListData.results.map((scenario) => ({ id: scenario.id, label: scenario.description }));
       dispatch(setScenarios(scenarios));
 
       //activate all scenarios initially
@@ -122,7 +126,7 @@ export default function Scenario(): JSX.Element {
         const endDay = new Date(startDay);
         endDay.setDate(endDay.getDate() + scenarioListData.results[0].numberOfDays - 1);
 
-        dispatch(setMinMaxDates({minDate: dateToISOString(startDay), maxDate: dateToISOString(endDay)}));
+        dispatch(setMinMaxDates({ minDate: dateToISOString(startDay), maxDate: dateToISOString(endDay) }));
       }
     }
   }, [activeScenarios, scenarioListData, dispatch]);
@@ -141,79 +145,79 @@ export default function Scenario(): JSX.Element {
   return (
     <ScrollSync enabled={compartmentsExpanded || false}>
       <Box
-        id='scenario-view-root'
+        id="scenario-view-root"
         sx={{
-          display: 'flex',
-          cursor: 'default',
+          display: "flex",
+          cursor: "default",
           background: theme.palette.background.default,
-          maxWidth: '100%',
+          maxWidth: "100%"
         }}
       >
         <Box
-          id='scenario-view-compartment-list-root'
+          id="scenario-view-compartment-list-root"
           sx={{
             borderRight: `2px dashed ${theme.palette.divider}`,
             flexGrow: 0,
             flexShrink: 0,
-            flexBasis: '274px',
-            minHeight: '20vh',
-            maxWidth: '100%',
-            display: 'flex',
-            flexDirection: 'column',
+            flexBasis: "274px",
+            minHeight: "20vh",
+            maxWidth: "100%",
+            display: "flex",
+            flexDirection: "column",
             marginTop: theme.spacing(3),
-            borderTop: '2px solid transparent', // invisible border for alignment with the scenario card
+            borderTop: "2px solid transparent", // invisible border for alignment with the scenario card
             paddingBottom: 0,
             paddingTop: theme.spacing(2),
             paddingLeft: 0,
-            paddingRight: 0,
+            paddingRight: 0
           }}
         >
           <Box
-            id='scenario-view-compartment-list-date'
+            id="scenario-view-compartment-list-date"
             sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              height: '3rem',
+              display: "flex",
+              justifyContent: "space-between",
+              height: "3rem",
               marginLeft: theme.spacing(3),
               marginRight: 0,
               marginBottom: theme.spacing(1),
               paddingRight: theme.spacing(3),
 
               // This invisible border mirrors the existing border of the scenario cards and ensures correct alignment.
-              borderTop: '2px solid transparent',
+              borderTop: "2px solid transparent"
             }}
           >
             <Typography
-              variant='h2'
+              variant="h2"
               sx={{
-                textAlign: 'left',
-                height: 'min-content',
+                textAlign: "left",
+                height: "min-content",
                 // fontWeight: 'bold',
-                fontSize: '13pt',
+                fontSize: "13pt"
               }}
             >
-              {t('scenario.simulation-start-day')}:
+              {t("scenario.simulation-start-day")}:
             </Typography>
             <Typography
-              variant='h2'
+              variant="h2"
               sx={{
-                textAlign: 'right',
-                height: 'min-content',
-                fontWeight: 'bold',
-                fontSize: '13pt',
+                textAlign: "right",
+                height: "min-content",
+                fontWeight: "bold",
+                fontSize: "13pt"
               }}
             >
-              {startDay ? new Date(startDay).toLocaleDateString(i18n.language) : t('today')}
+              {startDay ? new Date(startDay).toLocaleDateString(i18n.language) : t("today")}
             </Typography>
           </Box>
-          <ScrollSyncPane group='compartments'>
+          <ScrollSyncPane group="compartments">
             <List
-              id='scenario-view-compartment-list'
+              id="scenario-view-compartment-list"
               dense={true}
               disablePadding={true}
               sx={{
-                maxHeight: compartmentsExpanded ? '248px' : 'auto',
-                overflowY: 'auto',
+                maxHeight: compartmentsExpanded ? "248px" : "auto",
+                overflowY: "auto"
               }}
             >
               {scenarioList.compartments.map((compartment, i) => (
@@ -221,24 +225,24 @@ export default function Scenario(): JSX.Element {
                 <ListItemButton
                   key={compartment}
                   sx={{
-                    display: compartmentsExpanded || i < 4 ? 'flex' : 'none',
+                    display: compartmentsExpanded || i < 4 ? "flex" : "none",
                     padding: theme.spacing(1),
                     paddingLeft: theme.spacing(3),
                     paddingRight: theme.spacing(3),
                     margin: theme.spacing(0),
                     marginTop: theme.spacing(1),
                     borderLeft: `2px ${
-                      selectedCompartment === compartment ? theme.palette.primary.main : 'transparent'
+                      selectedCompartment === compartment ? theme.palette.primary.main : "transparent"
                     } solid`,
                     borderTop: `2px ${
-                      selectedCompartment === compartment ? theme.palette.background.paper : 'transparent'
+                      selectedCompartment === compartment ? theme.palette.background.paper : "transparent"
                     } solid`,
                     borderBottom: `2px ${
-                      selectedCompartment === compartment ? theme.palette.background.paper : 'transparent'
+                      selectedCompartment === compartment ? theme.palette.background.paper : "transparent"
                     } solid`,
-                    '&.MuiListItemButton-root.Mui-selected': {
-                      backgroundColor: theme.palette.background.paper,
-                    },
+                    "&.MuiListItemButton-root.Mui-selected": {
+                      backgroundColor: theme.palette.background.paper
+                    }
                   }}
                   selected={selectedCompartment === compartment}
                   onClick={() => {
@@ -251,11 +255,11 @@ export default function Scenario(): JSX.Element {
                     // disable child typography overriding this
                     disableTypography={true}
                     sx={{
-                      typography: 'listElement',
-                      fontWeight: selectedCompartment === compartment ? 'bold' : 'normal',
+                      typography: "listElement",
+                      fontWeight: selectedCompartment === compartment ? "bold" : "normal",
                       flexGrow: 1,
                       flexBasis: 100,
-                      zIndex: 20,
+                      zIndex: 20
                     }}
                   />
                   <ListItemText
@@ -263,12 +267,12 @@ export default function Scenario(): JSX.Element {
                     // disable child typography overriding this
                     disableTypography={true}
                     sx={{
-                      typography: 'listElement',
+                      typography: "listElement",
                       color:
                         selectedCompartment === compartment ? theme.palette.text.primary : theme.palette.text.disabled,
-                      textAlign: 'right',
+                      textAlign: "right",
                       flexGrow: 1,
-                      zIndex: 20,
+                      zIndex: 20
                     }}
                   />
                 </ListItemButton>
@@ -276,15 +280,15 @@ export default function Scenario(): JSX.Element {
             </List>
           </ScrollSyncPane>
           <Button
-            variant='outlined'
-            color='primary'
+            variant="outlined"
+            color="primary"
             sx={{
               margin: theme.spacing(3),
               marginTop: theme.spacing(4),
               marginBottom: 0,
-              padding: theme.spacing(1),
+              padding: theme.spacing(1)
             }}
-            aria-label={t('scenario.more')}
+            aria-label={t("scenario.more")}
             onClick={() => {
               dispatch(toggleCompartmentExpansion());
               if (
@@ -298,19 +302,19 @@ export default function Scenario(): JSX.Element {
               }
             }}
           >
-            {compartmentsExpanded ? t('less') : t('more')}
+            {compartmentsExpanded ? t("less") : t("more")}
           </Button>
         </Box>
         <Box
-          id='scenario-view-scenario-card-list'
+          id="scenario-view-scenario-card-list"
           sx={{
             flexGrow: 1,
             flexShrink: 1,
-            flexBasis: '100%',
-            display: 'flex',
-            overflowX: 'auto',
+            flexBasis: "100%",
+            display: "flex",
+            overflowX: "auto",
             marginLeft: theme.spacing(3),
-            minWidth: '400px',
+            minWidth: "400px"
           }}
         >
           {Object.entries(scenarioList.scenarios).map(([, scenario], i) => (
@@ -334,57 +338,83 @@ export default function Scenario(): JSX.Element {
         <Box
           sx={{
             borderLeft: `1px solid`,
-            borderColor: 'divider',
-            minHeight: '20vh',
+            borderColor: "divider",
+            minHeight: "20vh",
             paddingLeft: theme.spacing(3),
             paddingRight: theme.spacing(3),
-            display: 'flex',
-            flexDirection: 'column',
+            display: "flex",
+            flexDirection: "column"
           }}
         >
           <Button
-            variant='outlined'
-            color='success'
+            variant="outlined"
+            color="success"
             sx={{
-              height: '244px',
-              width: '200px',
+              height: "244px",
+              width: "200px",
               margin: theme.spacing(3),
               marginTop: theme.spacing(2),
-              fontWeight: 'bolder',
-              fontSize: '3rem',
+              fontWeight: "bolder",
+              fontSize: "3rem",
               border: `2px ${theme.palette.divider} dashed`,
-              borderRadius: '3px',
+              borderRadius: "3px",
               color: theme.palette.divider,
-              alignSelf: 'top',
+              alignSelf: "top",
 
-              '&:hover': {
+              "&:hover": {
                 border: `2px ${theme.palette.divider} dashed`,
-                background: '#E7E7E7',
-              },
+                background: "#E7E7E7"
+              }
             }}
-            aria-label={t('scenario.add')}
+            aria-label={t("scenario.add")}
           >
             +
           </Button>
 
           <Button
-            variant='outlined'
-            color='primary'
+            variant="outlined"
+            color="primary"
             sx={{
-              width: '200px',
+              width: "200px",
               margin: theme.spacing(2),
-              alignSelf: 'center',
+              alignSelf: "center"
             }}
             onClick={() => {
               setOpen(true);
             }}
-            aria-label={t('group-filters.title')}
+            aria-label={t("group-filters.title")}
           >
-            {t('scenario.manage-groups')}
+            {t("scenario.manage-groups")}
           </Button>
         </Box>
-        <Dialog maxWidth='lg' fullWidth={true} open={open} onClose={() => setOpen(false)}>
-          <ManageGroupDialog onCloseRequest={() => setOpen(false)} />
+        <Dialog maxWidth="lg" fullWidth={true} open={open} onClose={() => {
+          if (groupEditorUnsavedChanges) {
+            setCloseDialogOpen(true);
+          } else {
+            setOpen(false);
+          }
+        }}>
+          <ManageGroupDialog
+            onCloseRequest={() => {
+              if (groupEditorUnsavedChanges) {
+                setCloseDialogOpen(true);
+              } else {
+                setOpen(false);
+              }
+            }}
+            unsavedChangesCallback={(unsavedChanges) => setGroupEditorUnsavedChanges(unsavedChanges)} />
+          <ConfirmDialog
+            open={closeDialogOpen}
+            title={t("group-filters.confirm-discard-title")}
+            text={t("group-filters.confirm-discard-text")}
+            abortButtonText={t("group-filters.close")}
+            confirmButtonText={t("group-filters.discard")}
+            onAnswer={(answer) => {
+              if (answer) {
+                setOpen(false);
+              }
+              setCloseDialogOpen(false);
+            }} />
         </Dialog>
       </Box>
     </ScrollSync>
