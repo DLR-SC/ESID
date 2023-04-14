@@ -20,12 +20,12 @@
 ### Neue Funktionen
 - Gruppenfilter
   - Es gibt einen neuen Button unterhalb der '+' Karte oben rechts namens 'Gruppen'.
-  - Dies öffnet den Gruppenfilter-Editor. Hier können Sie Gruppen erstellen, umschalten, bearbeiten und löschen.
+  - Der Button öffnet den Gruppenfilter-Editor. Hier können Sie Gruppen erstellen, umschalten, bearbeiten und löschen.
     - Beispiel eines Gruppenfilters: "Alle Personen jedes Geschlechts im Alter von 35 oder weniger"
     - Beispiel eines Gruppenfilters: "Alle Personen jedes Geschlechts im Alter von 35 oder mehr"
     - Beispiel eines Gruppenfilters: "Alle Männer jeden Alters"
   - Die Szenarienkarten zeigen nun die aktiven Gruppenfilter als aufklappbare Erweiterung rechts an.
-  - Das Liniendiagramm zeigt die Gruppenfilter mit einem anderen Linienstil an.
+  - Das Liniendiagramm zeigt die Gruppenfilter mit unterschiedlichen Linienstilen an.
 
 ### Verbesserungen
 - Alle Zahlen auf Szenariokarten werden jetzt nur als Ganzzahlen angezeigt.
@@ -34,7 +34,7 @@
 - Der ausgewählte Bezirk wird auf der Bezirkskarte mit einer Kontur hervorgehoben.
 
 ### Fehlerbehebungen
-- Es wurde ein Problem mit dem persistenten Cache gefunden, das die Website zum Absturz brachte, wenn eine neue
+- Es wurde ein Problem mit dem persistenten Cache behoben, bei dem die Website abstürzt wenn eine neue
   Eigenschaft zum persistenten Speicher hinzugefügt wurde, und ein Kommentar wurde hinzugefügt, um zukünftige Fehler zu
   verhindern.
 
@@ -49,10 +49,10 @@
   - auswählbare Szenarien
   - Karten, die Szenariowerte, Änderungsrate im Vergleich zu den Fallzahlen des Startdatums und Trendpfeile anzeigen,
     die positive oder negative Veränderungen anzeigen
-  - zusätzliche Infektionszustände nach den Haupt-4 sind hinter einem Erweiterungsbutton verborgen
+  - zusätzliche Infektionszustände nach den 4 Hauptzustäden sind hinter einem Erweiterungsbutton verborgen
 - Liniendiagramm
   - auswählbares Datum mit Anzeige des ausgewählten Datums
-  - zoombarer X-Achse
+  - zoombare X-Achse
   - Unsicherheit (25. - 75. Perzentil) des ausgewählten Szenarios wird durch halbtransparente Flächenfüllung angezeigt
   - Tooltip, der Fall- und Szenariodaten sowie 25. und 75. Perzentilwerte für das ausgewählte Szenario anzeigt
 - Bezirkskarte

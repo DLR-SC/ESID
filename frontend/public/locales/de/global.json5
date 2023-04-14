@@ -9,7 +9,7 @@
       'privacy-policy': 'Datenschutzerklärung',
       accessibility: 'Barrierefreiheit',
       attribution: 'Attribution',
-      changelog: 'Änderungshistorie',
+      changelog: 'Versionshistorie',
       'changelog-path': 'locales/de/changelog-de.md',
     },
   },
