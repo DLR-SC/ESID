@@ -10,7 +10,7 @@
       accessibility: 'Accessibility',
       attribution: 'Attribution',
       changelog: 'Changelog',
-      'changelog-path': 'locales/en/changelog.md',
+      'changelog-path': 'locales/en/changelog-en.md',
     },
   },
   'icon-bar': {

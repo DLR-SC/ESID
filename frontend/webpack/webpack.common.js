@@ -15,7 +15,7 @@ module.exports = {
         './public/manifest.json',
         {from: './public/assets', to: 'assets'},
         {from: './public/locales', to: 'locales'},
-        {from: '../docs/changelog/changelog.md', to: 'locales/en'},
+        {from: '../docs/changelog/changelog-en.md', to: 'locales/en'},
         {from: '../docs/changelog/changelog-de.md', to: 'locales/de'},
       ],
     }),
