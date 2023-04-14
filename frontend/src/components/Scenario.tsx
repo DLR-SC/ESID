@@ -28,6 +28,7 @@ import {dateToISOString, Dictionary} from 'util/util';
 import {useGetCaseDataSingleSimulationEntryQuery} from '../store/services/caseDataApi';
 import {NumberFormatter} from '../util/hooks';
 import {ManageGroupDialog} from './ManageGroupDialog';
+import ConfirmDialog from './shared/ConfirmDialog';
 
 /**
  * React Component to render the Scenario Cards Section
@@ -61,6 +62,9 @@ export default function Scenario(): JSX.Element {
   const node = useAppSelector((state) => state.dataSelection.district.ags);
   const startDay = useAppSelector((state) => state.dataSelection.minDate);
   const activeScenarios = useAppSelector((state) => state.dataSelection.activeScenarios);
+
+  const [groupEditorUnsavedChanges, setGroupEditorUnsavedChanges] = useState(false);
+  const [closeDialogOpen, setCloseDialogOpen] = useState(false);
 
   const {data: scenarioListData} = useGetSimulationsQuery();
   const {data: simulationModelsData} = useGetSimulationModelsQuery();
@@ -383,8 +387,41 @@ export default function Scenario(): JSX.Element {
             {t('scenario.manage-groups')}
           </Button>
         </Box>
-        <Dialog maxWidth='lg' fullWidth={true} open={open} onClose={() => setOpen(false)}>
-          <ManageGroupDialog onCloseRequest={() => setOpen(false)} />
+        <Dialog
+          maxWidth='lg'
+          fullWidth={true}
+          open={open}
+          onClose={() => {
+            if (groupEditorUnsavedChanges) {
+              setCloseDialogOpen(true);
+            } else {
+              setOpen(false);
+            }
+          }}
+        >
+          <ManageGroupDialog
+            onCloseRequest={() => {
+              if (groupEditorUnsavedChanges) {
+                setCloseDialogOpen(true);
+              } else {
+                setOpen(false);
+              }
+            }}
+            unsavedChangesCallback={(unsavedChanges) => setGroupEditorUnsavedChanges(unsavedChanges)}
+          />
+          <ConfirmDialog
+            open={closeDialogOpen}
+            title={t('group-filters.confirm-discard-title')}
+            text={t('group-filters.confirm-discard-text')}
+            abortButtonText={t('group-filters.close')}
+            confirmButtonText={t('group-filters.discard')}
+            onAnswer={(answer) => {
+              if (answer) {
+                setOpen(false);
+              }
+              setCloseDialogOpen(false);
+            }}
+          />
         </Dialog>
       </Box>
     </ScrollSync>
