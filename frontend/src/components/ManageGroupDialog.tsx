@@ -39,8 +39,34 @@ export function ManageGroupDialog(props: {onCloseRequest: () => void}): JSX.Elem
 
   const {data: groupCategories} = useGetGroupCategoriesQuery();
 
-  const [selectedGroupFilter, setSelectedGroupFilter] = useState<GroupFilter | null>(null);
   const groupFilterList = useAppSelector((state) => state.dataSelection.groupFilters);
+
+  // The currently selected filter.
+  const [selectedGroupFilter, setSelectedGroupFilter] = useState<GroupFilter | null>(null);
+
+  // A filter the user might open. It will first be checked, if unsaved changes are present.
+  const [nextSelectedGroupFilter, setNextSelectedGroupFilter] = useState<GroupFilter | null>(null);
+
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+  const [unsavedChanges, setUnsavedChanges] = useState(false);
+
+  // This effect ensures that the user doesn't discard unsaved changes without confirming it first.
+  useEffect(() => {
+    if (nextSelectedGroupFilter && nextSelectedGroupFilter.id !== selectedGroupFilter?.id) {
+      // A new group filter has been selected.
+
+      if (selectedGroupFilter && unsavedChanges) {
+        // There are unsaved changes. Ask for confirmation first!
+        setConfirmDialogOpen(true);
+      } else {
+        // Everything is saved. Change the selected filter.
+        setSelectedGroupFilter(nextSelectedGroupFilter);
+      }
+    } else if (!nextSelectedGroupFilter && !unsavedChanges) {
+      // This case is handled, when the user presses the 'abort' button.
+      setSelectedGroupFilter(null);
+    }
+  }, [unsavedChanges, nextSelectedGroupFilter, selectedGroupFilter]);
 
   return (
     <Box
@@ -92,7 +118,7 @@ export function ManageGroupDialog(props: {onCloseRequest: () => void}): JSX.Elem
               key={item.id}
               item={item}
               selected={selectedGroupFilter?.id === item.id}
-              selectFilterCallback={(groupFilter) => setSelectedGroupFilter(groupFilter)}
+              selectFilterCallback={(groupFilter) => setNextSelectedGroupFilter(groupFilter)}
             />
           ))}
           <Card
@@ -110,7 +136,7 @@ export function ManageGroupDialog(props: {onCloseRequest: () => void}): JSX.Elem
               onClick={() => {
                 const groups: Dictionary<Array<string>> = {};
                 groupCategories?.results?.forEach((group) => (groups[group.key] = []));
-                setSelectedGroupFilter({id: crypto.randomUUID(), name: '', isVisible: false, groups: groups});
+                setNextSelectedGroupFilter({id: crypto.randomUUID(), name: '', isVisible: false, groups: groups});
               }}
             >
               <CardContent
@@ -134,7 +160,8 @@ export function ManageGroupDialog(props: {onCloseRequest: () => void}): JSX.Elem
           <GroupFilterEditor
             key={selectedGroupFilter.id}
             groupFilter={selectedGroupFilter}
-            selectGroupFilterCallback={(groupFilter) => setSelectedGroupFilter(groupFilter)}
+            selectGroupFilterCallback={(groupFilter) => setNextSelectedGroupFilter(groupFilter)}
+            unsavedChangesCallback={(edited) => setUnsavedChanges(edited)}
           />
         ) : (
           <Box
@@ -154,7 +181,7 @@ export function ManageGroupDialog(props: {onCloseRequest: () => void}): JSX.Elem
               onClick={() => {
                 const groups: Dictionary<Array<string>> = {};
                 groupCategories?.results?.forEach((group) => (groups[group.key] = []));
-                setSelectedGroupFilter({id: crypto.randomUUID(), name: '', isVisible: false, groups: groups});
+                setNextSelectedGroupFilter({id: crypto.randomUUID(), name: '', isVisible: false, groups: groups});
               }}
             >
               <GroupAdd color='primary' />
@@ -162,6 +189,21 @@ export function ManageGroupDialog(props: {onCloseRequest: () => void}): JSX.Elem
           </Box>
         )}
       </Box>
+      <ConfirmDialog
+        open={confirmDialogOpen}
+        title={t('group-filters.confirm-discard-title')}
+        text={t('group-filters.confirm-discard-text')}
+        abortButtonText={t('group-filters.close')}
+        confirmButtonText={t('group-filters.discard')}
+        onAnswer={(answer) => {
+          if (answer) {
+            setSelectedGroupFilter(nextSelectedGroupFilter);
+          } else {
+            setNextSelectedGroupFilter(null);
+          }
+          setConfirmDialogOpen(false);
+        }}
+      />
     </Box>
   );
 }
@@ -257,6 +299,13 @@ interface GroupFilterEditorProps {
    * @param groupFilter - Either the current filter or null when the user wants to close the current filter's editor.
    */
   selectGroupFilterCallback: (groupFilter: GroupFilter | null) => void;
+
+  /**
+   * A callback that notifies the parent, if there are currently unsaved changes for this group filter.
+   *
+   * @param unsavedChanges - If the group filter has been modified without saving.
+   */
+  unsavedChangesCallback: (unsavedChanges: boolean) => void;
 }
 
 /**
@@ -280,10 +329,17 @@ function GroupFilterEditor(props: GroupFilterEditorProps): JSX.Element {
 
   // Every group must have at least one element selected to be valid.
   const [valid, setValid] = useState(name.length > 0 && Object.values(groups).every((group) => group.length > 0));
+  const [unsavedChanges, setUnsavedChanges] = useState(false);
 
+  // Checks if the group filer is in a valid state.
   useEffect(() => {
     setValid(name.length > 0 && Object.values(groups).every((group) => group.length > 0));
-  }, [name, groups]);
+  }, [name, groups, props]);
+
+  // Updates the parent about the current save state of the group filter.
+  useEffect(() => {
+    props.unsavedChangesCallback(unsavedChanges);
+  }, [props, unsavedChanges]);
 
   const toggleGroup = useCallback(
     (subGroup: GroupSubcategory) => {
@@ -300,6 +356,7 @@ function GroupFilterEditor(props: GroupFilterEditorProps): JSX.Element {
         ...groups,
         [subGroup.category]: category,
       });
+      setUnsavedChanges(true);
     },
     [groups, setGroups]
   );
@@ -320,7 +377,10 @@ function GroupFilterEditor(props: GroupFilterEditorProps): JSX.Element {
         autoFocus={true}
         error={name.length === 0}
         onFocus={(e) => e.target.select()}
-        onChange={(e) => setName(e.target.value)}
+        onChange={(e) => {
+          setUnsavedChanges(true);
+          setName(e.target.value);
+        }}
       />
       <Box
         sx={{
@@ -376,15 +436,19 @@ function GroupFilterEditor(props: GroupFilterEditorProps): JSX.Element {
           variant='outlined'
           color='error'
           sx={{marginRight: theme.spacing(2)}}
-          onClick={() => props.selectGroupFilterCallback(null)}
+          onClick={() => {
+            setUnsavedChanges(false);
+            props.selectGroupFilterCallback(null);
+          }}
         >
           {t('group-filters.close')}
         </Button>
         <Button
           variant='outlined'
           color='primary'
-          disabled={!valid}
+          disabled={!valid || !unsavedChanges}
           onClick={() => {
+            setUnsavedChanges(false);
             const newFilter = {id: props.groupFilter.id, name: name, isVisible: true, groups: groups};
             dispatch(setGroupFilter(newFilter));
             props.selectGroupFilterCallback(newFilter);
