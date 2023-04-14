@@ -31,7 +31,7 @@ It allows displaying historical data, as well as analyzing simulation results of
 
 
 ## Features
-You can find a list of the latest changes in the [changelog](docs/changelog.md).
+You can find a list of the latest changes in the [changelog](docs/changelog/changelog-en.md).
 
 
 ## Developer Documentation
