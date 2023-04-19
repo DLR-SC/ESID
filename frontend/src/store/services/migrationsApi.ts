@@ -1,5 +1,5 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { MigrationConnection, TopMigration } from "../../types/migration";
+import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
+import {MigrationConnection, TopMigration} from '../../types/migration';
 
 /*
  * This Api already follows the new changes to the API (made by coac) 
@@ -24,7 +24,9 @@ export const migrationsApi = createApi({
         // Add end date if it exists
         if (args.endDate) queryParameters.push(`endDate=${args.endDate}`);
         // Add compartment and aggregation flag (defaults to false)
-        queryParameters.push(`compartments=${args.compartment}&aggregation_flag=${args.aggregation_flag ? args.aggregation_flag : 'false'}`);
+        queryParameters.push(
+          `compartments=${args.compartment}&aggregation_flag=${args.aggregation_flag ? args.aggregation_flag : 'false'}`
+        );
         // Add groups if they exist
         if (args.groups) queryParameters.push(`groups=${args.groups.join(',')}`);
         // Add start node
@@ -33,7 +35,9 @@ export const migrationsApi = createApi({
         queryParameters.push(`endNode=${args.endNode.join(',')}`);
 
         // Query url with parameters
-        const result = await fetchWithBQ(`scenarios/${args.scenario_id}/simulations/${args.runid}/migrations/?${queryParameters.join('&')}`);
+        const result = await fetchWithBQ(
+          `scenarios/${args.scenario_id}/simulations/${args.run_id}/migrations/?${queryParameters.join('&')}`
+        );
         // [ ]: Return error if any occurs
         // if (result.error) return {error: result.error};
 
@@ -41,7 +45,7 @@ export const migrationsApi = createApi({
 
         // Return data
         return {data: result.data as Array<MigrationConnection>};
-      }
+      },
     }),
 
     /**
@@ -58,7 +62,9 @@ export const migrationsApi = createApi({
         // Add end date if it exists
         if (args.endDate) queryParameters.push(`endDate=${args.endDate}`);
         // Add compartments and aggregation flag (defaults to false)
-        queryParameters.push(`compartments=${args.compartment}&aggregation_flag=${args.aggregation_flag ? args.aggregation_flag : 'false'}`);
+        queryParameters.push(
+          `compartments=${args.compartment}&aggregation_flag=${args.aggregation_flag ? args.aggregation_flag : 'false'}`
+        );
         // Add groups if they exist
         if (args.groups) queryParameters.push(`groups=${args.groups.join(',')}`);
         // Add requested node
@@ -69,7 +75,9 @@ export const migrationsApi = createApi({
         if (args.sort) queryParameters.push(`sort=${args.sort}`);
 
         // Query url with parameters
-        const result = await fetchWithBQ(`scenarios/${args.scenario_id}/simulations/${args.runid}/topMigrations/?${queryParameters.join('&')}`);
+        const result = await fetchWithBQ(
+          `scenarios/${args.scenario_id}/simulations/${args.run_id}/topMigrations/?${queryParameters.join('&')}`
+        );
         // [ ]: Return error if any occurs
         // if (result.error) return {error: result.error};
 
@@ -77,16 +85,16 @@ export const migrationsApi = createApi({
 
         // Return data
         return {data: result.data as Array<TopMigration>};
-      }
-    })
-  })
+      },
+    }),
+  }),
 });
 
 /**
  * Query parameters to request migration between nodes
  * 
  * @prop {string}         scenario_id               UUID of the scenario.
- * @prop {string}         runid                     UUID of the simulation run.
+ * @prop {string}         run_id                     UUID of the simulation run.
  * @prop {string}         [startDate]               Optional; Timestamp to filter for migrations after start date. If empty, returns all dates since simulation start date.
  * @prop {string}         [endDate]                 Optional; Timestamp to filter for migrations before end date. If empty, returns all dates until simulation end date.
  * @prop {string}         compartment               Specific compartment for Migration values.
@@ -96,22 +104,22 @@ export const migrationsApi = createApi({
  * @prop {Array<string>}  endNode                   List of node-UUIDs of the other endpoints of the migrations. 
  */
 interface MigrationsByNodeParameters {
-  scenario_id: string,
-  runid: string,
-  startDate?: string,
-  endDate?: string,
-  compartment: string,
-  aggregation_flag?: boolean,
-  groups?: Array<string>,
-  startNode: string,
-  endNode: Array<string>
+  scenario_id: string;
+  run_id: string;
+  startDate?: string;
+  endDate?: string;
+  compartment: string;
+  aggregation_flag?: boolean;
+  groups?: Array<string>;
+  startNode: string;
+  endNode: Array<string>;
 }
 
 /**
  * Query parameters to request top n migrations for a node
  * 
  * @prop {string}                       scenario_id         UUID of the scenario.
- * @prop {string}                       runid               UUID of the simulation run.
+ * @prop {string}                       run_id               UUID of the simulation run.
  * @prop {string}                       [startDate]         Optional; Timestamp to filter for migrations after start date. If empty, returns all dates since simulation start date.
  * @prop {string}                       [endDate]           Optional; Timestamp to filter for migrations before end date. If empty, returns all dates until simulation end date.
  * @prop {string}                       compartment         Specific compartment for migrations.
@@ -122,16 +130,20 @@ interface MigrationsByNodeParameters {
  * @prop {'incoming'|'outgoing'|'both'} sort                Method to sort before returning the top entries ('both' adds incoming and outgoing values). Defaults to 'incoming'.
  */
 interface TopMigrationsByNodeParameters {
-  scenario_id: string,
-  runid: string,
-  startDate?: string,
-  endDate?: string,
-  compartment?: string,
-  aggregation_flag?: boolean,
-  groups?: Array<string>,
-  node: string,
-  count: number,
-  sort: 'incoming'|'outgoing'|'total'
+  scenario_id: string;
+  run_id: string;
+  startDate?: string;
+  endDate?: string;
+  compartment?: string;
+  aggregation_flag?: boolean;
+  groups?: Array<string>;
+  node: string;
+  count: number;
+  sort: 'incoming' | 'outgoing' | 'total';
+}
+
+export const {useGetMigrationsByNodeQuery, useGetTopMigrationsByNodeQuery} = migrationsApi;
+
 }
 
 export const { useGetMigrationsByNodeQuery, useGetTopMigrationsByNodeQuery } = 
