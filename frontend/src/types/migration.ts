@@ -20,6 +20,6 @@ export interface MigrationConnection {
  * @prop {string} nodes       Node UUIDs of the top migration entry.
  */
 export interface TopMigration {
-  timestamp: string,
+  timestamp?: string,
   node: string,
 }
