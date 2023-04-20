@@ -175,17 +175,86 @@ function generateDummyMigrationsByNode(args: MigrationsByNodeParameters): Array<
       retVal.push(entry);
       // increment date by 1 day
       date.setDate(date.getDate() + 1);
-    } while (
+
       // Stop if start date has reached end date
-      date <= endDate
-    );
+    } while (date <= endDate);
   });
   return retVal;
 }
-// [ ] Function to generate a dummy response for the `getMigrationsByNode`-query until the coac API is put in
+
+// [ ] Function to generate a dummy response for the `getTopMigrationsByNode`-query until the coac API is put in
 function generateDummyTopMigrationsByNode(args: TopMigrationsByNodeParameters): Array<TopMigration> {
-  args;
-  // generate connections for each end node requested
-  // with ags from lk_germany_reduced_list.json (item["RS"])
-  throw new Error('Function not implemented.');
+  // fetch lk_germany_reduced_list.json to use real AGS (item["RS"])
+  const nodeList: Array<string> = [];
+  fetch('assets/lk_germany_reduced_list.json', {
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
+  })
+    .then((response) => {
+      // interpret content as JSON
+      return response.json();
+    })
+    .then(
+      // Resolve Promise
+      (
+        jsonlist: {
+          AGS: string;
+          NAME: string;
+          BEZ: string;
+        }[]
+      ) => {
+        // put AGS from json into nodelist
+        nodeList.push(...jsonlist.flatMap((entry) => entry.AGS));
+      },
+      // Reject Promise
+      () => {
+        console.warn('Did not receive proper county list');
+      }
+    );
+  // set start date to start of simulation if missing
+  const startDate = new Date(args.startDate ?? '2021-06-07');
+  // set end date to end of simulation if missing
+  const endDate = new Date(args.endDate ?? '2021-09-04');
+  // set flag for single date request; use dates with fallback; only use date part of ISO string (YYYY-MM-DD)
+  const isSingleDate = startDate.toISOString().substring(0, 10) === endDate.toISOString().substring(0, 10);
+  const retVal: Array<TopMigration> = [];
+  do {
+    // add n random nodes, check that they are not starting node, and add to this day's array
+    for (let i = 0; i < args.count; i++) {
+      let node: string = '';
+      do {
+        // get random node from list of nodes
+        node = nodeList[Math.floor(Math.random() * (nodeList.length - 1))];
+        // redo if:
+      } while (
+        // node is requesting node OR
+        node == args.node ||
+        // node is already in list with same date
+        retVal.find(
+          (entry) =>
+            // node is a duplicate AND
+            entry.node === node &&
+            // node does not have a timestamp (single date) OR
+            (entry.timestamp === undefined ||
+              // node has the same timestamp as the duplicate
+              entry.timestamp === startDate.toISOString().substring(0, 10))
+        )
+      );
+      // create entry
+      const entry: TopMigration = {
+        node: node,
+      };
+      // add timestamp if multiple dates are requested; only use date part of ISO string (YYYY-MM-DD)
+      if (!isSingleDate) entry.timestamp = startDate.toISOString().substring(0, 10);
+      // add entry to return array
+      retVal.push(entry);
+    }
+    // increment date by 1 day
+    startDate.setDate(startDate.getDate() + 1);
+    // Stop if start date has reached end date
+  } while (startDate <= endDate);
+  // return array of top migrations
+  return retVal;
 }
