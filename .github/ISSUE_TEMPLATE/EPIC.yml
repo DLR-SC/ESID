@@ -7,8 +7,6 @@ body:
     id: description
     attributes:
       label: Description
-      validations:
-        required: true
       value: |
         <!--
         ToDo Epic Creation
@@ -33,4 +31,5 @@ body:
         
         ---
         <!-- Notes on things that are out of scope of the Epic but may spawn new issues at a later date -->
-        
+    validations:
+      required: true
