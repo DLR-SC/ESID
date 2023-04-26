@@ -3,8 +3,12 @@ description: Create a new epic
 title: "[EPIC]: "
 labels: ["Epic"]
 body:
-  - type: markdown
+  - type: textarea
+    id: description
     attributes:
+      label: Description
+      validations:
+        required: true
       value: |
         <!--
         ToDo Epic Creation
