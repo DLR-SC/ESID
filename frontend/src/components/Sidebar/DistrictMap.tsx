@@ -17,6 +17,7 @@ import HeatLegendEdit from './HeatLegendEdit';
 import {HeatmapLegend} from '../../types/heatmapLegend';
 import LockOpen from '@mui/icons-material/LockOpen';
 import LoadingContainer from '../shared/LoadingContainer';
+import { Dialog } from '@mui/material';
 const {useRef} = React;
 
 interface IRegionPolygon {
@@ -36,6 +37,7 @@ export default function DistrictMap(): JSX.Element {
   const [geodata, setGeodata] = useState<GeoJSON.GeoJSON | null>(null);
   const [longLoad, setLongLoad] = useState(false);
   const [longLoadTimeout, setLongLoadTimeout] = useState<number>();
+
   const selectedDistrict = useAppSelector((state) => state.dataSelection.district);
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
