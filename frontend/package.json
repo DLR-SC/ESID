@@ -65,10 +65,12 @@
     "**/*": "prettier --write --ignore-unknown"
   },
   "dependencies": {
+    "'": "file:mui/material/ToggleButton'",
     "@amcharts/amcharts4": "^4.10.17",
     "@amcharts/amcharts5": "^5.1.8",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
+    "@material/switch": "^14.0.0",
     "@mui/icons-material": "^5.10.9",
     "@mui/lab": "*",
     "@mui/material": "^5.10.11",
@@ -90,7 +92,8 @@
     "redux": "^4.0.5",
     "redux-persist": "^6.0.0",
     "rooks": "^5.7.3",
-    "simplebar": "^5.3.5"
+    "simplebar": "^5.3.5",
+    "typescript-toggle": "^1.1.0"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.12.13",
