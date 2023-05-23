@@ -10,6 +10,7 @@
 - Added a label to the scenario start day.
 - All numbers on in the scenario overview now show as integers.
 - The group filter editor will now ask for confirmation to discard changes, when the user selects a new group filter or closes the dialog without saving.
+- All texts are now available in Englisch and German.
 
 ### Bug fixes
 
