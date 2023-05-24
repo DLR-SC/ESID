@@ -1,12 +1,15 @@
 # ESID Changelog
 
 ## vX.X.X-alpha
+
 **Release Date:** TBD
 
 ### New Features
+
 - The changelog can now be viewed shown using the burger menu in the top right corner.
 
 ### Improvements
+
 - Added a label to the scenario start day.
 - All numbers on in the scenario overview now show as integers.
 - The group filter editor will now ask for confirmation to discard changes, when the user selects a new group filter or closes the dialog without saving.
@@ -17,9 +20,11 @@
 ---
 
 ## v0.2.0-alpha
+
 **Release Date:** 27.02.2023
 
 ### New Features
+
 - Group Filters
   - There is a new button below the '+' card on the top right called 'Groups'.
   - This opens the group filter editor. Here you can create, toggle, edit and delete customizable groups.
@@ -30,21 +35,25 @@
   - The line chart displays the group filters with a different line style.
 
 ### Improvements
+
 - All numbers on scenario cards now show as integers only.
 - The cards are now bigger, so it is less likely for text to overflow.
 - The app now saves, if the infection states were expanded between sessions.
 - The selected district is now highlighted with an outline on the district map.
 
 ### Bug fixes
-- Found an issue with the persistent cache that crashed the website when a new property is added to the persistent store 
+
+- Found an issue with the persistent cache that crashed the website when a new property is added to the persistent store
   and added a comment to prevent future errors.
 
 ---
 
 ## v0.1.0-alpha
+
 **Release Date:** 01.01.2023
 
 ### New Features
+
 - Scenario Cards
   - selectable compartments
   - selectable scenarios
