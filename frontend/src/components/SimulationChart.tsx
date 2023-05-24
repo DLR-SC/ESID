@@ -31,6 +31,7 @@ const drawDeviations = false;
  */
 export default function SimulationChart(): JSX.Element {
   const {t, i18n} = useTranslation();
+  const {t: tBackend} = useTranslation('backend');
   const theme = useTheme();
   const scenarioList = useAppSelector((state) => state.scenarioList);
   const selectedDistrict = useAppSelector((state) => state.dataSelection.district.ags);
@@ -132,8 +133,10 @@ export default function SimulationChart(): JSX.Element {
       series.strokeWidth = 2;
       series.fill = am4core.color(theme.custom.scenarios[i % theme.custom.scenarios.length][0]); // loop around the color list if scenarios exceed color list
       series.stroke = series.fill;
-      series.tooltipText = `[bold ${series.stroke.hex}]${scenario.label}:[/] {${scenarioId}}`;
-      series.name = scenario.label;
+      series.tooltipText = `[bold ${series.stroke.hex}]${tBackend(
+        `scenario-names.${scenario.label}`
+      )}:[/] {${scenarioId}}`;
+      series.name = tBackend(`scenario-names.${scenario.label}`);
 
       if (drawDeviations) {
         const seriesSTD = chart.series.push(new am4charts.LineSeries());
@@ -145,7 +148,9 @@ export default function SimulationChart(): JSX.Element {
         series.fill = am4core.color(theme.custom.scenarios[i % theme.custom.scenarios.length][0]); // loop around the color list if scenarios exceed color list
         series.stroke = series.fill;
         // override tooltip
-        series.tooltipText = `${scenario.label}: [bold]{${scenarioId}STDdown} ~ {${scenarioId}STDup}[/]`;
+        series.tooltipText = `${tBackend(
+          `scenario-names.${scenario.label}`
+        )}: [bold]{${scenarioId}STDdown} ~ {${scenarioId}STDup}[/]`;
       }
     });
 
@@ -159,7 +164,7 @@ export default function SimulationChart(): JSX.Element {
       percentileUp: 'PercentileUp',
       percentileDown: 'PercentileDown',
     };
-    chart.exporting.filePrefix = 'Covid Simulaton Data';
+    chart.exporting.filePrefix = 'Covid Simulation Data';
 
     // Add series for groupFilter
     if (groupFilterList && selectedScenario) {
@@ -197,7 +202,7 @@ export default function SimulationChart(): JSX.Element {
     return () => {
       chartRef.current?.dispose();
     };
-  }, [scenarioList, groupFilterList, dispatch, i18n.language, t, theme, selectedScenario]);
+  }, [scenarioList, groupFilterList, dispatch, i18n.language, t, theme, selectedScenario, tBackend]);
 
   //Effect to hide disabled scenarios (and show them again if not hidden anymore)
   useEffect(() => {
@@ -342,7 +347,11 @@ export default function SimulationChart(): JSX.Element {
       chartRef.current.series.each((series) => {
         series.adapter.add('tooltipHTML', (_, target) => {
           const data = target.tooltipDataItem.dataContext;
-          const text = [`<strong>{date.formatDate("${t('dateFormat')}")} (${selectedCompartment})</strong>`];
+          const text = [
+            `<strong>{date.formatDate("${t('dateFormat')}")} (${tBackend(
+              `infection-states.${selectedCompartment}`
+            )})</strong>`,
+          ];
           text.push('<table>');
           chartRef.current?.series.each((s) => {
             if (
@@ -432,6 +441,7 @@ export default function SimulationChart(): JSX.Element {
     formatNumber,
     t,
     groupFilterData,
+    tBackend,
   ]);
 
   return (

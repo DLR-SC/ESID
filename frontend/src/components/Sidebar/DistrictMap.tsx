@@ -17,6 +17,7 @@ import HeatLegendEdit from './HeatLegendEdit';
 import {HeatmapLegend} from '../../types/heatmapLegend';
 import LockOpen from '@mui/icons-material/LockOpen';
 import LoadingContainer from '../shared/LoadingContainer';
+
 const {useRef} = React;
 
 interface IRegionPolygon {
@@ -57,6 +58,7 @@ export default function DistrictMap(): JSX.Element {
   const rootRef = useRef<am5.Root | null>(null);
   const legendRef = useRef<am5.HeatLegend | null>(null);
   const {t, i18n} = useTranslation();
+  const {t: tBackend} = useTranslation('backend');
   const {formatNumber} = NumberFormatter(i18n.language, 3, 8);
   const theme = useTheme();
   const dispatch = useAppDispatch();
@@ -248,7 +250,9 @@ export default function DistrictMap(): JSX.Element {
             polygon.setAll({
               tooltipText:
                 selectedScenario && selectedCompartment
-                  ? `${t(`BEZ.${regionData.BEZ}`)} {GEN}\n${selectedCompartment}: ${formatNumber(regionData.value)}`
+                  ? `${t(`BEZ.${regionData.BEZ}`)} {GEN}\n${tBackend(
+                      `infection-states.${selectedCompartment}`
+                    )}: ${formatNumber(regionData.value)}`
                   : `${t(`BEZ.${regionData.BEZ}`)} {GEN}`,
               fill: fillColor,
             });
@@ -281,6 +285,7 @@ export default function DistrictMap(): JSX.Element {
     isFetching,
     legend,
     longLoad,
+    tBackend,
   ]);
 
   return (
