@@ -1,25 +1,30 @@
 # ESID Änderungshistorie
 
 ## vX.X.X-alpha
+
 **Veröffentlichungsdatum:** TBD
 
 ### Neue Funktionen
+
 - Die Änderungshistorie kann jetzt über das Burger-Menü in der oberen rechten Ecke angezeigt werden.
 
 ### Verbesserungen
+
 - Ein Label wurde zum Szenarios-Starttag hinzugefügt.
 - Alle Zahlen in der Szenarienübersicht werden nun als Ganzzahlen angezeigt.
 - Der Gruppenfilter-Editor fragt jetzt nach einer Bestätigung, wenn der Benutzer einen anderen Gruppenfilter auswählt oder den Dialog schließt, ohne vorherige Änderungen zu speichern.
-- Alle Texte sind nun in Englisch und in Deutsch verfügbar.  
+- Alle Texte sind nun in Englisch und in Deutsch verfügbar.
 
 ### Fehlerbehebungen
 
 ---
 
 ## v0.2.0-alpha
+
 **Veröffentlichungsdatum:** 27.02.2023
 
 ### Neue Funktionen
+
 - Gruppenfilter
   - Es gibt einen neuen Button unterhalb der '+' Karte oben rechts namens 'Gruppen'.
   - Der Button öffnet den Gruppenfilter-Editor. Hier können Sie Gruppen erstellen, umschalten, bearbeiten und löschen.
@@ -30,12 +35,14 @@
   - Das Liniendiagramm zeigt die Gruppenfilter mit unterschiedlichen Linienstilen an.
 
 ### Verbesserungen
+
 - Alle Zahlen auf Szenariokarten werden jetzt nur als Ganzzahlen angezeigt.
 - Die Karten sind jetzt größer, damit es weniger wahrscheinlich ist, dass Text überläuft.
 - Die App speichert jetzt, ob die Infektionszustände zwischen den Sitzungen erweitert wurden.
 - Der ausgewählte Bezirk wird auf der Bezirkskarte mit einer Kontur hervorgehoben.
 
 ### Fehlerbehebungen
+
 - Es wurde ein Problem mit dem persistenten Cache behoben, bei dem die Website abstürzt wenn eine neue
   Eigenschaft zum persistenten Speicher hinzugefügt wurde, und ein Kommentar wurde hinzugefügt, um zukünftige Fehler zu
   verhindern.
@@ -43,9 +50,11 @@
 ---
 
 ## v0.1.0-alpha
+
 **Veröffentlichungsdatum:** 01.01.2023
 
 ### Neue Funktionen
+
 - Szenariokarten
   - auswählbare Infektionszustände
   - auswählbare Szenarien
