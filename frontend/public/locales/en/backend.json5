@@ -2,7 +2,7 @@
   'infection-states': {
     Infected: 'Infected',
     Hospitalized: 'Hospitalized',
-    ICU: 'ICU',
+    ICU: 'Intensive Care',
     Dead: 'Dead',
     Exposed: 'Exposed',
     Recovered: 'Recovered',
@@ -33,7 +33,7 @@
   },
   'group-filters': {
     categories: {
-      age: 'Age Groups',
+      age: 'Age',
       gender: 'Gender',
     },
     groups: {

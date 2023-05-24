@@ -33,7 +33,7 @@
   },
   'group-filters': {
     categories: {
-      age: 'Altersgruppen',
+      age: 'Alter',
       gender: 'Geschlecht',
     },
     groups: {
