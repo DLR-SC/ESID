@@ -21,6 +21,7 @@ import {
 } from '../../store/UserPreferenceSlice';
 import {HeatmapLegend} from '../../types/heatmapLegend';
 import {useTranslation} from 'react-i18next';
+import legendPresets from 'assets/heatmap_legend_presets.json';
 
 /**
  * This component displays an edit button to access a modal. In the modal you can edit the heatmap legend.
@@ -48,7 +49,7 @@ export default function HeatLegendEdit(): JSX.Element {
     //else they are already there from localstorage
     if (legend.name == 'uninitialized') {
       // get heatmap legend preset list from assets and select default
-      fetch('assets/heatmap_legend_presets.json', {
+      fetch(legendPresets as string, {
         headers: {
           'Content-Type': 'application/json',
           Accept: 'application/json',

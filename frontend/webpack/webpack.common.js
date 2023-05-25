@@ -13,8 +13,6 @@ module.exports = {
     new CopyPlugin({
       patterns: [
         './public/manifest.json',
-        {from: './public/assets', to: 'assets'},
-        {from: './public/locales', to: 'locales'},
         {from: './docs/changelog/changelog-en.md', to: 'locales/en'},
         {from: './docs/changelog/changelog-de.md', to: 'locales/de'},
       ],
@@ -26,18 +24,45 @@ module.exports = {
     new DotenvPlugin(),
   ],
   output: {
+    filename: '[name].bundle.[contenthash].js',
     path: path.resolve(__dirname + '/..', 'build'),
-    filename: 'bundle.js',
+    clean: true,
+  },
+  optimization: {
+    runtimeChunk: 'single',
+    splitChunks: {
+      chunks: 'all',
+    },
   },
   module: {
     rules: [
       {test: /\.tsx?$/i, use: ['ts-loader'], exclude: /node_modules/},
       {test: /\.css$/i, use: ['style-loader', 'css-loader']},
       {test: /\.scss$/i, use: ['style-loader', 'css-loader', 'sass-loader']},
+      {
+        test: /\.(png|jpe?g|gif|jp2|webp|svg)$/i,
+        type: 'asset/resource',
+        generator: {filename: 'images/[name].[hash][ext][query]'},
+      },
+      {
+        test: /\.(json|geojson)$/i,
+        type: 'asset/resource',
+        generator: {filename: 'data/[name].[hash][ext][query]'},
+      },
+      {
+        test: /locales.*\.json5$/i,
+        type: 'asset/resource',
+        generator: {
+          filename: (pathData) => {
+            const path = pathData.filename.split('/').slice(1, 3).join('/');
+            return `${path}/[name].[hash][ext][query]`;
+          },
+        },
+      },
     ],
   },
   resolve: {
-    modules: [path.resolve(__dirname, '..', 'src'), 'node_modules'],
+    modules: ['src', 'public', 'node_modules'],
     extensions: ['.ts', '.tsx', '.js', '.jsx'],
     fallback: {crypto: false},
   },
