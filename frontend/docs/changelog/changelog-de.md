@@ -17,6 +17,8 @@
 
 ### Fehlerbehebungen
 
+- Ein Fehler wurde behoben, der beim ersten Laden der Seite den Text in der Suchleiste nicht übersetzt hatte.
+
 ---
 
 ## v0.2.0-alpha
