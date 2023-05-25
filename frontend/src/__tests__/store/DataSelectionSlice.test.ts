@@ -9,7 +9,7 @@ import reducer, {
 
 describe('DataSelectionSlice', () => {
   const initialState = {
-    district: {ags: '00000', name: 'germany', type: ''},
+    district: {ags: '00000', name: '', type: ''},
     date: null,
     scenario: null,
     compartment: null,
