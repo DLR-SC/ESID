@@ -63,7 +63,7 @@ export default function SearchBar(): JSX.Element {
       );
     // this init should only run once on first render
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [t]);
 
   return (
     <Container>
