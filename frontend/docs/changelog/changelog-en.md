@@ -17,6 +17,8 @@
 
 ### Bug fixes
 
+- An error was fixed, which prevented the text in the search bar to be translated on an initial site visit.
+
 ---
 
 ## v0.2.0-alpha
