@@ -15,17 +15,17 @@ module.exports = {
       files: [
         {
           match: /(DLR_Logo)+.+(.png)$/,
-          attributes: { as: 'image' }
+          attributes: {as: 'image'},
         },
         {
           match: /(lk_germany_reduced)+.+(.geojson)$/,
-          attributes: { as: 'fetch' }
+          attributes: {as: 'fetch'},
         },
         {
           match: /(lk_germany_reduced_list)+.+(.json)$/,
-          attributes: { as: 'fetch' }
-        }
-      ]
+          attributes: {as: 'fetch'},
+        },
+      ],
     }),
     new CopyPlugin({
       patterns: [
