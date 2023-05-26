@@ -78,7 +78,7 @@ export default function Scenario(): JSX.Element {
       day: startDay ?? '',
       groups: ['total'],
     },
-    {skip: !startDay},
+    {skip: !startDay}
   );
 
   useEffect(() => {

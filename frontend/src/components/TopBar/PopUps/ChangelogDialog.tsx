@@ -17,9 +17,9 @@ export default function ChangelogDialog(): JSX.Element {
   const [md, setMD] = useState<string>('');
 
   useEffect(() => {
-    let changelogSrc = changelogEN as string;
+    let changelogSrc = changelogEN;
     if (i18n.language.startsWith('de')) {
-      changelogSrc = changelogDE as string;
+      changelogSrc = changelogDE;
     }
 
     void fetch(changelogSrc)

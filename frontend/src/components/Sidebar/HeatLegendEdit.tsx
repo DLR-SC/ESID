@@ -49,7 +49,7 @@ export default function HeatLegendEdit(): JSX.Element {
     //else they are already there from localstorage
     if (legend.name == 'uninitialized') {
       // get heatmap legend preset list from assets and select default
-      fetch(legendPresets as string, {
+      fetch(legendPresets, {
         headers: {
           'Content-Type': 'application/json',
           Accept: 'application/json',

@@ -33,7 +33,7 @@ export default function TopBar(): JSX.Element {
             height: '36px',
             width: 'auto',
           }}
-          src={esidLogo as string}
+          src={esidLogo}
           alt={t('topBar.icon-alt')}
         />
       </Grid>

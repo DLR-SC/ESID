@@ -100,7 +100,7 @@ export default function DistrictMap(): JSX.Element {
 
   // fetch geojson
   useEffect(() => {
-    fetch(mapData as string, {
+    fetch(mapData, {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',

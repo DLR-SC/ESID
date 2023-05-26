@@ -24,7 +24,7 @@ export default function SidebarTabs(): JSX.Element {
     >
       {/* This is a placeholder for now. */}
       <a href='https://www.dlr.de/' target='_blank' rel='noopener noreferrer' style={{width: '90%'}}>
-        <img src={dlrLogo as string} alt={t('dlr-logo')} width='100%' />
+        <img src={dlrLogo} alt={t('dlr-logo')} width='100%' />
       </a>
 
       {/*

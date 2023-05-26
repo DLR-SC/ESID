@@ -35,7 +35,7 @@ export default function SearchBar(): JSX.Element {
 
   useEffect(() => {
     // get option list from assets
-    fetch(countyData as string, {
+    fetch(countyData, {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',

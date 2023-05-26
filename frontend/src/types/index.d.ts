@@ -1,13 +1,54 @@
-declare module '*.png';
-declare module '*.jpg';
-declare module '*.jpeg';
-declare module '*.jp2';
-declare module '*.svg';
-declare module '*.webp';
-declare module '*.gif';
+declare module '*.png' {
+  const path: string;
+  export = path;
+}
 
-declare module '*.json';
-declare module '*.json5';
-declare module '*.geojson';
+declare module '*.jpg' {
+  const path: string;
+  export = path;
+}
 
-declare module '*.md';
+declare module '*.jpeg' {
+  const path: string;
+  export = path;
+}
+
+declare module '*.jp2' {
+  const path: string;
+  export = path;
+}
+
+declare module '*.svg' {
+  const path: string;
+  export = path;
+}
+
+declare module '*.webp' {
+  const path: string;
+  export = path;
+}
+
+declare module '*.gif' {
+  const path: string;
+  export = path;
+}
+
+declare module '*.json' {
+  const path: string;
+  export = path;
+}
+
+declare module '*.json5' {
+  const path: string;
+  export = path;
+}
+
+declare module '*.geojson' {
+  const path: string;
+  export = path;
+}
+
+declare module '*.md' {
+  const path: string;
+  export = path;
+}

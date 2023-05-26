@@ -31,7 +31,7 @@ export default function AttributionDialog(): JSX.Element {
   useEffect(() => {
     // The data should be fetched only once, since it is really slow.
     if (ATTRIBUTIONS_CACHE === null) {
-      void fetch(attributionData as string).then(async (response) => {
+      void fetch(attributionData).then(async (response) => {
         const json = (await response.json()) as Array<DependencyData>;
 
         // For each library we create a markdown string.
