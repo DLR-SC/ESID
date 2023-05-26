@@ -9,3 +9,5 @@ declare module '*.gif';
 declare module '*.json';
 declare module '*.json5';
 declare module '*.geojson';
+
+declare module '*.md';

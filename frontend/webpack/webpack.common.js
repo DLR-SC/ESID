@@ -76,6 +76,11 @@ module.exports = {
           },
         },
       },
+      {
+        test: /\.md$/i,
+        type: 'asset/resource',
+        generator: {filename: 'docs/[name].[hash][ext][query]'},
+      },
     ],
   },
   resolve: {
