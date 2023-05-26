@@ -32,9 +32,13 @@ void i18n
   .use(initReactI18next)
   .init(
     {
-      fallbackLng: 'en',
+      // By default, i18next loads the user language AND the fallback language, thus if the user has the browser set to
+      // German it would load 'de' and 'en'. Since we also provide complete translations for German, we set it to the
+      // fallback language to avoid loading both translations.
+      fallbackLng: navigator.language.startsWith('de') ? 'de' : 'en',
       supportedLngs: ['de', 'en'],
       defaultNS: 'global',
+      load: 'languageOnly',
       debug: false,
       interpolation: {
         escapeValue: false,
