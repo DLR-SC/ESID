@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import {useTranslation} from 'react-i18next';
 import React from 'react';
-import dlrLogo from 'assets/logo/DLRLogo.png';
+import dlrLogo from 'assets/logo/DLR_Logo.png';
 
 export default function SidebarTabs(): JSX.Element {
   const {t} = useTranslation('global');

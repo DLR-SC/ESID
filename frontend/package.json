@@ -5,7 +5,7 @@
   "scripts": {
     "build": "npm run collect-attributions && webpack --progress --config ./webpack/webpack.prod.js",
     "start": "webpack serve --open --progress --config ./webpack/webpack.dev.js",
-    "start-prod": "webpack serve --open --progress --config ./webpack/webpack.prod.js",
+    "start-prod": "webpack serve --no-client-overlay-warnings --open --progress --config ./webpack/webpack.prod.js",
     "test": "jest",
     "coverage": "jest --collectCoverage --reporters='default'",
     "format": "prettier --write .",
@@ -96,6 +96,7 @@
   },
   "devDependencies": {
     "@babel/preset-react": "^7.12.13",
+    "@principalstudio/html-webpack-inject-preload": "^1.2.7",
     "@testing-library/dom": "^8.11.1",
     "@testing-library/react": "^11.2.6",
     "@testing-library/react-hooks": "^7.0.2",

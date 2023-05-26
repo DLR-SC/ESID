@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackInjectPreload = require('@principalstudio/html-webpack-inject-preload');
 const CopyPlugin = require('copy-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const DotenvPlugin = require('dotenv-webpack');
@@ -9,6 +10,22 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: './public/index.html',
+    }),
+    new HtmlWebpackInjectPreload({
+      files: [
+        {
+          match: /(DLR_Logo)+.+(.png)$/,
+          attributes: { as: 'image' }
+        },
+        {
+          match: /(lk_germany_reduced)+.+(.geojson)$/,
+          attributes: { as: 'fetch' }
+        },
+        {
+          match: /(lk_germany_reduced_list)+.+(.json)$/,
+          attributes: { as: 'fetch' }
+        }
+      ]
     }),
     new CopyPlugin({
       patterns: [
