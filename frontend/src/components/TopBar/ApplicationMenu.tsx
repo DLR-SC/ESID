@@ -9,12 +9,11 @@ import Grid from '@mui/material/Grid';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Snackbar from '@mui/material/Snackbar';
-
-const ChangelogDialog = React.lazy(() => import('./PopUps/ChangelogDialog'));
-const ImprintDialog = React.lazy(() => import('./PopUps/ImprintDialog'));
-const PrivacyPolicyDialog = React.lazy(() => import('./PopUps/PrivacyPolicyDialog'));
-const AccessibilityDialog = React.lazy(() => import('./PopUps/AccessibilityDialog'));
-const AttributionDialog = React.lazy(() => import('./PopUps/AttributionDialog'));
+import ChangelogDialog from './PopUps/ChangelogDialog';
+import ImprintDialog from './PopUps/ImprintDialog';
+import PrivacyPolicyDialog from './PopUps/PrivacyPolicyDialog';
+import AccessibilityDialog from './PopUps/AccessibilityDialog';
+import AttributionDialog from './PopUps/AttributionDialog';
 
 /**
  * This menu is found at the top right of the application and is reachable from everywhere. It contains ways to access
