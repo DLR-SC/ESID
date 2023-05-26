@@ -14,6 +14,8 @@
 - Alle Zahlen in der Szenarienübersicht werden nun als Ganzzahlen angezeigt.
 - Der Gruppenfilter-Editor fragt jetzt nach einer Bestätigung, wenn der Benutzer einen anderen Gruppenfilter auswählt oder den Dialog schließt, ohne vorherige Änderungen zu speichern.
 - Alle Texte sind nun in Englisch und in Deutsch verfügbar.
+- Es wurden einige Verbesserungen gemacht, die das Laden der Seite beschleunigen.
+- Wenn neue Funktionen zur Verfügung gestellt werden, wird der Browser-Cache nicht mehr verhindern, dass Benutzer:innen diese sehen.
 
 ### Fehlerbehebungen
 
