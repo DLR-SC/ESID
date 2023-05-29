@@ -28,6 +28,7 @@ import {dateToISOString, Dictionary} from 'util/util';
 import {useGetCaseDataSingleSimulationEntryQuery} from '../store/services/caseDataApi';
 import {NumberFormatter} from '../util/hooks';
 import {ManageGroupDialog} from './ManageGroupDialog';
+import {ManageCompartments} from './ManageCompartments';
 import ConfirmDialog from './shared/ConfirmDialog';
 
 /**
@@ -38,6 +39,7 @@ import ConfirmDialog from './shared/ConfirmDialog';
 export default function Scenario(): JSX.Element {
   // State for the groups management dialog
   const [open, setOpen] = React.useState(false);
+  const [opendel, setOpendelg] = React.useState(false);
 
   const {t, i18n} = useTranslation();
   const theme = useTheme();
@@ -64,6 +66,7 @@ export default function Scenario(): JSX.Element {
   const activeScenarios = useAppSelector((state) => state.dataSelection.activeScenarios);
 
   const [groupEditorUnsavedChanges, setGroupEditorUnsavedChanges] = useState(false);
+  const [groupManageCompChanges, setGroupManageCompartChanges] = useState(false);
   const [closeDialogOpen, setCloseDialogOpen] = useState(false);
 
   const {data: scenarioListData} = useGetSimulationsQuery();
@@ -153,6 +156,9 @@ export default function Scenario(): JSX.Element {
           maxWidth: '100%',
         }}
       >
+
+
+            
         <Box
           id='scenario-view-compartment-list-root'
           sx={{
@@ -198,6 +204,7 @@ export default function Scenario(): JSX.Element {
             >
               {t('scenario.simulation-start-day')}:
             </Typography>
+
             <Typography
               variant='h2'
               sx={{
@@ -304,7 +311,47 @@ export default function Scenario(): JSX.Element {
           >
             {compartmentsExpanded ? t('less') : t('more')}
           </Button>
+           <Button
+            variant='outlined'
+            color='primary'
+            sx={{
+              width: '200px',
+              margin: theme.spacing(2),
+              alignSelf: 'center',
+            }}
+            onClick={() => {
+              setOpendelg(true);
+            }}
+            aria-label={t('add-button-filters.title')}
+          >
+            {t('Compartments')}
+          </Button>
         </Box>
+     
+        <Dialog
+          maxWidth='lg'
+          fullWidth={true}
+          open={opendel}
+          onClose={() => {
+            if (groupManageCompChanges) {
+              setCloseDialogOpen(true);
+            } else {
+              setOpendelg(false);
+            }
+          }}
+        >
+          <ManageCompartments
+            onCloseRequest={() => {
+              if (groupManageCompChanges) {
+                setCloseDialogOpen(true);
+              } else {
+                setOpendelg(false);
+              }
+            }}
+            unsavedChangesCallback={(unsavedChanges) => setGroupManageCompartChanges(unsavedChanges)}
+          />
+        
+        </Dialog>
         <Box
           id='scenario-view-scenario-card-list'
           sx={{
