@@ -29,6 +29,7 @@ module.exports = {
     'jest/expect-expect': [
       'warn',
       {
+        
         // ensure, that react tests are recognized as assertions
         assertFunctionNames: [
           'expect',
@@ -38,6 +39,8 @@ module.exports = {
           'screen.queryAllBy*',
           'screen.findBy*',
           'screen.findAllBy*',
+          '@typescript-eslint/no-unsafe-assignment'= 'off',
+          '@typescript-eslint/no-explicit-any'= 'off',
         ],
       },
     ],
