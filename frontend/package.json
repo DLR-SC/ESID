@@ -65,7 +65,7 @@
     "**/*": "prettier --write --ignore-unknown"
   },
   "dependencies": {
-    "'": "file:mui/material/ToggleButton'",
+    "'": "file:mui/material/Autocomplete'",
     "@amcharts/amcharts4": "^4.10.17",
     "@amcharts/amcharts5": "^5.1.8",
     "@emotion/react": "^11.10.5",
@@ -78,6 +78,7 @@
     "@mui/system": "^5.10.10",
     "@reduxjs/toolkit": "^1.5.0",
     "@types/geojson": "^7946.0.8",
+    "dotenv": "^16.0.3",
     "i18next": "^20.2.4",
     "i18next-browser-languagedetector": "^6.1.1",
     "i18next-http-backend": "^1.2.4",
