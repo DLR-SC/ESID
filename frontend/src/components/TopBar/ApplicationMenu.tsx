@@ -1,10 +1,6 @@
 import React, {MouseEvent} from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
 import {useTranslation} from 'react-i18next';
-import ImprintDialog from './PopUps/ImprintDialog';
-import PrivacyPolicyDialog from './PopUps/PrivacyPolicyDialog';
-import AccessibilityDialog from './PopUps/AccessibilityDialog';
-import AttributionDialog from './PopUps/AttributionDialog';
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -14,6 +10,10 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Snackbar from '@mui/material/Snackbar';
 import ChangelogDialog from './PopUps/ChangelogDialog';
+import ImprintDialog from './PopUps/ImprintDialog';
+import PrivacyPolicyDialog from './PopUps/PrivacyPolicyDialog';
+import AccessibilityDialog from './PopUps/AccessibilityDialog';
+import AttributionDialog from './PopUps/AttributionDialog';
 
 /**
  * This menu is found at the top right of the application and is reachable from everywhere. It contains ways to access

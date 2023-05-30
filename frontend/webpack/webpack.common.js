@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackInjectPreload = require('@principalstudio/html-webpack-inject-preload');
 const CopyPlugin = require('copy-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const DotenvPlugin = require('dotenv-webpack');
@@ -10,14 +11,24 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './public/index.html',
     }),
-    new CopyPlugin({
-      patterns: [
-        './public/manifest.json',
-        {from: './public/assets', to: 'assets'},
-        {from: './public/locales', to: 'locales'},
-        {from: './docs/changelog/changelog-en.md', to: 'locales/en'},
-        {from: './docs/changelog/changelog-de.md', to: 'locales/de'},
+    new HtmlWebpackInjectPreload({
+      files: [
+        {
+          match: /(DLR_Logo)+.+(.png)$/,
+          attributes: {as: 'image'},
+        },
+        {
+          match: /(lk_germany_reduced)+.+(.geojson)$/,
+          attributes: {as: 'fetch', crossOrigin: 'anonymous'},
+        },
+        {
+          match: /(lk_germany_reduced_list)+.+(.json)$/,
+          attributes: {as: 'fetch', crossOrigin: 'anonymous'},
+        },
       ],
+    }),
+    new CopyPlugin({
+      patterns: ['./public/manifest.json'],
     }),
     new ESLintPlugin({
       extensions: ['js', 'jsx', 'ts', 'tsx'],
@@ -26,18 +37,50 @@ module.exports = {
     new DotenvPlugin(),
   ],
   output: {
+    filename: '[name].bundle.[contenthash].js',
     path: path.resolve(__dirname + '/..', 'build'),
-    filename: 'bundle.js',
+    clean: true,
+  },
+  optimization: {
+    runtimeChunk: 'single',
+    splitChunks: {
+      chunks: 'all',
+    },
   },
   module: {
     rules: [
       {test: /\.tsx?$/i, use: ['ts-loader'], exclude: /node_modules/},
       {test: /\.css$/i, use: ['style-loader', 'css-loader']},
       {test: /\.scss$/i, use: ['style-loader', 'css-loader', 'sass-loader']},
+      {
+        test: /\.(png|jpe?g|gif|jp2|webp|svg)$/i,
+        type: 'asset/resource',
+        generator: {filename: 'images/[name].[hash][ext][query]'},
+      },
+      {
+        test: /\.(json|geojson)$/i,
+        type: 'asset/resource',
+        generator: {filename: 'data/[name].[hash][ext][query]'},
+      },
+      {
+        test: /locales.*\.json5$/i,
+        type: 'asset/resource',
+        generator: {
+          filename: (pathData) => {
+            const path = pathData.filename.split('/').slice(1, 3).join('/');
+            return `${path}/[name].[hash][ext][query]`;
+          },
+        },
+      },
+      {
+        test: /\.md$/i,
+        type: 'asset/resource',
+        generator: {filename: 'docs/[name].[hash][ext][query]'},
+      },
     ],
   },
   resolve: {
-    modules: [path.resolve(__dirname, '..', 'src'), 'node_modules'],
+    modules: ['src', 'public', 'node_modules'],
     extensions: ['.ts', '.tsx', '.js', '.jsx'],
     fallback: {crypto: false},
   },

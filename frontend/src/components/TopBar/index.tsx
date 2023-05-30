@@ -3,6 +3,7 @@ import {useTheme} from '@mui/material/styles';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
 import ApplicationMenu from './ApplicationMenu';
+import esidLogo from 'assets/logo/logo-200x66.svg';
 
 /**
  * This is the top navigation bar of the application. It contains the logo and a burger menu to access settings and
@@ -32,7 +33,7 @@ export default function TopBar(): JSX.Element {
             height: '36px',
             width: 'auto',
           }}
-          src='assets/logo/logo-200x66.svg'
+          src={esidLogo}
           alt={t('topBar.icon-alt')}
         />
       </Grid>

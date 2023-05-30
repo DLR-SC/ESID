@@ -27,7 +27,7 @@ import {setCompartments, setScenarios} from 'store/ScenarioSlice';
 import {dateToISOString, Dictionary} from 'util/util';
 import {useGetCaseDataSingleSimulationEntryQuery} from '../store/services/caseDataApi';
 import {NumberFormatter} from '../util/hooks';
-import {ManageGroupDialog} from './ManageGroupDialog';
+import ManageGroupDialog from './ManageGroupDialog';
 import ConfirmDialog from './shared/ConfirmDialog';
 
 /**
