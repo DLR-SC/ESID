@@ -30,8 +30,6 @@ module.exports = {
     new CopyPlugin({
       patterns: [
         './public/manifest.json',
-        {from: './docs/changelog/changelog-en.md', to: 'locales/en'},
-        {from: './docs/changelog/changelog-de.md', to: 'locales/de'},
       ],
     }),
     new ESLintPlugin({
