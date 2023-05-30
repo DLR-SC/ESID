@@ -61,7 +61,7 @@ void i18n
         },
       },
     },
-    undefined,
+    undefined
   )
   .then(() => (document.documentElement.lang = i18n.language));
 

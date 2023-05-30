@@ -24,7 +24,7 @@ export default function TopBar(): JSX.Element {
         borderBottom: `1px solid ${theme.palette.divider}`,
         paddingLeft: theme.spacing(4),
         paddingRight: theme.spacing(4),
-        gap: theme.spacing(4)
+        gap: theme.spacing(4),
       }}
     >
       <Box sx={{display: 'flex', alignItems: 'center'}}>
@@ -44,4 +44,3 @@ export default function TopBar(): JSX.Element {
     </Box>
   );
 }
-
