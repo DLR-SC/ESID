@@ -19,11 +19,11 @@ module.exports = {
         },
         {
           match: /(lk_germany_reduced)+.+(.geojson)$/,
-          attributes: {as: 'fetch'},
+          attributes: {as: 'fetch', crossOrigin: 'anonymous'},
         },
         {
           match: /(lk_germany_reduced_list)+.+(.json)$/,
-          attributes: {as: 'fetch'},
+          attributes: {as: 'fetch', crossOrigin: 'anonymous'},
         },
       ],
     }),
