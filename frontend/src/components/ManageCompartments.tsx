@@ -115,7 +115,7 @@ const namesauto = [
  		}}
  		>
  		<div />
- 		<Typography variant='h1'>{t('add-button-filters.title')}</Typography>
+ 		<Typography variant='h1'>{t('Comparments')}</Typography>
  		<IconButton color='primary' sx={{marginLeft: 'auto'}} onClick={props.onCloseRequest}>
  		<Close />
  		</IconButton>
@@ -468,7 +468,7 @@ interface GroupFilterCardProps {
      }}
      />
 
-
+{/* 
      <Box
      sx={{
        display: 'flex',
@@ -511,7 +511,7 @@ interface GroupFilterCardProps {
          </FormGroup>
          </Box>
          ))}
-     </Box>
+     </Box> */}
 
      <Autocomplete
      multiple
