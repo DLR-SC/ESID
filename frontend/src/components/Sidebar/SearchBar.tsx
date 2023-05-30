@@ -33,6 +33,13 @@ export default function SearchBar(): JSX.Element {
   const theme = useTheme();
   const dispatch = useAppDispatch();
 
+  // This ensures that the displayed name of Germany is always localized.
+  useEffect(() => {
+    if (selectedDistrict.ags === '00000' && selectedDistrict.name !== t('germany')) {
+      dispatch(selectDistrict({ags: '00000', name: t('germany'), type: ''}));
+    }
+  }, [t, selectedDistrict, dispatch]);
+
   useEffect(() => {
     // get option list from assets
     fetch(countyData, {

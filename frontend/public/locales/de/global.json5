@@ -65,4 +65,5 @@
   'no-data': 'Keine Daten',
   'dlr-logo': 'DLR-Logo',
   okay: 'Okay',
+  language: 'Sprache'
 }

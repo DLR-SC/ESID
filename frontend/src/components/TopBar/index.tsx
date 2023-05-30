@@ -1,9 +1,10 @@
-import Grid from '@mui/material/Grid';
 import {useTheme} from '@mui/material/styles';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
 import ApplicationMenu from './ApplicationMenu';
 import esidLogo from 'assets/logo/logo-200x66.svg';
+import Box from '@mui/material/Box';
+import LanguagePicker from './LanguagePicker';
 
 /**
  * This is the top navigation bar of the application. It contains the logo and a burger menu to access settings and
@@ -14,19 +15,19 @@ export default function TopBar(): JSX.Element {
   const theme = useTheme();
 
   return (
-    <Grid
+    <Box
       sx={{
+        display: 'flex',
+        alignItems: 'center',
         height: '56px',
         backgroundColor: theme.palette.background.default,
         borderBottom: `1px solid ${theme.palette.divider}`,
         paddingLeft: theme.spacing(4),
         paddingRight: theme.spacing(4),
+        gap: theme.spacing(4)
       }}
-      container
-      direction='row'
-      alignItems='center'
     >
-      <Grid container item alignItems='center' xs={2}>
+      <Box sx={{display: 'flex', alignItems: 'center'}}>
         <img
           id='application-icon'
           style={{
@@ -36,9 +37,11 @@ export default function TopBar(): JSX.Element {
           src={esidLogo}
           alt={t('topBar.icon-alt')}
         />
-      </Grid>
-      <Grid item xs={8} />
+      </Box>
+      <Box sx={{flexGrow: 1}} />
+      <LanguagePicker />
       <ApplicationMenu />
-    </Grid>
+    </Box>
   );
 }
+
