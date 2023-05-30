@@ -27,8 +27,14 @@ export default function HeatLegendEdit(): JSX.Element {
   const legend = useAppSelector((state) => state.userPreference.selectedHeatmap);
   const theme = useTheme();
   const {t} = useTranslation();
+
+  // This contains all legends using the default colors.
   const defaultLegends = useDefaultLegends();
+
+  // This contains all legends from the presets file.
   const [heatmapLegends, setHeatmapLegends] = useState<Array<HeatmapLegend>>([]);
+
+  // This contains the default legend and the presets and is used for displaying the list to the user.
   const [availablePresets, setAvailablePresets] = useState<Array<HeatmapLegend>>([]);
 
   // modal state
@@ -168,6 +174,9 @@ export default function HeatLegendEdit(): JSX.Element {
   );
 }
 
+/**
+ * This hook generates the heatmap legends for all scenarios using the current theme.
+ */
 function useDefaultLegends(): Array<HeatmapLegend> {
   const theme = useTheme();
   const [defaultLegends, setDefaultLegends] = useState<Array<HeatmapLegend>>([]);
