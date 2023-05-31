@@ -1,5 +1,5 @@
 import {useTranslation} from 'react-i18next';
-import React from 'react';
+import React, {useCallback} from 'react';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import ToggleButton from '@mui/material/ToggleButton';
 import DE from 'country-flag-icons/string/3x2/DE';
@@ -11,11 +11,15 @@ import GB from 'country-flag-icons/string/3x2/GB';
 export default function LanguagePicker(): JSX.Element {
   const {t, i18n} = useTranslation();
 
-  const handleLanguage = (_: unknown, newLanguage: string) => void i18n.changeLanguage(newLanguage);
+  const handleLanguage = useCallback(
+    (_: unknown, newLanguage: string) => void i18n.changeLanguage(newLanguage),
+    [i18n]
+  );
 
   return (
     <ToggleButtonGroup
       id='language-picker-toggle-group'
+      color='primary'
       value={i18n.language}
       exclusive
       onChange={handleLanguage}
