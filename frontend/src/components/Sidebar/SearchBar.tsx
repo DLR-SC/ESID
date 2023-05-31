@@ -8,6 +8,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import {useTranslation} from 'react-i18next';
+import countyData from 'assets/lk_germany_reduced_list.json';
 
 /** Type definition for the CountyItems of the Autocomplete field
  *  @see DataSelectionSlice
@@ -34,7 +35,7 @@ export default function SearchBar(): JSX.Element {
 
   useEffect(() => {
     // get option list from assets
-    fetch('assets/lk_germany_reduced_list.json', {
+    fetch(countyData, {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',

@@ -17,6 +17,7 @@ import HeatLegendEdit from './HeatLegendEdit';
 import {HeatmapLegend} from '../../types/heatmapLegend';
 import LockOpen from '@mui/icons-material/LockOpen';
 import LoadingContainer from '../shared/LoadingContainer';
+import mapData from 'assets/lk_germany_reduced.geojson';
 
 const {useRef} = React;
 
@@ -99,7 +100,7 @@ export default function DistrictMap(): JSX.Element {
 
   // fetch geojson
   useEffect(() => {
-    fetch('assets/lk_germany_reduced.geojson', {
+    fetch(mapData, {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',

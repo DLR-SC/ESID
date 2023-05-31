@@ -5,7 +5,7 @@
   "scripts": {
     "build": "npm run collect-attributions && webpack --progress --config ./webpack/webpack.prod.js",
     "start": "webpack serve --open --progress --config ./webpack/webpack.dev.js",
-    "start-prod": "webpack serve --open --progress --config ./webpack/webpack.prod.js",
+    "start-prod": "webpack serve --no-client-overlay-warnings --open --progress --config ./webpack/webpack.prod.js",
     "test": "jest",
     "coverage": "jest --collectCoverage --reporters='default'",
     "format": "prettier --write .",
@@ -33,7 +33,10 @@
       "<rootDir>/src"
     ],
     "moduleNameMapper": {
-      "^.+\\.(css|less|scss)$": "identity-obj-proxy"
+      "^.+\\.(css|less|scss)$": "identity-obj-proxy",
+      "^.+\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/src/__mocks__/fileMock.js",
+      "^.+\\.(json|json5|geojson)$": "<rootDir>/src/__mocks__/fileMock.js",
+      "^.+\\.(md)$": "<rootDir>/src/__mocks__/fileMock.js"
     },
     "reporters": [
       "default",
@@ -89,11 +92,11 @@
     "react-scroll-sync": "^0.11.0",
     "redux": "^4.0.5",
     "redux-persist": "^6.0.0",
-    "rooks": "^5.7.3",
-    "simplebar": "^5.3.5"
+    "rooks": "^5.7.3"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.12.13",
+    "@principalstudio/html-webpack-inject-preload": "^1.2.7",
     "@testing-library/dom": "^8.11.1",
     "@testing-library/react": "^11.2.6",
     "@testing-library/react-hooks": "^7.0.2",

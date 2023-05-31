@@ -34,7 +34,7 @@ import ConfirmDialog from './shared/ConfirmDialog';
  * it and allow the dialog to close. Additionally, an unsavedChangesCallback gives info, if the dialog currently contains
  * changes that weren't saved.
  */
-export function ManageGroupDialog(props: {
+export default function ManageGroupDialog(props: {
   onCloseRequest: () => void;
   unsavedChangesCallback: (unsavedChanges: boolean) => void;
 }): JSX.Element {
