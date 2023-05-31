@@ -42,9 +42,9 @@ describe('SearchBar', () => {
 
     await waitFor(() => expect(global.fetch).toHaveBeenCalled());
 
-    await screen.findByDisplayValue('');
+    await screen.findByPlaceholderText('germany');
 
-    userEvent.click(screen.getByDisplayValue(''));
+    userEvent.click(screen.getByPlaceholderText('germany'));
 
     await screen.findByText('A');
     await screen.findByText('Aichach-Friedberg (BEZ.LK)');
@@ -83,7 +83,7 @@ describe('SearchBar', () => {
 
     await waitFor(() => expect(global.fetch).toHaveBeenCalled());
 
-    userEvent.type(screen.getByDisplayValue(''), 'Aic{Enter}');
+    userEvent.type(screen.getByPlaceholderText('germany'), 'Aic{Enter}');
 
     await screen.findByDisplayValue('Aichach-Friedberg (BEZ.LK)');
     expect(Store.getState().dataSelection.district).toStrictEqual({
@@ -104,7 +104,7 @@ describe('SearchBar', () => {
 
     await waitFor(() => expect(global.fetch).toHaveBeenCalled());
 
-    userEvent.type(screen.getByDisplayValue(''), '{ArrowDown}{Enter}');
+    userEvent.type(screen.getByPlaceholderText('germany'), '{ArrowDown}{Enter}');
 
     await screen.findByDisplayValue('Test District (BEZ.Test Type)');
     expect(Store.getState().dataSelection.district).toStrictEqual({

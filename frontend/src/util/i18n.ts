@@ -44,8 +44,9 @@ void i18n
         escapeValue: false,
       },
       detection: {
-        order: ['navigator'], // Make sure that the browser language is the app language. This also prevents cookies.
-        caches: [], // This prevents the use of cookies.
+        // Make sure that the browser language is the app or the user selected language. This also prevents cookies.
+        order: ['localStorage', 'navigator'],
+        caches: ['localStorage'], // This prevents the use of cookies.
       },
       backend: {
         loadPath: (lngs, namespaces) => {

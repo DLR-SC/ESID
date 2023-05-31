@@ -7,6 +7,7 @@
 ### New Features
 
 - The changelog can now be viewed shown using the burger menu in the top right corner.
+- The language can now be switched in the top bar between German and English.
 
 ### Improvements
 

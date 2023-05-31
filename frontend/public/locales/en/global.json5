@@ -2,6 +2,7 @@
   dateFormat: 'MMM dd. yyyy',
   topBar: {
     'icon-alt': 'ESID application logo',
+    language: 'Language',
     menu: {
       label: 'Application menu',
       login: 'Login',

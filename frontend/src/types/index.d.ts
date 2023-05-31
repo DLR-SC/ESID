@@ -52,3 +52,8 @@ declare module '*.md' {
   const path: string;
   export = path;
 }
+
+declare module 'country-flag-icons/string/3x2/*' {
+  const svg: string;
+  export = svg;
+}

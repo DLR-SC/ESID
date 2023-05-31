@@ -5,7 +5,6 @@ import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import Divider from '@mui/material/Divider';
-import Grid from '@mui/material/Grid';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Snackbar from '@mui/material/Snackbar';
@@ -14,6 +13,7 @@ import ImprintDialog from './PopUps/ImprintDialog';
 import PrivacyPolicyDialog from './PopUps/PrivacyPolicyDialog';
 import AccessibilityDialog from './PopUps/AccessibilityDialog';
 import AttributionDialog from './PopUps/AttributionDialog';
+import Box from '@mui/system/Box';
 
 /**
  * This menu is found at the top right of the application and is reachable from everywhere. It contains ways to access
@@ -77,7 +77,7 @@ export default function ApplicationMenu(): JSX.Element {
   };
 
   return (
-    <Grid container item alignItems='center' justifyContent='flex-end' xs={2}>
+    <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'flex-end'}}>
       <Button
         id='top-bar-menu-button'
         aria-label={t('topBar.menu.label')}
@@ -122,6 +122,6 @@ export default function ApplicationMenu(): JSX.Element {
           {t('WIP')}
         </Alert>
       </Snackbar>
-    </Grid>
+    </Box>
   );
 }

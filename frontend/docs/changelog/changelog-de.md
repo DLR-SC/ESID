@@ -7,6 +7,7 @@
 ### Neue Funktionen
 
 - Die Änderungshistorie kann jetzt über das Burger-Menü in der oberen rechten Ecke angezeigt werden.
+- Die Sprache kann jetzt in der oberen Leiste zwischen Englisch und Deutsch gewechselt werden.
 
 ### Verbesserungen
 
