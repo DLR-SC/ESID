@@ -2,6 +2,7 @@
   dateFormat: 'dd. MMM yyyy',
   topBar: {
     'icon-alt': 'ESID Anwendungslogo',
+    language: 'Sprache',
     menu: {
       label: 'Anwendungsmenü',
       login: 'Anmelden',
@@ -65,5 +66,4 @@
   'no-data': 'Keine Daten',
   'dlr-logo': 'DLR-Logo',
   okay: 'Okay',
-  language: 'Sprache',
 }

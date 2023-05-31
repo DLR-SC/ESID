@@ -15,18 +15,31 @@ export default function LanguagePicker(): JSX.Element {
 
   return (
     <ToggleButtonGroup
+      id='language-picker-toggle-group'
       value={i18n.language}
       exclusive
       onChange={handleLanguage}
-      aria-label={t('language')}
+      aria-label={t('topBar.language')}
       sx={{height: '36px'}}
     >
-      <ToggleButton value='de' aria-label='Deutsch'>
-        <div style={{width: '24px', height: '16px', lineHeight: 'normal'}} dangerouslySetInnerHTML={{__html: DE}} />
+      <ToggleButton id='language-picker-german-option' value='de' aria-label='Deutsch'>
+        <Flag svgString={DE} />
       </ToggleButton>
-      <ToggleButton value='en' aria-label='English'>
-        <div style={{width: '24px', height: '16px', lineHeight: 'normal'}} dangerouslySetInnerHTML={{__html: GB}} />
+      <ToggleButton id='language-picker-english-option' value='en' aria-label='English'>
+        <Flag svgString={GB} />
       </ToggleButton>
     </ToggleButtonGroup>
+  );
+}
+
+/**
+ * Creates a flag icon from a svg string with a 3x2 ratio.
+ */
+function Flag(props: {svgString: string}): JSX.Element {
+  return (
+    <div
+      style={{width: '24px', height: '16px', lineHeight: 'normal'}}
+      dangerouslySetInnerHTML={{__html: props.svgString}}
+    />
   );
 }
