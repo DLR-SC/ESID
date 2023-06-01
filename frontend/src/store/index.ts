@@ -1,5 +1,6 @@
 import {combineReducers, configureStore} from '@reduxjs/toolkit';
 import DataSelectionReducer from './DataSelectionSlice';
+import DataSelectionFilterReducer from './DataSelectionFilter';
 import {caseDataApi} from './services/caseDataApi';
 import ScenarioReducer from './ScenarioSlice';
 import {scenarioApi} from './services/scenarioApi';
@@ -11,11 +12,12 @@ import {groupApi} from './services/groupApi';
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['dataSelection', 'userPreference', 'scenarioList'],
+  whitelist: ['dataSelection', 'userPreference', 'scenarioList','dataSelectionFilter'],
 };
 
 const rootReducer = combineReducers({
   dataSelection: DataSelectionReducer,
+  dataSelectionFilter: DataSelectionFilterReducer,
   scenarioList: ScenarioReducer,
   userPreference: UserPreferenceReducer,
   [caseDataApi.reducerPath]: caseDataApi.reducer,

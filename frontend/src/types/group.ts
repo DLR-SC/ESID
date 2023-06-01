@@ -19,3 +19,10 @@ export interface GroupFilter {
   isVisible: boolean;
   groups: Dictionary<string[]>;
 }
+
+export interface CompartmentFilters {
+  id: string;
+  name: string;
+  isVisible: boolean;
+  groups: Dictionary<string[]>;
+}
