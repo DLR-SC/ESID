@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useAppDispatch, useAppSelector} from '../store/hooks';
 import {useTranslation} from 'react-i18next';
 import Box from '@mui/material/Box';
@@ -9,23 +9,19 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Checkbox from '@mui/material/Checkbox';
 import Divider from '@mui/material/Divider';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormGroup from '@mui/material/FormGroup';
 import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Close from '@mui/icons-material/Close';
 import DeleteForever from '@mui/icons-material/DeleteForever';
 
-
-
-
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOffOutlined from '@mui/icons-material/VisibilityOffOutlined';
 import {useTheme} from '@mui/material/styles';
-import {GroupFilter} from '../types/group';
-import { GroupSubcategory, useGetGroupCategoriesQuery, useGetGroupSubcategoriesQuery } from '../store/services/groupApi';
-import { setGroupFilter, deleteGroupFilter, toggleGroupFilter} from '../store/DataSelectionSlice';
+
+import {CompartmentFilter} from '../types/compartment';
+
+import { setCompartmentFilter, deletecompartmentFilter, togglecompartmentFilter} from '../store/DataSelectionSlice';
 import {Dictionary} from '../util/util';
 import ConfirmDialog from './shared/ConfirmDialog';
 import AddBoxIcon from '@mui/icons-material/AddBox';
@@ -57,236 +53,239 @@ const namesauto = [
  * changes that weren't saved.
  */
  export function ManageCompartments(props: {
- 	onCloseRequest: () => void;
- 	unsavedChangesCallback: (unsavedChanges: boolean) => void;
+   onCloseRequest: () => void;
+   unsavedChangesCallback: (unsavedChanges: boolean) => void;
  }): JSX.Element {
- 	const {t} = useTranslation();
- 	const theme = useTheme();
+   const {t} = useTranslation();
+   const theme = useTheme();
 
- 	const {data: groupCategories} = useGetGroupCategoriesQuery();
+   // const {data: groupCategories} = useGetGroupCategoriesQuery();
 
- 	const groupFilterList = useAppSelector((state) => state.dataSelection.groupFilters);
+   // const compartmentFilterList = useAppSelector((state) => state.dataSelection.groupFilters);
+   const compartmentFilterList = useAppSelector((state) => state.dataSelection.compartmentFilters);
 
- 	// The currently selected filter.
- 	const [selectedGroupFilter, setSelectedGroupFilter] = useState<GroupFilter | null>(null);
+   // The currently selected filter.
+   // const [selectedGroupFilter, setSelectedGroupFilter] = useState<GroupFilter | null>(null);
+   const [selectedCompartmentFilter, setSelectedCompartmentFilter] = useState<CompartmentFilter | null>(null);
 
- 	// A filter the user might open. It will first be checked, if unsaved changes are present.
- 	const [nextSelectedGroupFilter, setNextSelectedGroupFilter] = useState<GroupFilter | null>(null);
+   // A filter the user might open. It will first be checked, if unsaved changes are present.
+   // const [nextSelectedGroupFilter, setNextSelectedCompartFilter] = useState<GroupFilter | null>(null);
+   const [nextSelectedCompartmentFilter, setNextSelectedCompartFilter] = useState<CompartmentFilter | null>(null);
 
- 	const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
- 	const [unsavedChanges, setUnsavedChanges] = useState(false);
+   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+   const [unsavedChanges, setUnsavedChanges] = useState(false);
 
- 	// This effect ensures that the user doesn't discard unsaved changes without confirming it first.
- 	useEffect(() => {
- 		if (nextSelectedGroupFilter && nextSelectedGroupFilter.id !== selectedGroupFilter?.id) {
- 			// A new group filter has been selected.
+   // This effect ensures that the user doesn't discard unsaved changes without confirming it first.
+   useEffect(() => {
+     if (nextSelectedCompartmentFilter && nextSelectedCompartmentFilter.id !== selectedCompartmentFilter?.id) {
+       // A new group filter has been selected.
 
- 			if (selectedGroupFilter && unsavedChanges) {
- 				// There are unsaved changes. Ask for confirmation first!
- 				setConfirmDialogOpen(true);
- 			} else {
- 				// Everything is saved. Change the selected filter.
- 				setSelectedGroupFilter(nextSelectedGroupFilter);
- 			}
- 		} else if (!nextSelectedGroupFilter && !unsavedChanges) {
- 			// This case is handled, when the user presses the 'abort' button.
- 			setSelectedGroupFilter(null);
- 		}
- 		props.unsavedChangesCallback(unsavedChanges);
- 	}, [unsavedChanges, nextSelectedGroupFilter, selectedGroupFilter, props]);
+       if (selectedCompartmentFilter && unsavedChanges) {
+         // There are unsaved changes. Ask for confirmation first!
+         setConfirmDialogOpen(true);
+       } else {
+         // Everything is saved. Change the selected filter.
+         setSelectedCompartmentFilter(nextSelectedCompartmentFilter);
+       }
+     } else if (!nextSelectedCompartmentFilter && !unsavedChanges) {
+       // This case is handled, when the user presses the 'abort' button.
+       setSelectedCompartmentFilter(null);
+     }
+     props.unsavedChangesCallback(unsavedChanges);
+   }, [unsavedChanges, nextSelectedCompartmentFilter, selectedCompartmentFilter, props]);
 
- 	return (
- 		<Box
- 		sx={{
- 			display: 'flex',
- 			flexDirection: 'column',
- 			flexGrow: '1',
- 			padding: theme.spacing(4),
- 			alignItems: 'center',
- 		}}
- 		>
- 		<Box
- 		id='group-filter-dialog-title-bar'
- 		sx={{
- 			display: 'grid',
- 			gridTemplateColumns: '1fr auto 1fr',
- 			gridColumnGap: '5px',
- 			alignItems: 'center',
- 			justifyItems: 'center',
- 			width: '100%',
- 			marginBottom: theme.spacing(2),
- 		}}
- 		>
- 		<div />
- 		<Typography variant='h1'>{t('Comparments')}</Typography>
- 		<IconButton color='primary' sx={{marginLeft: 'auto'}} onClick={props.onCloseRequest}>
- 		<Close />
- 		</IconButton>
+   return (
+     <Box
+     sx={{
+       display: 'flex',
+       flexDirection: 'column',
+       flexGrow: '1',
+       padding: theme.spacing(4),
+       alignItems: 'center',
+     }}
+     >
+     <Box
+     id='group-filter-dialog-title-bar'
+     sx={{
+       display: 'grid',
+       gridTemplateColumns: '1fr auto 1fr',
+       gridColumnGap: '5px',
+       alignItems: 'center',
+       justifyItems: 'center',
+       width: '100%',
+       marginBottom: theme.spacing(2),
+     }}
+     >
+     <div />
+     <Typography variant='h1'>{t('add-button-filters.title')}</Typography>
+     <IconButton color='primary' sx={{marginLeft: 'auto'}} onClick={props.onCloseRequest}>
+     <Close />
+     </IconButton>
 
- 		</Box>
- 		<Divider orientation='horizontal' variant='middle' flexItem />
- 		<Box
- 		sx={{
- 			display: 'flex',
- 			flexDirection: 'row',
- 			flexGrow: '1',
- 			width: '100%',
- 		}}
- 		>
- 		<Box
- 		sx={{
- 			minWidth: '300px',
- 			marginRight: theme.spacing(3),
- 			marginTop: theme.spacing(2),
- 			padding: theme.spacing(2),
- 		}}
- 		>
- 		{Object.values(groupFilterList || {})?.map((item) => (
- 			<GroupFilterCard
- 			key={item.id}
- 			item={item}
- 			selected={selectedGroupFilter?.id === item.id}
- 			selectFilterCallback={(groupFilter) => setNextSelectedGroupFilter(groupFilter)}
- 			/>
- 			))}
- 		<Card
- 		variant='outlined'
- 		sx={{
- 			display: 'flex',
- 			flexDirection: 'row',
- 			alignItems: 'center',
- 			marginTop: theme.spacing(1),
- 			borderColor: theme.palette.primary.main,
- 		}}
- 		>
- 		<CardActionArea
- 		aria-label={t('add-button-filters.add-group')}
- 		onClick={() => {
- 			const groups: Dictionary<Array<string>> = {};
- 			groupCategories?.results?.forEach((group) => (groups[group.key] = []));
- 			setNextSelectedGroupFilter({id: crypto.randomUUID(), name: '', isVisible: false, groups: groups});
- 		}}
- 		>
- 		
- 		</CardActionArea>
-
-
- 		</Card>
- 		<Card
- 		variant='outlined'
- 		sx={{
- 			display: 'flex',
- 			flexDirection: 'row',
- 			alignItems: 'center',
- 			marginTop: theme.spacing(1),
- 			borderColor: theme.palette.primary.main,
- 		}}
- 		>
- 		<CardActionArea
- 		aria-label={t('add-button-filters.add-group')}
- 		onClick={() => {
- 			const groups: Dictionary<Array<string>> = {};
- 			groupCategories?.results?.forEach((group) => (groups[group.key] = []));
- 			setNextSelectedGroupFilter({id: crypto.randomUUID(), name: '', isVisible: false, groups: groups});
- 		}}
- 		>
- 		
- 		<CardContent
- 		sx={{
- 			display: 'flex',
- 			flexDirection: 'row',
- 			alignItems: 'center',
- 			justifyContent: 'space-between',
- 		}}
- 		>
- 		<Typography variant='button' sx={{
- 			color: theme.palette.primary.main,
- 			marginLeft:'auto',
- 			marginRight:'auto',
-
- 		}}>
- 		{t('group-filters.add-group')}
- 		</Typography>
-
- 		</CardContent>
- 		</CardActionArea>
- 		</Card>
- 		</Box>
- 		<Divider orientation='vertical' flexItem />
+     </Box>
+     <Divider orientation='horizontal' variant='middle' flexItem />
+     <Box
+     sx={{
+       display: 'flex',
+       flexDirection: 'row',
+       flexGrow: '1',
+       width: '100%',
+     }}
+     >
+     <Box
+     sx={{
+       minWidth: '300px',
+       marginRight: theme.spacing(3),
+       marginTop: theme.spacing(2),
+       padding: theme.spacing(2),
+     }}
+     >
+     {Object.values(compartmentFilterList || {})?.map((item) => (
+       <GroupFilterCard
+       key={item.id}
+       item={item}
+       selected={selectedCompartmentFilter?.id === item.id}
+       selectFilterCallback={(compartmentFilter) => setNextSelectedCompartFilter(compartmentFilter)}
+       />
+       ))}
+     <Card
+     variant='outlined'
+     sx={{
+       display: 'flex',
+       flexDirection: 'row',
+       alignItems: 'center',
+       marginTop: theme.spacing(1),
+       borderColor: theme.palette.primary.main,
+     }}
+     >
+     <CardActionArea
+     aria-label={t('add-button-filters.add-group')}
+     onClick={() => {
+       const compartments: Dictionary<Array<string>> = {};
+       // groupCategories?.results?.forEach((group) => (compartmentFilter[group.key] = []));
+       setNextSelectedCompartFilter({id: crypto.randomUUID(), name: '', isVisible: false, compartments: compartments});
+     }}
+     >
+     
+     </CardActionArea>
 
 
- 		{selectedGroupFilter ? (
- 			<>
- 			<GroupFilterEditor
- 			key={selectedGroupFilter.id}
- 			groupFilter={selectedGroupFilter}
- 			selectGroupFilterCallback={(groupFilter) => setNextSelectedGroupFilter(groupFilter)}
- 			unsavedChangesCallback={(edited) => setUnsavedChanges(edited)}
- 			/>
+     </Card>
+     <Card
+     variant='outlined'
+     sx={{
+       display: 'flex',
+       flexDirection: 'row',
+       alignItems: 'center',
+       marginTop: theme.spacing(1),
+       borderColor: theme.palette.primary.main,
+     }}
+     >
+     <CardActionArea
+     aria-label={t('add-button-filters.add-group')}
+     onClick={() => {
+       const compartments: Dictionary<Array<string>> = {};
+       // groupCategories?.results?.forEach((group) => (groups[group.key] = []));
+       setNextSelectedCompartFilter({id: crypto.randomUUID(), name: '', isVisible: false, compartments: compartments});
+     }}
+     >
+     
+     <CardContent
+     sx={{
+       display: 'flex',
+       flexDirection: 'row',
+       alignItems: 'center',
+       justifyContent: 'space-between',
+     }}
+     >
+     <Typography variant='button' sx={{
+       color: theme.palette.primary.main,
+       marginLeft:'auto',
+       marginRight:'auto',
+
+     }}>
+     {t('group-filters.add-group')}
+     </Typography>
+
+     </CardContent>
+     </CardActionArea>
+     </Card>
+     </Box>
+     <Divider orientation='vertical' flexItem />
+
+
+     {selectedCompartmentFilter ? (
+       <>
+       <GroupFilterEditor
+       key={selectedCompartmentFilter.id}
+       compartmentFilter={selectedCompartmentFilter}
+       selectGroupFilterCallback={(compartmentFilter) => setNextSelectedCompartFilter(compartmentFilter)}
+       unsavedChangesCallback={(edited) => setUnsavedChanges(edited)}
+       />
 
 
 
 
- 			</>
- 			) : (
- 			<Box
- 			sx={{
- 				display: 'flex',
- 				flexGrow: '1',
- 				flexDirection: 'column',
- 				justifyContent: 'center',
- 				alignItems: 'center',
- 			}}
- 			>
- 			<Typography variant='body1'>{t('group-filters.nothing-selected')}</Typography>
- 			<Button
- 			variant='outlined'
- 			aria-label={t('group-filters.add-group')}
- 			sx={{marginTop: theme.spacing(2)}}
- 			onClick={() => {
- 				const groups: Dictionary<Array<string>> = {};
- 				groupCategories?.results?.forEach((group) => (groups[group.key] = []));
- 				setNextSelectedGroupFilter({id: crypto.randomUUID(), name: '', isVisible: false, groups: groups});
- 			}}
- 			>
- 			<AddBoxIcon/>
+       </>
+       ) : (
+       <Box
+       sx={{
+         display: 'flex',
+         flexGrow: '1',
+         flexDirection: 'column',
+         justifyContent: 'center',
+         alignItems: 'center',
+       }}
+       >
+       <Typography variant='body1'>{t('group-filters.nothing-selected')}</Typography>
+       <Button
+       variant='outlined'
+       aria-label={t('group-filters.add-group')}
+       sx={{marginTop: theme.spacing(2)}}
+       onClick={() => {
+         const compartments: Dictionary<Array<string>> = {};
+         // groupCategories?.results?.forEach((group) => (compartments[group.key] = []));
+         setNextSelectedCompartFilter({id: crypto.randomUUID(), name: '', isVisible: false, compartments: compartments});
+       }}
+       >
+       <AddBoxIcon/>
 
- 			</Button>
- 			</Box>
- 			)}
- 			</Box>
- 			<ConfirmDialog
- 			open={confirmDialogOpen}
- 			title={t('group-filters.confirm-discard-title')}
- 			text={t('group-filters.confirm-discard-text')}
- 			abortButtonText={t('group-filters.close')}
- 			confirmButtonText={t('group-filters.discard')}
- 			onAnswer={(answer) => {
- 				if (answer) {
- 					setSelectedGroupFilter(nextSelectedGroupFilter);
- 				} else {
- 					setNextSelectedGroupFilter(null);
- 				}
- 				setConfirmDialogOpen(false);
- 			}}
- 			/>
- 			</Box>
- 			);
+       </Button>
+       </Box>
+       )}
+       </Box>
+       <ConfirmDialog
+       open={confirmDialogOpen}
+       title={t('group-filters.confirm-discard-title')}
+       text={t('group-filters.confirm-discard-text')}
+       abortButtonText={t('group-filters.close')}
+       confirmButtonText={t('group-filters.discard')}
+       onAnswer={(answer) => {
+         if (answer) {
+           setSelectedCompartmentFilter(nextSelectedCompartmentFilter);
+         } else {
+           setNextSelectedCompartFilter(null);
+         }
+         setConfirmDialogOpen(false);
+       }}
+       />
+       </Box>
+       );
 }
 
 interface GroupFilterCardProps {
-	/** The GroupFilter item to be displayed. */
-	item: GroupFilter;
+  /** The GroupFilter item to be displayed. */
+  item: CompartmentFilter;
 
-	/** Whether the filter is selected or not. If it is selected, the detail view is displaying this filter's config. */
-	selected: boolean;
+  /** Whether the filter is selected or not. If it is selected, the detail view is displaying this filter's config. */
+  selected: boolean;
 
   /**
    * Callback function that is called when the filter is selected or unselected.
    *
    * @param groupFilter - Either this filter, if it was selected or null, if it was unselected.
    */
-   selectFilterCallback: (groupFilter: GroupFilter | null) => void;
+   selectFilterCallback: (compartmentFilter: CompartmentFilter | null) => void;
  }
 
 /**
@@ -294,69 +293,69 @@ interface GroupFilterCardProps {
  * the filter name, a toggle switch to turn on or off the filter, and a delete button to remove the filter.
  */
  function GroupFilterCard(props: GroupFilterCardProps) {
- 	const theme = useTheme();
- 	const {t} = useTranslation();
- 	const dispatch = useAppDispatch();
+   const theme = useTheme();
+   const {t} = useTranslation();
+   const dispatch = useAppDispatch();
 
- 	const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
 
- 	return (
- 		<Card
- 		variant='outlined'
- 		sx={{
- 			display: 'flex',
- 			flexDirection: 'row',
- 			alignItems: 'center',
- 			marginTop: theme.spacing(1),
- 		}}
- 		>
- 		<CardActionArea
- 		onClick={() => {
- 			props.selectFilterCallback(props.selected ? null : props.item);
- 		}}
- 		>
- 		<CardContent sx={{backgroundColor: props.selected ? theme.palette.info.main : theme.palette.background.paper}}>
- 		<Typography
- 		variant='body1'
- 		sx={{color: props.selected ? theme.palette.info.contrastText : theme.palette.text.primary}}
- 		>
- 		{props.item.name}
- 		</Typography>
- 		</CardContent>
- 		</CardActionArea>
- 		<Divider orientation='vertical' variant='middle' flexItem />
- 		<CardActions>
- 		<Checkbox
- 		checkedIcon={<Visibility />}
- 		icon={<VisibilityOffOutlined color='disabled' />}
- 		checked={props.item.isVisible}
- 		onClick={() => {
- 			dispatch(toggleGroupFilter(props.item.id));
- 		}}
- 		/>
- 		<ConfirmDialog
- 		open={confirmDialogOpen}
- 		title={t('group-filters.confirm-deletion-title')}
- 		text={t('group-filters.confirm-deletion-text', {groupName: props.item.name})}
- 		onAnswer={(answer) => {
- 			if (answer) {
- 				dispatch(deleteGroupFilter(props.item.id));
- 				props.selectFilterCallback(null);
- 			}
- 			setConfirmDialogOpen(false);
- 		}}
- 		/>
- 		<IconButton onClick={() => setConfirmDialogOpen(true)}>
- 		<DeleteForever />
- 		</IconButton>
- 		</CardActions>
- 		</Card>
- 		);
+   return (
+     <Card
+     variant='outlined'
+     sx={{
+       display: 'flex',
+       flexDirection: 'row',
+       alignItems: 'center',
+       marginTop: theme.spacing(1),
+     }}
+     >
+     <CardActionArea
+     onClick={() => {
+       props.selectFilterCallback(props.selected ? null : props.item);
+     }}
+     >
+     <CardContent sx={{backgroundColor: props.selected ? theme.palette.info.main : theme.palette.background.paper}}>
+     <Typography
+     variant='body1'
+     sx={{color: props.selected ? theme.palette.info.contrastText : theme.palette.text.primary}}
+     >
+     {props.item.name}
+     </Typography>
+     </CardContent>
+     </CardActionArea>
+     <Divider orientation='vertical' variant='middle' flexItem />
+     <CardActions>
+     <Checkbox
+     checkedIcon={<Visibility />}
+     icon={<VisibilityOffOutlined color='disabled' />}
+     checked={props.item.isVisible}
+     onClick={() => {
+       dispatch(togglecompartmentFilter(props.item.id));
+     }}
+     />
+     <ConfirmDialog
+     open={confirmDialogOpen}
+     title={t('group-filters.confirm-deletion-title')}
+     text={t('group-filters.confirm-deletion-text', {groupName: props.item.name})}
+     onAnswer={(answer) => {
+       if (answer) {
+         dispatch(deletecompartmentFilter(props.item.id));
+         props.selectFilterCallback(null);
+       }
+       setConfirmDialogOpen(false);
+     }}
+     />
+     <IconButton onClick={() => setConfirmDialogOpen(true)}>
+     <DeleteForever />
+     </IconButton>
+     </CardActions>
+     </Card>
+     );
  }
 
  interface GroupFilterEditorProps {
- 	/** The GroupFilter item to be edited. */
- 	groupFilter: GroupFilter;
+   /** The GroupFilter item to be edited. */
+   compartmentFilter: CompartmentFilter;
 
   /**
    * Callback function that is called, when a new filter is created, so it will be selected immediately or when the user
@@ -364,7 +363,7 @@ interface GroupFilterCardProps {
    *
    * @param groupFilter - Either the current filter or null when the user wants to close the current filter's editor.
    */
-   selectGroupFilterCallback: (groupFilter: GroupFilter | null) => void;
+   selectGroupFilterCallback: (compartmentFilter: CompartmentFilter | null) => void;
 
   /**
    * A callback that notifies the parent, if there are currently unsaved changes for this group filter.
@@ -384,20 +383,18 @@ interface GroupFilterCardProps {
  * @param props
  */
  function GroupFilterEditor(props: GroupFilterEditorProps): JSX.Element {
- 	const {t} = useTranslation();
- 	const theme = useTheme();
- 	const dispatch = useAppDispatch();
+   const {t} = useTranslation();
+   const theme = useTheme();
+   const dispatch = useAppDispatch();
 
- 	const {data: groupCategories} = useGetGroupCategoriesQuery();
- 	const {data: groupSubCategories} = useGetGroupSubcategoriesQuery();
-
- 	const [name, setName] = useState(props.groupFilter.name);
- 	const [groups, setGroups] = useState(props.groupFilter.groups);
+ 
+   const [name, setName] = useState(props.compartmentFilter.name);
+   // const [compartments, setcompartments] = useState(props.compartmentFilter.compartments);
    // const [groupfilterdata, setgroupfilterdata] = React.useState<string[]>([]);
    // const fixedOptions = [namesauto[1]];
    // const [value, setValue] = useState([...fixedOptions, namesauto[1]]);
    // // Every group must have at least one element selected to be valid.
-   const [valid, setValid] = useState(name.length > 0 && Object.values(groups).every((group) => group.length > 0));
+   // const [valid, setValid] = useState(name.length > 0 && Object.values(compartmentFilter).every((group) => group.length > 0));
    const [unsavedChanges, setUnsavedChanges] = useState(false);
 
    const [counter, setCounter] = useState(0);
@@ -405,6 +402,7 @@ interface GroupFilterCardProps {
    const handleClick = () => {
      setCounter(counter + 1);
      console.log(counter);
+     
    };
 
    const removerow = () => {
@@ -417,36 +415,35 @@ interface GroupFilterCardProps {
 
 
    // Checks if the group filer is in a valid state.
-   useEffect(() => {
-     setValid(name.length > 0 && Object.values(groups).every((group) => group.length > 0));
-   }, [name, groups, props]);
+   // useEffect(() => {
+   //   setValid(name.length > 0 && Object.values(compartments).every((group) => group.length > 0));
+   // }, [name, compartments, props]);
 
    // Updates the parent about the current save state of the group filter.
    useEffect(() => {
      props.unsavedChangesCallback(unsavedChanges);
    }, [props, unsavedChanges]);
    console.log('haloo im here ',name)
-   const toggleGroup = useCallback(
-     (subGroup: GroupSubcategory) => {
-       // We need to make a copy before we modify the entry.
-       let category = [...groups[subGroup.category]];
+   // const toggleGroup = useCallback(
+   
+   //     // We need to make a copy before we modify the entry.
+      
 
-       if (category.includes(subGroup.key)) {
-         category = category.filter((key) => key !== subGroup.key);
-       } else {
-         category.push(subGroup.key);
-       }
+   //     setGroups(
+   //       ...compartmentFilter
 
-       setGroups({
-         ...groups,
-         [subGroup.category]: category,
-       });
-       setUnsavedChanges(true);
+   //     );
+   //     setUnsavedChanges(true);
 
 
-     },
-     [groups, setGroups]
-     );
+    
+   //   [compartmentFilter, setGroups]
+   //   );
+
+// function toggleGroup() {
+//   setcompartments({
+//     ...compartments});
+// }
 
    return (
 
@@ -472,49 +469,6 @@ interface GroupFilterCardProps {
      />
 
 
-     <Box
-     sx={{
-       display: 'flex',
-       flexGrow: '1',
-       flexDirection: 'row',
-       marginTop: theme.spacing(2),
-       marginBottom: theme.spacing(2),
-     }}
-     >
-     {groupCategories?.results?.map((group) => (
-       <Box
-       key={group.key}
-       sx={{
-         display: 'flex',
-         flexDirection: 'column',
-       }}
-       >
-       <Typography
-       color={groups[group.key].length > 0 ? theme.palette.text.primary : theme.palette.error.main}
-       variant='h2'
-       >
-       {group.description}
-       </Typography>
-       <FormGroup>
-       {groupSubCategories?.results
-         ?.filter((subCategory) => subCategory.category === group.key)
-         .map((subGroup) => (
-           <FormControlLabel
-           key={subGroup.key}
-           label={subGroup.description}
-           control={
-             <Checkbox
-             checked={groups[group.key].includes(subGroup.key)}
-             onClick={() => toggleGroup(subGroup)}
-             />
-           }
-           />
-           ))}
-
-         </FormGroup>
-         </Box>
-         ))}
-     </Box>
 
      <Autocomplete
      multiple
@@ -619,11 +573,11 @@ interface GroupFilterCardProps {
      <Button
      variant='outlined'
      color='primary'
-     disabled={!valid || !unsavedChanges}
      onClick={() => {
        setUnsavedChanges(false);
-       const newFilter = {id: props.groupFilter.id, name: name, isVisible: true, groups: groups};
-       dispatch(setGroupFilter(newFilter));
+              const compartments: Dictionary<Array<string>> = {};
+       const newFilter = {id: props.compartmentFilter.id, name: name, isVisible: true, compartments: compartments};
+       dispatch(setCompartmentFilter(newFilter));
        props.selectGroupFilterCallback(newFilter);
      }}
      >
