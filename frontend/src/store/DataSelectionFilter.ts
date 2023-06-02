@@ -42,7 +42,9 @@ export const DataSelectionSliceFilter = createSlice({
       if (!state.compartmentFilters) {
         state.compartmentFilters = {};
       }
+      
       state.compartmentFilters[action.payload.id] = action.payload;
+      console.log(state.compartmentFilters);
     },
     
     deletecompartmentFilter(state, action: PayloadAction<string>) {

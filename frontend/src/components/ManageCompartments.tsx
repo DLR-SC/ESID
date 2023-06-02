@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {SyntheticEvent, useEffect, useState} from 'react';
 import {useAppDispatch, useAppSelector} from '../store/hooks';
 import {useTranslation} from 'react-i18next';
 import Box from '@mui/material/Box';
@@ -20,8 +20,9 @@ import VisibilityOffOutlined from '@mui/icons-material/VisibilityOffOutlined';
 import {useTheme} from '@mui/material/styles';
 
 import {CompartmentFilter} from '../types/compartment';
+// import { useGetGroupCategoriesQuery} from '../store/services/groupApi';
 
-import { setCompartmentFilter, deletecompartmentFilter, togglecompartmentFilter} from '../store/DataSelectionSlice';
+import { setCompartmentFilter, deletecompartmentFilter, togglecompartmentFilter} from '../store/DataSelectionFilter';
 import {Dictionary} from '../util/util';
 import ConfirmDialog from './shared/ConfirmDialog';
 import AddBoxIcon from '@mui/icons-material/AddBox';
@@ -62,7 +63,7 @@ const namesauto = [
    // const {data: groupCategories} = useGetGroupCategoriesQuery();
 
    // const compartmentFilterList = useAppSelector((state) => state.dataSelection.groupFilters);
-   const compartmentFilterList = useAppSelector((state) => state.dataSelection.compartmentFilters);
+   const compartmentFilterList = useAppSelector((state) => state.dataSelectionFilter.compartmentFilters);
 
    // The currently selected filter.
    // const [selectedGroupFilter, setSelectedGroupFilter] = useState<GroupFilter | null>(null);
@@ -389,12 +390,12 @@ interface GroupFilterCardProps {
 
  
    const [name, setName] = useState(props.compartmentFilter.name);
-   // const [compartments, setcompartments] = useState(props.compartmentFilter.compartments);
+   const [compartments, setcompartments] = useState(props.compartmentFilter.compartments);
    // const [groupfilterdata, setgroupfilterdata] = React.useState<string[]>([]);
    // const fixedOptions = [namesauto[1]];
    // const [value, setValue] = useState([...fixedOptions, namesauto[1]]);
    // // Every group must have at least one element selected to be valid.
-   // const [valid, setValid] = useState(name.length > 0 && Object.values(compartmentFilter).every((group) => group.length > 0));
+   const [valid, setValid] = useState(name.length > 0 && Object.values(compartments).every((group) => group.length > 0));
    const [unsavedChanges, setUnsavedChanges] = useState(false);
 
    const [counter, setCounter] = useState(0);
@@ -415,9 +416,9 @@ interface GroupFilterCardProps {
 
 
    // Checks if the group filer is in a valid state.
-   // useEffect(() => {
-   //   setValid(name.length > 0 && Object.values(compartments).every((group) => group.length > 0));
-   // }, [name, compartments, props]);
+   useEffect(() => {
+     setValid(name.length > 0 && Object.values(compartments).every((group) => group.length > 0));
+   }, [name, compartments, props]);
 
    // Updates the parent about the current save state of the group filter.
    useEffect(() => {
@@ -444,6 +445,12 @@ interface GroupFilterCardProps {
 //   setcompartments({
 //     ...compartments});
 // }
+
+const handleChange = (e: SyntheticEvent<Element, Event>, value: string[]): void => {
+    console.log({ e, value });
+    // setUnsavedChanges(true);
+    // setcompartments(value);
+};
 
    return (
 
@@ -481,11 +488,12 @@ interface GroupFilterCardProps {
      options={namesauto.map((option) => option.title)}
      defaultValue={[namesauto[1].title]}
      freeSolo
-
+     onChange={handleChange}
      renderInput={(params) => (
        <TextField
        {...params}
   
+    
        label="Name"
        placeholder="NAme"
        />
@@ -573,8 +581,9 @@ interface GroupFilterCardProps {
      <Button
      variant='outlined'
      color='primary'
+     disabled={!valid || !unsavedChanges}
      onClick={() => {
-       setUnsavedChanges(false);
+      
               const compartments: Dictionary<Array<string>> = {};
        const newFilter = {id: props.compartmentFilter.id, name: name, isVisible: true, compartments: compartments};
        dispatch(setCompartmentFilter(newFilter));
