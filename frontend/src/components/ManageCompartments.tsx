@@ -390,7 +390,7 @@ interface GroupFilterCardProps {
 
  
    const [name, setName] = useState(props.compartmentFilter.name);
-   const [compartments, setcompartments] = useState(props.compartmentFilter.compartments);
+   const [compartments] = useState(props.compartmentFilter.compartments);
    // const [groupfilterdata, setgroupfilterdata] = React.useState<string[]>([]);
    // const fixedOptions = [namesauto[1]];
    // const [value, setValue] = useState([...fixedOptions, namesauto[1]]);
