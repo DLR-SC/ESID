@@ -19,12 +19,12 @@ export type AGS = string;
  */
 export interface DataSelectionFilter {
  
-
+  filter: string[] | null ;
   compartmentFilters: Dictionary<CompartmentFilter> | null;
 }
 
 const initialState: DataSelectionFilter = {
-
+filter:null,
   compartmentFilters: {},
 };
 

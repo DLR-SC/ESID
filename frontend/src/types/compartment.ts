@@ -6,7 +6,7 @@ export interface CompartmentFilter {
     id: string;
     name: string;
     isVisible: boolean;
-    compartments: Dictionary<any>;
+    compartments: Dictionary<string[]>;
 
     
     
