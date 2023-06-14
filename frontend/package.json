@@ -86,11 +86,11 @@
     "react-lazyload": "^3.2.0",
     "react-markdown": "^6.0.3",
     "react-redux": "^7.2.3",
-    "react-scroll-sync": "^0.11.0",
-    "redux": "^4.0.5",
-    "redux-persist": "^6.0.0",
-    "rooks": "^5.7.3",
-    "simplebar": "^5.3.5"
+    "react-scroll-sync": "^0.11.0"
+    
+   
+    
+    
   },
   "devDependencies": {
     "@babel/preset-react": "^7.12.13",

@@ -39,7 +39,7 @@ import {useTranslation} from 'react-i18next';
    const theme = useTheme();
    const {t} = useTranslation();
 
-   const [isOn, setIsOn] = useState(false);
+   const [showall, setshowall] = useState(false);
 
  
    const [heatLegendEditOpen, setHeatLegendEditOpen] = React.useState(false);
@@ -142,13 +142,13 @@ import {useTranslation} from 'react-i18next';
     
      <span style={{float:'right'}}>
        <FormGroup>
-      <FormControlLabel control= {<Switch checked={isOn} onChange={() => setIsOn(!isOn)} />} label="Show more" labelPlacement="start"/>
+      <FormControlLabel control= {<Switch checked={showall} onChange={() => setshowall(!showall)} />} label="Show more" labelPlacement="start"/>
 
     </FormGroup>
      </span>
      <FormControl fullWidth sx={{marginBottom: theme.spacing(3)}}>
 
-     {isOn  ? ( 
+     {showall  ? ( 
 
        <Select id='heatmap-select' aria-label={t('heatlegend.select')} value={legend.name} onChange={handleChange}>
        {presets.map((preset, i) => (
