@@ -18,6 +18,7 @@ describe('DataSelectionSlice', () => {
     minDate: null,
     maxDate: null,
     groupFilters: {},
+    compartmentFilters:{},
   };
 
   test('Initial State', () => {

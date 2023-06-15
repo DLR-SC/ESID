@@ -2,6 +2,7 @@ import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import i18n from '../util/i18n';
 import {dateToISOString, Dictionary} from '../util/util';
 import {GroupFilter} from 'types/group';
+import {CompartmentFilter} from 'types/compartment';
 
 /**
  * AGS is the abbreviation for "Amtlicher Gemeindeschlüssel" in German, which are IDs of areas in Germany. The AGS have
@@ -27,6 +28,7 @@ export interface DataSelection {
   minDate: string | null;
   maxDate: string | null;
   groupFilters: Dictionary<GroupFilter> | null;
+  compartmentFilters: Dictionary<CompartmentFilter> | null;
 }
 
 const initialState: DataSelection = {
@@ -40,6 +42,7 @@ const initialState: DataSelection = {
   minDate: null,
   maxDate: null,
   groupFilters: {},
+  compartmentFilters:{},
 };
 
 /**
