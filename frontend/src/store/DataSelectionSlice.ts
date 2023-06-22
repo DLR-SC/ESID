@@ -1,8 +1,8 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import i18n from '../util/i18n';
-import {dateToISOString, Dictionary} from '../util/util';
-import {GroupFilter} from 'types/group';
-import {CompartmentFilter} from 'types/compartment';
+import { dateToISOString, Dictionary } from '../util/util';
+import { GroupFilter } from 'types/group';
+import { CompartmentFilter } from 'types/compartment';
 
 /**
  * AGS is the abbreviation for "Amtlicher Gemeindeschlüssel" in German, which are IDs of areas in Germany. The AGS have
@@ -18,7 +18,7 @@ export type AGS = string;
  * IMPORTANT: ALL NEW ADDITIONS MUST BE NULLABLE TO ENSURE EXISTING CACHES DOESN'T BREAK ON UPDATES!
  */
 export interface DataSelection {
-  district: {ags: AGS; name: string; type: string};
+  district: { ags: AGS; name: string; type: string };
   date: string | null;
   scenario: number | null;
   compartment: string | null;
@@ -32,7 +32,7 @@ export interface DataSelection {
 }
 
 const initialState: DataSelection = {
-  district: {ags: '00000', name: i18n.t('germany'), type: ''},
+  district: { ags: '00000', name: i18n.t('germany'), type: '' },
   date: null,
   scenario: null,
   compartment: null,
@@ -42,7 +42,7 @@ const initialState: DataSelection = {
   minDate: null,
   maxDate: null,
   groupFilters: {},
-  compartmentFilters:{},
+  compartmentFilters: {},
 };
 
 /**
@@ -52,7 +52,7 @@ export const DataSelectionSlice = createSlice({
   name: 'DataSelection',
   initialState,
   reducers: {
-    selectDistrict(state, action: PayloadAction<{ags: AGS; name: string; type: string}>) {
+    selectDistrict(state, action: PayloadAction<{ ags: AGS; name: string; type: string }>) {
       state.district = action.payload;
     },
     selectDate(state, action: PayloadAction<string>) {
@@ -79,7 +79,7 @@ export const DataSelectionSlice = createSlice({
         state.date = dateToISOString(date);
       }
     },
-    setMinMaxDates(state, action: PayloadAction<{minDate: string; maxDate: string}>) {
+    setMinMaxDates(state, action: PayloadAction<{ minDate: string; maxDate: string }>) {
       state.minDate = action.payload.minDate;
       state.maxDate = action.payload.maxDate;
       if (!state.date || state.date > state.maxDate) {

@@ -1,8 +1,8 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { Dictionary} from '../util/util';
+import { Dictionary } from '../util/util';
 
-import {CompartmentFilter} from 'types/compartment';
+import { CompartmentFilter } from 'types/compartment';
 
 /**
  * AGS is the abbreviation for "Amtlicher Gemeindeschlüssel" in German, which are IDs of areas in Germany. The AGS have
@@ -18,15 +18,15 @@ export type AGS = string;
  * IMPORTANT: ALL NEW ADDITIONS MUST BE NULLABLE TO ENSURE EXISTING CACHES DOESN'T BREAK ON UPDATES!
  */
 export interface DataSelectionFilter {
- 
+
 
   filter: string[] | null;
-  compartmentFilters: Dictionary<CompartmentFilter> | null ;
+  compartmentFilters: Dictionary<CompartmentFilter> | null;
 }
 
 const initialState: DataSelectionFilter = {
 
-		filter: null,
+  filter: null,
   compartmentFilters: {},
 };
 
@@ -37,38 +37,38 @@ export const DataSelectionSliceFilter = createSlice({
   name: 'DataSelection',
   initialState,
   reducers: {
-   
-  
+
+
     setCompartmentFilter(state, action: PayloadAction<CompartmentFilter>) {
-   
-      if (!state.compartmentFilters ) {
+
+      if (!state.compartmentFilters) {
         state.compartmentFilters = {};
-      
+
       }
 
       state.compartmentFilters[action.payload.id] = action.payload;
-     
+
     },
-    
+
     deletecompartmentFilter(state, action: PayloadAction<string>) {
-     if (!state.compartmentFilters ) {
+      if (!state.compartmentFilters) {
         state.compartmentFilters = {};
-    
+
       }
 
- 
+
       delete state.compartmentFilters[action.payload];
     },
-   
+
     togglecompartmentFilter(state, action: PayloadAction<string>) {
 
-     if (!state.compartmentFilters) {
+      if (!state.compartmentFilters) {
         state.compartmentFilters = {};
-      
+
       }
 
-      if (state.compartmentFilters[action.payload] ) {
-        
+      if (state.compartmentFilters[action.payload]) {
+
         state.compartmentFilters[action.payload].isVisible = !state.compartmentFilters[action.payload].isVisible;
       }
     },
@@ -76,9 +76,9 @@ export const DataSelectionSliceFilter = createSlice({
 });
 
 export const {
- 
+
   setCompartmentFilter,
- 
+
   deletecompartmentFilter,
 
   togglecompartmentFilter,

@@ -1,18 +1,18 @@
-import {combineReducers, configureStore} from '@reduxjs/toolkit';
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import DataSelectionReducer from './DataSelectionSlice';
 import DataSelectionFilterReducer from './DataSelectionFilter';
-import {caseDataApi} from './services/caseDataApi';
+import { caseDataApi } from './services/caseDataApi';
 import ScenarioReducer from './ScenarioSlice';
-import {scenarioApi} from './services/scenarioApi';
+import { scenarioApi } from './services/scenarioApi';
 import UserPreferenceReducer from './UserPreferenceSlice';
-import {persistReducer, persistStore} from 'redux-persist';
+import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import {groupApi} from './services/groupApi';
+import { groupApi } from './services/groupApi';
 
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['dataSelection', 'userPreference', 'scenarioList','dataSelectionFilter'],
+  whitelist: ['dataSelection', 'userPreference', 'scenarioList', 'dataSelectionFilter'],
 };
 
 const rootReducer = combineReducers({
