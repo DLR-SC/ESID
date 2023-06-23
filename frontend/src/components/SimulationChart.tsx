@@ -1,8 +1,13 @@
 import React, {useEffect, useRef} from 'react';
-import * as am4core from '@amcharts/amcharts4/core';
-import * as am4charts from '@amcharts/amcharts4/charts';
-import am4lang_en_US from '@amcharts/amcharts4/lang/en_US';
-import am4lang_de_DE from '@amcharts/amcharts4/lang/de_DE';
+/**/ import * as am4core from '@amcharts/amcharts4/core';
+/**/ import * as am4charts from '@amcharts/amcharts4/charts';
+/**/ import am4lang_en_US from '@amcharts/amcharts4/lang/en_US';
+/**/ import am4lang_de_DE from '@amcharts/amcharts4/lang/de_DE';
+import * as am5 from '@amcharts/amcharts5';
+import * as am5xy from '@amcharts/amcharts5/xy';
+import am5locales_en_US from '@amcharts/amcharts5/locales/en_US';
+import am5locales_de_DE from '@amcharts/amcharts5/locales/de_DE';
+import * as am5export from '@amcharts/amcharts5/plugins/exporting';
 import {useAppDispatch, useAppSelector} from '../store/hooks';
 import {useTheme} from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -19,11 +24,9 @@ import {NumberFormatter} from 'util/hooks';
 import LoadingContainer from './shared/LoadingContainer';
 import {useGetMultipleGroupFilterDataQuery} from 'store/services/groupApi';
 import {GroupData} from 'types/group';
-/* This component displays the evolution of the pandemic for a specific compartment (hospitalized, dead, infected, etc.) regarding the different scenarios
+/*
+ * This component displays the evolution of the pandemic for a specific compartment (hospitalized, dead, infected, etc.) regarding the different scenarios.
  */
-
-// deviations toggle (TODO)
-const drawDeviations = false;
 
 /**
  * React Component to render the Simulation Chart Section
@@ -86,191 +89,429 @@ export default function SimulationChart(): JSX.Element {
   );
 
   const {formatNumber} = NumberFormatter(i18n.language, 3, 8);
+  const numberFormat = '#,###.'
 
-  const chartRef = useRef<am4charts.XYChart | null>(null);
+  /**/ const am4_chartRef = useRef<am4charts.XYChart | null>(null);
+  const rootRef = useRef<am5.Root | null>(null);
+  const chartRef = useRef<am5xy.XYChart | null>(null);
 
-  useEffect(() => {
-    // Create chart instance (is called when props.scenarios changes)
-    const chart = am4core.create('chartdiv', am4charts.XYChart);
+  // Effect to create chart instance
+  useEffect(
+    () => {
+      /**/ const am4_chart = am4core.create('am4_chartdiv', am4charts.XYChart);
+      const root = am5.Root.new('chartdiv');
+      const chart = root.container.children.push(am5xy.XYChart.new(root, {
+        panX: false,
+        panY: false,
+        wheelX: 'panX',
+        wheelY: 'zoomX',
+        maxTooltipDistance: -1
+      }));
 
-    // Set localization
-    chart.language.locale = i18n.language === 'de' ? am4lang_de_DE : am4lang_en_US;
+      // Set localization
+      /**/ am4_chart.language.locale = i18n.language === 'de' ? am4lang_de_DE : am4lang_en_US;
+      root.locale = i18n.language === 'de' ? am5locales_de_DE : am5locales_en_US;
 
-    // Create axes
-    const dateAxis = chart.xAxes.push(new am4charts.DateAxis());
-    const valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-    valueAxis.min = 0;
+      // Set number formatter
+      root.numberFormatter.set('numberFormat', numberFormat);
 
-    // Add cursor
-    chart.cursor = new am4charts.XYCursor();
-    chart.cursor.xAxis = dateAxis;
+      // Create axes
+      /**/ const am4_dateAxis = am4_chart.xAxes.push(new am4charts.DateAxis());
+      const xAxis = chart.xAxes.push(
+        am5xy.DateAxis.new(root, {
+          renderer: am5xy.AxisRendererX.new(root, {}),
+          baseInterval: {timeUnit: 'day', count: 1},
+          gridIntervals: [
+            {timeUnit: 'day', count: 1},
+            {timeUnit: 'day', count: 7},
+            {timeUnit: 'month', count: 1},
+            {timeUnit: 'month', count: 3},
+            {timeUnit: 'year', count: 1},
+          ],
+          tooltip: am5.Tooltip.new(root, {})
+        })
+      );
+      // Change axis renderer to have ticks/lables on day center
+      const Xrenderer = xAxis.get('renderer');
+      Xrenderer.ticks.template.setAll({
+        location: 0.5,
+      })
+      /**/ const am4_valueAxis = am4_chart.yAxes.push(new am4charts.ValueAxis());
+      /**/ am4_valueAxis.min = 0;
+      const yAxis = chart.yAxes.push(
+        am5xy.ValueAxis.new(root, {
+          renderer: am5xy.AxisRendererY.new(root, {}),
+          min: 0,
+        })
+      );
 
-    // Add series for case data
-    const caseDataSeries = chart.series.push(new am4charts.LineSeries());
-    caseDataSeries.dataFields.valueY = 'caseData';
-    caseDataSeries.dataFields.dateX = 'date';
-    caseDataSeries.id = 'caseData';
-    caseDataSeries.strokeWidth = 2;
-    caseDataSeries.fill = am4core.color('black');
-    caseDataSeries.stroke = am4core.color('black');
-    caseDataSeries.name = t('chart.caseData');
+      // Add cursor
+      /**/ am4_chart.cursor = new am4charts.XYCursor();
+      /**/ am4_chart.cursor.xAxis = am4_dateAxis;
+      chart.set(
+        'cursor',
+        am5xy.XYCursor.new(root, {
+          behavior: 'zoomX',
+          xAxis: xAxis,
+        })
+      );
 
-    const percentileSeries = chart.series.push(new am4charts.LineSeries());
-    percentileSeries.dataFields.valueY = 'percentileUp';
-    percentileSeries.dataFields.openValueY = 'percentileDown';
-    percentileSeries.dataFields.dateX = 'date';
-    percentileSeries.id = 'percentiles';
-    percentileSeries.strokeWidth = 0;
-    percentileSeries.fillOpacity = 0.3;
+      // Add series for case data
+      /**/ const am4_caseDataSeries = am4_chart.series.push(new am4charts.LineSeries());
+      /**/ am4_caseDataSeries.dataFields.valueY = 'caseData';
+      /**/ am4_caseDataSeries.dataFields.dateX = 'date';
+      /**/ am4_caseDataSeries.id = 'caseData';
+      /**/ am4_caseDataSeries.strokeWidth = 2;
+      /**/ am4_caseDataSeries.fill = am4core.color('black');
+      /**/ am4_caseDataSeries.stroke = am4core.color('black');
+      /**/ am4_caseDataSeries.name = t('chart.caseData');
+      const caseDataSeries = chart.series.push(
+        am5xy.LineSeries.new(root, {
+          xAxis: xAxis,
+          yAxis: yAxis,
+          id: 'caseData',
+          name: t('chart.caseData'),
+          valueXField: 'date',
+          valueYField: 'caseData',
+          connect: false, // TODO: check if this is needed
+          stroke: am5.color('#000'),
+          fill: am5.color('#000'), // TODO: may be unnecessary (fills disabled by default)
+        })
+      );
+      caseDataSeries.strokes.template.setAll({
+        strokeWidth: 2,
+      });
 
-    // Add series for scenarios
-    Object.entries(scenarioList.scenarios).forEach(([scenarioId, scenario], i) => {
-      const series = chart.series.push(new am4charts.LineSeries());
-      series.dataFields.valueY = scenarioId;
-      series.dataFields.dateX = 'date';
-      series.id = scenarioId;
-      series.strokeWidth = 2;
-      series.fill = am4core.color(theme.custom.scenarios[i % theme.custom.scenarios.length][0]); // loop around the color list if scenarios exceed color list
-      series.stroke = series.fill;
-      series.tooltipText = `[bold ${series.stroke.hex}]${scenario.label}:[/] {${scenarioId}}`;
-      series.name = scenario.label;
+      // Add series for percentile area
+      /**/ const am4_percentileSeries = am4_chart.series.push(new am4charts.LineSeries());
+      /**/ am4_percentileSeries.dataFields.valueY = 'percentileUp';
+      /**/ am4_percentileSeries.dataFields.openValueY = 'percentileDown';
+      /**/ am4_percentileSeries.dataFields.dateX = 'date';
+      /**/ am4_percentileSeries.id = 'percentiles';
+      /**/ am4_percentileSeries.strokeWidth = 0;
+      /**/ am4_percentileSeries.fillOpacity = 0.3;
+      const percentileSeries = chart.series.push(
+        am5xy.LineSeries.new(root, {
+          xAxis: xAxis,
+          yAxis: yAxis,
+          id: 'percentiles',
+          valueXField: 'date',
+          valueYField: 'percentileUp',
+          openValueYField: 'percentileDown',
+          connect: false, // TODO: see case data series
+        })
+      );
+      percentileSeries.strokes.template.setAll({
+        strokeWidth: 0,
+      });
+      percentileSeries.fills.template.setAll({
+        fillOpacity: 0.5,
+        visible: true,
+      });
 
-      if (drawDeviations) {
-        const seriesSTD = chart.series.push(new am4charts.LineSeries());
-        seriesSTD.dataFields.valueY = `${scenarioId}STDup`;
-        seriesSTD.dataFields.openValueY = `${scenarioId}STDdown`;
-        seriesSTD.dataFields.dateX = 'date';
-        seriesSTD.strokeWidth = 0;
-        seriesSTD.fillOpacity = 0.3;
-        series.fill = am4core.color(theme.custom.scenarios[i % theme.custom.scenarios.length][0]); // loop around the color list if scenarios exceed color list
-        series.stroke = series.fill;
-        // override tooltip
-        series.tooltipText = `${scenario.label}: [bold]{${scenarioId}STDdown} ~ {${scenarioId}STDup}[/]`;
-      }
-    });
-
-    // To export this chart
-    chart.exporting.menu = new am4core.ExportMenu();
-    chart.exporting.dataFields = {
-      date: 'Date',
-      rki: 'RKI',
-      '1': 'Scenario 1',
-      '2': 'Scenario 2',
-      percentileUp: 'PercentileUp',
-      percentileDown: 'PercentileDown',
-    };
-    chart.exporting.filePrefix = 'Covid Simulaton Data';
-
-    // Add series for groupFilter
-    if (groupFilterList && selectedScenario) {
-      const groupFilterStrokes = ['2,4', '8,4', '8,4,2,4'];
-      Object.values(groupFilterList)
-        .filter((groupFilter) => groupFilter.isVisible)
-        .forEach((groupFilter, i) => {
-          const series = chart.series.push(new am4charts.LineSeries());
-          series.dataFields.valueY = groupFilter.name;
-          series.dataFields.dateX = 'date';
-          series.id = 'group-filter-' + groupFilter.name;
-          series.strokeWidth = 2;
-          series.fill = am4core.color(
-            theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0]
-          );
-          series.stroke = series.fill;
-          if (i < groupFilterStrokes.length) {
-            series.strokeDasharray = groupFilterStrokes[i];
-          }
-          series.tooltipText = `[bold ${series.stroke.hex}]${groupFilter.name}:[/] {${i}}`;
-          series.name = groupFilter.name;
+      // Add series for scenarios
+      Object.entries(scenarioList.scenarios).forEach(([scenarioId, scenario], i) => {
+        /**/ const am4_series = am4_chart.series.push(new am4charts.LineSeries());
+        /**/ am4_series.dataFields.valueY = scenarioId;
+        /**/ am4_series.dataFields.dateX = 'date';
+        /**/ am4_series.id = scenarioId;
+        /**/ am4_series.strokeWidth = 2;
+        /**/ am4_series.fill = am4core.color(theme.custom.scenarios[i % theme.custom.scenarios.length][0]); // loop around the color list if scenarios exceed color list
+        /**/ am4_series.stroke = am4_series.fill;
+        /**/ am4_series.tooltipText = `[bold ${am4_series.stroke.hex}]${scenario.label}:[/] {${scenarioId}}`;
+        /**/ am4_series.name = scenario.label;
+        const series = chart.series.push(
+          am5xy.LineSeries.new(root, {
+            xAxis: xAxis,
+            yAxis: yAxis,
+            id: scenarioId,
+            name: scenario.label,
+            valueXField: 'date',
+            valueYField: scenarioId,
+            connect: false, // TODO: see case data series
+            // for color: loop around the theme's scenario color list if scenario IDs exceed color list length, then pick first color of sub-palette which is the main color
+            // TODO: is this tooltip necessary?
+            tooltip: am5.Tooltip.new(root, {
+              labelText: `[bold ${theme.custom.scenarios[i % theme.custom.scenarios.length][0]}]${
+                scenario.label
+              }:[/] {${scenarioId}}`,
+            }),
+            stroke: am5.color(theme.custom.scenarios[i % theme.custom.scenarios.length][0]),
+            fill: am5.color(theme.custom.scenarios[i % theme.custom.scenarios.length][0]), // TODO: see case data series
+          })
+        );
+        series.strokes.template.setAll({
+          strokeWidth: 2,
         });
-    }
+      });
 
-    chart.events.on('hit', () => {
-      // Timezone shenanigans could get us the wrong day ...
-      const date = new Date(dateAxis.tooltipDate);
-      date.setUTCFullYear(date.getFullYear());
-      date.setUTCMonth(date.getMonth());
-      date.setUTCDate(date.getDate());
-      dispatch(selectDate(dateToISOString(date)));
-    });
+      // Set up menu to export this chart
+      /**/ am4_chart.exporting.menu = new am4core.ExportMenu();
+      /**/ am4_chart.exporting.dataFields = {
+        /**/ date: 'Date',
+        /**/ rki: 'RKI',
+        /**/ '1': 'Scenario 1',
+        /**/ '2': 'Scenario 2',
+        /**/ percentileUp: 'PercentileUp',
+        /**/ percentileDown: 'PercentileDown',
+        /**/
+      };
+      /**/ am4_chart.exporting.filePrefix = 'Covid Simulaton Data';
+      // TODO: move to data fill effect for easier access to dataSource
+      am5export.Exporting.new(root, {
+        menu: am5export.ExportingMenu.new(root, {}),
+        filePrefix: 'Covid Simulation Data',
+      });
 
-    chartRef.current = chart;
-    return () => {
-      chartRef.current?.dispose();
-    };
-  }, [scenarioList, groupFilterList, dispatch, i18n.language, t, theme, selectedScenario]);
+      // Add series for groupFilter
+      if (groupFilterList && selectedScenario) {
+        /**/ const am4_groupFilterStrokes = ['2,4', '8,4', '8,4,2,4'];
+        const groupFilterStrokes = [
+          [2, 4], // dotted
+          [8, 4], // dashed
+          [8, 4, 2, 4], // dashdotted
+          [8, 4, 2, 4, 2, 4], // dashdotdotted
+        ];
+        Object.values(groupFilterList)
+          .filter((groupFilter) => groupFilter.isVisible)
+          .forEach((groupFilter, i) => {
+            /**/ const am4_series = am4_chart.series.push(new am4charts.LineSeries());
+            /**/ am4_series.dataFields.valueY = groupFilter.name;
+            /**/ am4_series.dataFields.dateX = 'date';
+            /**/ am4_series.id = 'group-filter-' + groupFilter.name;
+            /**/ am4_series.strokeWidth = 2;
+            /**/ am4_series.fill = am4core.color(
+              /**/ theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0]
+              /**/
+            );
+            /**/ am4_series.stroke = am4_series.fill;
+            /**/ if (i < am4_groupFilterStrokes.length) {
+              /**/ am4_series.strokeDasharray = am4_groupFilterStrokes[i];
+              /**/
+            }
+            /**/ am4_series.tooltipText = `[bold ${am4_series.stroke.hex}]${groupFilter.name}:[/] {${i}}`;
+            /**/ am4_series.name = groupFilter.name;
+            const series = chart.series.push(
+              am5xy.LineSeries.new(root, {
+                xAxis: xAxis,
+                yAxis: yAxis,
+                id: `group-filter-${groupFilter.name}`,
+                name: groupFilter.name,
+                valueXField: 'date',
+                valueYField: groupFilter.name,
+                connect: false, // TODO: see case data
+                // take color of scenario (scenario ID is 1-based index, color list is 0-based index) loop if scenario ID exceeds length of color list; use first color of palette (main color)
+                tooltip: am5.Tooltip.new(root, {
+                  labelText: `[bold ${
+                    theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0]
+                  }]${groupFilter.name}:[/] {${groupFilter.name}}`,
+                }),
+                locationX: 0,
+                stroke: am5.color(theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0]),
+                fill: am5.color(theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0]), // TODO: see case Data
+              })
+            );
+            series.strokes.template.setAll({
+              strokeWidth: 2,
+              // loop stroke list if group filters exceeds list length
+              strokeDasharray: groupFilterStrokes[i % groupFilterStrokes.length],
+            });
+          });
+      }
 
-  //Effect to hide disabled scenarios (and show them again if not hidden anymore)
-  useEffect(() => {
-    const allSeries = chartRef.current?.series;
-    if (allSeries) {
+      // Date selection on double click
+      chart.events.on('dblclick', (ev) => {
+        // Transform cursor position to axis position then to date
+        const date = xAxis.positionToDate(xAxis.toAxisPosition(ev.target.get('cursor')?.getPrivate('positionX') as number));
+        // remove time info to only have date
+        date.setHours(0, 0, 0, 0);
+        
+        dispatch(selectDate(dateToISOString(date)));
+        /**/console.log(`Event: Date select (${dateToISOString(date)})`);
+      });
+      am4_chart.events.on('hit', () => {
+        // What even is this comment? ¯\_(ツ)_/¯
+        // Timezone shenanigans could get us the wrong day ...
+        const date = new Date(am4_dateAxis.tooltipDate);
+        date.setUTCFullYear(date.getFullYear());
+        date.setUTCMonth(date.getMonth());
+        date.setUTCDate(date.getDate());
+        dispatch(selectDate(dateToISOString(date)));
+      });
+
+      /**/ am4_chartRef.current = am4_chart;
+      // save references to be used in other effects
+      rootRef.current = root;
+      chartRef.current = chart;
+
+      return () => {
+        /**/ am4_chartRef.current?.dispose();
+        // dispose old values before creating a new instance
+        chartRef.current && chartRef.current.dispose();
+        rootRef.current && rootRef.current.dispose();
+      };
+    },
+    // Re-run effect when shown information changes (scenarios, group filters, or the selected scenario -> percentiles), dispatch, theme, or language (i18n & t) do not change after initialization
+    [scenarioList, groupFilterList, dispatch, i18n.language, t, theme, selectedScenario]
+  );
+
+  // Effect to hide disabled scenarios (and show them again if not hidden anymore)
+  useEffect(
+    () => {
+      const allSeries = chartRef.current?.series;
+      // skip effect if chart is not initialized (contains no series yet)
+      if (!allSeries) return;
+
       allSeries.each((series) => {
-        if (scenarioList.scenarios[+series.id] && !activeScenarios?.includes(+series.id)) {
-          series.hide();
+        // everything but scenario series evaluate to NaN
+        const seriesID = Number(series.get('id'));
+        // hide series if it is a scenario series (and in the scenario list) and not in the active scenarios list
+        if (!Number.isNaN(seriesID) && scenarioList.scenarios[seriesID] && !activeScenarios?.includes(seriesID)) {
+          void series.hide();
         } else {
-          series.show();
+          void series.show();
         }
       });
-    }
-  }, [scenarioList.scenarios, activeScenarios]);
+    },
+    // Re-run effect when the active scenario list or the scenarios change
+    [scenarioList.scenarios, activeScenarios]
+  );
 
-  //effect to hide deviations if no scenario is selected
-  useEffect(() => {
-    const allSeries = chartRef.current?.series;
-    if (allSeries) {
+  // Effect to hide deviations if no scenario is selected
+  useEffect(
+    () => {
+      const allSeries = chartRef.current?.series;
+      // skip effect if chart is not initialized (contains no series yet)
+      if (!allSeries) return;
+
       allSeries.each((series) => {
-        if (series.id == 'percentiles') {
+        // find percentile series and only show if there is a selected scenario
+        if (series.get('id') === 'percentiles') {
           if (selectedScenario) {
-            series.show();
+            void series.show();
           } else {
-            series.hide();
+            void series.hide();
           }
         }
       });
-    }
-  }, [selectedScenario]);
+    },
+    // Re-run effect when the selected scenario changes
+    [selectedScenario]
+  );
 
   // Effect to add Guide when date selected
-  useEffect(() => {
-    if (chartRef.current && selectedDate) {
-      const dateAxis = chartRef.current.xAxes.getIndex(0) as am4charts.DateAxis;
-      const range = dateAxis.axisRanges.create();
-      range.date = new Date(selectedDate);
-      range.grid.above = true;
-      range.grid.stroke = am4core.color(theme.palette.primary.main);
-      range.grid.strokeWidth = 2;
-      range.grid.strokeOpacity = 1;
-      range.label.text = '{date}';
-      range.label.language.locale = dateAxis.language.locale;
-      range.label.dateFormatter.dateFormat = t('dateFormat');
-      range.label.fill = am4core.color('white');
-      range.label.background.fill = range.grid.stroke;
-    }
+  useEffect(
+    () => {
+      // skip effect if chart is not initialized yet or no date is selected
+      if (!chartRef.current || !selectedDate) return;
 
-    // remove old ranges before creating a new one
-    return () => {
-      try {
-        const ranges = chartRef.current?.xAxes.getIndex(0)?.axisRanges;
-        ranges?.values.forEach((range) => {
-          ranges.removeValue(range);
-        });
-      } catch (e) {
-        console.error(e);
-      }
-    };
-  }, [scenarioList, selectedDate, theme, t, i18n.language, groupFilterData]);
+      // get xAxis from chart
+      const xAxis = chartRef.current.xAxes.getIndex(0) as am5xy.DateAxis<am5xy.AxisRendererX>;
+
+      // create data item for range
+      const rangeDataItem = xAxis.makeDataItem({
+        // make sure the time of the date object is set to first second of day
+        value: new Date(selectedDate).setHours(0, 0, 0),
+        // make sure the time of the date object is set to last second of day
+        endValue: new Date(selectedDate).setHours(23, 59, 59),
+        // line and label should drawn above the other elements
+        above: true,
+      })
+
+      // create the range with the data item
+      const range = xAxis.createAxisRange(rangeDataItem);
+      /**/console.log(`Range created (${(new Date(rangeDataItem.get('value') as number)).toDateString()})`, rangeDataItem, range);
+
+      // set stroke of range (line with label)
+      range.get('grid')?.setAll({
+        stroke: am5.color(theme.palette.primary.main),
+        strokeOpacity: 1,
+        strokeWidth: 2,
+        location: 0.5,
+        visible: true,
+      });
+
+      // set fill of range (rest of the day)
+      range.get('axisFill')?.setAll({
+        fill: am5.color(theme.palette.primary.main),
+        fillOpacity: 0.3,
+        visible: true,
+      });
+
+      // set label for range
+      range.get('label')?.setAll({
+        fill: am5.color(theme.palette.primary.contrastText),
+        text: (new Date(selectedDate)).toLocaleDateString(i18n.language, { year: 'numeric', month: 'short', day: '2-digit'}),
+        location: 0.5,
+        background: am5.RoundedRectangle.new(rootRef.current as am5.Root, {
+          fill: am5.color(theme.palette.primary.main),
+        }),
+        // put Label to the topmost layer to make sure it is drawn on top of the axis tick labels
+        layer: Number.MAX_VALUE,
+      });
+
+      /**/if (am4_chartRef.current && selectedDate) {
+        /**/ const dateAxis = am4_chartRef.current.xAxes.getIndex(0) as am4charts.DateAxis;
+        /**/ const range = dateAxis.axisRanges.create();
+        /**/ range.date = new Date(selectedDate);
+        /**/ range.grid.above = true;
+        /**/ range.grid.stroke = am4core.color(theme.palette.primary.main);
+        /**/ range.grid.strokeWidth = 2;
+        /**/ range.grid.strokeOpacity = 1;
+        /**/ range.label.text = '{date}';
+        /**/ range.label.language.locale = dateAxis.language.locale;
+        /**/ range.label.dateFormatter.dateFormat = t('dateFormat');
+        /**/ range.label.fill = am4core.color('white');
+        /**/ range.label.background.fill = range.grid.stroke;
+      /**/}
+
+      return () => {
+        // discard range
+        xAxis.axisRanges.removeValue(range);
+        /**/console.log(`Range removed (${(new Date(rangeDataItem.get('value') as number)).toDateString()})`, rangeDataItem, range);
+        
+
+        /**/ try {
+          /**/ const ranges = am4_chartRef.current?.xAxes.getIndex(0)?.axisRanges;
+          /**/ ranges?.values.forEach((range) => {
+            /**/ ranges.removeValue(range);
+            /**/
+          });
+          /**/
+        } catch (e) {
+          /**/ console.error(e);
+          /**/
+        }
+      };
+    },
+    // Re-run effect when selected date changes (or scenarioList/groupFilterData) (theme and translation do not change after initialization)
+    // CLARIFY why scenarioList or groupFilterData
+    [selectedDate, theme, t, i18n.language]
+  );
 
   // Effect to update Simulation and case data
-  useEffect(() => {
-    if (
-      chartRef.current &&
-      simulationData &&
-      simulationData.length > 1 &&
-      selectedCompartment &&
-      percentileData &&
-      selectedScenario
-    ) {
-      // clear data
-      chartRef.current.data = [];
+  useEffect(
+    () => {
+      // skip effect if chart is not initialized yet
+      if (!chartRef.current) return;
+      // also skip if simulation data is not populated or no data was requested (no active scenarios)
+      if (!simulationData || !simulationData.length) return;
+      // also skip if percentile data is not populated
+      if (!percentileData) return;
+      // also skip if there is no scenario or compartment selected
+      if (!selectedScenario || !selectedCompartment) return;
+
+      /**/ if (!(
+        /**/ am4_chartRef.current &&
+        /**/ simulationData &&
+        /**/ simulationData.length > 1 &&
+        /**/ selectedCompartment &&
+        /**/ percentileData &&
+        /**/ selectedScenario
+      /**/ )) return;
+      
+      /**/ // clear data
+      /**/ am4_chartRef.current.data = [];
 
       // create map to match dates
       const dataMap = new Map<string, {[key: string]: number}>();
@@ -315,111 +556,220 @@ export default function SimulationChart(): JSX.Element {
         });
       }
 
-      //change fill color of percentile series to selected scenario color
-      const percentileSeries = chartRef.current.map.getKey('percentiles') as am4charts.LineSeries;
-      if (
-        percentileSeries.fill !==
-        am4core.color(theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0])
-      ) {
-        percentileSeries.fill = am4core.color(
-          theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0]
-        );
-      }
-
-      // sort map by date
+      // Sort map by date
+      // TODO: refactor into one once am4 is out
       const dataMapSorted = new Map(Array.from(dataMap).sort(([a], [b]) => String(a).localeCompare(b)));
-
-      // push DataMap into chart data
-      dataMapSorted.forEach((values, day) => {
-        chartRef.current?.data.push({
-          date: day,
-          ...values,
-        });
+      const data = Array.from(dataMapSorted).map(([day, data]) => {
+        return {date: day, ...data};
       });
+
+      // Put data into series
+      chartRef.current.series.each((series, i) => {
+        // set data processors for first series (not needed on others since all use the same data)
+        if (i === 0) {
+          series.data.processor = am5.DataProcessor.new(rootRef.current as am5.Root, {
+            dateFields: ['date'],
+            dateFormat: 'yyyy-MM-dd',
+          })
+        }
+        // link each series to data
+        series.data.setAll(data);
+      });
+
+      /**/ // push DataMap into chart data
+      /**/ dataMapSorted.forEach((values, day) => {
+        /**/ am4_chartRef.current?.data.push({
+          /**/ date: day,
+          /**/ ...values,
+        /**/ });
+      /**/ });
+
+      // Change fill color of percentile series to selected scenario color
+      /**/ const am4_percentileSeries = am4_chartRef.current.map.getKey('percentiles') as am4charts.LineSeries;
+      const percentileSeries = chartRef.current.series.values.find((series) => series.get('id') === 'percentile');
+      percentileSeries?.set('fill', am5.color(theme.custom.scenarios[(selectedScenario -1) % theme.custom.scenarios.length][0]));
+      /**/ if (
+        /**/ am4_percentileSeries.fill !==
+        /**/ am4core.color(theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0])
+      /**/ ) {
+        /**/ am4_percentileSeries.fill = am4core.color(
+          /**/ theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0]
+        /**/ );
+      /**/ }
 
       // set up tooltip
-      // TODO: HTML Tooltip
-      chartRef.current.series.each((series) => {
-        series.adapter.add('tooltipHTML', (_, target) => {
-          const data = target.tooltipDataItem.dataContext;
-          const text = [`<strong>{date.formatDate("${t('dateFormat')}")} (${selectedCompartment})</strong>`];
-          text.push('<table>');
-          chartRef.current?.series.each((s) => {
+      const tooltipHTML = `
+        ${''/* Current Date and selected compartment name */}
+        <strong>{date.formatDate("${t('dateFormat')}")} (${selectedCompartment})</strong>
+        <table>
+          ${ /* Table row for each series */
+          chartRef.current.series.values.map((series): string => {
+            /* Skip if series:
+             * - is hidden
+             * - is percentile series (which is added to the active scenario series)
+             * - is group filter series
+             */
             if (
-              s.dataFields.valueY &&
-              data &&
-              (data as {[key: string]: number | string})[s.dataFields.valueY] &&
-              s.id !== 'percentiles' &&
-              !s.id.startsWith('group-filter-')
-            ) {
-              text.push('<tr>');
-              text.push(
-                `<th 
-                style='text-align:left; color:${(s.stroke as am4core.Color).hex}; padding-right:${theme.spacing(2)}'>
-                <strong>${s.name}</strong>
-                </th>`
-              );
-              text.push(
-                `<td style='text-align:right'>${formatNumber(
-                  (data as {[key: string]: number})[s.dataFields.valueY]
-                )}</td>`
-              );
-              if (
-                s.id == scenarioList.scenarios[selectedScenario].id.toString() &&
-                percentileSeries.dataFields.openValueY &&
-                percentileSeries.dataFields.valueY
-              ) {
-                text.push(
-                  `<td>[${formatNumber((data as {[key: string]: number})[percentileSeries.dataFields.openValueY])} - 
-                    ${formatNumber((data as {[key: string]: number})[percentileSeries.dataFields.valueY])}]</td>`
-                );
-                chartRef.current?.series.each((groupFilterSeries) => {
-                  if (
-                    groupFilterSeries.id.startsWith('group-filter-') &&
-                    groupFilterSeries.dataFields.valueY &&
-                    data &&
-                    (data as {[key: string]: number | string})[groupFilterSeries.dataFields.valueY]
-                  ) {
-                    text.push('<tr>');
-                    text.push(
-                      `<th 
-                         style='text-align:left; color:${
-                           (groupFilterSeries.stroke as am4core.Color).hex
-                         }; padding-right:${theme.spacing(2)}; padding-left:${theme.spacing(4)}'>
-                       <strong>${groupFilterSeries.name}</strong>
-                       </th>`
-                    );
-                    text.push(
-                      `<td style='text-align:right'>${formatNumber(
-                        (data as {[key: string]: number})[groupFilterSeries.dataFields.valueY]
-                      )}</td>`
-                    );
-                    text.push(`</tr>`);
-                  }
-                });
-              } else {
-                text.push('<td/>');
-                text.push('</tr>');
-              }
+              series.isHidden() ||
+              series.get('id') === 'percentiles' ||
+              series.get('id')?.startsWith('group-filter-'))
+            {
+              return '';
             }
-          });
-          text.push('</table>');
-          return text.join('\n');
+            /* Skip with error if series does not have property:
+            /**
+             * - id
+             * - name
+             * - valueYField
+             * - stroke
+             */
+            if (
+              !series.get('id') ||
+              !series.get('name') ||
+              !series.get('valueYField') ||
+              !series.get('stroke')
+            ) {
+              console.log('ERROR: missing series property: ', series.get('id'), series.get('name'), series.get('valueYField'), series.get('stroke'));
+              return '';
+            } else {
+            return `
+              <tr>
+                <th style='text-align:left; color:${(series.get('stroke') as am5.Color).toCSSHex()}; padding-right:${theme.spacing(2)}'>
+                  <strong>${series.get('name') as string}</strong>
+                </th>
+                <td style='text-align:right'>
+                  {${series.get('valueYField') as string}}
+                </td>
+                ${ /* Add percentiles if this series is the selected scenario */
+                  series.get('id') !== selectedScenario.toString() ? '' : `
+                  <td>
+                    [{percentileDown} - {percentileUp}]
+                  </td>
+                `}
+              </tr>
+              ${ /* Add group filters if this series is the selected scenario */
+                series.get('id') !== selectedScenario.toString() ? '' :
+                  /* Add table row for each active group filter */
+                  (chartRef.current as am5xy.XYChart).series.values.filter((s) => s.get('id')?.startsWith('group-filter-') && !s.isHidden()).map((groupFilterSeries) => {
+                  return `
+                  <tr>
+                    <th style='text-align:left; color:${(groupFilterSeries.get('stroke') as am5.Color).toCSSHex()}; padding-right:${theme.spacing(2)}; padding-left:${theme.spacing(2)}'>
+                      <strong>${groupFilterSeries.get('name') as string}</strong>
+                    </th>
+                    <td style='text-align:right'>
+                      {${groupFilterSeries.get('valueYField') as string}}
+                    </td>
+                  </tr>
+                  `
+                  }).join('')
+              }
+            `}
+          }).join('')
+          }
+        </table>
+      `;
+      // attach tooltip to series
+      chartRef.current.series.each((series) => {
+        const tooltip = am5.Tooltip.new(rootRef.current as am5.Root, {
+          labelHTML: tooltipHTML,
+          getFillFromSprite: false,
+          autoTextColor: false,
+          pointerOrientation: 'horizontal'
         });
-        // fix tooltip text & background color
-        if (series.tooltip) {
-          series.tooltip.label.fill = am4core.color(theme.palette.text.primary);
-          series.tooltip.getFillFromObject = false;
-          series.tooltip.background.fill = am4core.color(theme.palette.background.paper);
-        }
-      });
-      // prevent multiple tooltips from showing
-      chartRef.current.cursor.maxTooltipDistance = 0;
 
-      // invalidate/reload data
-      chartRef.current.invalidateData();
-    }
-  }, [
+        // Set tooltip default text color to theme primary text color
+        tooltip.label.setAll({
+          fill: am5.color(theme.palette.text.primary)
+        })
+
+        // Set tooltip background to theme paper
+        tooltip.get('background')?.setAll({
+          fill: am5.color(theme.palette.background.paper)
+        })
+
+        series.set('tooltip', tooltip);
+      });
+      /**/ // TODO: HTML Tooltip
+      /**/ am4_chartRef.current.series.each((series) => {
+        /**/ series.adapter.add('tooltipHTML', (_, target) => {
+          /**/ const data = target.tooltipDataItem.dataContext;
+          /**/ const text = [`<strong>{date.formatDate("${t('dateFormat')}")} (${selectedCompartment})</strong>`];
+          /**/ text.push('<table>');
+          /**/ am4_chartRef.current?.series.each((s) => {
+            /**/ if (
+              /**/ s.dataFields.valueY &&
+              /**/ data &&
+              /**/ (data as {[key: string]: number | string})[s.dataFields.valueY] &&
+              /**/ s.id !== 'percentiles' &&
+              /**/ !s.id.startsWith('group-filter-')
+            /**/ ) {
+              /**/ text.push('<tr>');
+              /**/ text.push(
+                /**/ `<th 
+                /**/ style='text-align:left; color:${(s.stroke as am4core.Color).hex}; padding-right:${theme.spacing(2)}'>
+                /**/ <strong>${s.name}</strong>
+                /**/ </th>`
+              /**/ );
+              /**/ text.push(
+                /**/ `<td style='text-align:right'>${formatNumber(
+                  /**/ (data as {[key: string]: number})[s.dataFields.valueY]
+                /**/ )}</td>`
+              /**/ );
+              /**/ if (
+                /**/ s.id == scenarioList.scenarios[selectedScenario].id.toString() &&
+                /**/ am4_percentileSeries.dataFields.openValueY &&
+                /**/ am4_percentileSeries.dataFields.valueY
+              /**/ ) {
+                /**/ text.push(
+                  /**/ `<td>[${formatNumber((data as {[key: string]: number})[am4_percentileSeries.dataFields.openValueY])} - 
+                  /**/ ${formatNumber((data as {[key: string]: number})[am4_percentileSeries.dataFields.valueY])}]</td>`
+                /**/ );
+                /**/ am4_chartRef.current?.series.each((groupFilterSeries) => {
+                  /**/ if (
+                    /**/ groupFilterSeries.id.startsWith('group-filter-') &&
+                    /**/ groupFilterSeries.dataFields.valueY &&
+                    /**/ data &&
+                    /**/ (data as {[key: string]: number | string})[groupFilterSeries.dataFields.valueY]
+                  /**/ ) {
+                    /**/ text.push('<tr>');
+                    /**/ text.push(`
+                    /**/ <th style='text-align:left; color:${
+                          /**/ (groupFilterSeries.stroke as am4core.Color).hex
+                        /**/ }; padding-right:${theme.spacing(2)}; padding-left:${theme.spacing(4)}'>
+                        /**/ <strong>${groupFilterSeries.name}</strong>
+                        /**/ </th>
+                        /**/ `);
+                    /**/ text.push(
+                      /**/ `<td style='text-align:right'>${formatNumber(
+                        /**/ (data as {[key: string]: number})[groupFilterSeries.dataFields.valueY]
+                      /**/ )}</td>`
+                    /**/ );
+                    /**/ text.push(`</tr>`);
+                  /**/ }
+                /**/ });
+              /**/ } else {
+                /**/ text.push('<td/>');
+                /**/ text.push('</tr>');
+              /**/ }
+            /**/ }
+          /**/ });
+          /**/ text.push('</table>');
+          /**/ return text.join('\n');
+        /**/ });
+        /**/ // fix tooltip text & background color
+        /**/ if (series.tooltip) {
+          /**/ series.tooltip.label.fill = am4core.color(theme.palette.text.primary);
+          /**/ series.tooltip.getFillFromObject = false;
+          /**/ series.tooltip.background.fill = am4core.color(theme.palette.background.paper);
+        /**/ }
+      /**/ });
+      /**/ // prevent multiple tooltips from showing
+      /**/ am4_chartRef.current.cursor.maxTooltipDistance = 0;
+
+      /**/ // invalidate/reload data
+      /**/ am4_chartRef.current.invalidateData();
+    },
+    [
     activeScenarios,
     selectedScenario,
     percentileData,
@@ -432,7 +782,8 @@ export default function SimulationChart(): JSX.Element {
     formatNumber,
     t,
     groupFilterData,
-  ]);
+    ]
+  );
 
   return (
     <LoadingContainer

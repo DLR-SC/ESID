@@ -18,6 +18,7 @@ export type AGS = string;
  */
 export interface DataSelection {
   district: {ags: AGS; name: string; type: string};
+  /** The current date in the store. Must be an ISO 8601 date cutoff at time (YYYY-MM-DD) */
   date: string | null;
   scenario: number | null;
   compartment: string | null;
