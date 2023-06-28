@@ -167,7 +167,7 @@ export function ManageCompartments(props: {
             }}
           >
             <CardActionArea
-              aria-label={t('add-button-filters.add-group')}
+              aria-label={t('add-button-filters.add-group-compartments')}
               onClick={() => {
                 const compartments: Dictionary<Array<string>> = {};
                 setNextSelectedCompartFilter({ id: crypto.randomUUID(), name: '', filter: [], isVisible: false, compartments: compartments });

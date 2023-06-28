@@ -50,6 +50,7 @@
     title: 'Manage Groups',
     'nothing-selected': 'Select a group to edit or create a new one.',
     'add-group': 'Add new group',
+    'add-group-compartments': 'COMPARTMENT',
     name: 'Name',
     close: 'Cancel',
     apply: 'Apply',
@@ -84,6 +85,9 @@
     lock: 'Lock maximum value',
     select: 'Select heatmap preset',
   },
+  heatmapchart: {
+    text:'Show more',
+  }
   today: 'Today',
   more: 'More',
   less: 'Less',
