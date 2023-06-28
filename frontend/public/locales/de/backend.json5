@@ -3,7 +3,7 @@
     Infected: 'Symptomatische',
     Hospitalized: 'Hospitalisierte',
     ICU: 'Intensivpatienten',
-    Dead: 'Verstorbene',
+    Dead: 'Todesfälle',
     Exposed: 'Präinfektiöse',
     Recovered: 'Genesene',
     Carrier: 'Nichtsymptomatische',
