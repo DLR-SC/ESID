@@ -226,6 +226,7 @@ export default function Scenario(): JSX.Element {
                 <ListItemButton
                   key={compartment}
                   sx={{
+                    whiteSpace: 'pre-line',
                     display: compartmentsExpanded || i < 4 ? 'flex' : 'none',
                     maxHeight: '36px', // Ensure, that emojis don't screw with the line height!
                     padding: theme.spacing(1),
