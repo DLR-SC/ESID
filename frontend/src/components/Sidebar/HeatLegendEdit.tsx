@@ -142,7 +142,7 @@ import {useTranslation} from 'react-i18next';
     
      <span style={{float:'right'}}>
        <FormGroup>
-      <FormControlLabel control= {<Switch checked={showall} onChange={() => setshowall(!showall)} />} label="Show more" labelPlacement="start"/>
+  <FormControlLabel control= {<Switch checked={showall} onChange={() => setshowall(!showall)} />} label={t('heatmapchart.textshow')} labelPlacement="start"/>
 
     </FormGroup>
      </span>

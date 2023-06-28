@@ -35,11 +35,14 @@
     deactivate: 'Scenario deaktivieren',
     'manage-groups': 'Gruppen',
     'simulation-start-day': 'Simulationsstart',
+    'add_button' : 'Fächer',
   },
   'group-filters': {
     title: 'Gruppen Verwalten',
+    'title-manage-compartment': 'Fächer verwalten',
     'nothing-selected': 'Wählen Sie eine Gruppe aus um diese zu bearbeiten oder erstellen Sie eine neue Gruppe.',
     'add-group': 'Neue Gruppe Erstellen',
+    'add-group-compartment':'Fächer'
     name: 'Name',
     close: 'Abbrechen',
     apply: 'Anwenden',
@@ -56,6 +59,10 @@
     edit: 'Farblegende bearbeiten',
     lock: 'Maximalwert feststellen',
     select: 'Farblegende auswählen',
+  },
+
+  haetmapchart: {
+    textshow: 'Zeig mehr'
   },
   today: 'Heute',
   more: 'Mehr',

@@ -66,6 +66,9 @@
     lock: 'Lock maximum value',
     select: 'Select heatmap preset',
   },
+  heatmapchart:{
+  textshow:'show more'
+  },
   today: 'Today',
   more: 'More',
   less: 'Less',
