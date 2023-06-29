@@ -632,7 +632,8 @@ export default function SimulationChart(): JSX.Element {
             ) {
               console.log('ERROR: missing series property: ', series.get('id'), series.get('name'), series.get('valueYField'), series.get('stroke'));
               return '';
-            } else {
+            }
+            /* Handle series normally */
             return `
               <tr>
                 <th style='text-align:left; color:${(series.get('stroke') as am5.Color).toCSSHex()}; padding-right:${theme.spacing(2)}'>
@@ -664,7 +665,7 @@ export default function SimulationChart(): JSX.Element {
                   `
                   }).join('')
               }
-            `}
+            `
           }).join('')
           }
         </table>
