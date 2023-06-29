@@ -54,6 +54,9 @@
   },
   chart: {
     caseData: 'Case Data',
+    date: 'Date',
+    percentileUp: '75th percentile',
+    percentileDown: '25th percentile'
   },
   heatlegend: {
     edit: 'Edit heatmap colors',

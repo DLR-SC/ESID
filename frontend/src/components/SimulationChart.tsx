@@ -257,11 +257,6 @@ export default function SimulationChart(): JSX.Element {
         /**/
       };
       /**/ am4_chart.exporting.filePrefix = 'Covid Simulaton Data';
-      // TODO: move to data fill effect for easier access to dataSource
-      am5export.Exporting.new(root, {
-        menu: am5export.ExportingMenu.new(root, {}),
-        filePrefix: 'Covid Simulation Data',
-      });
 
       // Add series for groupFilter
       if (groupFilterList && selectedScenario) {
@@ -768,6 +763,43 @@ export default function SimulationChart(): JSX.Element {
 
       /**/ // invalidate/reload data
       /**/ am4_chartRef.current.invalidateData();
+      
+      // collect data field names & order for data export
+      // always export date and case data
+      let dataFields = {
+        date: `${t('chart.date')}`,
+        caseData: `${t('chart.caseData')}`,
+        percentileUp: `${t('chart.percentileUp')}`,
+        percentileDown: `${t('chart.percentileDown')}`
+      };
+      // always put date first, case data second
+      const dataFieldsOrder = ['date', 'caseData'];
+      // loop through active scenarios (if there are any)
+      if (activeScenarios) {
+        activeScenarios.forEach((scenario_id) => {
+          // add scenario label to data field names
+          dataFields = {
+            ...dataFields,
+            [scenario_id]: scenarioList.scenarios[scenario_id].label,
+          };
+          // add scenario id to data field order
+          dataFieldsOrder.push(`${scenario_id}`)
+          // if this is the selected scenario also add percentiles after it
+          if (scenario_id == selectedScenario) {
+            dataFieldsOrder.push('percentileDown', 'percentileUp')
+          }
+        });
+      }
+      // update export menu
+      am5export.Exporting.new(rootRef.current as am5.Root, {
+        menu: am5export.ExportingMenu.new(rootRef.current as am5.Root, {}),
+        filePrefix: 'Covid Simulation Data',
+        dataSource: data,
+        dateFields: ['date'],
+        dateFormat: `${t('dateFormat')}`,
+        dataFields: dataFields,
+        dataFieldsOrder: dataFieldsOrder
+      });
     },
     [
     activeScenarios,
