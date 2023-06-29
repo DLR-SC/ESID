@@ -225,8 +225,8 @@ export default function SimulationChart(): JSX.Element {
         /**/ am4_series.strokeWidth = 2;
         /**/ am4_series.fill = color(theme.custom.scenarios[i % theme.custom.scenarios.length][0]); // loop around the color list if scenarios exceed color list
         /**/ am4_series.stroke = am4_series.fill;
-        /*TODO*/ am4_series.tooltipText = `[bold ${am4_series.stroke.hex}]${tBackend(`scenario-names.${scenario.label}`)}:[/] {${scenarioId}}`;
-        /*TODO*/ am4_series.name = tBackend(`scenario-names.${scenario.label}`);
+        /**/ am4_series.tooltipText = `[bold ${am4_series.stroke.hex}]${tBackend(`scenario-names.${scenario.label}`)}:[/] {${scenarioId}}`;
+        /**/ am4_series.name = tBackend(`scenario-names.${scenario.label}`);
 
         const series = chart.series.push(
           am5xy.LineSeries.new(root, {
