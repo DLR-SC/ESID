@@ -2,6 +2,7 @@
   dateFormat: 'MMM dd. yyyy',
   topBar: {
     'icon-alt': 'ESID application logo',
+    language: 'Language',
     menu: {
       label: 'Application menu',
       login: 'Login',
@@ -9,6 +10,7 @@
       'privacy-policy': 'Privacy Policy',
       accessibility: 'Accessibility',
       attribution: 'Attribution',
+      changelog: 'Changelog',
     },
   },
   'icon-bar': {
@@ -41,6 +43,7 @@
     activate: 'Activate scenario',
     deactivate: 'Deactivate scenario',
     'manage-groups': 'Groups',
+    'simulation-start-day': 'Simulation start',
   },
   'group-filters': {
     title: 'Manage Groups',
@@ -51,6 +54,9 @@
     apply: 'Apply',
     'confirm-deletion-title': 'Delete Group',
     'confirm-deletion-text': 'Are you sure you want to delete the "{{groupName}}" group?',
+    'confirm-discard-title': 'Discard Changes',
+    'confirm-discard-text': 'You have unsaved changes. Do you want to discard them?',
+    discard: 'Discard',
   },
   chart: {
     caseData: 'Case Data',

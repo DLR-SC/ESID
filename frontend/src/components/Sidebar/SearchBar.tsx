@@ -8,6 +8,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import {useTranslation} from 'react-i18next';
+import countyData from 'assets/lk_germany_reduced_list.json';
 
 /** Type definition for the CountyItems of the Autocomplete field
  *  @see DataSelectionSlice
@@ -32,9 +33,16 @@ export default function SearchBar(): JSX.Element {
   const theme = useTheme();
   const dispatch = useAppDispatch();
 
+  // This ensures that the displayed name of Germany is always localized.
+  useEffect(() => {
+    if (selectedDistrict.ags === '00000' && selectedDistrict.name !== t('germany')) {
+      dispatch(selectDistrict({ags: '00000', name: t('germany'), type: ''}));
+    }
+  }, [t, selectedDistrict, dispatch]);
+
   useEffect(() => {
     // get option list from assets
-    fetch('assets/lk_germany_reduced_list.json', {
+    fetch(countyData, {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -63,7 +71,7 @@ export default function SearchBar(): JSX.Element {
       );
     // this init should only run once on first render
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [t]);
 
   return (
     <Container>

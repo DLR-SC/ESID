@@ -1,5 +1,9 @@
 <p align="center"> 
-  <img src ="docs/images/logo-200x66.svg" />
+  <img src ="frontend/docs/images/logo-200x66.svg" />
+</p>
+
+<p align="center"> 
+  <img src ="frontend/docs/images/Overview.png" />
 </p>
 
 # ESID - Epidemiologisches Simulationstool für den Infektionsschutz in Deutschland
@@ -27,7 +31,7 @@ It allows displaying historical data, as well as analyzing simulation results of
 
 
 ## Features
-You can find a list of the latest changes in the [changelog](docs/changelog.md).
+You can find a list of the latest changes in the [changelog](frontend/docs/changelog/changelog-en.md).
 
 
 ## Developer Documentation

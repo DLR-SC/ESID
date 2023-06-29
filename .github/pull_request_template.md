@@ -48,7 +48,7 @@ If the PR is trivial you may remove this section
   - [ ] German
 - [ ] I tried addressing all new accessibility problems displayed in the console and documented if they can't be fixed
 - [ ] I attached performance measurements to prevent performance degradation
-- [ ] I added the changes to the next release section of the [changelog](../docs/changelog.md)
+- [ ] I added the changes to the next release section of the [changelog](../frontend/docs/changelog/changelog-en.md)
 
 **I, the reviewer checked the following things:**
 
@@ -58,4 +58,4 @@ If the PR is trivial you may remove this section
 - [ ] I checked the added tests for completeness
 - [ ] I checked the internationalized strings for spelling errors
 - [ ] I checked the performance metrics for problems or unexplained degradation
-- [ ] I checked that the changes are noted in the [changelog](../docs/changelog.md)
+- [ ] I checked that the changes are noted in the [changelog](../frontend/docs/changelog/changelog-en.md)

@@ -1,9 +1,35 @@
 # ESID Changelog
 
-## Next Release
-**27.02.2023:** v0.2.0-alpha
+## vX.X.X-alpha
+
+**Release Date:** TBD
 
 ### New Features
+
+- The changelog can now be viewed shown using the burger menu in the top right corner.
+- The language can now be switched in the top bar between German and English.
+
+### Improvements
+
+- Added a label to the scenario start day.
+- All numbers on in the scenario overview now show as integers.
+- The group filter editor will now ask for confirmation to discard changes, when the user selects a new group filter or closes the dialog without saving.
+- All texts are now available in Englisch and German.
+- Some improvements to page load speed have been made.
+- If a new feature gets rolled out, the browser cache will no longer prevent the users from seeing it.
+
+### Bug fixes
+
+- An error was fixed, which prevented the text in the search bar to be translated on an initial site visit.
+
+---
+
+## v0.2.0-alpha
+
+**Release Date:** 27.02.2023
+
+### New Features
+
 - Group Filters
   - There is a new button below the '+' card on the top right called 'Groups'.
   - This opens the group filter editor. Here you can create, toggle, edit and delete customizable groups.
@@ -14,20 +40,25 @@
   - The line chart displays the group filters with a different line style.
 
 ### Improvements
+
 - All numbers on scenario cards now show as integers only.
 - The cards are now bigger, so it is less likely for text to overflow.
-- The app now saves, if the compartments were expanded between sessions.
+- The app now saves, if the infection states were expanded between sessions.
+- The selected district is now highlighted with an outline on the district map.
 
 ### Bug fixes
-- Found an issue with the persistent cache that crashed the website when a new property is added to the persistent store 
+
+- Found an issue with the persistent cache that crashed the website when a new property is added to the persistent store
   and added a comment to prevent future errors.
 
 ---
 
 ## v0.1.0-alpha
+
 **Release Date:** 01.01.2023
 
 ### New Features
+
 - Scenario Cards
   - selectable compartments
   - selectable scenarios

@@ -1,6 +1,12 @@
 import React, {useEffect, useRef} from 'react';
-/**/ import * as am4core from '@amcharts/amcharts4/core';
-/**/ import * as am4charts from '@amcharts/amcharts4/charts';
+/**/ import {create} from '@amcharts/amcharts4/.internal/core/utils/Instance';
+/**/ import {XYChart} from '@amcharts/amcharts4/.internal/charts/types/XYChart';
+/**/ import {DateAxis} from '@amcharts/amcharts4/.internal/charts/axes/DateAxis';
+/**/ import {ValueAxis} from '@amcharts/amcharts4/.internal/charts/axes/ValueAxis';
+/**/ import {XYCursor} from '@amcharts/amcharts4/.internal/charts/cursors/XYCursor';
+/**/ import {LineSeries} from '@amcharts/amcharts4/.internal/charts/series/LineSeries';
+/**/ import {Color, color} from '@amcharts/amcharts4/.internal/core/utils/Color';
+/**/ import {ExportMenu} from '@amcharts/amcharts4/.internal/core/export/ExportMenu';
 /**/ import am4lang_en_US from '@amcharts/amcharts4/lang/en_US';
 /**/ import am4lang_de_DE from '@amcharts/amcharts4/lang/de_DE';
 import * as am5 from '@amcharts/amcharts5';
@@ -34,6 +40,7 @@ import {GroupData} from 'types/group';
  */
 export default function SimulationChart(): JSX.Element {
   const {t, i18n} = useTranslation();
+  const {t: tBackend} = useTranslation('backend');
   const theme = useTheme();
   const scenarioList = useAppSelector((state) => state.scenarioList);
   const selectedDistrict = useAppSelector((state) => state.dataSelection.district.ags);
@@ -91,14 +98,14 @@ export default function SimulationChart(): JSX.Element {
   const {formatNumber} = NumberFormatter(i18n.language, 3, 8);
   const numberFormat = '#,###.'
 
-  /**/ const am4_chartRef = useRef<am4charts.XYChart | null>(null);
+  /**/ const am4_chartRef = useRef<XYChart | null>(null);
   const rootRef = useRef<am5.Root | null>(null);
   const chartRef = useRef<am5xy.XYChart | null>(null);
 
   // Effect to create chart instance
   useEffect(
     () => {
-      /**/ const am4_chart = am4core.create('am4_chartdiv', am4charts.XYChart);
+      /**/ const am4_chart = create('am4_chartdiv', XYChart);
       const root = am5.Root.new('chartdiv');
       const chart = root.container.children.push(am5xy.XYChart.new(root, {
         panX: false,
@@ -116,7 +123,7 @@ export default function SimulationChart(): JSX.Element {
       root.numberFormatter.set('numberFormat', numberFormat);
 
       // Create axes
-      /**/ const am4_dateAxis = am4_chart.xAxes.push(new am4charts.DateAxis());
+      /**/ const am4_dateAxis = am4_chart.xAxes.push(new DateAxis());
       const xAxis = chart.xAxes.push(
         am5xy.DateAxis.new(root, {
           renderer: am5xy.AxisRendererX.new(root, {}),
@@ -136,7 +143,7 @@ export default function SimulationChart(): JSX.Element {
       Xrenderer.ticks.template.setAll({
         location: 0.5,
       })
-      /**/ const am4_valueAxis = am4_chart.yAxes.push(new am4charts.ValueAxis());
+      /**/ const am4_valueAxis = am4_chart.yAxes.push(new ValueAxis());
       /**/ am4_valueAxis.min = 0;
       const yAxis = chart.yAxes.push(
         am5xy.ValueAxis.new(root, {
@@ -146,7 +153,7 @@ export default function SimulationChart(): JSX.Element {
       );
 
       // Add cursor
-      /**/ am4_chart.cursor = new am4charts.XYCursor();
+      /**/ am4_chart.cursor = new XYCursor();
       /**/ am4_chart.cursor.xAxis = am4_dateAxis;
       chart.set(
         'cursor',
@@ -157,13 +164,13 @@ export default function SimulationChart(): JSX.Element {
       );
 
       // Add series for case data
-      /**/ const am4_caseDataSeries = am4_chart.series.push(new am4charts.LineSeries());
+      /**/ const am4_caseDataSeries = am4_chart.series.push(new LineSeries());
       /**/ am4_caseDataSeries.dataFields.valueY = 'caseData';
       /**/ am4_caseDataSeries.dataFields.dateX = 'date';
       /**/ am4_caseDataSeries.id = 'caseData';
       /**/ am4_caseDataSeries.strokeWidth = 2;
-      /**/ am4_caseDataSeries.fill = am4core.color('black');
-      /**/ am4_caseDataSeries.stroke = am4core.color('black');
+      /**/ am4_caseDataSeries.fill = color('black');
+      /**/ am4_caseDataSeries.stroke = color('black');
       /**/ am4_caseDataSeries.name = t('chart.caseData');
       const caseDataSeries = chart.series.push(
         am5xy.LineSeries.new(root, {
@@ -183,7 +190,7 @@ export default function SimulationChart(): JSX.Element {
       });
 
       // Add series for percentile area
-      /**/ const am4_percentileSeries = am4_chart.series.push(new am4charts.LineSeries());
+      /**/ const am4_percentileSeries = am4_chart.series.push(new LineSeries());
       /**/ am4_percentileSeries.dataFields.valueY = 'percentileUp';
       /**/ am4_percentileSeries.dataFields.openValueY = 'percentileDown';
       /**/ am4_percentileSeries.dataFields.dateX = 'date';
@@ -211,21 +218,22 @@ export default function SimulationChart(): JSX.Element {
 
       // Add series for scenarios
       Object.entries(scenarioList.scenarios).forEach(([scenarioId, scenario], i) => {
-        /**/ const am4_series = am4_chart.series.push(new am4charts.LineSeries());
+        /**/ const am4_series = am4_chart.series.push(new LineSeries());
         /**/ am4_series.dataFields.valueY = scenarioId;
         /**/ am4_series.dataFields.dateX = 'date';
         /**/ am4_series.id = scenarioId;
         /**/ am4_series.strokeWidth = 2;
-        /**/ am4_series.fill = am4core.color(theme.custom.scenarios[i % theme.custom.scenarios.length][0]); // loop around the color list if scenarios exceed color list
+        /**/ am4_series.fill = color(theme.custom.scenarios[i % theme.custom.scenarios.length][0]); // loop around the color list if scenarios exceed color list
         /**/ am4_series.stroke = am4_series.fill;
-        /**/ am4_series.tooltipText = `[bold ${am4_series.stroke.hex}]${scenario.label}:[/] {${scenarioId}}`;
-        /**/ am4_series.name = scenario.label;
+        /*TODO*/ am4_series.tooltipText = `[bold ${am4_series.stroke.hex}]${tBackend(`scenario-names.${scenario.label}`)}:[/] {${scenarioId}}`;
+        /*TODO*/ am4_series.name = tBackend(`scenario-names.${scenario.label}`);
+
         const series = chart.series.push(
           am5xy.LineSeries.new(root, {
             xAxis: xAxis,
             yAxis: yAxis,
             id: scenarioId,
-            name: scenario.label,
+            name: tBackend(`scenario-names.${scenario.label}`),
             valueXField: 'date',
             valueYField: scenarioId,
             connect: false, // TODO: see case data series
@@ -233,7 +241,7 @@ export default function SimulationChart(): JSX.Element {
             // TODO: is this tooltip necessary?
             tooltip: am5.Tooltip.new(root, {
               labelText: `[bold ${theme.custom.scenarios[i % theme.custom.scenarios.length][0]}]${
-                scenario.label
+                tBackend(`scenario-names.${scenario.label}`)
               }:[/] {${scenarioId}}`,
             }),
             stroke: am5.color(theme.custom.scenarios[i % theme.custom.scenarios.length][0]),
@@ -243,10 +251,10 @@ export default function SimulationChart(): JSX.Element {
         series.strokes.template.setAll({
           strokeWidth: 2,
         });
-      });
+    });
 
       // Set up menu to export this chart
-      /**/ am4_chart.exporting.menu = new am4core.ExportMenu();
+      /**/ am4_chart.exporting.menu = new ExportMenu();
       /**/ am4_chart.exporting.dataFields = {
         /**/ date: 'Date',
         /**/ rki: 'RKI',
@@ -256,9 +264,9 @@ export default function SimulationChart(): JSX.Element {
         /**/ percentileDown: 'PercentileDown',
         /**/
       };
-      /**/ am4_chart.exporting.filePrefix = 'Covid Simulaton Data';
+      /**/ am4_chart.exporting.filePrefix = 'Covid Simulation Data';
 
-      // Add series for groupFilter
+    // Add series for groupFilter
       if (groupFilterList && selectedScenario) {
         /**/ const am4_groupFilterStrokes = ['2,4', '8,4', '8,4,2,4'];
         const groupFilterStrokes = [
@@ -270,20 +278,18 @@ export default function SimulationChart(): JSX.Element {
         Object.values(groupFilterList)
           .filter((groupFilter) => groupFilter.isVisible)
           .forEach((groupFilter, i) => {
-            /**/ const am4_series = am4_chart.series.push(new am4charts.LineSeries());
+            /**/ const am4_series = am4_chart.series.push(new LineSeries());
             /**/ am4_series.dataFields.valueY = groupFilter.name;
             /**/ am4_series.dataFields.dateX = 'date';
             /**/ am4_series.id = 'group-filter-' + groupFilter.name;
             /**/ am4_series.strokeWidth = 2;
-            /**/ am4_series.fill = am4core.color(
-              /**/ theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0]
-              /**/
-            );
+            /**/ am4_series.fill = color(
+                /**/ theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0]
+            /**/ );
             /**/ am4_series.stroke = am4_series.fill;
             /**/ if (i < am4_groupFilterStrokes.length) {
-              /**/ am4_series.strokeDasharray = am4_groupFilterStrokes[i];
-              /**/
-            }
+                /**/ am4_series.strokeDasharray = am4_groupFilterStrokes[i];
+            /**/ }
             /**/ am4_series.tooltipText = `[bold ${am4_series.stroke.hex}]${groupFilter.name}:[/] {${i}}`;
             /**/ am4_series.name = groupFilter.name;
             const series = chart.series.push(
@@ -311,8 +317,8 @@ export default function SimulationChart(): JSX.Element {
               // loop stroke list if group filters exceeds list length
               strokeDasharray: groupFilterStrokes[i % groupFilterStrokes.length],
             });
-          });
-      }
+        });
+    }
 
       // Date selection on double click
       chart.events.on('dblclick', (ev) => {
@@ -347,7 +353,7 @@ export default function SimulationChart(): JSX.Element {
       };
     },
     // Re-run effect when shown information changes (scenarios, group filters, or the selected scenario -> percentiles), dispatch, theme, or language (i18n & t) do not change after initialization
-    [scenarioList, groupFilterList, dispatch, i18n.language, t, theme, selectedScenario]
+    [scenarioList, groupFilterList, dispatch, i18n.language, t, theme, selectedScenario, tBackend]
   );
 
   // Effect to hide disabled scenarios (and show them again if not hidden anymore)
@@ -446,17 +452,17 @@ export default function SimulationChart(): JSX.Element {
       });
 
       /**/if (am4_chartRef.current && selectedDate) {
-        /**/ const dateAxis = am4_chartRef.current.xAxes.getIndex(0) as am4charts.DateAxis;
+        /**/ const dateAxis = am4_chartRef.current.xAxes.getIndex(0) as DateAxis;
         /**/ const range = dateAxis.axisRanges.create();
         /**/ range.date = new Date(selectedDate);
         /**/ range.grid.above = true;
-        /**/ range.grid.stroke = am4core.color(theme.palette.primary.main);
+        /**/ range.grid.stroke = color(theme.palette.primary.main);
         /**/ range.grid.strokeWidth = 2;
         /**/ range.grid.strokeOpacity = 1;
         /**/ range.label.text = '{date}';
         /**/ range.label.language.locale = dateAxis.language.locale;
         /**/ range.label.dateFormatter.dateFormat = t('dateFormat');
-        /**/ range.label.fill = am4core.color('white');
+        /**/ range.label.fill = color('white');
         /**/ range.label.background.fill = range.grid.stroke;
       /**/}
 
@@ -580,14 +586,14 @@ export default function SimulationChart(): JSX.Element {
       /**/ });
 
       // Change fill color of percentile series to selected scenario color
-      /**/ const am4_percentileSeries = am4_chartRef.current.map.getKey('percentiles') as am4charts.LineSeries;
+      /**/ const am4_percentileSeries = am4_chartRef.current.map.getKey('percentiles') as LineSeries;
       const percentileSeries = chartRef.current.series.values.find((series) => series.get('id') === 'percentile');
       percentileSeries?.set('fill', am5.color(theme.custom.scenarios[(selectedScenario -1) % theme.custom.scenarios.length][0]));
       /**/ if (
         /**/ am4_percentileSeries.fill !==
-        /**/ am4core.color(theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0])
+        /**/ color(theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0])
       /**/ ) {
-        /**/ am4_percentileSeries.fill = am4core.color(
+        /**/ am4_percentileSeries.fill = color(
           /**/ theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0]
         /**/ );
       /**/ }
@@ -595,7 +601,7 @@ export default function SimulationChart(): JSX.Element {
       // set up tooltip
       const tooltipHTML = `
         ${''/* Current Date and selected compartment name */}
-        <strong>{date.formatDate("${t('dateFormat')}")} (${selectedCompartment})</strong>
+        <strong>{date.formatDate("${t('dateFormat')}")} (${tBackend(`infection-states.${selectedCompartment}`)})</strong>
         <table>
           ${ /* Table row for each series */
           chartRef.current.series.values.map((series): string => {
@@ -701,7 +707,7 @@ export default function SimulationChart(): JSX.Element {
               /**/ text.push('<tr>');
               /**/ text.push(
                 /**/ `<th 
-                /**/ style='text-align:left; color:${(s.stroke as am4core.Color).hex}; padding-right:${theme.spacing(2)}'>
+                /**/ style='text-align:left; color:${(s.stroke as Color).hex}; padding-right:${theme.spacing(2)}'>
                 /**/ <strong>${s.name}</strong>
                 /**/ </th>`
               /**/ );
@@ -729,7 +735,7 @@ export default function SimulationChart(): JSX.Element {
                     /**/ text.push('<tr>');
                     /**/ text.push(`
                     /**/ <th style='text-align:left; color:${
-                          /**/ (groupFilterSeries.stroke as am4core.Color).hex
+                          /**/ (groupFilterSeries.stroke as Color).hex
                         /**/ }; padding-right:${theme.spacing(2)}; padding-left:${theme.spacing(4)}'>
                         /**/ <strong>${groupFilterSeries.name}</strong>
                         /**/ </th>
@@ -753,9 +759,9 @@ export default function SimulationChart(): JSX.Element {
         /**/ });
         /**/ // fix tooltip text & background color
         /**/ if (series.tooltip) {
-          /**/ series.tooltip.label.fill = am4core.color(theme.palette.text.primary);
+          /**/ series.tooltip.label.fill = color(theme.palette.text.primary);
           /**/ series.tooltip.getFillFromObject = false;
-          /**/ series.tooltip.background.fill = am4core.color(theme.palette.background.paper);
+          /**/ series.tooltip.background.fill = color(theme.palette.background.paper);
         /**/ }
       /**/ });
       /**/ // prevent multiple tooltips from showing
@@ -814,6 +820,7 @@ export default function SimulationChart(): JSX.Element {
     formatNumber,
     t,
     groupFilterData,
+    tBackend,
     ]
   );
 

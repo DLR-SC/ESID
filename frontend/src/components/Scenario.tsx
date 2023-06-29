@@ -27,7 +27,8 @@ import {setCompartments, setScenarios} from 'store/ScenarioSlice';
 import {dateToISOString, Dictionary} from 'util/util';
 import {useGetCaseDataSingleSimulationEntryQuery} from '../store/services/caseDataApi';
 import {NumberFormatter} from '../util/hooks';
-import {ManageGroupDialog} from './ManageGroupDialog';
+import ManageGroupDialog from './ManageGroupDialog';
+import ConfirmDialog from './shared/ConfirmDialog';
 
 /**
  * React Component to render the Scenario Cards Section
@@ -39,13 +40,14 @@ export default function Scenario(): JSX.Element {
   const [open, setOpen] = React.useState(false);
 
   const {t, i18n} = useTranslation();
+  const {t: tBackend} = useTranslation('backend');
   const theme = useTheme();
 
   const dispatch = useAppDispatch();
   const [simulationModelKey, setSimulationModelKey] = useState<string>('unset');
   const [compartmentValues, setCompartmentValues] = useState<Dictionary<number> | null>(null);
 
-  const {formatNumber} = NumberFormatter(i18n.language, 3, 8);
+  const {formatNumber} = NumberFormatter(i18n.language, 1, 0);
 
   const getCompartmentValue = (compartment: string): string => {
     if (compartmentValues && compartment in compartmentValues) {
@@ -61,6 +63,9 @@ export default function Scenario(): JSX.Element {
   const node = useAppSelector((state) => state.dataSelection.district.ags);
   const startDay = useAppSelector((state) => state.dataSelection.minDate);
   const activeScenarios = useAppSelector((state) => state.dataSelection.activeScenarios);
+
+  const [groupEditorUnsavedChanges, setGroupEditorUnsavedChanges] = useState(false);
+  const [closeDialogOpen, setCloseDialogOpen] = useState(false);
 
   const {data: scenarioListData} = useGetSimulationsQuery();
   const {data: simulationModelsData} = useGetSimulationModelsQuery();
@@ -172,9 +177,9 @@ export default function Scenario(): JSX.Element {
             id='scenario-view-compartment-list-date'
             sx={{
               display: 'flex',
-              alignItems: 'flex-end',
+              justifyContent: 'space-between',
               height: '3rem',
-              marginLeft: 'auto',
+              marginLeft: theme.spacing(3),
               marginRight: 0,
               marginBottom: theme.spacing(1),
               paddingRight: theme.spacing(3),
@@ -183,6 +188,17 @@ export default function Scenario(): JSX.Element {
               borderTop: '2px solid transparent',
             }}
           >
+            <Typography
+              variant='h2'
+              sx={{
+                textAlign: 'left',
+                height: 'min-content',
+                // fontWeight: 'bold',
+                fontSize: '13pt',
+              }}
+            >
+              {t('scenario.simulation-start-day')}:
+            </Typography>
             <Typography
               variant='h2'
               sx={{
@@ -211,6 +227,7 @@ export default function Scenario(): JSX.Element {
                   key={compartment}
                   sx={{
                     display: compartmentsExpanded || i < 4 ? 'flex' : 'none',
+                    maxHeight: '36px', // Ensure, that emojis don't screw with the line height!
                     padding: theme.spacing(1),
                     paddingLeft: theme.spacing(3),
                     paddingRight: theme.spacing(3),
@@ -236,7 +253,7 @@ export default function Scenario(): JSX.Element {
                   }}
                 >
                   <ListItemText
-                    primary={compartment}
+                    primary={tBackend(`infection-states.${compartment}`)}
                     // disable child typography overriding this
                     disableTypography={true}
                     sx={{
@@ -372,8 +389,41 @@ export default function Scenario(): JSX.Element {
             {t('scenario.manage-groups')}
           </Button>
         </Box>
-        <Dialog maxWidth='lg' fullWidth={true} open={open} onClose={() => setOpen(false)}>
-          <ManageGroupDialog onCloseRequest={() => setOpen(false)} />
+        <Dialog
+          maxWidth='lg'
+          fullWidth={true}
+          open={open}
+          onClose={() => {
+            if (groupEditorUnsavedChanges) {
+              setCloseDialogOpen(true);
+            } else {
+              setOpen(false);
+            }
+          }}
+        >
+          <ManageGroupDialog
+            onCloseRequest={() => {
+              if (groupEditorUnsavedChanges) {
+                setCloseDialogOpen(true);
+              } else {
+                setOpen(false);
+              }
+            }}
+            unsavedChangesCallback={(unsavedChanges) => setGroupEditorUnsavedChanges(unsavedChanges)}
+          />
+          <ConfirmDialog
+            open={closeDialogOpen}
+            title={t('group-filters.confirm-discard-title')}
+            text={t('group-filters.confirm-discard-text')}
+            abortButtonText={t('group-filters.close')}
+            confirmButtonText={t('group-filters.discard')}
+            onAnswer={(answer) => {
+              if (answer) {
+                setOpen(false);
+              }
+              setCloseDialogOpen(false);
+            }}
+          />
         </Dialog>
       </Box>
     </ScrollSync>

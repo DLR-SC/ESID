@@ -5,7 +5,7 @@
   "scripts": {
     "build": "npm run collect-attributions && webpack --progress --config ./webpack/webpack.prod.js",
     "start": "webpack serve --open --progress --config ./webpack/webpack.dev.js",
-    "start-prod": "webpack serve --open --progress --config ./webpack/webpack.prod.js",
+    "start-prod": "webpack serve --no-client-overlay-warnings --open --progress --config ./webpack/webpack.prod.js",
     "test": "jest",
     "coverage": "jest --collectCoverage --reporters='default'",
     "format": "prettier --write .",
@@ -33,7 +33,11 @@
       "<rootDir>/src"
     ],
     "moduleNameMapper": {
-      "^.+\\.(css|less|scss)$": "identity-obj-proxy"
+      "^.+\\.(css|less|scss)$": "identity-obj-proxy",
+      "^.+\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/src/__mocks__/fileMock.js",
+      "^.+\\.(json|json5|geojson)$": "<rootDir>/src/__mocks__/fileMock.js",
+      "^.+\\.(md)$": "<rootDir>/src/__mocks__/fileMock.js",
+      "^.*country-flag-icons\\/string\\/.+$": "<rootDir>/src/__mocks__/fileMock.js"
     },
     "reporters": [
       "default",
@@ -76,6 +80,7 @@
     "@mui/system": "^5.10.10",
     "@reduxjs/toolkit": "^1.5.0",
     "@types/geojson": "^7946.0.8",
+    "country-flag-icons": "^1.5.7",
     "i18next": "^20.2.4",
     "i18next-browser-languagedetector": "^6.1.1",
     "i18next-http-backend": "^1.2.4",
@@ -84,20 +89,21 @@
     "react-dom": "^17.0.2",
     "react-i18next": "^11.8.15",
     "react-lazyload": "^3.2.0",
-    "react-markdown": "^6.0.2",
+    "react-markdown": "^6.0.3",
     "react-redux": "^7.2.3",
     "react-scroll-sync": "^0.11.0",
     "redux": "^4.0.5",
     "redux-persist": "^6.0.0",
-    "rooks": "^5.7.3",
-    "simplebar": "^5.3.5"
+    "rooks": "^5.7.3"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.12.13",
+    "@principalstudio/html-webpack-inject-preload": "^1.2.7",
     "@testing-library/dom": "^8.11.1",
     "@testing-library/react": "^11.2.6",
     "@testing-library/react-hooks": "^7.0.2",
     "@testing-library/user-event": "^13.5.0",
+    "@types/country-flag-icons": "^1.2.0",
     "@types/jest": "^27.0.0",
     "@types/node-fetch": "^2.5.10",
     "@types/react": "^17.0.3",
@@ -131,7 +137,7 @@
     "ts-loader": "^8.0.18",
     "ts-node": "^10.0.0",
     "typescript": "^4.8.4 <4.9.0",
-    "webpack": "^5.27.2",
+    "webpack": "^5.76.0",
     "webpack-cli": "^4.5.0",
     "webpack-dev-server": "^4.3.1",
     "webpack-merge": "^5.7.3"
