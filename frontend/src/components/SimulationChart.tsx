@@ -243,9 +243,7 @@ export default function SimulationChart(): JSX.Element {
                     theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0]
                   }]${groupFilter.name}:[/] {${groupFilter.name}}`,
                 }),
-                locationX: 0,
                 stroke: am5.color(theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0]),
-                fill: am5.color(theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0]), // TODO: see case Data
               })
             );
             series.strokes.template.setAll({
