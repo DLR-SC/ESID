@@ -53,7 +53,7 @@
     caseData: 'Falldaten',
     date: 'Datum',
     percentileUp: '0,75-Quantil',
-    percentileDown: '0,25-Quantil'
+    percentileDown: '0,25-Quantil',
   },
   heatlegend: {
     edit: 'Farblegende bearbeiten',
