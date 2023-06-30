@@ -1,7 +1,17 @@
 import React, {useEffect, useRef} from 'react';
 
-import * as am5 from '@amcharts/amcharts5';
-import * as am5xy from '@amcharts/amcharts5/xy';
+import {Root} from "@amcharts/amcharts5/.internal/core/Root";
+import {Tooltip} from "@amcharts/amcharts5/.internal/core/render/Tooltip";
+import {RoundedRectangle} from "@amcharts/amcharts5/.internal/core/render/RoundedRectangle"
+import {Color, color} from "@amcharts/amcharts5/.internal/core/util/Color";
+import {DataProcessor} from "@amcharts/amcharts5/.internal/core/util/DataProcessor"
+import {XYChart} from '@amcharts/amcharts5/.internal/charts/xy/XYChart';
+import {DateAxis} from '@amcharts/amcharts5/.internal/charts/xy/axes/DateAxis';
+import {AxisRendererX} from '@amcharts/amcharts5/.internal/charts/xy/axes/AxisRendererX';
+import {ValueAxis} from '@amcharts/amcharts5/.internal/charts/xy/axes/ValueAxis';
+import {AxisRendererY} from '@amcharts/amcharts5/.internal/charts/xy/axes/AxisRendererY';
+import {XYCursor} from '@amcharts/amcharts5/.internal/charts/xy/XYCursor';
+import {LineSeries} from '@amcharts/amcharts5/.internal/charts/xy/series/LineSeries';
 import am5locales_en_US from '@amcharts/amcharts5/locales/en_US';
 import am5locales_de_DE from '@amcharts/amcharts5/locales/de_DE';
 import * as am5export from '@amcharts/amcharts5/plugins/exporting';
@@ -89,15 +99,15 @@ export default function SimulationChart(): JSX.Element {
   const {formatNumber} = NumberFormatter(i18n.language, 3, 8);
   const numberFormat = '#,###.';
 
-  const rootRef = useRef<am5.Root | null>(null);
-  const chartRef = useRef<am5xy.XYChart | null>(null);
+  const rootRef = useRef<Root | null>(null);
+  const chartRef = useRef<XYChart | null>(null);
 
   // Effect to create chart instance
   useEffect(
     () => {
-      const root = am5.Root.new('chartdiv');
+      const root = Root.new('chartdiv');
       const chart = root.container.children.push(
-        am5xy.XYChart.new(root, {
+        XYChart.new(root, {
           panX: false,
           panY: false,
           wheelX: 'panX',
@@ -114,8 +124,8 @@ export default function SimulationChart(): JSX.Element {
 
       // Create x-axis
       const xAxis = chart.xAxes.push(
-        am5xy.DateAxis.new(root, {
-          renderer: am5xy.AxisRendererX.new(root, {}),
+        DateAxis.new(root, {
+          renderer: AxisRendererX.new(root, {}),
           baseInterval: {timeUnit: 'day', count: 1},
           gridIntervals: [
             {timeUnit: 'day', count: 1},
@@ -124,10 +134,10 @@ export default function SimulationChart(): JSX.Element {
             {timeUnit: 'month', count: 3},
             {timeUnit: 'year', count: 1},
           ],
-          tooltip: am5.Tooltip.new(root, {}),
+          tooltip: Tooltip.new(root, {}),
         })
       );
-      // Change axis renderer to have ticks/lables on day center
+      // Change axis renderer to have ticks/labels on day center
       const Xrenderer = xAxis.get('renderer');
       Xrenderer.ticks.template.setAll({
         location: 0.5,
@@ -135,8 +145,8 @@ export default function SimulationChart(): JSX.Element {
 
       // Create y-axis
       const yAxis = chart.yAxes.push(
-        am5xy.ValueAxis.new(root, {
-          renderer: am5xy.AxisRendererY.new(root, {}),
+        ValueAxis.new(root, {
+          renderer: AxisRendererY.new(root, {}),
           min: 0,
         })
       );
@@ -144,7 +154,7 @@ export default function SimulationChart(): JSX.Element {
       // Add cursor
       chart.set(
         'cursor',
-        am5xy.XYCursor.new(root, {
+        XYCursor.new(root, {
           behavior: 'zoomX',
           xAxis: xAxis,
         })
@@ -152,7 +162,7 @@ export default function SimulationChart(): JSX.Element {
 
       // Add series for case data
       const caseDataSeries = chart.series.push(
-        am5xy.LineSeries.new(root, {
+        LineSeries.new(root, {
           xAxis: xAxis,
           yAxis: yAxis,
           id: 'caseData',
@@ -160,7 +170,7 @@ export default function SimulationChart(): JSX.Element {
           valueXField: 'date',
           valueYField: 'caseData',
           connect: false, // TODO: check if this is needed
-          stroke: am5.color('#000'),
+          stroke: color('#000'),
         })
       );
       caseDataSeries.strokes.template.setAll({
@@ -169,7 +179,7 @@ export default function SimulationChart(): JSX.Element {
 
       // Add series for percentile area
       const percentileSeries = chart.series.push(
-        am5xy.LineSeries.new(root, {
+        LineSeries.new(root, {
           xAxis: xAxis,
           yAxis: yAxis,
           id: 'percentiles',
@@ -178,7 +188,7 @@ export default function SimulationChart(): JSX.Element {
           openValueYField: 'percentileDown',
           connect: false, // TODO: see case data series
           // add fill color according to selected scenario (if selected scenario is set)
-          fill: selectedScenario ? am5.color(theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0]) : undefined
+          fill: selectedScenario ? color(theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0]) : undefined
         })
       );
       percentileSeries.strokes.template.setAll({
@@ -192,7 +202,7 @@ export default function SimulationChart(): JSX.Element {
       // Add series for scenarios
       Object.entries(scenarioList.scenarios).forEach(([scenarioId, scenario], i) => {
         const series = chart.series.push(
-          am5xy.LineSeries.new(root, {
+          LineSeries.new(root, {
             xAxis: xAxis,
             yAxis: yAxis,
             id: scenarioId,
@@ -202,12 +212,12 @@ export default function SimulationChart(): JSX.Element {
             connect: false, // TODO: see case data series
             // for color: loop around the theme's scenario color list if scenario IDs exceed color list length, then pick first color of sub-palette which is the main color
             // TODO: is this tooltip necessary?
-            tooltip: am5.Tooltip.new(root, {
+            tooltip: Tooltip.new(root, {
               labelText: `[bold ${theme.custom.scenarios[i % theme.custom.scenarios.length][0]}]${tBackend(
                 `scenario-names.${scenario.label}`
               )}:[/] {${scenarioId}}`,
             }),
-            stroke: am5.color(theme.custom.scenarios[i % theme.custom.scenarios.length][0]),
+            stroke: color(theme.custom.scenarios[i % theme.custom.scenarios.length][0]),
           })
         );
         series.strokes.template.setAll({
@@ -229,7 +239,7 @@ export default function SimulationChart(): JSX.Element {
           .forEach((groupFilter, i) => {
             // Add line series for each group filter
             const series = chart.series.push(
-              am5xy.LineSeries.new(root, {
+              LineSeries.new(root, {
                 xAxis: xAxis,
                 yAxis: yAxis,
                 id: `group-filter-${groupFilter.name}`,
@@ -238,12 +248,12 @@ export default function SimulationChart(): JSX.Element {
                 valueYField: groupFilter.name,
                 connect: false, // TODO: see case data
                 // take color of scenario (scenario ID is 1-based index, color list is 0-based index) loop if scenario ID exceeds length of color list; use first color of palette (main color)
-                tooltip: am5.Tooltip.new(root, {
+                tooltip: Tooltip.new(root, {
                   labelText: `[bold ${
                     theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0]
                   }]${groupFilter.name}:[/] {${groupFilter.name}}`,
                 }),
-                stroke: am5.color(theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0]),
+                stroke: color(theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0]),
               })
             );
             series.strokes.template.setAll({
@@ -331,7 +341,7 @@ export default function SimulationChart(): JSX.Element {
       if (!chartRef.current || !selectedDate) return;
 
       // get xAxis from chart
-      const xAxis = chartRef.current.xAxes.getIndex(0) as am5xy.DateAxis<am5xy.AxisRendererX>;
+      const xAxis = chartRef.current.xAxes.getIndex(0) as DateAxis<AxisRendererX>;
 
       // create data item for range
       const rangeDataItem = xAxis.makeDataItem({
@@ -348,7 +358,7 @@ export default function SimulationChart(): JSX.Element {
 
       // set stroke of range (line with label)
       range.get('grid')?.setAll({
-        stroke: am5.color(theme.palette.primary.main),
+        stroke: color(theme.palette.primary.main),
         strokeOpacity: 1,
         strokeWidth: 2,
         location: 0.5,
@@ -357,22 +367,22 @@ export default function SimulationChart(): JSX.Element {
 
       // set fill of range (rest of the day)
       range.get('axisFill')?.setAll({
-        fill: am5.color(theme.palette.primary.main),
+        fill: color(theme.palette.primary.main),
         fillOpacity: 0.3,
         visible: true,
       });
 
       // set label for range
       range.get('label')?.setAll({
-        fill: am5.color(theme.palette.primary.contrastText),
+        fill: color(theme.palette.primary.contrastText),
         text: new Date(selectedDate).toLocaleDateString(i18n.language, {
           year: 'numeric',
           month: 'short',
           day: '2-digit',
         }),
         location: 0.5,
-        background: am5.RoundedRectangle.new(rootRef.current as am5.Root, {
-          fill: am5.color(theme.palette.primary.main),
+        background: RoundedRectangle.new(rootRef.current as Root, {
+          fill: color(theme.palette.primary.main),
         }),
         // put Label to the topmost layer to make sure it is drawn on top of the axis tick labels
         layer: Number.MAX_VALUE,
@@ -451,7 +461,7 @@ export default function SimulationChart(): JSX.Element {
     chartRef.current.series.each((series, i) => {
       // set data processors for first series (not needed on others since all use the same data)
       if (i === 0) {
-        series.data.processor = am5.DataProcessor.new(rootRef.current as am5.Root, {
+        series.data.processor = DataProcessor.new(rootRef.current as Root, {
           dateFields: ['date'],
           dateFormat: 'yyyy-MM-dd',
         });
@@ -504,7 +514,7 @@ export default function SimulationChart(): JSX.Element {
                 return `
               <tr>
                 <th style='text-align:left; color:${(
-                  series.get('stroke') as am5.Color
+                  series.get('stroke') as Color
                 ).toCSSHex()}; padding-right:${theme.spacing(2)}'>
                   <strong>${series.get('name') as string}</strong>
                 </th>
@@ -527,13 +537,13 @@ export default function SimulationChart(): JSX.Element {
                 series.get('id') !== selectedScenario.toString()
                   ? ''
                   : /* Add table row for each active group filter */
-                    (chartRef.current as am5xy.XYChart).series.values
+                    (chartRef.current as XYChart).series.values
                       .filter((s) => s.get('id')?.startsWith('group-filter-') && !s.isHidden())
                       .map((groupFilterSeries) => {
                         return `
                   <tr>
                     <th style='text-align:left; color:${(
-                      groupFilterSeries.get('stroke') as am5.Color
+                      groupFilterSeries.get('stroke') as Color
                     ).toCSSHex()}; padding-right:${theme.spacing(2)}; padding-left:${theme.spacing(2)}'>
                       <strong>${groupFilterSeries.get('name') as string}</strong>
                     </th>
@@ -553,7 +563,7 @@ export default function SimulationChart(): JSX.Element {
       `;
     // attach tooltip to series
     chartRef.current.series.each((series) => {
-      const tooltip = am5.Tooltip.new(rootRef.current as am5.Root, {
+      const tooltip = Tooltip.new(rootRef.current as Root, {
         labelHTML: tooltipHTML,
         getFillFromSprite: false,
         autoTextColor: false,
@@ -562,12 +572,12 @@ export default function SimulationChart(): JSX.Element {
 
       // Set tooltip default text color to theme primary text color
       tooltip.label.setAll({
-        fill: am5.color(theme.palette.text.primary),
+        fill: color(theme.palette.text.primary),
       });
 
       // Set tooltip background to theme paper
       tooltip.get('background')?.setAll({
-        fill: am5.color(theme.palette.background.paper),
+        fill: color(theme.palette.background.paper),
       });
 
       series.set('tooltip', tooltip);
@@ -600,8 +610,8 @@ export default function SimulationChart(): JSX.Element {
       });
     }
     // update export menu
-    am5export.Exporting.new(rootRef.current as am5.Root, {
-      menu: am5export.ExportingMenu.new(rootRef.current as am5.Root, {}),
+    am5export.Exporting.new(rootRef.current as Root, {
+      menu: am5export.ExportingMenu.new(rootRef.current as Root, {}),
       filePrefix: 'Covid Simulation Data',
       dataSource: data,
       dateFields: ['date'],
