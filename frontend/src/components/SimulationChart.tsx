@@ -107,14 +107,12 @@ export default function SimulationChart(): JSX.Element {
       );
 
       // Set localization
-
       root.locale = i18n.language === 'de' ? am5locales_de_DE : am5locales_en_US;
 
       // Set number formatter
       root.numberFormatter.set('numberFormat', numberFormat);
 
-      // Create axes
-
+      // Create x-axis
       const xAxis = chart.xAxes.push(
         am5xy.DateAxis.new(root, {
           renderer: am5xy.AxisRendererX.new(root, {}),
@@ -135,6 +133,7 @@ export default function SimulationChart(): JSX.Element {
         location: 0.5,
       });
 
+      // Create y-axis
       const yAxis = chart.yAxes.push(
         am5xy.ValueAxis.new(root, {
           renderer: am5xy.AxisRendererY.new(root, {}),
@@ -143,7 +142,6 @@ export default function SimulationChart(): JSX.Element {
       );
 
       // Add cursor
-
       chart.set(
         'cursor',
         am5xy.XYCursor.new(root, {
@@ -153,7 +151,6 @@ export default function SimulationChart(): JSX.Element {
       );
 
       // Add series for case data
-
       const caseDataSeries = chart.series.push(
         am5xy.LineSeries.new(root, {
           xAxis: xAxis,
@@ -164,7 +161,6 @@ export default function SimulationChart(): JSX.Element {
           valueYField: 'caseData',
           connect: false, // TODO: check if this is needed
           stroke: am5.color('#000'),
-          fill: am5.color('#000'), // TODO: may be unnecessary (fills disabled by default)
         })
       );
       caseDataSeries.strokes.template.setAll({
@@ -172,7 +168,6 @@ export default function SimulationChart(): JSX.Element {
       });
 
       // Add series for percentile area
-
       const percentileSeries = chart.series.push(
         am5xy.LineSeries.new(root, {
           xAxis: xAxis,
@@ -213,7 +208,6 @@ export default function SimulationChart(): JSX.Element {
               )}:[/] {${scenarioId}}`,
             }),
             stroke: am5.color(theme.custom.scenarios[i % theme.custom.scenarios.length][0]),
-            fill: am5.color(theme.custom.scenarios[i % theme.custom.scenarios.length][0]), // TODO: see case data series
           })
         );
         series.strokes.template.setAll({
@@ -221,19 +215,19 @@ export default function SimulationChart(): JSX.Element {
         });
       });
 
-      // Set up menu to export this chart
-
       // Add series for groupFilter
       if (groupFilterList && selectedScenario) {
         const groupFilterStrokes = [
           [2, 4], // dotted
           [8, 4], // dashed
-          [8, 4, 2, 4], // dashdotted
-          [8, 4, 2, 4, 2, 4], // dashdotdotted
+          [8, 4, 2, 4], // dash-dotted
+          [8, 4, 2, 4, 2, 4], // dash-dot-dotted
         ];
+        // loop through visible group filters
         Object.values(groupFilterList)
           .filter((groupFilter) => groupFilter.isVisible)
           .forEach((groupFilter, i) => {
+            // Add line series for each group filter
             const series = chart.series.push(
               am5xy.LineSeries.new(root, {
                 xAxis: xAxis,
@@ -296,7 +290,7 @@ export default function SimulationChart(): JSX.Element {
       if (!allSeries) return;
 
       allSeries.each((series) => {
-        // everything but scenario series evaluate to NaN
+        // everything but scenario series evaluate to NaN (because scenario series have their scenario id as series id while others have names)
         const seriesID = Number(series.get('id'));
         // hide series if it is a scenario series (and in the scenario list) and not in the active scenarios list
         if (!Number.isNaN(seriesID) && scenarioList.scenarios[seriesID] && !activeScenarios?.includes(seriesID)) {
@@ -392,7 +386,6 @@ export default function SimulationChart(): JSX.Element {
       };
     },
     // Re-run effect when selected date changes (or scenarioList/groupFilterData) (theme and translation do not change after initialization)
-    // CLARIFY why scenarioList or groupFilterData
     [selectedDate, theme, t, i18n.language]
   );
 
@@ -451,7 +444,6 @@ export default function SimulationChart(): JSX.Element {
     }
 
     // Sort map by date
-    // TODO: refactor into one once am4 is out
     const dataMapSorted = new Map(Array.from(dataMap).sort(([a], [b]) => String(a).localeCompare(b)));
     const data = Array.from(dataMapSorted).map(([day, data]) => {
       return {date: day, ...data};
@@ -473,9 +465,9 @@ export default function SimulationChart(): JSX.Element {
     // set up tooltip
     const tooltipHTML = `
         ${'' /* Current Date and selected compartment name */}
-        <strong>{date.formatDate("${t('dateFormat')}")} (${tBackend(
-      `infection-states.${selectedCompartment}`
-    )})</strong>
+        <strong>{date.formatDate("${t('dateFormat')}")} (${
+          tBackend(`infection-states.${selectedCompartment}`)
+        })</strong>
         <table>
           ${
             /* Table row for each series */
@@ -494,12 +486,12 @@ export default function SimulationChart(): JSX.Element {
                   return '';
                 }
                 /* Skip with error if series does not have property:
-            /**
-             * - id
-             * - name
-             * - valueYField
-             * - stroke
-             */
+                /**
+                 * - id
+                 * - name
+                 * - valueYField
+                 * - stroke
+                 */
                 if (!series.get('id') || !series.get('name') || !series.get('valueYField') || !series.get('stroke')) {
                   console.log(
                     'ERROR: missing series property: ',
