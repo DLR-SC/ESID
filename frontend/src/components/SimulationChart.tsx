@@ -143,7 +143,7 @@ export default function SimulationChart(): JSX.Element {
       Xrenderer.ticks.template.setAll({
         location: 0.5,
       });
-      // Change date formats for ticks & tooltip (use fallback object to suppress undefined object warnings as this cannot be undefined) // TODO
+      // Change date formats for ticks & tooltip (use fallback object to suppress undefined object warnings as this cannot be undefined)
       xAxis.get('dateFormats', {'day': ''})['day'] = t('dayFormat');
       xAxis.get('tooltipDateFormats', {'day': ''})['day'] = t('dayFormat');
       // Fix first date of the month falling back to wrong format (also with fallback object)
