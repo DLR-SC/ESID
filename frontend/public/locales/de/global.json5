@@ -1,5 +1,6 @@
 {
   dateFormat: 'dd. MMM yyyy',
+  dayFormat: 'dd. MMM',
   topBar: {
     'icon-alt': 'ESID Anwendungslogo',
     language: 'Sprache',
