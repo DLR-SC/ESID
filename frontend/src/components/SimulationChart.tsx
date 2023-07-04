@@ -436,10 +436,11 @@ export default function SimulationChart(): JSX.Element {
       dataMap.set(entry.day, {...dataMap.get(entry.day), percentileUp: entry.compartments[selectedCompartment]});
     });
 
-    // Add groupFilter data
+    // Add groupFilter data of visible filters
     if (groupFilterList && groupFilterData) {
       Object.values(groupFilterList).forEach((groupFilter) => {
         if (groupFilter && groupFilter.isVisible) {
+          // Check if data for filter is available (else report error)
           if (groupFilterData[groupFilter.name]) {
             groupFilterData[groupFilter.name].results.forEach((entry: GroupData) => {
               dataMap.set(entry.day, {
@@ -447,6 +448,8 @@ export default function SimulationChart(): JSX.Element {
                 [groupFilter.name]: entry.compartments[selectedCompartment],
               });
             });
+          } else {
+            console.error(`ERROR: missing data for "${groupFilter.name}" filter`);
           }
         }
       });
