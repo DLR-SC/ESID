@@ -175,7 +175,8 @@ export default function SimulationChart(): JSX.Element {
           name: t('chart.caseData'),
           valueXField: 'date',
           valueYField: 'caseData',
-          connect: false, // TODO: check if this is needed
+          // Prevent data points from connecting across gaps in the data
+          connect: false,
           stroke: color('#000'),
         })
       );
@@ -192,7 +193,7 @@ export default function SimulationChart(): JSX.Element {
           valueXField: 'date',
           valueYField: 'percentileUp',
           openValueYField: 'percentileDown',
-          connect: false, // TODO: see case data series
+          connect: false,
           // add fill color according to selected scenario (if selected scenario is set)
           fill: selectedScenario ? color(theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0]) : undefined
         })
@@ -215,9 +216,9 @@ export default function SimulationChart(): JSX.Element {
             name: tBackend(`scenario-names.${scenario.label}`),
             valueXField: 'date',
             valueYField: scenarioId,
-            connect: false, // TODO: see case data series
-            // for color: loop around the theme's scenario color list if scenario IDs exceed color list length, then pick first color of sub-palette which is the main color
-            // TODO: is this tooltip necessary?
+            connect: false,
+            // Fallback Tooltip (if HTML breaks for some reason)
+            // For text color: loop around the theme's scenario color list if scenario IDs exceed color list length, then pick first color of sub-palette which is the main color
             tooltip: Tooltip.new(root, {
               labelText: `[bold ${theme.custom.scenarios[i % theme.custom.scenarios.length][0]}]${tBackend(
                 `scenario-names.${scenario.label}`
@@ -252,8 +253,9 @@ export default function SimulationChart(): JSX.Element {
                 name: groupFilter.name,
                 valueXField: 'date',
                 valueYField: groupFilter.name,
-                connect: false, // TODO: see case data
-                // take color of scenario (scenario ID is 1-based index, color list is 0-based index) loop if scenario ID exceeds length of color list; use first color of palette (main color)
+                connect: false,
+                // Fallback Tooltip (if HTML breaks for some reason)
+                // Use color of selected scenario (scenario ID is 1-based index, color list is 0-based index) loop if scenario ID exceeds length of color list; use first color of palette (main color)
                 tooltip: Tooltip.new(root, {
                   labelText: `[bold ${
                     theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0]
