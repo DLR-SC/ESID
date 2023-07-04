@@ -327,7 +327,7 @@ export default function SimulationChart(): JSX.Element {
       if (!chartRef.current) return;
 
       // Find percentile series and only show it if there is a selected scenario
-      chartRef.current?.series.values.filter(series => series.get('id') === 'precentiles').map((percentileSeries) => {
+      chartRef.current?.series.values.filter(series => series.get('id') === 'percentiles').map((percentileSeries) => {
         selectedScenario ? void percentileSeries.show() : void percentileSeries.hide();
       })
     },
