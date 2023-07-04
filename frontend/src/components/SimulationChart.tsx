@@ -14,7 +14,7 @@ import {XYCursor} from '@amcharts/amcharts5/.internal/charts/xy/XYCursor';
 import {LineSeries} from '@amcharts/amcharts5/.internal/charts/xy/series/LineSeries';
 import am5locales_en_US from '@amcharts/amcharts5/locales/en_US';
 import am5locales_de_DE from '@amcharts/amcharts5/locales/de_DE';
-import * as am5export from '@amcharts/amcharts5/plugins/exporting';
+import {Exporting, ExportingMenu} from '@amcharts/amcharts5/plugins/exporting';
 import {useAppDispatch, useAppSelector} from '../store/hooks';
 import {useTheme} from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -616,8 +616,8 @@ export default function SimulationChart(): JSX.Element {
       });
     }
     // update export menu
-    am5export.Exporting.new(rootRef.current as Root, {
-      menu: am5export.ExportingMenu.new(rootRef.current as Root, {}),
+    Exporting.new(rootRef.current as Root, {
+      menu: ExportingMenu.new(rootRef.current as Root, {}),
       filePrefix: 'Covid Simulation Data',
       dataSource: data,
       dateFields: ['date'],
