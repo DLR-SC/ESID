@@ -202,7 +202,7 @@ export default function SimulationChart(): JSX.Element {
         strokeWidth: 0,
       });
       percentileSeries.fills.template.setAll({
-        fillOpacity: 0.5,
+        fillOpacity: 0.3,
         visible: true,
       });
 
@@ -401,8 +401,8 @@ export default function SimulationChart(): JSX.Element {
         xAxis.axisRanges.removeValue(range);
       };
     },
-    // Re-run effect when selected date changes (or scenarioList/groupFilterData) (theme and translation do not change after initialization)
-    [selectedDate, theme, t, i18n.language]
+    // Re-run effect when selection changes (date/scenario/compartment/district) (theme and translation do not change after initialization)
+    [selectedDate, selectedScenario, selectedCompartment, selectedDistrict, theme, t, i18n.language]
   );
 
   // Effect to update Simulation and case data
