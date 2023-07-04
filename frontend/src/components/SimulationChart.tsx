@@ -323,20 +323,13 @@ export default function SimulationChart(): JSX.Element {
   // Effect to hide deviations if no scenario is selected
   useEffect(
     () => {
-      const allSeries = chartRef.current?.series;
-      // skip effect if chart is not initialized (contains no series yet)
-      if (!allSeries) return;
+      // Skip effect if chart is not initialized (contains no series yet)
+      if (!chartRef.current) return;
 
-      allSeries.each((series) => {
-        // find percentile series and only show if there is a selected scenario
-        if (series.get('id') === 'percentiles') {
-          if (selectedScenario) {
-            void series.show();
-          } else {
-            void series.hide();
-          }
-        }
-      });
+      // Find percentile series and only show it if there is a selected scenario
+      chartRef.current?.series.values.filter(series => series.get('id') === 'precentiles').map((percentileSeries) => {
+        selectedScenario ? void percentileSeries.show() : void percentileSeries.hide();
+      })
     },
     // Re-run effect when the selected scenario changes
     [selectedScenario]
