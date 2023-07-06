@@ -17,6 +17,7 @@
 - All texts are now available in Englisch and German.
 - Some improvements to page load speed have been made.
 - If a new feature gets rolled out, the browser cache will no longer prevent the users from seeing it.
+- The line chart module is upgraded from AmCharts 4 to 5 for better performance.
 
 ### Bug fixes
 
