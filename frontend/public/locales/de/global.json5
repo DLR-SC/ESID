@@ -33,7 +33,7 @@
     more: 'Mehr Eigenschaften',
     activate: 'Scenario aktivieren',
     deactivate: 'Scenario deaktivieren',
-    'manage-groups': 'Gruppen',
+    'manage-groups': 'Filter',
     'simulation-start-day': 'Simulationsstart',
   },
   'group-filters': {

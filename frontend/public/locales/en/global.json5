@@ -42,7 +42,7 @@
     more: 'More properties',
     activate: 'Activate scenario',
     deactivate: 'Deactivate scenario',
-    'manage-groups': 'Groups',
+    'manage-groups': 'Filters',
     'simulation-start-day': 'Simulation start',
   },
   'group-filters': {
