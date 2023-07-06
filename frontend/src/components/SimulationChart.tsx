@@ -142,8 +142,8 @@ export default function SimulationChart(): JSX.Element {
         })
       );
       // Change axis renderer to have ticks/labels on day center
-      const Xrenderer = xAxis.get('renderer');
-      Xrenderer.ticks.template.setAll({
+      const xRenderer = xAxis.get('renderer');
+      xRenderer.ticks.template.setAll({
         location: 0.5,
       });
       // Change date formats for ticks & tooltip (use fallback object to suppress undefined object warnings as this cannot be undefined)
