@@ -285,7 +285,7 @@ export default function SimulationChart(): JSX.Element {
       }
 
       // Add event on double click to select date
-      chart.events.on('dblclick', (ev) => {
+      chart.events.on('click', (ev) => {
         // Get date from axis position from cursor position
         const date = xAxis.positionToDate(
           xAxis.toAxisPosition(ev.target.get('cursor')?.getPrivate('positionX') as number)
