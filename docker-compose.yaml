@@ -47,7 +47,7 @@ services:
       - db
 
   frontend:
-    image: esid/frontend:latest
+    image: esid/frontend:${ESID_BRANCH}
     restart: always
     build:
       context: frontend/

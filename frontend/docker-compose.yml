@@ -1,10 +1,10 @@
-version: '3.9'
+version: '3.7'
 services:
   frontend:
     build:
       context: .
       dockerfile: Dockerfile
-    image: esid/frontend:latest
+    image: esid/frontend:${ESID_BRANCH}
     environment:
       HOST: ${HOST}
       API_URL: ${API_URL}

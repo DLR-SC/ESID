@@ -9,7 +9,7 @@ ENV PYTHONUNBUFFERED 1
 RUN set -x && \
 	apt-get update && \
 	apt -f install	&& \
-	apt-get -qy install netcat && \
+	apt-get -qy install netcat-traditional && \
 	rm -rf /var/lib/apt/lists/* && \
 	wget -O /wait-for https://raw.githubusercontent.com/eficode/wait-for/master/wait-for && \
 	chmod +x /wait-for
@@ -17,6 +17,7 @@ RUN set -x && \
 CMD ["sh", "/entrypoint-startup.sh"]
 COPY ./docker/entrypoint-startup.sh /
 
+COPY ./.env ./.env
 COPY ./requirements ./requirements
 
 RUN pip install numpy scipy pandas tqdm
