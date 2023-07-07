@@ -56,7 +56,7 @@ services:
       PROXY_PORT: 8000
       HOST: ${HOST}
     ports:
-      - 8080:80
+      - ${ESID_PORTS}
     depends_on:
       - backend
 
