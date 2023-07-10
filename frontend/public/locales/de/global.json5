@@ -35,17 +35,17 @@
     deactivate: 'Scenario deaktivieren',
     'manage-groups': 'Gruppen',
     'simulation-start-day': 'Simulationsstart',
-    'add_button' : 'Fächer',
+    add_button: 'Fächer',
   },
   'group-filters': {
     title: 'Gruppen Verwalten',
     'title-manage-compartment': 'Fächer verwalten',
     'nothing-selected': 'Wählen Sie eine Gruppe aus um diese zu bearbeiten oder erstellen Sie eine neue Gruppe.',
     'add-group': 'Neue Gruppe Erstellen',
-    'add-group-compartment':'Fächer'
-    'name': 'Name',
-    'close': 'Abbrechen',
-    'apply': 'Anwenden',
+    'add-group-compartment': 'Fächer',
+    name: 'Name',
+    close: 'Abbrechen',
+    apply: 'Anwenden',
     'confirm-deletion-title': 'Gruppe Löschen',
     'confirm-deletion-text': 'Sind Sie sicher, dass Sie die Gruppe "{{groupName}}" wirklich löschen wollen?',
     'confirm-discard-title': 'Änderungen Verwerfen',
@@ -53,7 +53,7 @@
     discard: 'Verwerfen',
   },
   chart: {
-    'caseData': 'Falldaten',
+    caseData: 'Falldaten',
   },
   heatlegend: {
     edit: 'Farblegende bearbeiten',
@@ -62,7 +62,7 @@
   },
 
   haetmapchart: {
-    textshow: 'Zeig mehr'
+    textshow: 'Zeig mehr',
   },
   today: 'Heute',
   more: 'Mehr',

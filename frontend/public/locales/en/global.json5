@@ -11,6 +11,7 @@
       accessibility: 'Accessibility',
       attribution: 'Attribution',
       changelog: 'Changelog',
+      'changelog-path': 'locales/en/changelog-en.md',
     },
   },
   'icon-bar': {
@@ -66,8 +67,8 @@
     lock: 'Lock maximum value',
     select: 'Select heatmap preset',
   },
-  heatmapchart:{
-  textshow:'show more'
+  heatmapchart: {
+    textshow: 'show more',
   },
   today: 'Today',
   more: 'More',

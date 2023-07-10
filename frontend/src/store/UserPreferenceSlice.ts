@@ -3,9 +3,9 @@ import {HeatmapLegend} from '../types/heatmapLegend';
 
 export interface UserPreference {
   selectedHeatmap: HeatmapLegend;
-    //all selectable HeatmapLegends
-    heatmaps: HeatmapLegend[];
-      //the default HeatmapLegends for each Scenario
+  //all selectable HeatmapLegends
+  heatmaps: HeatmapLegend[];
+  //the default HeatmapLegends for each Scenario
   //the defaultHeatmap of the currently selected Scenario is always at index 0 in the "heatmaps" array
   defaultHeatmaps: HeatmapLegend[];
 }
