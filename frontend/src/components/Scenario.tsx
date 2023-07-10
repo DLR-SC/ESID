@@ -374,6 +374,7 @@ export default function Scenario(): JSX.Element {
           </Button>
 
           <Button
+            disabled // disable filters for pilot study as there is no filterable data yet
             variant='outlined'
             color='primary'
             sx={{

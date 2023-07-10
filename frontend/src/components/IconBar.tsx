@@ -25,10 +25,11 @@ export default function IconBar(): JSX.Element {
   const maxDate = useAppSelector((state) => state.dataSelection.maxDate);
 
   const toggleFullscreen = () => {
-    if (fsApi?.isFullscreen) {
-      void fsApi?.exit();
+    if (fsApi?.isFullscreenEnabled) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+      void fsApi?.disableFullscreen();
     } else {
-      void fsApi?.request();
+      void fsApi?.disableFullscreen();
     }
   };
 
