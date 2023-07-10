@@ -35,6 +35,7 @@ export default function HeatLegendEdit(): JSX.Element {
   const dispatch = useAppDispatch();
   const activeScenario = useAppSelector((state) => state.dataSelection.scenario);
   const legend = useAppSelector((state) => state.userPreference.selectedHeatmap);
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const presets = useAppSelector((state) => state.userPreference.heatmaps);
   const theme = useTheme();
   const { t } = useTranslation();

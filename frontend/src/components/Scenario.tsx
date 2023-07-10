@@ -27,7 +27,7 @@ import {setCompartments, setScenarios} from 'store/ScenarioSlice';
 import {dateToISOString, Dictionary} from 'util/util';
 import {useGetCaseDataSingleSimulationEntryQuery} from '../store/services/caseDataApi';
 import {NumberFormatter} from '../util/hooks';
-import {ManageGroupDialog} from './ManageGroupDialog';
+import ManageGroupDialog from './ManageGroupDialog';
 import ConfirmDialog from './shared/ConfirmDialog';
 
 /**
@@ -40,6 +40,7 @@ export default function Scenario(): JSX.Element {
   const [open, setOpen] = React.useState(false);
 
   const {t, i18n} = useTranslation();
+  const {t: tBackend} = useTranslation('backend');
   const theme = useTheme();
 
   const dispatch = useAppDispatch();
@@ -226,6 +227,7 @@ export default function Scenario(): JSX.Element {
                   key={compartment}
                   sx={{
                     display: compartmentsExpanded || i < 4 ? 'flex' : 'none',
+                    maxHeight: '36px', // Ensure, that emojis don't screw with the line height!
                     padding: theme.spacing(1),
                     paddingLeft: theme.spacing(3),
                     paddingRight: theme.spacing(3),
@@ -251,7 +253,7 @@ export default function Scenario(): JSX.Element {
                   }}
                 >
                   <ListItemText
-                    primary={compartment}
+                    primary={tBackend(`infection-states.${compartment}`)}
                     // disable child typography overriding this
                     disableTypography={true}
                     sx={{

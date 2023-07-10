@@ -17,6 +17,8 @@ import HeatLegendEdit from './HeatLegendEdit';
 import {HeatmapLegend} from '../../types/heatmapLegend';
 import LockOpen from '@mui/icons-material/LockOpen';
 import LoadingContainer from '../shared/LoadingContainer';
+import mapData from 'assets/lk_germany_reduced.geojson';
+
 const {useRef} = React;
 
 interface IRegionPolygon {
@@ -42,6 +44,7 @@ export default function DistrictMap(): JSX.Element {
   const selectedDate = useAppSelector((state) => state.dataSelection.date);
   const scenarioList = useAppSelector((state) => state.scenarioList.scenarios);
   const legend = useAppSelector((state) => state.userPreference.selectedHeatmap);
+  const [chart, setChart] = useState<am5map.MapChart | null>(null);
 
   const {data, isFetching} = useGetSimulationDataByDateQuery(
     {
@@ -53,10 +56,9 @@ export default function DistrictMap(): JSX.Element {
     {skip: !selectedScenario || !selectedCompartment || !selectedDate}
   );
 
-  const chartRef = useRef<am5map.MapChart | null>(null);
-  const rootRef = useRef<am5.Root | null>(null);
   const legendRef = useRef<am5.HeatLegend | null>(null);
   const {t, i18n} = useTranslation();
+  const {t: tBackend} = useTranslation('backend');
   const {formatNumber} = NumberFormatter(i18n.language, 3, 8);
   const theme = useTheme();
   const dispatch = useAppDispatch();
@@ -97,7 +99,8 @@ export default function DistrictMap(): JSX.Element {
 
   // fetch geojson
   useEffect(() => {
-    fetch('assets/lk_germany_reduced.geojson', {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    fetch(mapData, {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -173,20 +176,16 @@ export default function DistrictMap(): JSX.Element {
         void legendRef.current.hideTooltip();
       }
     });
-    rootRef.current = root;
-    chartRef.current = chart;
+    setChart(chart);
     return () => {
-      chartRef.current && chartRef.current.dispose();
-      rootRef.current && rootRef.current.dispose();
+      chart && chart.dispose();
+      root && root.dispose();
     };
   }, [geodata, theme, t, formatNumber, dispatch]);
 
-  // needed as trigger for the following effect
-  const polygonSeriesLength = (chartRef.current?.series.getIndex(0) as am5map.MapPolygonSeries)?.mapPolygons.length;
-
   useEffect(() => {
     // unselect previous
-    if (chartRef.current && lastSelectedPolygon.current) {
+    if (chart && lastSelectedPolygon.current) {
       // reset style
       lastSelectedPolygon.current.states.create('default', {
         stroke: am5.color(theme.palette.background.default),
@@ -196,8 +195,8 @@ export default function DistrictMap(): JSX.Element {
       lastSelectedPolygon.current.states.apply('default');
     }
     // select new
-    if (selectedDistrict.ags !== '00000' && chartRef.current && chartRef.current.series.length > 0) {
-      const series = chartRef.current.series.getIndex(0) as am5map.MapPolygonSeries;
+    if (selectedDistrict.ags !== '00000' && chart && chart.series.length > 0) {
+      const series = chart.series.getIndex(0) as am5map.MapPolygonSeries;
       series.mapPolygons.each((polygon) => {
         const data = polygon.dataItem?.dataContext as IRegionPolygon;
         if (data.RS === selectedDistrict.ags) {
@@ -214,12 +213,12 @@ export default function DistrictMap(): JSX.Element {
         }
       });
     }
-  }, [selectedDistrict, theme, polygonSeriesLength]);
+  }, [chart, selectedDistrict, theme]);
 
   // set Data
   useEffect(() => {
-    if (chartRef.current && chartRef.current.series.length > 0) {
-      const polygonSeries = chartRef.current.series.getIndex(0) as am5map.MapPolygonSeries;
+    if (chart && chart.series.length > 0) {
+      const polygonSeries = chart.series.getIndex(0) as am5map.MapPolygonSeries;
       if (selectedScenario && selectedCompartment && !isFetching) {
         // Map compartment value to RS
         const dataMapped = new Map<string, number>();
@@ -248,7 +247,9 @@ export default function DistrictMap(): JSX.Element {
             polygon.setAll({
               tooltipText:
                 selectedScenario && selectedCompartment
-                  ? `${t(`BEZ.${regionData.BEZ}`)} {GEN}\n${selectedCompartment}: ${formatNumber(regionData.value)}`
+                  ? `${t(`BEZ.${regionData.BEZ}`)} {GEN}\n${tBackend(
+                      `infection-states.${selectedCompartment}`
+                    )}: ${formatNumber(regionData.value)}`
                   : `${t(`BEZ.${regionData.BEZ}`)} {GEN}`,
               fill: fillColor,
             });
@@ -281,6 +282,8 @@ export default function DistrictMap(): JSX.Element {
     isFetching,
     legend,
     longLoad,
+    tBackend,
+    chart,
   ]);
 
   return (

@@ -14,6 +14,7 @@ describe('TopBar', () => {
       </I18nextProvider>
     );
     screen.getByAltText('topBar.icon-alt');
+    screen.getByLabelText('topBar.language');
     screen.getByLabelText('topBar.menu.label');
   });
 });

@@ -34,7 +34,7 @@ import ConfirmDialog from './shared/ConfirmDialog';
  * it and allow the dialog to close. Additionally, an unsavedChangesCallback gives info, if the dialog currently contains
  * changes that weren't saved.
  */
-export function ManageGroupDialog(props: {
+export default function ManageGroupDialog(props: {
   onCloseRequest: () => void;
   unsavedChangesCallback: (unsavedChanges: boolean) => void;
 }): JSX.Element {
@@ -323,6 +323,7 @@ interface GroupFilterEditorProps {
  */
 function GroupFilterEditor(props: GroupFilterEditorProps): JSX.Element {
   const {t} = useTranslation();
+  const {t: tBackend} = useTranslation('backend');
   const theme = useTheme();
   const dispatch = useAppDispatch();
 
@@ -408,15 +409,16 @@ function GroupFilterEditor(props: GroupFilterEditorProps): JSX.Element {
               color={groups[group.key].length > 0 ? theme.palette.text.primary : theme.palette.error.main}
               variant='h2'
             >
-              {group.description}
+              {tBackend(`group-filters.categories.${group.key}`)}
             </Typography>
             <FormGroup>
               {groupSubCategories?.results
                 ?.filter((subCategory) => subCategory.category === group.key)
+                .filter((subGroup) => subGroup.key !== 'total') // TODO: We filter out the total group for now.
                 .map((subGroup) => (
                   <FormControlLabel
                     key={subGroup.key}
-                    label={subGroup.description}
+                    label={tBackend(`group-filters.groups.${subGroup.key}`)}
                     control={
                       <Checkbox
                         checked={groups[group.key].includes(subGroup.key)}
