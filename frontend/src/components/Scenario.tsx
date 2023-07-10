@@ -27,9 +27,9 @@ import {setCompartments, setScenarios} from 'store/ScenarioSlice';
 import {dateToISOString, Dictionary} from 'util/util';
 import {useGetCaseDataSingleSimulationEntryQuery} from '../store/services/caseDataApi';
 import {NumberFormatter} from '../util/hooks';
-import {ManageGroupDialog} from './ManageGroupDialog';
-import {ManageCompartments} from './ManageCompartments';
+import ManageGroupDialog from './ManageGroupDialog';
 import ConfirmDialog from './shared/ConfirmDialog';
+import { ManageCompartments } from './ManageCompartments';
 
 /**
  * React Component to render the Scenario Cards Section
@@ -42,6 +42,7 @@ export default function Scenario(): JSX.Element {
   const [opendel, setOpendelg] = React.useState(false);
 
   const {t, i18n} = useTranslation();
+  const {t: tBackend} = useTranslation('backend');
   const theme = useTheme();
 
   const dispatch = useAppDispatch();
@@ -233,6 +234,7 @@ export default function Scenario(): JSX.Element {
                   key={compartment}
                   sx={{
                     display: compartmentsExpanded || i < 4 ? 'flex' : 'none',
+                    maxHeight: '36px', // Ensure, that emojis don't screw with the line height!
                     padding: theme.spacing(1),
                     paddingLeft: theme.spacing(3),
                     paddingRight: theme.spacing(3),
@@ -258,7 +260,7 @@ export default function Scenario(): JSX.Element {
                   }}
                 >
                   <ListItemText
-                    primary={compartment}
+                    primary={tBackend(`infection-states.${compartment}`)}
                     // disable child typography overriding this
                     disableTypography={true}
                     sx={{
@@ -420,6 +422,7 @@ export default function Scenario(): JSX.Element {
           </Button>
 
           <Button
+            disabled // disable filters for pilot study as there is no filterable data yet
             variant='outlined'
             color='primary'
             sx={{

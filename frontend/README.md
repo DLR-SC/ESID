@@ -157,7 +157,7 @@ would be difficult to handle with React's `props` alone.
   <details>
   <summary>Design Guidelines for Colors and Typography <i>(-- Click to expand --)</i></summary>
 
-  ![](../docs/images/ThemeGuidelines.svg 'ESID Design Guidelines')
+  ![](docs/images/ThemeGuidelines.svg 'ESID Design Guidelines')
 
   **The alternative text color for lighter and darker variants where the contrast is not high enough is always either `#F2F2F2` (light text), or `#0C0B0D` (dark text).**
 

@@ -49,7 +49,7 @@ describe('AttributionDialog', () => {
     // Make sure that fetch was called with the correct value.
     // eslint-disable-next-line @typescript-eslint/require-await
     await act(async () => {
-      expect(global.fetch).toHaveBeenCalledWith('assets/third-party-attributions.json');
+      expect(global.fetch).toHaveBeenCalledWith('mock');
     });
 
     // Forces the lazy loaded components to load. This is needed, since there is no viewport, that would trigger a load.

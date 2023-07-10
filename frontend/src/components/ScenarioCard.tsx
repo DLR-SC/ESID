@@ -32,6 +32,7 @@ import {GroupFilterCard} from './GroupFilterCard';
 export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
   const theme = useTheme();
   const {t, i18n} = useTranslation();
+  const {t: tBackend} = useTranslation('backend');
 
   const {formatNumber} = NumberFormatter(i18n.language, 1, 0);
 
@@ -207,7 +208,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
                   fontSize: '13pt',
                 }}
               >
-                {props.scenario.label}
+                {tBackend(`scenario-names.${props.scenario.label}`)}
               </Typography>
             </Box>
           </Box>
@@ -236,7 +237,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
                   fontSize: '13pt',
                 }}
               >
-                {props.scenario.label}
+                {tBackend(`scenario-names.${props.scenario.label}`)}
               </Typography>
             </Box>
             <ScrollSyncPane group='compartments'>

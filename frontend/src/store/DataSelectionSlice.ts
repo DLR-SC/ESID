@@ -1,7 +1,6 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import i18n from '../util/i18n';
-import { dateToISOString, Dictionary } from '../util/util';
-import { GroupFilter } from 'types/group';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {dateToISOString, Dictionary} from '../util/util';
+import {GroupFilter} from 'types/group';
 import { CompartmentFilter } from 'types/compartment';
 
 /**
@@ -32,7 +31,7 @@ export interface DataSelection {
 }
 
 const initialState: DataSelection = {
-  district: { ags: '00000', name: i18n.t('germany'), type: '' },
+  district: {ags: '00000', name: '', type: ''},
   date: null,
   scenario: null,
   compartment: null,

@@ -2,6 +2,7 @@
   dateFormat: 'MMM dd. yyyy',
   topBar: {
     'icon-alt': 'ESID application logo',
+    language: 'Language',
     menu: {
       label: 'Application menu',
       login: 'Login',
@@ -10,7 +11,6 @@
       accessibility: 'Accessibility',
       attribution: 'Attribution',
       changelog: 'Changelog',
-      'changelog-path': 'locales/en/changelog-en.md',
     },
   },
   'icon-bar': {
@@ -42,7 +42,7 @@
     more: 'More properties',
     activate: 'Activate scenario',
     deactivate: 'Deactivate scenario',
-    'manage-groups': 'Groups',
+    'manage-groups': 'Filters',
     'simulation-start-day': 'Simulation start',
     'add_button': 'COMPARTMENTS',
   },
