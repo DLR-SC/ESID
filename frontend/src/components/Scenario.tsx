@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { useTheme } from '@mui/material/styles';
-import { useTranslation } from 'react-i18next';
+import React, {useEffect, useState} from 'react';
+import {useAppDispatch, useAppSelector} from '../store/hooks';
+import {useTheme} from '@mui/material/styles';
+import {useTranslation} from 'react-i18next';
 import {
   selectCompartment,
   selectScenario,
@@ -17,18 +17,18 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import Dialog from '@mui/material/Dialog';
-import { ScrollSync, ScrollSyncPane } from 'react-scroll-sync';
+import {ScrollSync, ScrollSyncPane} from 'react-scroll-sync';
 import {
   useGetSimulationModelQuery,
   useGetSimulationModelsQuery,
   useGetSimulationsQuery,
 } from '../store/services/scenarioApi';
-import { setCompartments, setScenarios } from 'store/ScenarioSlice';
-import { dateToISOString, Dictionary } from 'util/util';
-import { useGetCaseDataSingleSimulationEntryQuery } from '../store/services/caseDataApi';
-import { NumberFormatter } from '../util/hooks';
-import { ManageGroupDialog } from './ManageGroupDialog';
-import { ManageCompartments } from './ManageCompartments';
+import {setCompartments, setScenarios} from 'store/ScenarioSlice';
+import {dateToISOString, Dictionary} from 'util/util';
+import {useGetCaseDataSingleSimulationEntryQuery} from '../store/services/caseDataApi';
+import {NumberFormatter} from '../util/hooks';
+import {ManageGroupDialog} from './ManageGroupDialog';
+import {ManageCompartments} from './ManageCompartments';
 import ConfirmDialog from './shared/ConfirmDialog';
 
 /**
@@ -41,14 +41,14 @@ export default function Scenario(): JSX.Element {
   const [open, setOpen] = React.useState(false);
   const [opendel, setOpendelg] = React.useState(false);
 
-  const { t, i18n } = useTranslation();
+  const {t, i18n} = useTranslation();
   const theme = useTheme();
 
   const dispatch = useAppDispatch();
   const [simulationModelKey, setSimulationModelKey] = useState<string>('unset');
   const [compartmentValues, setCompartmentValues] = useState<Dictionary<number> | null>(null);
 
-  const { formatNumber } = NumberFormatter(i18n.language, 1, 0);
+  const {formatNumber} = NumberFormatter(i18n.language, 1, 0);
 
   const getCompartmentValue = (compartment: string): string => {
     if (compartmentValues && compartment in compartmentValues) {
@@ -69,23 +69,23 @@ export default function Scenario(): JSX.Element {
   const [groupManageCompChanges, setGroupManageCompartChanges] = useState(false);
   const [closeDialogOpen, setCloseDialogOpen] = useState(false);
 
-  const { data: scenarioListData } = useGetSimulationsQuery();
-  const { data: simulationModelsData } = useGetSimulationModelsQuery();
-  const { data: simulationModelData } = useGetSimulationModelQuery(simulationModelKey, {
+  const {data: scenarioListData} = useGetSimulationsQuery();
+  const {data: simulationModelsData} = useGetSimulationModelsQuery();
+  const {data: simulationModelData} = useGetSimulationModelQuery(simulationModelKey, {
     skip: simulationModelKey === 'unset',
   });
-  const { data: caseData } = useGetCaseDataSingleSimulationEntryQuery(
+  const {data: caseData} = useGetCaseDataSingleSimulationEntryQuery(
     {
       node: node,
       day: startDay ?? '',
       groups: ['total'],
     },
-    { skip: !startDay }
+    {skip: !startDay}
   );
 
   useEffect(() => {
     if (simulationModelsData && simulationModelsData.results.length > 0) {
-      const { key } = simulationModelsData.results[0];
+      const {key} = simulationModelsData.results[0];
       setSimulationModelKey(key);
     }
   }, [simulationModelsData]);
@@ -98,7 +98,7 @@ export default function Scenario(): JSX.Element {
 
   useEffect(() => {
     if (simulationModelData) {
-      const { compartments } = simulationModelData.results;
+      const {compartments} = simulationModelData.results;
       dispatch(setCompartments(compartments));
     }
   }, [simulationModelData, dispatch]);
@@ -111,7 +111,7 @@ export default function Scenario(): JSX.Element {
 
   useEffect(() => {
     if (scenarioListData) {
-      const scenarios = scenarioListData.results.map((scenario) => ({ id: scenario.id, label: scenario.description }));
+      const scenarios = scenarioListData.results.map((scenario) => ({id: scenario.id, label: scenario.description}));
       dispatch(setScenarios(scenarios));
 
       //activate all scenarios initially
@@ -129,7 +129,7 @@ export default function Scenario(): JSX.Element {
         const endDay = new Date(startDay);
         endDay.setDate(endDay.getDate() + scenarioListData.results[0].numberOfDays - 1);
 
-        dispatch(setMinMaxDates({ minDate: dateToISOString(startDay), maxDate: dateToISOString(endDay) }));
+        dispatch(setMinMaxDates({minDate: dateToISOString(startDay), maxDate: dateToISOString(endDay)}));
       }
     }
   }, [activeScenarios, scenarioListData, dispatch]);
@@ -158,7 +158,7 @@ export default function Scenario(): JSX.Element {
       >
 
 
-
+            
         <Box
           id='scenario-view-compartment-list-root'
           sx={{
@@ -204,7 +204,7 @@ export default function Scenario(): JSX.Element {
             >
               {t('scenario.simulation-start-day')}:
             </Typography>
-
+         
             <Typography
               variant='h2'
               sx={{
@@ -238,12 +238,15 @@ export default function Scenario(): JSX.Element {
                     paddingRight: theme.spacing(3),
                     margin: theme.spacing(0),
                     marginTop: theme.spacing(1),
-                    borderLeft: `2px ${selectedCompartment === compartment ? theme.palette.primary.main : 'transparent'
-                      } solid`,
-                    borderTop: `2px ${selectedCompartment === compartment ? theme.palette.background.paper : 'transparent'
-                      } solid`,
-                    borderBottom: `2px ${selectedCompartment === compartment ? theme.palette.background.paper : 'transparent'
-                      } solid`,
+                    borderLeft: `2px ${
+                      selectedCompartment === compartment ? theme.palette.primary.main : 'transparent'
+                    } solid`,
+                    borderTop: `2px ${
+                      selectedCompartment === compartment ? theme.palette.background.paper : 'transparent'
+                    } solid`,
+                    borderBottom: `2px ${
+                      selectedCompartment === compartment ? theme.palette.background.paper : 'transparent'
+                    } solid`,
                     '&.MuiListItemButton-root.Mui-selected': {
                       backgroundColor: theme.palette.background.paper,
                     },
@@ -308,7 +311,7 @@ export default function Scenario(): JSX.Element {
           >
             {compartmentsExpanded ? t('less') : t('more')}
           </Button>
-          <Button
+           <Button
             variant='outlined'
             color='primary'
             sx={{
@@ -319,12 +322,13 @@ export default function Scenario(): JSX.Element {
             onClick={() => {
               setOpendelg(true);
             }}
-            aria-label={t('add-button-filters.title')}
+            aria-label={t('group-filters.title-manage-compartment')}
           >
             {t('scenario.add_button')}
-          </Button>
+        
+           </Button>
         </Box>
-
+     
         <Dialog
           maxWidth='lg'
           fullWidth={true}
@@ -347,7 +351,7 @@ export default function Scenario(): JSX.Element {
             }}
             unsavedChangesCallback={(unsavedChanges) => setGroupManageCompartChanges(unsavedChanges)}
           />
-
+        
         </Dialog>
         <Box
           id='scenario-view-scenario-card-list'
@@ -451,6 +455,7 @@ export default function Scenario(): JSX.Element {
                 setOpen(false);
               }
             }}
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
             unsavedChangesCallback={(unsavedChanges) => setGroupEditorUnsavedChanges(unsavedChanges)}
           />
           <ConfirmDialog

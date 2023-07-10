@@ -102,7 +102,7 @@ export function ManageCompartments(props: {
         }}
       >
         <div />
-        <Typography variant='h1'>{t('add-button-filters.title')}</Typography>
+        <Typography variant='h1'>{t('group-filters.title-manage-compartments')}</Typography>
         <IconButton color='primary' sx={{ marginLeft: 'auto' }} onClick={props.onCloseRequest}>
           <Close />
         </IconButton>

@@ -35,14 +35,14 @@
     deactivate: 'Scenario deaktivieren',
     'manage-groups': 'Gruppen',
     'simulation-start-day': 'Simulationsstart',
-    'add_button': 'fächer',
+    'add_button': 'FÄCHER',
   },
   'group-filters': {
     title: 'Gruppen Verwalten',
-    'title-manage-compartment': 'Facher verwalten',
+    'title-manage-compartment': 'Fächer verwalten',
     'nothing-selected': 'Wählen Sie eine Gruppe aus um diese zu bearbeiten oder erstellen Sie eine neue Gruppe.',
     'add-group': 'Neue Gruppe Erstellen',
-    'add-group-compartments': 'Facher',
+    'add-group-compartments': 'Fächer',
     name: 'Name',
     close: 'Abbrechen',
     apply: 'Anwenden',
@@ -52,6 +52,7 @@
     'confirm-discard-text': 'Sie haben ungespeicherte Änderungen. Wollen sie diese verwerfen?',
     discard: 'Verwerfen',
   },
+ 
   chart: {
     caseData: 'Falldaten',
   },
@@ -59,6 +60,10 @@
     edit: 'Farblegende bearbeiten',
     lock: 'Maximalwert feststellen',
     select: 'Farblegende auswählen',
+  },
+
+  heatmapchart:{
+  textshow: 'Zeig mehr'
   },
   today: 'Heute',
   more: 'Mehr',

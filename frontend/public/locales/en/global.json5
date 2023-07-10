@@ -48,9 +48,10 @@
   },
   'group-filters': {
     title: 'Manage Groups',
+    'title-manage-compartments': 'MANAGE COMPARTMENTS',
     'nothing-selected': 'Select a group to edit or create a new one.',
     'add-group': 'Add new group',
-    'add-group-compartments': 'COMPARTMENT',
+    'add-group-compartments': 'COMPARTMENTS',
     name: 'Name',
     close: 'Cancel',
     apply: 'Apply',
@@ -64,19 +65,7 @@
   'test-button':'Test'
   },
 
-  'add-button-filters': {
-    title: 'MANAGE COMPARTMENTS',
-    'nothing-selected': 'Select a group to edit or create a new one.',
-    'add-group': 'COMPARTMENTS',
-    name: 'Name',
-    close: 'Cancel',
-    apply: 'Apply',
-    'confirm-deletion-title': 'Delete Group',
-    'confirm-deletion-text': 'Are you sure you want to delete the "{{groupName}}" group?',
-    'confirm-discard-title': 'Discard Changes',
-    'confirm-discard-text': 'You have unsaved changes. Do you want to discard them?',
-    discard: 'Discard',
-  },
+ 
   chart: {
     caseData: 'Case Data',
   },
@@ -85,12 +74,13 @@
     lock: 'Lock maximum value',
     select: 'Select heatmap preset',
   },
-  heatmapchart: {
-    text:'Show more',
-  }
+ heatmapchart:{
+  textshow: 'Show More',
+ 
+  },
   today: 'Today',
-  more: 'More',
-  less: 'Less',
+  more: 'Show more',
+  less: 'less',
   search: 'Search',
   germany: 'Germany',
   'no-data': 'No Data',
