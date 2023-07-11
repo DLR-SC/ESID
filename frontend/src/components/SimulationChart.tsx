@@ -354,8 +354,8 @@ export default function SimulationChart(): JSX.Element {
   // Effect to add Guide when date selected
   useEffect(
     () => {
-      // Skip effect if chart is not initialized yet or no date is selected
-      if (!chartRef.current || !selectedDate) return;
+      // Skip effect if chart (or root) is not initialized yet or no date is selected
+      if (!chartRef.current || !rootRef.current || !selectedDate) return;
 
       // Get xAxis from chart
       const xAxis = chartRef.current.xAxes.getIndex(0) as DateAxis<AxisRendererX>;
@@ -398,7 +398,7 @@ export default function SimulationChart(): JSX.Element {
           day: '2-digit',
         }),
         location: 0.5,
-        background: RoundedRectangle.new(rootRef.current as Root, {
+        background: RoundedRectangle.new(rootRef.current, {
           fill: color(theme.palette.primary.main),
         }),
         // Put Label to the topmost layer to make sure it is drawn on top of the axis tick labels
@@ -410,8 +410,8 @@ export default function SimulationChart(): JSX.Element {
         xAxis.axisRanges.removeValue(range);
       };
     },
-    // Re-run effect when selection changes (date/scenario/compartment/district) (theme and translation do not change after initialization)
-    [selectedDate, selectedScenario, selectedCompartment, selectedDistrict, theme, t, i18n.language]
+    // Re-run effect when selection changes (date/scenario/compartment/district) or when the active scenarios/filters change (theme and translation do not change after initialization)
+    [selectedDate, selectedScenario, selectedCompartment, selectedDistrict, activeScenarios, groupFilterList, theme, t, i18n.language]
   );
 
   // Effect to update Simulation and case data
