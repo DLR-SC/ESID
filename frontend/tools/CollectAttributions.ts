@@ -215,13 +215,13 @@ async function getLicenseText(lib: string, license: string | null, author: strin
       const licenseJSON = await response.json();
       if (licenseJSON.body) {
         licenseText = licenseJSON.body;
-        LICENSE_CACHE.set(license, licenseText);
+        LICENSE_CACHE.set(license, licenseText!);
       }
     }
 
     // When a license text was successfully downloaded, the name and year are filled in, if possible.
     if (licenseText) {
-      return licenseText.replace('[year]', new Date().getUTCFullYear()).replace('[fullname]', author || '');
+      return licenseText.replace('[year]', new Date().getUTCFullYear().toString()).replace('[fullname]', author || '');
     }
   }
 
