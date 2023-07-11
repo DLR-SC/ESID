@@ -206,7 +206,7 @@ async function getLicenseText(lib: string, license: string | null, author: strin
     return fs.readFileSync(`${libRoot}/${possibleLicenseFiles[0]}`).toString();
   } else if (license) {
     // If no license file is found, we try to get a generic license file from GitHub using the name of the license.
-    let licenseText = null;
+    let licenseText: string | null = null;
     if (LICENSE_CACHE.has(license)) {
       // License texts are cached to minimize requests to GitHub.
       licenseText = LICENSE_CACHE.get(license);
