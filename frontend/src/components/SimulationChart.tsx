@@ -101,8 +101,7 @@ export default function SimulationChart(): JSX.Element {
   const rootRef = useRef<Root | null>(null);
   const chartRef = useRef<XYChart | null>(null);
 
-  // Effect to create chart instance
-  // TODO: extract everything but chart setup so it only runs once
+  // Effect to initialize root & chart
   useEffect(
     () => {
       // Create root and chart
@@ -116,9 +115,6 @@ export default function SimulationChart(): JSX.Element {
           maxTooltipDistance: -1,
         })
       );
-
-      // Set localization
-      root.locale = i18n.language === 'de' ? am5locales_de_DE : am5locales_en_US;
 
       // Set number formatter
       root.numberFormatter.set('numberFormat', '#,###.');
@@ -146,14 +142,9 @@ export default function SimulationChart(): JSX.Element {
       xRenderer.ticks.template.setAll({
         location: 0.5,
       });
-      // Change date formats for ticks & tooltip (use fallback object to suppress undefined object warnings as this cannot be undefined)
-      xAxis.get('dateFormats', {day: ''})['day'] = t('dayFormat');
-      xAxis.get('tooltipDateFormats', {day: ''})['day'] = t('dayFormat');
-      // Fix first date of the month falling back to wrong format (also with fallback object)
-      xAxis.get('periodChangeDateFormats', {day: ''})['day'] = t('dayFormat');
 
       // Create y-axis
-      const yAxis = chart.yAxes.push(
+      chart.yAxes.push(
         ValueAxis.new(root, {
           renderer: AxisRendererY.new(root, {}),
           // Fix lower end to 0
@@ -173,6 +164,64 @@ export default function SimulationChart(): JSX.Element {
           xAxis: xAxis,
         })
       );
+
+      // Add event on double click to select date
+      chart.events.on('click', (ev) => {
+        // Get date from axis position from cursor position
+        const date = xAxis.positionToDate(
+          xAxis.toAxisPosition(ev.target.get('cursor')?.getPrivate('positionX') as number)
+        );
+        // Remove time information to only have a date
+        date.setHours(0, 0, 0, 0);
+        // Set date in store
+        dispatch(selectDate(dateToISOString(date)));
+      });
+
+      // Set refs to be used in other effects
+      rootRef.current = root;
+      chartRef.current = chart;
+
+      // Clean-up before re-running this effect
+      return () => {
+        // Dispose old root and chart before creating a new instance
+        chartRef.current && chartRef.current.dispose();
+        rootRef.current && rootRef.current.dispose();
+      };
+    },
+    // This effect should only run once. dispatch should not change during runtime
+    [dispatch]
+  );
+
+  // Effect to change localization of chart if language changes
+  useEffect(
+    () => {
+      // Skip if root or chart is not initialized
+      if (!rootRef.current || !chartRef.current) return;
+
+      // Set localization
+      rootRef.current.locale = i18n.language === 'de' ? am5locales_de_DE : am5locales_en_US;
+
+      // Change date formats for ticks & tooltip (use fallback object to suppress undefined object warnings as this cannot be undefined)
+      const xAxis: DateAxis<AxisRendererX> = chartRef.current.xAxes.getIndex(0) as DateAxis<AxisRendererX>;
+      xAxis.get('dateFormats', {day: ''})['day'] = t('dayFormat');
+      xAxis.get('tooltipDateFormats', {day: ''})['day'] = t('dayFormat');
+      // Fix first date of the month falling back to wrong format (also with fallback object)
+      xAxis.get('periodChangeDateFormats', {day: ''})['day'] = t('dayFormat');
+    },
+    // Re-run effect if language changes
+    [i18n.language, t]
+  );
+
+  // Effect to add series to chart
+  useEffect(
+    () => {
+      // Skip if root or chart not initialized
+      if (!rootRef.current || !chartRef.current) return;
+
+      const chart: XYChart = chartRef.current;
+      const root: Root = rootRef.current;
+      const xAxis: DateAxis<AxisRendererX> = chart.xAxes.getIndex(0) as DateAxis<AxisRendererX>;
+      const yAxis: ValueAxis<AxisRendererY> = chart.yAxes.getIndex(0) as ValueAxis<AxisRendererY>;
 
       // Add series for case data
       const caseDataSeries = chart.series.push(
@@ -284,31 +333,14 @@ export default function SimulationChart(): JSX.Element {
           });
       }
 
-      // Add event on double click to select date
-      chart.events.on('click', (ev) => {
-        // Get date from axis position from cursor position
-        const date = xAxis.positionToDate(
-          xAxis.toAxisPosition(ev.target.get('cursor')?.getPrivate('positionX') as number)
-        );
-        // Remove time information to only have a date
-        date.setHours(0, 0, 0, 0);
-        // Set date in store
-        dispatch(selectDate(dateToISOString(date)));
-      });
-
-      // Set refs to be used in other effects
-      rootRef.current = root;
-      chartRef.current = chart;
-
-      // Clean-up before re-running this effect
+      // Clean-up function
       return () => {
-        // Dispose old root and chart before creating a new instance
-        chartRef.current && chartRef.current.dispose();
-        rootRef.current && rootRef.current.dispose();
+        // Remove all series
+        chart.series.clear();
       };
     },
-    // Re-run effect when shown information changes (scenarios, group filters, or the selected scenario -> percentiles); dispatch, theme, or language (i18n & t) do not change after initialization
-    [scenarioList, groupFilterList, dispatch, i18n.language, t, theme, selectedScenario, tBackend]
+    // Re-run if scenario, group filter, or selected scenario (percentile series) change. (t, tBackend, and theme do not change during runtime).
+    [scenarioList, groupFilterList, selectedScenario, t, tBackend, theme]
   );
 
   // Effect to hide disabled scenarios (and show them again if not hidden anymore)
@@ -411,7 +443,17 @@ export default function SimulationChart(): JSX.Element {
       };
     },
     // Re-run effect when selection changes (date/scenario/compartment/district) or when the active scenarios/filters change (theme and translation do not change after initialization)
-    [selectedDate, selectedScenario, selectedCompartment, selectedDistrict, activeScenarios, groupFilterList, theme, t, i18n.language]
+    [
+      selectedDate,
+      selectedScenario,
+      selectedCompartment,
+      selectedDistrict,
+      activeScenarios,
+      groupFilterList,
+      theme,
+      t,
+      i18n.language,
+    ]
   );
 
   // Effect to update Simulation and case data
