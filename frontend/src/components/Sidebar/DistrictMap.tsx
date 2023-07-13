@@ -298,7 +298,7 @@ export default function DistrictMap(): JSX.Element {
               legendRef.current = legend;
             }}
             min={0}
-            // used math.round to convert the numbers to integers
+            // use math.round to convert the numbers to integers
             max={
               legend.isNormalized ? Math.round(aggregatedMax) : Math.round(legend.steps[legend.steps.length - 1].value)
             }
