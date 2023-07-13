@@ -22,6 +22,7 @@
 ### Bug fixes
 
 - An error was fixed, which prevented the text in the search bar to be translated on an initial site visit.
+- Fixed an error, where districts with missing values weren't shown.
 
 ---
 
