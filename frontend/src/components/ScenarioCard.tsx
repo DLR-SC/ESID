@@ -1,15 +1,28 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useTheme} from '@mui/material/styles';
-import {Box, IconButton, List, ListItem, ListItemText, Tooltip, Typography} from '@mui/material';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
 import {useAppSelector} from 'store/hooks';
 import {useGetSingleSimulationEntryQuery} from 'store/services/scenarioApi';
 import {Dictionary} from '../util/util';
 import {useTranslation} from 'react-i18next';
 import {NumberFormatter} from '../util/hooks';
-import {CheckBoxOutlineBlank, CheckBox} from '@mui/icons-material';
+import CheckBoxOutlineBlank from '@mui/icons-material/CheckBoxOutlineBlank';
+import CheckBox from '@mui/icons-material/CheckBox';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
+import {ScrollSyncPane} from 'react-scroll-sync';
+import Button from '@mui/material/Button';
+import ChevronLeft from '@mui/icons-material/ChevronLeft';
+import ChevronRight from '@mui/icons-material/ChevronRight';
+import Collapse from '@mui/material/Collapse';
+import {GroupFilterCard} from './GroupFilterCard';
 
 /**
  * React Component to render individual Scenario Card
@@ -19,16 +32,18 @@ import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
   const theme = useTheme();
   const {t, i18n} = useTranslation();
+  const {t: tBackend} = useTranslation('backend');
 
-  const compartmentsRef = useRef<HTMLUListElement | null>(null);
-
-  const {formatNumber} = NumberFormatter(i18n.language, 3, 8);
+  const {formatNumber} = NumberFormatter(i18n.language, 1, 0);
 
   const [compartmentValues, setCompartmentValues] = useState<Dictionary<number> | null>(null);
 
   const compartments = useAppSelector((state) => state.scenarioList.compartments);
+  const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
+  const compartmentsExpanded = useAppSelector((state) => state.dataSelection.compartmentsExpanded);
   const node = useAppSelector((state) => state.dataSelection.district?.ags);
   const day = useAppSelector((state) => state.dataSelection.date);
+
   const {data} = useGetSingleSimulationEntryQuery(
     {
       id: props.scenario.id,
@@ -40,16 +55,6 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
   );
 
   const [hover, setHover] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (compartmentsRef.current) {
-      if (props.expandProperties) {
-        compartmentsRef.current.scrollTop = props.scrollTop;
-      } else {
-        compartmentsRef.current.scrollTop = 0;
-      }
-    }
-  }, [props.expandProperties, props.scrollTop]);
 
   useEffect(() => {
     if (data && data.results.length > 0) {
@@ -80,7 +85,8 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
       }
     }
 
-    return 'N/A';
+    // Return a Figure Dash (‒) where a rate cannot be calculated.
+    return '\u2012';
   };
 
   const TrendArrow = (props: {compartment: string}): JSX.Element => {
@@ -92,7 +98,7 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
     // Shows upwards red arrows if getCompartmentRate > 3%. If there is no RKI value for that compartment i.e., getCompartmentRate is Null, then it will check the getCompartmentValue (scenario values only) which will always be positive.
     else if (
       parseFloat(getCompartmentRate(compartment)) > 3 ||
-      (parseFloat(getCompartmentValue(compartment)) > 0 && getCompartmentRate(compartment) === 'N/A')
+      (parseFloat(getCompartmentValue(compartment)) > 0 && getCompartmentRate(compartment) === '\u2012')
     ) {
       return <ArrowDropUpIcon color={'error'} fontSize={'medium'} sx={{display: 'block'}} />;
     }
@@ -104,170 +110,265 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
 
   return (
     <Box
+      id={`scenario-card-root-${props.scenario.id}`}
       sx={{
-        position: 'relative',
-        zIndex: 0,
-        flexGrow: 0,
-        flexShrink: 0,
-        flexBasis: '172px',
-        boxSizing: 'border-box',
-        marginX: '2px',
-        marginY: theme.spacing(2),
-        mb: 0,
+        display: 'flex',
+        flexDirection: 'row',
+        color: props.color,
+        width: 'min-content',
+        paddingLeft: theme.spacing(3),
+        paddingRight: theme.spacing(3),
       }}
-      onMouseLeave={() => setHover(false)}
     >
-      {/*hover-state*/}
-      <Box
-        sx={{
-          position: 'absolute',
-          zIndex: -1,
-          width: '100%',
-          height: '100%',
-          borderRadius: '9px', //matching the radius of the box shadow
-          background: hexToRGB(props.color, 0.4),
-          display: hover ? 'flex' : 'none',
-          alignItems: 'flex-end',
-        }}
-      >
-        <Tooltip
-          title={props.active ? t('scenario.deactivate').toString() : t('scenario.activate').toString()}
-          arrow={true}
-        >
-          <IconButton
-            color={'primary'}
-            onClick={() => props.onToggle()}
-            aria-label={props.active ? t('scenario.deactivate') : t('scenario.activate')}
-          >
-            {props.active ? <CheckBox /> : <CheckBoxOutlineBlank />}
-          </IconButton>
-        </Tooltip>
-      </Box>
       <Box
         sx={{
           position: 'relative',
           zIndex: 0,
+          flexGrow: 0,
+          flexShrink: 0,
+          width: '200px',
           boxSizing: 'border-box',
-          height: 'min-content',
-          padding: theme.spacing(2),
-          border: `2px solid ${props.color}`,
-          borderRadius: '3px',
-          margin: '6px',
-          background: theme.palette.background.paper,
-          color: props.color,
-          boxShadow: props.selected && !hover ? `0px 0px 0px 6px ${hexToRGB(props.color, 0.4)}` : 'none',
-          transition: 'transform 0.5s',
-          transformStyle: 'preserve-3d',
-          transform: !props.active ? 'rotateY(180deg)' : 'none',
+          marginX: '2px',
+          marginY: theme.spacing(2),
+          marginBottom: 0,
         }}
-        onClick={props.active ? () => props.onClick() : () => true}
-        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
       >
-        {/*back*/}
+        {/*hover-state*/}
         <Box
+          id={`scenario-card-settings-list-${props.scenario.id}`}
           sx={{
             position: 'absolute',
-            backfaceVisibility: 'hidden',
-            transform: 'rotateY(180deg)',
+            zIndex: -2,
+            width: 'calc(100% + 12px)',
+            height: '100%',
+            marginTop: '-6px',
+            marginLeft: '-6px',
+            borderRadius: '9px', //matching the radius of the box shadow
+            background: hexToRGB(props.color, 0.4),
+            display: hover ? 'flex' : 'none',
+            alignItems: 'flex-end',
           }}
         >
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'flex-end',
-              height: '3rem',
-              marginLeft: theme.spacing(2),
-            }}
+          <Tooltip
+            title={props.active ? t('scenario.deactivate').toString() : t('scenario.activate').toString()}
+            arrow={true}
           >
-            <Typography
-              variant='h2'
-              sx={{
-                height: 'min-content',
-                fontWeight: 'bold',
-                fontSize: '13pt',
-              }}
+            <IconButton
+              color={'primary'}
+              onClick={() => props.onToggle()}
+              aria-label={props.active ? t('scenario.deactivate') : t('scenario.activate')}
             >
-              {props.scenario.label}
-            </Typography>
-          </Box>
+              {props.active ? <CheckBox /> : <CheckBoxOutlineBlank />}
+            </IconButton>
+          </Tooltip>
         </Box>
-        {/*front*/}
         <Box
+          id={`scenario-card-main-card-${props.scenario.id}`}
           sx={{
-            transform: 'rotateY(0deg)', //firefox ignores backface-visibility if the object is not rotated
-            backfaceVisibility: 'hidden',
+            position: 'relative',
+            zIndex: 0,
+            boxSizing: 'border-box',
+            height: 'min-content',
+            padding: theme.spacing(2),
+            border: `2px solid ${props.color}`,
+            borderRadius: '3px',
+            background: theme.palette.background.paper,
+            color: props.color,
+            boxShadow: props.selected && !hover ? `0px 0px 0px 6px ${hexToRGB(props.color, 0.4)}` : 'none',
+            transition: 'transform 0.5s',
+            transformStyle: 'preserve-3d',
+            transform: !props.active ? 'rotateY(180deg)' : 'none',
           }}
+          onClick={props.active ? () => props.onClick() : () => true}
+          onMouseEnter={() => setHover(true)}
         >
           <Box
+            id={`scenario-card-back-${props.scenario.id}`}
             sx={{
-              display: 'flex',
-              alignItems: 'flex-end',
-              height: '3rem',
-              marginBottom: theme.spacing(1),
+              position: 'absolute',
+              backfaceVisibility: 'hidden',
+              transform: 'rotateY(180deg)',
+              margin: '6px',
             }}
           >
-            <Typography
-              variant='h2'
+            <Box
               sx={{
-                height: 'min-content',
-                fontWeight: 'bold',
-                fontSize: '13pt',
+                display: 'flex',
+                alignItems: 'flex-end',
+                height: '3rem',
+                marginLeft: theme.spacing(2),
               }}
             >
-              {props.scenario.label}
-            </Typography>
-          </Box>
-          <List
-            ref={compartmentsRef}
-            dense={true}
-            disablePadding={true}
-            sx={{
-              maxHeight: props.expandProperties ? '248px' : 'auto',
-              overflowY: 'hidden',
-            }}
-          >
-            {compartments.map((compartment, i) => (
-              // hide compartment if expandProperties false and index > 4
-              // highlight compartment if selectedProperty === compartment
-
-              <ListItem
-                key={compartment}
+              <Typography
+                variant='h2'
                 sx={{
-                  display: props.expandProperties || i < 4 ? 'flex' : 'none',
-                  color:
-                    props.selectedProperty === compartment ? theme.palette.text.primary : theme.palette.text.disabled,
-                  padding: theme.spacing(1),
-                  margin: theme.spacing(0),
-                  marginTop: theme.spacing(1),
+                  height: 'min-content',
+                  fontWeight: 'bold',
+                  fontSize: '13pt',
                 }}
               >
-                <ListItemText
-                  primary={getCompartmentValue(compartment)}
-                  // disable child typography overriding this
-                  disableTypography={true}
-                  sx={{
-                    typography: 'listElement',
-                    textAlign: 'right',
-                    flexBasis: '55%',
-                  }}
-                />
-                <ListItemText
-                  primary={getCompartmentRate(compartment)}
-                  // disable child typography overriding this
-                  disableTypography={true}
-                  sx={{
-                    typography: 'listElement',
-                    fontWeight: 'bold',
-                    textAlign: 'right',
-                    flexBasis: '45%',
-                  }}
-                />
-                <TrendArrow compartment={compartment} />
-              </ListItem>
-            ))}
-          </List>
+                {tBackend(`scenario-names.${props.scenario.label}`)}
+              </Typography>
+            </Box>
+          </Box>
+          <Box
+            id={`scenario-card-front-${props.scenario.id}`}
+            sx={{
+              transform: 'rotateY(0deg)', //firefox ignores backface-visibility if the object is not rotated
+              backfaceVisibility: 'hidden',
+              margin: '6px',
+            }}
+          >
+            <Box
+              id={`scenario-card-title-container-${props.scenario.id}`}
+              sx={{
+                display: 'flex',
+                alignItems: 'flex-end',
+                height: '3rem',
+                marginBottom: theme.spacing(1),
+              }}
+            >
+              <Typography
+                variant='h2'
+                sx={{
+                  height: 'min-content',
+                  fontWeight: 'bold',
+                  fontSize: '13pt',
+                }}
+              >
+                {tBackend(`scenario-names.${props.scenario.label}`)}
+              </Typography>
+            </Box>
+            <ScrollSyncPane group='compartments'>
+              <List
+                id={`scenario-card-compartment-list-${props.scenario.id}`}
+                className='hide-scrollbar'
+                dense={true}
+                disablePadding={true}
+                sx={{
+                  maxHeight: compartmentsExpanded ? '248px' : 'auto',
+                  overflowX: 'hidden',
+                  overflowY: 'auto',
+                }}
+              >
+                {compartments.map((compartment, i) => (
+                  <ListItem
+                    key={compartment}
+                    sx={{
+                      // hide compartment if compartmentsExpanded false and index > 4
+                      // highlight compartment if selectedCompartment === compartment
+                      display: compartmentsExpanded || i < 4 ? 'flex' : 'none',
+                      color:
+                        selectedCompartment === compartment ? theme.palette.text.primary : theme.palette.text.disabled,
+                      padding: theme.spacing(1),
+                      margin: theme.spacing(0),
+                      marginTop: theme.spacing(1),
+                      borderTop: '2px solid transparent',
+                      borderBottom: '2px solid transparent',
+                    }}
+                  >
+                    <ListItemText
+                      primary={getCompartmentValue(compartment)}
+                      // disable child typography overriding this
+                      disableTypography={true}
+                      sx={{
+                        typography: 'listElement',
+                        textAlign: 'right',
+                        flexBasis: '55%',
+                      }}
+                    />
+                    <ListItemText
+                      primary={getCompartmentRate(compartment)}
+                      // disable child typography overriding this
+                      disableTypography={true}
+                      sx={{
+                        typography: 'listElement',
+                        fontWeight: 'bold',
+                        textAlign: 'right',
+                        flexBasis: '45%',
+                      }}
+                    />
+                    <TrendArrow compartment={compartment} />
+                  </ListItem>
+                ))}
+              </List>
+            </ScrollSyncPane>
+          </Box>
         </Box>
       </Box>
+      {props.active ? <GroupFilterAppendage scenarioId={props.scenario.id} color={props.color} /> : null}
+    </Box>
+  );
+}
+
+/**
+ * This component is placed on the right side of the scenario cards, if at least one group filter is active. It contains
+ * a button to open and close the card appendage for the active group filters.
+ */
+function GroupFilterAppendage(props: GroupFilterAppendageProps): JSX.Element | null {
+  const theme = useTheme();
+  const groupFilterList = useAppSelector((state) => state.dataSelection.groupFilters);
+
+  const [folded, setFolded] = useState(true);
+
+  if (!groupFilterList) {
+    return null;
+  }
+
+  const groupFilterArray = Object.values(groupFilterList);
+
+  // If no group filter is visible this will be hidden.
+  if (!groupFilterArray.some((groupFilter) => groupFilter.isVisible)) {
+    return null;
+  }
+
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'row',
+        marginY: theme.spacing(2),
+        marginLeft: '-3px',
+        padding: '1px',
+        height: 'min-content',
+        border: `1px solid ${props.color}`,
+        borderRadius: '3px',
+        background: theme.palette.background.paper,
+      }}
+    >
+      <Button
+        sx={{
+          width: '26px',
+          minWidth: '26px',
+          borderRight: `1px solid ${theme.palette.divider}`,
+        }}
+        onClick={() => setFolded(!folded)}
+      >
+        {folded ? <ChevronLeft /> : <ChevronRight />}
+      </Button>
+      <Collapse in={folded} orientation='horizontal'>
+        <Box
+          id={`scenario-card-${props.scenarioId}-group-filter-list`}
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+          }}
+        >
+          {groupFilterArray
+            .filter((groupFilter) => groupFilter.isVisible)
+            .map((groupFilter, i) => {
+              return (
+                <GroupFilterCard
+                  key={groupFilter.name}
+                  groupFilter={groupFilter}
+                  groupFilterIndex={i}
+                  scenarioId={props.scenarioId}
+                />
+              );
+            })}
+        </Box>
+      </Collapse>
     </Box>
   );
 }
@@ -295,15 +396,6 @@ interface ScenarioCardProps {
   /** The color of the card. */
   color: string;
 
-  /** The compartment name of the currently selected compartment, or empty string if none is selected. */
-  selectedProperty: string;
-
-  /** Boolean value whether the properties list is expanded or only the first four are shown. */
-  expandProperties: boolean;
-
-  /** To synchronize scrolling. */
-  scrollTop: number;
-
   startValues: Dictionary<number> | null;
 
   /** The function that is executed when the scenario card is clicked. */
@@ -311,6 +403,14 @@ interface ScenarioCardProps {
 
   /** The function that is executed when the disable toggle is clicked. */
   onToggle: () => void;
+}
+
+interface GroupFilterAppendageProps {
+  /** The scenario id. */
+  scenarioId: number;
+
+  /** The scenario color. */
+  color: string;
 }
 
 function hexToRGB(hex: string, alpha: number): string {

@@ -3,27 +3,29 @@ import {useTheme} from '@mui/material/styles';
 import SearchBar from './SearchBar';
 import DistrictMap from './DistrictMap';
 import SidebarTabs from './SidebarTabs';
-import {Box, Container, Stack} from '@mui/material';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Stack from '@mui/material/Stack';
 
 export default function Sidebar(): JSX.Element {
   const theme = useTheme();
 
   return (
     <Stack
+      id='sidebar-root'
       direction='column'
       alignItems='stretch'
       justifyContent='flex-start'
       sx={{
-        width: 422,
-        height: 1,
+        width: '422px',
         borderRight: `1px solid ${theme.palette.divider}`,
         background: theme.palette.background.default,
       }}
     >
-      <Box>
+      <Box id='sidebar-map-search-bar-wrapper'>
         <SearchBar />
       </Box>
-      <Box>
+      <Box id='sidebar-map-wrapper'>
         <DistrictMap />
       </Box>
       <Container disableGutters sx={{flexGrow: 1}}>

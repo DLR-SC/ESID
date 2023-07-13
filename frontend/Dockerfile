@@ -11,7 +11,7 @@ COPY . .
 COPY ./.env.docker ./.env
 
 #Run command npm install to install packages
-RUN npm install
+RUN npm ci
 
 #create a react production build
 RUN npm run build

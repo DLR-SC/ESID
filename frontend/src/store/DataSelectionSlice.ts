@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import i18n from '../util/i18n';
-import {dateToISOString} from '../util/util';
+import {dateToISOString, Dictionary} from '../util/util';
+import {GroupFilter} from 'types/group';
 
 /**
  * AGS is the abbreviation for "Amtlicher Gemeindeschlüssel" in German, which are IDs of areas in Germany. The AGS have
@@ -10,26 +10,35 @@ import {dateToISOString} from '../util/util';
  */
 export type AGS = string;
 
+/**
+ * This contains all the state, that the user can configure directly.
+ *
+ * IMPORTANT: ALL NEW ADDITIONS MUST BE NULLABLE TO ENSURE EXISTING CACHES DOESN'T BREAK ON UPDATES!
+ */
 export interface DataSelection {
   district: {ags: AGS; name: string; type: string};
   date: string | null;
   scenario: number | null;
   compartment: string | null;
+  compartmentsExpanded: boolean | null;
   activeScenarios: number[] | null;
 
   minDate: string | null;
   maxDate: string | null;
+  groupFilters: Dictionary<GroupFilter> | null;
 }
 
 const initialState: DataSelection = {
-  district: {ags: '00000', name: i18n.t('germany'), type: ''},
+  district: {ags: '00000', name: '', type: ''},
   date: null,
   scenario: null,
   compartment: null,
+  compartmentsExpanded: null,
   activeScenarios: null,
 
   minDate: null,
   maxDate: null,
+  groupFilters: {},
 };
 
 /**
@@ -92,6 +101,32 @@ export const DataSelectionSlice = createSlice({
     selectCompartment(state, action: PayloadAction<string>) {
       state.compartment = action.payload;
     },
+    toggleCompartmentExpansion(state) {
+      state.compartmentsExpanded = !state.compartmentsExpanded;
+    },
+    setGroupFilter(state, action: PayloadAction<GroupFilter>) {
+      if (!state.groupFilters) {
+        state.groupFilters = {};
+      }
+
+      state.groupFilters[action.payload.id] = action.payload;
+    },
+    deleteGroupFilter(state, action: PayloadAction<string>) {
+      if (!state.groupFilters) {
+        state.groupFilters = {};
+      }
+
+      delete state.groupFilters[action.payload];
+    },
+    toggleGroupFilter(state, action: PayloadAction<string>) {
+      if (!state.groupFilters) {
+        state.groupFilters = {};
+      }
+
+      if (state.groupFilters[action.payload]) {
+        state.groupFilters[action.payload].isVisible = !state.groupFilters[action.payload].isVisible;
+      }
+    },
   },
 });
 
@@ -102,7 +137,12 @@ export const {
   nextDay,
   setMinMaxDates,
   selectScenario,
-  toggleScenario,
   selectCompartment,
+  toggleCompartmentExpansion,
+  setGroupFilter,
+  deleteGroupFilter,
+  toggleGroupFilter,
+  toggleScenario,
 } = DataSelectionSlice.actions;
+
 export default DataSelectionSlice.reducer;

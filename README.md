@@ -1,5 +1,9 @@
 <p align="center"> 
-  <img src ="docs/images/logo-200x66.svg" />
+  <img src ="frontend/docs/images/logo-200x66.svg" />
+</p>
+
+<p align="center"> 
+  <img src ="frontend/docs/images/Overview.png" />
 </p>
 
 # ESID - Epidemiologisches Simulationstool für den Infektionsschutz in Deutschland
@@ -21,12 +25,13 @@ It allows displaying historical data, as well as analyzing simulation results of
   - [Scope](#scope)
   - [Enforcement](#enforcement)
   - [Attribution](#attribution)
-- [Contributors](#contributors)
+- [Current Contributors](#current-contributors)
+  - [Previous Contributors](#previous-contributors)
 - [License](#license)
 
 
 ## Features
-**TODO**
+You can find a list of the latest changes in the [changelog](frontend/docs/changelog/changelog-en.md).
 
 
 ## Developer Documentation
@@ -197,13 +202,14 @@ German Aerospace Center (DLR):
 - Jonas Gilg
 - Luca Spataro
 - Moritz Zeumer
-- Laurin Kerkloh
+- Pawandeep Kaur-Betz
 
-## Previous Contributors
+### Previous Contributors
 German Aerospace Center (DLR):
 - Margrit Klitz
 - Kerem Balci
 - Selma Dahmani
+- Laurin Kerkloh
 
 Hochschule für Gestaltung Schwäbisch Gmünd (HfG):
 - Julien Stoll

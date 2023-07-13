@@ -1,11 +1,19 @@
 import React, {MouseEvent} from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
 import {useTranslation} from 'react-i18next';
+import Alert from '@mui/material/Alert';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import Divider from '@mui/material/Divider';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import Snackbar from '@mui/material/Snackbar';
+import ChangelogDialog from './PopUps/ChangelogDialog';
 import ImprintDialog from './PopUps/ImprintDialog';
 import PrivacyPolicyDialog from './PopUps/PrivacyPolicyDialog';
 import AccessibilityDialog from './PopUps/AccessibilityDialog';
 import AttributionDialog from './PopUps/AttributionDialog';
-import {Alert, Button, Dialog, Divider, Grid, Menu, MenuItem, Snackbar} from '@mui/material';
+import Box from '@mui/system/Box';
 
 /**
  * This menu is found at the top right of the application and is reachable from everywhere. It contains ways to access
@@ -19,6 +27,7 @@ export default function ApplicationMenu(): JSX.Element {
   const [privacyPolicyOpen, setPrivacyPolicyOpen] = React.useState(false);
   const [accessibilityOpen, setAccessibilityOpen] = React.useState(false);
   const [attributionsOpen, setAttributionsOpen] = React.useState(false);
+  const [changelogOpen, setChangelogOpen] = React.useState(false);
   const [snackbarOpen, setSnackbarOpen] = React.useState(false);
 
   /** Calling this method opens the application menu. */
@@ -61,8 +70,14 @@ export default function ApplicationMenu(): JSX.Element {
     setAttributionsOpen(true);
   };
 
+  /** This method gets called, when the changelog menu entry was clicked. */
+  const changelogClicked = () => {
+    closeMenu();
+    setChangelogOpen(true);
+  };
+
   return (
-    <Grid container item alignItems='center' justifyContent='flex-end' xs={2}>
+    <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'flex-end'}}>
       <Button
         id='top-bar-menu-button'
         aria-label={t('topBar.menu.label')}
@@ -79,6 +94,7 @@ export default function ApplicationMenu(): JSX.Element {
         <MenuItem onClick={privacyPolicyClicked}>{t('topBar.menu.privacy-policy')}</MenuItem>
         <MenuItem onClick={accessibilityClicked}>{t('topBar.menu.accessibility')}</MenuItem>
         <MenuItem onClick={attributionClicked}>{t('topBar.menu.attribution')}</MenuItem>
+        <MenuItem onClick={changelogClicked}>{t('topBar.menu.changelog')}</MenuItem>
       </Menu>
 
       <Dialog maxWidth='lg' fullWidth={true} open={imprintOpen} onClose={() => setImprintOpen(false)}>
@@ -97,11 +113,15 @@ export default function ApplicationMenu(): JSX.Element {
         <AttributionDialog />
       </Dialog>
 
+      <Dialog maxWidth='lg' fullWidth={true} open={changelogOpen} onClose={() => setChangelogOpen(false)}>
+        <ChangelogDialog />
+      </Dialog>
+
       <Snackbar open={snackbarOpen} autoHideDuration={5000} onClose={() => setSnackbarOpen(false)}>
         <Alert onClose={() => setSnackbarOpen(false)} severity='info'>
           {t('WIP')}
         </Alert>
       </Snackbar>
-    </Grid>
+    </Box>
   );
 }

@@ -3,7 +3,11 @@ import {useTheme} from '@mui/material/styles';
 import {useTranslation} from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
 import LazyLoad from 'react-lazyload';
-import {Box, CircularProgress, Grid, Typography} from '@mui/material';
+import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import attributionData from 'assets/third-party-attributions.json';
 
 interface DependencyData {
   name: string;
@@ -27,7 +31,7 @@ export default function AttributionDialog(): JSX.Element {
   useEffect(() => {
     // The data should be fetched only once, since it is really slow.
     if (ATTRIBUTIONS_CACHE === null) {
-      void fetch('assets/third-party-attributions.json').then(async (response) => {
+      void fetch(attributionData).then(async (response) => {
         const json = (await response.json()) as Array<DependencyData>;
 
         // For each library we create a markdown string.
