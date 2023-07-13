@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import {useTranslation} from 'react-i18next';
 import React from 'react';
-import dlrLogo from 'assets/logo/DLR_Logo.png';
+import logo from 'assets/logo/LOKI_compact.svg';
 
 export default function SidebarTabs(): JSX.Element {
   const {t} = useTranslation('global');
@@ -23,8 +23,8 @@ export default function SidebarTabs(): JSX.Element {
       }}
     >
       {/* This is a placeholder for now. */}
-      <a href='https://www.dlr.de/' target='_blank' rel='noopener noreferrer' style={{width: '90%'}}>
-        <img src={dlrLogo} alt={t('dlr-logo')} width='100%' />
+      <a href='https://www.dlr.de/' target='_blank' rel='noopener noreferrer' style={{width: '40%'}}>
+        <img src={logo} alt={t('dlr-logo')} width='100%' />
       </a>
 
       {/*
