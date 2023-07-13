@@ -97,12 +97,12 @@ export default function SimulationChart(): JSX.Element {
   );
 
   const {formatNumber} = NumberFormatter(i18n.language, 3, 8);
-  const numberFormat = '#,###.';
 
   const rootRef = useRef<Root | null>(null);
   const chartRef = useRef<XYChart | null>(null);
 
   // Effect to create chart instance
+  // TODO: extract everything but chart setup so it only runs once
   useEffect(
     () => {
       // Create root and chart
@@ -121,7 +121,7 @@ export default function SimulationChart(): JSX.Element {
       root.locale = i18n.language === 'de' ? am5locales_de_DE : am5locales_en_US;
 
       // Set number formatter
-      root.numberFormatter.set('numberFormat', numberFormat);
+      root.numberFormatter.set('numberFormat', '#,###.');
 
       // Create x-axis
       const xAxis = chart.xAxes.push(
