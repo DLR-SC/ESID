@@ -17,11 +17,13 @@
 - Alle Texte sind nun in Englisch und in Deutsch verfügbar.
 - Es wurden einige Verbesserungen gemacht, die das Laden der Seite beschleunigen.
 - Wenn neue Funktionen zur Verfügung gestellt werden, wird der Browser-Cache nicht mehr verhindern, dass Benutzer:innen diese sehen.
+- Das DLR-Logo wurde durch das LOKI-Logo ersetzt und verkleinert.
 - Das Modul für das Liniendiagramm wurde von AmCharts 4 auf 5 gewechselt für eine bessere Leistung.
 
 ### Fehlerbehebungen
 
 - Ein Fehler wurde behoben, der beim ersten Laden der Seite den Text in der Suchleiste nicht übersetzt hatte.
+- Ein Fehler wurde behoben, der Landkreise mit fehlenden Daten verschwinden lies.
 
 ---
 
