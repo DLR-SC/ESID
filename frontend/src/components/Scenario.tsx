@@ -9,7 +9,7 @@ import {
   toggleCompartmentExpansion,
   toggleScenario,
 } from 'store/DataSelectionSlice';
-import ScenarioCard from './ScenarioCard';
+import {CaseDataCard, ScenarioCard} from './ScenarioCard';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import List from '@mui/material/List';
@@ -319,6 +319,13 @@ export default function Scenario(): JSX.Element {
             minWidth: '400px',
           }}
         >
+          <CaseDataCard
+            selected={selectedScenario === 0}
+            active={!!activeScenarios && activeScenarios.includes(0)}
+            startValues={compartmentValues}
+            onClick={() => dispatch(selectScenario(0))}
+            onToggle={() => dispatch(toggleScenario(0))}
+          />
           {Object.entries(scenarioList.scenarios).map(([, scenario], i) => (
             <ScenarioCard
               key={i}

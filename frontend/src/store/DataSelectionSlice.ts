@@ -89,7 +89,7 @@ export const DataSelectionSlice = createSlice({
     },
     toggleScenario(state, action: PayloadAction<number>) {
       if (!state.activeScenarios) {
-        state.activeScenarios = [];
+        state.activeScenarios = [0];
       }
       const index = state.activeScenarios.indexOf(action.payload);
       if (index == -1) {

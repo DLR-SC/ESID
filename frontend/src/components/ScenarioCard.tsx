@@ -23,60 +23,47 @@ import ChevronLeft from '@mui/icons-material/ChevronLeft';
 import ChevronRight from '@mui/icons-material/ChevronRight';
 import Collapse from '@mui/material/Collapse';
 import {GroupFilterCard} from './GroupFilterCard';
+import {useGetCaseDataSingleSimulationEntryQuery} from '../store/services/caseDataApi';
 
-/**
- * React Component to render individual Scenario Card
- * @prop {ScenarioCardProps} props - The props for the component.
- * @returns {JSX.Element} JSX Element to render the scenario card.
- */
-export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
+
+function DataCard(props: {
+  id: number,
+  label: string,
+  color: string,
+  selected: boolean,
+  active: boolean,
+  compartmentValues: Dictionary<number> | null,
+  startValues: Dictionary<number> | null,
+  onClick: () => void;
+  onToggle: () => void;
+}): JSX.Element {
   const theme = useTheme();
   const {t, i18n} = useTranslation();
   const {t: tBackend} = useTranslation('backend');
 
   const {formatNumber} = NumberFormatter(i18n.language, 1, 0);
 
-  const [compartmentValues, setCompartmentValues] = useState<Dictionary<number> | null>(null);
-
   const compartments = useAppSelector((state) => state.scenarioList.compartments);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
   const compartmentsExpanded = useAppSelector((state) => state.dataSelection.compartmentsExpanded);
-  const node = useAppSelector((state) => state.dataSelection.district?.ags);
-  const day = useAppSelector((state) => state.dataSelection.date);
-
-  const {data} = useGetSingleSimulationEntryQuery(
-    {
-      id: props.scenario.id,
-      node: node,
-      day: day ?? '',
-      groups: ['total'],
-    },
-    {skip: !day}
-  );
 
   const [hover, setHover] = useState<boolean>(false);
 
-  useEffect(() => {
-    if (data && data.results.length > 0) {
-      setCompartmentValues(data.results[0].compartments);
-    }
-  }, [data]);
-
   const getCompartmentValue = (compartment: string): string => {
-    if (compartmentValues && compartment in compartmentValues) {
-      return formatNumber(compartmentValues[compartment]);
+    if (props.compartmentValues && compartment in props.compartmentValues) {
+      return formatNumber(props.compartmentValues[compartment]);
     }
     return t('no-data');
   };
 
   const getCompartmentRate = (compartment: string): string => {
     if (
-      compartmentValues &&
-      compartment in compartmentValues &&
+      props.compartmentValues &&
+      compartment in props.compartmentValues &&
       props.startValues &&
       compartment in props.startValues
     ) {
-      const value = compartmentValues[compartment];
+      const value = props.compartmentValues[compartment];
       const startValue = props.startValues[compartment];
       const result = Math.round(100 * (value / startValue) - 100);
       if (isFinite(result)) {
@@ -108,198 +95,276 @@ export default function ScenarioCard(props: ScenarioCardProps): JSX.Element {
     }
   };
 
-  return (
+  return <Box
+    id={`scenario-card-root-${props.id}`}
+    sx={{
+      display: 'flex',
+      flexDirection: 'row',
+      color: props.color,
+      width: 'min-content',
+      paddingLeft: theme.spacing(3),
+      paddingRight: theme.spacing(3),
+    }}
+  >
     <Box
-      id={`scenario-card-root-${props.scenario.id}`}
       sx={{
-        display: 'flex',
-        flexDirection: 'row',
-        color: props.color,
-        width: 'min-content',
-        paddingLeft: theme.spacing(3),
-        paddingRight: theme.spacing(3),
+        position: 'relative',
+        zIndex: 0,
+        flexGrow: 0,
+        flexShrink: 0,
+        width: '200px',
+        boxSizing: 'border-box',
+        marginX: '2px',
+        marginY: theme.spacing(2),
+        marginBottom: 0,
       }}
+      onMouseLeave={() => setHover(false)}
     >
+      {/*hover-state*/}
       <Box
+        id={`scenario-card-settings-list-${props.id}`}
+        sx={{
+          position: 'absolute',
+          zIndex: -2,
+          width: 'calc(100% + 12px)',
+          height: '100%',
+          marginTop: '-6px',
+          marginLeft: '-6px',
+          borderRadius: '9px', //matching the radius of the box shadow
+          background: hexToRGB(props.color, 0.4),
+          display: hover ? 'flex' : 'none',
+          alignItems: 'flex-end',
+        }}
+      >
+        <Tooltip
+          title={props.active ? t('scenario.deactivate').toString() : t('scenario.activate').toString()}
+          arrow={true}
+        >
+          <IconButton
+            color={'primary'}
+            onClick={() => props.onToggle()}
+            aria-label={props.active ? t('scenario.deactivate') : t('scenario.activate')}
+          >
+            {props.active ? <CheckBox /> : <CheckBoxOutlineBlank />}
+          </IconButton>
+        </Tooltip>
+      </Box>
+      <Box
+        id={`scenario-card-main-card-${props.id}`}
         sx={{
           position: 'relative',
           zIndex: 0,
-          flexGrow: 0,
-          flexShrink: 0,
-          width: '200px',
           boxSizing: 'border-box',
-          marginX: '2px',
-          marginY: theme.spacing(2),
-          marginBottom: 0,
+          height: 'min-content',
+          padding: theme.spacing(2),
+          border: `2px solid ${props.color}`,
+          borderRadius: '3px',
+          background: theme.palette.background.paper,
+          color: props.color,
+          boxShadow: props.selected && !hover ? `0px 0px 0px 6px ${hexToRGB(props.color, 0.4)}` : 'none',
+          transition: 'transform 0.5s',
+          transformStyle: 'preserve-3d',
+          transform: !props.active ? 'rotateY(180deg)' : 'none',
         }}
-        onMouseLeave={() => setHover(false)}
+        onClick={props.active ? () => props.onClick() : () => true}
+        onMouseEnter={() => setHover(true)}
       >
-        {/*hover-state*/}
         <Box
-          id={`scenario-card-settings-list-${props.scenario.id}`}
+          id={`scenario-card-back-${props.id}`}
           sx={{
             position: 'absolute',
-            zIndex: -2,
-            width: 'calc(100% + 12px)',
-            height: '100%',
-            marginTop: '-6px',
-            marginLeft: '-6px',
-            borderRadius: '9px', //matching the radius of the box shadow
-            background: hexToRGB(props.color, 0.4),
-            display: hover ? 'flex' : 'none',
-            alignItems: 'flex-end',
+            backfaceVisibility: 'hidden',
+            transform: 'rotateY(180deg)',
+            margin: '6px',
           }}
         >
-          <Tooltip
-            title={props.active ? t('scenario.deactivate').toString() : t('scenario.activate').toString()}
-            arrow={true}
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'flex-end',
+              height: '3rem',
+              marginLeft: theme.spacing(2),
+            }}
           >
-            <IconButton
-              color={'primary'}
-              onClick={() => props.onToggle()}
-              aria-label={props.active ? t('scenario.deactivate') : t('scenario.activate')}
+            <Typography
+              variant='h2'
+              sx={{
+                height: 'min-content',
+                fontWeight: 'bold',
+                fontSize: '13pt',
+              }}
             >
-              {props.active ? <CheckBox /> : <CheckBoxOutlineBlank />}
-            </IconButton>
-          </Tooltip>
+              {tBackend(`scenario-names.${props.label}`)}
+            </Typography>
+          </Box>
         </Box>
         <Box
-          id={`scenario-card-main-card-${props.scenario.id}`}
+          id={`scenario-card-front-${props.id}`}
           sx={{
-            position: 'relative',
-            zIndex: 0,
-            boxSizing: 'border-box',
-            height: 'min-content',
-            padding: theme.spacing(2),
-            border: `2px solid ${props.color}`,
-            borderRadius: '3px',
-            background: theme.palette.background.paper,
-            color: props.color,
-            boxShadow: props.selected && !hover ? `0px 0px 0px 6px ${hexToRGB(props.color, 0.4)}` : 'none',
-            transition: 'transform 0.5s',
-            transformStyle: 'preserve-3d',
-            transform: !props.active ? 'rotateY(180deg)' : 'none',
+            transform: 'rotateY(0deg)', //firefox ignores backface-visibility if the object is not rotated
+            backfaceVisibility: 'hidden',
+            margin: '6px',
           }}
-          onClick={props.active ? () => props.onClick() : () => true}
-          onMouseEnter={() => setHover(true)}
         >
           <Box
-            id={`scenario-card-back-${props.scenario.id}`}
+            id={`scenario-card-title-container-${props.id}`}
             sx={{
-              position: 'absolute',
-              backfaceVisibility: 'hidden',
-              transform: 'rotateY(180deg)',
-              margin: '6px',
+              display: 'flex',
+              alignItems: 'flex-end',
+              height: '3rem',
+              marginBottom: theme.spacing(1),
             }}
           >
-            <Box
+            <Typography
+              variant='h2'
               sx={{
-                display: 'flex',
-                alignItems: 'flex-end',
-                height: '3rem',
-                marginLeft: theme.spacing(2),
+                height: 'min-content',
+                fontWeight: 'bold',
+                fontSize: '13pt',
               }}
             >
-              <Typography
-                variant='h2'
-                sx={{
-                  height: 'min-content',
-                  fontWeight: 'bold',
-                  fontSize: '13pt',
-                }}
-              >
-                {tBackend(`scenario-names.${props.scenario.label}`)}
-              </Typography>
-            </Box>
+              {tBackend(`scenario-names.${props.label}`)}
+            </Typography>
           </Box>
-          <Box
-            id={`scenario-card-front-${props.scenario.id}`}
-            sx={{
-              transform: 'rotateY(0deg)', //firefox ignores backface-visibility if the object is not rotated
-              backfaceVisibility: 'hidden',
-              margin: '6px',
-            }}
-          >
-            <Box
-              id={`scenario-card-title-container-${props.scenario.id}`}
+          <ScrollSyncPane group='compartments'>
+            <List
+              id={`scenario-card-compartment-list-${props.id}`}
+              className='hide-scrollbar'
+              dense={true}
+              disablePadding={true}
               sx={{
-                display: 'flex',
-                alignItems: 'flex-end',
-                height: '3rem',
-                marginBottom: theme.spacing(1),
+                maxHeight: compartmentsExpanded ? '248px' : 'auto',
+                overflowX: 'hidden',
+                overflowY: 'auto',
               }}
             >
-              <Typography
-                variant='h2'
-                sx={{
-                  height: 'min-content',
-                  fontWeight: 'bold',
-                  fontSize: '13pt',
-                }}
-              >
-                {tBackend(`scenario-names.${props.scenario.label}`)}
-              </Typography>
-            </Box>
-            <ScrollSyncPane group='compartments'>
-              <List
-                id={`scenario-card-compartment-list-${props.scenario.id}`}
-                className='hide-scrollbar'
-                dense={true}
-                disablePadding={true}
-                sx={{
-                  maxHeight: compartmentsExpanded ? '248px' : 'auto',
-                  overflowX: 'hidden',
-                  overflowY: 'auto',
-                }}
-              >
-                {compartments.map((compartment, i) => (
-                  <ListItem
-                    key={compartment}
+              {compartments.map((compartment, i) => (
+                <ListItem
+                  key={compartment}
+                  sx={{
+                    // hide compartment if compartmentsExpanded false and index > 4
+                    // highlight compartment if selectedCompartment === compartment
+                    display: compartmentsExpanded || i < 4 ? 'flex' : 'none',
+                    color:
+                      selectedCompartment === compartment ? theme.palette.text.primary : theme.palette.text.disabled,
+                    padding: theme.spacing(1),
+                    margin: theme.spacing(0),
+                    marginTop: theme.spacing(1),
+                    borderTop: '2px solid transparent',
+                    borderBottom: '2px solid transparent',
+                  }}
+                >
+                  <ListItemText
+                    primary={getCompartmentValue(compartment)}
+                    // disable child typography overriding this
+                    disableTypography={true}
                     sx={{
-                      // hide compartment if compartmentsExpanded false and index > 4
-                      // highlight compartment if selectedCompartment === compartment
-                      display: compartmentsExpanded || i < 4 ? 'flex' : 'none',
-                      color:
-                        selectedCompartment === compartment ? theme.palette.text.primary : theme.palette.text.disabled,
-                      padding: theme.spacing(1),
-                      margin: theme.spacing(0),
-                      marginTop: theme.spacing(1),
-                      borderTop: '2px solid transparent',
-                      borderBottom: '2px solid transparent',
+                      typography: 'listElement',
+                      textAlign: 'right',
+                      flexBasis: '55%',
                     }}
-                  >
-                    <ListItemText
-                      primary={getCompartmentValue(compartment)}
-                      // disable child typography overriding this
-                      disableTypography={true}
-                      sx={{
-                        typography: 'listElement',
-                        textAlign: 'right',
-                        flexBasis: '55%',
-                      }}
-                    />
-                    <ListItemText
-                      primary={getCompartmentRate(compartment)}
-                      // disable child typography overriding this
-                      disableTypography={true}
-                      sx={{
-                        typography: 'listElement',
-                        fontWeight: 'bold',
-                        textAlign: 'right',
-                        flexBasis: '45%',
-                      }}
-                    />
-                    <TrendArrow compartment={compartment} />
-                  </ListItem>
-                ))}
-              </List>
-            </ScrollSyncPane>
-          </Box>
+                  />
+                  <ListItemText
+                    primary={getCompartmentRate(compartment)}
+                    // disable child typography overriding this
+                    disableTypography={true}
+                    sx={{
+                      typography: 'listElement',
+                      fontWeight: 'bold',
+                      textAlign: 'right',
+                      flexBasis: '45%',
+                    }}
+                  />
+                  <TrendArrow compartment={compartment} />
+                </ListItem>
+              ))}
+            </List>
+          </ScrollSyncPane>
         </Box>
       </Box>
-      {props.active ? <GroupFilterAppendage scenarioId={props.scenario.id} color={props.color} /> : null}
     </Box>
+    {props.active ? <GroupFilterAppendage scenarioId={props.id} color={props.color} /> : null}
+  </Box>;
+}
+
+export function CaseDataCard(props: {
+  selected: boolean,
+  active: boolean,
+  startValues: Dictionary<number> | null,
+  onClick: () => void,
+  onToggle: () => void
+}): JSX.Element {
+  const [compartmentValues, setCompartmentValues] = useState<Dictionary<number> | null>(null);
+
+  const node = useAppSelector((state) => state.dataSelection.district?.ags);
+  const day = useAppSelector((state) => state.dataSelection.date);
+
+  const {data} = useGetCaseDataSingleSimulationEntryQuery(
+    {
+      node: node,
+      day: day ?? '',
+      groups: ['total'],
+    },
+    {skip: !day},
   );
+
+  useEffect(() => {
+    if (data && data.results.length > 0) {
+      setCompartmentValues(data.results[0].compartments);
+    }
+  }, [data]);
+
+  return (
+    <DataCard id={0}
+              label={'Case Data'}
+              color={'#000000'}
+              selected={props.selected}
+              active={props.active}
+              compartmentValues={compartmentValues}
+              startValues={props.startValues}
+              onClick={props.onClick}
+              onToggle={props.onToggle} />);
+}
+
+/**
+ * React Component to render individual Scenario Card
+ * @prop {ScenarioCardProps} props - The props for the component.
+ * @returns {JSX.Element} JSX Element to render the scenario card.
+ */
+export function ScenarioCard(props: ScenarioCardProps): JSX.Element {
+  const theme = useTheme();
+
+  const [compartmentValues, setCompartmentValues] = useState<Dictionary<number> | null>(null);
+
+  const node = useAppSelector((state) => state.dataSelection.district?.ags);
+  const day = useAppSelector((state) => state.dataSelection.date);
+
+  const {data} = useGetSingleSimulationEntryQuery(
+    {
+      id: props.scenario.id,
+      node: node,
+      day: day ?? '',
+      groups: ['total'],
+    },
+    {skip: !day},
+  );
+
+  useEffect(() => {
+    if (data && data.results.length > 0) {
+      setCompartmentValues(data.results[0].compartments);
+    }
+  }, [data]);
+
+  return (
+    <DataCard id={props.scenario.id}
+              label={props.scenario.label}
+              color={theme.custom.scenarios[props.scenario.id][0]}
+              selected={props.selected}
+              active={props.active}
+              compartmentValues={compartmentValues}
+              startValues={props.startValues}
+              onClick={props.onClick}
+              onToggle={props.onToggle} />);
 }
 
 /**
