@@ -135,7 +135,8 @@ export function DataCard(props: {
             zIndex: 0,
             boxSizing: 'border-box',
             height: 'min-content',
-            padding: theme.spacing(2),
+            paddingTop: theme.spacing(2),
+            paddingBottom: theme.spacing(2),
             border: `2px solid ${props.color}`,
             borderRadius: '3px',
             background: theme.palette.background.paper,
@@ -171,6 +172,10 @@ export function DataCard(props: {
                   height: 'min-content',
                   fontWeight: 'bold',
                   fontSize: '13pt',
+                  marginLeft: '6px',
+                  marginRight: '6px',
+                  paddingLeft: theme.spacing(2),
+                  paddingRight: theme.spacing(2),
                 }}
               >
                 {props.label}
@@ -182,7 +187,8 @@ export function DataCard(props: {
             sx={{
               transform: 'rotateY(0deg)', //firefox ignores backface-visibility if the object is not rotated
               backfaceVisibility: 'hidden',
-              margin: '6px',
+              marginTop: '6px',
+              marginBottom: '6px',
             }}
           >
             <Box
@@ -200,6 +206,10 @@ export function DataCard(props: {
                   height: 'min-content',
                   fontWeight: 'bold',
                   fontSize: '13pt',
+                  marginLeft: '6px',
+                  marginRight: '6px',
+                  paddingLeft: theme.spacing(2),
+                  paddingRight: theme.spacing(2),
                 }}
               >
                 {props.label}
@@ -226,9 +236,13 @@ export function DataCard(props: {
                       display: compartmentsExpanded || i < 4 ? 'flex' : 'none',
                       color:
                         selectedCompartment === compartment ? theme.palette.text.primary : theme.palette.text.disabled,
+                      //backgroundColor: selectedCompartment === compartment ? theme.custom.scenarios[props.id][5] : "transparent",
+                      backgroundColor: selectedCompartment === compartment ? hexToRGB(props.color, 0.1) : 'transparent',
                       padding: theme.spacing(1),
                       margin: theme.spacing(0),
                       marginTop: theme.spacing(1),
+                      paddingLeft: `calc(${theme.spacing(2)} + 6px)`,
+                      paddingRight: `calc(${theme.spacing(2)} + 6px)`,
                       borderTop: '2px solid transparent',
                       borderBottom: '2px solid transparent',
                     }}
