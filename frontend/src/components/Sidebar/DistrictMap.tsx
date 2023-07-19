@@ -102,7 +102,7 @@ export default function DistrictMap(): JSX.Element {
     if (fixedLegendMaxValue) {
       return fixedLegendMaxValue;
     }
-    let max = 0;
+    let max = 1;
 
     if (data && selectedCompartment !== null) {
       data.results.forEach((entry) => {
@@ -331,7 +331,10 @@ export default function DistrictMap(): JSX.Element {
               legendRef.current = legend;
             }}
             min={0}
-            max={legend.isNormalized ? aggregatedMax : legend.steps[legend.steps.length - 1].value}
+            // use math.round to convert the numbers to integers
+            max={
+              legend.isNormalized ? Math.round(aggregatedMax) : Math.round(legend.steps[legend.steps.length - 1].value)
+            }
             displayText={true}
             id={'legend'}
           />
