@@ -1,28 +1,15 @@
-import React, {useEffect, useState} from 'react';
-import {useAppDispatch, useAppSelector} from '../../store/hooks';
+import React, {useState} from 'react';
+import {useAppSelector} from '../../store/hooks';
 import {useTheme} from '@mui/material/styles';
 import {useTranslation} from 'react-i18next';
-import {
-  selectScenario,
-  setMinMaxDates,
-  toggleScenario,
-} from 'store/DataSelectionSlice';
-import {ScenarioCard} from './ScenarioCard';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import {ScrollSync} from 'react-scroll-sync';
-import {
-  useGetSimulationModelQuery,
-  useGetSimulationModelsQuery,
-  useGetSimulationsQuery,
-} from '../../store/services/scenarioApi';
-import {setCompartments, setScenarios} from 'store/ScenarioSlice';
-import {dateToISOString, Dictionary} from 'util/util';
 import ManageGroupDialog from '../ManageGroupDialog';
 import ConfirmDialog from '../shared/ConfirmDialog';
-import {CaseDataCard} from './CaseDataCard';
 import CompartmentList from './CompartmentList';
+import DataCardList from './DataCardList';
 
 /**
  * React Component to render the Scenario Cards Section
@@ -36,73 +23,10 @@ export default function Scenario(): JSX.Element {
   const {t} = useTranslation();
   const theme = useTheme();
 
-  const dispatch = useAppDispatch();
-  const [simulationModelKey, setSimulationModelKey] = useState<string>('unset');
-  const [compartmentValues] = useState<Dictionary<number> | null>(null);
-
-  const scenarioList = useAppSelector((state) => state.scenarioList);
-  const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
   const compartmentsExpanded = useAppSelector((state) => state.dataSelection.compartmentsExpanded);
-  const activeScenarios = useAppSelector((state) => state.dataSelection.activeScenarios);
 
   const [groupEditorUnsavedChanges, setGroupEditorUnsavedChanges] = useState(false);
   const [closeDialogOpen, setCloseDialogOpen] = useState(false);
-
-  const {data: scenarioListData} = useGetSimulationsQuery();
-  const {data: simulationModelsData} = useGetSimulationModelsQuery();
-  const {data: simulationModelData} = useGetSimulationModelQuery(simulationModelKey, {
-    skip: simulationModelKey === 'unset',
-  });
-
-  useEffect(() => {
-    if (simulationModelsData && simulationModelsData.results.length > 0) {
-      const {key} = simulationModelsData.results[0];
-      setSimulationModelKey(key);
-    }
-  }, [simulationModelsData]);
-
-  useEffect(() => {
-    if (simulationModelData) {
-      const {compartments} = simulationModelData.results;
-      dispatch(setCompartments(compartments));
-    }
-  }, [simulationModelData, dispatch]);
-
-  useEffect(() => {
-    if (scenarioListData) {
-      const scenarios = scenarioListData.results.map((scenario) => ({id: scenario.id, label: scenario.description}));
-      dispatch(setScenarios(scenarios));
-
-      //activate all scenarios initially
-      if (!activeScenarios) {
-        scenarios.forEach((scenario) => {
-          dispatch(toggleScenario(scenario.id));
-        });
-      }
-
-      if (scenarios.length > 0) {
-        // It seems, that the simulation data is only available from the second day forward.
-        const startDay = new Date(scenarioListData.results[0].startDay);
-        startDay.setUTCDate(startDay.getUTCDate() + 1);
-
-        const endDay = new Date(startDay);
-        endDay.setDate(endDay.getDate() + scenarioListData.results[0].numberOfDays - 1);
-
-        dispatch(setMinMaxDates({minDate: dateToISOString(startDay), maxDate: dateToISOString(endDay)}));
-      }
-    }
-  }, [activeScenarios, scenarioListData, dispatch]);
-
-  //effect to switch active scenario
-  useEffect(() => {
-    if (activeScenarios) {
-      if (activeScenarios.length == 0) {
-        dispatch(selectScenario(null));
-      } else if (selectedScenario === null || !activeScenarios.includes(selectedScenario)) {
-        dispatch(selectScenario(activeScenarios[0]));
-      }
-    }
-  }, [activeScenarios, selectedScenario, dispatch]);
 
   return (
     <ScrollSync enabled={compartmentsExpanded ?? false}>
@@ -116,43 +40,7 @@ export default function Scenario(): JSX.Element {
         }}
       >
         <CompartmentList />
-        <Box
-          id='scenario-view-scenario-card-list'
-          sx={{
-            flexGrow: 1,
-            flexShrink: 1,
-            flexBasis: '100%',
-            display: 'flex',
-            overflowX: 'auto',
-            marginLeft: theme.spacing(3),
-            minWidth: '400px',
-          }}
-        >
-          <CaseDataCard
-            selected={selectedScenario === 0}
-            active={!!activeScenarios && activeScenarios.includes(0)}
-            startValues={compartmentValues}
-            onClick={() => dispatch(selectScenario(0))}
-            onToggle={() => dispatch(toggleScenario(0))}
-          />
-          {Object.entries(scenarioList.scenarios).map(([, scenario], i) => (
-            <ScenarioCard
-              key={scenario.id}
-              scenario={scenario}
-              selected={selectedScenario === scenario.id}
-              active={!!activeScenarios && activeScenarios.includes(scenario.id)}
-              color={theme.custom.scenarios[i][0]}
-              startValues={compartmentValues}
-              onClick={() => {
-                // set active scenario to this one and send dispatches
-                dispatch(selectScenario(scenario.id));
-              }}
-              onToggle={() => {
-                dispatch(toggleScenario(scenario.id));
-              }}
-            />
-          ))}
-        </Box>
+        <DataCardList />
         <Box
           sx={{
             borderLeft: `1px solid`,

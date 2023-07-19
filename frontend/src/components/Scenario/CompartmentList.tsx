@@ -6,13 +6,12 @@ import ListItemButton from '@mui/material/ListItemButton';
 import {selectCompartment, toggleCompartmentExpansion} from '../../store/DataSelectionSlice';
 import ListItemText from '@mui/material/ListItemText';
 import Button from '@mui/material/Button';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {useTheme} from '@mui/material/styles';
 import {useTranslation} from 'react-i18next';
 import {useAppDispatch, useAppSelector} from '../../store/hooks';
-import {Dictionary} from '../../util/util';
 import {NumberFormatter} from '../../util/hooks';
-import {useGetCaseDataSingleSimulationEntryQuery} from '../../store/services/caseDataApi';
+import {useGetSimulationStartValues} from './hooks';
 
 export default function CompartmentList(): JSX.Element {
   const theme = useTheme();
@@ -25,17 +24,7 @@ export default function CompartmentList(): JSX.Element {
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
   const compartmentsExpanded = useAppSelector((state) => state.dataSelection.compartmentsExpanded);
   const startDay = useAppSelector((state) => state.dataSelection.minDate);
-  const node = useAppSelector((state) => state.dataSelection.district.ags);
-  const [compartmentValues, setCompartmentValues] = useState<Dictionary<number> | null>(null);
-
-  const {data: caseData} = useGetCaseDataSingleSimulationEntryQuery(
-    {
-      node: node,
-      day: startDay ?? '',
-      groups: ['total'],
-    },
-    {skip: !startDay}
-  );
+  const compartmentValues = useGetSimulationStartValues();
 
   const getCompartmentValue = (compartment: string): string => {
     if (compartmentValues && compartment in compartmentValues) {
@@ -44,11 +33,6 @@ export default function CompartmentList(): JSX.Element {
     return t('no-data');
   };
 
-  useEffect(() => {
-    if (caseData) {
-      setCompartmentValues(caseData.results[0].compartments);
-    }
-  }, [caseData]);
 
   useEffect(() => {
     if (!selectedCompartment && compartments.length > 0) {
