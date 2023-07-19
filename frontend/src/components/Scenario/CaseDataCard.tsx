@@ -10,7 +10,7 @@ interface CaseDataCardProps {
   active: boolean;
   startValues: Dictionary<number> | null;
   onClick: () => void;
-  onToggle: () => void
+  onToggle: () => void;
 }
 
 export function CaseDataCard(props: CaseDataCardProps): JSX.Element {
@@ -26,7 +26,7 @@ export function CaseDataCard(props: CaseDataCardProps): JSX.Element {
       day: day ?? '',
       groups: ['total'],
     },
-    {skip: !day},
+    {skip: !day}
   );
 
   useEffect(() => {

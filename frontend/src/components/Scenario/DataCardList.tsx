@@ -82,41 +82,43 @@ export default function DataCardList(): JSX.Element {
     }
   }, [activeScenarios, selectedScenario, dispatch]);
 
-  return (<Box
-    id='scenario-view-scenario-card-list'
-    sx={{
-      flexGrow: 1,
-      flexShrink: 1,
-      flexBasis: '100%',
-      display: 'flex',
-      overflowX: 'auto',
-      marginLeft: theme.spacing(3),
-      minWidth: '400px',
-    }}
-  >
-    <CaseDataCard
-      selected={selectedScenario === 0}
-      active={!!activeScenarios && activeScenarios.includes(0)}
-      startValues={startValues}
-      onClick={() => dispatch(selectScenario(0))}
-      onToggle={() => dispatch(toggleScenario(0))}
-    />
-    {Object.entries(scenarioList.scenarios).map(([, scenario], i) => (
-      <ScenarioCard
-        key={scenario.id}
-        scenario={scenario}
-        selected={selectedScenario === scenario.id}
-        active={!!activeScenarios && activeScenarios.includes(scenario.id)}
-        color={theme.custom.scenarios[i][0]}
+  return (
+    <Box
+      id='scenario-view-scenario-card-list'
+      sx={{
+        flexGrow: 1,
+        flexShrink: 1,
+        flexBasis: '100%',
+        display: 'flex',
+        overflowX: 'auto',
+        marginLeft: theme.spacing(3),
+        minWidth: '400px',
+      }}
+    >
+      <CaseDataCard
+        selected={selectedScenario === 0}
+        active={!!activeScenarios && activeScenarios.includes(0)}
         startValues={startValues}
-        onClick={() => {
-          // set active scenario to this one and send dispatches
-          dispatch(selectScenario(scenario.id));
-        }}
-        onToggle={() => {
-          dispatch(toggleScenario(scenario.id));
-        }}
+        onClick={() => dispatch(selectScenario(0))}
+        onToggle={() => dispatch(toggleScenario(0))}
       />
-    ))}
-  </Box>);
+      {Object.entries(scenarioList.scenarios).map(([, scenario], i) => (
+        <ScenarioCard
+          key={scenario.id}
+          scenario={scenario}
+          selected={selectedScenario === scenario.id}
+          active={!!activeScenarios && activeScenarios.includes(scenario.id)}
+          color={theme.custom.scenarios[i][0]}
+          startValues={startValues}
+          onClick={() => {
+            // set active scenario to this one and send dispatches
+            dispatch(selectScenario(scenario.id));
+          }}
+          onToggle={() => {
+            dispatch(toggleScenario(scenario.id));
+          }}
+        />
+      ))}
+    </Box>
+  );
 }
