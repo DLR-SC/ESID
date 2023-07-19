@@ -172,10 +172,8 @@ export function DataCard(props: {
                   height: 'min-content',
                   fontWeight: 'bold',
                   fontSize: '13pt',
-                  marginLeft: '6px',
-                  marginRight: '6px',
-                  paddingLeft: theme.spacing(2),
-                  paddingRight: theme.spacing(2),
+                  paddingLeft: theme.spacing(3),
+                  paddingRight: theme.spacing(3),
                 }}
               >
                 {props.label}
@@ -206,10 +204,8 @@ export function DataCard(props: {
                   height: 'min-content',
                   fontWeight: 'bold',
                   fontSize: '13pt',
-                  marginLeft: '6px',
-                  marginRight: '6px',
-                  paddingLeft: theme.spacing(2),
-                  paddingRight: theme.spacing(2),
+                  paddingLeft: theme.spacing(3),
+                  paddingRight: theme.spacing(3),
                 }}
               >
                 {props.label}
@@ -241,8 +237,8 @@ export function DataCard(props: {
                       padding: theme.spacing(1),
                       margin: theme.spacing(0),
                       marginTop: theme.spacing(1),
-                      paddingLeft: `calc(${theme.spacing(2)} + 6px)`,
-                      paddingRight: `calc(${theme.spacing(2)} + 6px)`,
+                      paddingLeft: theme.spacing(3),
+                      paddingRight: theme.spacing(3),
                       borderTop: '2px solid transparent',
                       borderBottom: '2px solid transparent',
                     }}
