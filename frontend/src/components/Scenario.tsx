@@ -137,14 +137,14 @@ export default function Scenario(): JSX.Element {
     if (activeScenarios) {
       if (activeScenarios.length == 0) {
         dispatch(selectScenario(null));
-      } else if (!selectedScenario || !activeScenarios.includes(selectedScenario)) {
+      } else if (selectedScenario === null || !activeScenarios.includes(selectedScenario)) {
         dispatch(selectScenario(activeScenarios[0]));
       }
     }
   }, [activeScenarios, selectedScenario, dispatch]);
 
   return (
-    <ScrollSync enabled={compartmentsExpanded || false}>
+    <ScrollSync enabled={compartmentsExpanded ?? false}>
       <Box
         id='scenario-view-root'
         sx={{
@@ -328,7 +328,7 @@ export default function Scenario(): JSX.Element {
           />
           {Object.entries(scenarioList.scenarios).map(([, scenario], i) => (
             <ScenarioCard
-              key={i}
+              key={scenario.id}
               scenario={scenario}
               selected={selectedScenario === scenario.id}
               active={!!activeScenarios && activeScenarios.includes(scenario.id)}

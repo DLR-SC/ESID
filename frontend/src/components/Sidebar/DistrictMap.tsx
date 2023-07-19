@@ -18,6 +18,7 @@ import {HeatmapLegend} from '../../types/heatmapLegend';
 import LockOpen from '@mui/icons-material/LockOpen';
 import LoadingContainer from '../shared/LoadingContainer';
 import mapData from 'assets/lk_germany_reduced.geojson';
+import {useGetCaseDataByDateQuery} from '../../store/services/caseDataApi';
 
 const {useRef} = React;
 
@@ -46,24 +47,55 @@ export default function DistrictMap(): JSX.Element {
   const legend = useAppSelector((state) => state.userPreference.selectedHeatmap);
   const [chart, setChart] = useState<am5map.MapChart | null>(null);
 
-  const {data, isFetching} = useGetSimulationDataByDateQuery(
+  const {data: simulationData, isFetching: isSimulationDataFetching} = useGetSimulationDataByDateQuery(
     {
       id: selectedScenario ?? 0,
       day: selectedDate ?? '',
       groups: ['total'],
       compartments: [selectedCompartment ?? ''],
     },
-    {skip: !selectedScenario || !selectedCompartment || !selectedDate}
+    {skip: !selectedScenario || !selectedCompartment || !selectedDate || selectedScenario === 0}
+  );
+
+  const {data: caseData, isFetching: isCaseDataFetching} = useGetCaseDataByDateQuery(
+    {
+      day: selectedDate ?? '',
+      groups: ['total'],
+      compartments: [selectedCompartment ?? ''],
+    },
+    {skip: selectedScenario === null || !selectedCompartment || !selectedDate || selectedScenario > 0}
   );
 
   const legendRef = useRef<am5.HeatLegend | null>(null);
   const {t, i18n} = useTranslation();
   const {t: tBackend} = useTranslation('backend');
-  const {formatNumber} = NumberFormatter(i18n.language, 3, 8);
+  const {formatNumber} = NumberFormatter(i18n.language, 1, 0);
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const lastSelectedPolygon = useRef<am5map.MapPolygon | null>(null);
   const [fixedLegendMaxValue, setFixedLegendMaxValue] = useState<number | null>(null);
+
+  const data = useMemo(() => {
+    if (selectedScenario === null) {
+      return null;
+    }
+
+    if (selectedScenario === 0 && caseData !== undefined) {
+      return caseData;
+    } else if (selectedScenario > 0 && simulationData !== undefined) {
+      return simulationData;
+    }
+
+    return null;
+  }, [caseData, simulationData, selectedScenario]);
+
+  const isFetching = useMemo(() => {
+    if (selectedScenario === null) {
+      return true;
+    }
+
+    return (selectedScenario === 0 && isCaseDataFetching) || (selectedScenario > 0 && isSimulationDataFetching);
+  }, [selectedScenario, isCaseDataFetching, isSimulationDataFetching]);
 
   // use Memoized to store aggregated max and only recalculate if parameters change
   const aggregatedMax: number = useMemo(() => {
@@ -71,7 +103,8 @@ export default function DistrictMap(): JSX.Element {
       return fixedLegendMaxValue;
     }
     let max = 0;
-    if (data && selectedCompartment) {
+
+    if (data && selectedCompartment !== null) {
       data.results.forEach((entry) => {
         if (entry.name !== '00000') {
           max = Math.max(entry.compartments[selectedCompartment], max);
@@ -177,8 +210,8 @@ export default function DistrictMap(): JSX.Element {
     });
     setChart(chart);
     return () => {
-      chart && chart.dispose();
-      root && root.dispose();
+      chart?.dispose();
+      root?.dispose();
     };
   }, [geodata, theme, t, formatNumber, dispatch]);
 
@@ -218,7 +251,7 @@ export default function DistrictMap(): JSX.Element {
   useEffect(() => {
     if (chart && chart.series.length > 0) {
       const polygonSeries = chart.series.getIndex(0) as am5map.MapPolygonSeries;
-      if (selectedScenario && selectedCompartment && !isFetching) {
+      if (selectedScenario !== null && selectedCompartment && !isFetching) {
         // Map compartment value to RS
         const dataMapped = new Map<string, number>();
         data?.results.forEach((entry) => {
@@ -229,7 +262,7 @@ export default function DistrictMap(): JSX.Element {
         if (dataMapped.size > 0) {
           polygonSeries.mapPolygons.each((polygon) => {
             const regionData = polygon.dataItem?.dataContext as IRegionPolygon;
-            regionData.value = dataMapped.get(regionData.RS) || Number.NaN;
+            regionData.value = dataMapped.get(regionData.RS) ?? Number.NaN;
 
             // determine fill color
             let fillColor = am5.color(theme.palette.background.default);
@@ -243,13 +276,13 @@ export default function DistrictMap(): JSX.Element {
               }
             }
 
+            const bez = t(`BEZ.${regionData.BEZ}`);
+            const compartmentName = tBackend(`infection-states.${selectedCompartment}`);
             polygon.setAll({
               tooltipText:
-                selectedScenario && selectedCompartment
-                  ? `${t(`BEZ.${regionData.BEZ}`)} {GEN}\n${tBackend(
-                      `infection-states.${selectedCompartment}`
-                    )}: ${formatNumber(regionData.value)}`
-                  : `${t(`BEZ.${regionData.BEZ}`)} {GEN}`,
+                selectedScenario !== null && selectedCompartment
+                  ? `${bez} {GEN}\n${compartmentName}: ${formatNumber(regionData.value)}`
+                  : `${bez} {GEN}`,
               fill: fillColor,
             });
           });
@@ -259,8 +292,9 @@ export default function DistrictMap(): JSX.Element {
           polygonSeries.mapPolygons.each((polygon) => {
             const regionData = polygon.dataItem?.dataContext as IRegionPolygon;
             regionData.value = Number.NaN;
+            const bez = t(`BEZ.${regionData.BEZ}`);
             polygon.setAll({
-              tooltipText: `${t(`BEZ.${regionData.BEZ}`)} {GEN}`,
+              tooltipText: `${bez} {GEN}`,
               fill: am5.color(theme.palette.text.disabled),
             });
           });

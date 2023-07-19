@@ -25,11 +25,6 @@ import {NumberFormatter} from 'util/hooks';
 import LoadingContainer from './shared/LoadingContainer';
 import {useGetMultipleGroupFilterDataQuery} from 'store/services/groupApi';
 import {GroupData} from 'types/group';
-/* This component displays the evolution of the pandemic for a specific compartment (hospitalized, dead, infected, etc.) regarding the different scenarios
- */
-
-// deviations toggle (TODO)
-const drawDeviations = false;
 
 /**
  * React Component to render the Simulation Chart Section
@@ -49,7 +44,7 @@ export default function SimulationChart(): JSX.Element {
   const dispatch = useAppDispatch();
 
   const {data: groupFilterData} = useGetMultipleGroupFilterDataQuery(
-    groupFilterList && selectedScenario && selectedDistrict && selectedCompartment
+    groupFilterList && selectedScenario !== null && selectedDistrict && selectedCompartment
       ? Object.values(groupFilterList)
           .filter((groupFilter) => groupFilter.isVisible)
           .map((groupFilter) => {
@@ -74,7 +69,7 @@ export default function SimulationChart(): JSX.Element {
 
   const {data: simulationData, isFetching: simulationFetching} = useGetMultipleSimulationDataByNodeQuery(
     {
-      ids: activeScenarios ? activeScenarios : [],
+      ids: activeScenarios ? activeScenarios.filter((s) => s !== 0) : [],
       node: selectedDistrict,
       groups: ['total'],
       compartments: [selectedCompartment ?? ''],
@@ -89,10 +84,10 @@ export default function SimulationChart(): JSX.Element {
       groups: ['total'],
       compartment: selectedCompartment as string,
     },
-    {skip: !selectedScenario || !selectedCompartment}
+    {skip: !selectedScenario || !selectedCompartment || selectedScenario === 0}
   );
 
-  const {formatNumber} = NumberFormatter(i18n.language, 3, 8);
+  const {formatNumber} = NumberFormatter(i18n.language, 1, 0);
 
   const chartRef = useRef<XYChart | null>(null);
 
@@ -137,27 +132,12 @@ export default function SimulationChart(): JSX.Element {
       series.dataFields.dateX = 'date';
       series.id = scenarioId;
       series.strokeWidth = 2;
-      series.fill = color(theme.custom.scenarios[i % theme.custom.scenarios.length][0]); // loop around the color list if scenarios exceed color list
+      series.fill = color(theme.custom.scenarios[(i + 1) % theme.custom.scenarios.length][0]); // loop around the color list if scenarios exceed color list
       series.stroke = series.fill;
       series.tooltipText = `[bold ${series.stroke.hex}]${tBackend(
         `scenario-names.${scenario.label}`
       )}:[/] {${scenarioId}}`;
       series.name = tBackend(`scenario-names.${scenario.label}`);
-
-      if (drawDeviations) {
-        const seriesSTD = chart.series.push(new LineSeries());
-        seriesSTD.dataFields.valueY = `${scenarioId}STDup`;
-        seriesSTD.dataFields.openValueY = `${scenarioId}STDdown`;
-        seriesSTD.dataFields.dateX = 'date';
-        seriesSTD.strokeWidth = 0;
-        seriesSTD.fillOpacity = 0.3;
-        series.fill = color(theme.custom.scenarios[i % theme.custom.scenarios.length][0]); // loop around the color list if scenarios exceed color list
-        series.stroke = series.fill;
-        // override tooltip
-        series.tooltipText = `${tBackend(
-          `scenario-names.${scenario.label}`
-        )}: [bold]{${scenarioId}STDdown} ~ {${scenarioId}STDup}[/]`;
-      }
     });
 
     // To export this chart
@@ -173,7 +153,7 @@ export default function SimulationChart(): JSX.Element {
     chart.exporting.filePrefix = 'Covid Simulation Data';
 
     // Add series for groupFilter
-    if (groupFilterList && selectedScenario) {
+    if (groupFilterList && selectedScenario !== null) {
       const groupFilterStrokes = ['2,4', '8,4', '8,4,2,4'];
       Object.values(groupFilterList)
         .filter((groupFilter) => groupFilter.isVisible)
@@ -183,7 +163,7 @@ export default function SimulationChart(): JSX.Element {
           series.dataFields.dateX = 'date';
           series.id = 'group-filter-' + groupFilter.name;
           series.strokeWidth = 2;
-          series.fill = color(theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0]);
+          series.fill = color(theme.custom.scenarios[selectedScenario % theme.custom.scenarios.length][0]);
           series.stroke = series.fill;
           if (i < groupFilterStrokes.length) {
             series.strokeDasharray = groupFilterStrokes[i];
@@ -213,10 +193,10 @@ export default function SimulationChart(): JSX.Element {
     const allSeries = chartRef.current?.series;
     if (allSeries) {
       allSeries.each((series) => {
-        if (scenarioList.scenarios[+series.id] && !activeScenarios?.includes(+series.id)) {
-          series.hide();
-        } else {
+        if (!scenarioList.scenarios[+series.id] || activeScenarios?.includes(+series.id)) {
           series.show();
+        } else {
+          series.hide();
         }
       });
     }
@@ -228,7 +208,7 @@ export default function SimulationChart(): JSX.Element {
     if (allSeries) {
       allSeries.each((series) => {
         if (series.id == 'percentiles') {
-          if (selectedScenario) {
+          if (selectedScenario !== null && selectedScenario > 0) {
             series.show();
           } else {
             series.hide();
@@ -275,8 +255,7 @@ export default function SimulationChart(): JSX.Element {
       simulationData &&
       simulationData.length > 1 &&
       selectedCompartment &&
-      percentileData &&
-      selectedScenario
+      selectedScenario !== null
     ) {
       // clear data
       chartRef.current.data = [];
@@ -298,20 +277,22 @@ export default function SimulationChart(): JSX.Element {
         dataMap.set(entry.day, {...dataMap.get(entry.day), caseData: entry.compartments[selectedCompartment]});
       });
 
-      //add 25th percentile data
-      percentileData[0].results?.forEach((entry: PercentileDataByDay) => {
-        dataMap.set(entry.day, {...dataMap.get(entry.day), percentileDown: entry.compartments[selectedCompartment]});
-      });
+      if (selectedScenario > 0 && percentileData) {
+        //add 25th percentile data
+        percentileData[0].results?.forEach((entry: PercentileDataByDay) => {
+          dataMap.set(entry.day, {...dataMap.get(entry.day), percentileDown: entry.compartments[selectedCompartment]});
+        });
 
-      //add 75th percentile data
-      percentileData[1].results?.forEach((entry: PercentileDataByDay) => {
-        dataMap.set(entry.day, {...dataMap.get(entry.day), percentileUp: entry.compartments[selectedCompartment]});
-      });
+        //add 75th percentile data
+        percentileData[1].results?.forEach((entry: PercentileDataByDay) => {
+          dataMap.set(entry.day, {...dataMap.get(entry.day), percentileUp: entry.compartments[selectedCompartment]});
+        });
+      }
 
       // Add groupFilter data
       if (groupFilterList && groupFilterData) {
         Object.values(groupFilterList).forEach((groupFilter) => {
-          if (groupFilter && groupFilter.isVisible) {
+          if (groupFilter?.isVisible) {
             if (groupFilterData[groupFilter.name]) {
               groupFilterData[groupFilter.name].results.forEach((entry: GroupData) => {
                 dataMap.set(entry.day, {
@@ -327,12 +308,9 @@ export default function SimulationChart(): JSX.Element {
       //change fill color of percentile series to selected scenario color
       const percentileSeries = chartRef.current.map.getKey('percentiles') as LineSeries;
       if (
-        percentileSeries.fill !==
-        color(theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0])
+        percentileSeries.fill !== color(theme.custom.scenarios[selectedScenario % theme.custom.scenarios.length][0])
       ) {
-        percentileSeries.fill = color(
-          theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0]
-        );
+        percentileSeries.fill = color(theme.custom.scenarios[selectedScenario % theme.custom.scenarios.length][0]);
       }
 
       // sort map by date
@@ -347,7 +325,6 @@ export default function SimulationChart(): JSX.Element {
       });
 
       // set up tooltip
-      // TODO: HTML Tooltip
       chartRef.current.series.each((series) => {
         series.adapter.add('tooltipHTML', (_, target) => {
           const data = target.tooltipDataItem.dataContext;
@@ -378,7 +355,7 @@ export default function SimulationChart(): JSX.Element {
                 )}</td>`
               );
               if (
-                s.id == scenarioList.scenarios[selectedScenario].id.toString() &&
+                s.id == selectedScenario.toString() &&
                 percentileSeries.dataFields.openValueY &&
                 percentileSeries.dataFields.valueY
               ) {

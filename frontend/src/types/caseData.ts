@@ -11,5 +11,5 @@ export interface CaseDataByDate {
   count: number;
   next: string | null;
   previous: string | null;
-  results: Array<{node: string; compartments: Dictionary<number>}>;
+  results: Array<{name: string; compartments: Dictionary<number>}>;
 }
