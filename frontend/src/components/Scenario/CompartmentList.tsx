@@ -16,14 +16,12 @@ import {useGetSimulationStartValues} from './hooks';
 export default function CompartmentList(): JSX.Element {
   const theme = useTheme();
   const {t, i18n} = useTranslation();
-  const {t: tBackend} = useTranslation('backend');
   const dispatch = useAppDispatch();
   const {formatNumber} = NumberFormatter(i18n.language, 1, 0);
 
   const compartments = useAppSelector((state) => state.scenarioList.compartments);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
   const compartmentsExpanded = useAppSelector((state) => state.dataSelection.compartmentsExpanded);
-  const startDay = useAppSelector((state) => state.dataSelection.minDate);
   const compartmentValues = useGetSimulationStartValues();
 
   const getCompartmentValue = (compartment: string): string => {
@@ -32,7 +30,6 @@ export default function CompartmentList(): JSX.Element {
     }
     return t('no-data');
   };
-
 
   useEffect(() => {
     if (!selectedCompartment && compartments.length > 0) {
@@ -59,44 +56,7 @@ export default function CompartmentList(): JSX.Element {
       paddingRight: 0,
     }}
   >
-    <Box
-      id='scenario-view-compartment-list-date'
-      sx={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        height: '3rem',
-        marginLeft: theme.spacing(3),
-        marginRight: 0,
-        marginBottom: theme.spacing(1),
-        paddingRight: theme.spacing(3),
-
-        // This invisible border mirrors the existing border of the scenario cards and ensures correct alignment.
-        borderTop: '2px solid transparent',
-      }}
-    >
-      <Typography
-        variant='h2'
-        sx={{
-          textAlign: 'left',
-          height: 'min-content',
-          // fontWeight: 'bold',
-          fontSize: '13pt',
-        }}
-      >
-        {t('scenario.simulation-start-day')}:
-      </Typography>
-      <Typography
-        variant='h2'
-        sx={{
-          textAlign: 'right',
-          height: 'min-content',
-          fontWeight: 'bold',
-          fontSize: '13pt',
-        }}
-      >
-        {startDay ? new Date(startDay).toLocaleDateString(i18n.language) : t('today')}
-      </Typography>
-    </Box>
+    <SimulationStartTitle />
     <ScrollSyncPane group='compartments'>
       <List
         id='scenario-view-compartment-list'
@@ -108,62 +68,14 @@ export default function CompartmentList(): JSX.Element {
         }}
       >
         {compartments.map((compartment, i) => (
-          // map all compartments to display compartment list
-          <ListItemButton
+          <CompartmentRow
             key={compartment}
-            sx={{
-              display: compartmentsExpanded || i < 4 ? 'flex' : 'none',
-              maxHeight: '36px', // Ensure, that emojis don't screw with the line height!
-              padding: theme.spacing(1),
-              paddingLeft: theme.spacing(3),
-              paddingRight: theme.spacing(3),
-              margin: theme.spacing(0),
-              marginTop: theme.spacing(1),
-              borderLeft: `2px ${
-                selectedCompartment === compartment ? theme.palette.primary.main : 'transparent'
-              } solid`,
-              borderTop: `2px ${
-                selectedCompartment === compartment ? theme.palette.background.paper : 'transparent'
-              } solid`,
-              borderBottom: `2px ${
-                selectedCompartment === compartment ? theme.palette.background.paper : 'transparent'
-              } solid`,
-              '&.MuiListItemButton-root.Mui-selected': {
-                backgroundColor: theme.palette.background.paper,
-              },
-            }}
-            selected={selectedCompartment === compartment}
-            onClick={() => {
-              // dispatch new compartment name
-              dispatch(selectCompartment(compartment));
-            }}
-          >
-            <ListItemText
-              primary={tBackend(`infection-states.${compartment}`)}
-              // disable child typography overriding this
-              disableTypography={true}
-              sx={{
-                typography: 'listElement',
-                fontWeight: selectedCompartment === compartment ? 'bold' : 'normal',
-                flexGrow: 1,
-                flexBasis: 100,
-                zIndex: 20,
-              }}
-            />
-            <ListItemText
-              primary={getCompartmentValue(compartment)}
-              // disable child typography overriding this
-              disableTypography={true}
-              sx={{
-                typography: 'listElement',
-                color:
-                  selectedCompartment === compartment ? theme.palette.text.primary : theme.palette.text.disabled,
-                textAlign: 'right',
-                flexGrow: 1,
-                zIndex: 20,
-              }}
-            />
-          </ListItemButton>
+            compartment={compartment}
+            value={getCompartmentValue(compartment)}
+            selected={compartment === selectedCompartment}
+            index={i}
+            compartmentsExpanded={compartmentsExpanded}
+          />
         ))}
       </List>
     </ScrollSyncPane>
@@ -193,4 +105,121 @@ export default function CompartmentList(): JSX.Element {
       {compartmentsExpanded ? t('less') : t('more')}
     </Button>
   </Box>);
+}
+
+function SimulationStartTitle(): JSX.Element {
+  const theme = useTheme();
+  const {t, i18n} = useTranslation();
+
+  const startDay = useAppSelector((state) => state.dataSelection.minDate);
+
+  return <Box
+    id='scenario-view-compartment-list-date'
+    sx={{
+      display: 'flex',
+      justifyContent: 'space-between',
+      height: '3rem',
+      marginLeft: theme.spacing(3),
+      marginRight: 0,
+      marginBottom: theme.spacing(1),
+      paddingRight: theme.spacing(3),
+
+      // This invisible border mirrors the existing border of the scenario cards and ensures correct alignment.
+      borderTop: '2px solid transparent',
+    }}
+  >
+    <Typography
+      variant='h2'
+      sx={{
+        textAlign: 'left',
+        height: 'min-content',
+        // fontWeight: 'bold',
+        fontSize: '13pt',
+      }}
+    >
+      {t('scenario.simulation-start-day')}:
+    </Typography>
+    <Typography
+      variant='h2'
+      sx={{
+        textAlign: 'right',
+        height: 'min-content',
+        fontWeight: 'bold',
+        fontSize: '13pt',
+      }}
+    >
+      {startDay ? new Date(startDay).toLocaleDateString(i18n.language) : t('today')}
+    </Typography>
+  </Box>;
+}
+
+function CompartmentRow(props: {
+  compartment: string,
+  value: string,
+  selected: boolean,
+  index: number,
+  compartmentsExpanded: boolean | null
+}): JSX.Element {
+  const {t: tBackend} = useTranslation('backend');
+  const theme = useTheme();
+
+  const dispatch = useAppDispatch();
+
+  return (
+    <ListItemButton
+      key={props.compartment}
+      sx={{
+        display: props.compartmentsExpanded || props.index < 4 ? 'flex' : 'none',
+        maxHeight: '36px', // Ensure, that emojis don't screw with the line height!
+        padding: theme.spacing(1),
+        paddingLeft: theme.spacing(3),
+        paddingRight: theme.spacing(3),
+        margin: theme.spacing(0),
+        marginTop: theme.spacing(1),
+        borderLeft: `2px ${
+          props.selected ? theme.palette.primary.main : 'transparent'
+        } solid`,
+        borderTop: `2px ${
+          props.selected ? theme.palette.background.paper : 'transparent'
+        } solid`,
+        borderBottom: `2px ${
+          props.selected ? theme.palette.background.paper : 'transparent'
+        } solid`,
+        '&.MuiListItemButton-root.Mui-selected': {
+          backgroundColor: theme.palette.background.paper,
+        },
+      }}
+      selected={props.selected}
+      onClick={() => {
+        // dispatch new compartment name
+        dispatch(selectCompartment(props.compartment));
+      }}
+    >
+      <ListItemText
+        primary={tBackend(`infection-states.${props.compartment}`)}
+        // disable child typography overriding this
+        disableTypography={true}
+        sx={{
+          typography: 'listElement',
+          fontWeight: props.selected ? 'bold' : 'normal',
+          flexGrow: 1,
+          flexBasis: 100,
+          zIndex: 20,
+        }}
+      />
+      <ListItemText
+        primary={props.value}
+        // disable child typography overriding this
+        disableTypography={true}
+        sx={{
+          typography: 'listElement',
+          color:
+            props.selected ? theme.palette.text.primary : theme.palette.text.disabled,
+          textAlign: 'right',
+          flexGrow: 1,
+          zIndex: 20,
+        }}
+      />
+    </ListItemButton>
+  );
 }
