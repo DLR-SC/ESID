@@ -36,7 +36,6 @@ export function DataCard(props: {
   const {formatNumber} = NumberFormatter(i18n.language, 1, 0);
 
   const compartments = useAppSelector((state) => state.scenarioList.compartments);
-  const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
   const compartmentsExpanded = useAppSelector((state) => state.dataSelection.compartmentsExpanded);
 
   const [hover, setHover] = useState<boolean>(false);
@@ -158,27 +157,7 @@ export function DataCard(props: {
               margin: '6px',
             }}
           >
-            <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'flex-end',
-                height: '3rem',
-                marginLeft: theme.spacing(2),
-              }}
-            >
-              <Typography
-                variant='h2'
-                sx={{
-                  height: 'min-content',
-                  fontWeight: 'bold',
-                  fontSize: '13pt',
-                  paddingLeft: theme.spacing(3),
-                  paddingRight: theme.spacing(3),
-                }}
-              >
-                {props.label}
-              </Typography>
-            </Box>
+            <CardTitle title={props.label} id={props.id} isFront={false} />
           </Box>
           <Box
             id={`scenario-card-front-${props.id}`}
@@ -189,28 +168,7 @@ export function DataCard(props: {
               marginBottom: '6px',
             }}
           >
-            <Box
-              id={`scenario-card-title-container-${props.id}`}
-              sx={{
-                display: 'flex',
-                alignItems: 'flex-end',
-                height: '3rem',
-                marginBottom: theme.spacing(1),
-              }}
-            >
-              <Typography
-                variant='h2'
-                sx={{
-                  height: 'min-content',
-                  fontWeight: 'bold',
-                  fontSize: '13pt',
-                  paddingLeft: theme.spacing(3),
-                  paddingRight: theme.spacing(3),
-                }}
-              >
-                {props.label}
-              </Typography>
-            </Box>
+            <CardTitle title={props.label} id={props.id} isFront />
             <ScrollSyncPane group='compartments'>
               <List
                 id={`scenario-card-compartment-list-${props.id}`}
@@ -224,51 +182,14 @@ export function DataCard(props: {
                 }}
               >
                 {compartments.map((compartment, i) => (
-                  <ListItem
+                  <CompartmentRow
                     key={compartment}
-                    sx={{
-                      // hide compartment if compartmentsExpanded false and index > 4
-                      // highlight compartment if selectedCompartment === compartment
-                      display: compartmentsExpanded || i < 4 ? 'flex' : 'none',
-                      color:
-                        selectedCompartment === compartment ? theme.palette.text.primary : theme.palette.text.disabled,
-                      //backgroundColor: selectedCompartment === compartment ? theme.custom.scenarios[props.id][5] : "transparent",
-                      backgroundColor: selectedCompartment === compartment ? hexToRGB(props.color, 0.1) : 'transparent',
-                      padding: theme.spacing(1),
-                      margin: theme.spacing(0),
-                      marginTop: theme.spacing(1),
-                      paddingLeft: theme.spacing(3),
-                      paddingRight: theme.spacing(3),
-                      borderTop: '2px solid transparent',
-                      borderBottom: '2px solid transparent',
-                    }}
-                  >
-                    <ListItemText
-                      primary={getCompartmentValue(compartment)}
-                      // disable child typography overriding this
-                      disableTypography={true}
-                      sx={{
-                        typography: 'listElement',
-                        textAlign: 'right',
-                        flexBasis: '55%',
-                      }}
-                    />
-                    <ListItemText
-                      primary={getCompartmentRate(compartment)}
-                      // disable child typography overriding this
-                      disableTypography={true}
-                      sx={{
-                        typography: 'listElement',
-                        fontWeight: 'bold',
-                        textAlign: 'right',
-                        flexBasis: '45%',
-                      }}
-                    />
-                    <TrendArrow
-                      rate={getCompartmentRate(compartment)}
-                      value={parseFloat(getCompartmentValue(compartment))}
-                    />
-                  </ListItem>
+                    compartment={compartment}
+                    value={parseFloat(getCompartmentValue(compartment))}
+                    rate={getCompartmentRate(compartment)}
+                    color={props.color}
+                    index={i}
+                  />
                 ))}
               </List>
             </ScrollSyncPane>
@@ -277,6 +198,93 @@ export function DataCard(props: {
       </Box>
       {props.active ? <GroupFilterAppendage scenarioId={props.id} color={props.color} /> : null}
     </Box>
+  );
+}
+
+function CardTitle(props: {title: string, id: number, isFront: boolean}): JSX.Element {
+  const theme = useTheme();
+
+  return (
+    <Box
+      id={`scenario-card-title-container-${props.id}-${props.isFront ? 'front' : 'back'}`}
+      sx={{
+        display: 'flex',
+        alignItems: 'flex-end',
+        height: '3rem',
+        marginBottom: theme.spacing(1),
+      }}
+    >
+      <Typography
+        variant='h2'
+        sx={{
+          height: 'min-content',
+          fontWeight: 'bold',
+          fontSize: '13pt',
+          paddingLeft: theme.spacing(3),
+          paddingRight: theme.spacing(3),
+        }}
+      >
+        {props.title}
+      </Typography>
+    </Box>
+  );
+}
+
+function CompartmentRow(props: {
+  compartment: string,
+  value: number,
+  rate: string,
+  color: string,
+  index: number
+}): JSX.Element {
+  const theme = useTheme();
+
+  const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
+  const compartmentsExpanded = useAppSelector((state) => state.dataSelection.compartmentsExpanded);
+
+  return (
+    <ListItem
+      sx={{
+        // hide compartment if compartmentsExpanded false and index > 4
+        // highlight compartment if selectedCompartment === compartment
+        display: compartmentsExpanded || props.index < 4 ? 'flex' : 'none',
+        color: selectedCompartment === props.compartment ? theme.palette.text.primary : theme.palette.text.disabled,
+        backgroundColor: selectedCompartment === props.compartment ? hexToRGB(props.color, 0.1) : 'transparent',
+        padding: theme.spacing(1),
+        margin: theme.spacing(0),
+        marginTop: theme.spacing(1),
+        paddingLeft: theme.spacing(3),
+        paddingRight: theme.spacing(3),
+        borderTop: '2px solid transparent',
+        borderBottom: '2px solid transparent',
+      }}
+    >
+      <ListItemText
+        primary={props.value}
+        // disable child typography overriding this
+        disableTypography={true}
+        sx={{
+          typography: 'listElement',
+          textAlign: 'right',
+          flexBasis: '55%',
+        }}
+      />
+      <ListItemText
+        primary={props.rate}
+        // disable child typography overriding this
+        disableTypography={true}
+        sx={{
+          typography: 'listElement',
+          fontWeight: 'bold',
+          textAlign: 'right',
+          flexBasis: '45%',
+        }}
+      />
+      <TrendArrow
+        rate={props.rate}
+        value={props.value}
+      />
+    </ListItem>
   );
 }
 

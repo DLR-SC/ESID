@@ -6,7 +6,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import {selectCompartment, toggleCompartmentExpansion} from '../../store/DataSelectionSlice';
 import ListItemText from '@mui/material/ListItemText';
 import Button from '@mui/material/Button';
-import React, {useEffect} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import {useTheme} from '@mui/material/styles';
 import {useTranslation} from 'react-i18next';
 import {useAppDispatch, useAppSelector} from '../../store/hooks';
@@ -73,9 +73,7 @@ export default function CompartmentList(): JSX.Element {
               key={compartment}
               compartment={compartment}
               value={getCompartmentValue(compartment)}
-              selected={compartment === selectedCompartment}
               index={i}
-              compartmentsExpanded={compartmentsExpanded}
             />
           ))}
         </List>
@@ -160,34 +158,36 @@ function SimulationStartTitle(): JSX.Element {
 function CompartmentRow(props: {
   compartment: string;
   value: string;
-  selected: boolean;
   index: number;
-  compartmentsExpanded: boolean | null;
 }): JSX.Element {
   const {t: tBackend} = useTranslation('backend');
   const theme = useTheme();
 
   const dispatch = useAppDispatch();
+  const compartmentsExpanded = useAppSelector((state) => state.dataSelection.compartmentsExpanded);
+  const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
+
+  const selected = useMemo(() => props.compartment === selectedCompartment, [props.compartment, selectedCompartment]);
 
   return (
     <ListItemButton
       key={props.compartment}
       sx={{
-        display: props.compartmentsExpanded || props.index < 4 ? 'flex' : 'none',
+        display: compartmentsExpanded || props.index < 4 ? 'flex' : 'none',
         maxHeight: '36px', // Ensure, that emojis don't screw with the line height!
         padding: theme.spacing(1),
         paddingLeft: theme.spacing(3),
         paddingRight: theme.spacing(3),
         margin: theme.spacing(0),
         marginTop: theme.spacing(1),
-        borderLeft: `2px ${props.selected ? theme.palette.primary.main : 'transparent'} solid`,
-        borderTop: `2px ${props.selected ? theme.palette.background.paper : 'transparent'} solid`,
-        borderBottom: `2px ${props.selected ? theme.palette.background.paper : 'transparent'} solid`,
+        borderLeft: `2px ${selected ? theme.palette.primary.main : 'transparent'} solid`,
+        borderTop: `2px ${selected ? theme.palette.background.paper : 'transparent'} solid`,
+        borderBottom: `2px ${selected ? theme.palette.background.paper : 'transparent'} solid`,
         '&.MuiListItemButton-root.Mui-selected': {
           backgroundColor: theme.palette.background.paper,
         },
       }}
-      selected={props.selected}
+      selected={selected}
       onClick={() => {
         // dispatch new compartment name
         dispatch(selectCompartment(props.compartment));
@@ -199,7 +199,7 @@ function CompartmentRow(props: {
         disableTypography={true}
         sx={{
           typography: 'listElement',
-          fontWeight: props.selected ? 'bold' : 'normal',
+          fontWeight: selected ? 'bold' : 'normal',
           flexGrow: 1,
           flexBasis: 100,
           zIndex: 20,
@@ -211,7 +211,7 @@ function CompartmentRow(props: {
         disableTypography={true}
         sx={{
           typography: 'listElement',
-          color: props.selected ? theme.palette.text.primary : theme.palette.text.disabled,
+          color: selected ? theme.palette.text.primary : theme.palette.text.disabled,
           textAlign: 'right',
           flexGrow: 1,
           zIndex: 20,
