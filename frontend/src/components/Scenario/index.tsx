@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {useAppDispatch, useAppSelector} from '../store/hooks';
+import {useAppDispatch, useAppSelector} from '../../store/hooks';
 import {useTheme} from '@mui/material/styles';
 import {useTranslation} from 'react-i18next';
 import {
@@ -9,7 +9,7 @@ import {
   toggleCompartmentExpansion,
   toggleScenario,
 } from 'store/DataSelectionSlice';
-import {CaseDataCard, ScenarioCard} from './ScenarioCard';
+import {ScenarioCard} from './ScenarioCard';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import List from '@mui/material/List';
@@ -22,13 +22,14 @@ import {
   useGetSimulationModelQuery,
   useGetSimulationModelsQuery,
   useGetSimulationsQuery,
-} from '../store/services/scenarioApi';
+} from '../../store/services/scenarioApi';
 import {setCompartments, setScenarios} from 'store/ScenarioSlice';
 import {dateToISOString, Dictionary} from 'util/util';
-import {useGetCaseDataSingleSimulationEntryQuery} from '../store/services/caseDataApi';
-import {NumberFormatter} from '../util/hooks';
-import ManageGroupDialog from './ManageGroupDialog';
-import ConfirmDialog from './shared/ConfirmDialog';
+import {useGetCaseDataSingleSimulationEntryQuery} from '../../store/services/caseDataApi';
+import {NumberFormatter} from '../../util/hooks';
+import ManageGroupDialog from '../ManageGroupDialog';
+import ConfirmDialog from '../shared/ConfirmDialog';
+import {CaseDataCard} from './CaseDataCard';
 
 /**
  * React Component to render the Scenario Cards Section

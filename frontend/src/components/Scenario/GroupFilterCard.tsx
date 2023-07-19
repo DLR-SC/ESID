@@ -1,16 +1,16 @@
 import {useTheme} from '@mui/material/styles';
-import {useAppSelector} from '../store/hooks';
+import {useAppSelector} from '../../store/hooks';
 import React from 'react';
 import Box from '@mui/material/Box';
-import {useGetSingleGroupFilterDataQuery} from '../store/services/groupApi';
+import {useGetSingleGroupFilterDataQuery} from '../../store/services/groupApi';
 import Typography from '@mui/material/Typography';
 import {useTranslation} from 'react-i18next';
-import {NumberFormatter} from '../util/hooks';
+import {NumberFormatter} from '../../util/hooks';
 import {ScrollSyncPane} from 'react-scroll-sync';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
-import {GroupFilter} from '../types/group';
+import {GroupFilter} from '../../types/group';
 
 /**
  * This is responsible for displaying an active group filter.

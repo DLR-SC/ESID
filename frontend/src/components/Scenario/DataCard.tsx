@@ -1,31 +1,25 @@
-import React, {useEffect, useState} from 'react';
+import {Dictionary} from '../../util/util';
 import {useTheme} from '@mui/material/styles';
+import {useTranslation} from 'react-i18next';
+import {NumberFormatter} from '../../util/hooks';
+import {useAppSelector} from '../../store/hooks';
+import React, {useState} from 'react';
 import Box from '@mui/material/Box';
+import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
+import CheckBox from '@mui/icons-material/CheckBox';
+import CheckBoxOutlineBlank from '@mui/icons-material/CheckBoxOutlineBlank';
+import Typography from '@mui/material/Typography';
+import {ScrollSyncPane} from 'react-scroll-sync';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
-import Tooltip from '@mui/material/Tooltip';
-import Typography from '@mui/material/Typography';
-import {useAppSelector} from 'store/hooks';
-import {useGetSingleSimulationEntryQuery} from 'store/services/scenarioApi';
-import {Dictionary} from '../util/util';
-import {useTranslation} from 'react-i18next';
-import {NumberFormatter} from '../util/hooks';
-import CheckBoxOutlineBlank from '@mui/icons-material/CheckBoxOutlineBlank';
-import CheckBox from '@mui/icons-material/CheckBox';
-import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import {ScrollSyncPane} from 'react-scroll-sync';
-import Button from '@mui/material/Button';
-import ChevronLeft from '@mui/icons-material/ChevronLeft';
-import ChevronRight from '@mui/icons-material/ChevronRight';
-import Collapse from '@mui/material/Collapse';
-import {GroupFilterCard} from './GroupFilterCard';
-import {useGetCaseDataSingleSimulationEntryQuery} from '../store/services/caseDataApi';
+import {GroupFilterAppendage} from './GroupFilterAppendage';
 
-function DataCard(props: {
+export function DataCard(props: {
   id: number;
   label: string;
   color: string;
@@ -276,165 +270,6 @@ function DataCard(props: {
   );
 }
 
-export function CaseDataCard(props: {
-  selected: boolean;
-  active: boolean;
-  startValues: Dictionary<number> | null;
-  onClick: () => void;
-  onToggle: () => void;
-}): JSX.Element {
-  const {t} = useTranslation();
-  const [compartmentValues, setCompartmentValues] = useState<Dictionary<number> | null>(null);
-
-  const node = useAppSelector((state) => state.dataSelection.district?.ags);
-  const day = useAppSelector((state) => state.dataSelection.date);
-
-  const {data} = useGetCaseDataSingleSimulationEntryQuery(
-    {
-      node: node,
-      day: day ?? '',
-      groups: ['total'],
-    },
-    {skip: !day}
-  );
-
-  useEffect(() => {
-    if (data && data.results.length > 0) {
-      setCompartmentValues(data.results[0].compartments);
-    }
-  }, [data]);
-
-  return (
-    <DataCard
-      id={0}
-      label={t('chart.caseData')}
-      color={'#000000'}
-      selected={props.selected}
-      active={props.active}
-      compartmentValues={compartmentValues}
-      startValues={props.startValues}
-      onClick={props.onClick}
-      onToggle={props.onToggle}
-    />
-  );
-}
-
-/**
- * React Component to render individual Scenario Card
- * @prop {ScenarioCardProps} props - The props for the component.
- * @returns {JSX.Element} JSX Element to render the scenario card.
- */
-export function ScenarioCard(props: ScenarioCardProps): JSX.Element {
-  const {t: tBackend} = useTranslation('backend');
-  const theme = useTheme();
-
-  const [compartmentValues, setCompartmentValues] = useState<Dictionary<number> | null>(null);
-
-  const node = useAppSelector((state) => state.dataSelection.district?.ags);
-  const day = useAppSelector((state) => state.dataSelection.date);
-
-  const {data} = useGetSingleSimulationEntryQuery(
-    {
-      id: props.scenario.id,
-      node: node,
-      day: day ?? '',
-      groups: ['total'],
-    },
-    {skip: !day}
-  );
-
-  useEffect(() => {
-    if (data && data.results.length > 0) {
-      setCompartmentValues(data.results[0].compartments);
-    }
-  }, [data]);
-
-  return (
-    <DataCard
-      id={props.scenario.id}
-      label={tBackend(`scenario-names.${props.scenario.label}`)}
-      color={theme.custom.scenarios[props.scenario.id][0]}
-      selected={props.selected}
-      active={props.active}
-      compartmentValues={compartmentValues}
-      startValues={props.startValues}
-      onClick={props.onClick}
-      onToggle={props.onToggle}
-    />
-  );
-}
-
-/**
- * This component is placed on the right side of the scenario cards, if at least one group filter is active. It contains
- * a button to open and close the card appendage for the active group filters.
- */
-function GroupFilterAppendage(props: GroupFilterAppendageProps): JSX.Element | null {
-  const theme = useTheme();
-  const groupFilterList = useAppSelector((state) => state.dataSelection.groupFilters);
-
-  const [folded, setFolded] = useState(true);
-
-  if (!groupFilterList) {
-    return null;
-  }
-
-  const groupFilterArray = Object.values(groupFilterList);
-
-  // If no group filter is visible this will be hidden.
-  if (!groupFilterArray.some((groupFilter) => groupFilter.isVisible)) {
-    return null;
-  }
-
-  return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'row',
-        marginY: theme.spacing(2),
-        marginLeft: '-3px',
-        padding: '1px',
-        height: 'min-content',
-        border: `1px solid ${props.color}`,
-        borderRadius: '3px',
-        background: theme.palette.background.paper,
-      }}
-    >
-      <Button
-        sx={{
-          width: '26px',
-          minWidth: '26px',
-          borderRight: `1px solid ${theme.palette.divider}`,
-        }}
-        onClick={() => setFolded(!folded)}
-      >
-        {folded ? <ChevronLeft /> : <ChevronRight />}
-      </Button>
-      <Collapse in={folded} orientation='horizontal'>
-        <Box
-          id={`scenario-card-${props.scenarioId}-group-filter-list`}
-          sx={{
-            display: 'flex',
-            flexDirection: 'row',
-          }}
-        >
-          {groupFilterArray
-            .filter((groupFilter) => groupFilter.isVisible)
-            .map((groupFilter, i) => {
-              return (
-                <GroupFilterCard
-                  key={groupFilter.name}
-                  groupFilter={groupFilter}
-                  groupFilterIndex={i}
-                  scenarioId={props.scenarioId}
-                />
-              );
-            })}
-        </Box>
-      </Collapse>
-    </Box>
-  );
-}
-
 function TrendArrow(props: {rate: string; value: number}): JSX.Element {
   // Shows downwards green arrows if getCompartmentRate < 0%.
   if (parseFloat(props.rate) < 0) {
@@ -448,46 +283,6 @@ function TrendArrow(props: {rate: string; value: number}): JSX.Element {
   else {
     return <ArrowRightIcon color={'action'} fontSize={'medium'} sx={{display: 'block'}} />;
   }
-}
-
-/** Type definition for the ScenarioCard props */
-interface ScenarioCardProps {
-  /** The scenario this card is displaying. */
-  scenario: {
-    /** The identifier for the scenario. */
-    id: number;
-
-    /** The label for the scenario displayed to the user. */
-    label: string;
-  };
-
-  /** The key for this scenario (index from the map function for the scenario list). */
-  key: number;
-
-  /** Boolean value whether the scenario is the selected scenario. */
-  selected: boolean;
-
-  /** Boolean value whether the scenario is active (not flipped). */
-  active: boolean;
-
-  /** The color of the card. */
-  color: string;
-
-  startValues: Dictionary<number> | null;
-
-  /** The function that is executed when the scenario card is clicked. */
-  onClick: () => void;
-
-  /** The function that is executed when the disable toggle is clicked. */
-  onToggle: () => void;
-}
-
-interface GroupFilterAppendageProps {
-  /** The scenario id. */
-  scenarioId: number;
-
-  /** The scenario color. */
-  color: string;
 }
 
 function hexToRGB(hex: string, alpha: number): string {
