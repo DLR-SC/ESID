@@ -29,7 +29,7 @@ import {useGetCaseDataSingleSimulationEntryQuery} from '../store/services/caseDa
 import {NumberFormatter} from '../util/hooks';
 import ManageGroupDialog from './ManageGroupDialog';
 import ConfirmDialog from './shared/ConfirmDialog';
-import { ManageCompartments } from './ManageCompartments';
+import {ManageCompartments} from './ManageCompartments';
 
 /**
  * React Component to render the Scenario Cards Section
@@ -157,9 +157,6 @@ export default function Scenario(): JSX.Element {
           maxWidth: '100%',
         }}
       >
-
-
-            
         <Box
           id='scenario-view-compartment-list-root'
           sx={{
@@ -205,7 +202,7 @@ export default function Scenario(): JSX.Element {
             >
               {t('scenario.simulation-start-day')}:
             </Typography>
-         
+
             <Typography
               variant='h2'
               sx={{
@@ -313,7 +310,7 @@ export default function Scenario(): JSX.Element {
           >
             {compartmentsExpanded ? t('less') : t('more')}
           </Button>
-           <Button
+          <Button
             variant='outlined'
             color='primary'
             sx={{
@@ -327,10 +324,9 @@ export default function Scenario(): JSX.Element {
             aria-label={t('group-filters.title-manage-compartment')}
           >
             {t('scenario.add_button')}
-        
-           </Button>
+          </Button>
         </Box>
-     
+
         <Dialog
           maxWidth='lg'
           fullWidth={true}
@@ -353,7 +349,6 @@ export default function Scenario(): JSX.Element {
             }}
             unsavedChangesCallback={(unsavedChanges) => setGroupManageCompartChanges(unsavedChanges)}
           />
-        
         </Dialog>
         <Box
           id='scenario-view-scenario-card-list'

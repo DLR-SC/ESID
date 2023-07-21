@@ -1,4 +1,4 @@
-import { Dictionary } from 'util/util';
+import {Dictionary} from 'util/util';
 
 export interface GroupResponse {
   count: number;

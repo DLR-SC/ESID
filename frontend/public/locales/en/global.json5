@@ -44,7 +44,7 @@
     deactivate: 'Deactivate scenario',
     'manage-groups': 'Filters',
     'simulation-start-day': 'Simulation start',
-    'add_button': 'COMPARTMENTS',
+    add_button: 'COMPARTMENTS',
   },
   'group-filters': {
     title: 'Manage Groups',
@@ -61,11 +61,10 @@
     'confirm-discard-text': 'You have unsaved changes. Do you want to discard them?',
     discard: 'Discard',
   },
-  'manage-compartment':{
-  'test-button':'Test'
+  'manage-compartment': {
+    'test-button': 'Test',
   },
 
- 
   chart: {
     caseData: 'Case Data',
   },
@@ -74,9 +73,8 @@
     lock: 'Lock maximum value',
     select: 'Select heatmap preset',
   },
- heatmapchart:{
-  textshow: 'Show More',
- 
+  heatmapchart: {
+    textshow: 'Show More',
   },
   today: 'Today',
   more: 'Show more',

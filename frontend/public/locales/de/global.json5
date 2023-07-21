@@ -35,7 +35,7 @@
     deactivate: 'Scenario deaktivieren',
     'manage-groups': 'Filter',
     'simulation-start-day': 'Simulationsstart',
-    'add_button': 'FÄCHER',
+    add_button: 'FÄCHER',
   },
   'group-filters': {
     title: 'Gruppen Verwalten',
@@ -52,7 +52,7 @@
     'confirm-discard-text': 'Sie haben ungespeicherte Änderungen. Wollen sie diese verwerfen?',
     discard: 'Verwerfen',
   },
- 
+
   chart: {
     caseData: 'Falldaten',
   },
@@ -62,8 +62,8 @@
     select: 'Farblegende auswählen',
   },
 
-  heatmapchart:{
-  textshow: 'Zeig mehr'
+  heatmapchart: {
+    textshow: 'Zeig mehr',
   },
   today: 'Heute',
   more: 'Mehr',

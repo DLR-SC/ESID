@@ -1,7 +1,3 @@
-/**
- * This script collects all attributions from our production dependencies and outputs them as a JSON file to
- * `assets/third-party-attributions.json`.
- */
 
 import * as fs from 'fs';
 import * as path from 'path';
@@ -206,7 +202,7 @@ async function getLicenseText(lib: string, license: string | null, author: strin
     return fs.readFileSync(`${libRoot}/${possibleLicenseFiles[0]}`).toString();
   } else if (license) {
     // If no license file is found, we try to get a generic license file from GitHub using the name of the license.
-    let licenseText = null;
+    let licenseText: string | undefined = undefined;
     if (LICENSE_CACHE.has(license)) {
       // License texts are cached to minimize requests to GitHub.
       licenseText = LICENSE_CACHE.get(license);
@@ -215,13 +211,13 @@ async function getLicenseText(lib: string, license: string | null, author: strin
       const licenseJSON = await response.json();
       if (licenseJSON.body) {
         licenseText = licenseJSON.body;
-        LICENSE_CACHE.set(license, licenseText);
+        LICENSE_CACHE.set(license, licenseText!);
       }
     }
 
     // When a license text was successfully downloaded, the name and year are filled in, if possible.
     if (licenseText) {
-      return licenseText.replace('[year]', new Date().getUTCFullYear()).replace('[fullname]', author || '');
+      return licenseText.replace('[year]', new Date().getUTCFullYear().toString()).replace('[fullname]', author || '');
     }
   }
 
