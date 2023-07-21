@@ -1,3 +1,8 @@
+/**
+ * This script collects all attributions from our production dependencies and outputs them as a JSON file to
+ * `assets/third-party-attributions.json`.
+ */
+
 import * as fs from 'fs';
 import * as path from 'path';
 import fetch from 'node-fetch';
