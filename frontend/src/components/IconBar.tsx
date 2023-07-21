@@ -13,7 +13,14 @@ import {nextDay, previousDay, selectDate} from '../store/DataSelectionSlice';
 import {useTranslation} from 'react-i18next';
 
 export default function IconBar(): JSX.Element {
-  const fsApi = useFullscreen();
+  const fsApi: {
+    isFullscreenAvailable: boolean;
+    fullscreenElement: Element | null;
+    isFullscreenEnabled: boolean;
+    enableFullscreen: () => Promise<void>;
+    disableFullscreen: () => Promise<void>;
+    toggleFullscreen: () => Promise<void>;
+  } = useFullscreen();
   const dispatch = useAppDispatch();
   const {t} = useTranslation();
 
@@ -25,10 +32,10 @@ export default function IconBar(): JSX.Element {
   const maxDate = useAppSelector((state) => state.dataSelection.maxDate);
 
   const toggleFullscreen = () => {
-    if (fsApi?.isFullscreenEnabled) {
-      void fsApi?.disableFullscreen();
+    if (fsApi.isFullscreenEnabled) {
+      void fsApi.disableFullscreen();
     } else {
-      void fsApi?.enableFullscreen();
+      void fsApi.enableFullscreen();
     }
   };
 
