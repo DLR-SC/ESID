@@ -1,4 +1,3 @@
-
 import * as fs from 'fs';
 import * as path from 'path';
 import fetch from 'node-fetch';
@@ -232,4 +231,3 @@ interface DependencyData {
   license: string | null;
   licenseText: string | null;
 }
-

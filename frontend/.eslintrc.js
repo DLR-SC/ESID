@@ -27,8 +27,9 @@ module.exports = {
   ],
   rules: {
     'jest/expect-expect': [
-      'warn',{
-        '@typescript-eslint/no-explicit-any': ['warn', { ignoreRestArgs: true }]
+      'warn',
+      {
+        '@typescript-eslint/no-explicit-any': ['warn', {ignoreRestArgs: true}],
       },
       {
         // ensure, that react tests are recognized as assertions
