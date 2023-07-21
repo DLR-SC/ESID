@@ -64,6 +64,6 @@
   germany: 'Deutschland',
   WIP: 'Diese Funktionalität befindet sich noch in der Entwicklung.',
   'no-data': 'Keine Daten',
-  'dlr-logo': 'DLR-Logo',
+  'loki-logo': 'LOKI-Logo',
   okay: 'Okay',
 }
