@@ -28,7 +28,7 @@ module.exports = {
   rules: {
     'jest/expect-expect': [
       'warn',
-     
+
       {
         // ensure, that react tests are recognized as assertions
         assertFunctionNames: [
