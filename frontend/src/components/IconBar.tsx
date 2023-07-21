@@ -26,10 +26,9 @@ export default function IconBar(): JSX.Element {
 
   const toggleFullscreen = () => {
     if (fsApi?.isFullscreenEnabled) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       void fsApi?.disableFullscreen();
     } else {
-      void fsApi?.disableFullscreen();
+      void fsApi?.enableFullscreen();
     }
   };
 

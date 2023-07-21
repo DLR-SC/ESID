@@ -70,7 +70,7 @@ export default function DistrictMap(): JSX.Element {
     if (fixedLegendMaxValue) {
       return fixedLegendMaxValue;
     }
-    let max = 0;
+    let max = 1;
     if (data && selectedCompartment) {
       data.results.forEach((entry) => {
         if (entry.name !== '00000') {
@@ -230,7 +230,8 @@ export default function DistrictMap(): JSX.Element {
         if (dataMapped.size > 0) {
           polygonSeries.mapPolygons.each((polygon) => {
             const regionData = polygon.dataItem?.dataContext as IRegionPolygon;
-            regionData.value = dataMapped.get(regionData.RS) || Number.NaN;
+            const temp = dataMapped.get(regionData.RS);
+            regionData.value = temp != undefined ? temp : Number.NaN;
 
             // determine fill color
             let fillColor = am5.color(theme.palette.background.default);
@@ -298,7 +299,10 @@ export default function DistrictMap(): JSX.Element {
               legendRef.current = legend;
             }}
             min={0}
-            max={legend.isNormalized ? aggregatedMax : legend.steps[legend.steps.length - 1].value}
+            // use math.round to convert the numbers to integers
+            max={
+              legend.isNormalized ? Math.round(aggregatedMax) : Math.round(legend.steps[legend.steps.length - 1].value)
+            }
             displayText={true}
             id={'legend'}
           />

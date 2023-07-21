@@ -43,7 +43,7 @@
     more: 'More properties',
     activate: 'Activate scenario',
     deactivate: 'Deactivate scenario',
-    'manage-groups': 'Groups',
+    'manage-groups': 'Filters',
     'simulation-start-day': 'Simulation start',
   },
   'group-filters': {
@@ -76,7 +76,7 @@
   search: 'Search',
   germany: 'Germany',
   'no-data': 'No Data',
-  'dlr-logo': 'DLR logo',
+  'loki-logo': 'LOKI logo',
   lorem: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore\
     et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet\
     clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet,\

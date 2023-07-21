@@ -14,7 +14,7 @@ module.exports = {
     new HtmlWebpackInjectPreload({
       files: [
         {
-          match: /(DLR_Logo)+.+(.png)$/,
+          match: /(LOKI_compact)+.+(.svg)$/,
           attributes: {as: 'image'},
         },
         {
