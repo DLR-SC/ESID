@@ -184,8 +184,8 @@ export default function SimulationChart(): JSX.Element {
       // Clean-up before re-running this effect
       return () => {
         // Dispose old root and chart before creating a new instance
-        chartRef.current && chartRef.current.dispose();
-        rootRef.current && rootRef.current.dispose();
+        chartRef.current?.dispose();
+        rootRef.current?.dispose();
       };
     },
     // This effect should only run once. dispatch should not change during runtime
@@ -196,7 +196,9 @@ export default function SimulationChart(): JSX.Element {
   useEffect(
     () => {
       // Skip if root or chart is not initialized
-      if (!rootRef.current || !chartRef.current) return;
+      if (!rootRef.current || !chartRef.current) {
+        return;
+      }
 
       // Set localization
       rootRef.current.locale = i18n.language === 'de' ? am5locales_de_DE : am5locales_en_US;
@@ -216,7 +218,9 @@ export default function SimulationChart(): JSX.Element {
   useEffect(
     () => {
       // Skip if root or chart not initialized
-      if (!rootRef.current || !chartRef.current) return;
+      if (!rootRef.current || !chartRef.current) {
+        return;
+      }
 
       const chart: XYChart = chartRef.current;
       const root: Root = rootRef.current;
@@ -387,7 +391,9 @@ export default function SimulationChart(): JSX.Element {
   useEffect(
     () => {
       // Skip effect if chart (or root) is not initialized yet or no date is selected
-      if (!chartRef.current || !rootRef.current || !selectedDate) return;
+      if (!chartRef.current || !rootRef.current || !selectedDate) {
+        return;
+      }
 
       // Get xAxis from chart
       const xAxis = chartRef.current.xAxes.getIndex(0) as DateAxis<AxisRendererX>;
