@@ -155,11 +155,13 @@ function SimulationStartTitle(): JSX.Element {
   );
 }
 
-function CompartmentRow(props: {
+interface CompartmentRowProps {
   compartment: string;
   value: string;
   index: number;
-}): JSX.Element {
+}
+
+function CompartmentRow(props: CompartmentRowProps): JSX.Element {
   const {t: tBackend} = useTranslation('backend');
   const theme = useTheme();
 

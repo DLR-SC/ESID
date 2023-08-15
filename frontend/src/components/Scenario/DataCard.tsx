@@ -19,7 +19,7 @@ import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import {GroupFilterAppendage} from './GroupFilterAppendage';
 
-export function DataCard(props: {
+interface DataCardProps {
   id: number;
   label: string;
   color: string;
@@ -29,7 +29,9 @@ export function DataCard(props: {
   startValues: Dictionary<number> | null;
   onClick: () => void;
   onToggle: () => void;
-}): JSX.Element {
+}
+
+export function DataCard(props: DataCardProps): JSX.Element {
   const theme = useTheme();
   const {t, i18n} = useTranslation();
 
@@ -201,7 +203,13 @@ export function DataCard(props: {
   );
 }
 
-function CardTitle(props: {title: string, id: number, isFront: boolean}): JSX.Element {
+interface CardTitleProps {
+  title: string;
+  id: number;
+  isFront: boolean;
+}
+
+function CardTitle(props: CardTitleProps): JSX.Element {
   const theme = useTheme();
 
   return (
@@ -230,13 +238,15 @@ function CardTitle(props: {title: string, id: number, isFront: boolean}): JSX.El
   );
 }
 
-function CompartmentRow(props: {
-  compartment: string,
-  value: number,
-  rate: string,
-  color: string,
-  index: number
-}): JSX.Element {
+interface CompartmentRowProps {
+  compartment: string;
+  value: number;
+  rate: string;
+  color: string;
+  index: number;
+}
+
+function CompartmentRow(props: CompartmentRowProps): JSX.Element {
   const theme = useTheme();
 
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
@@ -288,7 +298,12 @@ function CompartmentRow(props: {
   );
 }
 
-function TrendArrow(props: {rate: string; value: number}): JSX.Element {
+interface TrendArrowProps {
+  rate: string;
+  value: number;
+}
+
+function TrendArrow(props: TrendArrowProps): JSX.Element {
   // Shows downwards green arrows if getCompartmentRate < 0%.
   if (parseFloat(props.rate) < 0) {
     return <ArrowDropDownIcon color={'success'} fontSize={'medium'} sx={{display: 'block'}} />;
