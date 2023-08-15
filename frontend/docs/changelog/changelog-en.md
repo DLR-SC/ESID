@@ -18,6 +18,7 @@
 - Some improvements to page load speed have been made.
 - If a new feature gets rolled out, the browser cache will no longer prevent the users from seeing it.
 - The DLR logo was replaced by the LOKI logo and the size was reduced.
+- The line chart module is upgraded from AmCharts 4 to 5 for better performance.
 
 ### Bug fixes
 
