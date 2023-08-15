@@ -18,6 +18,7 @@
 - Es wurden einige Verbesserungen gemacht, die das Laden der Seite beschleunigen.
 - Wenn neue Funktionen zur Verfügung gestellt werden, wird der Browser-Cache nicht mehr verhindern, dass Benutzer:innen diese sehen.
 - Das DLR-Logo wurde durch das LOKI-Logo ersetzt und verkleinert.
+- Das Modul für das Liniendiagramm wurde von AmCharts 4 auf 5 gewechselt für eine bessere Leistung.
 
 ### Fehlerbehebungen
 

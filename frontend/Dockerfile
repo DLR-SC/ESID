@@ -8,7 +8,7 @@ WORKDIR /app
 #copy all the folder contents from local to container
 COPY . .
 
-COPY ./.env.docker ./.env
+COPY ./.env ./.env
 
 #Run command npm install to install packages
 RUN npm install
