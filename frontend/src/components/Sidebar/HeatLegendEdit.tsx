@@ -47,7 +47,7 @@ export default function HeatLegendEdit(): JSX.Element {
 
   useEffect(() => {
     if (legend.name == 'uninitialized') {
-      fetch('assets/heatmap_legend_presets.json', {
+      fetch('legendPresets', {
         headers: {
           'Content-Type': 'application/json',
           Accept: 'application/json',
@@ -89,15 +89,17 @@ export default function HeatLegendEdit(): JSX.Element {
           }
         );
     }
+    // This effect should only run once on first use since the presets don't change.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
+  // Effect to update the default legend when the active scenario changes
   useEffect(() => {
     if (activeScenario) {
+      // Select default legend (legends are in a 0-based array while the scenario Ids are 1-based)
       dispatch(selectDefaultLegend({selectedScenario: activeScenario - 1}));
     }
+    // This effect should run whenever the active scenrio changes (dispatch should not change during runtime).
   }, [activeScenario, dispatch]);
-
   return (
     <>
       <Tooltip title={t('heatlegend.edit').toString()} placement='right' arrow>

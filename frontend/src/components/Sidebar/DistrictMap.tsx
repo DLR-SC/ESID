@@ -99,7 +99,6 @@ export default function DistrictMap(): JSX.Element {
 
   // fetch geojson
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     fetch(mapData, {
       headers: {
         'Content-Type': 'application/json',

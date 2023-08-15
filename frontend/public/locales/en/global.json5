@@ -11,7 +11,6 @@
       accessibility: 'Accessibility',
       attribution: 'Attribution',
       changelog: 'Changelog',
-      'changelog-path': 'locales/en/changelog-en.md',
     },
   },
   'icon-bar': {
@@ -68,11 +67,8 @@
     select: 'Select heatmap preset',
   },
   heatmapchart: {
-    textshow: 'show more',
+    textshow: 'Show more',
   },
-  today: 'Today',
-  more: 'More',
-  less: 'Less',
   search: 'Search',
   germany: 'Germany',
   'no-data': 'No Data',
