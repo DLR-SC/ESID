@@ -553,6 +553,7 @@ export default function SimulationChart(): JSX.Element {
           ${
             // Table row for each series
             chartRef.current.series.values
+              .filter((series) => activeScenarios?.includes(Number(series.get('id'))))
               .map((series): string => {
                 /* Skip if series:
                  * - is hidden
@@ -595,7 +596,7 @@ export default function SimulationChart(): JSX.Element {
                   </td>
                   ${
                     // Add percentiles if this series is the selected scenario
-                    series.get('id') !== selectedScenario.toString()
+                    series.get('id') !== selectedScenario.toString() || selectedScenario === 0
                       ? ''
                       : `
                         <td>
