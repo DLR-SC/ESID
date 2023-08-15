@@ -1,5 +1,6 @@
 {
   dateFormat: 'dd. MMM yyyy',
+  dayFormat: 'dd. MMM',
   topBar: {
     'icon-alt': 'ESID Anwendungslogo',
     language: 'Sprache',
@@ -51,6 +52,9 @@
   },
   chart: {
     caseData: 'Falldaten',
+    date: 'Datum',
+    percentileUp: '0,75-Quantil',
+    percentileDown: '0,25-Quantil',
   },
   heatlegend: {
     edit: 'Farblegende bearbeiten',

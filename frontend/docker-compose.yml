@@ -1,14 +1,14 @@
-version: '3.9'
+version: '3.7'
 services:
   frontend:
     build:
       context: .
       dockerfile: Dockerfile
-    image: esid/frontend:latest
+    image: esid/frontend:${ESID_BRANCH}
     environment:
       HOST: ${HOST}
       API_URL: ${API_URL}
       PROXY_HOST: ${PROXY_HOST}
       PROXY_PORT: ${PROXY_PORT}
     ports:
-      - '8080:80'
+      - ${ESID_PORT}:80
