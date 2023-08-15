@@ -13,6 +13,12 @@ import {useAppDispatch, useAppSelector} from '../../store/hooks';
 import {NumberFormatter} from '../../util/hooks';
 import {useGetSimulationStartValues} from './hooks';
 
+/**
+ * The component renders a list of compartments with their name on the left and the case data values at simulation start
+ * at the right. The user can select a compartment by clicking on one in the list. The list shows by default four
+ * compartments, but can be expanded by clicking on the more button. The extended list can be scrolled and is
+ * synchronized with the compartment lists of the data cards to the right.
+ */
 export default function CompartmentList(): JSX.Element {
   const theme = useTheme();
   const {t, i18n} = useTranslation();
@@ -24,6 +30,7 @@ export default function CompartmentList(): JSX.Element {
   const compartmentsExpanded = useAppSelector((state) => state.dataSelection.compartmentsExpanded);
   const compartmentValues = useGetSimulationStartValues();
 
+  /** This function either returns the value at simulation start of a compartment or 'no data'. */
   const getCompartmentValue = (compartment: string): string => {
     if (compartmentValues && compartment in compartmentValues) {
       return formatNumber(compartmentValues[compartment]);
@@ -31,6 +38,7 @@ export default function CompartmentList(): JSX.Element {
     return t('no-data');
   };
 
+  // This effect sets the selected compartment to the first one if no compartment is initially selected.
   useEffect(() => {
     if (!selectedCompartment && compartments.length > 0) {
       dispatch(selectCompartment(compartments[0]));
@@ -107,6 +115,7 @@ export default function CompartmentList(): JSX.Element {
   );
 }
 
+/** This component renders the simulation start date together with a descriptive label. */
 function SimulationStartTitle(): JSX.Element {
   const theme = useTheme();
   const {t, i18n} = useTranslation();
@@ -156,11 +165,21 @@ function SimulationStartTitle(): JSX.Element {
 }
 
 interface CompartmentRowProps {
+  /** The name of the compartment. */
   compartment: string;
+
+  /** The value of the compartment at simulation start. */
   value: string;
+
+  /** The index of the compartment. */
   index: number;
 }
 
+/**
+ * This component renders a single row of the compartment list. To the left the name will be displayed and to the right
+ * the value at simulation start. If the index of the compartment is greater than three and the compartment list is not
+ * in the expanded mode this component will be hidden.
+ */
 function CompartmentRow(props: CompartmentRowProps): JSX.Element {
   const {t: tBackend} = useTranslation('backend');
   const theme = useTheme();

@@ -39,7 +39,7 @@ interface ScenarioCardProps {
 }
 
 /**
- * React Component to render individual Scenario Card.
+ * React Component to render an individual Scenario Card.
  * @prop {ScenarioCardProps} props - The props for the component.
  * @returns {JSX.Element} JSX Element to render the scenario card.
  */

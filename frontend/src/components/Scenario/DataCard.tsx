@@ -20,17 +20,38 @@ import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import {GroupFilterAppendage} from './GroupFilterAppendage';
 
 interface DataCardProps {
+  /** The scenario id of the card. Note that id 0 is reserved for case data. */
   id: number;
+
+  /** This is the title of the card. */
   label: string;
+
+  /** The color of the scenario that the card should be highlighted in. */
   color: string;
+
+  /** If the card is the selected one. Only one card can be selected at the same time. */
   selected: boolean;
+
+  /** If this card is active. If not the card is flipped and only the title is shown. */
   active: boolean;
+
+  /** All the values that correspond to this card. */
   compartmentValues: Dictionary<number> | null;
+
+  /** The simulation start values. They are used for calculating the rate. */
   startValues: Dictionary<number> | null;
+
+  /** Callback for when the card is selected. */
   onClick: () => void;
+
+  /** Callback for when the card is activated or deactivated. */
   onToggle: () => void;
 }
 
+/**
+ * This component renders a card for either the case data card or the scenario cards. It contains a title and a list of
+ * compartment values and change rates relative to the simulation start.
+ */
 export function DataCard(props: DataCardProps): JSX.Element {
   const theme = useTheme();
   const {t, i18n} = useTranslation();
@@ -42,6 +63,7 @@ export function DataCard(props: DataCardProps): JSX.Element {
 
   const [hover, setHover] = useState<boolean>(false);
 
+  /** This function either returns the value at simulation start of a compartment or 'no data'. */
   const getCompartmentValue = (compartment: string): string => {
     if (props.compartmentValues && compartment in props.compartmentValues) {
       return formatNumber(props.compartmentValues[compartment]);
@@ -49,29 +71,44 @@ export function DataCard(props: DataCardProps): JSX.Element {
     return t('no-data');
   };
 
+  /**
+   * This function returns one of the following things:
+   *  - The relative increase of a compartment value preceded by a plus sign
+   *  - The relative decrease of a compartment value preceded by a minus sign
+   *  - A zero preceded by a plus-minus sign
+   *  - A dash, when no rate of change can be calculated
+   */
   const getCompartmentRate = (compartment: string): string => {
     if (
-      props.compartmentValues &&
-      compartment in props.compartmentValues &&
-      props.startValues &&
-      compartment in props.startValues
+      !props.compartmentValues ||
+      !(compartment in props.compartmentValues) ||
+      !props.startValues ||
+      !(compartment in props.startValues)
     ) {
-      const value = props.compartmentValues[compartment];
-      const startValue = props.startValues[compartment];
-      const result = Math.round(100 * (value / startValue) - 100);
-      if (isFinite(result)) {
-        let sign: string;
-        if (result > 0) {
-          sign = result === 0 ? '\u00B1' : '+';
-        } else {
-          sign = result === 0 ? '\u00B1' : '-';
-        }
-        return sign + Math.abs(result).toFixed() + '%';
-      }
+      // Return a Figure Dash (‒) where a rate cannot be calculated.
+      return '\u2012';
     }
 
-    // Return a Figure Dash (‒) where a rate cannot be calculated.
-    return '\u2012';
+    const value = props.compartmentValues[compartment];
+    const startValue = props.startValues[compartment];
+    const result = Math.round(100 * (value / startValue) - 100);
+
+    if (!isFinite(result)) {
+      // Return a Figure Dash (‒) where a rate cannot be calculated.
+      return '\u2012';
+    }
+
+    let sign: string;
+    if (result > 0) {
+      sign = '+';
+    } else if (result < 0) {
+      sign = '-';
+    } else {
+      // Return a Plus Minus sign (±) where a rate cannot be calculated.
+      sign = '\u00B1';
+    }
+
+    return sign + Math.abs(result).toFixed() + '%';
   };
 
   return (
@@ -204,11 +241,17 @@ export function DataCard(props: DataCardProps): JSX.Element {
 }
 
 interface CardTitleProps {
-  title: string;
+  /** The id of the card. Either zero for the case data or the scenario id. */
   id: number;
+
+  /** The title of the card. */
+  title: string;
+
+  /** If the card is front facing or flipped. */
   isFront: boolean;
 }
 
+/** Renders the card title. Depending, if the card is flipped or not the title will be left or right aligned. */
 function CardTitle(props: CardTitleProps): JSX.Element {
   const theme = useTheme();
 
@@ -239,13 +282,27 @@ function CardTitle(props: CardTitleProps): JSX.Element {
 }
 
 interface CompartmentRowProps {
+  /** The name of the compartment. */
   compartment: string;
+
+  /** The compartment value to display. */
   value: number;
+
+  /** The rate of change to display. */
   rate: string;
+
+  /** The corresponding scenario color. */
   color: string;
+
+  /** The index of the compartment. */
   index: number;
 }
 
+/**
+ * This component renders a single row of the data card. To the left the value will be displayed and to the right the
+ * rate is displayed. If the index of the compartment is greater than three and the compartment list is not in the
+ * expanded mode this component will be hidden.
+ */
 function CompartmentRow(props: CompartmentRowProps): JSX.Element {
   const theme = useTheme();
 
@@ -290,19 +347,24 @@ function CompartmentRow(props: CompartmentRowProps): JSX.Element {
           flexBasis: '45%',
         }}
       />
-      <TrendArrow
-        rate={props.rate}
-        value={props.value}
-      />
+      <TrendArrow rate={props.rate} value={props.value} />
     </ListItem>
   );
 }
 
 interface TrendArrowProps {
-  rate: string;
+  /** The value. */
   value: number;
+
+  /** The rate of change relative to scenario start. */
+  rate: string;
 }
 
+/**
+ * Renders an arrow depending on value and rate. When the rate is negative a green downwards arrow is rendered, when the
+ * rate is between zero and three percent a grey sidewards arrow is rendered and when the rate is greater than three
+ * percent a red upwards arrow is being rendered.
+ */
 function TrendArrow(props: TrendArrowProps): JSX.Element {
   // Shows downwards green arrows if getCompartmentRate < 0%.
   if (parseFloat(props.rate) < 0) {
@@ -318,6 +380,7 @@ function TrendArrow(props: TrendArrowProps): JSX.Element {
   }
 }
 
+/** Takes a three component hex string and an alpha value and transforms it into an rgba css string. */
 function hexToRGB(hex: string, alpha: number): string {
   const r = parseInt(hex.slice(1, 3), 16),
     g = parseInt(hex.slice(3, 5), 16),
