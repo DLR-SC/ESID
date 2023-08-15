@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useMemo} from 'react';
 import {useTheme} from '@mui/material/styles';
 import {useAppSelector} from 'store/hooks';
 import {useGetSingleSimulationEntryQuery} from 'store/services/scenarioApi';
@@ -47,8 +47,6 @@ export function ScenarioCard(props: ScenarioCardProps): JSX.Element {
   const {t: tBackend} = useTranslation('backend');
   const theme = useTheme();
 
-  const [compartmentValues, setCompartmentValues] = useState<Dictionary<number> | null>(null);
-
   const node = useAppSelector((state) => state.dataSelection.district?.ags);
   const day = useAppSelector((state) => state.dataSelection.date);
 
@@ -62,10 +60,12 @@ export function ScenarioCard(props: ScenarioCardProps): JSX.Element {
     {skip: !day}
   );
 
-  useEffect(() => {
+  const compartmentValues = useMemo(() => {
     if (data && data.results.length > 0) {
-      setCompartmentValues(data.results[0].compartments);
+      return data.results[0].compartments;
     }
+
+    return null;
   }, [data]);
 
   return (
