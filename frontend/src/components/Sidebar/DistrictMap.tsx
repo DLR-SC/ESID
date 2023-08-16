@@ -54,7 +54,7 @@ export default function DistrictMap(): JSX.Element {
       groups: ['total'],
       compartments: [selectedCompartment ?? ''],
     },
-    {skip: selectedScenario === null || selectedScenario === 0|| !selectedCompartment || !selectedDate}
+    {skip: selectedScenario === null || selectedScenario === 0 || !selectedCompartment || !selectedDate}
   );
 
   const {data: caseData, isFetching: isCaseDataFetching} = useGetCaseDataByDateQuery(

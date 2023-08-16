@@ -251,9 +251,10 @@ export default function SimulationChart(): JSX.Element {
           connect: false,
           visible: selectedScenario !== null && selectedScenario > 0,
           // Add fill color according to selected scenario (if selected scenario is set)
-          fill: selectedScenario !== null && selectedScenario > 0
-            ? color(theme.custom.scenarios[selectedScenario % theme.custom.scenarios.length][0])
-            : undefined,
+          fill:
+            selectedScenario !== null && selectedScenario > 0
+              ? color(theme.custom.scenarios[selectedScenario % theme.custom.scenarios.length][0])
+              : undefined,
         })
       );
       percentileSeries.strokes.template.setAll({
@@ -317,9 +318,9 @@ export default function SimulationChart(): JSX.Element {
                 // Fallback Tooltip (if HTML breaks for some reason)
                 // Use color of selected scenario (scenario ID is 1-based index, color list is 0-based index) loop if scenario ID exceeds length of color list; use first color of palette (main color)
                 tooltip: Tooltip.new(root, {
-                  labelText: `[bold ${
-                    theme.custom.scenarios[selectedScenario % theme.custom.scenarios.length][0]
-                  }]${groupFilter.name}:[/] {${groupFilter.name}}`,
+                  labelText: `[bold ${theme.custom.scenarios[selectedScenario % theme.custom.scenarios.length][0]}]${
+                    groupFilter.name
+                  }:[/] {${groupFilter.name}}`,
                 }),
                 stroke: color(theme.custom.scenarios[selectedScenario % theme.custom.scenarios.length][0]),
               })
@@ -477,12 +478,10 @@ export default function SimulationChart(): JSX.Element {
 
     // Cycle through scenarios
     activeScenarios?.forEach((scenarioId) => {
-      if (simulationData && simulationData[scenarioId]) {
-        simulationData[scenarioId].results.forEach(({day, compartments}) => {
-          // Add scenario data to map (upsert date entry)
-          dataMap.set(day, {...dataMap.get(day), [scenarioId]: compartments[selectedCompartment]});
-        });
-      }
+      simulationData?.[scenarioId]?.results.forEach(({day, compartments}) => {
+        // Add scenario data to map (upsert date entry)
+        dataMap.set(day, {...dataMap.get(day), [scenarioId]: compartments[selectedCompartment]});
+      });
 
       if (scenarioId === 0) {
         // Add case data values (upsert date entry)
@@ -507,7 +506,7 @@ export default function SimulationChart(): JSX.Element {
     // Add groupFilter data of visible filters
     if (groupFilterList && groupFilterData) {
       Object.values(groupFilterList).forEach((groupFilter) => {
-        if (groupFilter && groupFilter.isVisible) {
+        if (groupFilter?.isVisible) {
           // Check if data for filter is available (else report error)
           if (groupFilterData[groupFilter.name]) {
             groupFilterData[groupFilter.name].results.forEach((entry: GroupData) => {
