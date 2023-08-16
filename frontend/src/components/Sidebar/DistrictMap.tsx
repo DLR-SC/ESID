@@ -54,7 +54,7 @@ export default function DistrictMap(): JSX.Element {
       groups: ['total'],
       compartments: [selectedCompartment ?? ''],
     },
-    {skip: !selectedScenario || !selectedCompartment || !selectedDate || selectedScenario === 0}
+    {skip: selectedScenario === null || selectedScenario === 0|| !selectedCompartment || !selectedDate}
   );
 
   const {data: caseData, isFetching: isCaseDataFetching} = useGetCaseDataByDateQuery(
@@ -63,7 +63,7 @@ export default function DistrictMap(): JSX.Element {
       groups: ['total'],
       compartments: [selectedCompartment ?? ''],
     },
-    {skip: selectedScenario === null || !selectedCompartment || !selectedDate || selectedScenario > 0}
+    {skip: selectedScenario === null || selectedScenario > 0 || !selectedCompartment || !selectedDate}
   );
 
   const legendRef = useRef<am5.HeatLegend | null>(null);
