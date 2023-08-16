@@ -51,14 +51,14 @@ describe('DataSelectionSlice', () => {
   test('Toggle Scenario', () => {
     const scenario = 2;
     expect(reducer(initialState, toggleScenario(scenario))).toEqual(
-      Object.assign(initialState, {activeScenarios: [2]})
+      Object.assign(initialState, {activeScenarios: [0, 2]})
     );
 
     const state = Object.assign(initialState, {
-      activeScenarios: [1, 2, 4],
+      activeScenarios: [0, 1, 2, 4],
     });
 
-    expect(reducer(state, toggleScenario(2))).toEqual(Object.assign(initialState, {activeScenarios: [1, 4]}));
+    expect(reducer(state, toggleScenario(2))).toEqual(Object.assign(initialState, {activeScenarios: [0, 1, 4]}));
   });
 
   test('Add Group Filter', () => {
