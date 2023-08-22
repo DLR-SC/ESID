@@ -19,6 +19,8 @@
 - Wenn neue Funktionen zur Verfügung gestellt werden, wird der Browser-Cache nicht mehr verhindern, dass Benutzer:innen diese sehen.
 - Das DLR-Logo wurde durch das LOKI-Logo ersetzt und verkleinert.
 - Das Modul für das Liniendiagramm wurde von AmCharts 4 auf 5 gewechselt für eine bessere Leistung.
+- Das DLR-Logo in der Tableiste wurde durch das ESID-Logo ersetzt.
+- Das LOKI-Logo verweist nun auf die LOKI-Pandemics Webseite, anstatt der DLR-Webseite.
 
 ### Fehlerbehebungen
 
