@@ -6,7 +6,6 @@ import {selectDistrict} from '../../store/DataSelectionSlice';
 import SearchIcon from '@mui/icons-material/Search';
 import {Autocomplete, Box, Container} from '@mui/material';
 import {useTranslation} from 'react-i18next';
-import RestartAltIcon from '@mui/icons-material/RestartAlt';
 
 /** Type definition for the CountyItems of the Autocomplete field
  *  @see DataSelectionSlice
