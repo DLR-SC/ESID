@@ -11,7 +11,7 @@ COPY . .
 COPY ./.env ./.env
 
 #Run command npm install to install packages
-RUN npm ci
+RUN npm install
 
 #create a react production build
 RUN npm run build

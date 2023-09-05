@@ -70,9 +70,9 @@
     lock: 'Lock maximum value',
     select: 'Select heatmap preset',
   },
-  today: 'Today',
-  more: 'More',
-  less: 'Less',
+  heatmapchart: {
+    textshow: 'Show more',
+  },
   search: 'Search',
   germany: 'Germany',
   'no-data': 'No Data',

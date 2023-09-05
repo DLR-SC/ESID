@@ -91,9 +91,8 @@
     "react-markdown": "^6.0.3",
     "react-redux": "^7.2.3",
     "react-scroll-sync": "^0.11.0",
-    "redux": "^4.0.5",
     "redux-persist": "^6.0.0",
-    "rooks": "^5.7.3"
+    "rooks": "^7.14.1"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.12.13",
