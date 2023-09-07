@@ -82,7 +82,7 @@ function GroupFilterCardCompartmentValues(props: GroupFilterCardProps): JSX.Elem
       day: day ?? '',
       groupFilter: props.groupFilter,
     },
-    {skip: !day}
+    {skip: !day || props.scenarioId === 0}
   );
 
   const getGroupValue = (compartment: string): string => {
@@ -98,56 +98,52 @@ function GroupFilterCardCompartmentValues(props: GroupFilterCardProps): JSX.Elem
     return formatNumber(groupFilterResults[0].compartments[compartment]);
   };
 
-  if (groupFilterData) {
-    return (
-      <ScrollSyncPane group='compartments'>
-        <List
-          id={`scenario-card-${props.scenarioId}-group-filter-compartment-list-${props.groupFilterIndex}`}
-          className='hide-scrollbar'
-          dense={true}
-          disablePadding={true}
-          sx={{
-            maxHeight: compartmentsExpanded ? '248px' : 'auto',
-            overflowX: 'hidden',
-            overflowY: 'auto',
-          }}
-        >
-          {compartments.map((compartment, i) => {
-            return (
-              <ListItem
-                key={compartment}
+  return (
+    <ScrollSyncPane group='compartments'>
+      <List
+        id={`scenario-card-${props.scenarioId}-group-filter-compartment-list-${props.groupFilterIndex}`}
+        className='hide-scrollbar'
+        dense={true}
+        disablePadding={true}
+        sx={{
+          maxHeight: compartmentsExpanded ? '248px' : 'auto',
+          overflowX: 'hidden',
+          overflowY: 'auto',
+        }}
+      >
+        {compartments.map((compartment, i) => {
+          return (
+            <ListItem
+              key={compartment}
+              sx={{
+                // hide compartment if compartmentsExpanded false and index > 4
+                display: compartmentsExpanded || i < 4 ? 'flex' : 'none',
+                // highlight compartment if selectedCompartment === compartment
+                color: selectedCompartment === compartment ? theme.palette.text.primary : theme.palette.text.disabled,
+                alignContent: 'center',
+                padding: theme.spacing(1),
+                margin: theme.spacing(0),
+                marginTop: theme.spacing(1),
+                borderTop: '2px solid transparent',
+                borderBottom: '2px solid transparent',
+              }}
+            >
+              <ListItemText
+                primary={getGroupValue(compartment)}
+                // disable child typography overriding this
+                disableTypography={true}
                 sx={{
-                  // hide compartment if compartmentsExpanded false and index > 4
-                  display: compartmentsExpanded || i < 4 ? 'flex' : 'none',
-                  // highlight compartment if selectedCompartment === compartment
-                  color: selectedCompartment === compartment ? theme.palette.text.primary : theme.palette.text.disabled,
-                  alignContent: 'center',
-                  padding: theme.spacing(1),
-                  margin: theme.spacing(0),
-                  marginTop: theme.spacing(1),
-                  borderTop: '2px solid transparent',
-                  borderBottom: '2px solid transparent',
+                  typography: 'listElement',
+                  textAlign: 'right',
+                  minWidth: '88px',
                 }}
-              >
-                <ListItemText
-                  primary={getGroupValue(compartment)}
-                  // disable child typography overriding this
-                  disableTypography={true}
-                  sx={{
-                    typography: 'listElement',
-                    textAlign: 'right',
-                    minWidth: '88px',
-                  }}
-                />
-              </ListItem>
-            );
-          })}
-        </List>
-      </ScrollSyncPane>
-    );
-  } else {
-    return null;
-  }
+              />
+            </ListItem>
+          );
+        })}
+      </List>
+    </ScrollSyncPane>
+  );
 }
 
 interface GroupFilterCardProps {
