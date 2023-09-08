@@ -249,7 +249,8 @@ export default function DistrictMap(): JSX.Element {
                 selectedScenario && selectedCompartment
                   ? `${t(`BEZ.${regionData.BEZ}`)} {GEN}\n${tBackend(
                       `infection-states.${selectedCompartment}`
-                    )}: ${formatNumber(regionData.value)}`
+                      // replace ' \n ' sequence for compartments that have glyphs with ' '
+                    ).replace(/ \n /g, ' ')}: ${formatNumber(regionData.value)}`
                   : `${t(`BEZ.${regionData.BEZ}`)} {GEN}`,
               fill: fillColor,
             });
