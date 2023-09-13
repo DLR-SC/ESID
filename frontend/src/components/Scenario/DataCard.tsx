@@ -124,6 +124,7 @@ export function DataCard(props: DataCardProps): JSX.Element {
       }}
     >
       <Box
+        id='scenario-card-container'
         sx={{
           position: 'relative',
           zIndex: 0,

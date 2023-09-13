@@ -42,6 +42,7 @@ export default function Scenario(): JSX.Element {
         <CompartmentList />
         <DataCardList />
         <Box
+          id='scenario-footer-container'
           sx={{
             borderLeft: `1px solid`,
             borderColor: 'divider',
@@ -53,6 +54,7 @@ export default function Scenario(): JSX.Element {
           }}
         >
           <Button
+            id='scenario-add-button'
             variant='outlined'
             color='success'
             sx={{
@@ -78,6 +80,7 @@ export default function Scenario(): JSX.Element {
           </Button>
 
           <Button
+            id='manage-filters-button'
             disabled // disable filters for pilot study as there is no filterable data yet
             variant='outlined'
             color='primary'
@@ -95,6 +98,7 @@ export default function Scenario(): JSX.Element {
           </Button>
         </Box>
         <Dialog
+          id='manage-filters-dialog'
           maxWidth='lg'
           fullWidth={true}
           open={open}

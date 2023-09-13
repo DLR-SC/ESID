@@ -39,6 +39,7 @@ export function GroupFilterAppendage(props: GroupFilterAppendageProps): JSX.Elem
 
   return (
     <Box
+      id={`scenario-card-${props.scenarioId}-group-filter-container`}
       sx={{
         display: 'flex',
         flexDirection: 'row',
@@ -52,6 +53,7 @@ export function GroupFilterAppendage(props: GroupFilterAppendageProps): JSX.Elem
       }}
     >
       <Button
+        id={`scenario-card-${props.scenarioId}-group-filter-fold-toggle`}
         sx={{
           width: '26px',
           minWidth: '26px',
