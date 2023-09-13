@@ -87,6 +87,7 @@ export default function CompartmentList(): JSX.Element {
         </List>
       </ScrollSyncPane>
       <Button
+        id='toggle-expanded-compartments-button'
         variant='outlined'
         color='primary'
         sx={{
