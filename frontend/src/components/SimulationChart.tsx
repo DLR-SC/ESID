@@ -74,6 +74,7 @@ export default function SimulationChart(): JSX.Element {
 
   const {data: simulationData, isFetching: simulationFetching} = useGetMultipleSimulationDataByNodeQuery(
     {
+      // Filter only scenarios (scenario id 0 is case data)
       ids: activeScenarios ? activeScenarios.filter((s) => s !== 0) : [],
       node: selectedDistrict,
       groups: ['total'],
