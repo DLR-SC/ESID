@@ -75,6 +75,7 @@ export default function DistrictMap(): JSX.Element {
   const lastSelectedPolygon = useRef<am5map.MapPolygon | null>(null);
   const [fixedLegendMaxValue, setFixedLegendMaxValue] = useState<number | null>(null);
 
+  // This memo either returns the case data or simulation data, depending on which card is selected.
   const data = useMemo(() => {
     if (selectedScenario === null) {
       return null;
@@ -89,6 +90,7 @@ export default function DistrictMap(): JSX.Element {
     return null;
   }, [caseData, simulationData, selectedScenario]);
 
+  // This memo returns if the required data is currently being fetched. Either the case data or the scenario data.
   const isFetching = useMemo(() => {
     if (selectedScenario === null) {
       return true;
