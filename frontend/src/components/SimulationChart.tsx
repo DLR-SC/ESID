@@ -227,6 +227,7 @@ export default function SimulationChart(): JSX.Element {
         LineSeries.new(root, {
           xAxis: xAxis,
           yAxis: yAxis,
+          // Case Data is always scenario id 0
           id: '0',
           name: t('chart.caseData'),
           valueXField: 'date',
