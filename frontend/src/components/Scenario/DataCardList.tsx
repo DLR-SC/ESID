@@ -59,7 +59,7 @@ export default function DataCardList(): JSX.Element {
       }
 
       if (scenarios.length > 0) {
-        // It seems, that the simulation data is only available from the second day forward.
+        // The simulation data (results) are only available one day after the start day onward.
         const startDay = new Date(scenarioListData.results[0].startDay);
         startDay.setUTCDate(startDay.getUTCDate() + 1);
 
