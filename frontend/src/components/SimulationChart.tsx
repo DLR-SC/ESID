@@ -282,6 +282,7 @@ export default function SimulationChart(): JSX.Element {
             // Fallback Tooltip (if HTML breaks for some reason)
             // For text color: loop around the theme's scenario color list if scenario IDs exceed color list length, then pick first color of sub-palette which is the main color
             tooltip: Tooltip.new(root, {
+              // Offest by one since the scenario 0 colr palette is exclusively for case data
               labelText: `[bold ${theme.custom.scenarios[(i + 1) % theme.custom.scenarios.length][0]}]${tBackend(
                 `scenario-names.${scenario.label}`
               )}:[/] {${scenarioId}}`,
@@ -552,7 +553,7 @@ export default function SimulationChart(): JSX.Element {
     )})</strong>
         <table>
           ${
-            // Table row for each series
+            // Table row for each series of an active scenario
             chartRef.current.series.values
               .filter((series) => activeScenarios?.includes(Number(series.get('id'))))
               .map((series): string => {
@@ -596,7 +597,7 @@ export default function SimulationChart(): JSX.Element {
                     {${series.get('valueYField') as string}}
                   </td>
                   ${
-                    // Add percentiles if this series is the selected scenario
+                    // Skip percentiles if this series is not the selected scenario or case data
                     series.get('id') !== selectedScenario.toString() || selectedScenario === 0
                       ? ''
                       : `
@@ -672,6 +673,7 @@ export default function SimulationChart(): JSX.Element {
     // Loop through active scenarios (if there are any)
     if (activeScenarios) {
       activeScenarios.forEach((scenarioId) => {
+        // Skip case data (already added)
         if (scenarioId === 0) {
           return;
         }
