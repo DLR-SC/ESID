@@ -251,8 +251,9 @@ export default function SimulationChart(): JSX.Element {
           valueYField: 'percentileUp',
           openValueYField: 'percentileDown',
           connect: false,
+          // Percentiles are only visible if a scenario is selected and it is not case data
           visible: selectedScenario !== null && selectedScenario > 0,
-          // Add fill color according to selected scenario (if selected scenario is set)
+          // Add fill color according to selected scenario (if selected scenario is set and it's not case data)
           fill:
             selectedScenario !== null && selectedScenario > 0
               ? color(theme.custom.scenarios[selectedScenario % theme.custom.scenarios.length][0])

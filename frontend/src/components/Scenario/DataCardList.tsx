@@ -1,6 +1,6 @@
 import Box from '@mui/material/Box';
 import {CaseDataCard} from './CaseDataCard';
-import {selectScenario, setMinMaxDates, toggleScenario} from '../../store/DataSelectionSlice';
+import {selectScenario, setMinMaxDates, setStartDate, toggleScenario} from '../../store/DataSelectionSlice';
 import {ScenarioCard} from './ScenarioCard';
 import React, {useEffect, useState} from 'react';
 import {dateToISOString} from '../../util/util';
@@ -67,6 +67,7 @@ export default function DataCardList(): JSX.Element {
         endDay.setDate(endDay.getDate() + scenarioListData.results[0].numberOfDays - 1);
 
         dispatch(setMinMaxDates({minDate: dateToISOString(startDay), maxDate: dateToISOString(endDay)}));
+        dispatch(setStartDate(scenarioListData.results[0].startDay));
       }
     }
   }, [activeScenarios, scenarioListData, dispatch]);

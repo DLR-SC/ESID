@@ -15,6 +15,7 @@ describe('DataSelectionSlice', () => {
     compartment: null,
     compartmentsExpanded: null,
     activeScenarios: null,
+    simulationStart: null,
     minDate: null,
     maxDate: null,
     groupFilters: {},

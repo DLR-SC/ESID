@@ -121,12 +121,7 @@ function SimulationStartTitle(): JSX.Element {
   const theme = useTheme();
   const {t, i18n} = useTranslation();
 
-  const startDay = useAppSelector((state) => {
-    let date = new Date(state.dataSelection.minDate);
-    // start day is the day before the first simulation result
-    date = new Date(date.getDate() - 1);
-    return `${date.toISOString().substring(0, 9)}`
-  });
+  const startDay = useAppSelector((state) => state.dataSelection.simulationStart);
 
   return (
     <Box

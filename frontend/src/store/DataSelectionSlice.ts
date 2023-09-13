@@ -24,6 +24,7 @@ export interface DataSelection {
   compartmentsExpanded: boolean | null;
   activeScenarios: number[] | null;
 
+  simulationStart: string | null;
   minDate: string | null;
   maxDate: string | null;
   groupFilters: Dictionary<GroupFilter> | null;
@@ -37,6 +38,7 @@ const initialState: DataSelection = {
   compartmentsExpanded: null,
   activeScenarios: null,
 
+  simulationStart: null,
   minDate: null,
   maxDate: null,
   groupFilters: {},
@@ -75,6 +77,9 @@ export const DataSelectionSlice = createSlice({
         date.setUTCDate(date.getUTCDate() + 1);
         state.date = dateToISOString(date);
       }
+    },
+    setStartDate(state, action: PayloadAction<string>) {
+      state.simulationStart = action.payload;
     },
     setMinMaxDates(state, action: PayloadAction<{minDate: string; maxDate: string}>) {
       state.minDate = action.payload.minDate;
@@ -136,6 +141,7 @@ export const {
   selectDate,
   previousDay,
   nextDay,
+  setStartDate,
   setMinMaxDates,
   selectScenario,
   selectCompartment,
