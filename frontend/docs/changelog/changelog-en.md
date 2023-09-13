@@ -8,17 +8,21 @@
 
 - The changelog can now be viewed shown using the burger menu in the top right corner.
 - The language can now be switched in the top bar between German and English.
+- A new card for case data was added:
+  - On selecting the card the case data will be displayed on the rest of the application correspondingly.
+  - It is now also possible to view case data without any scenario activated.
 
 ### Improvements
 
 - Added a label to the scenario start day.
-- All numbers on in the scenario overview now show as integers.
+- All numbers now show as integers only.
 - The group filter editor will now ask for confirmation to discard changes, when the user selects a new group filter or closes the dialog without saving.
-- All texts are now available in Englisch and German.
+- All texts are now available in English and German.
 - Some improvements to page load speed have been made.
 - If a new feature gets rolled out, the browser cache will no longer prevent the users from seeing it.
 - The DLR logo was replaced by the LOKI logo and the size was reduced.
 - The line chart module is upgraded from AmCharts 4 to 5 for better performance.
+- The selected infection state is now also highlighted in the scenario cards.
 - The DLR logo in the tab bar was replaced with the ESID logo.
 - The LOKI logo now leads to the LOKI-Pandemics, instead of the DLR website.
 

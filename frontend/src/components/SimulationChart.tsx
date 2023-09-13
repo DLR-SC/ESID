@@ -26,13 +26,9 @@ import {
   useGetPercentileDataQuery,
 } from 'store/services/scenarioApi';
 import {useTranslation} from 'react-i18next';
-import {NumberFormatter} from 'util/hooks';
 import LoadingContainer from './shared/LoadingContainer';
 import {useGetMultipleGroupFilterDataQuery} from 'store/services/groupApi';
 import {GroupData} from 'types/group';
-/*
- * This component displays the evolution of the pandemic over time for a specific infection state (hospitalized, dead, infected, etc.) regarding the different scenarios.
- */
 
 /**
  * React Component to render the Simulation Chart Section
@@ -78,7 +74,8 @@ export default function SimulationChart(): JSX.Element {
 
   const {data: simulationData, isFetching: simulationFetching} = useGetMultipleSimulationDataByNodeQuery(
     {
-      ids: activeScenarios ? activeScenarios : [],
+      // Filter only scenarios (scenario id 0 is case data)
+      ids: activeScenarios ? activeScenarios.filter((s) => s !== 0) : [],
       node: selectedDistrict,
       groups: ['total'],
       compartments: [selectedCompartment ?? ''],
@@ -93,10 +90,8 @@ export default function SimulationChart(): JSX.Element {
       groups: ['total'],
       compartment: selectedCompartment as string,
     },
-    {skip: !selectedScenario || !selectedCompartment}
+    {skip: selectedScenario === null || selectedScenario === 0 || !selectedCompartment}
   );
-
-  const {formatNumber} = NumberFormatter(i18n.language, 3, 8);
 
   const rootRef = useRef<Root | null>(null);
   const chartRef = useRef<XYChart | null>(null);
@@ -232,10 +227,11 @@ export default function SimulationChart(): JSX.Element {
         LineSeries.new(root, {
           xAxis: xAxis,
           yAxis: yAxis,
-          id: 'caseData',
+          // Case Data is always scenario id 0
+          id: '0',
           name: t('chart.caseData'),
           valueXField: 'date',
-          valueYField: 'caseData',
+          valueYField: '0',
           // Prevent data points from connecting across gaps in the data
           connect: false,
           stroke: color('#000'),
@@ -255,10 +251,13 @@ export default function SimulationChart(): JSX.Element {
           valueYField: 'percentileUp',
           openValueYField: 'percentileDown',
           connect: false,
-          // Add fill color according to selected scenario (if selected scenario is set)
-          fill: selectedScenario
-            ? color(theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0])
-            : undefined,
+          // Percentiles are only visible if a scenario is selected and it is not case data
+          visible: selectedScenario !== null && selectedScenario > 0,
+          // Add fill color according to selected scenario (if selected scenario is set and it's not case data)
+          fill:
+            selectedScenario !== null && selectedScenario > 0
+              ? color(theme.custom.scenarios[selectedScenario % theme.custom.scenarios.length][0])
+              : undefined,
         })
       );
       percentileSeries.strokes.template.setAll({
@@ -284,11 +283,12 @@ export default function SimulationChart(): JSX.Element {
             // Fallback Tooltip (if HTML breaks for some reason)
             // For text color: loop around the theme's scenario color list if scenario IDs exceed color list length, then pick first color of sub-palette which is the main color
             tooltip: Tooltip.new(root, {
-              labelText: `[bold ${theme.custom.scenarios[i % theme.custom.scenarios.length][0]}]${tBackend(
+              // Offest by one since the scenario 0 colr palette is exclusively for case data
+              labelText: `[bold ${theme.custom.scenarios[(i + 1) % theme.custom.scenarios.length][0]}]${tBackend(
                 `scenario-names.${scenario.label}`
               )}:[/] {${scenarioId}}`,
             }),
-            stroke: color(theme.custom.scenarios[i % theme.custom.scenarios.length][0]),
+            stroke: color(theme.custom.scenarios[(i + 1) % theme.custom.scenarios.length][0]),
           })
         );
         series.strokes.template.setAll({
@@ -322,11 +322,11 @@ export default function SimulationChart(): JSX.Element {
                 // Fallback Tooltip (if HTML breaks for some reason)
                 // Use color of selected scenario (scenario ID is 1-based index, color list is 0-based index) loop if scenario ID exceeds length of color list; use first color of palette (main color)
                 tooltip: Tooltip.new(root, {
-                  labelText: `[bold ${
-                    theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0]
-                  }]${groupFilter.name}:[/] {${groupFilter.name}}`,
+                  labelText: `[bold ${theme.custom.scenarios[selectedScenario % theme.custom.scenarios.length][0]}]${
+                    groupFilter.name
+                  }:[/] {${groupFilter.name}}`,
                 }),
-                stroke: color(theme.custom.scenarios[(selectedScenario - 1) % theme.custom.scenarios.length][0]),
+                stroke: color(theme.custom.scenarios[selectedScenario % theme.custom.scenarios.length][0]),
               })
             );
             series.strokes.template.setAll({
@@ -357,17 +357,21 @@ export default function SimulationChart(): JSX.Element {
       // Set visibility of each series
       allSeries.each((series) => {
         // Everything but scenario series evaluate to NaN (because scenario series have their scenario id as series id while others have names)
-        const seriesID = Number(series.get('id'));
+        const seriesID = series.get('id');
         // Hide series if it is a scenario series (and in the scenario list) but not in the active scenarios list
-        if (!Number.isNaN(seriesID) && scenarioList.scenarios[seriesID] && !activeScenarios?.includes(seriesID)) {
+        if (seriesID === 'percentiles') {
+          return;
+        }
+
+        if (!activeScenarios?.includes(Number(seriesID))) {
           void series.hide();
         } else {
           void series.show();
         }
       });
     },
-    // Re-run effect when the active scenario list or the scenarios change
-    [scenarioList.scenarios, activeScenarios]
+    // Re-run effect when the active scenario list changes
+    [activeScenarios]
   );
 
   // Effect to hide deviations if no scenario is selected
@@ -380,7 +384,11 @@ export default function SimulationChart(): JSX.Element {
       chartRef.current?.series.values
         .filter((series) => series.get('id') === 'percentiles')
         .map((percentileSeries) => {
-          selectedScenario ? void percentileSeries.show() : void percentileSeries.hide();
+          if (selectedScenario === null || selectedScenario === 0) {
+            void percentileSeries.hide();
+          } else {
+            void percentileSeries.show();
+          }
         });
     },
     // Re-run effect when the selected scenario changes
@@ -466,45 +474,43 @@ export default function SimulationChart(): JSX.Element {
   useEffect(() => {
     // Skip effect if chart is not initialized yet
     if (!chartRef.current) return;
-    // Also skip if simulation data is not populated or no data was requested (no active scenarios)
-    if (!simulationData || !simulationData.length) return;
-    // Also skip if percentile data is not populated
-    if (!percentileData) return;
     // Also skip if there is no scenario or compartment selected
-    if (!selectedScenario || !selectedCompartment) return;
+    if (selectedScenario === null || !selectedCompartment) return;
 
     // Create empty map to match dates
     const dataMap = new Map<string, {[key: string]: number}>();
 
     // Cycle through scenarios
     activeScenarios?.forEach((scenarioId) => {
-      if (simulationData[scenarioId]) {
-        simulationData[scenarioId].results.forEach(({day, compartments}) => {
-          // Add scenario data to map (upsert date entry)
-          dataMap.set(day, {...dataMap.get(day), [scenarioId]: compartments[selectedCompartment]});
+      simulationData?.[scenarioId]?.results.forEach(({day, compartments}) => {
+        // Add scenario data to map (upsert date entry)
+        dataMap.set(day, {...dataMap.get(day), [scenarioId]: compartments[selectedCompartment]});
+      });
+
+      if (scenarioId === 0) {
+        // Add case data values (upsert date entry)
+        caseData?.results.forEach((entry) => {
+          dataMap.set(entry.day, {...dataMap.get(entry.day), [0]: entry.compartments[selectedCompartment]});
         });
       }
     });
 
-    // Add case data values (upsert date entry)
-    caseData?.results.forEach((entry) => {
-      dataMap.set(entry.day, {...dataMap.get(entry.day), caseData: entry.compartments[selectedCompartment]});
-    });
+    if (percentileData) {
+      // Add 25th percentile data
+      percentileData[0].results?.forEach((entry: PercentileDataByDay) => {
+        dataMap.set(entry.day, {...dataMap.get(entry.day), percentileDown: entry.compartments[selectedCompartment]});
+      });
 
-    // Add 25th percentile data
-    percentileData[0].results?.forEach((entry: PercentileDataByDay) => {
-      dataMap.set(entry.day, {...dataMap.get(entry.day), percentileDown: entry.compartments[selectedCompartment]});
-    });
-
-    // Add 75th percentile data
-    percentileData[1].results?.forEach((entry: PercentileDataByDay) => {
-      dataMap.set(entry.day, {...dataMap.get(entry.day), percentileUp: entry.compartments[selectedCompartment]});
-    });
+      // Add 75th percentile data
+      percentileData[1].results?.forEach((entry: PercentileDataByDay) => {
+        dataMap.set(entry.day, {...dataMap.get(entry.day), percentileUp: entry.compartments[selectedCompartment]});
+      });
+    }
 
     // Add groupFilter data of visible filters
     if (groupFilterList && groupFilterData) {
       Object.values(groupFilterList).forEach((groupFilter) => {
-        if (groupFilter && groupFilter.isVisible) {
+        if (groupFilter?.isVisible) {
           // Check if data for filter is available (else report error)
           if (groupFilterData[groupFilter.name]) {
             groupFilterData[groupFilter.name].results.forEach((entry: GroupData) => {
@@ -548,8 +554,9 @@ export default function SimulationChart(): JSX.Element {
     )})</strong>
         <table>
           ${
-            // Table row for each series
+            // Table row for each series of an active scenario
             chartRef.current.series.values
+              .filter((series) => activeScenarios?.includes(Number(series.get('id'))))
               .map((series): string => {
                 /* Skip if series:
                  * - is hidden
@@ -591,8 +598,8 @@ export default function SimulationChart(): JSX.Element {
                     {${series.get('valueYField') as string}}
                   </td>
                   ${
-                    // Add percentiles if this series is the selected scenario
-                    series.get('id') !== selectedScenario.toString()
+                    // Skip percentiles if this series is not the selected scenario or case data
+                    series.get('id') !== selectedScenario.toString() || selectedScenario === 0
                       ? ''
                       : `
                         <td>
@@ -666,16 +673,21 @@ export default function SimulationChart(): JSX.Element {
     const dataFieldsOrder = ['date', 'caseData'];
     // Loop through active scenarios (if there are any)
     if (activeScenarios) {
-      activeScenarios.forEach((scenario_id) => {
+      activeScenarios.forEach((scenarioId) => {
+        // Skip case data (already added)
+        if (scenarioId === 0) {
+          return;
+        }
+
         // Add scenario label to export data field names
         dataFields = {
           ...dataFields,
-          [scenario_id]: scenarioList.scenarios[scenario_id].label,
+          [scenarioId]: scenarioList.scenarios[scenarioId].label,
         };
         // Add scenario id to export data field order (for sorted export like csv)
-        dataFieldsOrder.push(`${scenario_id}`);
+        dataFieldsOrder.push(`${scenarioId}`);
         // If this is the selected scenario also add percentiles after it
-        if (scenario_id == selectedScenario) {
+        if (scenarioId == selectedScenario) {
           dataFieldsOrder.push('percentileDown', 'percentileUp');
         }
       });
@@ -702,7 +714,6 @@ export default function SimulationChart(): JSX.Element {
     selectedCompartment,
     theme,
     groupFilterList,
-    formatNumber,
     t,
     tBackend,
   ]);
