@@ -33,6 +33,7 @@
               Relation zu den Werten der vergangenen Tagen bewertet werden kann, ob die Situation sich verbessert oder\
               verschlimmert. Sofern verfügbar, kommen die Zahlen zu den Intensivpatient:innen aus dem DIVI\
               Intensivregister.',
+
   },
   'scenario-names': {
     'Summer 2021 Simulation 1': 'Szenario ohne Maßnahmen',
