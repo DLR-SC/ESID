@@ -254,17 +254,21 @@ function CompartmentRow(props: CompartmentRowProps): JSX.Element {
           zIndex: 20,
         }}
       />
-      <ListItemIcon sx={{
-        marginLeft: theme.spacing(2),
-        minWidth: 'auto',
-      }}>
+      <ListItemIcon
+        id={`infection-state-info-button-${props.compartment}`}
+        sx={{
+          marginLeft: theme.spacing(2),
+          minWidth: 'auto',
+        }}
+      >
         <ClickAwayListener onClickAway={handleTooltipClose}>
           <Tooltip
             open={tooltipOpen}
             onClose={handleTooltipClose}
             onClick={handleTooltipOpen}
-            title={tBackend('infection-states.tooltip')}>
-            <InfoOutlined color={"info"} />
+            title={tBackend('infection-states.tooltip')}
+          >
+            <InfoOutlined color={'info'} />
           </Tooltip>
         </ClickAwayListener>
       </ListItemIcon>
