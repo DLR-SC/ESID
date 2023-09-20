@@ -12,8 +12,9 @@ import {useTranslation} from 'react-i18next';
 import {useAppDispatch, useAppSelector} from '../../store/hooks';
 import {NumberFormatter} from '../../util/hooks';
 import {useGetSimulationStartValues} from './hooks';
-import {ClickAwayListener, ListItemIcon} from '@mui/material';
-import {InfoOutlined} from '@mui/icons-material';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+import InfoOutlined from '@mui/icons-material/InfoOutlined';
 import Tooltip from '@mui/material/Tooltip';
 
 /**
