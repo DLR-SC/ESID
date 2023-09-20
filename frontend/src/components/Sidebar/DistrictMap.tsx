@@ -81,9 +81,9 @@ export default function DistrictMap(): JSX.Element {
       return null;
     }
 
-    if (selectedScenario === 0 && caseData !== undefined) {
+    if (selectedScenario === 0 && caseData !== undefined && caseData.results.length > 0) {
       return caseData;
-    } else if (selectedScenario > 0 && simulationData !== undefined) {
+    } else if (selectedScenario > 0 && simulationData !== undefined && simulationData.results.length > 0) {
       return simulationData;
     }
 
@@ -253,7 +253,7 @@ export default function DistrictMap(): JSX.Element {
   useEffect(() => {
     if (chart && chart.series.length > 0) {
       const polygonSeries = chart.series.getIndex(0) as am5map.MapPolygonSeries;
-      if (selectedScenario !== null && selectedCompartment && !isFetching) {
+      if (selectedScenario !== null && selectedCompartment && !isFetching && data) {
         // Map compartment value to RS
         const dataMapped = new Map<string, number>();
         data?.results.forEach((entry) => {
@@ -289,18 +289,16 @@ export default function DistrictMap(): JSX.Element {
             });
           });
         }
-      } else {
-        if (longLoad) {
-          polygonSeries.mapPolygons.each((polygon) => {
-            const regionData = polygon.dataItem?.dataContext as IRegionPolygon;
-            regionData.value = Number.NaN;
-            const bez = t(`BEZ.${regionData.BEZ}`);
-            polygon.setAll({
-              tooltipText: `${bez} {GEN}`,
-              fill: am5.color(theme.palette.text.disabled),
-            });
+      } else if (longLoad || !data) {
+        polygonSeries.mapPolygons.each((polygon) => {
+          const regionData = polygon.dataItem?.dataContext as IRegionPolygon;
+          regionData.value = Number.NaN;
+          const bez = t(`BEZ.${regionData.BEZ}`);
+          polygon.setAll({
+            tooltipText: `${bez} {GEN}`,
+            fill: am5.color(theme.palette.text.disabled),
           });
-        }
+        });
       }
     }
   }, [
