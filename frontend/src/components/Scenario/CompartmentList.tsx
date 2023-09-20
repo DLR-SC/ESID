@@ -6,15 +6,12 @@ import ListItemButton from '@mui/material/ListItemButton';
 import {selectCompartment, toggleCompartmentExpansion} from '../../store/DataSelectionSlice';
 import ListItemText from '@mui/material/ListItemText';
 import Button from '@mui/material/Button';
-import React, {MouseEvent, useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import {useTheme} from '@mui/material/styles';
 import {useTranslation} from 'react-i18next';
 import {useAppDispatch, useAppSelector} from '../../store/hooks';
 import {NumberFormatter} from '../../util/hooks';
 import {useGetSimulationStartValues} from './hooks';
-import {ClickAwayListener, ListItemIcon} from '@mui/material';
-import {InfoOutlined} from '@mui/icons-material';
-import Tooltip from '@mui/material/Tooltip';
 
 /**
  * The component renders a list of compartments with their name on the left and the case data values at simulation start
@@ -194,18 +191,6 @@ function CompartmentRow(props: CompartmentRowProps): JSX.Element {
 
   const selected = useMemo(() => props.compartment === selectedCompartment, [props.compartment, selectedCompartment]);
 
-  const [tooltipOpen, setTooltipOpen] = useState(false);
-
-  const handleTooltipClose = () => {
-    setTooltipOpen(false);
-  };
-
-  const handleTooltipOpen = (e: MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setTooltipOpen(true);
-  };
-
   return (
     <ListItemButton
       key={props.compartment}
@@ -254,20 +239,6 @@ function CompartmentRow(props: CompartmentRowProps): JSX.Element {
           zIndex: 20,
         }}
       />
-      <ListItemIcon sx={{
-        marginLeft: theme.spacing(2),
-        minWidth: 'auto',
-      }}>
-        <ClickAwayListener onClickAway={handleTooltipClose}>
-          <Tooltip
-            open={tooltipOpen}
-            onClose={handleTooltipClose}
-            onClick={handleTooltipOpen}
-            title={tBackend('infection-states.tooltip')}>
-            <InfoOutlined color={"info"} />
-          </Tooltip>
-        </ClickAwayListener>
-      </ListItemIcon>
     </ListItemButton>
   );
 }
