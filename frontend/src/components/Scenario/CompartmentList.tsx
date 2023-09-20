@@ -269,7 +269,7 @@ function CompartmentRow(props: CompartmentRowProps): JSX.Element {
             <InfoOutlined
               sx={{
                 color: theme.palette.info.light,
-                fontSize: '1.1em'
+                fontSize: '1.1em',
               }}
             />
           </Tooltip>
