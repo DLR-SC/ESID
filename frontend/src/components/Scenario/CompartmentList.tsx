@@ -195,18 +195,6 @@ function CompartmentRow(props: CompartmentRowProps): JSX.Element {
 
   const selected = useMemo(() => props.compartment === selectedCompartment, [props.compartment, selectedCompartment]);
 
-  const [tooltipOpen, setTooltipOpen] = useState(false);
-
-  const handleTooltipClose = () => {
-    setTooltipOpen(false);
-  };
-
-  const handleTooltipOpen = (e: MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setTooltipOpen(true);
-  };
-
   return (
     <ListItemButton
       key={props.compartment}
