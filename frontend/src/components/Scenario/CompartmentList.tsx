@@ -266,7 +266,12 @@ function CompartmentRow(props: CompartmentRowProps): JSX.Element {
             onClick={openTooltip}
             title={tBackend('infection-states.tooltip')}
           >
-            <InfoOutlined color={'info'} />
+            <InfoOutlined
+              sx={{
+                color: theme.palette.info.light,
+                fontSize: '1.1em'
+              }}
+            />
           </Tooltip>
         </ClickAwayListener>
       </ListItemIcon>
