@@ -195,6 +195,15 @@ function CompartmentRow(props: CompartmentRowProps): JSX.Element {
 
   const selected = useMemo(() => props.compartment === selectedCompartment, [props.compartment, selectedCompartment]);
 
+  const [tooltipOpen, setTooltipOpen] = useState(false);
+
+  const openTooltip = (e: MouseEvent) => {
+    e.stopPropagation();
+    setTooltipOpen(true);
+  };
+
+  const closeTooltip = () => setTooltipOpen(false);
+
   return (
     <ListItemButton
       key={props.compartment}
@@ -250,11 +259,11 @@ function CompartmentRow(props: CompartmentRowProps): JSX.Element {
           minWidth: 'auto',
         }}
       >
-        <ClickAwayListener onClickAway={handleTooltipClose}>
+        <ClickAwayListener onClickAway={closeTooltip}>
           <Tooltip
             open={tooltipOpen}
-            onClose={handleTooltipClose}
-            onClick={handleTooltipOpen}
+            onClose={closeTooltip}
+            onClick={openTooltip}
             title={tBackend('infection-states.tooltip')}
           >
             <InfoOutlined color={'info'} />
