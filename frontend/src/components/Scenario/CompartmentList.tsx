@@ -148,7 +148,7 @@ function SimulationStartTitle(): JSX.Element {
           fontSize: '13pt',
         }}
       >
-        {t('scenario.simulation-start-day')}:
+        {t('scenario.reference-day')}:
       </Typography>
       <Typography
         variant='h2'
