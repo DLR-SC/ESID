@@ -84,17 +84,19 @@ export default function DataCardList(): JSX.Element {
     if (caseData?.data) {
       const entries = caseData.data.results.map((entry) => entry.day).sort((a, b) => a.localeCompare(b));
 
+      const firstCaseDataDay = entries[0];
       if (!minDate) {
-        minDate = entries[0];
+        minDate = firstCaseDataDay;
         dispatch(setStartDate(minDate));
       } else {
-        minDate = minDate.localeCompare(entries[0]) < 0 ? minDate : entries[0];
+        minDate = minDate.localeCompare(firstCaseDataDay) < 0 ? minDate : firstCaseDataDay;
       }
 
+      const lastCaseDataDay = entries.slice(-1)[0];
       if (!maxDate) {
-        maxDate = entries.slice(-1)[0];
+        maxDate = lastCaseDataDay;
       } else {
-        maxDate = maxDate.localeCompare(entries[0]) > 0 ? maxDate : entries.slice(-1)[0];
+        maxDate = maxDate.localeCompare(lastCaseDataDay) > 0 ? maxDate : lastCaseDataDay;
       }
     }
 
