@@ -6,12 +6,16 @@ import ListItemButton from '@mui/material/ListItemButton';
 import {selectCompartment, toggleCompartmentExpansion} from '../../store/DataSelectionSlice';
 import ListItemText from '@mui/material/ListItemText';
 import Button from '@mui/material/Button';
-import React, {useEffect, useMemo} from 'react';
+import React, {MouseEvent, useEffect, useMemo, useState} from 'react';
 import {useTheme} from '@mui/material/styles';
 import {useTranslation} from 'react-i18next';
 import {useAppDispatch, useAppSelector} from '../../store/hooks';
 import {NumberFormatter} from '../../util/hooks';
 import {useGetSimulationStartValues} from './hooks';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+import InfoOutlined from '@mui/icons-material/InfoOutlined';
+import Tooltip from '@mui/material/Tooltip';
 
 /**
  * The component renders a list of compartments with their name on the left and the case data values at simulation start
@@ -191,6 +195,15 @@ function CompartmentRow(props: CompartmentRowProps): JSX.Element {
 
   const selected = useMemo(() => props.compartment === selectedCompartment, [props.compartment, selectedCompartment]);
 
+  const [tooltipOpen, setTooltipOpen] = useState(false);
+
+  const openTooltip = (e: MouseEvent) => {
+    e.stopPropagation();
+    setTooltipOpen(true);
+  };
+
+  const closeTooltip = () => setTooltipOpen(false);
+
   return (
     <ListItemButton
       key={props.compartment}
@@ -239,6 +252,29 @@ function CompartmentRow(props: CompartmentRowProps): JSX.Element {
           zIndex: 20,
         }}
       />
+      <ListItemIcon
+        id={`infection-state-info-button-${props.compartment}`}
+        sx={{
+          marginLeft: theme.spacing(2),
+          minWidth: 'auto',
+        }}
+      >
+        <ClickAwayListener onClickAway={closeTooltip}>
+          <Tooltip
+            open={tooltipOpen}
+            onClose={closeTooltip}
+            onClick={openTooltip}
+            title={tBackend('infection-states.tooltip')}
+          >
+            <InfoOutlined
+              sx={{
+                color: theme.palette.info.light,
+                fontSize: '1.1em',
+              }}
+            />
+          </Tooltip>
+        </ClickAwayListener>
+      </ListItemIcon>
     </ListItemButton>
   );
 }
