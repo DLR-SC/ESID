@@ -4,6 +4,8 @@
     Hospitalized: 'Hospitalisiert',
     ICU: 'Intensivpatient',
     Dead: 'Verstorben',
+    DeadV1: 'Verstorben (💉)',
+    DeadV2: 'Verstorben (💉💉)',
     Exposed: 'Kontaktperson',
     Recovered: 'Genesen',
     Carrier: 'Träger',
