@@ -4,7 +4,7 @@ import {useGetCaseDataSingleSimulationEntryQuery} from '../../store/services/cas
 import {useAppSelector} from '../../store/hooks';
 
 export function useGetSimulationStartValues() {
-  const startDay = useAppSelector((state) => state.dataSelection.minDate);
+  const startDay = useAppSelector((state) => state.dataSelection.simulationStart);
   const node = useAppSelector((state) => state.dataSelection.district.ags);
 
   const [compartmentValues, setCompartmentValues] = useState<Dictionary<number> | null>(null);

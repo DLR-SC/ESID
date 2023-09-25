@@ -26,6 +26,7 @@
 - The selected infection state is now also highlighted in the scenario cards.
 - The DLR logo in the tab bar was replaced with the ESID logo.
 - The LOKI logo now leads to the LOKI-Pandemics, instead of the DLR website.
+- It is now possible to set the date to any day containing data.
 
 ### Bug fixes
 

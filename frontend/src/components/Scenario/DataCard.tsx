@@ -225,7 +225,7 @@ export function DataCard(props: DataCardProps): JSX.Element {
                   <CompartmentRow
                     key={compartment}
                     compartment={compartment}
-                    value={parseFloat(getCompartmentValue(compartment))}
+                    value={getCompartmentValue(compartment)}
                     rate={getCompartmentRate(compartment)}
                     color={props.color}
                     index={i}
@@ -287,7 +287,7 @@ interface CompartmentRowProps {
   compartment: string;
 
   /** The compartment value to display. */
-  value: number;
+  value: string;
 
   /** The rate of change to display. */
   rate: string;
@@ -348,7 +348,7 @@ function CompartmentRow(props: CompartmentRowProps): JSX.Element {
           flexBasis: '45%',
         }}
       />
-      <TrendArrow rate={props.rate} value={props.value} />
+      <TrendArrow rate={props.rate} value={parseFloat(props.value)} />
     </ListItem>
   );
 }
