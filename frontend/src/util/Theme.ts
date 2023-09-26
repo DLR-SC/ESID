@@ -129,9 +129,9 @@ export default createTheme({
         tooltip: {
           fontSize: '10pt',
           textAlign: 'justify',
-        }
-      }
-    }
+        },
+      },
+    },
   },
   custom: {
     //scenario colors with graduations
