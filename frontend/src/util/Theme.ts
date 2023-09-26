@@ -124,6 +124,14 @@ export default createTheme({
         },
       },
     },
+    MuiTooltip: {
+      styleOverrides: {
+        tooltip: {
+          fontSize: '10pt',
+          textAlign: 'justify',
+        }
+      }
+    }
   },
   custom: {
     //scenario colors with graduations
