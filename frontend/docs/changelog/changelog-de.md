@@ -27,6 +27,7 @@
 - Das DLR-Logo in der Tableiste wurde durch das ESID-Logo ersetzt.
 - Das LOKI-Logo verweist nun auf die LOKI-Pandemics Webseite, anstatt der DLR-Webseite.
 - Es ist jetzt möglich einen beliebigen Tag mit Daten auszuwählen.
+- Die Textgröße in Tooltips wurden zur besseren Lesbarkeit angepasst.
 
 ### Fehlerbehebungen
 
