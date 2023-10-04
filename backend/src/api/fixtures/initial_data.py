@@ -411,7 +411,7 @@ RESTRICTIONS = [
     ("restriction_4", "Restriction 4")
 ]
 
-PARAMETERS = [ 
+PARAMETERS = [
     "IncubationTime",
     "SerialInterval",
     "InfectiousTimeMild",
@@ -440,30 +440,9 @@ PARAMETERS = [
 ]
 
 COMPARTMENTS = [
-    "Susceptible",
-    "SusceptibleV1",
-    "Exposed",
-    "ExposedV1",
-    "ExposedV2",
-    "Carrier",
-    "CarrierV1",
-    "CarrierV2",
-    "CarrierT",
-    "CarrierTV1",
-    "CarrierTV2",
+    "MildInfections",
     "Infected",
-    "InfectedV1",
-    "InfectedV2",
-    "InfectedT",
-    "InfectedTV1",
-    "InfectedTV2",
     "Hospitalized",
-    "HospitalizedV1",
-    "HospitalizedV2",
-    "ICU",
-    "ICUV1",
-    "ICUV2",
-    "Recovered",
     "Dead"
 ]
 
@@ -473,12 +452,12 @@ GROUP_CATEGORIES = [
 ]
 
 GROUPS = [
-    ("age_0", "age", "Ages bewteen 0-4 years" ),
-    ("age_1", "age", "Ages between 5-14 years" ),
-    ("age_2", "age", "Ages between 15-34 years" ),
-    ("age_3", "age", "Ages between 35-59 years" ),
-    ("age_4", "age", "Ages between 60-79 years" ),
-    ("age_5", "age", "Ages above 80" ),
+    ("age_0", "age", "Ages bewteen 0-4 years"),
+    ("age_1", "age", "Ages between 5-14 years"),
+    ("age_2", "age", "Ages between 15-34 years"),
+    ("age_3", "age", "Ages between 35-59 years"),
+    ("age_4", "age", "Ages between 60-79 years"),
+    ("age_5", "age", "Ages above 80"),
     ("total", "age", "All ages"),
     ("female", "gender", "Female"),
     ("male", "gender", "Male")
