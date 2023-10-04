@@ -51,7 +51,7 @@
     discard: 'Verwerfen',
   },
   chart: {
-    caseData: 'Falldaten',
+    caseData: 'Geschätzte Fälle',
     date: 'Datum',
     percentileUp: '0,75-Quantil',
     percentileDown: '0,25-Quantil',

@@ -60,7 +60,7 @@
     discard: 'Discard',
   },
   chart: {
-    caseData: 'Case Data',
+    caseData: 'Estimated Cases',
     date: 'Date',
     percentileUp: '75th percentile',
     percentileDown: '25th percentile',

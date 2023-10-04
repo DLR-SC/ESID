@@ -94,6 +94,7 @@ export default function CompartmentList(): JSX.Element {
         id='toggle-expanded-compartments-button'
         variant='outlined'
         color='primary'
+        disabled={compartments.length < 5}
         sx={{
           margin: theme.spacing(3),
           marginTop: theme.spacing(4),
