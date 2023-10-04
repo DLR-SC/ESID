@@ -1,6 +1,7 @@
 {
   'infection-states': {
     Infected: 'Infiziert',
+    MildInfections: 'Milde Infektion',
     Hospitalized: 'Hospitalisiert',
     ICU: 'Intensivpatient',
     Dead: 'Verstorben',
