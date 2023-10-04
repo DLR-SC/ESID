@@ -11,6 +11,7 @@
 - Eine neue Karte für Falldaten wurde hinzugefügt:
   - Wenn diese Karte ausgewählt wird, werden die Falldaten dementsprechend im Rest der Anwendung angezeigt.
   - Es ist nun auch möglich die Falldaten alleine anzuzeigen, ohne dass ein Szenario aktiviert ist.
+- Neben der Liste der Infektionszustände ist jetzt zu jedem Infektionszustand ein Infokästchen. Aktuell haben alle Zustände die gleiche Information.
 
 ### Verbesserungen
 
@@ -25,6 +26,7 @@
 - Der ausgewählte Infektionszustand wird nun auch in den Szenariokarten farbig hervorgehoben.
 - Das DLR-Logo in der Tableiste wurde durch das ESID-Logo ersetzt.
 - Das LOKI-Logo verweist nun auf die LOKI-Pandemics Webseite, anstatt der DLR-Webseite.
+- Es ist jetzt möglich einen beliebigen Tag mit Daten auszuwählen.
 
 ### Fehlerbehebungen
 

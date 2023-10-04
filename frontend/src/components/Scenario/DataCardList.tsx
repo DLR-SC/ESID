@@ -13,6 +13,7 @@ import {
 } from '../../store/services/scenarioApi';
 import {setCompartments, setScenarios} from '../../store/ScenarioSlice';
 import {useGetSimulationStartValues} from './hooks';
+import {useGetCaseDataByDistrictQuery} from '../../store/services/caseDataApi';
 
 export default function DataCardList(): JSX.Element {
   const theme = useTheme();
@@ -30,6 +31,9 @@ export default function DataCardList(): JSX.Element {
     skip: simulationModelKey === 'unset',
   });
 
+  // This is a temporary solution to get the start and end day of the case data.
+  const caseData = useGetCaseDataByDistrictQuery({node: '00000', groups: null, compartments: null});
+
   const startValues = useGetSimulationStartValues();
 
   useEffect(() => {
@@ -46,7 +50,11 @@ export default function DataCardList(): JSX.Element {
     }
   }, [simulationModelData, dispatch]);
 
+  // This effect calculates the start and end days from the case and scenario data.
   useEffect(() => {
+    let minDate: string | null = null;
+    let maxDate: string | null = null;
+
     if (scenarioListData) {
       const scenarios = scenarioListData.results.map((scenario) => ({id: scenario.id, label: scenario.description}));
       dispatch(setScenarios(scenarios));
@@ -66,11 +74,36 @@ export default function DataCardList(): JSX.Element {
         const endDay = new Date(startDay);
         endDay.setDate(endDay.getDate() + scenarioListData.results[0].numberOfDays - 1);
 
-        dispatch(setMinMaxDates({minDate: dateToISOString(startDay), maxDate: dateToISOString(endDay)}));
-        dispatch(setStartDate(scenarioListData.results[0].startDay));
+        minDate = dateToISOString(startDay);
+        maxDate = dateToISOString(endDay);
+
+        dispatch(setStartDate(minDate));
       }
     }
-  }, [activeScenarios, scenarioListData, dispatch]);
+
+    if (caseData?.data) {
+      const entries = caseData.data.results.map((entry) => entry.day).sort((a, b) => a.localeCompare(b));
+
+      const firstCaseDataDay = entries[0];
+      if (!minDate) {
+        minDate = firstCaseDataDay;
+        dispatch(setStartDate(minDate));
+      } else {
+        minDate = minDate.localeCompare(firstCaseDataDay) < 0 ? minDate : firstCaseDataDay;
+      }
+
+      const lastCaseDataDay = entries.slice(-1)[0];
+      if (!maxDate) {
+        maxDate = lastCaseDataDay;
+      } else {
+        maxDate = maxDate.localeCompare(lastCaseDataDay) > 0 ? maxDate : lastCaseDataDay;
+      }
+    }
+
+    if (minDate && maxDate) {
+      dispatch(setMinMaxDates({minDate, maxDate}));
+    }
+  }, [activeScenarios, scenarioListData, dispatch, caseData]);
 
   //effect to switch active scenario
   useEffect(() => {
