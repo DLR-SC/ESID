@@ -28,6 +28,7 @@
 - The LOKI logo now leads to the LOKI-Pandemics, instead of the DLR website.
 - It is now possible to set the date to any day containing data.
 - "Case Data" was renamed to "Estimated Cases" and new translations for new infection states were added.
+- The text size in tooltips was adjusted to improve readability.
 
 ### Bug fixes
 

@@ -262,6 +262,7 @@ function CompartmentRow(props: CompartmentRowProps): JSX.Element {
       >
         <ClickAwayListener onClickAway={closeTooltip}>
           <Tooltip
+            arrow
             open={tooltipOpen}
             onClose={closeTooltip}
             onClick={openTooltip}

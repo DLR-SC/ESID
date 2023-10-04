@@ -28,6 +28,7 @@
 - Das LOKI-Logo verweist nun auf die LOKI-Pandemics Webseite, anstatt der DLR-Webseite.
 - Es ist jetzt möglich einen beliebigen Tag mit Daten auszuwählen.
 - "Falldaten" wurde in "Geschätzte Fälle" umbenannt und neue Übersetzungen für neue Infektionszustände wurden hinzugefügt.
+- Die Textgröße in Tooltips wurden zur besseren Lesbarkeit angepasst.
 
 ### Fehlerbehebungen
 
