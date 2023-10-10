@@ -6,12 +6,16 @@ import ListItemButton from '@mui/material/ListItemButton';
 import {selectCompartment, toggleCompartmentExpansion} from '../../store/DataSelectionSlice';
 import ListItemText from '@mui/material/ListItemText';
 import Button from '@mui/material/Button';
-import React, {useEffect, useMemo} from 'react';
+import React, {MouseEvent, useEffect, useMemo, useState} from 'react';
 import {useTheme} from '@mui/material/styles';
 import {useTranslation} from 'react-i18next';
 import {useAppDispatch, useAppSelector} from '../../store/hooks';
 import {NumberFormatter} from '../../util/hooks';
 import {useGetSimulationStartValues} from './hooks';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+import InfoOutlined from '@mui/icons-material/InfoOutlined';
+import Tooltip from '@mui/material/Tooltip';
 
 /**
  * The component renders a list of compartments with their name on the left and the case data values at simulation start
@@ -90,6 +94,7 @@ export default function CompartmentList(): JSX.Element {
         id='toggle-expanded-compartments-button'
         variant='outlined'
         color='primary'
+        disabled={compartments.length < 5}
         sx={{
           margin: theme.spacing(3),
           marginTop: theme.spacing(4),
@@ -148,7 +153,7 @@ function SimulationStartTitle(): JSX.Element {
           fontSize: '13pt',
         }}
       >
-        {t('scenario.simulation-start-day')}:
+        {t('scenario.reference-day')}:
       </Typography>
       <Typography
         variant='h2'
@@ -190,6 +195,15 @@ function CompartmentRow(props: CompartmentRowProps): JSX.Element {
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
 
   const selected = useMemo(() => props.compartment === selectedCompartment, [props.compartment, selectedCompartment]);
+
+  const [tooltipOpen, setTooltipOpen] = useState(false);
+
+  const openTooltip = (e: MouseEvent) => {
+    e.stopPropagation();
+    setTooltipOpen(true);
+  };
+
+  const closeTooltip = () => setTooltipOpen(false);
 
   return (
     <ListItemButton
@@ -239,6 +253,30 @@ function CompartmentRow(props: CompartmentRowProps): JSX.Element {
           zIndex: 20,
         }}
       />
+      <ListItemIcon
+        id={`infection-state-info-button-${props.compartment}`}
+        sx={{
+          marginLeft: theme.spacing(2),
+          minWidth: 'auto',
+        }}
+      >
+        <ClickAwayListener onClickAway={closeTooltip}>
+          <Tooltip
+            arrow
+            open={tooltipOpen}
+            onClose={closeTooltip}
+            onClick={openTooltip}
+            title={tBackend('infection-states.tooltip')}
+          >
+            <InfoOutlined
+              sx={{
+                color: theme.palette.info.light,
+                fontSize: '1.1em',
+              }}
+            />
+          </Tooltip>
+        </ClickAwayListener>
+      </ListItemIcon>
     </ListItemButton>
   );
 }

@@ -11,6 +11,7 @@
 - A new card for case data was added:
   - On selecting the card the case data will be displayed on the rest of the application correspondingly.
   - It is now also possible to view case data without any scenario activated.
+- Next to the list of infection states, there is now an info box for each infection state. Currently, all states have the same information.
 
 ### Improvements
 
@@ -25,6 +26,9 @@
 - The selected infection state is now also highlighted in the scenario cards.
 - The DLR logo in the tab bar was replaced with the ESID logo.
 - The LOKI logo now leads to the LOKI-Pandemics, instead of the DLR website.
+- It is now possible to set the date to any day containing data.
+- "Case Data" was renamed to "Estimated Cases" and new translations for new infection states were added.
+- The text size in tooltips was adjusted to improve readability.
 
 ### Bug fixes
 

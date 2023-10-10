@@ -1,6 +1,7 @@
 {
   'infection-states': {
     Infected: 'Infected',
+    MildInfections: 'Mild Infection',
     Hospitalized: 'Hospitalized',
     ICU: 'Intensive Care',
     Dead: 'Dead',
@@ -28,6 +29,12 @@
     CarrierV2: 'Carrier (💉💉)',
     SusceptibleV1: 'Susceptible (💉)',
     SusceptibleV2: 'Susceptible (💉💉)',
+    tooltip: 'The numbers of infected and hospitalised shown here are based on assumptions about immunity, duration and\
+              severity of infection with Sars-CoV-2. They are calculated via a complex multi-step process from the\
+              reported case numbers and a simple formula cannot be given. An increase/decrease in the number of cases\
+              means an increase/decrease in the number of infected persons, so that it is possible to assess whether\
+              the situation is improving or worsening in relation to the values of the previous days. If available, the\
+              figures on intensive care patients come from the DIVI Intensive Care Register.',
   },
   'scenario-names': {
     'Summer 2021 Simulation 1': 'Scenario without Interventions',

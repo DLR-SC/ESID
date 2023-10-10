@@ -43,6 +43,8 @@ export default function SimulationChart(): JSX.Element {
   const selectedDistrict = useAppSelector((state) => state.dataSelection.district.ags);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
   const selectedDate = useAppSelector((state) => state.dataSelection.date);
+  const minDate = useAppSelector((state) => state.dataSelection.minDate);
+  const maxDate = useAppSelector((state) => state.dataSelection.maxDate);
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
   const activeScenarios = useAppSelector((state) => state.dataSelection.activeScenarios);
   const groupFilterList = useAppSelector((state) => state.dataSelection.groupFilters);
@@ -208,6 +210,18 @@ export default function SimulationChart(): JSX.Element {
     // Re-run effect if language changes
     [i18n.language, t]
   );
+
+  // Effect to update min/max date.
+  useEffect(() => {
+    // Skip if root or chart is not initialized
+    if (!rootRef.current || !chartRef.current || !minDate || !maxDate) {
+      return;
+    }
+
+    const xAxis: DateAxis<AxisRendererX> = chartRef.current.xAxes.getIndex(0) as DateAxis<AxisRendererX>;
+    xAxis.set('min', new Date(minDate).setHours(0));
+    xAxis.set('max', new Date(maxDate).setHours(23, 59, 59));
+  }, [minDate, maxDate]);
 
   // Effect to add series to chart
   useEffect(
