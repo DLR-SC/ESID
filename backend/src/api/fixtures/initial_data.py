@@ -440,30 +440,9 @@ PARAMETERS = [
 ]
 
 COMPARTMENTS = [
-    "Susceptible",
-    "SusceptibleV1",
-    "Exposed",
-    "ExposedV1",
-    "ExposedV2",
-    "Carrier",
-    "CarrierV1",
-    "CarrierV2",
-    "CarrierT",
-    "CarrierTV1",
-    "CarrierTV2",
+    "MildInfections",
     "Infected",
-    "InfectedV1",
-    "InfectedV2",
-    "InfectedT",
-    "InfectedTV1",
-    "InfectedTV2",
     "Hospitalized",
-    "HospitalizedV1",
-    "HospitalizedV2",
-    "ICU",
-    "ICUV1",
-    "ICUV2",
-    "Recovered",
     "Dead"
 ]
 
