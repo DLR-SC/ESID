@@ -441,8 +441,8 @@ PARAMETERS = [
 
 COMPARTMENTS = [
     "MildInfections",
-    "Infected",
     "Hospitalized",
+    "ICU",
     "Dead"
 ]
 
