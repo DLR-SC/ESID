@@ -185,7 +185,7 @@ function useDefaultLegends(): Array<HeatmapLegend> {
     const legends: Array<HeatmapLegend> = [];
     const stepCount = theme.custom.scenarios[0].length - 1;
     for (const element of theme.custom.scenarios) {
-      const steps: {color:string; value: number}[] = [];
+      const steps = [];
       for (let j = 0; j < stepCount; j++) {
         steps.push({color: element[stepCount - 1 - j], value: j / (stepCount - 1)});
       }

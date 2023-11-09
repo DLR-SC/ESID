@@ -28,7 +28,7 @@ module.exports = {
       ],
     }),
     new CopyPlugin({
-      patterns: ['./public/manifest.json'],
+      patterns: ['./public/manifest.json', './public/icon.svg'],
     }),
     new ESLintPlugin({
       extensions: ['js', 'jsx', 'ts', 'tsx'],

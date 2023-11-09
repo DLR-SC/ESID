@@ -35,7 +35,7 @@
     activate: 'Scenario aktivieren',
     deactivate: 'Scenario deaktivieren',
     'manage-groups': 'Filter',
-    'simulation-start-day': 'Simulationsstart',
+    'reference-day': 'Referenztag',
   },
   'group-filters': {
     title: 'Gruppen Verwalten',
@@ -51,7 +51,7 @@
     discard: 'Verwerfen',
   },
   chart: {
-    caseData: 'Falldaten',
+    caseData: 'Geschätzte Fälle',
     date: 'Datum',
     percentileUp: '0,75-Quantil',
     percentileDown: '0,25-Quantil',

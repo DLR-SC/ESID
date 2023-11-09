@@ -44,7 +44,7 @@
     activate: 'Activate scenario',
     deactivate: 'Deactivate scenario',
     'manage-groups': 'Filters',
-    'simulation-start-day': 'Simulation start',
+    'reference-day': 'Reference Day',
   },
   'group-filters': {
     title: 'Manage Groups',
@@ -60,7 +60,7 @@
     discard: 'Discard',
   },
   chart: {
-    caseData: 'Case Data',
+    caseData: 'Estimated Cases',
     date: 'Date',
     percentileUp: '75th percentile',
     percentileDown: '25th percentile',
