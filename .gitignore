@@ -2,3 +2,4 @@
 
 # ignore user/workspace settings etc. of VSCode
 .vscode
+node_modules

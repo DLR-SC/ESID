@@ -86,11 +86,11 @@ export default function HeatLegendEdit(): JSX.Element {
 
   // This effect builds the list of available presets from the "defaultLegends" and "heatmapLegends".
   useEffect(() => {
-    if (!activeScenario || defaultLegends.length === 0) {
+    if (activeScenario === null || defaultLegends.length === 0) {
       return;
     }
 
-    const scenarioDefault = defaultLegends[activeScenario - 1];
+    const scenarioDefault = defaultLegends[activeScenario];
     const legends = [...heatmapLegends];
     legends.unshift(scenarioDefault);
 
@@ -105,7 +105,7 @@ export default function HeatLegendEdit(): JSX.Element {
 
   // This effect updates the selected legend, if a default legend is selected and the scenario changes.
   useEffect(() => {
-    if (!activeScenario) {
+    if (activeScenario === null) {
       return;
     }
 
@@ -184,10 +184,10 @@ function useDefaultLegends(): Array<HeatmapLegend> {
   useEffect(() => {
     const legends: Array<HeatmapLegend> = [];
     const stepCount = theme.custom.scenarios[0].length - 1;
-    for (let i = 0; i < theme.custom.scenarios.length; i++) {
-      const steps = [];
+    for (const element of theme.custom.scenarios) {
+      const steps: {color:string; value: number}[] = [];
       for (let j = 0; j < stepCount; j++) {
-        steps.push({color: theme.custom.scenarios[i][stepCount - 1 - j], value: j / (stepCount - 1)});
+        steps.push({color: element[stepCount - 1 - j], value: j / (stepCount - 1)});
       }
       legends.push({name: 'Default', isNormalized: true, steps});
     }
