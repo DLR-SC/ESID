@@ -19,7 +19,7 @@ export function useGetSimulationStartValues() {
   );
 
   useEffect(() => {
-    if (caseData) {
+    if (caseData?.results && caseData.results.length > 0) {
       setCompartmentValues(caseData.results[0].compartments);
     }
   }, [caseData]);
