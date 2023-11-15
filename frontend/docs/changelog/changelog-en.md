@@ -8,22 +8,34 @@
 
 - The changelog can now be viewed shown using the burger menu in the top right corner.
 - The language can now be switched in the top bar between German and English.
+- A new card for case data was added:
+  - On selecting the card the case data will be displayed on the rest of the application correspondingly.
+  - It is now also possible to view case data without any scenario activated.
+- Next to the list of infection states, there is now an info box for each infection state. Currently, all states have the same information.
 
 ### Improvements
 
 - Added a label to the scenario start day.
-- All numbers on in the scenario overview now show as integers.
+- All numbers now show as integers only.
 - The group filter editor will now ask for confirmation to discard changes, when the user selects a new group filter or closes the dialog without saving.
-- All texts are now available in Englisch and German.
+- All texts are now available in English and German.
 - Some improvements to page load speed have been made.
 - If a new feature gets rolled out, the browser cache will no longer prevent the users from seeing it.
 - The DLR logo was replaced by the LOKI logo and the size was reduced.
 - The line chart module is upgraded from AmCharts 4 to 5 for better performance.
+- The selected infection state is now also highlighted in the scenario cards.
+- The DLR logo in the tab bar was replaced with the ESID logo.
+- The LOKI logo now leads to the LOKI-Pandemics, instead of the DLR website.
+- It is now possible to set the date to any day containing data.
+- "Case Data" was renamed to "Estimated Cases" and new translations for new infection states were added.
+- The text size in tooltips was adjusted to improve readability.
+- Only four aggregated compartments are displayed.
 
 ### Bug fixes
 
 - An error was fixed, which prevented the text in the search bar to be translated on an initial site visit.
 - Fixed an error, where districts with missing values weren't shown.
+- Fixed an error, which crashed the website when the data was updated.
 
 ---
 

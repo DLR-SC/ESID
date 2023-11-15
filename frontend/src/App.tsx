@@ -14,6 +14,7 @@ import {PersistGate} from 'redux-persist/integration/react';
 import {useAppDispatch, useAppSelector} from './store/hooks';
 import {selectDistrict} from './store/DataSelectionSlice';
 import {useTranslation} from 'react-i18next';
+import Footer from 'components/Footer/footer';
 
 /**
  * This is the root element of the React application. It divides the main screen area into the three main components.
@@ -40,12 +41,17 @@ export default function App(): JSX.Element {
               >
                 <Sidebar />
                 <MainContent />
+            
               </Box>
+              <Footer/>
             </Box>
+    
           </PersistGate>
         </ThemeProvider>
+       
       </Provider>
     </Suspense>
+    
   );
 }
 

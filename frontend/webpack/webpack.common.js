@@ -28,7 +28,7 @@ module.exports = {
       ],
     }),
     new CopyPlugin({
-      patterns: ['./public/manifest.json'],
+      patterns: ['./public/manifest.json', './public/icon.svg'],
     }),
     new ESLintPlugin({
       extensions: ['js', 'jsx', 'ts', 'tsx'],
@@ -77,6 +77,7 @@ module.exports = {
         type: 'asset/resource',
         generator: {filename: 'docs/[name].[hash][ext][query]'},
       },
+      {test: /\.(eot|woff|woff2|svg|ttf)([\?]?.*)$/, loader: "file-loader"}
     ],
   },
   resolve: {

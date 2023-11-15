@@ -8,22 +8,34 @@
 
 - Die Änderungshistorie kann jetzt über das Burger-Menü in der oberen rechten Ecke angezeigt werden.
 - Die Sprache kann jetzt in der oberen Leiste zwischen Englisch und Deutsch gewechselt werden.
+- Eine neue Karte für Falldaten wurde hinzugefügt:
+  - Wenn diese Karte ausgewählt wird, werden die Falldaten dementsprechend im Rest der Anwendung angezeigt.
+  - Es ist nun auch möglich die Falldaten alleine anzuzeigen, ohne dass ein Szenario aktiviert ist.
+- Neben der Liste der Infektionszustände ist jetzt zu jedem Infektionszustand ein Infokästchen. Aktuell haben alle Zustände die gleiche Information.
 
 ### Verbesserungen
 
 - Ein Label wurde zum Szenarios-Starttag hinzugefügt.
-- Alle Zahlen in der Szenarienübersicht werden nun als Ganzzahlen angezeigt.
+- Alle Zahlen werden nun als Ganzzahlen angezeigt.
 - Der Gruppenfilter-Editor fragt jetzt nach einer Bestätigung, wenn der Benutzer einen anderen Gruppenfilter auswählt oder den Dialog schließt, ohne vorherige Änderungen zu speichern.
 - Alle Texte sind nun in Englisch und in Deutsch verfügbar.
 - Es wurden einige Verbesserungen gemacht, die das Laden der Seite beschleunigen.
 - Wenn neue Funktionen zur Verfügung gestellt werden, wird der Browser-Cache nicht mehr verhindern, dass Benutzer:innen diese sehen.
 - Das DLR-Logo wurde durch das LOKI-Logo ersetzt und verkleinert.
 - Das Modul für das Liniendiagramm wurde von AmCharts 4 auf 5 gewechselt für eine bessere Leistung.
+- Der ausgewählte Infektionszustand wird nun auch in den Szenariokarten farbig hervorgehoben.
+- Das DLR-Logo in der Tableiste wurde durch das ESID-Logo ersetzt.
+- Das LOKI-Logo verweist nun auf die LOKI-Pandemics Webseite, anstatt der DLR-Webseite.
+- Es ist jetzt möglich einen beliebigen Tag mit Daten auszuwählen.
+- "Falldaten" wurde in "Geschätzte Fälle" umbenannt und neue Übersetzungen für neue Infektionszustände wurden hinzugefügt.
+- Die Textgröße in Tooltips wurden zur besseren Lesbarkeit angepasst.
+- Es werden nur noch vier aggregierte Kompartimente angezeigt.
 
 ### Fehlerbehebungen
 
 - Ein Fehler wurde behoben, der beim ersten Laden der Seite den Text in der Suchleiste nicht übersetzt hatte.
 - Ein Fehler wurde behoben, der Landkreise mit fehlenden Daten verschwinden lies.
+- Ein Fehler wurde behoben, der die Webseite abstürzen lässt, nachdem die zugrunde liegenden Daten aktualisiert wurden.
 
 ---
 
