@@ -77,7 +77,7 @@ module.exports = {
         type: 'asset/resource',
         generator: {filename: 'docs/[name].[hash][ext][query]'},
       },
-      {test: /\.(eot|woff|woff2|svg|ttf)([\?]?.*)$/, loader: "file-loader"}
+      {test: /\.(eot|woff|woff2|svg|ttf)([\?]?.*)$/, loader: 'file-loader'},
     ],
   },
   resolve: {

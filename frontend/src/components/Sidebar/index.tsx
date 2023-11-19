@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { useTheme } from '@mui/material/styles';
+import {useTheme} from '@mui/material/styles';
 import SearchBar from './SearchBar';
 import DistrictMap from './DistrictMap';
 // import SidebarTabs from './SidebarTabs';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 import PieChart from './Piechartshow';
 import BarChart from './BarChart';
 import BarchartStacked from './BarChartStack';
@@ -18,7 +18,7 @@ import DialogContent from '@mui/material/DialogContent';
 import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
 // import Select, { SelectChangeEvent } from '@mui/material/Select';
-import Carousel from 'react-material-ui-carousel'
+import Carousel from 'react-material-ui-carousel';
 import SettingsIcon from '@mui/icons-material/Settings';
 import DialogTitle from '@mui/material/DialogTitle';
 import piechart from 'assets/logo/pie-charts.png';
@@ -27,10 +27,8 @@ import graphchart from 'assets/logo/graphic-chart.png';
 import samplechart from 'assets/logo/sample_charts.png';
 // import samchart from 'assets/logo/sam.png';
 
-
-
 export default function Sidebar(): JSX.Element {
-  const { t } = useTranslation('global');
+  const {t} = useTranslation('global');
   const theme = useTheme();
 
   const [piechartshow, setpieShow] = React.useState(false);
@@ -47,8 +45,6 @@ export default function Sidebar(): JSX.Element {
 
   const handlebarchartstackClose = () => setbarstackshow(false);
   const handlebarchartstackShow = () => setbarstackshow(true);
-
-
 
   // const onSelect = () => setonslecectopen(false)
   const toggleHide = () => {
@@ -68,98 +64,97 @@ export default function Sidebar(): JSX.Element {
     setHide3(true);
   };
 
-
-
   return (
     <Stack
       id='sidebar-root'
-
       sx={{
         borderRight: `1px solid ${theme.palette.divider}`,
         background: theme.palette.background.default,
         width: '300px',
-
       }}
     >
       <Box id='sidebar-map-search-bar-wrapper'>
         <SearchBar />
       </Box>
       <Box id='sidebar-map-wrapper'>
-
         <DistrictMap />
-
       </Box>
 
-      <Box >
-
-        <div style={{ height: '200px', }}>
+      <Box>
+        <div style={{height: '200px'}}>
           <div
             style={{
-
               transition: 'width 0.3s ease', // Add smooth transition
-
-
             }}
           >
-
-
-
-            <div style={{ display: 'flex' }}>
-
-
-
-              <Button variant="outlined" sx={{ width: '100px', height: '30px' }} style={{ backgroundColor: hide1 ? "#6892d5" : "white", color: hide1 ? "white" : "black" }} onClick={toggleHide}>New</Button>
-              <Button variant="outlined" sx={{ width: '100px', height: '30px' }} style={{ backgroundColor: hide2 ? "#6892d5" : "white", color: hide2 ? "white" : "black" }} onClick={toggleHide2}>Load</Button>
-              <Button variant="outlined" sx={{ width: '100px', height: '30px' }} style={{ backgroundColor: hide3 ? "#6892d5" : "white", color: hide3 ? "white" : "black" }} onClick={toggleHide3}>Display</Button>
-
-
-
+            <div style={{display: 'flex'}}>
+              <Button
+                variant='outlined'
+                sx={{width: '100px', height: '30px'}}
+                style={{backgroundColor: hide1 ? '#6892d5' : 'white', color: hide1 ? 'white' : 'black'}}
+                onClick={toggleHide}
+              >
+                New
+              </Button>
+              <Button
+                variant='outlined'
+                sx={{width: '100px', height: '30px'}}
+                style={{backgroundColor: hide2 ? '#6892d5' : 'white', color: hide2 ? 'white' : 'black'}}
+                onClick={toggleHide2}
+              >
+                Load
+              </Button>
+              <Button
+                variant='outlined'
+                sx={{width: '100px', height: '30px'}}
+                style={{backgroundColor: hide3 ? '#6892d5' : 'white', color: hide3 ? 'white' : 'black'}}
+                onClick={toggleHide3}
+              >
+                Display
+              </Button>
             </div>
-            {hide1 &&
-              <div style={{ paddingTop: '10px', paddingLeft: '2px' }} >
-
+            {hide1 && (
+              <div style={{paddingTop: '10px', paddingLeft: '2px'}}>
                 <Carousel autoPlay={false}>
                   {/* <Box sx={ {display:'flex', width:'500px' , flexDirection:'row',overflow:'hidden',overflowX:'scroll'}}> */}
 
-                  <Box sx={{ display: 'flex', width: '500px' }}>
-                    <div style={{ marginLeft: '15px' }} onClick={handleShow}>
+                  <Box sx={{display: 'flex', width: '500px'}}>
+                    <div style={{marginLeft: '15px'}} onClick={handleShow}>
                       <img src={piechart} alt={t('pie-chart')} width='80px' height='90px' />
-                      <p style={{ marginLeft: '15px', fontSize: '12px' }}>Pie Chart</p>
+                      <p style={{marginLeft: '15px', fontSize: '12px'}}>Pie Chart</p>
                     </div>
-                    <div style={{ marginLeft: '15px' }} onClick={handlebarchartShow}>
+                    <div style={{marginLeft: '15px'}} onClick={handlebarchartShow}>
                       <img src={linechart} alt={t('pie-chart')} width='80px' height='90px' />
-                      <p style={{ marginLeft: '15px', fontSize: '12px' }}>Bar Chart</p>
+                      <p style={{marginLeft: '15px', fontSize: '12px'}}>Bar Chart</p>
                     </div>
 
-                    <div style={{ marginLeft: '15px' }} onClick={handlebarchartstackShow}>
+                    <div style={{marginLeft: '15px'}} onClick={handlebarchartstackShow}>
                       <img src={graphchart} alt={t('pie-chart')} width='80px' height='90px' />
-                      <p style={{ marginLeft: '15px', fontSize: '12px' }}>Bar Chart</p>
+                      <p style={{marginLeft: '15px', fontSize: '12px'}}>Bar Chart</p>
                     </div>
                   </Box>
-                  <Box sx={{ display: 'flex', width: '500px' }}>
-                    <div style={{ marginLeft: '15px' }} onClick={handlebarchartstackShow}>
+                  <Box sx={{display: 'flex', width: '500px'}}>
+                    <div style={{marginLeft: '15px'}} onClick={handlebarchartstackShow}>
                       <img src={graphchart} alt={t('pie-chart')} width='80px' height='100px' />
-                      <p style={{ marginLeft: '15px', fontSize: '12px' }}>Bar Chart</p>
+                      <p style={{marginLeft: '15px', fontSize: '12px'}}>Bar Chart</p>
                     </div>
 
-                    <div style={{ marginLeft: '15px' }} onClick={handlebarchartstackShow}>
+                    <div style={{marginLeft: '15px'}} onClick={handlebarchartstackShow}>
                       <img src={graphchart} alt={t('pie-chart')} width='80px' height='100px' />
-                      <p style={{ marginLeft: '15px', fontSize: '12px' }}>Bar Chart</p>
+                      <p style={{marginLeft: '15px', fontSize: '12px'}}>Bar Chart</p>
                     </div>
-                    <div style={{ marginLeft: '15px' }} onClick={handlebarchartShow}>
+                    <div style={{marginLeft: '15px'}} onClick={handlebarchartShow}>
                       <img src={linechart} alt={t('pie-chart')} width='80px' height='100px' />
-                      <p style={{ marginLeft: '15px', fontSize: '12px' }}>Bar Chart</p>
+                      <p style={{marginLeft: '15px', fontSize: '12px'}}>Bar Chart</p>
                     </div>
                   </Box>
                 </Carousel>
               </div>
-            }
-            {hide2 &&
+            )}
+            {hide2 && (
               <div>
-                <div style={{ paddingLeft: '250px', height: '30px', paddingTop: '10px' }}>
-                  {/* <SettingsIcon/> */}
-                </div>
-                <div style={{ background: 'white' }}>
+                <div style={{paddingLeft: '250px', height: '30px', paddingTop: '10px'}}>{/* <SettingsIcon/> */}</div>
+                <div style={{background: 'white'}}>
                   {/* <div style={{marginLeft:'15px'}} onClick={handleShow}>
       <img src={piechart} alt={t('pie-chart')} width='80px' height='100px'/>
       <p style={{marginLeft:'15px',fontSize:'12px'}}>Pie Chart</p>
@@ -167,67 +162,74 @@ export default function Sidebar(): JSX.Element {
        */}
                   <Carousel>
                     <Box>
-                      <div style={{ marginLeft: '15px', display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gridGap: '10px' }}>
-                        <div style={{ transition: 'transform 0.3s ease' }} className="zoom-image">
+                      <div
+                        style={{
+                          marginLeft: '15px',
+                          display: 'grid',
+                          gridTemplateColumns: 'repeat(2, 1fr)',
+                          gridGap: '10px',
+                        }}
+                      >
+                        <div style={{transition: 'transform 0.3s ease'}} className='zoom-image'>
                           <img src={samplechart} alt={t('pie-chart')} width='120px' height='100px' />
                         </div>
                         <div>
                           <img src={samplechart} alt={t('pie-chart')} width='120px' height='100px' />
                         </div>
 
-                        <p style={{ marginLeft: '15px', fontSize: '12px' }}>Pie Chart</p>
-
+                        <p style={{marginLeft: '15px', fontSize: '12px'}}>Pie Chart</p>
                       </div>
-
                     </Box>
                     <Box>
-                      <div style={{ marginLeft: '15px', display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gridGap: '10px' }}>
-                        <div style={{ transition: 'transform 0.3s ease' }} className="zoom-image">
+                      <div
+                        style={{
+                          marginLeft: '15px',
+                          display: 'grid',
+                          gridTemplateColumns: 'repeat(2, 1fr)',
+                          gridGap: '10px',
+                        }}
+                      >
+                        <div style={{transition: 'transform 0.3s ease'}} className='zoom-image'>
                           <img src={samplechart} alt={t('pie-chart')} width='120px' height='100px' />
                         </div>
                         <div>
                           <img src={samplechart} alt={t('pie-chart')} width='120px' height='100px' />
                         </div>
 
-                        <p style={{ marginLeft: '15px', fontSize: '12px' }}>Pie Chart</p>
-
+                        <p style={{marginLeft: '15px', fontSize: '12px'}}>Pie Chart</p>
                       </div>
-
                     </Box>
                   </Carousel>
                 </div>
               </div>
-
-            }
-            {hide3 &&
-              <div style={{ height: '100px' }}>
-                <div style={{ paddingLeft: '250px', height: '30px', color: '#6892d5', paddingTop: '10px' }}>
+            )}
+            {hide3 && (
+              <div style={{height: '100px'}}>
+                <div style={{paddingLeft: '250px', height: '30px', color: '#6892d5', paddingTop: '10px'}}>
                   <SettingsIcon onClick={handleShow} />
                 </div>
-                <div style={{ marginLeft: '15px' }} onClick={handlebarchartShow}>
+                <div style={{marginLeft: '15px'}} onClick={handlebarchartShow}>
                   <img src={graphchart} alt={t('pie-chart')} width='250px' height='200px' />
-                  <p style={{ marginLeft: '15px', fontSize: '12px' }}>Bar Chart</p>
+                  <p style={{marginLeft: '15px', fontSize: '12px'}}>Bar Chart</p>
                 </div>
               </div>
-            }
-
+            )}
           </div>
 
-
-          <Dialog open={piechartshow} onClose={handleClose}
-
+          <Dialog
+            open={piechartshow}
+            onClose={handleClose}
             PaperProps={{
               style: {
                 position: 'absolute',
                 left: 280,
-
-              }
+              },
             }}
           >
             <DialogTitle>Pie Chart</DialogTitle>
 
             <IconButton
-              aria-label="close"
+              aria-label='close'
               onClick={handleClose}
               sx={{
                 position: 'absolute',
@@ -239,7 +241,7 @@ export default function Sidebar(): JSX.Element {
               <CloseIcon />
             </IconButton>
             <br></br>
-            <DialogContent >
+            <DialogContent>
               <PieChart />
             </DialogContent>
             <DialogActions>
@@ -248,19 +250,20 @@ export default function Sidebar(): JSX.Element {
             </DialogActions>
           </Dialog>
 
-
-          <Dialog open={barchartshow} onClose={handlebarchartClose}
+          <Dialog
+            open={barchartshow}
+            onClose={handlebarchartClose}
             PaperProps={{
               style: {
                 position: 'absolute',
                 left: 280,
-
-              }
-            }}>
+              },
+            }}
+          >
             <DialogTitle>Bar Chart</DialogTitle>
 
             <IconButton
-              aria-label="close"
+              aria-label='close'
               onClick={handlebarchartClose}
               sx={{
                 position: 'absolute',
@@ -273,7 +276,7 @@ export default function Sidebar(): JSX.Element {
             </IconButton>
             <br></br>
 
-            <DialogContent >
+            <DialogContent>
               <BarChart />
             </DialogContent>
             <DialogActions>
@@ -282,19 +285,21 @@ export default function Sidebar(): JSX.Element {
             </DialogActions>
           </Dialog>
 
-          <Dialog open={barchartstackshow} onClose={handlebarchartstackClose}
+          <Dialog
+            open={barchartstackshow}
+            onClose={handlebarchartstackClose}
             PaperProps={{
               style: {
                 position: 'absolute',
                 left: 280,
-                width: 600
+                width: 600,
               },
             }}
           >
             <DialogTitle>Bar Line Chart</DialogTitle>
 
             <IconButton
-              aria-label="close"
+              aria-label='close'
               onClick={handlebarchartstackClose}
               sx={{
                 position: 'absolute',
@@ -313,7 +318,6 @@ export default function Sidebar(): JSX.Element {
               <Button onClick={handlebarchartstackClose}>Save</Button>
             </DialogActions>
           </Dialog>
-
 
           {/* 
       <Modal
@@ -337,16 +341,10 @@ export default function Sidebar(): JSX.Element {
         <BarchartStacked/>
         </Box>
       </Modal> */}
-
         </div>
-
       </Box>
 
-      <Container disableGutters sx={{ flexGrow: 1 }}>
-
-      </Container>
-
-
+      <Container disableGutters sx={{flexGrow: 1}}></Container>
     </Stack>
   );
 }

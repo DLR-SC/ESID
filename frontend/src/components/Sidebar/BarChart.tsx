@@ -1,13 +1,6 @@
-import React from "react";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-
-} from "recharts";
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import React from 'react';
+import {LineChart, Line, XAxis, YAxis, CartesianGrid} from 'recharts';
+import Select, {SelectChangeEvent} from '@mui/material/Select';
 import Stack from '@mui/material/Stack';
 // import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
@@ -18,47 +11,44 @@ import TextField from '@mui/material/TextField';
 
 const data = [
   {
-    name: "Page A",
+    name: 'Page A',
     uv: 4000,
     pv: 2400,
-    amt: 2400
+    amt: 2400,
   },
   {
-    name: "Page B",
+    name: 'Page B',
     uv: 3000,
     pv: 1398,
-    amt: 2210
+    amt: 2210,
   },
   {
-    name: "Page C",
+    name: 'Page C',
     uv: 2000,
     pv: 9800,
-    amt: 2290
+    amt: 2290,
   },
   {
-    name: "Page D",
+    name: 'Page D',
     uv: 2780,
     pv: 3908,
-    amt: 2000
+    amt: 2000,
   },
   {
-    name: "Page E",
+    name: 'Page E',
     uv: 2900,
     pv: 9900,
-    amt: 2290
+    amt: 2290,
   },
   {
-    name: "Page F",
+    name: 'Page F',
     uv: 2990,
     pv: 5908,
-    amt: 2600
+    amt: 2600,
   },
-
-
 ];
 
 export default function BarChart(): JSX.Element {
-
   const [age, setAge] = React.useState('');
 
   const handleChange = (event: SelectChangeEvent) => {
@@ -66,22 +56,23 @@ export default function BarChart(): JSX.Element {
   };
 
   return (
-
-    <Stack sx={{ overflow: "scroll", height: '400px' }}>
-      <Stack spacing={2} direction="row" sx={{ paddingTop: '20px', mx: 'auto' }}>
-
-      </Stack>
+    <Stack sx={{overflow: 'scroll', height: '400px'}}>
+      <Stack spacing={2} direction='row' sx={{paddingTop: '20px', mx: 'auto'}}></Stack>
       <div>
-        <Box sx={{ display: "flex", paddingTop: '20px', paddingRight: '20px' }}>
-          <Box width={140}> <h5 >vaccinated</h5></Box>
+        <Box sx={{display: 'flex', paddingTop: '20px', paddingRight: '20px'}}>
+          <Box width={140}>
+            {' '}
+            <h5>vaccinated</h5>
+          </Box>
           <Box
             sx={{
-
               width: 400,
               maxWidth: '100%',
               height: 7,
-            }}>
-            <TextField fullWidth label="fullWidth" id="fullWidth" /></Box>
+            }}
+          >
+            <TextField fullWidth label='fullWidth' id='fullWidth' />
+          </Box>
         </Box>
       </div>
       <br></br>
@@ -95,33 +86,31 @@ export default function BarChart(): JSX.Element {
             top: 8,
             right: 30,
             left: 20,
-            bottom: 5
+            bottom: 5,
           }}
         >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" style={{ fontSize: '10px' }} />
-          <YAxis style={{ fontSize: '10px' }} />
+          <CartesianGrid strokeDasharray='3 3' />
+          <XAxis dataKey='name' style={{fontSize: '10px'}} />
+          <YAxis style={{fontSize: '10px'}} />
 
-          <Line
-            type="monotone"
-            dataKey="pv"
-            stroke="#8884d8"
-            activeDot={{ r: 8 }}
-          />
-          <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
+          <Line type='monotone' dataKey='pv' stroke='#8884d8' activeDot={{r: 8}} />
+          <Line type='monotone' dataKey='uv' stroke='#82ca9d' />
         </LineChart>
       </div>
 
-      <Box sx={{ display: "flex", paddingRight: '10px', paddingTop: '10px' }}>
-        <Box width={140}> <h5 >Detail 1</h5></Box>
+      <Box sx={{display: 'flex', paddingRight: '10px', paddingTop: '10px'}}>
+        <Box width={140}>
+          {' '}
+          <h5>Detail 1</h5>
+        </Box>
 
         <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">Age</InputLabel>
+          <InputLabel id='demo-simple-select-label'>Age</InputLabel>
           <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
+            labelId='demo-simple-select-label'
+            id='demo-simple-select'
             value={age}
-            label="Age"
+            label='Age'
             onChange={handleChange}
           >
             <MenuItem value={10}>Ten</MenuItem>
@@ -131,16 +120,19 @@ export default function BarChart(): JSX.Element {
         </FormControl>
       </Box>
 
-      <Box sx={{ display: "flex", paddingTop: '20px', paddingRight: '20px' }}>
-        <Box width={140}> <h5 >Detail 1</h5></Box>
+      <Box sx={{display: 'flex', paddingTop: '20px', paddingRight: '20px'}}>
+        <Box width={140}>
+          {' '}
+          <h5>Detail 1</h5>
+        </Box>
 
         <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">Age</InputLabel>
+          <InputLabel id='demo-simple-select-label'>Age</InputLabel>
           <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
+            labelId='demo-simple-select-label'
+            id='demo-simple-select'
             value={age}
-            label="Age"
+            label='Age'
             onChange={handleChange}
           >
             <MenuItem value={10}>Ten</MenuItem>
@@ -150,16 +142,19 @@ export default function BarChart(): JSX.Element {
         </FormControl>
       </Box>
 
-      <Box sx={{ display: "flex", paddingTop: '20px', paddingRight: '20px' }}>
-        <Box width={140}> <h5 >Detail 1</h5></Box>
+      <Box sx={{display: 'flex', paddingTop: '20px', paddingRight: '20px'}}>
+        <Box width={140}>
+          {' '}
+          <h5>Detail 1</h5>
+        </Box>
 
         <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">Age</InputLabel>
+          <InputLabel id='demo-simple-select-label'>Age</InputLabel>
           <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
+            labelId='demo-simple-select-label'
+            id='demo-simple-select'
             value={age}
-            label="Age"
+            label='Age'
             onChange={handleChange}
           >
             <MenuItem value={10}>Ten</MenuItem>
@@ -168,16 +163,19 @@ export default function BarChart(): JSX.Element {
           </Select>
         </FormControl>
       </Box>
-      <Box sx={{ display: "flex", paddingTop: '20px', paddingRight: '20px' }}>
-        <Box width={140}> <h5 >Detail 1</h5></Box>
+      <Box sx={{display: 'flex', paddingTop: '20px', paddingRight: '20px'}}>
+        <Box width={140}>
+          {' '}
+          <h5>Detail 1</h5>
+        </Box>
 
         <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">Age</InputLabel>
+          <InputLabel id='demo-simple-select-label'>Age</InputLabel>
           <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
+            labelId='demo-simple-select-label'
+            id='demo-simple-select'
             value={age}
-            label="Age"
+            label='Age'
             onChange={handleChange}
           >
             <MenuItem value={10}>Ten</MenuItem>
@@ -193,7 +191,5 @@ export default function BarChart(): JSX.Element {
       <Button variant="outlined"></Button> 
     </Stack> */}
     </Stack>
-
-
   );
 }

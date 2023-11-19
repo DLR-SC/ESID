@@ -41,17 +41,13 @@ export default function App(): JSX.Element {
               >
                 <Sidebar />
                 <MainContent />
-            
               </Box>
-              <Footer/>
+              <Footer />
             </Box>
-    
           </PersistGate>
         </ThemeProvider>
-       
       </Provider>
     </Suspense>
-    
   );
 }
 
