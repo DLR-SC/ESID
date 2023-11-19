@@ -1,26 +1,26 @@
-import React, {useEffect, useMemo, useState} from 'react';
-import {useTheme} from '@mui/material/styles';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useTheme } from '@mui/material/styles';
 import * as am5 from '@amcharts/amcharts5';
 import * as am5map from '@amcharts/amcharts5/map';
-import {useTranslation} from 'react-i18next';
-import {useAppDispatch, useAppSelector} from '../../store/hooks';
-import {selectDistrict} from '../../store/DataSelectionSlice';
+import { useTranslation } from 'react-i18next';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { selectDistrict } from '../../store/DataSelectionSlice';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import LockIcon from '@mui/icons-material/Lock';
-import {useGetSimulationDataByDateQuery} from 'store/services/scenarioApi';
+import { useGetSimulationDataByDateQuery } from 'store/services/scenarioApi';
 import HeatLegend from './HeatLegend';
-import {NumberFormatter} from 'util/hooks';
+import { NumberFormatter } from 'util/hooks';
 import HeatLegendEdit from './HeatLegendEdit';
-import {HeatmapLegend} from '../../types/heatmapLegend';
+import { HeatmapLegend } from '../../types/heatmapLegend';
 import LockOpen from '@mui/icons-material/LockOpen';
 import LoadingContainer from '../shared/LoadingContainer';
 import mapData from 'assets/lk_germany_reduced.geojson';
-import {useGetCaseDataByDateQuery} from '../../store/services/caseDataApi';
+import { useGetCaseDataByDateQuery } from '../../store/services/caseDataApi';
 
-const {useRef} = React;
+const { useRef } = React;
 
 interface IRegionPolygon {
   value: number;
@@ -47,29 +47,29 @@ export default function DistrictMap(): JSX.Element {
   const legend = useAppSelector((state) => state.userPreference.selectedHeatmap);
   const [chart, setChart] = useState<am5map.MapChart | null>(null);
 
-  const {data: simulationData, isFetching: isSimulationDataFetching} = useGetSimulationDataByDateQuery(
+  const { data: simulationData, isFetching: isSimulationDataFetching } = useGetSimulationDataByDateQuery(
     {
       id: selectedScenario ?? 0,
       day: selectedDate ?? '',
       groups: ['total'],
       compartments: [selectedCompartment ?? ''],
     },
-    {skip: selectedScenario === null || selectedScenario === 0 || !selectedCompartment || !selectedDate}
+    { skip: selectedScenario === null || selectedScenario === 0 || !selectedCompartment || !selectedDate }
   );
 
-  const {data: caseData, isFetching: isCaseDataFetching} = useGetCaseDataByDateQuery(
+  const { data: caseData, isFetching: isCaseDataFetching } = useGetCaseDataByDateQuery(
     {
       day: selectedDate ?? '',
       groups: ['total'],
       compartments: [selectedCompartment ?? ''],
     },
-    {skip: selectedScenario === null || selectedScenario > 0 || !selectedCompartment || !selectedDate}
+    { skip: selectedScenario === null || selectedScenario > 0 || !selectedCompartment || !selectedDate }
   );
 
   const legendRef = useRef<am5.HeatLegend | null>(null);
-  const {t, i18n} = useTranslation();
-  const {t: tBackend} = useTranslation('backend');
-  const {formatNumber} = NumberFormatter(i18n.language, 1, 0);
+  const { t, i18n } = useTranslation();
+  const { t: tBackend } = useTranslation('backend');
+  const { formatNumber } = NumberFormatter(i18n.language, 1, 0);
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const lastSelectedPolygon = useRef<am5map.MapPolygon | null>(null);
@@ -188,7 +188,7 @@ export default function DistrictMap(): JSX.Element {
     // add click event
     polygonTemplate.events.on('click', (e) => {
       const item = e.target.dataItem?.dataContext as IRegionPolygon;
-      dispatch(selectDistrict({ags: item.RS, name: item.GEN, type: t(item.BEZ)}));
+      dispatch(selectDistrict({ ags: item.RS, name: item.GEN, type: t(item.BEZ) }));
     });
     // add hover state
     polygonTemplate.states.create('hover', {
@@ -271,7 +271,7 @@ export default function DistrictMap(): JSX.Element {
             if (Number.isFinite(regionData.value)) {
               if (legend.steps[0].value == 0 && legend.steps[legend.steps.length - 1].value == 1) {
                 // if legend is normalized, also pass mix & max to color function
-                fillColor = getColorFromLegend(regionData.value, legend, {min: 0, max: aggregatedMax});
+                fillColor = getColorFromLegend(regionData.value, legend, { min: 0, max: aggregatedMax });
               } else {
                 // if legend is not normalized, min & max are first and last stop of legend and don't need to be passed
                 fillColor = getColorFromLegend(regionData.value, legend);
@@ -346,7 +346,7 @@ export default function DistrictMap(): JSX.Element {
               aria-label={t('heatlegend.lock')}
               onClick={() => setFixedLegendMaxValue(fixedLegendMaxValue ? null : aggregatedMax)}
               size='small'
-              sx={{padding: theme.spacing(0)}}
+              sx={{ padding: theme.spacing(0) }}
             >
               {fixedLegendMaxValue ? <LockIcon /> : <LockOpen />}
             </IconButton>
@@ -361,13 +361,13 @@ export default function DistrictMap(): JSX.Element {
 function getColorFromLegend(
   value: number,
   legend: HeatmapLegend,
-  aggregatedMinMax?: {min: number; max: number}
+  aggregatedMinMax?: { min: number; max: number }
 ): am5.Color {
   // assume legend stops are absolute
   let normalizedValue = value;
   // if aggregated values (min/max) are properly set, the legend items are already normalized => need to normalize value too
   if (aggregatedMinMax && aggregatedMinMax.min < aggregatedMinMax.max) {
-    const {min: aggregatedMin, max: aggregatedMax} = aggregatedMinMax;
+    const { min: aggregatedMin, max: aggregatedMax } = aggregatedMinMax;
     normalizedValue = (value - aggregatedMin) / (aggregatedMax - aggregatedMin);
   } else if (aggregatedMinMax) {
     // log error if any of the above checks fail

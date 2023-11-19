@@ -1,10 +1,10 @@
-import React, {useEffect} from 'react';
-import {useTheme} from '@mui/material/styles';
+import React, { useEffect } from 'react';
+import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import * as am5 from '@amcharts/amcharts5';
-import {useTranslation} from 'react-i18next';
-import {NumberFormatter} from 'util/hooks';
-import {HeatmapLegend} from '../../types/heatmapLegend';
+import { useTranslation } from 'react-i18next';
+import { NumberFormatter } from 'util/hooks';
+import { HeatmapLegend } from '../../types/heatmapLegend';
 
 export default function HeatLegend(props: {
   // add is_dynamic/absolute?
@@ -16,8 +16,8 @@ export default function HeatLegend(props: {
   id: string;
 }): JSX.Element {
   const id = props.id + String(Date.now() + Math.random()); // "guarantee" unique id
-  const {i18n: i18n} = useTranslation();
-  const {formatNumber} = NumberFormatter(i18n.language, 3, 8);
+  const { i18n: i18n } = useTranslation();
+  const { formatNumber } = NumberFormatter(i18n.language, 3, 8);
   const theme = useTheme();
 
   useEffect(() => {
@@ -36,7 +36,7 @@ export default function HeatLegend(props: {
     );
 
     // compile stop list
-    const stoplist: {color: am5.Color; opacity: number; offset: number}[] = [];
+    const stoplist: { color: am5.Color; opacity: number; offset: number }[] = [];
     props.legend.steps.forEach((item) => {
       stoplist.push({
         color: am5.color(item.color),
