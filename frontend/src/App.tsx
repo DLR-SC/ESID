@@ -1,20 +1,19 @@
-import React, { Suspense, useEffect } from 'react';
-import { Provider } from 'react-redux';
+import React, {Suspense, useEffect} from 'react';
+import {Provider} from 'react-redux';
 
 import './App.scss';
 
 import TopBar from './components/TopBar';
 import Sidebar from './components/Sidebar';
 import MainContent from './components/MainContent';
-import { Store, Persistor } from './store';
+import {Store, Persistor} from './store';
 import Box from '@mui/material/Box';
-import { ThemeProvider } from '@mui/material/styles';
+import {ThemeProvider} from '@mui/material/styles';
 import Theme from './util/Theme';
-import { PersistGate } from 'redux-persist/integration/react';
-import { useAppDispatch, useAppSelector } from './store/hooks';
-import { selectDistrict } from './store/DataSelectionSlice';
-import { useTranslation } from 'react-i18next';
-
+import {PersistGate} from 'redux-persist/integration/react';
+import {useAppDispatch, useAppSelector} from './store/hooks';
+import {selectDistrict} from './store/DataSelectionSlice';
+import {useTranslation} from 'react-i18next';
 
 /**
  * This is the root element of the React application. It divides the main screen area into the three main components.
@@ -27,7 +26,7 @@ export default function App(): JSX.Element {
         <ThemeProvider theme={Theme}>
           <PersistGate loading={null} persistor={Persistor}>
             <Initializer />
-            <Box id='app' display='flex' flexDirection='column' sx={{ height: '100%', width: '100%' }}>
+            <Box id='app' display='flex' flexDirection='column' sx={{height: '100%', width: '100%'}}>
               <TopBar />
               <Box
                 id='app-content'
@@ -41,17 +40,12 @@ export default function App(): JSX.Element {
               >
                 <Sidebar />
                 <MainContent />
-
               </Box>
-
             </Box>
-
           </PersistGate>
         </ThemeProvider>
-
       </Provider>
     </Suspense>
-
   );
 }
 
@@ -60,7 +54,7 @@ export default function App(): JSX.Element {
  * component.
  */
 function Initializer() {
-  const { t } = useTranslation();
+  const {t} = useTranslation();
   const selectedDistrict = useAppSelector((state) => state.dataSelection.district);
   const dispatch = useAppDispatch();
 
@@ -68,7 +62,7 @@ function Initializer() {
   // before the translations are available.
   useEffect(() => {
     if (selectedDistrict.ags === '00000' && selectedDistrict.name === '') {
-      dispatch(selectDistrict({ ags: '00000', name: t('germany'), type: '' }));
+      dispatch(selectDistrict({ags: '00000', name: t('germany'), type: ''}));
     }
   }, [selectedDistrict, t, dispatch]);
 

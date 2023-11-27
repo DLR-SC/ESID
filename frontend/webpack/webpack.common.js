@@ -15,15 +15,15 @@ module.exports = {
       files: [
         {
           match: /(LOKI_compact)+.+(.svg)$/,
-          attributes: { as: 'image' },
+          attributes: {as: 'image'},
         },
         {
           match: /(lk_germany_reduced)+.+(.geojson)$/,
-          attributes: { as: 'fetch', crossOrigin: 'anonymous' },
+          attributes: {as: 'fetch', crossOrigin: 'anonymous'},
         },
         {
           match: /(lk_germany_reduced_list)+.+(.json)$/,
-          attributes: { as: 'fetch', crossOrigin: 'anonymous' },
+          attributes: {as: 'fetch', crossOrigin: 'anonymous'},
         },
       ],
     }),
@@ -49,18 +49,18 @@ module.exports = {
   },
   module: {
     rules: [
-      { test: /\.tsx?$/i, use: ['ts-loader'], exclude: /node_modules/ },
-      { test: /\.css$/i, use: ['style-loader', 'css-loader'] },
-      { test: /\.scss$/i, use: ['style-loader', 'css-loader', 'sass-loader'] },
+      {test: /\.tsx?$/i, use: ['ts-loader'], exclude: /node_modules/},
+      {test: /\.css$/i, use: ['style-loader', 'css-loader']},
+      {test: /\.scss$/i, use: ['style-loader', 'css-loader', 'sass-loader']},
       {
         test: /\.(png|jpe?g|gif|jp2|webp|svg)$/i,
         type: 'asset/resource',
-        generator: { filename: 'images/[name].[hash][ext][query]' },
+        generator: {filename: 'images/[name].[hash][ext][query]'},
       },
       {
         test: /\.(json|geojson)$/i,
         type: 'asset/resource',
-        generator: { filename: 'data/[name].[hash][ext][query]' },
+        generator: {filename: 'data/[name].[hash][ext][query]'},
       },
       {
         test: /locales.*\.json5$/i,
@@ -75,14 +75,14 @@ module.exports = {
       {
         test: /\.md$/i,
         type: 'asset/resource',
-        generator: { filename: 'docs/[name].[hash][ext][query]' },
+        generator: {filename: 'docs/[name].[hash][ext][query]'},
       },
-      { test: /\.(eot|woff|woff2|svg|ttf)([\?]?.*)$/, loader: 'file-loader' },
+      {test: /\.(eot|woff|woff2|svg|ttf)([\?]?.*)$/, loader: 'file-loader'},
     ],
   },
   resolve: {
     modules: ['src', 'public', 'node_modules'],
     extensions: ['.ts', '.tsx', '.js', '.jsx'],
-    fallback: { crypto: false },
+    fallback: {crypto: false},
   },
 };

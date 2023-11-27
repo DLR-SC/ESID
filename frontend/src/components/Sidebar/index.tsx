@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTheme } from '@mui/material/styles';
+import {useTheme} from '@mui/material/styles';
 import SearchBar from './SearchBar';
 import DistrictMap from './DistrictMap';
 import SidebarTabs from './SidebarTabs';
@@ -28,7 +28,7 @@ export default function Sidebar(): JSX.Element {
       <Box id='sidebar-map-wrapper'>
         <DistrictMap />
       </Box>
-      <Container disableGutters sx={{ flexGrow: 1 }}>
+      <Container disableGutters sx={{flexGrow: 1}}>
         <SidebarTabs />
       </Container>
     </Stack>
