@@ -9,4 +9,4 @@ import './util/i18n';
 //     root.render(<App />);
 // }
 
-ReactDOM.render(<App/>, document.getElementById('root'))
+ReactDOM.render(<App />, document.getElementById('root'));
