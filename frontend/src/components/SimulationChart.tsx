@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useCallback, useEffect, useRef} from 'react';
 import {Root} from '@amcharts/amcharts5/.internal/core/Root';
 import {Tooltip} from '@amcharts/amcharts5/.internal/core/render/Tooltip';
 import {RoundedRectangle} from '@amcharts/amcharts5/.internal/core/render/RoundedRectangle';
@@ -29,6 +29,7 @@ import {useTranslation} from 'react-i18next';
 import LoadingContainer from './shared/LoadingContainer';
 import {useGetMultipleGroupFilterDataQuery} from 'store/services/groupApi';
 import {GroupData} from 'types/group';
+import {setReferenceDayBottom} from '../store/LayoutSlice';
 
 /**
  * React Component to render the Simulation Chart Section
@@ -43,6 +44,7 @@ export default function SimulationChart(): JSX.Element {
   const selectedDistrict = useAppSelector((state) => state.dataSelection.district.ags);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
   const selectedDate = useAppSelector((state) => state.dataSelection.date);
+  const referenceDay = useAppSelector((state) => state.dataSelection.simulationStart);
   const minDate = useAppSelector((state) => state.dataSelection.minDate);
   const maxDate = useAppSelector((state) => state.dataSelection.maxDate);
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
@@ -97,6 +99,20 @@ export default function SimulationChart(): JSX.Element {
 
   const rootRef = useRef<Root | null>(null);
   const chartRef = useRef<XYChart | null>(null);
+
+  const setReferenceDayX = useCallback(() => {
+    if (!chartRef.current || !rootRef.current || !referenceDay) {
+      return;
+    }
+
+    const midday = new Date(referenceDay).setHours(12, 0, 0);
+
+    const xAxis: DateAxis<AxisRendererX> = chartRef.current.xAxes.getIndex(0) as DateAxis<AxisRendererX>;
+    const xAxisPosition = xAxis.width() * xAxis.toGlobalPosition(xAxis.dateToPosition(new Date(midday)));
+    const globalPosition = xAxis.toGlobal({x: xAxisPosition, y: 0});
+    const docPosition = rootRef.current.rootPointToDocument(globalPosition).x;
+    dispatch(setReferenceDayBottom(docPosition));
+  }, [dispatch, referenceDay]);
 
   // Effect to initialize root & chart
   useEffect(
@@ -410,22 +426,84 @@ export default function SimulationChart(): JSX.Element {
   );
 
   // Effect to add Guide when date selected
+  useEffect(() => {
+    // Skip effect if chart (or root) is not initialized yet or no date is selected
+    if (!chartRef.current || !rootRef.current || !selectedDate) {
+      return;
+    }
+
+    // Get xAxis from chart
+    const xAxis = chartRef.current.xAxes.getIndex(0) as DateAxis<AxisRendererX>;
+
+    // Create data item for range
+    const rangeDataItem = xAxis.makeDataItem({
+      // Make sure the time of the start date object is set to first second of day
+      value: new Date(selectedDate).setHours(0, 0, 0),
+      // Make sure the time of the end date object is set to last second of day
+      endValue: new Date(selectedDate).setHours(23, 59, 59),
+      // Line and label should drawn above the other elements
+      above: true,
+    });
+
+    // Create the range with the data item
+    const range = xAxis.createAxisRange(rangeDataItem);
+
+    // Set stroke of range (line with label)
+    range.get('grid')?.setAll({
+      stroke: color(theme.palette.primary.main),
+      strokeOpacity: 1,
+      strokeWidth: 2,
+      location: 0.5,
+      visible: true,
+    });
+
+    // Set fill of range (rest of the day)
+    range.get('axisFill')?.setAll({
+      fill: color(theme.palette.primary.main),
+      fillOpacity: 0.3,
+      visible: true,
+    });
+
+    // Set label for range
+    range.get('label')?.setAll({
+      fill: color(theme.palette.primary.contrastText),
+      text: new Date(selectedDate).toLocaleDateString(i18n.language, {
+        year: 'numeric',
+        month: 'short',
+        day: '2-digit',
+      }),
+      location: 0.5,
+      background: RoundedRectangle.new(rootRef.current, {
+        fill: color(theme.palette.primary.main),
+      }),
+      // Put Label to the topmost layer to make sure it is drawn on top of the axis tick labels
+      layer: Number.MAX_VALUE,
+    });
+
+    return () => {
+      // Discard range before re-running this effect
+      xAxis.axisRanges.removeValue(range);
+    };
+  }, [selectedDate, theme, i18n.language]);
+
+  // Effect to add guide for the reference day
   useEffect(
     () => {
       // Skip effect if chart (or root) is not initialized yet or no date is selected
-      if (!chartRef.current || !rootRef.current || !selectedDate) {
+      if (!chartRef.current || !rootRef.current || !referenceDay) {
         return;
       }
 
       // Get xAxis from chart
       const xAxis = chartRef.current.xAxes.getIndex(0) as DateAxis<AxisRendererX>;
 
+      const referenceDate = new Date(referenceDay);
+      const start = referenceDate.setHours(12, 0, 0);
+
       // Create data item for range
       const rangeDataItem = xAxis.makeDataItem({
         // Make sure the time of the start date object is set to first second of day
-        value: new Date(selectedDate).setHours(0, 0, 0),
-        // Make sure the time of the end date object is set to last second of day
-        endValue: new Date(selectedDate).setHours(23, 59, 59),
+        value: start,
         // Line and label should drawn above the other elements
         above: true,
       });
@@ -435,53 +513,26 @@ export default function SimulationChart(): JSX.Element {
 
       // Set stroke of range (line with label)
       range.get('grid')?.setAll({
-        stroke: color(theme.palette.primary.main),
+        stroke: color(theme.palette.text.secondary),
         strokeOpacity: 1,
         strokeWidth: 2,
-        location: 0.5,
-        visible: true,
+        strokeDasharray: [6, 4],
       });
 
-      // Set fill of range (rest of the day)
-      range.get('axisFill')?.setAll({
-        fill: color(theme.palette.primary.main),
-        fillOpacity: 0.3,
-        visible: true,
-      });
-
-      // Set label for range
-      range.get('label')?.setAll({
-        fill: color(theme.palette.primary.contrastText),
-        text: new Date(selectedDate).toLocaleDateString(i18n.language, {
-          year: 'numeric',
-          month: 'short',
-          day: '2-digit',
-        }),
-        location: 0.5,
-        background: RoundedRectangle.new(rootRef.current, {
-          fill: color(theme.palette.primary.main),
-        }),
-        // Put Label to the topmost layer to make sure it is drawn on top of the axis tick labels
-        layer: Number.MAX_VALUE,
-      });
+      setReferenceDayX();
+      xAxis.onPrivate('selectionMin', setReferenceDayX);
+      xAxis.onPrivate('selectionMax', setReferenceDayX);
+      const resizeObserver = new ResizeObserver(setReferenceDayX);
+      resizeObserver.observe(rootRef.current.dom);
 
       return () => {
         // Discard range before re-running this effect
         xAxis.axisRanges.removeValue(range);
+        resizeObserver.disconnect();
       };
     },
     // Re-run effect when selection changes (date/scenario/compartment/district) or when the active scenarios/filters change (theme and translation do not change after initialization)
-    [
-      selectedDate,
-      selectedScenario,
-      selectedCompartment,
-      selectedDistrict,
-      activeScenarios,
-      groupFilterList,
-      theme,
-      t,
-      i18n.language,
-    ]
+    [referenceDay, theme, i18n.language, setReferenceDayX]
   );
 
   // Effect to update Simulation and case data
@@ -716,6 +767,8 @@ export default function SimulationChart(): JSX.Element {
       dataFields: dataFields,
       dataFieldsOrder: dataFieldsOrder,
     });
+
+    setReferenceDayX();
     // Re-run this effect whenever the data itself changes (or any variable the effect uses)
   }, [
     percentileData,
@@ -730,6 +783,7 @@ export default function SimulationChart(): JSX.Element {
     groupFilterList,
     t,
     tBackend,
+    setReferenceDayX,
   ]);
 
   return (

@@ -14,6 +14,8 @@ import {PersistGate} from 'redux-persist/integration/react';
 import {useAppDispatch, useAppSelector} from './store/hooks';
 import {selectDistrict} from './store/DataSelectionSlice';
 import {useTranslation} from 'react-i18next';
+import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
+import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
 
 /**
  * This is the root element of the React application. It divides the main screen area into the three main components.
@@ -25,23 +27,25 @@ export default function App(): JSX.Element {
       <Provider store={Store}>
         <ThemeProvider theme={Theme}>
           <PersistGate loading={null} persistor={Persistor}>
-            <Initializer />
-            <Box id='app' display='flex' flexDirection='column' sx={{height: '100%', width: '100%'}}>
-              <TopBar />
-              <Box
-                id='app-content'
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  flexGrow: 1,
-                  alignItems: 'stretch',
-                  width: '100%',
-                }}
-              >
-                <Sidebar />
-                <MainContent />
+            <MUILocalization>
+              <Initializer />
+              <Box id='app' display='flex' flexDirection='column' sx={{height: '100%', width: '100%'}}>
+                <TopBar />
+                <Box
+                  id='app-content'
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    flexGrow: 1,
+                    alignItems: 'stretch',
+                    width: '100%',
+                  }}
+                >
+                  <Sidebar />
+                  <MainContent />
+                </Box>
               </Box>
-            </Box>
+            </MUILocalization>
           </PersistGate>
         </ThemeProvider>
       </Provider>
@@ -67,4 +71,14 @@ function Initializer() {
   }, [selectedDistrict, t, dispatch]);
 
   return null;
+}
+
+function MUILocalization(props: {children: string | JSX.Element | JSX.Element[]}): JSX.Element {
+  const {i18n} = useTranslation();
+
+  return (
+    <LocalizationProvider dateAdapter={AdapterDayjs} locale={i18n.language}>
+      {props.children}
+    </LocalizationProvider>
+  );
 }

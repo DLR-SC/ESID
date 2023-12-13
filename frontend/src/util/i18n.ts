@@ -15,6 +15,9 @@ import deLegal from 'locales/de/legal.json5';
 import deGlobal from 'locales/de/global.json5';
 import deTranslation from 'locales/de/translation.json5';
 
+import 'dayjs/locale/en';
+import 'dayjs/locale/de';
+
 const translationFiles = [
   enBackend,
   enLegal,
