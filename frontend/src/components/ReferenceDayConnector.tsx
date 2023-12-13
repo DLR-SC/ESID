@@ -4,6 +4,9 @@ import React, {useRef, useState} from 'react';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 
+/**
+ * Draws a dashed line from the reference day in the compartment view to the reference day on the chart.
+ */
 export function ReferenceDayConnector(): JSX.Element {
   const theme = useTheme();
   const referenceDayPos = useAppSelector((state) => state.layoutSlice.referenceDayXPositions);
