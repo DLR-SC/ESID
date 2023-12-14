@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { useTheme } from '@mui/material/styles';
+import React, {useCallback, useEffect, useState} from 'react';
+import {useTheme} from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -7,15 +7,15 @@ import FormControl from '@mui/material/FormControl';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import MenuItem from '@mui/material/MenuItem';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select, {SelectChangeEvent} from '@mui/material/Select';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import HeatLegend from './HeatLegend';
 import EditIcon from '@mui/icons-material/Edit';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { selectHeatmapLegend } from '../../store/UserPreferenceSlice';
-import { HeatmapLegend } from '../../types/heatmapLegend';
-import { useTranslation } from 'react-i18next';
+import {useAppDispatch, useAppSelector} from '../../store/hooks';
+import {selectHeatmapLegend} from '../../store/UserPreferenceSlice';
+import {HeatmapLegend} from '../../types/heatmapLegend';
+import {useTranslation} from 'react-i18next';
 import legendPresets from 'assets/heatmap_legend_presets.json';
 
 /**
@@ -27,7 +27,7 @@ export default function HeatLegendEdit(): JSX.Element {
   const legend = useAppSelector((state) => state.userPreference.selectedHeatmap);
 
   const theme = useTheme();
-  const { t } = useTranslation();
+  const {t} = useTranslation();
 
   // console.log('haloooc alll',legendPresets)
 
@@ -48,7 +48,7 @@ export default function HeatLegendEdit(): JSX.Element {
       const preset = availablePresets.find((preset) => preset.name === name);
       // console.log('preset list ',preset)
       if (preset) {
-        dispatch(selectHeatmapLegend({ legend: preset }));
+        dispatch(selectHeatmapLegend({legend: preset}));
       }
     },
     [dispatch, availablePresets]
@@ -66,7 +66,6 @@ export default function HeatLegendEdit(): JSX.Element {
         },
       })
         .then((response) => {
-
           return response.json();
         })
         .then(
@@ -136,20 +135,18 @@ export default function HeatLegendEdit(): JSX.Element {
       const legends: Array<HeatmapLegend> = [];
       const stepCount = theme.custom.scenarios[0].length - 1;
       for (let i = 0; i < theme.custom.scenarios.length; i++) {
-        const steps: Array<{ color: string; value: number }> = [];
+        const steps: Array<{color: string; value: number}> = [];
         for (let j = 0; j < stepCount; j++) {
-          steps.push({ color: theme.custom.scenarios[i][stepCount - 1 - j], value: j / (stepCount - 1) });
+          steps.push({color: theme.custom.scenarios[i][stepCount - 1 - j], value: j / (stepCount - 1)});
         }
-        legends.push({ name: 'Default', isNormalized: true, steps });
+        legends.push({name: 'Default', isNormalized: true, steps});
 
         setDefaultLegends(legends);
       }
-
     }, [theme, setDefaultLegends]);
 
     return defaultLegends;
   }
-
 
   return (
     <>
@@ -159,7 +156,7 @@ export default function HeatLegendEdit(): JSX.Element {
           onClick={() => setHeatLegendEditOpen(true)}
           aria-label={t('heatlegend.edit')}
           size='small'
-          sx={{ padding: theme.spacing(0), marginBottom: theme.spacing(1) }}
+          sx={{padding: theme.spacing(0), marginBottom: theme.spacing(1)}}
         >
           <EditIcon />
         </IconButton>
@@ -171,12 +168,10 @@ export default function HeatLegendEdit(): JSX.Element {
             background: theme.palette.background.paper,
           }}
         >
-          <FormControl fullWidth sx={{ marginBottom: theme.spacing(3) }}>
-
+          <FormControl fullWidth sx={{marginBottom: theme.spacing(3)}}>
             <Select id='heatmap-select' aria-label={t('heatlegend.select')} value={legend.name} onChange={handleChange}>
               {availablePresets.map((preset, i) => (
-                <MenuItem key={'legendPresetSelect' + i.toString()} value={preset.name} >
-
+                <MenuItem key={'legendPresetSelect' + i.toString()} value={preset.name}>
                   <Grid container maxWidth='lg'>
                     <Grid item xs={12}>
                       <HeatLegend
@@ -189,7 +184,6 @@ export default function HeatLegendEdit(): JSX.Element {
                         displayText={!preset.isNormalized}
                         id={preset.name}
                       />
-
                     </Grid>
                     <Grid item xs={12}>
                       <Typography variant='h2' align='center'>
