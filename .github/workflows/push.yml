@@ -39,7 +39,8 @@ jobs:
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          file: frontend/reports/clover.xml
+          files: frontend/reports/clover.xml
+          format: clover
           base-path: frontend
           
   lighthouseci:
