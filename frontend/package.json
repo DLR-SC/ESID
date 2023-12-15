@@ -11,7 +11,7 @@
     "coverage": "vitest run --coverage",
     "format": "prettier --write .",
     "lint": "eslint --fix src",
-    "collect-attributions": "ts-node --esm ./tools/CollectAttributions.ts"
+    "collect-attributions": "ts-node --esm tools/CollectAttributions.mts"
   },
   "repository": {
     "type": "git",
