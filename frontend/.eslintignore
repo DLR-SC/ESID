@@ -1,6 +1,6 @@
 node_modules
 build
-webpack
-.eslintrc.js
+vite
+.eslintrc.cjs
 
 src/**.scss

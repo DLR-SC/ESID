@@ -10,7 +10,7 @@ import {
 
 export const scenarioApi = createApi({
   reducerPath: 'scenarioApi',
-  baseQuery: fetchBaseQuery({baseUrl: `${process.env.API_URL || ''}/api/v1/`}),
+  baseQuery: fetchBaseQuery({baseUrl: `${import.meta.env.VITE_API_URL || ''}/api/v1/`}),
   endpoints: (builder) => ({
     getSimulationModels: builder.query<SimulationModels, void>({
       query: () => {

@@ -1,5 +1,7 @@
 import React from 'react';
+import {describe, test, vi, expect} from 'vitest';
 import {act, render, screen} from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import i18n from '../../../../util/i18nForTests';
 
@@ -10,7 +12,7 @@ import ApplicationMenu from '../../../../components/TopBar/ApplicationMenu';
 describe('AttributionDialog', () => {
   test('PopUp', async () => {
     // We mock fetch to return two entries for attributions.
-    global.fetch = jest.fn().mockImplementation(() => {
+    const fetch = vi.fn().mockImplementation(() => {
       return Promise.resolve({
         json: () => {
           return Promise.resolve([
@@ -35,22 +37,25 @@ describe('AttributionDialog', () => {
       });
     });
 
+    vi.stubGlobal('fetch', fetch);
+
     render(
       <I18nextProvider i18n={i18n}>
         <ApplicationMenu />
       </I18nextProvider>
     );
 
-    screen.getByLabelText('topBar.menu.label').click();
-    screen.getByText('topBar.menu.attribution').click();
+    const menu = screen.getByLabelText('topBar.menu.label');
+    await userEvent.click(menu);
+
+    const attribution = screen.getByText('topBar.menu.attribution');
+    await userEvent.click(attribution);
+
     screen.getByText('attribution.header');
     screen.getByText('attribution.thank-you-text');
 
     // Make sure that fetch was called with the correct value.
-    // eslint-disable-next-line @typescript-eslint/require-await
-    await act(async () => {
-      expect(global.fetch).toHaveBeenCalledWith('mock');
-    });
+    expect(fetch).toHaveBeenCalledWith('/assets/third-party-attributions.json');
 
     // Forces the lazy loaded components to load. This is needed, since there is no viewport, that would trigger a load.
     // eslint-disable-next-line @typescript-eslint/require-await
@@ -69,6 +74,6 @@ describe('AttributionDialog', () => {
 
     screen.getByText('OtherLib');
 
-    (global.fetch as jest.Mock).mockClear();
+    fetch.mockClear();
   });
 });

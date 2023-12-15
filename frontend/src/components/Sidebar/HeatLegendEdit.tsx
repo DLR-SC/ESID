@@ -16,7 +16,7 @@ import {useAppDispatch, useAppSelector} from '../../store/hooks';
 import {selectHeatmapLegend} from '../../store/UserPreferenceSlice';
 import {HeatmapLegend} from '../../types/heatmapLegend';
 import {useTranslation} from 'react-i18next';
-import legendPresets from 'assets/heatmap_legend_presets.json';
+import legendPresets from '../../../assets/heatmap_legend_presets.json?url';
 
 /**
  * This component displays an edit button to access a modal. In the modal you can edit the heatmap legend.

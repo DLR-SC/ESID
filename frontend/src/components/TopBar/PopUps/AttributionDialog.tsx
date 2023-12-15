@@ -7,7 +7,7 @@ import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import attributionData from 'assets/third-party-attributions.json';
+import attributionData from '../../../../assets/third-party-attributions.json?url';
 
 interface DependencyData {
   name: string;
@@ -38,7 +38,7 @@ export default function AttributionDialog(): JSX.Element {
         ATTRIBUTIONS_CACHE = json.map((lib: DependencyData) => {
           let tmp = '';
           tmp += '\n\n---\n\n';
-          tmp += `# __${lib.name}__ ${lib.version || ''}\n`;
+          tmp += `# __${lib.name}__ ${lib.version ?? ''}\n`;
           if (lib.authors) {
             tmp += `__${t('attribution.authors')}:__ ${lib.authors}\n\n`;
           }

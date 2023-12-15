@@ -1,4 +1,6 @@
-import {renderHook} from '@testing-library/react-hooks';
+import {describe, test, expect} from 'vitest';
+import {renderHook} from '@testing-library/react';
+
 import {NumberFormatter} from '../../util/hooks';
 
 describe('NumberFormatter', () => {

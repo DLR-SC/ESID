@@ -1,6 +1,9 @@
 import React from 'react';
+import {describe, test} from 'vitest';
 import {render} from '@testing-library/react';
+
 import i18n from '../../../util/i18nForTests';
+
 import SidebarHistory from '../../../components/Sidebar/SidebarHistory';
 import {I18nextProvider} from 'react-i18next';
 

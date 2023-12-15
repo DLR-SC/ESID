@@ -31,7 +31,7 @@ jobs:
         uses: EnricoMi/publish-unit-test-result-action@v1
         if: always()
         with:
-          files: frontend/reports/jest-junit.xml
+          files: frontend/reports/vitest-junit.xml
 
       - name: Coverage
         run: npm run coverage
@@ -39,7 +39,7 @@ jobs:
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: frontend/reports/lcov.info
+          path-to-lcov: frontend/reports/clover.xml
           base-path: frontend
           
   lighthouseci:

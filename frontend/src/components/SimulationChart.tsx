@@ -564,8 +564,8 @@ export default function SimulationChart(): JSX.Element {
     const tooltipHTML = `
         ${'' /* Current Date and selected compartment name */}
         <strong>{date.formatDate("${t('dateFormat')}")} (${tBackend(
-      `infection-states.${selectedCompartment}`
-    )})</strong>
+          `infection-states.${selectedCompartment}`
+        )})</strong>
         <table>
           ${
             // Table row for each series of an active scenario

@@ -91,10 +91,10 @@ export default function ConfirmDialog(props: ConfirmDialogProps): JSX.Element {
             sx={{marginRight: theme.spacing(2)}}
             onClick={() => props.onAnswer(false)}
           >
-            {props.abortButtonText || 'Abort'}
+            {props.abortButtonText ?? 'Abort'}
           </Button>
           <Button variant='outlined' color='primary' onClick={() => props.onAnswer(true)}>
-            {props.confirmButtonText || 'Confirm'}
+            {props.confirmButtonText ?? 'Confirm'}
           </Button>
         </Box>
       </Box>

@@ -1,3 +1,5 @@
+import {describe, test, expect} from 'vitest';
+
 import reducer, {
   setGroupFilter,
   selectCompartment,
@@ -22,7 +24,7 @@ describe('DataSelectionSlice', () => {
   };
 
   test('Initial State', () => {
-    expect(reducer(undefined, {type: null})).toEqual(initialState);
+    expect(reducer(undefined, {type: ''})).toEqual(initialState);
   });
 
   test('Select District', () => {

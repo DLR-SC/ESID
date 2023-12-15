@@ -4,7 +4,7 @@ import {SimulationDataByNode} from '../../types/scenario';
 
 export const caseDataApi = createApi({
   reducerPath: 'caseDataApi',
-  baseQuery: fetchBaseQuery({baseUrl: `${process.env.API_URL || ''}/api/v1/rki/`}),
+  baseQuery: fetchBaseQuery({baseUrl: `${import.meta.env.VITE_API_URL || ''}/api/v1/rki/`}),
   endpoints: (builder) => ({
     getCaseDataByDistrict: builder.query<CaseDataByNode, CaseDataByDistrictParameters>({
       async queryFn(arg, _queryApi, _extraOptions, fetchWithBQ) {

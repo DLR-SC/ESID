@@ -4,7 +4,7 @@ import {GroupFilter, GroupResponse} from 'types/group';
 
 export const groupApi = createApi({
   reducerPath: 'groupApi',
-  baseQuery: fetchBaseQuery({baseUrl: `${process.env.API_URL || ''}/api/v1/`}),
+  baseQuery: fetchBaseQuery({baseUrl: `${import.meta.env.VITE_API_URL || ''}/api/v1/`}),
   endpoints: (builder) => ({
     getGroupCategories: builder.query<GroupCategories, void>({
       query: () => {
