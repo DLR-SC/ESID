@@ -37,8 +37,8 @@ export default defineConfig((configEnv) => {
       setupFiles: './src/__tests__/setup.ts',
       coverage: {
         reporter: ['text', 'clover'],
-        reportsDirectory: 'reports'
-      }
+        reportsDirectory: 'reports',
+      },
     },
   };
 });
