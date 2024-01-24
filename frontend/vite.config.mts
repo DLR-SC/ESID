@@ -39,6 +39,10 @@ export default defineConfig((configEnv) => {
         reporter: ['text', 'clover'],
         reportsDirectory: 'reports',
       },
+      threads: false,
+      deps: {
+        inline: ['vitest-canvas-mock'],
+      },
     },
   };
 });
