@@ -40,8 +40,10 @@ export default defineConfig((configEnv) => {
         reportsDirectory: 'reports',
       },
       threads: false,
-      deps: {
-        inline: ['vitest-canvas-mock'],
+      server: {
+        deps: {
+          inline: ['vitest-canvas-mock'],
+        },
       },
     },
   };

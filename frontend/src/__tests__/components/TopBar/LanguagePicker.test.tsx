@@ -8,7 +8,7 @@ import {I18nextProvider} from 'react-i18next';
 import LanguagePicker from '../../../components/TopBar/LanguagePicker';
 
 describe('LanguagePicker', () => {
-  vi.stubGlobal('fetch', () => {});
+  vi.stubGlobal('fetch', vi.fn());
 
   test('init', () => {
     render(

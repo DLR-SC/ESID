@@ -35,7 +35,7 @@ module.exports = {
     'vitest/expect-expect': [
       'warn',
       {
-        customExpressions: [
+        assertFunctionNames: [
           'expect',
           'screen.getByText',
           'screen.findByText',
