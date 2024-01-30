@@ -11,7 +11,7 @@ import {groupApi} from './services/groupApi';
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['dataSelection', 'userPreference', 'scenarioList'],
+  whitelist: ['dataSelection', 'userPreference'],
 };
 
 const rootReducer = combineReducers({

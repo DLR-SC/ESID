@@ -77,7 +77,7 @@ export default function SimulationChart(): JSX.Element {
   const {data: simulationData, isFetching: simulationFetching} = useGetMultipleSimulationDataByNodeQuery(
     {
       // Filter only scenarios (scenario id 0 is case data)
-      ids: activeScenarios ? activeScenarios.filter((s) => s !== 0) : [],
+      ids: activeScenarios ? activeScenarios.filter((s) => s !== 0 && scenarioList.scenarios[s]) : [],
       node: selectedDistrict,
       groups: ['total'],
       compartments: [selectedCompartment ?? ''],
@@ -689,7 +689,7 @@ export default function SimulationChart(): JSX.Element {
     if (activeScenarios) {
       activeScenarios.forEach((scenarioId) => {
         // Skip case data (already added)
-        if (scenarioId === 0) {
+        if (scenarioId === 0 || !scenarioList.scenarios[scenarioId]) {
           return;
         }
 
