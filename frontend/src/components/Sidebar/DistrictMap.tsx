@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useState, useRef} from 'react';
 import {useTheme} from '@mui/material/styles';
 import * as am5 from '@amcharts/amcharts5';
 import * as am5map from '@amcharts/amcharts5/map';
@@ -17,10 +17,8 @@ import HeatLegendEdit from './HeatLegendEdit';
 import {HeatmapLegend} from '../../types/heatmapLegend';
 import LockOpen from '@mui/icons-material/LockOpen';
 import LoadingContainer from '../shared/LoadingContainer';
-import mapData from 'assets/lk_germany_reduced.geojson';
 import {useGetCaseDataByDateQuery} from '../../store/services/caseDataApi';
-
-const {useRef} = React;
+import mapData from '../../../assets/lk_germany_reduced.geojson?url';
 
 interface IRegionPolygon {
   value: number;

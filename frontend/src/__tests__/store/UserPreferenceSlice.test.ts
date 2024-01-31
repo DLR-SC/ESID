@@ -1,3 +1,5 @@
+import {describe, test, expect} from 'vitest';
+
 import reducer, {selectHeatmapLegend, UserPreference} from '../../store/UserPreferenceSlice';
 import {HeatmapLegend} from '../../types/heatmapLegend';
 
@@ -14,7 +16,7 @@ describe('DataSelectionSlice', () => {
   };
 
   test('Initial State', () => {
-    expect(reducer(undefined, {type: null})).toEqual(initialState);
+    expect(reducer(undefined, {type: ''})).toEqual(initialState);
   });
 
   test('Select Heatmap Legend', () => {

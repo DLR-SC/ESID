@@ -28,29 +28,30 @@ jobs:
       - name: Test
         run: npm run test
       - name: Upload Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v1
+        uses: EnricoMi/publish-unit-test-result-action@v2
         if: always()
         with:
-          files: frontend/reports/jest-junit.xml
+          files: frontend/reports/vitest-junit.xml
 
       - name: Coverage
         run: npm run coverage
       - name: Upload Coverage
-        uses: coverallsapp/github-action@master
+        uses: coverallsapp/github-action@v2.2.3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: frontend/reports/lcov.info
+          files: frontend/reports/clover.xml
+          format: clover
           base-path: frontend
           
   lighthouseci:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 16
       - run: |
-          cd frontend && npm install && npm install -g @lhci/cli@0.8.x
+          cd frontend && npm install && npm install -g @lhci/cli@0.12.x
           npm run build
       - run: cd frontend && lhci autorun --collect.psiStrategy=desktop --upload.target=temporary-public-storage
     env:

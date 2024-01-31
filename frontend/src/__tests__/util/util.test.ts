@@ -1,5 +1,7 @@
-import * as util from 'util/util';
-import {dateToISOString} from 'util/util';
+import {describe, test, expect} from 'vitest';
+
+import {dateToISOString} from '../../util/util';
+import * as util from '../../util/util';
 
 describe('deepCopy', () => {
   test('object', () => {
