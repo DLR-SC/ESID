@@ -2,10 +2,10 @@ import React from 'react';
 import Scenario from './Scenario';
 import IconBar from './IconBar';
 
-import SimulationChart from './SimulationChart';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import {useTheme} from '@mui/material/styles';
+import MainContentTabs from './MainContentTabs';
 
 export default function MainContent(): JSX.Element {
   const theme = useTheme();
@@ -43,9 +43,7 @@ export default function MainContent(): JSX.Element {
           }}
         />
       </Grid>
-      <Grid id='main-content-simulation-chart-wrapper' item sx={{flexGrow: 1}}>
-        <SimulationChart />
-      </Grid>
+      <MainContentTabs />
     </Grid>
   );
 }
