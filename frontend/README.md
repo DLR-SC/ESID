@@ -110,6 +110,15 @@ npm run build
 
 The resulting release will be in the `dist` folder.
 
+If you want to test a release build you can run:
+
+```bash
+npm run preview
+# or
+npm run build-and-preview
+```
+
+
 ## Technologies
 
 The project makes use of some core technologies and libraries. You should always prefer their features over other
