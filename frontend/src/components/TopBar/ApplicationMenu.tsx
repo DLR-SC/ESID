@@ -114,7 +114,7 @@ export default function ApplicationMenu(): JSX.Element {
       </Dialog>
 
       <Dialog maxWidth='lg' fullWidth={true} open={changelogOpen} onClose={() => setChangelogOpen(false)}>
-        {<ChangelogDialog />}
+        <ChangelogDialog />
       </Dialog>
 
       <Snackbar open={snackbarOpen} autoHideDuration={5000} onClose={() => setSnackbarOpen(false)}>

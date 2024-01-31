@@ -9,7 +9,11 @@ import ApplicationMenu from '../../../../components/TopBar/ApplicationMenu';
 
 describe('AccessibilityDialog', () => {
   test('PopUp', async () => {
-    render(<I18nextProvider i18n={i18n}>{<ApplicationMenu />}</I18nextProvider>);
+    render(
+      <I18nextProvider i18n={i18n}>
+        <ApplicationMenu />
+      </I18nextProvider>
+    );
     const menu = screen.getByLabelText('topBar.menu.label');
     await userEvent.click(menu);
 
