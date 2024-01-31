@@ -27,7 +27,7 @@ export const scenarioApi = createApi({
     getSimulations: builder.query<Simulations, void>({
       query: () => {
         return `simulations/`;
-      }
+      },
     }),
 
     getSimulationDataByDate: builder.query<SimulationDataByDate, SimulationDataByDateParameters>({
