@@ -118,7 +118,6 @@ npm run preview
 npm run build-and-preview
 ```
 
-
 ## Technologies
 
 The project makes use of some core technologies and libraries. You should always prefer their features over other
