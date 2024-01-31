@@ -4,5 +4,8 @@ import React from 'react';
 import App from './App';
 import './util/i18n';
 
-const root = createRoot(document.getElementById('root')!);
-root.render(<App />);
+const rootEl = document.getElementById('root');
+if (rootEl) {
+  const root = createRoot(rootEl);
+  root.render(<App />);
+}

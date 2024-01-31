@@ -8,6 +8,7 @@ import SidebarHistory from '../../../components/Sidebar/SidebarHistory';
 import {I18nextProvider} from 'react-i18next';
 
 describe('History', () => {
+  // eslint-disable-next-line vitest/expect-expect
   test('History', () => {
     render(
       <I18nextProvider i18n={i18n}>

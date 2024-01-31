@@ -12,7 +12,7 @@ import Theme from '../../../util/Theme';
 import {ThemeProvider} from '@mui/material/styles';
 
 describe('District Map', () => {
-  vi.stubGlobal('fetch', async () => {});
+  vi.stubGlobal('fetch', async () => Promise.all([]));
 
   test('district map load', () => {
     render(

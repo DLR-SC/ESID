@@ -10,6 +10,7 @@ import {
 
 export const scenarioApi = createApi({
   reducerPath: 'scenarioApi',
+  // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
   baseQuery: fetchBaseQuery({baseUrl: `${import.meta.env.VITE_API_URL || ''}/api/v1/`}),
   endpoints: (builder) => ({
     getSimulationModels: builder.query<SimulationModels, void>({
