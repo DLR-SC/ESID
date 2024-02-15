@@ -1,4 +1,5 @@
 *.tar
 
-# ignore user/workspace settings etc. of VSCode
+# ignore user/workspace settings etc.
 .vscode
+.idea
