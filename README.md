@@ -8,7 +8,7 @@
 
 # ESID - Epidemiological Scenarios for Infectious Diseases
 
-> [INFO!]  
+> [!INFO]  
 > ESID is a visual analytics tool to visualize and compare scenarios of infectious disease propagation developed at the [German Aerospace Center (DLR)](https://www.dlr.de/).
 > It allows displaying historical data, as well as analyzing simulation results of pandemics.
 
@@ -29,7 +29,7 @@
 - Line chart with date selection and uncerainty display to compare temporal changes in scenario values
 - Inter-connected views adapting to context and selected filters
 
-> [TIP!]  
+> [!TIP]  
 > You can find a list of the latest changes in the [changelog](frontend/docs/changelog/changelog-en.md).
 
 
@@ -40,7 +40,7 @@ You can find the developer documentation for the front- and backend in the corre
 
 
 ## Contributing to ESID
-> [IMPORTANT!]  
+> [!IMPORTANT]  
 > Whenever you encounter a :beetle: **bug** or have a :tada: **feature request**, report this via [Github issues](https://github.com/DLR-SC/ESID/issues).
 
 We are always happy to receive contributions to ESID in the form of **pull requests** via Github.
@@ -50,7 +50,7 @@ There is a [forking guide in the developer guidelines](frontend/README.md#forkin
 
 
 ## Contributor Covenant Code of Conduct
-> [INFO!]  
+> [!INFO]  
 > Our Code of Conduct can be found [here](CODE_OF_CONDUCT.md).
 
 ## Contributors
@@ -81,7 +81,7 @@ There is a [forking guide in the developer guidelines](frontend/README.md#forkin
 </details>
 
 ## License
-> [INFO!]  
+> [!INFO]  
 > Copyright 2021-2023 German Aerospace Center (DLR)
 > 
 > Our license can be found [here](LICENSE).
