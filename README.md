@@ -29,7 +29,9 @@
 - Inter-connected views adapting to context and selected filters
 
 > [!TIP]  
-> You can find a list of the latest changes in the [changelog](frontend/docs/changelog/changelog-en.md).
+> You can find a list of the latest changes in the [changelog](/frontend/docs/changelog/changelog-en.md).[^changelog-de]
+
+[^changelog-de]: The changelog is also available in german [here](/frontend/docs/changelog/changelog-de.md).
 
 
 ## Developer Documentation
