@@ -14,6 +14,7 @@
 <!-- omit from toc -->
 ## Table of Contents
 - [Features](#features)
+- [Quickstart Guide](#quickstart-guide)
 - [Developer Documentation](#developer-documentation)
 - [Contributing to ESID](#contributing-to-esid)
 - [Contributor Covenant Code of Conduct](#contributor-covenant-code-of-conduct)
@@ -33,6 +34,35 @@
 
 [^changelog-de]: The changelog is also available in german [here](/frontend/docs/changelog/changelog-de.md).
 
+
+## Quickstart Guide
+> [!IMPORTANT]
+To build the frontend you need to download and install _Node.js_, and the _Node Package Manager_ (npm). You can
+download the latest release from their website: [NodeJS.org](https://nodejs.org/en/)
+
+First, clone this repository to your computer:
+```bash
+git clone git@github.com:DLR-SC/ESID.git
+cd ESID
+git checkout develop
+```
+> [!NOTE]  
+> The `develop` branch contains our latest developed features as outlined in our [Branching Strategy](/frontend/README.md#branching-strategy).
+
+Next, initialize the project by downloading and installing its dependencies:
+```bash
+cd frontend
+npm install
+```
+
+Once the dependencies are installed you can launch it locally with:
+```bash
+npm run start
+```
+This will host a server at [localhost:8080](http://localhost:8080/), where the website will be displayed.
+
+> [!TIP]  
+> For further information please check the [Developer Documentation](#developer-documentation) below.
 
 ## Developer Documentation
 You can find the developer documentation for the front- and backend in the corresponding folders:
