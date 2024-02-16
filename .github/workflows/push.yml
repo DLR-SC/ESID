@@ -59,3 +59,11 @@ jobs:
       - run: cd frontend && lhci autorun --collect.psiStrategy=desktop --upload.target=temporary-public-storage
     env:
       LHCI_GITHUB_APP_TOKEN: ${{ secrets.LIGHTHOUSE_CI }}
+
+  reuse:
+    name: Check Compliance with REUSE Specification
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: REUSE Compliance Check
+        uses: fsfe/reuse-action@v1
