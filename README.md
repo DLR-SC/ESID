@@ -11,7 +11,7 @@
 > ESID is a visual analytics tool to visualize and compare scenarios of infectious disease propagation developed at the [German Aerospace Center (DLR)](https://www.dlr.de/).
 > It allows displaying historical data, as well as analyzing simulation results of pandemic scenarios in multiple, connected views across spatial and temproal domains.
 
-
+<!-- omit from toc -->
 ## Table of Contents
 - [Features](#features)
 - [Developer Documentation](#developer-documentation)
