@@ -3,7 +3,7 @@
 
 name: Push
 
-on: ["push", "pull_request"]
+on: ["push"]
 
 jobs:
   frontend:
@@ -59,6 +59,18 @@ jobs:
       - run: cd frontend && lhci autorun --collect.psiStrategy=desktop --upload.target=temporary-public-storage
     env:
       LHCI_GITHUB_APP_TOKEN: ${{ secrets.LIGHTHOUSE_CI }}
+
+  scan:
+    name: gitleaks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
 
   reuse:
     name: Check Compliance with REUSE Specification
