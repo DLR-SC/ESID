@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
+
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 import {CaseDataByDate, CaseDataByNode} from '../../types/caseData';
 import {SimulationDataByNode} from '../../types/scenario';

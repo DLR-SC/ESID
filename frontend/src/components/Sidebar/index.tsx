@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
+
 import React from 'react';
 import {useTheme} from '@mui/material/styles';
 import SearchBar from './SearchBar';

@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
+
 import i18n from 'i18next';
 import {initReactI18next} from 'react-i18next';
 

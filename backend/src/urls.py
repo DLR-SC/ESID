@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+# SPDX-License-Identifier: Apache-2.0
+
 import os
 from django.conf import settings
 from django.urls import path, re_path, include, reverse_lazy

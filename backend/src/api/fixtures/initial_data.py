@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+# SPDX-License-Identifier: Apache-2.0
+
 NODES = [
     {"key": "00000", "label": "Deutschland"},
     {"key": "01001", "label": "Flensburg"},
