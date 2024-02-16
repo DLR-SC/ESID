@@ -3,34 +3,41 @@
 The project makes use of some core technologies and libraries. You should always prefer their features over other
 libraries. Also try to learn and keep up with their best practices and guidelines.
 
-- **TypeScript**: Type safety and increasing productivity.
-- **React**: Efficient and robust user interface management.
-- **Redux**: Efficient and robust state management.
-- **Material UI**: Good looking user interface design and responsive layout.
+- **[TypeScript](https://www.typescriptlang.org/)**: Type safety and increasing productivity.
+- **[React](https://react.dev/)**: Efficient and robust user interface management.
+- **[Redux](https://redux.js.org/)**: Efficient and robust state management.
+- **[Material UI](https://mui.com/material-ui/)**: Good looking user interface design and responsive layout.
+
 
 ## Guidelines
 
-In general developers should follow the best practices of the libraries they use.
+> [!TIP]
+> In general developers should follow the best practices of the libraries they use.
+
 
 ### TypeScript
 
 - Try to write all code in TypeScript. Only resort to JavaScript if it is absolutely necessary.
 - Avoid the use `any`. If there is no type information available, create an interface that describes the type.
+- Use the [linter](/frontend/README.md#linting-code) to follow common best prectices.
+
 
 ### React
 
 - Make small individual components that fulfill as small of a role as possible.
 - Strongly prefer React-Hooks over class components.
 
+
 ### Redux
 
-Application state management is done using [Redux](https://redux.js.org/). We use the
-[Redux Toolkit](https://redux-toolkit.js.org/) to easier work with the framework.
+Application state management is done using [Redux](https://redux.js.org/).
+We use the [Redux Toolkit](https://redux-toolkit.js.org/) to easier work with the framework.
 [React Redux](https://react-redux.js.org/) provides the interface between React and Redux.
 
-While it is possible to manage all state with Redux, it should be preferred to use React's `props` functionality to
-manage local component state. Redux should only be used, when the state affects large portions of the application that
-would be difficult to handle with React's `props` alone.
+> [!IMPORTANT]
+> While it is possible to manage all state with Redux, it should be preferred to use React's `props` functionality to manage local component state.
+> Redux should only be used, when the state affects large portions of the application that would be difficult to handle with React's `props` alone.
+
 
 ### Design and Layout
 
@@ -38,9 +45,9 @@ would be difficult to handle with React's `props` alone.
   - The [Material UI](https://material-ui.com/) library does conform to these guidelines. So make use of it as much as
     possible.
   - For icons make use of [Material Icons](https://fonts.google.com/icons).
-- The application should always look best in a 16:9 ratio with 1920x1080 and 2560x1440 pixel resolutions.
+- The application should always look best in a `16:9` ratio with `1920x1080` and `2560x1440` pixel resolutions.
 - The layout should be as responsive as possible, but the previous point has priority.
-- The UI should be self describing. To ensure that all functionality can be understood add tooltips to components.
+- The UI should be self describing. To ensure that all functionality can be understood, add tooltips to components where necessary.
 - The frontend uses a global theme based on the following guidelines:
   <details>
   <summary>Design Guidelines for Colors and Typography <i>(-- Click to expand --)</i></summary>
@@ -88,38 +95,46 @@ would be difficult to handle with React's `props` alone.
 
     </details>
 
+
 ### Testing
 
-All code should be tested:
+> [!IMPORTANT]  
+> All code should be tested:
+> - Pure TypeScript should be tested using unit tests with a 100% coverage.
+> - UI code should be tested using the `react-testing-library`.
 
-- Pure TypeScript should be tested using unit tests with a 100% coverage.
-- UI code should be tested using the react-testing-library.
 
 ### Performance
 
 New code should be checked for Performance degradation.
 Use the Browser Based Profiling Tools (Chrome/Firefox):
-
 - [React Developer Tools](https://beta.reactjs.org/learn/react-developer-tools) (Profiler)
 - Performance insights (Chrome)
 - Lighthouse (Chrome)
 
+> [!NOTE]
+> A lighthouse report is automatically generated with every pull request, linking the results of the development branch in the pull request makes the review easier.
+
+
 ### Documentation
 
-Code should be documented as much as possible. Each class and function should contain a detailed description of what it
-does, what inputs it gets and what outputs it produces. Document only functions that require it. Getters and setters for
-example don't to be documented unless they do something unconventional.
+Code should be documented as much as possible.
+Each class and function should contain a detailed description of what it does, what inputs it gets and what outputs it produces.
+Document only functions that require it.
+Getters and setters for example don't to be documented unless they do something unconventional.
+
 
 ### Internationalization
 
-All text in the application should be internationalized with at least German and English support. To internationalize
-texts the [react-i18next](https://react.i18next.com/) framework is used.
+> [!IMPORTANT]
+> All text in the application should be internationalized with at least German and English support.
 
-You can add translations in the `locales/<language>-<namespace>.json5` files. The following code snippets show
-how to use a translation in a React-Hook.
+To internationalize texts the [react-i18next](https://react.i18next.com/) framework is used.
+
+You can add translations in the `locales/<language>-<namespace>.json5` files.
+The following code snippets show how to use a translation in a React-Hook.
 
 `locales/en-global.json5`:
-
 ```json
 {
   "helloWorld": "Hello, World!"
@@ -127,7 +142,6 @@ how to use a translation in a React-Hook.
 ```
 
 `locales/de-global.json5`:
-
 ```json
 {
   "helloWorld": "Hallo, Welt!"
@@ -135,7 +149,6 @@ how to use a translation in a React-Hook.
 ```
 
 `HelloWorld.tsx`:
-
 ```tsx
 import React from 'react';
 import {useTranslation} from 'react-i18next';
@@ -146,11 +159,15 @@ export default function HelloWorld(): JSX.Element {
 }
 ```
 
+
 ### Accessibility
 
-The application should conform to modern accessibility (a11y) guidelines. We use
-[Lighthouse](https://developer.chrome.com/docs/lighthouse/overview/) to check for a11y problems. During a pull request
-a Lighthouse report is automatically generated during the CI checks.
+The application should conform to modern accessibility (a11y) guidelines.
+We use [Lighthouse](https://developer.chrome.com/docs/lighthouse/overview/) to check for a11y problems.
+
+> [!NOTE]
+> During a pull request a Lighthouse report is automatically generated during the CI checks.
+
 
 ### Code Style
 
@@ -178,6 +195,7 @@ class MyClass {
 
 Try to use `const` as much as possible and use `let` otherwise. Never use `var`!
 
+
 ### Imports
 
 To optimize the final size of the bundle it is important to make imports as granular as possible to allow for the best
@@ -192,6 +210,8 @@ import {LockIcon} from '@mui/icons-material';
 // Instead do this, to insure only the used icons are being imported:
 import LockIcon from '@mui/icons-material/Lock';
 ```
+
+
 ---
 ### Branching Strategy
 The development of ESID follows a simplified version of **git-flow**: The `main` branch always contains stable code.
@@ -200,6 +220,7 @@ When a new milestone is reached, the content of `develop` will be merged to `mai
 
 [Github Actions](https://github.com/DLR-SC/ESID/actions) are used for continuous integration.
 All pull requests and pushes to `main` and `develop` are built automatically.
+
 
 ### Git Commit Messages
 Commits should start with a Capital letter and should be written in present tense (e.g. __:tada: Add cool new feature__ instead of __:tada: Added cool new feature__).
