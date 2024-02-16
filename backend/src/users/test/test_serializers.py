@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+# SPDX-License-Identifier: Apache-2.0
+
 from django.test import TestCase
 from django.contrib.auth.hashers import check_password
 from nose.tools import eq_, ok_

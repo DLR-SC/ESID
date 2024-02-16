@@ -1,3 +1,8 @@
+<!--
+SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+SPDX-License-Identifier: CC-BY-4.0
+-->
+
 <p align="center"> 
   <img src ="frontend/docs/images/logo-200x66.svg" />
 </p>

@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+# SPDX-License-Identifier: CC0-1.0
+
 #get the latest alpine image from node registry
 FROM node:16-alpine AS build-stage
 LABEL stage=build

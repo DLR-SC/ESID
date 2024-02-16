@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+# SPDX-License-Identifier: Apache-2.0
+
 from djangorestframework_camel_case.render import CamelCaseJSONRenderer, CamelCaseBrowsableAPIRenderer
 
 class CustomCamelCaseJSONRenderer(CamelCaseJSONRenderer):

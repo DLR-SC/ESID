@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+# SPDX-License-Identifier: CC0-1.0
+
 name: Push
 
 on: ["push"]
@@ -68,3 +71,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
+
+  reuse:
+    name: Check Compliance with REUSE Specification
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: REUSE Compliance Check
+        uses: fsfe/reuse-action@v1

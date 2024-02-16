@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
+
 import React, {useEffect, useRef} from 'react';
 import {Root} from '@amcharts/amcharts5/.internal/core/Root';
 import {Tooltip} from '@amcharts/amcharts5/.internal/core/render/Tooltip';

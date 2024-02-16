@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
+
 /**
  * This script collects all attributions from our production dependencies and outputs them as a JSON file to
  * `assets/third-party-attributions.json`.

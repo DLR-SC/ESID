@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+# SPDX-License-Identifier: Apache-2.0
+
 from django.conf import settings
 from rest_framework.serializers import ImageField as ApiImageField
 from easy_thumbnails.files import get_thumbnailer
