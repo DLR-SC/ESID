@@ -1,4 +1,9 @@
+# SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR) <jonas.gilg@dlr.de>
+#
+# SPDX-License-Identifier: Apache-2.0
+
 *.tar
 
-# ignore user/workspace settings etc. of VSCode
+# ignore user/workspace settings etc.
 .vscode
+.idea
