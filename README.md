@@ -6,6 +6,16 @@
   <img src ="frontend/docs/images/Overview.png" />
 </p>
 
+---
+<img src="https://img.shields.io/badge/eslint-3A33D1?style=for-the-badge&logo=eslint&logoColor=white" height="20px">
+<img src="https://img.shields.io/badge/prettier-1A2C34?style=for-the-badge&logo=prettier&logoColor=F7BA3E" height="20px">
+
+[![REUSE](https://api.reuse.software/badge/github.com/DLR-SC/ESID)](https://api.reuse.software/info/github.com/DLR-SC/ESID)
+[![Coverage Status](https://coveralls.io/repos/github/DLR-SC/ESID/badge.svg?branch=develop)](https://coveralls.io/github/DLR-SC/ESID?branch=develop)
+[![documentation](https://img.shields.io/badge/Docs-online-34D058.svg)](docs/README.md)
+[![license](https://img.shields.io/github/license/DLR-SC/ESID.svg)](LICENSE) 
+
+
 # ESID - Epidemiological Scenarios for Infectious Diseases
 > 📘 **Abstract**  
 > ESID is a visual analytics tool to visualize and compare scenarios of infectious disease propagation developed at the [German Aerospace Center (DLR)](https://www.dlr.de/).
