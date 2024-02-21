@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
+
 import React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -91,10 +94,10 @@ export default function ConfirmDialog(props: ConfirmDialogProps): JSX.Element {
             sx={{marginRight: theme.spacing(2)}}
             onClick={() => props.onAnswer(false)}
           >
-            {props.abortButtonText || 'Abort'}
+            {props.abortButtonText ?? 'Abort'}
           </Button>
           <Button variant='outlined' color='primary' onClick={() => props.onAnswer(true)}>
-            {props.confirmButtonText || 'Confirm'}
+            {props.confirmButtonText ?? 'Confirm'}
           </Button>
         </Box>
       </Box>

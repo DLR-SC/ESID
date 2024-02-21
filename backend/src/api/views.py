@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+# SPDX-License-Identifier: Apache-2.0
+
 # Create your views here.
 from rest_framework import viewsets, permissions, mixins, generics
 

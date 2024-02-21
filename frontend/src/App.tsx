@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
+
 import React, {Suspense, useEffect} from 'react';
 import {Provider} from 'react-redux';
 
@@ -16,6 +19,8 @@ import {selectDistrict} from './store/DataSelectionSlice';
 import {useTranslation} from 'react-i18next';
 import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
 import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
+import {I18nextProvider, useTranslation} from 'react-i18next';
+import i18n from './util/i18n';
 
 /**
  * This is the root element of the React application. It divides the main screen area into the three main components.

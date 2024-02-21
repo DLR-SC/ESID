@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
+
 /**
  * This script collects all attributions from our production dependencies and outputs them as a JSON file to
  * `assets/third-party-attributions.json`.
@@ -5,7 +8,12 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
+import {fileURLToPath} from 'url';
 import fetch from 'node-fetch';
+
+// @ts-ignore
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 /** Generic license texts are being cached here, since some projects don't provide any, and we have to download them.*/
 const LICENSE_CACHE = new Map<string, string>();
@@ -57,7 +65,7 @@ const PACKAGE_JSON = path.resolve(PROJECT_ROOT, 'package.json');
   console.info();
 
   console.info('Writing to disk ...');
-  fs.writeFileSync(`${PROJECT_ROOT}/public/assets/third-party-attributions.json`, JSON.stringify(dependencyData));
+  fs.writeFileSync(`${PROJECT_ROOT}/assets/third-party-attributions.json`, JSON.stringify(dependencyData));
   console.info('Done!');
 })();
 
@@ -70,7 +78,7 @@ const PACKAGE_JSON = path.resolve(PROJECT_ROOT, 'package.json');
 function getDirectDependencies(lib: string): Array<string> {
   try {
     const json = JSON.parse(fs.readFileSync(`${NODE_MODULES}/${lib}/package.json`).toString());
-    return json && json.dependencies ? Object.keys(json.dependencies) : [];
+    return json?.dependencies ? Object.keys(json.dependencies) : [];
   } catch (error) {
     console.warn(`package.json of ${lib} not found!`);
     return [];
@@ -212,7 +220,7 @@ async function getLicenseText(lib: string, license: string | null, author: strin
       licenseText = LICENSE_CACHE.get(license);
     } else {
       const response = await fetch(`https://api.github.com/licenses/${license}`);
-      const licenseJSON = await response.json();
+      const licenseJSON = (await response.json()) as any;
       if (licenseJSON.body) {
         licenseText = licenseJSON.body;
         LICENSE_CACHE.set(license, licenseText!);

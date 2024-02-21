@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
+
 import React, {useCallback, useEffect, useRef} from 'react';
 import {Root} from '@amcharts/amcharts5/.internal/core/Root';
 import {Tooltip} from '@amcharts/amcharts5/.internal/core/render/Tooltip';
@@ -615,8 +618,8 @@ export default function SimulationChart(): JSX.Element {
     const tooltipHTML = `
         ${'' /* Current Date and selected compartment name */}
         <strong>{date.formatDate("${t('dateFormat')}")} (${tBackend(
-      `infection-states.${selectedCompartment}`
-    )})</strong>
+          `infection-states.${selectedCompartment}`
+        )})</strong>
         <table>
           ${
             // Table row for each series of an active scenario

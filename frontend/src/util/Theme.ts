@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
+
 // add List Element typography using module augmentation
 import React from 'react';
 import {createTheme} from '@mui/material/styles';

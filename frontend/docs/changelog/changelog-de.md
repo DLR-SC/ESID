@@ -1,3 +1,8 @@
+<!--
+SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+SPDX-License-Identifier: CC-BY-4.0
+-->
+
 # ESID Änderungshistorie
 
 ## vX.X.X-alpha
@@ -31,6 +36,7 @@
 - "Falldaten" wurde in "Geschätzte Fälle" umbenannt und neue Übersetzungen für neue Infektionszustände wurden hinzugefügt.
 - Die Textgröße in Tooltips wurden zur besseren Lesbarkeit angepasst.
 - Es werden nur noch vier aggregierte Kompartimente angezeigt.
+- Internes Build-System wurde durch Vite ersetzt, welches die Leistung der Webseite verbessert.
 
 ### Fehlerbehebungen
 

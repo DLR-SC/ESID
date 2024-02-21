@@ -1,7 +1,10 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
+
 import Box from '@mui/material/Box';
 import {useTranslation} from 'react-i18next';
 import React from 'react';
-import logo from 'assets/logo/LOKI_compact.svg';
+import logo from '../../../assets/logo/LOKI_compact.svg';
 
 export default function SidebarTabs(): JSX.Element {
   const {t, i18n} = useTranslation('global');

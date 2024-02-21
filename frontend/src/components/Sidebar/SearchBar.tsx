@@ -1,14 +1,16 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
+
 import React, {useEffect, useState} from 'react';
 import {useTheme} from '@mui/material/styles';
-import {useAppSelector} from '../../store/hooks';
-import {useAppDispatch} from '../../store/hooks';
+import {useAppSelector, useAppDispatch} from '../../store/hooks';
 import {selectDistrict} from '../../store/DataSelectionSlice';
 import SearchIcon from '@mui/icons-material/Search';
 import Autocomplete from '@mui/material/Autocomplete';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import {useTranslation} from 'react-i18next';
-import countyData from 'assets/lk_germany_reduced_list.json';
+import countyData from '../../../assets/lk_germany_reduced_list.json?url';
 
 /** Type definition for the CountyItems of the Autocomplete field
  *  @see DataSelectionSlice

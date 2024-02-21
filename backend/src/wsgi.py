@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+# SPDX-License-Identifier: Apache-2.0
+
 """
 WSGI config for viral project.
 It exposes the WSGI callable as a module-level variable named ``application``.

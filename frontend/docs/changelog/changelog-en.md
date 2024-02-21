@@ -1,3 +1,8 @@
+<!--
+SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+SPDX-License-Identifier: CC-BY-4.0
+-->
+
 # ESID Changelog
 
 ## vX.X.X-alpha
@@ -31,6 +36,7 @@
 - "Case Data" was renamed to "Estimated Cases" and new translations for new infection states were added.
 - The text size in tooltips was adjusted to improve readability.
 - Only four aggregated compartments are displayed.
+- Internal build system was replaced by Vite, which improves website performance.
 
 ### Bug fixes
 
