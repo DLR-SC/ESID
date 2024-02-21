@@ -36,6 +36,7 @@ SPDX-License-Identifier: CC-BY-4.0
 - Die Textgröße in Tooltips wurden zur besseren Lesbarkeit angepasst.
 - Es werden nur noch vier aggregierte Kompartimente angezeigt.
 - Internes Build-System wurde durch Vite ersetzt, welches die Leistung der Webseite verbessert.
+- Die Parameter des Simulationsmodells wurden im Backend geupdatet.
 
 ### Fehlerbehebungen
 
