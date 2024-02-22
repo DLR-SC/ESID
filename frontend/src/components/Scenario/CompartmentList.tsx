@@ -181,6 +181,7 @@ function SimulationStartTitle(): JSX.Element {
         minDate={dayjs(minDate)}
         maxDate={dayjs(maxDate)}
         onChange={updateDate}
+        slotProps={{textField: {size: 'small'}}}
       />
     </Box>
   );

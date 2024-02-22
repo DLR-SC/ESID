@@ -16,7 +16,6 @@ import {XYCursor} from '@amcharts/amcharts5/.internal/charts/xy/XYCursor';
 import {LineSeries} from '@amcharts/amcharts5/.internal/charts/xy/series/LineSeries';
 import am5locales_en_US from '@amcharts/amcharts5/locales/en_US';
 import am5locales_de_DE from '@amcharts/amcharts5/locales/de_DE';
-import {Exporting, ExportingMenu} from '@amcharts/amcharts5/plugins/exporting';
 import {useAppDispatch, useAppSelector} from '../store/hooks';
 import {darken, useTheme} from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -760,16 +759,22 @@ export default function SimulationChart(): JSX.Element {
         }
       });
     }
-    // Update export menu
-    Exporting.new(rootRef.current as Root, {
-      menu: ExportingMenu.new(rootRef.current as Root, {}),
-      filePrefix: 'Covid Simulation Data',
-      dataSource: data,
-      dateFields: ['date'],
-      dateFormat: `${t('dateFormat')}`,
-      dataFields: dataFields,
-      dataFieldsOrder: dataFieldsOrder,
-    });
+
+    // Let's import this lazily, since it contains a lot of code.
+    import('@amcharts/amcharts5/plugins/exporting')
+      .then((module) => {
+        // Update export menu
+        module.Exporting.new(rootRef.current as Root, {
+          menu: module.ExportingMenu.new(rootRef.current as Root, {}),
+          filePrefix: 'Covid Simulation Data',
+          dataSource: data,
+          dateFields: ['date'],
+          dateFormat: `${t('dateFormat')}`,
+          dataFields: dataFields,
+          dataFieldsOrder: dataFieldsOrder,
+        });
+      })
+      .catch(() => console.warn("Couldn't load exporting functionality!"));
 
     setReferenceDayX();
     // Re-run this effect whenever the data itself changes (or any variable the effect uses)

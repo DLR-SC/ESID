@@ -18,7 +18,8 @@ import {useAppDispatch, useAppSelector} from './store/hooks';
 import {selectDistrict} from './store/DataSelectionSlice';
 import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
 import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
-import {useTranslation} from 'react-i18next';
+import {I18nextProvider, useTranslation} from 'react-i18next';
+import i18n from './util/i18n';
 
 /**
  * This is the root element of the React application. It divides the main screen area into the three main components.
@@ -30,25 +31,27 @@ export default function App(): JSX.Element {
       <Provider store={Store}>
         <ThemeProvider theme={Theme}>
           <PersistGate loading={null} persistor={Persistor}>
-            <MUILocalization>
-              <Initializer />
-              <Box id='app' display='flex' flexDirection='column' sx={{height: '100%', width: '100%'}}>
-                <TopBar />
-                <Box
-                  id='app-content'
-                  sx={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    flexGrow: 1,
-                    alignItems: 'stretch',
-                    width: '100%',
-                  }}
-                >
-                  <Sidebar />
-                  <MainContent />
+            <I18nextProvider i18n={i18n}>
+              <MUILocalization>
+                <Initializer />
+                <Box id='app' display='flex' flexDirection='column' sx={{height: '100%', width: '100%'}}>
+                  <TopBar />
+                  <Box
+                    id='app-content'
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      flexGrow: 1,
+                      alignItems: 'stretch',
+                      width: '100%',
+                    }}
+                  >
+                    <Sidebar />
+                    <MainContent />
+                  </Box>
                 </Box>
-              </Box>
-            </MUILocalization>
+              </MUILocalization>
+            </I18nextProvider>
           </PersistGate>
         </ThemeProvider>
       </Provider>
