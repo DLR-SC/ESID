@@ -41,6 +41,7 @@
     "@mui/lab": "*",
     "@mui/material": "^5.15.0",
     "@mui/system": "^5.15.0",
+    "@mui/x-date-pickers": "^6.19.4",
     "@reduxjs/toolkit": "^2.0.1",
     "@types/geojson": "^7946.0.13",
     "country-flag-icons": "^1.5.9",

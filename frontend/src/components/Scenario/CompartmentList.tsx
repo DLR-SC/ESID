@@ -9,7 +9,7 @@ import {selectCompartment, setStartDate, toggleCompartmentExpansion} from '../..
 import ListItemText from '@mui/material/ListItemText';
 import Button from '@mui/material/Button';
 import React, {MouseEvent, useEffect, useMemo, useRef, useState} from 'react';
-import {useTheme} from '@mui/material/styles';
+import {darken, useTheme} from '@mui/material/styles';
 import {useTranslation} from 'react-i18next';
 import {useAppDispatch, useAppSelector} from '../../store/hooks';
 import {NumberFormatter} from '../../util/hooks';
@@ -19,7 +19,6 @@ import ClickAwayListener from '@mui/material/ClickAwayListener';
 import InfoOutlined from '@mui/icons-material/InfoOutlined';
 import Tooltip from '@mui/material/Tooltip';
 import {DatePicker} from '@mui/x-date-pickers/DatePicker';
-import TextField from '@mui/material/TextField';
 import dayjs, {Dayjs} from 'dayjs';
 import {dateToISOString} from '../../util/util';
 import {setReferenceDayTop} from '../../store/LayoutSlice';
@@ -62,7 +61,7 @@ export default function CompartmentList(): JSX.Element {
     <Box
       id='scenario-view-compartment-list-root'
       sx={{
-        borderRight: `2px dashed ${theme.palette.text.secondary}`,
+        borderRight: `2px dashed ${darken(theme.palette.divider, 0.25)}`,
         flexGrow: 0,
         flexShrink: 0,
         flexBasis: '274px',
@@ -178,12 +177,10 @@ function SimulationStartTitle(): JSX.Element {
     >
       <DatePicker<Dayjs>
         label={t('scenario.reference-day')}
-        value={startDay}
+        value={dayjs(startDay)}
         minDate={dayjs(minDate)}
         maxDate={dayjs(maxDate)}
         onChange={updateDate}
-        renderInput={(props) => <TextField size='small' variant='standard' contentEditable={false} {...props} />}
-        disableMaskedInput
       />
     </Box>
   );

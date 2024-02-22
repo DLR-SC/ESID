@@ -1,4 +1,7 @@
-import {useTheme} from '@mui/material/styles';
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
+
+import {darken, useTheme} from '@mui/material/styles';
 import {useAppSelector} from '../store/hooks';
 import React, {useRef, useState} from 'react';
 import Grid from '@mui/material/Grid';
@@ -55,13 +58,14 @@ export function ReferenceDayConnector(): JSX.Element {
     >
       <Box
         sx={{
-          borderBottom: `2px dashed ${theme.palette.text.secondary}`,
-          borderRight: dateLineWidth <= 0 ? `2px dashed ${theme.palette.text.secondary}` : '0',
-          borderLeft: dateLineWidth > 0 ? `2px dashed ${theme.palette.text.secondary}` : '0',
-          borderRadius: `0 0 ${dateLineWidth <= 0 ? '16px' : '0'} ${dateLineWidth > 0 ? '16px' : '0'}`,
+          borderBottom: `2px dashed ${darken(theme.palette.divider, 0.25)}`,
+          borderRight: dateLineWidth <= 0 ? `2px dashed ${darken(theme.palette.divider, 0.25)}` : '0',
+          borderLeft: dateLineWidth > 0 ? `2px dashed ${darken(theme.palette.divider, 0.25)}` : '0',
+          borderRadius: '0',
+          marginTop: '0.15em',
           marginLeft: `${dateLineOffset}px`,
           width: `min(${Math.abs(dateLineWidth)}px, calc(100% - ${localX}px))`,
-          height: 'calc(100% + 16px)',
+          height: 'calc(100% + 16px - 0.15em)',
           zIndex: 10,
           position: 'relative',
         }}

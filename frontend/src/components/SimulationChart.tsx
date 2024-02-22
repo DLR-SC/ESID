@@ -18,7 +18,7 @@ import am5locales_en_US from '@amcharts/amcharts5/locales/en_US';
 import am5locales_de_DE from '@amcharts/amcharts5/locales/de_DE';
 import {Exporting, ExportingMenu} from '@amcharts/amcharts5/plugins/exporting';
 import {useAppDispatch, useAppSelector} from '../store/hooks';
-import {useTheme} from '@mui/material/styles';
+import {darken, useTheme} from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import {selectDate} from '../store/DataSelectionSlice';
 import {useGetCaseDataByDistrictQuery} from '../store/services/caseDataApi';
@@ -516,7 +516,7 @@ export default function SimulationChart(): JSX.Element {
 
       // Set stroke of range (line with label)
       range.get('grid')?.setAll({
-        stroke: color(theme.palette.text.secondary),
+        stroke: color(darken(theme.palette.divider, 0.25)),
         strokeOpacity: 1,
         strokeWidth: 2,
         strokeDasharray: [6, 4],
