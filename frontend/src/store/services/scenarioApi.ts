@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
+
 import {Dictionary} from 'util/util';
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 import {
@@ -10,7 +13,8 @@ import {
 
 export const scenarioApi = createApi({
   reducerPath: 'scenarioApi',
-  baseQuery: fetchBaseQuery({baseUrl: `${process.env.API_URL || ''}/api/v1/`}),
+  // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+  baseQuery: fetchBaseQuery({baseUrl: `${import.meta.env.VITE_API_URL || ''}/api/v1/`}),
   endpoints: (builder) => ({
     getSimulationModels: builder.query<SimulationModels, void>({
       query: () => {

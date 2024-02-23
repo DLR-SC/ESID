@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
+
 import React, {useEffect} from 'react';
 import {useTheme} from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -16,7 +19,7 @@ export default function HeatLegend(props: {
   id: string;
 }): JSX.Element {
   const id = props.id + String(Date.now() + Math.random()); // "guarantee" unique id
-  const {i18n: i18n} = useTranslation();
+  const {i18n} = useTranslation();
   const {formatNumber} = NumberFormatter(i18n.language, 3, 8);
   const theme = useTheme();
 
@@ -42,7 +45,7 @@ export default function HeatLegend(props: {
         color: am5.color(item.color),
         // opacity of the color between 0..1
         opacity: 1,
-        // offset is stop position normalized to 0..1 unless already nomalized
+        // offset is stop position normalized to 0..1 unless already normalized
         offset: props.legend.isNormalized ? item.value : (item.value - props.min) / (props.max - props.min),
       });
     });

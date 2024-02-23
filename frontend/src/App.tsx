@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
+
 import React, {Suspense, useEffect} from 'react';
 import {Provider} from 'react-redux';
 
@@ -13,7 +16,8 @@ import Theme from './util/Theme';
 import {PersistGate} from 'redux-persist/integration/react';
 import {useAppDispatch, useAppSelector} from './store/hooks';
 import {selectDistrict} from './store/DataSelectionSlice';
-import {useTranslation} from 'react-i18next';
+import {I18nextProvider, useTranslation} from 'react-i18next';
+import i18n from './util/i18n';
 
 /**
  * This is the root element of the React application. It divides the main screen area into the three main components.
@@ -24,25 +28,27 @@ export default function App(): JSX.Element {
     <Suspense fallback='loading'>
       <Provider store={Store}>
         <ThemeProvider theme={Theme}>
-          <PersistGate loading={null} persistor={Persistor}>
-            <Initializer />
-            <Box id='app' display='flex' flexDirection='column' sx={{height: '100%', width: '100%'}}>
-              <TopBar />
-              <Box
-                id='app-content'
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  flexGrow: 1,
-                  alignItems: 'stretch',
-                  width: '100%',
-                }}
-              >
-                <Sidebar />
-                <MainContent />
+          <I18nextProvider i18n={i18n}>
+            <PersistGate loading={null} persistor={Persistor}>
+              <Initializer />
+              <Box id='app' display='flex' flexDirection='column' sx={{height: '100%', width: '100%'}}>
+                <TopBar />
+                <Box
+                  id='app-content'
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    flexGrow: 1,
+                    alignItems: 'stretch',
+                    width: '100%',
+                  }}
+                >
+                  <Sidebar />
+                  <MainContent />
+                </Box>
               </Box>
-            </Box>
-          </PersistGate>
+            </PersistGate>
+          </I18nextProvider>
         </ThemeProvider>
       </Provider>
     </Suspense>

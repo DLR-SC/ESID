@@ -1,0 +1,14 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: ESID
+Upstream-Contact: German Aerospace Center (DLR)
+Source: https://github.com/DLR-SC/ESID
+
+# Sample paragraph, commented out:
+#
+# Files: src/*
+# Copyright: $YEAR $NAME <$CONTACT>
+# License: ...
+
+Files: frontend/src/*
+Copyright: German Aerospace Center (DLR)
+License: Apache-2.0

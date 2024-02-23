@@ -1,4 +1,9 @@
-import {renderHook} from '@testing-library/react-hooks';
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
+
+import {describe, test, expect} from 'vitest';
+import {renderHook} from '@testing-library/react';
+
 import {NumberFormatter} from '../../util/hooks';
 
 describe('NumberFormatter', () => {

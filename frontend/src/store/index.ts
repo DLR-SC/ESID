@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
+
 import {combineReducers, configureStore} from '@reduxjs/toolkit';
 import DataSelectionReducer from './DataSelectionSlice';
 import {caseDataApi} from './services/caseDataApi';
@@ -31,7 +34,7 @@ export const Store = configureStore({
       serializableCheck: {
         ignoredActions: ['persist/PERSIST'],
       },
-    }).concat(caseDataApi.middleware, scenarioApi.middleware),
+    }).concat(caseDataApi.middleware, scenarioApi.middleware, groupApi.middleware),
 });
 
 export const Persistor = persistStore(Store);

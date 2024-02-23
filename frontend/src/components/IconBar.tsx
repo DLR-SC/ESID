@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
+
 import React, {useEffect, useState} from 'react';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import {useFullscreen} from 'rooks';
@@ -25,10 +28,10 @@ export default function IconBar(): JSX.Element {
   const maxDate = useAppSelector((state) => state.dataSelection.maxDate);
 
   const toggleFullscreen = () => {
-    if (fsApi?.isFullscreen) {
-      void fsApi?.exit();
+    if (fsApi.isFullscreenEnabled) {
+      void fsApi.disableFullscreen();
     } else {
-      void fsApi?.request();
+      void fsApi.enableFullscreen();
     }
   };
 
@@ -66,44 +69,28 @@ export default function IconBar(): JSX.Element {
         height: '60px',
       }}
     >
-      <Tooltip title={t<string>('icon-bar.previous-day-tooltip')}>
+      <Tooltip title={t('icon-bar.previous-day-tooltip')}>
         <span>
           <Button disabled={selectedDay === minDate || isPlaying} onClick={() => dispatch(previousDay())}>
             <SkipPreviousRounded />
           </Button>
         </span>
       </Tooltip>
-      <Tooltip title={t<string>('icon-bar.play-pause-tooltip')}>
+      <Tooltip title={t('icon-bar.play-pause-tooltip')}>
         <Button onClick={() => setIsPlaying(!isPlaying)}>{isPlaying ? <PauseRounded /> : <PlayArrowRounded />}</Button>
       </Tooltip>
-      <Tooltip title={t<string>('icon-bar.next-day-tooltip')}>
+      <Tooltip title={t('icon-bar.next-day-tooltip')}>
         <span>
           <Button disabled={selectedDay === maxDate || isPlaying} onClick={() => dispatch(nextDay())}>
             <SkipNextRounded />
           </Button>
         </span>
       </Tooltip>
-      {/*
-      <Button disabled>
-        <AutorenewIcon />
-      </Button>
-        <Button disabled>
-        <UndoIcon />
-        </Button>
-        <Button disabled>
-        <RedoIcon />
-        </Button>
-        */}
-      <Tooltip title={t<string>('icon-bar.fullscreen-tooltip')}>
+      <Tooltip title={t('icon-bar.fullscreen-tooltip')}>
         <Button onClick={toggleFullscreen}>
           <FullscreenIcon />
         </Button>
       </Tooltip>
-      {/*
-      <Button disabled>
-        <ShareIcon />
-      </Button>
-      */}
     </Box>
   );
 }

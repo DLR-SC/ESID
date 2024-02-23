@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
+
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 export interface Scenario {
@@ -48,5 +51,5 @@ function sortWithPreference(array: Array<string>): Array<string> {
   const result = preferredOrder.filter((entry) => array.includes(entry));
   array = array.filter((entry) => !preferredOrder.includes(entry));
 
-  return [...result, ...array.sort()];
+  return [...result, ...array.sort((a, b) => a.localeCompare(b))];
 }

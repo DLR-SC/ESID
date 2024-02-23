@@ -1,6 +1,11 @@
+# SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+# SPDX-License-Identifier: CC0-1.0
+
 build
+dist
 node_modules
 package-lock.json
 reports
+coverage
 
-public/assets/*json
+assets/*json

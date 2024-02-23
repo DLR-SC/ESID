@@ -1,3 +1,8 @@
+<!--
+SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+SPDX-License-Identifier: CC-BY-4.0
+-->
+
 # ESID - Frontend Developer Documentation
 
 ## Table of Contents
@@ -108,7 +113,15 @@ Release build can be created with the simple command:
 npm run build
 ```
 
-The resulting release will be in the `build` folder.
+The resulting release will be in the `dist` folder.
+
+If you want to test a release build you can run:
+
+```bash
+npm run preview
+# or
+npm run build-and-preview
+```
 
 ## Technologies
 
@@ -227,10 +240,10 @@ example don't to be documented unless they do something unconventional.
 All text in the application should be internationalized with at least German and English support. To internationalize
 texts the [react-i18next](https://react.i18next.com/) framework is used.
 
-You can add translations in the `public/locales/<language>/<namespace>.json5` files. The following code snippets show
+You can add translations in the `locales/<language>-<namespace>.json5` files. The following code snippets show
 how to use a translation in a React-Hook.
 
-`public/locales/en/global.json5`:
+`locales/en-global.json5`:
 
 ```json
 {
@@ -238,7 +251,7 @@ how to use a translation in a React-Hook.
 }
 ```
 
-`public/locales/de/global.json5`:
+`locales/de-global.json5`:
 
 ```json
 {
@@ -266,7 +279,7 @@ a Lighthouse report is automatically generated during the CI checks.
 
 ### Code Style
 
-Function names, parameters and variables and class members should be written in `camelCase`. The exception for functions
+Function names, parameters, variables and class members should be written in `camelCase`. The exception for functions
 are React-Hooks, which should be written in `PascalCase`. In addition, classes and interfaces should also be written in
 `PascalCase`:
 

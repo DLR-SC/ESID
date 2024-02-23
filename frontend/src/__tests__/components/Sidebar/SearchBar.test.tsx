@@ -1,4 +1,8 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
+
 import React from 'react';
+import {describe, test, expect, vi, afterEach} from 'vitest';
 import {act, cleanup, render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
@@ -12,7 +16,7 @@ import {selectDistrict} from '../../../store/DataSelectionSlice';
 
 describe('SearchBar', () => {
   // We mock fetch to return two entries for searchable districts.
-  global.fetch = jest.fn().mockImplementation(() => {
+  const fetch = vi.fn().mockImplementation(() => {
     return Promise.resolve({
       json: () => {
         return Promise.resolve([
@@ -31,6 +35,8 @@ describe('SearchBar', () => {
     });
   });
 
+  vi.stubGlobal('fetch', fetch);
+
   test('countyList loaded correctly', async () => {
     render(
       <I18nextProvider i18n={i18n}>
@@ -40,11 +46,11 @@ describe('SearchBar', () => {
       </I18nextProvider>
     );
 
-    await waitFor(() => expect(global.fetch).toHaveBeenCalled());
+    await waitFor(() => expect(fetch).toHaveBeenCalled());
 
     await screen.findByPlaceholderText('germany');
 
-    userEvent.click(screen.getByPlaceholderText('germany'));
+    await userEvent.click(screen.getByPlaceholderText('germany'));
 
     await screen.findByText('A');
     await screen.findByText('Aichach-Friedberg (BEZ.LK)');
@@ -63,7 +69,7 @@ describe('SearchBar', () => {
       </I18nextProvider>
     );
 
-    await waitFor(() => expect(global.fetch).toHaveBeenCalled());
+    await waitFor(() => expect(fetch).toHaveBeenCalled());
 
     act(() => {
       Store.dispatch(selectDistrict({ags: '12345', name: 'Test District', type: 'Test Type'}));
@@ -81,9 +87,9 @@ describe('SearchBar', () => {
       </I18nextProvider>
     );
 
-    await waitFor(() => expect(global.fetch).toHaveBeenCalled());
+    await waitFor(() => expect(fetch).toHaveBeenCalled());
 
-    userEvent.type(screen.getByPlaceholderText('germany'), 'Aic{Enter}');
+    await userEvent.type(screen.getByPlaceholderText('germany'), 'Aic{Enter}');
 
     await screen.findByDisplayValue('Aichach-Friedberg (BEZ.LK)');
     expect(Store.getState().dataSelection.district).toStrictEqual({
@@ -102,9 +108,9 @@ describe('SearchBar', () => {
       </I18nextProvider>
     );
 
-    await waitFor(() => expect(global.fetch).toHaveBeenCalled());
+    await waitFor(() => expect(fetch).toHaveBeenCalled());
 
-    userEvent.type(screen.getByPlaceholderText('germany'), '{ArrowDown}{Enter}');
+    await userEvent.type(screen.getByPlaceholderText('germany'), '{ArrowDown}{Enter}');
 
     await screen.findByDisplayValue('Test District (BEZ.Test Type)');
     expect(Store.getState().dataSelection.district).toStrictEqual({

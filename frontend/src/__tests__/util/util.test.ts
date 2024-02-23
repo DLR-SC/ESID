@@ -1,5 +1,10 @@
-import * as util from 'util/util';
-import {dateToISOString} from 'util/util';
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
+
+import {describe, test, expect} from 'vitest';
+
+import {dateToISOString} from '../../util/util';
+import * as util from '../../util/util';
 
 describe('deepCopy', () => {
   test('object', () => {
