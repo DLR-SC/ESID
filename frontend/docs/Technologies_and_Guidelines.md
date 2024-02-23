@@ -1,3 +1,22 @@
+# Technologies and Guidelines
+
+- [Technologies](#technologies)
+- [Guidelines](#guidelines)
+  - [TypeScript](#typescript)
+  - [React](#react)
+  - [Redux](#redux)
+  - [Design and Layout](#design-and-layout)
+  - [Testing](#testing)
+  - [Performance](#performance)
+  - [Documentation](#documentation)
+  - [Internationalization](#internationalization)
+  - [Accessibility](#accessibility)
+  - [Code Style](#code-style)
+  - [Imports](#imports)
+  - [Branching Strategy](#branching-strategy)
+  - [Git Commit Messages](#git-commit-messages)
+
+
 ## Technologies
 
 The project makes use of some core technologies and libraries. You should always prefer their features over other
