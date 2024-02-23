@@ -80,7 +80,7 @@ export default function SimulationChart(): JSX.Element {
   const {data: simulationData, isFetching: simulationFetching} = useGetMultipleSimulationDataByNodeQuery(
     {
       // Filter only scenarios (scenario id 0 is case data)
-      ids: activeScenarios ? activeScenarios.filter((s) => s !== 0) : [],
+      ids: activeScenarios ? activeScenarios.filter((s) => s !== 0 && scenarioList.scenarios[s]) : [],
       node: selectedDistrict,
       groups: ['total'],
       compartments: [selectedCompartment ?? ''],
@@ -286,7 +286,7 @@ export default function SimulationChart(): JSX.Element {
       });
 
       // Add series for each scenario
-      Object.entries(scenarioList.scenarios).forEach(([scenarioId, scenario], i) => {
+      Object.entries(scenarioList.scenarios).forEach(([scenarioId, scenario]) => {
         const series = chart.series.push(
           LineSeries.new(root, {
             xAxis: xAxis,
@@ -300,12 +300,11 @@ export default function SimulationChart(): JSX.Element {
             // Fallback Tooltip (if HTML breaks for some reason)
             // For text color: loop around the theme's scenario color list if scenario IDs exceed color list length, then pick first color of sub-palette which is the main color
             tooltip: Tooltip.new(root, {
-              // Offest by one since the scenario 0 colr palette is exclusively for case data
-              labelText: `[bold ${theme.custom.scenarios[(i + 1) % theme.custom.scenarios.length][0]}]${tBackend(
+              labelText: `[bold ${theme.custom.scenarios[scenario.id % theme.custom.scenarios.length][0]}]${tBackend(
                 `scenario-names.${scenario.label}`
               )}:[/] {${scenarioId}}`,
             }),
-            stroke: color(theme.custom.scenarios[(i + 1) % theme.custom.scenarios.length][0]),
+            stroke: color(theme.custom.scenarios[scenario.id % theme.custom.scenarios.length][0]),
           })
         );
         series.strokes.template.setAll({
@@ -692,7 +691,7 @@ export default function SimulationChart(): JSX.Element {
     if (activeScenarios) {
       activeScenarios.forEach((scenarioId) => {
         // Skip case data (already added)
-        if (scenarioId === 0) {
+        if (scenarioId === 0 || !scenarioList.scenarios[scenarioId]) {
           return;
         }
 

@@ -145,7 +145,7 @@ export default function DataCardList(): JSX.Element {
           scenario={scenario}
           selected={selectedScenario === scenario.id}
           active={!!activeScenarios && activeScenarios.includes(scenario.id)}
-          color={theme.custom.scenarios[i][0]}
+          color={theme.custom.scenarios[(i + 1) % theme.custom.scenarios.length][0]}
           startValues={startValues}
           onClick={() => {
             // set active scenario to this one and send dispatches

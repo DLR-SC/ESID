@@ -42,6 +42,7 @@ SPDX-License-Identifier: CC-BY-4.0
 - An error was fixed, which prevented the text in the search bar to be translated on an initial site visit.
 - Fixed an error, where districts with missing values weren't shown.
 - Fixed an error, which crashed the website when the data was updated.
+- Fixed an error, which crashed the website when a scenario was removed from the database.
 
 ---
 

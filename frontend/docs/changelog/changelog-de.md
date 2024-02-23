@@ -42,6 +42,7 @@ SPDX-License-Identifier: CC-BY-4.0
 - Ein Fehler wurde behoben, der beim ersten Laden der Seite den Text in der Suchleiste nicht übersetzt hatte.
 - Ein Fehler wurde behoben, der Landkreise mit fehlenden Daten verschwinden lies.
 - Ein Fehler wurde behoben, der die Webseite abstürzen lässt, nachdem die zugrunde liegenden Daten aktualisiert wurden.
+- Ein Fehler wurde behoben, der die Webseite abstürzen lässt, wenn ein Szenario aus der Datenbank entfernt wurde.
 
 ---
 
