@@ -169,6 +169,8 @@ export default function DistrictMap(): JSX.Element {
         }),
       })
     );
+    // Add home button to reset pan & zoom
+    chart.get('zoomControl')?.homeButton.set('visible', true);
 
     // Create polygon series
     const polygonSeries = chart.series.push(

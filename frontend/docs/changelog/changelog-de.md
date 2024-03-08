@@ -18,6 +18,7 @@ SPDX-License-Identifier: CC-BY-4.0
   - Es ist nun auch möglich die Falldaten alleine anzuzeigen, ohne dass ein Szenario aktiviert ist.
 - Neben der Liste der Infektionszustände ist jetzt zu jedem Infektionszustand ein Infokästchen. Aktuell haben alle Zustände die gleiche Information.
 - Der Referenztag ist nun einstellbar. Eine Linie wird zum Graphen gezeichnet, um so den Zusammenhang zu verdeutlichen.
+- Die Zoom-Knöpfe der Karte haben eine weitere Schaltfläche bekommen, mit der die Kartenansicht zur ursprünglichen Übersicht zurückgesetzt werden kann.
 
 ### Verbesserungen
 
@@ -43,6 +44,7 @@ SPDX-License-Identifier: CC-BY-4.0
 - Ein Fehler wurde behoben, der beim ersten Laden der Seite den Text in der Suchleiste nicht übersetzt hatte.
 - Ein Fehler wurde behoben, der Landkreise mit fehlenden Daten verschwinden lies.
 - Ein Fehler wurde behoben, der die Webseite abstürzen lässt, nachdem die zugrunde liegenden Daten aktualisiert wurden.
+- Ein Fehler wurde behoben, der die Webseite abstürzen lässt, wenn ein Szenario aus der Datenbank entfernt wurde.
 
 ---
 

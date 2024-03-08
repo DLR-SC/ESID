@@ -18,6 +18,7 @@ SPDX-License-Identifier: CC-BY-4.0
   - It is now also possible to view case data without any scenario activated.
 - Next to the list of infection states, there is now an info box for each infection state. Currently, all states have the same information.
 - The reference day is now editable. A line is being drawn to the chart to show the connection.
+- The zoom control of the map now has an additional button to reset the view to the initial overview
 
 ### Improvements
 
@@ -43,6 +44,7 @@ SPDX-License-Identifier: CC-BY-4.0
 - An error was fixed, which prevented the text in the search bar to be translated on an initial site visit.
 - Fixed an error, where districts with missing values weren't shown.
 - Fixed an error, which crashed the website when the data was updated.
+- Fixed an error, which crashed the website when a scenario was removed from the database.
 
 ---
 
