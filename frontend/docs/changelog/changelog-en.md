@@ -17,6 +17,7 @@ SPDX-License-Identifier: CC-BY-4.0
   - On selecting the card the case data will be displayed on the rest of the application correspondingly.
   - It is now also possible to view case data without any scenario activated.
 - Next to the list of infection states, there is now an info box for each infection state. Currently, all states have the same information.
+- The zoom control of the map now has an additional button to reset the view to the initial overview
 
 ### Improvements
 
