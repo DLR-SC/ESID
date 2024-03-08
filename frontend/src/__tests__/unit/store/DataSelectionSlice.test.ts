@@ -10,7 +10,7 @@ import reducer, {
   selectDistrict,
   selectScenario,
   toggleScenario,
-} from '../../store/DataSelectionSlice';
+} from '../../../store/DataSelectionSlice';
 
 describe('DataSelectionSlice', () => {
   const initialState = {

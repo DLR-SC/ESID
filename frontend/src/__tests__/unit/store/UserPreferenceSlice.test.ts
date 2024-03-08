@@ -3,8 +3,8 @@
 
 import {describe, test, expect} from 'vitest';
 
-import reducer, {selectHeatmapLegend, UserPreference} from '../../store/UserPreferenceSlice';
-import {HeatmapLegend} from '../../types/heatmapLegend';
+import reducer, {selectHeatmapLegend, UserPreference} from '../../../store/UserPreferenceSlice';
+import {HeatmapLegend} from '../../../types/heatmapLegend';
 
 describe('DataSelectionSlice', () => {
   const initialState: UserPreference = {
