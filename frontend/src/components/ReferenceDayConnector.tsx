@@ -3,9 +3,10 @@
 
 import {darken, useTheme} from '@mui/material/styles';
 import {useAppSelector} from '../store/hooks';
-import React, {useRef, useState} from 'react';
+import React from 'react';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
+import {useBoundingclientrectRef} from 'rooks';
 
 /**
  * Draws a dashed line from the reference day in the compartment view to the reference day on the chart.
@@ -13,12 +14,13 @@ import Box from '@mui/material/Box';
 export function ReferenceDayConnector(): JSX.Element {
   const theme = useTheme();
   const referenceDayPos = useAppSelector((state) => state.layoutSlice.referenceDayXPositions);
-  const [globalX, setGlobalX] = useState(0);
-  const resizeObserverRef = useRef<ResizeObserver>();
+
+  const [ref, boundingRect] = useBoundingclientrectRef();
 
   // The following lines calculate the bounding boxes of the date-line connector, that connects the reference day from
   // the compartment selection to the reference day of the simulation chart.
   const dateLineTop = referenceDayPos?.top ?? 0;
+  const globalX = boundingRect?.x ?? 0;
   const localX = dateLineTop - globalX;
   const dateLineBot = referenceDayPos?.bottom ?? 0;
 
@@ -38,18 +40,7 @@ export function ReferenceDayConnector(): JSX.Element {
     <Grid
       id='main-content-horizontal-spacer'
       item
-      ref={(el: HTMLElement | null) => {
-        if (!el) {
-          return;
-        }
-
-        if (resizeObserverRef.current) {
-          resizeObserverRef.current.disconnect();
-        }
-
-        resizeObserverRef.current = new ResizeObserver(() => setGlobalX(el.getBoundingClientRect().x));
-        resizeObserverRef.current.observe(el);
-      }}
+      ref={ref}
       sx={{
         borderBottom: `1px solid ${theme.palette.divider}`,
         backgroundColor: 'transparent',

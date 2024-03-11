@@ -5,10 +5,10 @@ import React from 'react';
 import {describe, test, expect, vi} from 'vitest';
 import {act, render, screen} from '@testing-library/react';
 
-import i18n from '../../../../util/i18nForTests';
+import i18n from '../../../util/i18nForTests';
 
 import {I18nextProvider} from 'react-i18next';
-import LanguagePicker from '../../../../components/TopBar/LanguagePicker';
+import LanguagePicker from '../../../components/TopBar/LanguagePicker';
 
 describe('LanguagePicker', () => {
   vi.stubGlobal('fetch', vi.fn());

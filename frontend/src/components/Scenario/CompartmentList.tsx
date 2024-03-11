@@ -8,7 +8,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import {selectCompartment, setStartDate, toggleCompartmentExpansion} from '../../store/DataSelectionSlice';
 import ListItemText from '@mui/material/ListItemText';
 import Button from '@mui/material/Button';
-import React, {MouseEvent, useEffect, useMemo, useRef, useState} from 'react';
+import React, {MouseEvent, useEffect, useMemo, useState} from 'react';
 import {darken, useTheme} from '@mui/material/styles';
 import {useTranslation} from 'react-i18next';
 import {useAppDispatch, useAppSelector} from '../../store/hooks';
@@ -22,6 +22,7 @@ import {DatePicker} from '@mui/x-date-pickers/DatePicker';
 import dayjs, {Dayjs} from 'dayjs';
 import {dateToISOString} from '../../util/util';
 import {setReferenceDayTop} from '../../store/LayoutSlice';
+import {useBoundingclientrectRef} from 'rooks';
 
 /**
  * The component renders a list of compartments with their name on the left and the case data values at simulation start
@@ -40,7 +41,13 @@ export default function CompartmentList(): JSX.Element {
   const compartmentsExpanded = useAppSelector((state) => state.dataSelection.compartmentsExpanded);
   const compartmentValues = useGetSimulationStartValues();
 
-  const resizeObserverRef = useRef<ResizeObserver>();
+  const [resizeRef, resizeBoundingRect] = useBoundingclientrectRef();
+
+  useEffect(() => {
+    const x = resizeBoundingRect?.x ?? 0;
+    const w = resizeBoundingRect?.width ?? 0;
+    dispatch(setReferenceDayTop(x + w));
+  }, [dispatch, resizeBoundingRect]);
 
   /** This function either returns the value at simulation start of a compartment or 'no data'. */
   const getCompartmentValue = (compartment: string): string => {
@@ -60,6 +67,7 @@ export default function CompartmentList(): JSX.Element {
   return (
     <Box
       id='scenario-view-compartment-list-root'
+      ref={resizeRef}
       sx={{
         borderRight: `2px dashed ${darken(theme.palette.divider, 0.25)}`,
         flexGrow: 0,
@@ -75,20 +83,6 @@ export default function CompartmentList(): JSX.Element {
         paddingTop: theme.spacing(2),
         paddingLeft: 0,
         paddingRight: 0,
-      }}
-      ref={(el: HTMLElement | null) => {
-        if (!el) {
-          return;
-        }
-
-        if (resizeObserverRef.current) {
-          resizeObserverRef.current.disconnect();
-        }
-
-        resizeObserverRef.current = new ResizeObserver(() =>
-          dispatch(setReferenceDayTop(el.getBoundingClientRect().x + el.getBoundingClientRect().width))
-        );
-        resizeObserverRef.current.observe(el);
       }}
     >
       <SimulationStartTitle />

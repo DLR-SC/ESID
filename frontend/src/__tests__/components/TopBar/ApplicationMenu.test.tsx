@@ -6,10 +6,10 @@ import {describe, test} from 'vitest';
 import {render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import i18n from '../../../../util/i18nForTests';
+import i18n from '../../../util/i18nForTests';
 
 import {I18nextProvider} from 'react-i18next';
-import ApplicationMenu from '../../../../components/TopBar/ApplicationMenu';
+import ApplicationMenu from '../../../components/TopBar/ApplicationMenu';
 
 describe('TopBarMenu', () => {
   test('open', async () => {

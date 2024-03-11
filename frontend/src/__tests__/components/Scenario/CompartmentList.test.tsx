@@ -5,14 +5,14 @@ import React from 'react';
 import {describe, test, vi, afterEach, beforeEach} from 'vitest';
 import {cleanup, render, screen} from '@testing-library/react';
 
-import i18n from '../../../../util/i18nForTests';
+import i18n from '../../../util/i18nForTests';
 
 import {I18nextProvider} from 'react-i18next';
 import {Provider} from 'react-redux';
-import {Store} from '../../../../store';
-import {setStartDate} from '../../../../store/DataSelectionSlice';
-import CompartmentList from '../../../../components/Scenario/CompartmentList';
-import {MUILocalization} from '../../../../components/shared/MUILocalization';
+import {Store} from '../../../store';
+import {setStartDate} from '../../../store/DataSelectionSlice';
+import CompartmentList from '../../../components/Scenario/CompartmentList';
+import {MUILocalization} from '../../../components/shared/MUILocalization';
 
 describe('CompartmentList', () => {
   vi.stubGlobal('fetch', async () => Promise.all([]));
