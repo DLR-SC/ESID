@@ -22,6 +22,7 @@ import LockOpen from '@mui/icons-material/LockOpen';
 import LoadingContainer from '../shared/LoadingContainer';
 import {useGetCaseDataByDateQuery} from '../../store/services/caseDataApi';
 import mapData from '../../../assets/lk_germany_reduced.geojson?url';
+import * as svgPaths from '../../util/svgPaths';
 
 interface IRegionPolygon {
   value: number;
@@ -171,6 +172,19 @@ export default function DistrictMap(): JSX.Element {
     );
     // Add home button to reset pan & zoom
     chart.get('zoomControl')?.homeButton.set('visible', true);
+    // Use svg path for icon
+    chart
+      .get('zoomControl')
+      ?.homeButton.get('icon')
+      ?.set('svgPath', svgPaths.zoomReset(-12, -12));
+    chart
+      .get('zoomControl')?.homeButton.get('icon')
+      ?.set('fill', am5.color('#fff'));
+    // Add function to select germany when home button is pressed
+    chart.get('zoomControl')?.homeButton.events.on('click', (_ev) => {
+      // Set district to germany
+      dispatch(selectDistrict({ags: '00000', name: t('germany'), type: ''}));
+    });
 
     // Create polygon series
     const polygonSeries = chart.series.push(
