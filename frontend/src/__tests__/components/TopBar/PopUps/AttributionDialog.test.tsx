@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React from 'react';
+import React, {Suspense} from 'react';
 import {describe, test, vi, expect} from 'vitest';
 import {act, render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -44,7 +44,9 @@ describe('AttributionDialog', () => {
 
     render(
       <I18nextProvider i18n={i18n}>
-        <ApplicationMenu />
+        <Suspense>
+          <ApplicationMenu />
+        </Suspense>
       </I18nextProvider>
     );
 
@@ -54,8 +56,8 @@ describe('AttributionDialog', () => {
     const attribution = screen.getByText('topBar.menu.attribution');
     await userEvent.click(attribution);
 
-    screen.getByText('attribution.header');
-    screen.getByText('attribution.thank-you-text');
+    await screen.findByText('attribution.header');
+    await screen.findByText('attribution.thank-you-text');
 
     // Make sure that fetch was called with the correct value.
     expect(fetch).toHaveBeenCalledWith('/assets/third-party-attributions.json');
@@ -64,18 +66,18 @@ describe('AttributionDialog', () => {
     // eslint-disable-next-line @typescript-eslint/require-await
     await act(async () => forceVisible());
 
-    screen.getByText('SomeLib');
-    screen.getByText('1.0.1');
+    await screen.findByText('SomeLib');
+    await screen.findByText('1.0.1');
 
-    screen.getByText('attribution.authors:');
-    screen.getByText('John Doe, Jane, Doe');
+    await screen.findByText('attribution.authors:');
+    await screen.findByText('John Doe, Jane, Doe');
 
-    screen.getByText('attribution.repository:');
-    screen.getByText('github.com');
+    await screen.findByText('attribution.repository:');
+    await screen.findByText('github.com');
 
-    screen.getByText('MIT License Text ...');
+    await screen.findByText('MIT License Text ...');
 
-    screen.getByText('OtherLib');
+    await screen.findByText('OtherLib');
 
     fetch.mockClear();
   });

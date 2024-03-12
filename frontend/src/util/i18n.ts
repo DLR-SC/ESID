@@ -8,6 +8,9 @@ import JSON5 from 'json5';
 import Backend from 'i18next-http-backend';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
+import 'dayjs/locale/en';
+import 'dayjs/locale/de';
+
 const translationFiles = [
   new URL('../../locales/en-backend.json5', import.meta.url).href,
   new URL('../../locales/en-legal.json5', import.meta.url).href,
