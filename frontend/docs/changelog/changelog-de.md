@@ -18,7 +18,7 @@ SPDX-License-Identifier: CC-BY-4.0
   - Es ist nun auch möglich die Falldaten alleine anzuzeigen, ohne dass ein Szenario aktiviert ist.
 - Neben der Liste der Infektionszustände ist jetzt zu jedem Infektionszustand ein Infokästchen. Aktuell haben alle Zustände die gleiche Information.
 - Der Referenztag ist nun einstellbar. Eine Linie wird zum Graphen gezeichnet, um so den Zusammenhang zu verdeutlichen.
-- Die Zoom-Knöpfe der Karte haben eine weitere Schaltfläche bekommen, mit der die Kartenansicht zur ursprünglichen Übersicht zurückgesetzt werden kann.
+- Die Zoom-Knöpfe der Karte haben ein neues Aussehen und eine weitere Schaltfläche bekommen, mit der die Kartenansicht zur ursprünglichen Übersicht über Deutschland zurückgesetzt werden kann.
 
 ### Verbesserungen
 
