@@ -2,15 +2,14 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import {ScrollSyncPane} from 'react-scroll-sync';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
-import {selectCompartment, toggleCompartmentExpansion} from '../../store/DataSelectionSlice';
+import {selectCompartment, setStartDate, toggleCompartmentExpansion} from '../../store/DataSelectionSlice';
 import ListItemText from '@mui/material/ListItemText';
 import Button from '@mui/material/Button';
 import React, {MouseEvent, useEffect, useMemo, useState} from 'react';
-import {useTheme} from '@mui/material/styles';
+import {darken, useTheme} from '@mui/material/styles';
 import {useTranslation} from 'react-i18next';
 import {useAppDispatch, useAppSelector} from '../../store/hooks';
 import {NumberFormatter} from '../../util/hooks';
@@ -19,6 +18,11 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import InfoOutlined from '@mui/icons-material/InfoOutlined';
 import Tooltip from '@mui/material/Tooltip';
+import {DatePicker} from '@mui/x-date-pickers/DatePicker';
+import dayjs, {Dayjs} from 'dayjs';
+import {dateToISOString} from '../../util/util';
+import {setReferenceDayTop} from '../../store/LayoutSlice';
+import {useBoundingclientrectRef} from 'rooks';
 
 /**
  * The component renders a list of compartments with their name on the left and the case data values at simulation start
@@ -36,6 +40,14 @@ export default function CompartmentList(): JSX.Element {
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
   const compartmentsExpanded = useAppSelector((state) => state.dataSelection.compartmentsExpanded);
   const compartmentValues = useGetSimulationStartValues();
+
+  const [resizeRef, resizeBoundingRect] = useBoundingclientrectRef();
+
+  useEffect(() => {
+    const x = resizeBoundingRect?.x ?? 0;
+    const w = resizeBoundingRect?.width ?? 0;
+    dispatch(setReferenceDayTop(x + w));
+  }, [dispatch, resizeBoundingRect]);
 
   /** This function either returns the value at simulation start of a compartment or 'no data'. */
   const getCompartmentValue = (compartment: string): string => {
@@ -55,8 +67,9 @@ export default function CompartmentList(): JSX.Element {
   return (
     <Box
       id='scenario-view-compartment-list-root'
+      ref={resizeRef}
       sx={{
-        borderRight: `2px dashed ${theme.palette.divider}`,
+        borderRight: `2px dashed ${darken(theme.palette.divider, 0.25)}`,
         flexGrow: 0,
         flexShrink: 0,
         flexBasis: '274px',
@@ -127,9 +140,18 @@ export default function CompartmentList(): JSX.Element {
 /** This component renders the simulation start date together with a descriptive label. */
 function SimulationStartTitle(): JSX.Element {
   const theme = useTheme();
-  const {t, i18n} = useTranslation();
+  const {t} = useTranslation();
+  const dispatch = useAppDispatch();
 
   const startDay = useAppSelector((state) => state.dataSelection.simulationStart);
+  const minDate = useAppSelector((state) => state.dataSelection.minDate);
+  const maxDate = useAppSelector((state) => state.dataSelection.maxDate);
+
+  function updateDate(newDate: Dayjs | null) {
+    if (newDate) {
+      dispatch(setStartDate(dateToISOString(newDate.toDate())));
+    }
+  }
 
   return (
     <Box
@@ -147,28 +169,14 @@ function SimulationStartTitle(): JSX.Element {
         borderTop: '2px solid transparent',
       }}
     >
-      <Typography
-        variant='h2'
-        sx={{
-          textAlign: 'left',
-          height: 'min-content',
-          // fontWeight: 'bold',
-          fontSize: '13pt',
-        }}
-      >
-        {t('scenario.reference-day')}:
-      </Typography>
-      <Typography
-        variant='h2'
-        sx={{
-          textAlign: 'right',
-          height: 'min-content',
-          fontWeight: 'bold',
-          fontSize: '13pt',
-        }}
-      >
-        {startDay ? new Date(startDay).toLocaleDateString(i18n.language) : t('today')}
-      </Typography>
+      <DatePicker<Dayjs>
+        label={t('scenario.reference-day')}
+        value={dayjs(startDay)}
+        minDate={dayjs(minDate)}
+        maxDate={dayjs(maxDate)}
+        onChange={updateDate}
+        slotProps={{textField: {size: 'small'}}}
+      />
     </Box>
   );
 }

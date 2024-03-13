@@ -9,10 +9,12 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import {ScrollSync} from 'react-scroll-sync';
-import ManageGroupDialog from '../ManageGroupDialog';
 import ConfirmDialog from '../shared/ConfirmDialog';
 import CompartmentList from './CompartmentList';
 import DataCardList from './DataCardList';
+
+// Let's import pop-ups only once they are opened.
+const ManageGroupDialog = React.lazy(() => import('../ManageGroupDialog'));
 
 /**
  * React Component to render the Scenario Cards Section

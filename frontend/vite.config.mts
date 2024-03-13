@@ -10,6 +10,7 @@ import eslintPlugin from '@nabla/vite-plugin-eslint';
 export default defineConfig((configEnv) => {
   return {
     assetsInclude: ['**/*.md', '**/*.geojson', '**/*.json5'],
+    base: './',
     plugins: [
       react(),
       eslintPlugin(),

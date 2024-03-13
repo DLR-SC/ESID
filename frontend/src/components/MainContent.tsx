@@ -9,9 +9,11 @@ import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import {useTheme} from '@mui/material/styles';
 import MainContentTabs from './MainContentTabs';
+import {ReferenceDayConnector} from './ReferenceDayConnector';
 
 export default function MainContent(): JSX.Element {
   const theme = useTheme();
+
   return (
     <Grid
       id='main-content-root'
@@ -46,6 +48,7 @@ export default function MainContent(): JSX.Element {
           }}
         />
       </Grid>
+      <ReferenceDayConnector />
       <MainContentTabs />
     </Grid>
   );
