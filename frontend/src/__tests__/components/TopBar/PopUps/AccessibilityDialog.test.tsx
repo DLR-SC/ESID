@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React from 'react';
+import React, {Suspense} from 'react';
 import {describe, test} from 'vitest';
 import {render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -14,7 +14,9 @@ describe('AccessibilityDialog', () => {
   test('PopUp', async () => {
     render(
       <I18nextProvider i18n={i18n}>
-        <ApplicationMenu />
+        <Suspense>
+          <ApplicationMenu />
+        </Suspense>
       </I18nextProvider>
     );
     const menu = screen.getByLabelText('topBar.menu.label');
@@ -23,7 +25,7 @@ describe('AccessibilityDialog', () => {
     const a11y = screen.getByText('topBar.menu.accessibility');
     await userEvent.click(a11y);
 
-    screen.getByText('accessibility.header');
-    screen.getByText('accessibility.content');
+    await screen.findByText('accessibility.header');
+    await screen.findByText('accessibility.content');
   });
 });

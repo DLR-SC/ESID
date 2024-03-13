@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: CC0-1.0
 
 #get the latest alpine image from node registry
-FROM node:16-alpine AS build-stage
+FROM node:20-alpine AS build-stage
 LABEL stage=build
 
 #set the working directory
@@ -24,7 +24,7 @@ FROM nginx:alpine
 
 #we copy the output from first stage that is our react build
 #into nginx html directory where it will serve our index file
-COPY --from=build-stage /app/build/ /usr/share/nginx/html
+COPY --from=build-stage /app/dist/ /usr/share/nginx/html
 COPY --from=build-stage /app/nginx.conf /etc/nginx/templates/default.conf.template
 
 CMD ["nginx", "-g", "daemon off;"]

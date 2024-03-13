@@ -17,6 +17,7 @@ SPDX-License-Identifier: CC-BY-4.0
   - Wenn diese Karte ausgewählt wird, werden die Falldaten dementsprechend im Rest der Anwendung angezeigt.
   - Es ist nun auch möglich die Falldaten alleine anzuzeigen, ohne dass ein Szenario aktiviert ist.
 - Neben der Liste der Infektionszustände ist jetzt zu jedem Infektionszustand ein Infokästchen. Aktuell haben alle Zustände die gleiche Information.
+- Der Referenztag ist nun einstellbar. Eine Linie wird zum Graphen gezeichnet, um so den Zusammenhang zu verdeutlichen.
 - Die Zoom-Knöpfe der Karte haben eine weitere Schaltfläche bekommen, mit der die Kartenansicht zur ursprünglichen Übersicht zurückgesetzt werden kann.
 
 ### Verbesserungen
