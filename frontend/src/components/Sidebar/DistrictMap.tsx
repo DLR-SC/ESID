@@ -22,7 +22,9 @@ import LockOpen from '@mui/icons-material/LockOpen';
 import LoadingContainer from '../shared/LoadingContainer';
 import {useGetCaseDataByDateQuery} from '../../store/services/caseDataApi';
 import mapData from '../../../assets/lk_germany_reduced.geojson?url';
-import * as svgPaths from '../../util/svgPaths';
+import svgZoomResetURL from '../../../assets/svg/zoom_out_map_white_24dp.svg?url';
+import svgZoomInURL from '../../../assets/svg/zoom_in_white_24dp.svg';
+import svgZoomOutURL from '../../../assets/svg/zoom_out_white_24dp.svg';
 
 interface IRegionPolygon {
   value: number;
@@ -172,19 +174,45 @@ export default function DistrictMap(): JSX.Element {
     );
     // Add home button to reset pan & zoom
     chart.get('zoomControl')?.homeButton.set('visible', true);
-    // Use svg path for icon
-    chart
-      .get('zoomControl')
-      ?.homeButton.get('icon')
-      ?.set('svgPath', svgPaths.zoomReset(-12, -12));
-    chart
-      .get('zoomControl')?.homeButton.get('icon')
-      ?.set('fill', am5.color('#fff'));
+    // settings to fix positioning of images on buttons
+    const fixSVGPosition = {
+      width: 25,
+      height: 25,
+      dx: -5,
+      dy: -3,
+    };
+    // Set svg icon for home button
+    chart.get('zoomControl')?.homeButton.set(
+      'icon',
+      am5.Picture.new(root, {
+        src: svgZoomResetURL,
+        ...fixSVGPosition,
+        // recast due to bug/error; am5.Picture usable according to https://www.amcharts.com/docs/v5/concepts/common-elements/buttons/#External_image
+      }) as unknown as am5.Graphics
+    );
     // Add function to select germany when home button is pressed
-    chart.get('zoomControl')?.homeButton.events.on('click', (_ev) => {
+    chart.get('zoomControl')?.homeButton.events.on('click', () => {
       // Set district to germany
       dispatch(selectDistrict({ags: '00000', name: t('germany'), type: ''}));
     });
+    // Set svg icon for plus button
+    chart.get('zoomControl')?.plusButton.set(
+      'icon',
+      am5.Picture.new(root, {
+        src: svgZoomInURL,
+        ...fixSVGPosition,
+        // recast due to bug/error; am5.Picture usable according to https://www.amcharts.com/docs/v5/concepts/common-elements/buttons/#External_image
+      }) as unknown as am5.Graphics
+    );
+    // Set svg icon for minus button
+    chart.get('zoomControl')?.minusButton.set(
+      'icon',
+      am5.Picture.new(root, {
+        src: svgZoomOutURL,
+        ...fixSVGPosition,
+        // recast due to bug/error; am5.Picture usable according to https://www.amcharts.com/docs/v5/concepts/common-elements/buttons/#External_image
+      }) as unknown as am5.Graphics
+    );
 
     // Create polygon series
     const polygonSeries = chart.series.push(
