@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
+
 import React, {useCallback, useEffect, useState} from 'react';
 import {useTheme} from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -90,7 +93,7 @@ export default function HeatLegendEdit(): JSX.Element {
       return;
     }
 
-    const scenarioDefault = defaultLegends[activeScenario];
+    const scenarioDefault = defaultLegends[activeScenario % defaultLegends.length];
     const legends = [...heatmapLegends];
     legends.unshift(scenarioDefault);
 

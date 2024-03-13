@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
+
 import {useEffect, useState} from 'react';
 import {Dictionary} from '../../util/util';
 import {useGetCaseDataSingleSimulationEntryQuery} from '../../store/services/caseDataApi';

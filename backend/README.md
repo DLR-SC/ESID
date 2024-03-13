@@ -1,3 +1,7 @@
+<!--
+SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+SPDX-License-Identifier: CC-BY-4.0
+-->
 
 # ESID - Backend Developer Documentation
 

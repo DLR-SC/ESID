@@ -34,7 +34,7 @@
     "**/*": "prettier --write --ignore-unknown"
   },
   "dependencies": {
-    "@amcharts/amcharts5": "^5.6.2",
+    "@amcharts/amcharts5": "^5.8.4",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.15.0",
@@ -79,7 +79,7 @@
     "@typescript-eslint/parser": "^5.62.0",
     "@vitejs/plugin-react": "^4.2.1",
     "@vitest/coverage-v8": "^1.0.4",
-    "babel-eslint": "^10.1.0",
+    "@babel/eslint-parser": "^7.23.10",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.1.3",

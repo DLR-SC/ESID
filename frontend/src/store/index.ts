@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
+
 import {combineReducers, configureStore} from '@reduxjs/toolkit';
 import DataSelectionReducer from './DataSelectionSlice';
 import {caseDataApi} from './services/caseDataApi';
@@ -11,7 +14,7 @@ import {groupApi} from './services/groupApi';
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['dataSelection', 'userPreference', 'scenarioList'],
+  whitelist: ['dataSelection', 'userPreference'],
 };
 
 const rootReducer = combineReducers({

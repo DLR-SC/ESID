@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
+
 import React, {useEffect, useMemo, useState, useRef} from 'react';
 import {useTheme} from '@mui/material/styles';
 import * as am5 from '@amcharts/amcharts5';
@@ -166,6 +169,8 @@ export default function DistrictMap(): JSX.Element {
         }),
       })
     );
+    // Add home button to reset pan & zoom
+    chart.get('zoomControl')?.homeButton.set('visible', true);
 
     // Create polygon series
     const polygonSeries = chart.series.push(

@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
+
 import React, {useMemo} from 'react';
 import {useTheme} from '@mui/material/styles';
 import {useAppSelector} from 'store/hooks';
@@ -72,7 +75,7 @@ export function ScenarioCard(props: ScenarioCardProps): JSX.Element {
     <DataCard
       id={props.scenario.id}
       label={tBackend(`scenario-names.${props.scenario.label}`)}
-      color={theme.custom.scenarios[props.scenario.id][0]}
+      color={theme.custom.scenarios[props.scenario.id % theme.custom.scenarios.length][0]}
       selected={props.selected}
       active={props.active}
       compartmentValues={compartmentValues}

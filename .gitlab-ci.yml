@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+# SPDX-License-Identifier: CC0-1.0
+
 # ! PLEASE NOTE THAT THIS IS ONLY FOR INTERNAL USE AND THE FILE IS UPLOADED ON GITHUB FOR CONVENIENCE  
 
 # The bellow pipeline allows to build and deploy the website automatically, whenever developer pushes code to the application.

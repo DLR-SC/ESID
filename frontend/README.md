@@ -1,3 +1,8 @@
+<!--
+SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+SPDX-License-Identifier: CC-BY-4.0
+-->
+
 # ESID - Frontend Developer Documentation
 
 ## Table of Contents
@@ -117,7 +122,6 @@ npm run preview
 # or
 npm run build-and-preview
 ```
-
 
 ## Technologies
 

@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
+
 import React from 'react';
 import {describe, test, vi, expect} from 'vitest';
 import {act, render, screen} from '@testing-library/react';

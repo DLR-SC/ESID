@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
+
 import Box from '@mui/material/Box';
 import {CaseDataCard} from './CaseDataCard';
 import {selectScenario, setMinMaxDates, setStartDate, toggleScenario} from '../../store/DataSelectionSlice';
@@ -142,7 +145,7 @@ export default function DataCardList(): JSX.Element {
           scenario={scenario}
           selected={selectedScenario === scenario.id}
           active={!!activeScenarios && activeScenarios.includes(scenario.id)}
-          color={theme.custom.scenarios[i][0]}
+          color={theme.custom.scenarios[(i + 1) % theme.custom.scenarios.length][0]}
           startValues={startValues}
           onClick={() => {
             // set active scenario to this one and send dispatches

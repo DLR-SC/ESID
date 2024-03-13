@@ -1,3 +1,8 @@
+<!--
+SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+SPDX-License-Identifier: CC-BY-4.0
+-->
+
 # ESID Änderungshistorie
 
 ## vX.X.X-alpha
@@ -12,6 +17,7 @@
   - Wenn diese Karte ausgewählt wird, werden die Falldaten dementsprechend im Rest der Anwendung angezeigt.
   - Es ist nun auch möglich die Falldaten alleine anzuzeigen, ohne dass ein Szenario aktiviert ist.
 - Neben der Liste der Infektionszustände ist jetzt zu jedem Infektionszustand ein Infokästchen. Aktuell haben alle Zustände die gleiche Information.
+- Die Zoom-Knöpfe der Karte haben eine weitere Schaltfläche bekommen, mit der die Kartenansicht zur ursprünglichen Übersicht zurückgesetzt werden kann.
 
 ### Verbesserungen
 
@@ -37,6 +43,7 @@
 - Ein Fehler wurde behoben, der beim ersten Laden der Seite den Text in der Suchleiste nicht übersetzt hatte.
 - Ein Fehler wurde behoben, der Landkreise mit fehlenden Daten verschwinden lies.
 - Ein Fehler wurde behoben, der die Webseite abstürzen lässt, nachdem die zugrunde liegenden Daten aktualisiert wurden.
+- Ein Fehler wurde behoben, der die Webseite abstürzen lässt, wenn ein Szenario aus der Datenbank entfernt wurde.
 
 ---
 

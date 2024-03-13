@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+# SPDX-License-Identifier: Apache-2.0
+
 NODES = [
     {"key": "00000", "label": "Deutschland"},
     {"key": "01001", "label": "Flensburg"},
@@ -411,32 +414,28 @@ RESTRICTIONS = [
     ("restriction_4", "Restriction 4")
 ]
 
-PARAMETERS = [ 
+PARAMETERS = [
     "IncubationTime",
     "SerialInterval",
-    "InfectiousTimeMild",
-    "HomeToHospitalizedTime",
-    "HospitalizedToHomeTime",
-    "HospitalizedToICUTime",
-    "ICUToHomeTime",
-    "ICUToDeathTime",
-    "InfectionProbabilityFromContact",
-    "RelativeCarrierInfectability",
+    "TimeInfectedSymptoms",
+    "TimeInfectedSevere",
+    "TimeInfectedCritical",
+    "TransmissionProbabilityOnContact",
+    "RelativeTransmissionNoSymptoms",
     "RiskOfInfectionFromSympomatic",
     "MaxRiskOfInfectionFromSympomatic",
-    "AsymptoticCasesPerInfectious",
-    "HospitalizedCasesPerInfectious",
-    "ICUCasesPerHospitalized",
-    "DeathsPerHospitalized",
-    "ReducVaccExp",
-    "ReducImmuneExp",
-    "ReducExpInf",
-    "ReducImmuneExpInf",
-    "ReducInfHosp",
-    "ReducImmuneInfHosp",
-    "ReducTime",
-    "Seasonality",
-    "VaccinationGap"
+    "RecoveredPerInfectedNoSymptoms",
+    "SeverePerInfectedSymptoms",
+    "CriticalPerSevere",
+    "DeathsPerCritical",
+    "ReducExposedPartialImmunity",
+    "ReducExposedImprovedImmunity",
+    "ReducInfectedSymptomsPartialImmunity",
+    "ReducInfectedSymptomsImprovedImmunity",
+    "ReducInfectedSevereCriticalDeadPartialImmunity",
+    "ReducInfectedSevereCriticalDeadImprovedImmunity",
+    "ReducTimeInfectedMild",
+    "Seasonality"
 ]
 
 COMPARTMENTS = [
@@ -452,12 +451,12 @@ GROUP_CATEGORIES = [
 ]
 
 GROUPS = [
-    ("age_0", "age", "Ages bewteen 0-4 years" ),
-    ("age_1", "age", "Ages between 5-14 years" ),
-    ("age_2", "age", "Ages between 15-34 years" ),
-    ("age_3", "age", "Ages between 35-59 years" ),
-    ("age_4", "age", "Ages between 60-79 years" ),
-    ("age_5", "age", "Ages above 80" ),
+    ("age_0", "age", "Ages bewteen 0-4 years"),
+    ("age_1", "age", "Ages between 5-14 years"),
+    ("age_2", "age", "Ages between 15-34 years"),
+    ("age_3", "age", "Ages between 35-59 years"),
+    ("age_4", "age", "Ages between 60-79 years"),
+    ("age_5", "age", "Ages above 80"),
     ("total", "age", "All ages"),
     ("female", "gender", "Female"),
     ("male", "gender", "Male")
