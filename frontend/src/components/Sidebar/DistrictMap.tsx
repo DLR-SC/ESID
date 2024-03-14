@@ -23,8 +23,8 @@ import LoadingContainer from '../shared/LoadingContainer';
 import {useGetCaseDataByDateQuery} from '../../store/services/caseDataApi';
 import mapData from '../../../assets/lk_germany_reduced.geojson?url';
 import svgZoomResetURL from '../../../assets/svg/zoom_out_map_white_24dp.svg?url';
-import svgZoomInURL from '../../../assets/svg/zoom_in_white_24dp.svg';
-import svgZoomOutURL from '../../../assets/svg/zoom_out_white_24dp.svg';
+import svgZoomInURL from '../../../assets/svg/zoom_in_white_24dp.svg?url';
+import svgZoomOutURL from '../../../assets/svg/zoom_out_white_24dp.svg?url';
 
 interface IRegionPolygon {
   value: number;
@@ -174,6 +174,7 @@ export default function DistrictMap(): JSX.Element {
     );
     // Add home button to reset pan & zoom
     chart.get('zoomControl')?.homeButton.set('visible', true);
+
     // settings to fix positioning of images on buttons
     const fixSVGPosition = {
       width: 25,
@@ -181,6 +182,7 @@ export default function DistrictMap(): JSX.Element {
       dx: -5,
       dy: -3,
     };
+
     // Set svg icon for home button
     chart.get('zoomControl')?.homeButton.set(
       'icon',
@@ -190,11 +192,13 @@ export default function DistrictMap(): JSX.Element {
         // recast due to bug/error; am5.Picture usable according to https://www.amcharts.com/docs/v5/concepts/common-elements/buttons/#External_image
       }) as unknown as am5.Graphics
     );
+
     // Add function to select germany when home button is pressed
     chart.get('zoomControl')?.homeButton.events.on('click', () => {
       // Set district to germany
       dispatch(selectDistrict({ags: '00000', name: t('germany'), type: ''}));
     });
+
     // Set svg icon for plus button
     chart.get('zoomControl')?.plusButton.set(
       'icon',
@@ -204,6 +208,7 @@ export default function DistrictMap(): JSX.Element {
         // recast due to bug/error; am5.Picture usable according to https://www.amcharts.com/docs/v5/concepts/common-elements/buttons/#External_image
       }) as unknown as am5.Graphics
     );
+
     // Set svg icon for minus button
     chart.get('zoomControl')?.minusButton.set(
       'icon',
