@@ -5,7 +5,6 @@ import React from 'react';
 import Scenario from './Scenario';
 import IconBar from './IconBar';
 
-import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import {useTheme} from '@mui/material/styles';
 import MainContentTabs from './MainContentTabs';
@@ -13,7 +12,6 @@ import {ReferenceDayConnector} from './ReferenceDayConnector';
 
 export default function MainContent(): JSX.Element {
   const theme = useTheme();
-
   return (
     <Grid
       id='main-content-root'
@@ -38,15 +36,6 @@ export default function MainContent(): JSX.Element {
       </Grid>
       <Grid sx={{width: '100%', maxWidth: '100%'}} id='main-content-scenario-wrapper' item>
         <Scenario />
-      </Grid>
-      <Grid id='main-content-horizontal-spacer' item>
-        <Divider
-          sx={{
-            borderBottom: `1px solid ${theme.palette.divider}`,
-            backgroundColor: 'transparent',
-            margin: `${theme.spacing(4)} 0 0 0`,
-          }}
-        />
       </Grid>
       <ReferenceDayConnector />
       <MainContentTabs />
