@@ -18,7 +18,7 @@ SPDX-License-Identifier: CC-BY-4.0
   - It is now also possible to view case data without any scenario activated.
 - Next to the list of infection states, there is now an info box for each infection state. Currently, all states have the same information.
 - The reference day is now editable. A line is being drawn to the chart to show the connection.
-- The zoom control of the map now has an additional button to reset the view to the initial overview
+- The zoom controls of the map now have a new look and an additional button to reset the view to the initial overview of germany
 
 ### Improvements
 
