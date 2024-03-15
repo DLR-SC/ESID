@@ -1,12 +1,10 @@
 import Grid from '@mui/material/Grid';
-import SimulationChart from './SimulationChart';
 import React from 'react';
 import TabContext from '@mui/lab/TabContext';
 import TabPanel from '@mui/lab/TabPanel';
 import Tab, {tabClasses, TabProps} from '@mui/material/Tab';
 import TabList from '@mui/lab/TabList';
 import Box from '@mui/material/Box';
-import ParameterEditor from './ParameterEditor';
 import ShowChart from '@mui/icons-material/ShowChart';
 import Coronavirus from '@mui/icons-material/Coronavirus';
 import styled from '@mui/material/styles/styled';
@@ -15,6 +13,10 @@ import {buttonBaseClasses} from '@mui/material/ButtonBase';
 import {useTranslation} from 'react-i18next';
 import {useAppDispatch, useAppSelector} from '../store/hooks';
 import {selectTab} from '../store/UserPreferenceSlice';
+
+// Lazily load the tab contents to enable code splitting.
+const ParameterEditor = React.lazy(() => import('./ParameterEditor'));
+const SimulationChart = React.lazy(() => import('./SimulationChart'));
 
 const TabItem = styled(Tab)<TabProps>(({theme}) => ({
   background: theme.palette.background.default,
@@ -30,6 +32,10 @@ const TabItem = styled(Tab)<TabProps>(({theme}) => ({
   },
 }));
 
+/**
+ * This component manages the main content, which is a collection of tabs that the user can navigate through. By default
+ * the Simulation Chart is being shown.
+ */
 export default function MainContentTabs() {
   const {t} = useTranslation();
   const selectedTab = useAppSelector((state) => state.userPreference.selectedTab ?? '1');
@@ -56,7 +62,6 @@ export default function MainContentTabs() {
           <TabList
             onChange={handleChange}
             centered
-            aria-label='TODO'
             sx={{
               minHeight: '0',
             }}

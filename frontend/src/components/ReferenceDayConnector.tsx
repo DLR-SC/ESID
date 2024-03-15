@@ -13,8 +13,9 @@ import {useBoundingclientrectRef} from 'rooks';
  */
 export function ReferenceDayConnector(): JSX.Element {
   const theme = useTheme();
-  const selectedTab = useAppSelector((state) => state.userPreference.selectedTab ?? '1');
 
+  // The selected tab is used to decide, if the connecting border is being drawn. Tab '1' would be the simulation chart.
+  const selectedTab = useAppSelector((state) => state.userPreference.selectedTab ?? '1');
   const referenceDayPos = useAppSelector((state) => state.layoutSlice.referenceDayXPositions);
 
   const [ref, boundingRect] = useBoundingclientrectRef();
