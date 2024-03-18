@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
+
 import Grid from '@mui/material/Grid';
 import React from 'react';
 import TabContext from '@mui/lab/TabContext';
