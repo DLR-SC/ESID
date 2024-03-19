@@ -41,6 +41,7 @@
               Intensivregister.',
   },
   'scenario-names': {
+    'Baseline Scenario': 'Basisszenario',
     'Summer 2021 Simulation 1': 'Szenario ohne Maßnahmen',
     'Summer 2021 Simulation 2': 'Szenario mit Maßnahmen',
   },
