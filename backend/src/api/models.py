@@ -162,7 +162,7 @@ class SimulationModel(models.Model):
 
 
 class ScenarioParameterGroup(models.Model):
-    distribution = models.ForeignKey(Distribution, related_name='distribution', on_delete=models.RESTRICT)
+    distribution = models.ForeignKey(Distribution, related_name='distribution', on_delete=models.CASCADE)
     groups = models.ManyToManyField(Group)
     
     @property
@@ -176,7 +176,7 @@ class ScenarioParameterGroup(models.Model):
 
 class ScenarioParameter(models.Model):
     """Model definition for a parameter belonging to a scenario."""
-    parameter = models.ForeignKey(Parameter, related_name='parameter', on_delete=models.RESTRICT)
+    parameter = models.ForeignKey(Parameter, related_name='parameter', on_delete=models.CASCADE)
     groups = models.ManyToManyField(ScenarioParameterGroup)
     
     class Meta:
@@ -190,7 +190,7 @@ class ScenarioNode(models.Model):
     """Model definition for a node belonging to a scenario (i.e. counties)."""
 
     # Fields
-    node = models.ForeignKey(Node, on_delete=models.RESTRICT)
+    node = models.ForeignKey(Node, on_delete=models.CASCADE)
     parameters = models.ManyToManyField(ScenarioParameter)
     interventions = models.ManyToManyField(Intervention)
 
@@ -219,7 +219,7 @@ class Scenario(models.Model):
     key = models.CharField(max_length=20, unique=True)
     name = models.CharField(max_length=100)
     description = models.TextField()
-    simulation_model = models.ForeignKey(SimulationModel, related_name='simulation_model', on_delete=models.RESTRICT)
+    simulation_model = models.ForeignKey(SimulationModel, related_name='simulation_model', on_delete=models.CASCADE)
     number_of_groups = models.IntegerField()
     number_of_nodes = models.IntegerField()
     nodes = models.ManyToManyField(ScenarioNode)
@@ -248,7 +248,7 @@ class Scenario(models.Model):
 
 class SimulationCompartment(Distribution):
     """Model definition for a compartment belonging to a simulation."""
-    compartment = models.ForeignKey(Compartment, on_delete=models.RESTRICT)
+    compartment = models.ForeignKey(Compartment, on_delete=models.CASCADE)
 
     class Meta:
         pass
@@ -260,7 +260,7 @@ class SimulationCompartment(Distribution):
 class SimulationNode(models.Model):
     """Model definition for a node belonging to a simulation (i.e. counties)."""
 
-    scenario_node = models.ForeignKey(ScenarioNode, on_delete=models.RESTRICT)
+    scenario_node = models.ForeignKey(ScenarioNode, on_delete=models.CASCADE)
     data = models.ManyToManyField(DataEntry)
 
     class Meta:
@@ -284,7 +284,7 @@ class Simulation(models.Model):
     start_day = models.DateField()
     number_of_days = models.IntegerField()
 
-    scenario = models.ForeignKey(Scenario, on_delete=models.RESTRICT)
+    scenario = models.ForeignKey(Scenario, on_delete=models.CASCADE)
     nodes = models.ManyToManyField(SimulationNode)
 
     class Meta:
