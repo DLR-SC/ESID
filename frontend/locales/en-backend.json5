@@ -40,6 +40,7 @@
               figures on intensive care patients come from the DIVI Intensive Care Register.',
   },
   'scenario-names': {
+    'Baseline Scenario': 'Baseline Scenario',
     'Summer 2021 Simulation 1': 'Scenario without Interventions',
     'Summer 2021 Simulation 2': 'Scenario with Interventions',
   },
