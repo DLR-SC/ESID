@@ -16,6 +16,7 @@ describe('DataSelectionSlice', () => {
         {color: 'rgb(255,255,255)', value: 1},
       ],
     },
+    selectedTab: '1',
   };
 
   test('Initial State', () => {
@@ -33,6 +34,7 @@ describe('DataSelectionSlice', () => {
     };
     expect(reducer(initialState, selectHeatmapLegend({legend: legend}))).toEqual({
       selectedHeatmap: legend,
+      selectedTab: '1',
     });
   });
 });

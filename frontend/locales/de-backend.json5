@@ -139,7 +139,7 @@
     },
     */
 
-    // Old Parameter Names
+    // New Parameter Names
     RecoveredPerInfectedNoSymptoms: {
       symbol: '\\mu_C^R',
       description: 'Anteil der nicht symptomatischen Fälle',
