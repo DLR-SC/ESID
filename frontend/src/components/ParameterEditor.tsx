@@ -55,7 +55,7 @@ export default function ParameterEditor() {
   );
 }
 
-/** A simple header component it creates a table cell with the given header name and it spans by default one column. */
+/** A simple header component it creates a table cell with the given header name, and it spans by default one column. */
 function ParameterColumHeader(props: Readonly<{name: string; colSpan?: number}>): JSX.Element {
   const theme = useTheme();
 
@@ -90,10 +90,7 @@ function ParameterRowHeader(props: Readonly<{symbol: string; description: string
  * Depending on the type of parameter, this component renders different types of parameter rows.
  */
 function ParameterRow(props: Readonly<{params: ParameterData}>): JSX.Element | null {
-  const {t, i18n} = useTranslation('backend');
-  if (!i18n.exists(`parameters.${props.params.key}`, {ns: 'backend'})) {
-    return null;
-  }
+  const {t} = useTranslation('backend');
 
   return (
     <TableRow>

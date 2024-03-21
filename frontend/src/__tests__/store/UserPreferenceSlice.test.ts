@@ -3,7 +3,7 @@
 
 import {describe, test, expect} from 'vitest';
 
-import reducer, {selectHeatmapLegend, UserPreference} from '../../store/UserPreferenceSlice';
+import reducer, {selectHeatmapLegend, selectTab, UserPreference} from '../../store/UserPreferenceSlice';
 import {HeatmapLegend} from '../../types/heatmapLegend';
 
 describe('DataSelectionSlice', () => {
@@ -35,6 +35,20 @@ describe('DataSelectionSlice', () => {
     expect(reducer(initialState, selectHeatmapLegend({legend: legend}))).toEqual({
       selectedHeatmap: legend,
       selectedTab: '1',
+    });
+  });
+
+  test('Select Parameter Tab', () => {
+    expect(reducer(initialState, selectTab('2'))).toEqual({
+      selectedHeatmap: {
+        name: 'uninitialized',
+        isNormalized: true,
+        steps: [
+          {color: 'rgb(255,255,255)', value: 0},
+          {color: 'rgb(255,255,255)', value: 1},
+        ],
+      },
+      selectedTab: '2',
     });
   });
 });
