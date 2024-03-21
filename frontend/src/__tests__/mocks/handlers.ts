@@ -42,4 +42,18 @@ export default [
       },
     });
   }),
+  http.get('/assets/lk_germany_reduced_list.json', () => {
+    return HttpResponse.json([
+      {
+        RS: '09771',
+        GEN: 'Aichach-Friedberg',
+        BEZ: 'LK',
+      },
+      {
+        RS: '12345',
+        GEN: 'Test District',
+        BEZ: 'Test Type',
+      },
+    ]);
+  }),
 ];
