@@ -107,6 +107,38 @@ export const scenarioApi = createApi({
         return {data: result};
       },
     }),
+
+    getScenarioParameters: builder.query<Array<ParameterData>, number>({
+      queryFn: async function (arg: number, _queryApi, _extraOptions, fetchWithBQ) {
+        const response = await fetchWithBQ(`scenarios/${arg}/`);
+        if (response.error) return {error: response.error};
+        const parameters = response.data as ParameterRESTData;
+
+        const result: Array<ParameterData> = parameters.results.parameters.map((parameter) => {
+          const groupData = parameter.groups.slice(0, 6).map((group) => ({span: 1, min: group.min, max: group.max}));
+          const mergedGroupData = [groupData[0]];
+
+          for (let i = 1; i < groupData.length; i++) {
+            const prev = mergedGroupData[mergedGroupData.length - 1];
+            const curr = groupData[i];
+            if (prev.min == curr.min && prev.max == curr.max) {
+              prev.span++;
+            } else {
+              mergedGroupData.push(curr);
+            }
+          }
+
+          return {
+            key: parameter.parameter,
+            symbol: 'x',
+            type: 'MIN_MAX_GROUPED',
+            data: mergedGroupData,
+          };
+        });
+
+        return {data: result};
+      },
+    }),
   }),
 });
 
@@ -127,6 +159,23 @@ export interface SelectedScenarioPercentileData {
 export interface PercentileDataByDay {
   compartments: Dictionary<number>;
   day: string;
+}
+
+export interface ParameterRESTData {
+  results: {
+    name: string;
+    description: string;
+    simulationModel: string;
+    numberOfGroups: number;
+    parameters: Array<{parameter: string; groups: Array<{min: number; max: number}>}>;
+  };
+}
+
+export interface ParameterData {
+  symbol: string;
+  key: string;
+  type: string;
+  data: Array<{span: number; min: number; max: number}> | string;
 }
 
 interface SimulationDataByDateParameters {
@@ -166,4 +215,5 @@ export const {
   useGetSingleSimulationEntryQuery,
   useGetMultipleSimulationDataByNodeQuery,
   useGetPercentileDataQuery,
+  useGetScenarioParametersQuery,
 } = scenarioApi;

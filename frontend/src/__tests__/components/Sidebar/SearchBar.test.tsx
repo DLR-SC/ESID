@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React from 'react';
-import {describe, test, expect, vi, afterEach} from 'vitest';
-import {act, cleanup, render, screen, waitFor} from '@testing-library/react';
+import {describe, test, expect, afterEach} from 'vitest';
+import {act, cleanup, render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import i18n from '../../../util/i18nForTests';
@@ -15,28 +15,6 @@ import {Store} from '../../../store';
 import {selectDistrict} from '../../../store/DataSelectionSlice';
 
 describe('SearchBar', () => {
-  // We mock fetch to return two entries for searchable districts.
-  const fetch = vi.fn().mockImplementation(() => {
-    return Promise.resolve({
-      json: () => {
-        return Promise.resolve([
-          {
-            RS: '09771',
-            GEN: 'Aichach-Friedberg',
-            BEZ: 'LK',
-          },
-          {
-            RS: '12345',
-            GEN: 'Test District',
-            BEZ: 'Test Type',
-          },
-        ]);
-      },
-    });
-  });
-
-  vi.stubGlobal('fetch', fetch);
-
   test('countyList loaded correctly', async () => {
     render(
       <I18nextProvider i18n={i18n}>
@@ -45,8 +23,6 @@ describe('SearchBar', () => {
         </Provider>
       </I18nextProvider>
     );
-
-    await waitFor(() => expect(fetch).toHaveBeenCalled());
 
     await screen.findByPlaceholderText('germany');
 
@@ -69,8 +45,6 @@ describe('SearchBar', () => {
       </I18nextProvider>
     );
 
-    await waitFor(() => expect(fetch).toHaveBeenCalled());
-
     act(() => {
       Store.dispatch(selectDistrict({ags: '12345', name: 'Test District', type: 'Test Type'}));
     });
@@ -86,8 +60,6 @@ describe('SearchBar', () => {
         </Provider>
       </I18nextProvider>
     );
-
-    await waitFor(() => expect(fetch).toHaveBeenCalled());
 
     await userEvent.type(screen.getByPlaceholderText('germany'), 'Aic{Enter}');
 
@@ -107,8 +79,6 @@ describe('SearchBar', () => {
         </Provider>
       </I18nextProvider>
     );
-
-    await waitFor(() => expect(fetch).toHaveBeenCalled());
 
     await userEvent.type(screen.getByPlaceholderText('germany'), '{ArrowDown}{Enter}');
 

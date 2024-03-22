@@ -64,6 +64,10 @@
     lock: 'Maximalwert feststellen',
     select: 'Farblegende auswählen',
   },
+  bottomTabs: {
+    timeSeries: 'Zeitreihe',
+    parameters: 'Parameter',
+  },
   today: 'Heute',
   more: 'Mehr',
   less: 'Weniger',

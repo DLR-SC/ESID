@@ -5,14 +5,13 @@ import React from 'react';
 import Scenario from './Scenario';
 import IconBar from './IconBar';
 
-import SimulationChart from './SimulationChart';
 import Grid from '@mui/material/Grid';
 import {useTheme} from '@mui/material/styles';
+import MainContentTabs from './MainContentTabs';
 import {ReferenceDayConnector} from './ReferenceDayConnector';
 
 export default function MainContent(): JSX.Element {
   const theme = useTheme();
-
   return (
     <Grid
       id='main-content-root'
@@ -39,9 +38,7 @@ export default function MainContent(): JSX.Element {
         <Scenario />
       </Grid>
       <ReferenceDayConnector />
-      <Grid id='main-content-simulation-chart-wrapper' item sx={{flexGrow: 1}}>
-        <SimulationChart />
-      </Grid>
+      <MainContentTabs />
     </Grid>
   );
 }

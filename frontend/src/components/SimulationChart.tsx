@@ -802,7 +802,7 @@ export default function SimulationChart(): JSX.Element {
       <Box
         id='chartdiv'
         sx={{
-          height: 'calc(100% - 4px)',
+          height: '100%',
           margin: 0,
           padding: 0,
           backgroundColor: theme.palette.background.paper,

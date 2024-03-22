@@ -6,6 +6,9 @@ import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
 import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
 import React from 'react';
 
+/**
+ * A utility component to provide localization support for certain MUI elements, like date pickers.
+ */
 export function MUILocalization(props: {children: string | JSX.Element | JSX.Element[]}): JSX.Element {
   const {i18n} = useTranslation();
 
