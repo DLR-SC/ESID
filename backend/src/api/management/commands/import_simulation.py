@@ -58,16 +58,20 @@ def process_node(self, meta, h5node, compartments, order, start_day, percentile,
         [n_days, n_compartments] = dataset.shape
 
         if n_days - 1 != meta['numberOfDays']:
-            self.stdout.write(self.style.ERROR('Number of days {} in dataset {} does not match the expected number of days for simulation {}!'.format(n_days, dataset_name, meta['numberOfDays'])))
+            self.stdout.write(self.style.ERROR(
+                'Number of days {} in dataset {} does not match the expected number of days for simulation {}!'.format(
+                    n_days, dataset_name, meta['numberOfDays'])))
             continue
 
         if n_compartments != len(order):
-            self.stdout.write(self.style.ERROR('Compartment mapping must be of the same length as columns in dataset {}!={}'.format(len(order), n_compartments)))
+            self.stdout.write(self.style.ERROR(
+                'Compartment mapping must be of the same length as columns in dataset {}!={}'.format(len(order),
+                                                                                                     n_compartments)))
             continue
 
         # create data entry models
         entries = create_data_entries(start_day, n_days, order, dataset, group, percentile)
-        
+
         # save data entry models
         entries = models.DataEntry.objects.bulk_create(entries)
 
@@ -76,7 +80,7 @@ def process_node(self, meta, h5node, compartments, order, start_day, percentile,
             entry.groups.add(group)
 
         data_entries.extend(entries)
-    
+
     simulation_node.data.set(list(simulation_node.data.all()) + data_entries)
     simulation_node.save()
 
@@ -108,7 +112,8 @@ def process_percentile(self, path, percentile, meta, simulation, scenario, compa
                     padded = nodeId.zfill(5)
 
                     if not padded in scenario_node_names:
-                        self.stdout.write(self.style.ERROR('Node {} not part of scenario {}'.format(padded, scenario.name)))
+                        self.stdout.write(
+                            self.style.ERROR('Node {} not part of scenario {}'.format(padded, scenario.name)))
 
                     if not h5[nodeId]:
                         self.stdout.write(self.style.ERROR('No data found for node {}'.format(padded, scenario.name)))
@@ -126,9 +131,8 @@ def process_percentile(self, path, percentile, meta, simulation, scenario, compa
 
                     process_node(self, meta, h5node, compartments, order, start_day, percentile, simulation_node)
 
-
     self.stdout.write("Importing Results_sum.h5 as node 00000")
-    with h5py.File(os.path.join(path, 'Results_sum.h5'), 'r') as h5:            
+    with h5py.File(os.path.join(path, 'Results_sum.h5'), 'r') as h5:
         h5node = h5['0']
 
         scenario_node = scenario_nodes.get(node__name='00000')
@@ -139,10 +143,10 @@ def process_percentile(self, path, percentile, meta, simulation, scenario, compa
             simulation_node = models.SimulationNode(scenario_node=scenario_node)
             simulation_node.save()
             simulation.nodes.add(simulation_node)
-        
+
         process_node(self, meta, h5node, compartments, order, start_day, percentile, simulation_node)
-        
-    simulation.save()      
+
+    simulation.save()
 
 
 class Command(BaseCommand):
@@ -150,13 +154,16 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument('data_path', type=str)
+        parser.add_argument('--action', default=None, 
+                            help="In the case of existing simulation data with the same key, action controls if the new data is appended or replaces the old data. "
+                                 "If None is given or it is not specified, the command will ask for user input."
+                                 "A value of 1 replaces the previous scenario and a value of 2 appends the simulation data", type=str)
 
     def handle(self, *args, **options):
-        
+
         path = options['data_path']
         if not path:
             raise CommandError('No path to data provided!')
-
 
         if not os.path.exists(path):
             raise CommandError('Could not find path {}!'.format(path))
@@ -170,28 +177,27 @@ class Command(BaseCommand):
         if is_zip:
             temp_dir = tempfile.TemporaryDirectory()
             self.stdout.write('Extracting zip file "{}" to temporary folder {}'.format(path, temp_dir.name))
-            with zipfile.ZipFile(path,"r") as zip:
+            with zipfile.ZipFile(path, "r") as zip:
                 zip.extractall(temp_dir.name)
 
             path = temp_dir.name
 
         files = os.listdir(path)
-        
+
         if "metadata.json" not in files:
             raise CommandError('No metadata.json found in data folder!')
 
         print(files)
 
-        percentiles = list(map(lambda p: int(p) if p.isnumeric() else int(p[1:]), filter(lambda f: os.path.isdir(os.path.join(path, f)), files)))
+        percentiles = list(map(lambda p: int(p) if p.isnumeric() else int(p[1:]),
+                               filter(lambda f: os.path.isdir(os.path.join(path, f)), files)))
 
         print(percentiles)
         if len(percentiles) == 0:
             raise CommandError('No percentiles found to import!')
 
-
         with open(os.path.join(path, 'metadata.json')) as metafile:
             meta = json.load(metafile)
-
 
         # check mandatory keys
         for key in MANDATORY:
@@ -217,13 +223,18 @@ class Command(BaseCommand):
         try:
             simulation = models.Simulation.objects.get(key=meta['key'])
             
-            self.stdout.write('Simulation {} already exists! \n What do you want to do?'.format(meta['name']))
-            action = input("(1) replace simulation, (2) append simulation data \n")
+            self.stdout.write('Simulation {} already exists!\n'.format(meta['name']))
+            action = options['action']
+            if action is None:
+                self.stdout.write('What do you want to do?')
+                action = input("(1) replace simulation, (2) append simulation data \n")
 
             if action == '1':
+                self.stdout.write(' Replacing simulation')
                 simulation.delete()
                 simulation = None
             elif action == '2':
+                self.stdout.write(' Appending simulation')
                 pass
             else:
                 raise CommandError(self.style.ERROR('Unrecognized input {}!'.format(action)))
@@ -239,16 +250,15 @@ class Command(BaseCommand):
                 name=meta['name'], \
                 description=meta['description'], \
                 scenario=scenario, \
-                start_day=start_day, 
-                number_of_days=meta['numberOfDays'] )
+                start_day=start_day,
+                number_of_days=meta['numberOfDays'])
 
             simulation.save()
 
-
         for percentile in percentiles:
-            process_percentile(self, os.path.join(path, str(percentile)), percentile, meta, simulation, scenario, compartments, order, start_day)
+            process_percentile(self, os.path.join(path, str(percentile)), percentile, meta, simulation, scenario,
+                               compartments, order, start_day)
 
-        
         if is_zip:
             self.stdout.write('Deleting temporary folder {}'.format(path, temp_dir.name))
             temp_dir.cleanup()
