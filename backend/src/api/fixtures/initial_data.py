@@ -415,8 +415,8 @@ RESTRICTIONS = [
 ]
 
 PARAMETERS = [
-    "TimeExposed"
-    "TimeInfectedNoSymptoms",
+    "IncubationTime",
+    "SerialInterval",
     "TimeInfectedSymptoms",
     "TimeInfectedSevere",
     "TimeInfectedCritical",
@@ -435,8 +435,7 @@ PARAMETERS = [
     "ReducInfectedSevereCriticalDeadPartialImmunity",
     "ReducInfectedSevereCriticalDeadImprovedImmunity",
     "ReducTimeInfectedMild",
-    "Seasonality",
-    "ContactScaling"
+    "Seasonality"
 ]
 
 COMPARTMENTS = [
@@ -447,7 +446,8 @@ COMPARTMENTS = [
 ]
 
 GROUP_CATEGORIES = [
-    ("age", "Age groups")
+    ("age", "Age groups"),
+    ("gender", "Gender")
 ]
 
 GROUPS = [
@@ -457,7 +457,9 @@ GROUPS = [
     ("age_3", "age", "Ages between 35-59 years"),
     ("age_4", "age", "Ages between 60-79 years"),
     ("age_5", "age", "Ages above 80"),
-    ("total", "age", "All ages")
+    ("total", "age", "All ages"),
+    ("female", "gender", "Female"),
+    ("male", "gender", "Male")
 ]
 
 SIMULATION_MODELS = {
