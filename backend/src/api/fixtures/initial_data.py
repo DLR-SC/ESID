@@ -415,7 +415,7 @@ RESTRICTIONS = [
 ]
 
 PARAMETERS = [
-    "TimeExposed"
+    "TimeExposed",
     "TimeInfectedNoSymptoms",
     "TimeInfectedSymptoms",
     "TimeInfectedSevere",
@@ -451,7 +451,7 @@ GROUP_CATEGORIES = [
 ]
 
 GROUPS = [
-    ("age_0", "age", "Ages bewteen 0-4 years"),
+    ("age_0", "age", "Ages between 0-4 years"),
     ("age_1", "age", "Ages between 5-14 years"),
     ("age_2", "age", "Ages between 15-34 years"),
     ("age_3", "age", "Ages between 35-59 years"),
