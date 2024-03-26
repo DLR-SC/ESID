@@ -415,7 +415,7 @@ RESTRICTIONS = [
 ]
 
 PARAMETERS = [
-    "TimeExposed"
+    "TimeExposed",
     "TimeInfectedNoSymptoms",
     "TimeInfectedSymptoms",
     "TimeInfectedSevere",
