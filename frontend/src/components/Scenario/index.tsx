@@ -86,7 +86,6 @@ export default function Scenario(): JSX.Element {
 
           <Button
             id='manage-filters-button'
-            disabled // disable filters for pilot study as there is no filterable data yet
             variant='outlined'
             color='primary'
             sx={{
