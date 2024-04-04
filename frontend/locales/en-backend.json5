@@ -229,7 +229,7 @@
     },
     Seasonality: {
       symbol: 'k',
-      description: 'Contribution to relative seasonal factor',
+      description: 'Contribution of relative seasonal factor',
     },
     SerialInterval: {
       symbol: 'SI',
