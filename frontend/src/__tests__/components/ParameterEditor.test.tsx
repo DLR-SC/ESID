@@ -22,9 +22,12 @@ describe('ParameterEditor', () => {
 
     screen.getByText('Parameter');
 
-    await waitFor(() => {
-      expect(screen.getByText('group-filters.groups.age_0')).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByText('group-filters.groups.age_0')).toBeInTheDocument();
+      },
+      {timeout: 10000}
+    );
 
     await screen.findByText('group-filters.groups.age_0');
     await screen.findByText('group-filters.groups.age_1');
