@@ -16,6 +16,7 @@ import Box from '@mui/material/Box';
 import MathMarkdown from './shared/MathMarkdown';
 import {ParameterData, useGetScenarioParametersQuery} from '../store/services/scenarioApi';
 import {useTranslation} from 'react-i18next';
+import {useGetGroupSubcategoriesQuery} from '../store/services/groupApi';
 
 /**
  * This component visualizes the parameters of the selected scenario. It uses a table with the following format:
@@ -30,8 +31,10 @@ import {useTranslation} from 'react-i18next';
  * be different socio-economic groups, e.g. age.
  */
 export default function ParameterEditor() {
+  const {t} = useTranslation('backend');
   const theme = useTheme();
   const {data} = useGetScenarioParametersQuery(1);
+  const {data: groups} = useGetGroupSubcategoriesQuery();
 
   return (
     <TableContainer sx={{background: theme.palette.background.paper, height: '100%'}}>
@@ -39,12 +42,10 @@ export default function ParameterEditor() {
         <TableHead>
           <TableRow>
             <ParameterColumHeader colSpan={2} name='Parameter' />
-            <ParameterColumHeader name='0 - 4' />
-            <ParameterColumHeader name='5 - 14' />
-            <ParameterColumHeader name='15 - 34' />
-            <ParameterColumHeader name='35 - 59' />
-            <ParameterColumHeader name='60 - 79' />
-            <ParameterColumHeader name='80+' />
+            {groups?.results // Currently only age groups are supported. We also need to ignore the 'total' group.
+              ?.filter((group) => group.key !== 'total')
+              .filter((group) => group.category === 'age')
+              .map((group) => <ParameterColumHeader key={group.key} name={t(`group-filters.groups.${group.key}`)} />)}
           </TableRow>
         </TableHead>
         <TableBody>
@@ -55,7 +56,10 @@ export default function ParameterEditor() {
   );
 }
 
-/** A simple header component it creates a table cell with the given header name, and it spans by default one column. */
+/**
+ * A simple header component.
+ * It creates a table cell with the given header name, and it spans by default one column.
+ */
 function ParameterColumHeader(props: Readonly<{name: string; colSpan?: number}>): JSX.Element {
   const theme = useTheme();
 
@@ -70,8 +74,9 @@ function ParameterColumHeader(props: Readonly<{name: string; colSpan?: number}>)
 }
 
 /**
- * This component creates the header for each parameter. The symbol is the scientific symbol for the parameter in latex
- * equation format. The description explains the parameter in a single sentence.
+ * This component creates the header for each parameter.
+ * The symbol is the scientific symbol for the parameter in latex equation format. The description explains the
+ * parameter in a single sentence.
  */
 function ParameterRowHeader(props: Readonly<{symbol: string; description: string}>): JSX.Element {
   return (
@@ -114,8 +119,8 @@ function ParameterRow(props: Readonly<{params: ParameterData}>): JSX.Element | n
 }
 
 /**
- * Renders parameter values for all groups with min and max values. If min and max are identical only one value is
- * shown.
+ * Renders parameter values for all groups with min and max values.
+ * If min and max are identical only one value is shown.
  */
 function ParameterRowMinMaxGrouped(props: Readonly<{params: ParameterData}>): Array<JSX.Element> {
   const theme = useTheme();
@@ -164,7 +169,8 @@ function ParameterRowMinMaxGrouped(props: Readonly<{params: ParameterData}>): Ar
 }
 
 /**
- * Renders an equation which makes up the parameter. The equation is spanning over the whole row.
+ * Renders an equation which makes up the parameter.
+ * The equation is spanning over the whole row.
  */
 function ParameterRowComputed(props: Readonly<{params: ParameterData}>): JSX.Element {
   return (

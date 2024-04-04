@@ -78,12 +78,6 @@
       symbol: 'Veraltet',
       description: 'ICUToHomeTime',
     },
-    /*
-    IncubationTime: {
-      symbol: 'IT',
-      description: 'Zeitraum des latenten nicht-infektiösen Stadiums',
-    },
-    */
     InfectionProbabilityFromContact: {
       symbol: 'p^{(0)}',
       description: 'Grundlegendes Übertragungsrisiko (ohne Saisonalitätsfaktor)',
@@ -132,24 +126,6 @@
       symbol: '\\xi_{I_{Sy},max}',
       description: 'Relatives Infektionsrisiko durch nichtisolierte symptomatische Individuen',
     },
-    /*
-    Seasonality: {
-      symbol: 'k',
-      description: 'Anteil eines relativen Saisonalitätsfaktors',
-    },
-    */
-    /*
-    SerialInterval: {
-      symbol: 'SI',
-      description: 'Serielles Intervall zwischen zwei aufeinanderfolgenden Infektionen',
-    },
-    */
-    /*
-    VaccinationGap: {
-      symbol: '-',
-      description: 'Zeit in Tagen zwischen erster und zweiter Impfung',
-    },
-    */
 
     // New Parameter Names
     RecoveredPerInfectedNoSymptoms: {
@@ -240,6 +216,18 @@
       symbol: '-',
       description: 'Zeit in Tagen zwischen erster und zweiter Impfung',
     },
+    ContactScaling: {
+      symbol: '-',
+      description: 'Skalierung der Kontakte, z.B. durch NPIs',
+    },
+    TimeExposed: {
+      symbol: 'T_E',
+      description: 'Mittlere Zeitspanne bevor angesteckte Personen infektiös werden',
+    },
+    TimeInfectedNoSymptoms: {
+      symbol: 'T_C',
+      description: 'Mittlere Zeitspanne der Infektiösität ohne Symptome',
+    }
   },
   'scenario-names': {
     'Baseline Scenario': 'Basisszenario',

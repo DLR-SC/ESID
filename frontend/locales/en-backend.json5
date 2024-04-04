@@ -77,12 +77,6 @@
       symbol: 'Deprecated',
       description: 'ICUToHomeTime',
     },
-    /*
-    IncubationTime: {
-      symbol: 'IT',
-      description: 'Incubation period',
-    },
-    */
     InfectionProbabilityFromContact: {
       symbol: 'p^{(0)}',
       description: 'Basic Transmission risk (without seasonality factor)',
@@ -131,24 +125,6 @@
       symbol: '\\xi_{I_{Sy},max}',
       description: 'Relative risk of infection from nonisolated symptomatic individuals',
     },
-    /*
-    Seasonality: {
-      symbol: 'k',
-      description: 'Contribution to relative seasonal factor',
-    },
-    */
-    /*
-    SerialInterval: {
-      symbol: 'SI',
-      description: 'Serial interval between two consecutive infections',
-    },
-    */
-    /*
-    VaccinationGap: {
-      symbol: '-',
-      description: 'Time in days between first and second vaccine shot',
-    },
-    */
 
     // New Parameter Names
     RecoveredPerInfectedNoSymptoms: {
@@ -239,6 +215,18 @@
       symbol: '-',
       description: 'Time in days between first and second vaccine shot',
     },
+    ContactScaling: {
+      symbol: '-',
+      description: 'Scaling of contacts due to e.g. NPIs',
+    },
+    TimeExposed: {
+      symbol: 'T_E',
+      description: 'Average time span before exposed individuals become infectious',
+    },
+    TimeInfectedNoSymptoms: {
+      symbol: 'T_C',
+      description: 'Average time span of infectiousness without symptoms',
+    }
   },
   'scenario-names': {
     'Baseline Scenario': 'Baseline Scenario',
