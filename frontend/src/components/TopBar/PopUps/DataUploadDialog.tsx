@@ -6,8 +6,8 @@ import {useTheme} from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import {useTranslation} from 'react-i18next';
-import {Button} from '@mui/material';
-import {CloudUpload} from '@mui/icons-material';
+import {Button, List, ListItem, ListItemText} from '@mui/material';
+import {Clear, CloudUpload, Done, MoreHoriz} from '@mui/icons-material';
 
 /**
  * This component displays the accessibility legal text.
@@ -16,24 +16,46 @@ export default function DataUploadDialog(): JSX.Element {
   const {t} = useTranslation();
   const theme = useTheme();
   const [dragActive, setDragActive] = React.useState(false);
-  const [uploadStat, setUploadStat] = React.useState<{filename: string, status: boolean}[]>([]);
+
+  enum UploadStatus {
+    Started,
+    Error,
+    Done,
+  }
+
+  const [uploadStat, setUploadStat] = React.useState<{filename: string; status: UploadStatus}[]>([]);
 
   const fileTypes: string[] = [];
 
   // Function to handle data upload.
-  const handleFiles = (filelist: FileList) => {
-    console.log(filelist);
-    // update file display
-    const displaylist: {filename: string, status: boolean}[] = [];
-    for (let i = 0; i < filelist.length; i++) {
-      const file = filelist[i];
-      
-      displaylist.push({
-        filename: file.name,
-        status: false
-      });
-    }
-  };
+  const handleFiles = useCallback(
+    (filelist: FileList) => {
+      const fileSizeToString = (size: number) => {
+        if (size < 1024) {
+          return `${size} B`;
+        } else if (size >= 1024 && size < 1048576) {
+          return `${(size / 1024).toFixed(1)} KB`;
+        } else {
+          return `${(size / 1048576).toFixed(1)} MB`;
+        }
+      };
+      console.log(filelist);
+      // update file display
+      const displaylist: {filename: string; status: UploadStatus}[] = [];
+      for (let i = 0; i < filelist.length; i++) {
+        const file = filelist[i];
+
+        displaylist.push({
+          filename: `${file.name} (${fileSizeToString(file.size)})`,
+          status: UploadStatus.Started,
+        });
+      }
+      setUploadStat(displaylist);
+
+      // TODO: init file upload, adjust UploadStat as needed
+    },
+    [UploadStatus]
+  );
 
   // Callback for drag event (to modify styling)
   const handleDrag = useCallback((e: React.DragEvent) => {
@@ -47,22 +69,28 @@ export default function DataUploadDialog(): JSX.Element {
   }, []);
 
   // Callback for files selected through drag & drop
-  const handleDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(false);
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      handleFiles(e.dataTransfer.files);
-    }
-  }, []);
+  const handleDrop = useCallback(
+    (e: React.DragEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setDragActive(false);
+      if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+        handleFiles(e.dataTransfer.files);
+      }
+    },
+    [handleFiles]
+  );
 
   // Callback for files selected through dialog
-  const handleClick = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    if (e.target.files && e.target.files[0]) {
-      handleFiles(e.target.files);
-    }
-  }, []);
+  const handleClick = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      e.preventDefault();
+      if (e.target.files && e.target.files[0]) {
+        handleFiles(e.target.files);
+      }
+    },
+    [handleFiles]
+  );
 
   return (
     <form id='upload-form' onDragEnter={handleDrag} onDragLeave={handleDrag} onSubmit={(e) => e.preventDefault()}>
@@ -82,6 +110,27 @@ export default function DataUploadDialog(): JSX.Element {
       >
         <Typography variant='h1'>{t('upload.header')}</Typography>
         <div>{t('upload.dragNotice')}</div>
+        {uploadStat.length > 0 && (
+          <List>
+            {uploadStat.map((file) => (
+              <ListItem
+                key={file.filename}
+                disableGutters
+                secondaryAction={
+                  file.status === UploadStatus.Done ? (
+                    <Done sx={{color: theme.palette.primary.main}} />
+                  ) : file.status === UploadStatus.Error ? (
+                    <Clear sx={{color: theme.palette.error.main}} />
+                  ) : (
+                    <MoreHoriz sx={{color: theme.palette.divider}} /> // TODO: Throbber
+                  )
+                }
+              >
+                <ListItemText primary={file.filename} />
+              </ListItem>
+            ))}
+          </List>
+        )}
         <label htmlFor='upload-input'>
           <Button variant='contained' startIcon={<CloudUpload />} component='span'>
             {t('upload.button')}
