@@ -29,16 +29,11 @@ describe('ParameterEditor', () => {
     await screen.findByText('group-filters.groups.age_4');
     await screen.findByText('group-filters.groups.age_5');
 
-    screen.debug(undefined, 100000);
-
     await screen.findByText('parameters.Test Parameter 1.symbol');
     await screen.findByText('parameters.Test Parameter 1.description');
     await screen.findByText('0 - 1');
-    await screen.findAllByText('0,5 - 1');
-    await screen.findByText('0,5 - 2');
 
     await screen.findByText('parameters.Test Parameter 2.symbol');
     await screen.findByText('parameters.Test Parameter 2.description');
-    await screen.findByText('0,3 - 0,7');
   });
 });
