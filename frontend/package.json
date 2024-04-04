@@ -8,7 +8,7 @@
     "start": "vite serve",
     "preview": "vite preview",
     "build-and-preview": "npm run build && npm run preview",
-    "test": "vitest --reporter=default --reporter=junit --outputFile=./reports/vitest-junit.xml",
+    "test": "vitest run --reporter=default --reporter=junit --outputFile=./reports/vitest-junit.xml",
     "coverage": "vitest run --coverage",
     "format": "prettier --write .",
     "lint": "eslint --fix src",
