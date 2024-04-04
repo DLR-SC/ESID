@@ -1,9 +1,9 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import {describe, test} from 'vitest';
+import {describe, expect, test} from 'vitest';
 import {Store} from '../../store';
-import {screen, render} from '@testing-library/react';
+import {screen, render, waitFor} from '@testing-library/react';
 import {I18nextProvider} from 'react-i18next';
 import i18n from '../../util/i18nForTests';
 import {Provider} from 'react-redux';
@@ -21,6 +21,11 @@ describe('ParameterEditor', () => {
     );
 
     screen.getByText('Parameter');
+
+    await waitFor(() => {
+      expect(screen.getByText('group-filters.groups.age_0')).toBeInTheDocument();
+    });
+
     await screen.findByText('group-filters.groups.age_0');
     await screen.findByText('group-filters.groups.age_1');
     await screen.findByText('group-filters.groups.age_2');
