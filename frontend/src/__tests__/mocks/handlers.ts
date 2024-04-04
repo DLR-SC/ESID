@@ -10,7 +10,7 @@ export default [
         name: 'test',
         description: 'Test Scenario',
         simulationModel: 'testmodel',
-        numberOfGroups: 10,
+        numberOfGroups: 7,
         numberOfNodes: 10,
         parameters: [
           {
@@ -22,13 +22,11 @@ export default [
               {min: 0.5, max: 2},
               {min: 0.5, max: 2},
               {min: 0.5, max: 1},
-              {min: 0.5, max: 1},
             ],
           },
           {
             parameter: 'Test Parameter 2',
             groups: [
-              {min: 0.3, max: 0.7},
               {min: 0.3, max: 0.7},
               {min: 0.3, max: 0.7},
               {min: 0.3, max: 0.7},
