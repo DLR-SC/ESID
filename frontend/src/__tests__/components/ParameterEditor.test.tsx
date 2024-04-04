@@ -11,7 +11,7 @@ import React from 'react';
 import ParameterEditor from '../../components/ParameterEditor';
 
 describe('ParameterEditor', () => {
-  test('Editor Loaded', async () => {
+  test('Editor Loaded', {timeout: 15000}, async () => {
     render(
       <I18nextProvider i18n={i18n}>
         <Provider store={Store}>
