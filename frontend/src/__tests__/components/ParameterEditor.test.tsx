@@ -21,12 +21,12 @@ describe('ParameterEditor', () => {
     );
 
     screen.getByText('Parameter');
-    screen.getByText('0 - 4');
-    screen.getByText('5 - 14');
-    screen.getByText('15 - 34');
-    screen.getByText('35 - 59');
-    screen.getByText('60 - 79');
-    screen.getByText('80+');
+    await screen.findByText('group-filters.groups.age_0');
+    await screen.findByText('group-filters.groups.age_1');
+    await screen.findByText('group-filters.groups.age_2');
+    await screen.findByText('group-filters.groups.age_3');
+    await screen.findByText('group-filters.groups.age_4');
+    await screen.findByText('group-filters.groups.age_5');
 
     await screen.findByText('parameters.Test Parameter 1.symbol');
     await screen.findByText('parameters.Test Parameter 1.description');

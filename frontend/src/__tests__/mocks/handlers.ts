@@ -42,6 +42,55 @@ export default [
       },
     });
   }),
+  http.get('*/api/v1/groups/', () => {
+    return HttpResponse.json({
+      count: 7,
+      results: [
+        {
+          key: 'age_0',
+          name: 'age_0',
+          description: 'Ages between 0-4 years',
+          category: 'age',
+        },
+        {
+          key: 'age_1',
+          name: 'age_1',
+          description: 'Ages between 5-14 years',
+          category: 'age',
+        },
+        {
+          key: 'age_2',
+          name: 'age_2',
+          description: 'Ages between 15-34 years',
+          category: 'age',
+        },
+        {
+          key: 'age_3',
+          name: 'age_3',
+          description: 'Ages between 35-59 years',
+          category: 'age',
+        },
+        {
+          key: 'age_4',
+          name: 'age_4',
+          description: 'Ages between 60-79 years',
+          category: 'age',
+        },
+        {
+          key: 'age_5',
+          name: 'age_5',
+          description: 'Ages above 80',
+          category: 'age',
+        },
+        {
+          key: 'total',
+          name: 'total',
+          description: 'All ages',
+          category: 'age',
+        },
+      ],
+    });
+  }),
   http.get('/assets/lk_germany_reduced_list.json', () => {
     return HttpResponse.json([
       {
