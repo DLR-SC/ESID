@@ -29,6 +29,8 @@ describe('ParameterEditor', () => {
     await screen.findByText('group-filters.groups.age_4');
     await screen.findByText('group-filters.groups.age_5');
 
+    screen.debug(undefined, 100000);
+
     await screen.findByText('parameters.Test Parameter 1.symbol');
     await screen.findByText('parameters.Test Parameter 1.description');
     await screen.findByText('0 - 1');
