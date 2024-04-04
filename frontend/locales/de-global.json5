@@ -10,6 +10,7 @@
     menu: {
       label: 'Anwendungsmenü',
       login: 'Anmelden',
+      upload: 'Daten Hochladen',
       imprint: 'Impressum',
       'privacy-policy': 'Datenschutzerklärung',
       accessibility: 'Barrierefreiheit',
@@ -73,4 +74,10 @@
   'no-data': 'Keine Daten',
   'loki-logo': 'LOKI-Logo',
   okay: 'Okay',
+  upload: {
+    header: 'Falldaten hochladen',
+    dragNotice: 'Ziehen Sie ihre Datei(en) in dieses Feld oder nutzen sie den Knopf um Falldaten für ESID hochzuladen.',
+    button: 'Daten hochladen',
+    dropNotice: 'Hier loslassen um die Daten hochzuladen.'
+  }
 }
