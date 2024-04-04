@@ -227,7 +227,7 @@
     TimeInfectedNoSymptoms: {
       symbol: 'T_C',
       description: 'Mittlere Zeitspanne der Infektiösität ohne Symptome',
-    }
+    },
   },
   'scenario-names': {
     'Baseline Scenario': 'Basisszenario',

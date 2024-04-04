@@ -226,7 +226,7 @@
     TimeInfectedNoSymptoms: {
       symbol: 'T_C',
       description: 'Average time span of infectiousness without symptoms',
-    }
+    },
   },
   'scenario-names': {
     'Baseline Scenario': 'Baseline Scenario',
