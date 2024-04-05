@@ -93,6 +93,6 @@
     header: 'Upload Case Data',
     dragNotice: 'Drag and drop your file(s) in here to or use the button below to uplad your case data to ESID.',
     button: 'Upload Data',
-    dropNotice: 'Drop here to upload.'
-  }
+    dropNotice: 'Drop here to upload.',
+  },
 }

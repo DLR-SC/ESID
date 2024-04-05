@@ -78,6 +78,6 @@
     header: 'Falldaten hochladen',
     dragNotice: 'Ziehen Sie ihre Datei(en) in dieses Feld oder nutzen sie den Knopf um Falldaten für ESID hochzuladen.',
     button: 'Daten hochladen',
-    dropNotice: 'Hier loslassen um die Daten hochzuladen.'
-  }
+    dropNotice: 'Hier loslassen um die Daten hochzuladen.',
+  },
 }
