@@ -39,6 +39,195 @@
               the situation is improving or worsening in relation to the values of the previous days. If available, the\
               figures on intensive care patients come from the DIVI Intensive Care Register.',
   },
+  parameters: {
+    // Old Parameter Names
+    AsymptoticCasesPerInfectious: {
+      symbol: '\\mu_C^R',
+      description: 'Share of nonsymptomatic cases',
+    },
+    DeathsPerHospitalized: {
+      symbol: '\\mu_U^D',
+      description: 'Share of persons that die during ICU treatment',
+    },
+    HomeToHospitalizedTime: {
+      symbol: 'T_I',
+      description: 'Average time span for persons with mild symptoms',
+    },
+    HospitalizedCasesPerInfectious: {
+      symbol: '\\mu_I^H',
+      description: 'Share of symptomatic individuals that later need hospitalization',
+    },
+    HospitalizedToHomeTime: {
+      symbol: 'T_H',
+      description: 'Time span of necessary hospitalization (without ICU)',
+    },
+    HospitalizedToICUTime: {
+      symbol: 'Deprecated',
+      description: 'HospitalizedToICUTime',
+    },
+    ICUCasesPerHospitalized: {
+      symbol: '\\mu_H^U',
+      description: 'Share of hospitalized patients that later need ICU treatment',
+    },
+    ICUToDeathTime: {
+      symbol: 'T_U',
+      description: 'Time span of necessary ICU treatment',
+    },
+    ICUToHomeTime: {
+      symbol: 'Deprecated',
+      description: 'ICUToHomeTime',
+    },
+    InfectionProbabilityFromContact: {
+      symbol: 'p^{(0)}',
+      description: 'Basic Transmission risk (without seasonality factor)',
+    },
+    InfectiousTimeMild: {
+      symbol: 'Deprecated',
+      description: 'InfectiousTimeMild',
+    },
+    MaxRiskOfInfectionFromSympomatic: {
+      symbol: '\\xi_{I_{Sy}}',
+      description: 'Maximum relative risk of infection from nonisolated symptomatic individuals (with test capacity limitations)',
+    },
+    ReducExpInf: {
+      symbol: 'p_{I_{Sy,PI}}',
+      description: 'Relative reduction against symptomatic CODs for individuals with partial immunity',
+    },
+    ReducImmuneExp: {
+      symbol: 'p_{E_{II}}',
+      description: 'Relative reduction against any infection for individuals with improved immunity',
+    },
+    ReducImmuneExpInf: {
+      symbol: 'p_{I_{Sy,II}}',
+      description: 'Relative reduction against symptomatic CODs for individuals with improved immunity',
+    },
+    ReducImmuneInfHosp: {
+      symbol: 'p_{I_{Sev,II}}',
+      description: 'Relative reduction against severe and critical CODs for individuals with improved immunity',
+    },
+    ReducInfHosp: {
+      symbol: 'p_{I_{Sev,PI}}',
+      description: 'Relative reduction against severe and critical CODs for individuals with partial immunity',
+    },
+    ReducTime: {
+      symbol: '\\kappa',
+      description: 'Relative reduction of time span of mild infections for individuals with partial and improved immunity',
+    },
+    ReducVaccExp: {
+      symbol: 'p_{E_{PI}}',
+      description: 'Relative reduction against any infection for individuals with partial immunity',
+    },
+    RelativeCarrierInfectability: {
+      symbol: '\\xi_{I_{NS}}',
+      description: 'Relative risk of infection from nonisolated nonsymptomatic individuals',
+    },
+    RiskOfInfectionFromSympomatic: {
+      symbol: '\\xi_{I_{Sy},max}',
+      description: 'Relative risk of infection from nonisolated symptomatic individuals',
+    },
+
+    // New Parameter Names
+    RecoveredPerInfectedNoSymptoms: {
+      symbol: '\\mu_C^R',
+      description: 'Share of nonsymptomatic cases',
+    },
+    DeathsPerCritical: {
+      symbol: '\\mu_U^D',
+      description: 'Share of persons that die during ICU treatment',
+    },
+    TimeInfectedSymptoms: {
+      symbol: 'T_I',
+      description: 'Average time span for persons with mild symptoms',
+    },
+    SeverePerInfectedSymptoms: {
+      symbol: '\\mu_I^H',
+      description: 'Share of symptomatic individuals that later need hospitalization',
+    },
+    TimeInfectedSevere: {
+      symbol: 'T_H',
+      description: 'Time span of necessary hospitalization (without ICU)',
+    },
+    CriticalPerSevere: {
+      symbol: '\\mu_H^U',
+      description: 'Share of hospitalized patients that later need ICU treatment',
+    },
+    TimeInfectedCritical: {
+      symbol: 'T_U',
+      description: 'Time span of necessary ICU treatment',
+    },
+    IncubationTime: {
+      symbol: 'IT',
+      description: 'Incubation period',
+    },
+    TransmissionProbabilityOnContact: {
+      symbol: 'p^{(0)}',
+      description: 'Basic Transmission risk (without seasonality factor)',
+    },
+    MaxRiskOfInfectionFromSymptomatic: {
+      symbol: '\\xi_{I_{Sy}}',
+      description: 'Maximum relative risk of infection from nonisolated symptomatic individuals (with test capacity limitations)',
+    },
+    ReducInfectedSymptomsPartialImmunity: {
+      symbol: 'p_{I_{Sy,PI}}',
+      description: 'Relative reduction against symptomatic CODs for individuals with partial immunity',
+    },
+    ReducExposedImprovedImmunity: {
+      symbol: 'p_{E_{II}}',
+      description: 'Relative reduction against any infection for individuals with improved immunity',
+    },
+    ReducInfectedSymptomsImprovedImmunity: {
+      symbol: 'p_{I_{Sy,II}}',
+      description: 'Relative reduction against symptomatic CODs for individuals with improved immunity',
+    },
+    ReducInfectedSevereCriticalDeadImprovedImmunity: {
+      symbol: 'p_{I_{Sev,II}}',
+      description: 'Relative reduction against severe and critical CODs for individuals with improved immunity',
+    },
+    ReducInfectedSevereCriticalDeadPartialImmunity: {
+      symbol: 'p_{I_{Sev,PI}}',
+      description: 'Relative reduction against severe and critical CODs for individuals with partial immunity',
+    },
+    ReducTimeInfectedMild: {
+      symbol: '\\kappa',
+      description: 'Relative reduction of time span of mild infections for individuals with partial and improved immunity',
+    },
+    ReducExposedPartialImmunity: {
+      symbol: 'p_{E_{PI}}',
+      description: 'Relative reduction against any infection for individuals with partial immunity',
+    },
+    RelativeTransmissionNoSymptoms: {
+      symbol: '\\xi_{I_{NS}}',
+      description: 'Relative risk of infection from nonisolated nonsymptomatic individuals',
+    },
+    RiskOfInfectionFromSymptomatic: {
+      symbol: '\\xi_{I_{Sy},max}',
+      description: 'Relative risk of infection from nonisolated symptomatic individuals',
+    },
+    Seasonality: {
+      symbol: 'k',
+      description: 'Contribution of relative seasonal factor',
+    },
+    SerialInterval: {
+      symbol: 'SI',
+      description: 'Serial interval between two consecutive infections',
+    },
+    VaccinationGap: {
+      symbol: '-',
+      description: 'Time in days between first and second vaccine shot',
+    },
+    ContactScaling: {
+      symbol: '-',
+      description: 'Scaling of contacts due to e.g. NPIs',
+    },
+    TimeExposed: {
+      symbol: 'T_E',
+      description: 'Average time span before exposed individuals become infectious',
+    },
+    TimeInfectedNoSymptoms: {
+      symbol: 'T_C',
+      description: 'Average time span of infectiousness without symptoms',
+    },
+  },
   'scenario-names': {
     'Baseline Scenario': 'Baseline Scenario',
     'Summer 2021 Simulation 1': 'Scenario without Interventions',

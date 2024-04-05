@@ -13,6 +13,9 @@ import {useBoundingclientrectRef} from 'rooks';
  */
 export function ReferenceDayConnector(): JSX.Element {
   const theme = useTheme();
+
+  // The selected tab is used to decide, if the connecting border is being drawn. Tab '1' would be the simulation chart.
+  const selectedTab = useAppSelector((state) => state.userPreference.selectedTab ?? '1');
   const referenceDayPos = useAppSelector((state) => state.layoutSlice.referenceDayXPositions);
 
   const [ref, boundingRect] = useBoundingclientrectRef();
@@ -47,20 +50,22 @@ export function ReferenceDayConnector(): JSX.Element {
         height: theme.spacing(4),
       }}
     >
-      <Box
-        sx={{
-          borderBottom: `2px dashed ${darken(theme.palette.divider, 0.25)}`,
-          borderRight: dateLineWidth <= 0 ? `2px dashed ${darken(theme.palette.divider, 0.25)}` : '0',
-          borderLeft: dateLineWidth > 0 ? `2px dashed ${darken(theme.palette.divider, 0.25)}` : '0',
-          borderRadius: '0',
-          marginTop: '0.15em',
-          marginLeft: `${dateLineOffset}px`,
-          width: `min(${Math.abs(dateLineWidth)}px, calc(100% - ${localX}px))`,
-          height: 'calc(100% + 16px - 0.15em)',
-          zIndex: 10,
-          position: 'relative',
-        }}
-      />
+      {selectedTab === '1' ? (
+        <Box
+          sx={{
+            borderBottom: `2px dashed ${darken(theme.palette.divider, 0.25)}`,
+            borderRight: dateLineWidth <= 0 ? `2px dashed ${darken(theme.palette.divider, 0.25)}` : '0',
+            borderLeft: dateLineWidth > 0 ? `2px dashed ${darken(theme.palette.divider, 0.25)}` : '0',
+            borderRadius: '0',
+            marginTop: '0.15em',
+            marginLeft: `${dateLineOffset}px`,
+            width: `min(${Math.abs(dateLineWidth)}px, calc(100% - ${localX}px))`,
+            height: 'calc(100% + 16px - 0.15em)',
+            zIndex: 10,
+            position: 'relative',
+          }}
+        />
+      ) : null}
     </Grid>
   );
 }
