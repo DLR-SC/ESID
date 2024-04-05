@@ -239,7 +239,7 @@ export function DataCard(props: DataCardProps): JSX.Element {
           </Box>
         </Box>
       </Box>
-      {props.active ? <GroupFilterAppendage scenarioId={props.id} color={props.color} /> : null}
+      {props.active && props.id !== 0 ? <GroupFilterAppendage scenarioId={props.id} color={props.color} /> : null}
     </Box>
   );
 }

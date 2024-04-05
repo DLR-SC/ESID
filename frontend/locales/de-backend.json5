@@ -40,6 +40,195 @@
               verschlimmert. Sofern verfügbar, kommen die Zahlen zu den Intensivpatient:innen aus dem DIVI\
               Intensivregister.',
   },
+  parameters: {
+    // Old Parameter Names
+    AsymptoticCasesPerInfectious: {
+      symbol: '\\mu_C^R',
+      description: 'Anteil der nicht symptomatischen Fälle',
+    },
+    DeathsPerHospitalized: {
+      symbol: '\\mu_U^D',
+      description: 'Anteil der Personen, die auf der Intensivstation behandelt werden und sterben',
+    },
+    HomeToHospitalizedTime: {
+      symbol: 'T_I',
+      description: 'Mittlere Zeitspanne für Personen mit milden Symptomen',
+    },
+    HospitalizedCasesPerInfectious: {
+      symbol: '\\mu_I^H',
+      description: 'Anteil der symptomatischen Fälle, die zu einem Krankenhausaufenthalt führen',
+    },
+    HospitalizedToHomeTime: {
+      symbol: 'T_H',
+      description: 'Dauer des notwendigen Krankenhausaufenthalts (ohne Intensivpflege)',
+    },
+    HospitalizedToICUTime: {
+      symbol: 'Veraltet',
+      description: 'HospitalizedToICUTime',
+    },
+    ICUCasesPerHospitalized: {
+      symbol: '\\mu_H^U',
+      description: 'Anteil der hospitalisierten Personen, welche später Intensivpflege benötigen',
+    },
+    ICUToDeathTime: {
+      symbol: 'T_U',
+      description: 'Dauer der notwendigen Intensivpflege',
+    },
+    ICUToHomeTime: {
+      symbol: 'Veraltet',
+      description: 'ICUToHomeTime',
+    },
+    InfectionProbabilityFromContact: {
+      symbol: 'p^{(0)}',
+      description: 'Grundlegendes Übertragungsrisiko (ohne Saisonalitätsfaktor)',
+    },
+    InfectiousTimeMild: {
+      symbol: 'Veraltet',
+      description: 'InfectiousTimeMild',
+    },
+    MaxRiskOfInfectionFromSympomatic: {
+      symbol: '\\xi_{I_{Sy}}',
+      description: 'Maximales relatives Infektionsrisiko durch nicht-isolierte symptomatische Individuen (mit Testkapazitätsbeschränkungen)',
+    },
+    ReducExpInf: {
+      symbol: 'p_{I_{Sy,PI}}',
+      description: 'Relative Reduktion symptomatischer Infektionen für Personen mit partieller Immunität',
+    },
+    ReducImmuneExp: {
+      symbol: 'p_{E_{II}}',
+      description: 'Relative Reduktion jedweder Infektion für Personen mit hoher Immunität',
+    },
+    ReducImmuneExpInf: {
+      symbol: 'p_{I_{Sy,II}}',
+      description: 'Relative Reduktion symptomatischer Infektionen für Personen mit hoher Immunität',
+    },
+    ReducImmuneInfHosp: {
+      symbol: 'p_{I_{Sev,II}}',
+      description: 'Relative Reduktion schwerer oder kritischer Infektion für Personen mit hoher Immunität',
+    },
+    ReducInfHosp: {
+      symbol: 'p_{I_{Sev,PI}}',
+      description: 'Relative Reduktion schwerer oder kritischer Infektionen für Personen mit partieller Immunität',
+    },
+    ReducTime: {
+      symbol: '\\kappa',
+      description: 'Relative Reduktion der Dauer milder Infektionen für partiell und gut geschützte Individuen',
+    },
+    ReducVaccExp: {
+      symbol: 'p_{E_{PI}}',
+      description: 'Relative Reduktion jedweder Infektion für Personen mit partieller Immunität',
+    },
+    RelativeCarrierInfectability: {
+      symbol: '\\xi_{I_{NS}}',
+      description: 'Relatives Infektionsrisiko durch nichtisolierte nichtsymptomatische Individuen',
+    },
+    RiskOfInfectionFromSympomatic: {
+      symbol: '\\xi_{I_{Sy},max}',
+      description: 'Relatives Infektionsrisiko durch nichtisolierte symptomatische Individuen',
+    },
+
+    // New Parameter Names
+    RecoveredPerInfectedNoSymptoms: {
+      symbol: '\\mu_C^R',
+      description: 'Anteil der nicht symptomatischen Fälle',
+    },
+    DeathsPerCritical: {
+      symbol: '\\mu_U^D',
+      description: 'Anteil der Personen, die auf der Intensivstation behandelt werden und sterben',
+    },
+    TimeInfectedSymptoms: {
+      symbol: 'T_I',
+      description: 'Mittlere Zeitspanne für Personen mit milden Symptomen',
+    },
+    SeverePerInfectedSymptoms: {
+      symbol: '\\mu_I^H',
+      description: 'Anteil der symptomatischen Fälle, die zu einem Krankenhausaufenthalt führen',
+    },
+    TimeInfectedSevere: {
+      symbol: 'T_H',
+      description: 'Dauer des notwendigen Krankenhausaufenthalts (ohne Intensivpflege)',
+    },
+    CriticalPerSevere: {
+      symbol: '\\mu_H^U',
+      description: 'Anteil der hospitalisierten Personen, welche später Intensivpflege benötigen',
+    },
+    TimeInfectedCritical: {
+      symbol: 'T_U',
+      description: 'Dauer der notwendigen Intensivpflege',
+    },
+    IncubationTime: {
+      symbol: 'IT',
+      description: 'Zeitraum des latenten nicht-infektiösen Stadiums',
+    },
+    TransmissionProbabilityOnContact: {
+      symbol: 'p^{(0)}',
+      description: 'Grundlegendes Übertragungsrisiko (ohne Saisonalitätsfaktor)',
+    },
+    MaxRiskOfInfectionFromSymptomatic: {
+      symbol: '\\xi_{I_{Sy}}',
+      description: 'Maximales relatives Infektionsrisiko durch nicht-isolierte symptomatische Individuen (mit Testkapazitätsbeschränkungen)',
+    },
+    ReducInfectedSymptomsPartialImmunity: {
+      symbol: 'p_{I_{Sy,PI}}',
+      description: 'Relative Reduktion symptomatischer Infektionen für Personen mit partieller Immunität',
+    },
+    ReducExposedImprovedImmunity: {
+      symbol: 'p_{E_{II}}',
+      description: 'Relative Reduktion jedweder Infektion für Personen mit hoher Immunität',
+    },
+    ReducInfectedSymptomsImprovedImmunity: {
+      symbol: 'p_{I_{Sy,II}}',
+      description: 'Relative Reduktion symptomatischer Infektionen für Personen mit hoher Immunität',
+    },
+    ReducInfectedSevereCriticalDeadImprovedImmunity: {
+      symbol: 'p_{I_{Sev,II}}',
+      description: 'Relative Reduktion schwerer oder kritischer Infektion für Personen mit hoher Immunität',
+    },
+    ReducInfectedSevereCriticalDeadPartialImmunity: {
+      symbol: 'p_{I_{Sev,PI}}',
+      description: 'Relative Reduktion schwerer oder kritischer Infektionen für Personen mit partieller Immunität',
+    },
+    ReducTimeInfectedMild: {
+      symbol: '\\kappa',
+      description: 'Relative Reduktion der Dauer milder Infektionen für partiell und gut geschützte Individuen',
+    },
+    ReducExposedPartialImmunity: {
+      symbol: 'p_{E_{PI}}',
+      description: 'Relative Reduktion jedweder Infektion für Personen mit partieller Immunität',
+    },
+    RelativeTransmissionNoSymptoms: {
+      symbol: '\\xi_{I_{NS}}',
+      description: 'Relatives Infektionsrisiko durch nichtisolierte nichtsymptomatische Individuen',
+    },
+    RiskOfInfectionFromSymptomatic: {
+      symbol: '\\xi_{I_{Sy},max}',
+      description: 'Relatives Infektionsrisiko durch nichtisolierte symptomatische Individuen',
+    },
+    Seasonality: {
+      symbol: 'k',
+      description: 'Anteil eines relativen Saisonalitätsfaktors',
+    },
+    SerialInterval: {
+      symbol: 'SI',
+      description: 'Serielles Intervall zwischen zwei aufeinanderfolgenden Infektionen',
+    },
+    VaccinationGap: {
+      symbol: '-',
+      description: 'Zeit in Tagen zwischen erster und zweiter Impfung',
+    },
+    ContactScaling: {
+      symbol: '-',
+      description: 'Skalierung der Kontakte, z.B. durch NPIs',
+    },
+    TimeExposed: {
+      symbol: 'T_E',
+      description: 'Mittlere Zeitspanne bevor angesteckte Personen infektiös werden',
+    },
+    TimeInfectedNoSymptoms: {
+      symbol: 'T_C',
+      description: 'Mittlere Zeitspanne der Infektiösität ohne Symptome',
+    },
+  },
   'scenario-names': {
     'Baseline Scenario': 'Basisszenario',
     'Summer 2021 Simulation 1': 'Szenario ohne Maßnahmen',

@@ -74,6 +74,10 @@
     lock: 'Lock maximum value',
     select: 'Select heatmap preset',
   },
+  bottomTabs: {
+    timeSeries: 'Time Series',
+    parameters: 'Parameters',
+  },
   today: 'Today',
   more: 'More',
   less: 'Less',

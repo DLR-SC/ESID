@@ -6,6 +6,7 @@ import {HeatmapLegend} from '../types/heatmapLegend';
 
 export interface UserPreference {
   selectedHeatmap: HeatmapLegend;
+  selectedTab?: string;
 }
 
 const initialState: UserPreference = {
@@ -18,6 +19,7 @@ const initialState: UserPreference = {
       {color: 'rgb(255,255,255)', value: 1},
     ],
   },
+  selectedTab: '1',
 };
 
 /**
@@ -31,8 +33,11 @@ export const UserPreferenceSlice = createSlice({
     selectHeatmapLegend(state, action: PayloadAction<{legend: HeatmapLegend}>) {
       state.selectedHeatmap = action.payload.legend;
     },
+    selectTab(state, action: PayloadAction<string>) {
+      state.selectedTab = action.payload;
+    },
   },
 });
 
-export const {selectHeatmapLegend} = UserPreferenceSlice.actions;
+export const {selectHeatmapLegend, selectTab} = UserPreferenceSlice.actions;
 export default UserPreferenceSlice.reducer;

@@ -135,6 +135,13 @@ export default createTheme({
         },
       },
     },
+    MuiTableCell: {
+      styleOverrides: {
+        root: {
+          border: '1px solid #D2D1DB',
+        },
+      },
+    },
   },
   custom: {
     //scenario colors with graduations
