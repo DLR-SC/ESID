@@ -1,13 +1,14 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {useTheme} from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import {useTranslation} from 'react-i18next';
 import {Button, List, ListItem, ListItemText} from '@mui/material';
-import {Clear, CloudUpload, Done, MoreHoriz} from '@mui/icons-material';
+import {Clear, CloudUpload, Done} from '@mui/icons-material';
+import {helix} from 'ldrs';
 
 /**
  * This component displays the accessibility legal text.
@@ -22,6 +23,11 @@ export default function DataUploadDialog(): JSX.Element {
     Error,
     Done,
   }
+
+  // register throbber for use
+  useEffect(() => {
+    helix.register();
+  }, []);
 
   const [uploadStat, setUploadStat] = React.useState<{filename: string; status: UploadStatus}[]>([]);
 
@@ -118,11 +124,11 @@ export default function DataUploadDialog(): JSX.Element {
                 disableGutters
                 secondaryAction={
                   file.status === UploadStatus.Done ? (
-                    <Done sx={{color: theme.palette.primary.main}} />
+                    <Done sx={{color: theme.palette.primary.main, fontSize: 45}} />
                   ) : file.status === UploadStatus.Error ? (
-                    <Clear sx={{color: theme.palette.error.main}} />
+                    <Clear sx={{color: theme.palette.error.main, fontSize: 45}} />
                   ) : (
-                    <MoreHoriz sx={{color: theme.palette.divider}} /> // TODO: Throbber
+                    <l-helix size={45} speed={2.5} color={theme.palette.divider}></l-helix>
                   )
                 }
               >
