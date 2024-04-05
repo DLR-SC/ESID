@@ -101,8 +101,12 @@ export default function ApplicationMenu(): JSX.Element {
         <MenuIcon />
       </Button>
       <Menu id='application-menu' anchorEl={anchorElement} open={Boolean(anchorElement)} onClose={closeMenu}>
-        <MenuItem onClick={loginClicked}>{t('topBar.menu.login')}</MenuItem>
-        <MenuItem onClick={uploadClicked}>{t('topBar.menu.upload')}</MenuItem>
+        <MenuItem disabled onClick={loginClicked}>
+          {t('topBar.menu.login')}
+        </MenuItem>
+        <MenuItem disabled onClick={uploadClicked}>
+          {t('topBar.menu.upload')}
+        </MenuItem>
         <Divider />
         <MenuItem onClick={imprintClicked}>{t('topBar.menu.imprint')}</MenuItem>
         <MenuItem onClick={privacyPolicyClicked}>{t('topBar.menu.privacy-policy')}</MenuItem>
