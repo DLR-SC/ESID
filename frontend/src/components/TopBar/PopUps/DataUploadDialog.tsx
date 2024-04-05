@@ -24,7 +24,7 @@ export default function DataUploadDialog(): JSX.Element {
     Done,
   }
 
-  // register throbber for use
+  // Register throbber for later use.
   useEffect(() => {
     helix.register();
   }, []);
@@ -36,6 +36,7 @@ export default function DataUploadDialog(): JSX.Element {
   // Function to handle data upload.
   const handleFiles = useCallback(
     (filelist: FileList) => {
+      // Function to increase readability of file size appended behind filename.
       const fileSizeToString = (size: number) => {
         if (size < 1024) {
           return `${size} B`;
@@ -45,8 +46,7 @@ export default function DataUploadDialog(): JSX.Element {
           return `${(size / 1048576).toFixed(1)} MB`;
         }
       };
-      console.log(filelist);
-      // update file display
+      // Update file display with new files.
       const displaylist: {filename: string; status: UploadStatus}[] = [];
       for (let i = 0; i < filelist.length; i++) {
         const file = filelist[i];
@@ -63,7 +63,7 @@ export default function DataUploadDialog(): JSX.Element {
     [UploadStatus]
   );
 
-  // Callback for drag event (to modify styling)
+  // Callback for drag event (to modify styling).
   const handleDrag = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -74,7 +74,7 @@ export default function DataUploadDialog(): JSX.Element {
     }
   }, []);
 
-  // Callback for files selected through drag & drop
+  // Callback for files selected through drag & drop.
   const handleDrop = useCallback(
     (e: React.DragEvent) => {
       e.preventDefault();
@@ -87,7 +87,7 @@ export default function DataUploadDialog(): JSX.Element {
     [handleFiles]
   );
 
-  // Callback for files selected through dialog
+  // Callback for files selected through dialog.
   const handleClick = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       e.preventDefault();
@@ -119,6 +119,7 @@ export default function DataUploadDialog(): JSX.Element {
         {uploadStat.length > 0 && (
           <List>
             {uploadStat.map((file) => (
+              // Create a list item for each file.
               <ListItem
                 key={file.filename}
                 disableGutters
@@ -144,6 +145,7 @@ export default function DataUploadDialog(): JSX.Element {
         </label>
       </Box>
       {dragActive && (
+        // Add an overlay on top of the popup to display a notice and make handling the drag events smoother.
         <div
           id='upload-drop-notice'
           onDragEnter={handleDrag}
