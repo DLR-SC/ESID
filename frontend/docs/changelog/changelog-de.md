@@ -5,9 +5,9 @@ SPDX-License-Identifier: CC-BY-4.0
 
 # ESID Änderungshistorie
 
-## vX.X.X-alpha
+## v0.3.0-beta
 
-**Veröffentlichungsdatum:** TBD
+**Veröffentlichungsdatum:** 03.05.2024
 
 ### Neue Funktionen
 
@@ -19,6 +19,7 @@ SPDX-License-Identifier: CC-BY-4.0
 - Neben der Liste der Infektionszustände ist jetzt zu jedem Infektionszustand ein Infokästchen. Aktuell haben alle Zustände die gleiche Information.
 - Der Referenztag ist nun einstellbar. Eine Linie wird zum Graphen gezeichnet, um so den Zusammenhang zu verdeutlichen.
 - Die Zoom-Knöpfe der Karte haben ein neues Aussehen und eine weitere Schaltfläche bekommen, mit der die Kartenansicht zur ursprünglichen Übersicht über Deutschland zurückgesetzt werden kann.
+- Ein neuer Tab ist jetzt unter der Zeitserie zu finden, welcher die Parameter der Simulation anzeigt.
 
 ### Verbesserungen
 
