@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React from 'react';
+import React, {useCallback} from 'react';
 import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
 import TableHead from '@mui/material/TableHead';
@@ -78,7 +78,7 @@ function ParameterColumHeader(props: Readonly<{name: string; colSpan?: number}>)
  * The symbol is the scientific symbol for the parameter in latex equation format. The description explains the
  * parameter in a single sentence.
  */
-function ParameterRowHeader(props: Readonly<{symbol: string; description: string}>): JSX.Element {
+function ParameterRowHeader(props: Readonly<{symbol: string; description: string; unit: string}>): JSX.Element {
   return (
     <>
       <TableCell sx={{borderRight: 'none'}}>
@@ -102,6 +102,7 @@ function ParameterRow(props: Readonly<{params: ParameterData}>): JSX.Element | n
       <ParameterRowHeader
         symbol={t(`parameters.${props.params.key}.symbol`)}
         description={t(`parameters.${props.params.key}.description`)}
+        unit={t(`parameters.${props.params.key}.unit`)}
       />
       {((): JSX.Element | null => {
         // jsx inline switch case
@@ -124,7 +125,24 @@ function ParameterRow(props: Readonly<{params: ParameterData}>): JSX.Element | n
  */
 function ParameterRowMinMaxGrouped(props: Readonly<{params: ParameterData}>): Array<JSX.Element> {
   const theme = useTheme();
-  const {i18n} = useTranslation('backend');
+  const {t, i18n} = useTranslation('backend');
+
+  const getContent = useCallback(
+    (min: number, max: number) => {
+      const unit = t(`parameters.${props.params.key}.unit`);
+      if (unit === '%') {
+        min *= 100;
+        max *= 100;
+      }
+
+      if (min === max) {
+        return `${min.toLocaleString(i18n.language)}\u202F${unit}`;
+      } else {
+        return `${min.toLocaleString(i18n.language)} - ${max.toLocaleString(i18n.language)}\u202F${unit}`;
+      }
+    },
+    [i18n.language, props.params.key, t]
+  );
 
   return (props.params.data as Array<{span: number; min: number; max: number}>).map((entry) => (
     <TableCell
@@ -151,9 +169,7 @@ function ParameterRowMinMaxGrouped(props: Readonly<{params: ParameterData}>): Ar
             padding: theme.spacing(2),
           }}
         >
-          {entry.min === entry.max
-            ? entry.min.toLocaleString(i18n.language)
-            : `${entry.min.toLocaleString(i18n.language)} - ${entry.max.toLocaleString(i18n.language)}`}
+          {getContent(entry.min, entry.max)}
         </Typography>
         <Divider
           sx={{
