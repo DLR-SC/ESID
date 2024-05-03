@@ -45,234 +45,234 @@
     AsymptoticCasesPerInfectious: {
       symbol: '\\mu_C^R',
       description: 'Anteil der nicht symptomatischen Fälle',
-      unit: '%'
+      unit: '%',
     },
     DeathsPerHospitalized: {
       symbol: '\\mu_U^D',
       description: 'Anteil der Personen, die auf der Intensivstation behandelt werden und sterben',
-      unit: '%'
+      unit: '%',
     },
     HomeToHospitalizedTime: {
       symbol: 'T_I',
       description: 'Mittlere Zeitspanne für Personen mit milden Symptomen',
-      unit: 'Tage'
+      unit: 'Tage',
     },
     HospitalizedCasesPerInfectious: {
       symbol: '\\mu_I^H',
       description: 'Anteil der symptomatischen Fälle, die zu einem Krankenhausaufenthalt führen',
-      unit: '%'
+      unit: '%',
     },
     HospitalizedToHomeTime: {
       symbol: 'T_H',
       description: 'Dauer des notwendigen Krankenhausaufenthalts (ohne Intensivpflege)',
-      unit: 'Tage'
+      unit: 'Tage',
     },
     HospitalizedToICUTime: {
       symbol: 'Veraltet',
       description: 'HospitalizedToICUTime',
-      unit: 'Tage'
+      unit: 'Tage',
     },
     ICUCasesPerHospitalized: {
       symbol: '\\mu_H^U',
       description: 'Anteil der hospitalisierten Personen, welche später Intensivpflege benötigen',
-      unit: '%'
+      unit: '%',
     },
     ICUToDeathTime: {
       symbol: 'T_U',
       description: 'Dauer der notwendigen Intensivpflege',
-      unit: 'Tage'
+      unit: 'Tage',
     },
     ICUToHomeTime: {
       symbol: 'Veraltet',
       description: 'ICUToHomeTime',
-      unit: 'Tage'
+      unit: 'Tage',
     },
     InfectionProbabilityFromContact: {
       symbol: 'p^{(0)}',
       description: 'Grundlegendes Übertragungsrisiko (ohne Saisonalitätsfaktor)',
-      unit: '%'
+      unit: '%',
     },
     InfectiousTimeMild: {
       symbol: 'Veraltet',
       description: 'InfectiousTimeMild',
-      unit: 'Tage'
+      unit: 'Tage',
     },
     MaxRiskOfInfectionFromSympomatic: {
       symbol: '\\xi_{I_{Sy}}',
       description: 'Maximales relatives Infektionsrisiko durch nicht-isolierte symptomatische Individuen (mit Testkapazitätsbeschränkungen)',
-      unit: '%'
+      unit: '%',
     },
     ReducExpInf: {
       symbol: 'p_{I_{Sy,PI}}',
       description: 'Relative Reduktion symptomatischer Infektionen für Personen mit partieller Immunität',
-      unit: '%'
+      unit: '%',
     },
     ReducImmuneExp: {
       symbol: 'p_{E_{II}}',
       description: 'Relative Reduktion jedweder Infektion für Personen mit hoher Immunität',
-      unit: '%'
+      unit: '%',
     },
     ReducImmuneExpInf: {
       symbol: 'p_{I_{Sy,II}}',
       description: 'Relative Reduktion symptomatischer Infektionen für Personen mit hoher Immunität',
-      unit: '%'
+      unit: '%',
     },
     ReducImmuneInfHosp: {
       symbol: 'p_{I_{Sev,II}}',
       description: 'Relative Reduktion schwerer oder kritischer Infektion für Personen mit hoher Immunität',
-      unit: '%'
+      unit: '%',
     },
     ReducInfHosp: {
       symbol: 'p_{I_{Sev,PI}}',
       description: 'Relative Reduktion schwerer oder kritischer Infektionen für Personen mit partieller Immunität',
-      unit: '%'
+      unit: '%',
     },
     ReducTime: {
       symbol: '\\kappa',
       description: 'Relative Reduktion der Dauer milder Infektionen für partiell und gut geschützte Individuen',
-      unit: 'Tage'
+      unit: 'Tage',
     },
     ReducVaccExp: {
       symbol: 'p_{E_{PI}}',
       description: 'Relative Reduktion jedweder Infektion für Personen mit partieller Immunität',
-      unit: '%'
+      unit: '%',
     },
     RelativeCarrierInfectability: {
       symbol: '\\xi_{I_{NS}}',
       description: 'Relatives Infektionsrisiko durch nichtisolierte nichtsymptomatische Individuen',
-      unit: '%'
+      unit: '%',
     },
     RiskOfInfectionFromSympomatic: {
       symbol: '\\xi_{I_{Sy},max}',
       description: 'Relatives Infektionsrisiko durch nichtisolierte symptomatische Individuen',
-      unit: '%'
+      unit: '%',
     },
 
     // New Parameter Names
     RecoveredPerInfectedNoSymptoms: {
       symbol: '\\mu_C^R',
       description: 'Anteil der nicht symptomatischen Fälle',
-      unit: '%'
+      unit: '%',
     },
     DeathsPerCritical: {
       symbol: '\\mu_U^D',
       description: 'Anteil der Personen, die auf der Intensivstation behandelt werden und sterben',
-      unit: '%'
+      unit: '%',
     },
     TimeInfectedSymptoms: {
       symbol: 'T_I',
       description: 'Mittlere Zeitspanne für Personen mit milden Symptomen',
-      unit: 'Tage'
+      unit: 'Tage',
     },
     SeverePerInfectedSymptoms: {
       symbol: '\\mu_I^H',
       description: 'Anteil der symptomatischen Fälle, die zu einem Krankenhausaufenthalt führen',
-      unit: '%'
+      unit: '%',
     },
     TimeInfectedSevere: {
       symbol: 'T_H',
       description: 'Dauer des notwendigen Krankenhausaufenthalts (ohne Intensivpflege)',
-      unit: 'Tage'
+      unit: 'Tage',
     },
     CriticalPerSevere: {
       symbol: '\\mu_H^U',
       description: 'Anteil der hospitalisierten Personen, welche später Intensivpflege benötigen',
-      unit: '%'
+      unit: '%',
     },
     TimeInfectedCritical: {
       symbol: 'T_U',
       description: 'Dauer der notwendigen Intensivpflege',
-      unit: 'Tage'
+      unit: 'Tage',
     },
     IncubationTime: {
       symbol: 'IT',
       description: 'Zeitraum des latenten nicht-infektiösen Stadiums',
-      unit: 'Tage'
+      unit: 'Tage',
     },
     TransmissionProbabilityOnContact: {
       symbol: 'p^{(0)}',
       description: 'Grundlegendes Übertragungsrisiko (ohne Saisonalitätsfaktor)',
-      unit: '%'
+      unit: '%',
     },
     MaxRiskOfInfectionFromSymptomatic: {
       symbol: '\\xi_{I_{Sy}}',
       description: 'Maximales relatives Infektionsrisiko durch nicht-isolierte symptomatische Individuen (mit Testkapazitätsbeschränkungen)',
-      unit: '%'
+      unit: '%',
     },
     ReducInfectedSymptomsPartialImmunity: {
       symbol: 'p_{I_{Sy,PI}}',
       description: 'Relative Reduktion symptomatischer Infektionen für Personen mit partieller Immunität',
-      unit: '%'
+      unit: '%',
     },
     ReducExposedImprovedImmunity: {
       symbol: 'p_{E_{II}}',
       description: 'Relative Reduktion jedweder Infektion für Personen mit hoher Immunität',
-      unit: '%'
+      unit: '%',
     },
     ReducInfectedSymptomsImprovedImmunity: {
       symbol: 'p_{I_{Sy,II}}',
       description: 'Relative Reduktion symptomatischer Infektionen für Personen mit hoher Immunität',
-      unit: '%'
+      unit: '%',
     },
     ReducInfectedSevereCriticalDeadImprovedImmunity: {
       symbol: 'p_{I_{Sev,II}}',
       description: 'Relative Reduktion schwerer oder kritischer Infektion für Personen mit hoher Immunität',
-      unit: '%'
+      unit: '%',
     },
     ReducInfectedSevereCriticalDeadPartialImmunity: {
       symbol: 'p_{I_{Sev,PI}}',
       description: 'Relative Reduktion schwerer oder kritischer Infektionen für Personen mit partieller Immunität',
-      unit: '%'
+      unit: '%',
     },
     ReducTimeInfectedMild: {
       symbol: '\\kappa',
       description: 'Relative Reduktion der Dauer milder Infektionen für partiell und gut geschützte Individuen',
-      unit: 'Tage'
+      unit: 'Tage',
     },
     ReducExposedPartialImmunity: {
       symbol: 'p_{E_{PI}}',
       description: 'Relative Reduktion jedweder Infektion für Personen mit partieller Immunität',
-      unit: '%'
+      unit: '%',
     },
     RelativeTransmissionNoSymptoms: {
       symbol: '\\xi_{I_{NS}}',
       description: 'Relatives Infektionsrisiko durch nichtisolierte nichtsymptomatische Individuen',
-      unit: '%'
+      unit: '%',
     },
     RiskOfInfectionFromSymptomatic: {
       symbol: '\\xi_{I_{Sy},max}',
       description: 'Relatives Infektionsrisiko durch nichtisolierte symptomatische Individuen',
-      unit: '%'
+      unit: '%',
     },
     Seasonality: {
       symbol: 'k',
       description: 'Anteil eines relativen Saisonalitätsfaktors',
-      unit: '%'
+      unit: '%',
     },
     SerialInterval: {
       symbol: 'SI',
       description: 'Serielles Intervall zwischen zwei aufeinanderfolgenden Infektionen',
-      unit: 'Tage'
+      unit: 'Tage',
     },
     VaccinationGap: {
       symbol: '-',
       description: 'Zeit in Tagen zwischen erster und zweiter Impfung',
-      unit: 'Tage'
+      unit: 'Tage',
     },
     ContactScaling: {
       symbol: '-',
       description: 'Skalierung der Kontakte, z.B. durch NPIs',
-      unit: '%'
+      unit: '%',
     },
     TimeExposed: {
       symbol: 'T_E',
       description: 'Mittlere Zeitspanne bevor angesteckte Personen infektiös werden',
-      unit: 'Tage'
+      unit: 'Tage',
     },
     TimeInfectedNoSymptoms: {
       symbol: 'T_C',
       description: 'Mittlere Zeitspanne der Infektiösität ohne Symptome',
-      unit: 'Tage'
+      unit: 'Tage',
     },
   },
   'scenario-names': {
