@@ -31,7 +31,7 @@ describe('ParameterEditor', () => {
 
     await screen.findByText('parameters.Test Parameter 1.symbol');
     await screen.findByText('parameters.Test Parameter 1.description');
-    await screen.findByText('0 - 1');
+    await screen.findByText(/0 - 1 parameters\.Test Parameter 1\.unit/);
 
     await screen.findByText('parameters.Test Parameter 2.symbol');
     await screen.findByText('parameters.Test Parameter 2.description');
