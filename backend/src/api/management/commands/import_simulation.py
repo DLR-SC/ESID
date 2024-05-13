@@ -25,8 +25,8 @@ MANDATORY = [
 def create_data_entries(start_day, n_days, compartments, dataset, group, percentile):
     entries = []
 
-    # skip first data entry, because it only contains the initial rki data
-    for day in range(1, n_days):
+    # Do not skip first data entry, to avoid discontinuity with initial rki data
+    for day in range(n_days):
         date = start_day + timedelta(days=day)
 
         values = dict()
