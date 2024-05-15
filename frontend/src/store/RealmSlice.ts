@@ -1,23 +1,23 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 export interface Realm {
-  name: string
+  name: string;
 }
 
 const initialState: Realm = {
-  name: localStorage.getItem("realm") || ""
-}
+  name: localStorage.getItem('realm') || '',
+};
 
 export const RealmSlice = createSlice({
-  name: "Realm",
+  name: 'Realm',
   initialState,
   reducers: {
     setRealm(state, action: PayloadAction<string>) {
       // store realm in local storage
       // redirects start new the browser sessions i.e. store state will be reset
-      localStorage.setItem("realm", action.payload)
+      localStorage.setItem('realm', action.payload);
       state.name = action.payload;
-    }
+    },
   },
 });
 

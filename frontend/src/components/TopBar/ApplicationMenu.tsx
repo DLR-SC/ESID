@@ -10,8 +10,8 @@ import Divider from '@mui/material/Divider';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Box from '@mui/system/Box';
-import { useAppSelector } from 'store/hooks';
-import { AuthContext, IAuthContext } from 'react-oauth2-code-pkce';
+import {useAppSelector} from 'store/hooks';
+import {AuthContext, IAuthContext} from 'react-oauth2-code-pkce';
 
 // Let's import pop-ups only once they are opened.
 const ChangelogDialog = React.lazy(() => import('./PopUps/ChangelogDialog'));
@@ -28,12 +28,12 @@ export default function ApplicationMenu(): JSX.Element {
   const {t} = useTranslation();
 
   const realm = useAppSelector((state) => state.realm.name);
-  const { login, token, logOut } = useContext<IAuthContext>(AuthContext)
+  const {login, token, logOut} = useContext<IAuthContext>(AuthContext);
 
   // user cannot login when realm is not selected
-  const loginDisabled = realm === "";
+  const loginDisabled = realm === '';
   // user is authenticated when token is not empty
-  const isAuthenticated = token !== "";
+  const isAuthenticated = token !== '';
 
   const [anchorElement, setAnchorElement] = React.useState<Element | null>(null);
   const [imprintOpen, setImprintOpen] = React.useState(false);
@@ -42,7 +42,6 @@ export default function ApplicationMenu(): JSX.Element {
   const [attributionsOpen, setAttributionsOpen] = React.useState(false);
   const [changelogOpen, setChangelogOpen] = React.useState(false);
 
-  
   /** Calling this method opens the application menu. */
   const openMenu = (event: MouseEvent) => {
     setAnchorElement(event.currentTarget);
@@ -63,7 +62,7 @@ export default function ApplicationMenu(): JSX.Element {
   const logoutClicked = () => {
     closeMenu();
     logOut();
-  }
+  };
 
   /** This method gets called, when the imprint menu entry was clicked. It opens a dialog showing the legal text. */
   const imprintClicked = () => {
@@ -107,11 +106,13 @@ export default function ApplicationMenu(): JSX.Element {
         <MenuIcon />
       </Button>
       <Menu id='application-menu' anchorEl={anchorElement} open={Boolean(anchorElement)} onClose={closeMenu}>
-        {
-          isAuthenticated ? 
-          <MenuItem onClick={logoutClicked} >Logout</MenuItem> :
-          <MenuItem onClick={loginClicked} disabled={loginDisabled} >{t('topBar.menu.login')}</MenuItem>
-        }
+        {isAuthenticated ? (
+          <MenuItem onClick={logoutClicked}>Logout</MenuItem>
+        ) : (
+          <MenuItem onClick={loginClicked} disabled={loginDisabled}>
+            {t('topBar.menu.login')}
+          </MenuItem>
+        )}
         <Divider />
         <MenuItem onClick={imprintClicked}>{t('topBar.menu.imprint')}</MenuItem>
         <MenuItem onClick={privacyPolicyClicked}>{t('topBar.menu.privacy-policy')}</MenuItem>
