@@ -11,6 +11,7 @@ import {persistReducer, persistStore} from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import {groupApi} from './services/groupApi';
 import LayoutReducer from './LayoutSlice';
+import RealmReducer from './RealmSlice';
 
 const persistConfig = {
   key: 'root',
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
   scenarioList: ScenarioReducer,
   userPreference: UserPreferenceReducer,
   layoutSlice: LayoutReducer,
+  realm: RealmReducer,
   [caseDataApi.reducerPath]: caseDataApi.reducer,
   [scenarioApi.reducerPath]: scenarioApi.reducer,
   [groupApi.reducerPath]: groupApi.reducer,
