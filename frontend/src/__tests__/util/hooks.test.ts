@@ -4,12 +4,12 @@
 import {describe, test, expect} from 'vitest';
 import {renderHook} from '@testing-library/react';
 
-import {NumberFormatter} from '../../util/hooks';
+import {useNumberFormatter} from '../../util/hooks';
 
 describe('NumberFormatter', () => {
   test('languages', () => {
     let lang = 'de';
-    const {result, rerender} = renderHook(() => NumberFormatter(lang, 5, 2));
+    const {result, rerender} = renderHook(() => useNumberFormatter(lang, 5, 2));
 
     const germanFormat = result.current.formatNumber(2000.1);
     expect(germanFormat).toBe('2.000,1');
@@ -22,7 +22,7 @@ describe('NumberFormatter', () => {
   });
 
   test('significantDigits', () => {
-    const {result} = renderHook(() => NumberFormatter('en', 5, 5));
+    const {result} = renderHook(() => useNumberFormatter('en', 5, 5));
     const formatNumber = result.current.formatNumber;
 
     expect(formatNumber(123456)).toBe('123,456');
@@ -35,7 +35,7 @@ describe('NumberFormatter', () => {
   });
 
   test('maxFractionalDigits', () => {
-    const {result} = renderHook(() => NumberFormatter('en', 5, 2));
+    const {result} = renderHook(() => useNumberFormatter('en', 5, 2));
     const formatNumber = result.current.formatNumber;
 
     expect(formatNumber(123456)).toBe('123,456');

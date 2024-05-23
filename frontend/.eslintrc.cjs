@@ -1,7 +1,6 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: CC0-1.0
 
-const {screen} = require('@testing-library/react');
 module.exports = {
   root: true,
   env: {browser: true, es2020: true},
@@ -23,7 +22,7 @@ module.exports = {
     crypto: 'readonly',
     window: 'readonly',
   },
-  plugins: ['@typescript-eslint', 'vitest', 'react', 'react-hooks'],
+  plugins: ['@typescript-eslint', 'vitest', 'react', 'react-hooks', 'react-compiler'],
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
@@ -35,6 +34,7 @@ module.exports = {
     'plugin:prettier/recommended',
   ],
   rules: {
+    'react-compiler/react-compiler': "error",
     'vitest/expect-expect': [
       'warn',
       {

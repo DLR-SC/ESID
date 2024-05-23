@@ -4,7 +4,7 @@
 import {Dictionary} from '../../util/util';
 import {useTheme} from '@mui/material/styles';
 import {useTranslation} from 'react-i18next';
-import {NumberFormatter} from '../../util/hooks';
+import {useNumberFormatter} from '../../util/hooks';
 import {useAppSelector} from '../../store/hooks';
 import React, {useState} from 'react';
 import Box from '@mui/material/Box';
@@ -59,7 +59,7 @@ export function DataCard(props: DataCardProps): JSX.Element {
   const theme = useTheme();
   const {t, i18n} = useTranslation();
 
-  const {formatNumber} = NumberFormatter(i18n.language, 1, 0);
+  const {formatNumber} = useNumberFormatter(i18n.language, 1, 0);
 
   const compartments = useAppSelector((state) => state.scenarioList.compartments);
   const compartmentsExpanded = useAppSelector((state) => state.dataSelection.compartmentsExpanded);

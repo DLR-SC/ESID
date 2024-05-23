@@ -7,12 +7,33 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 import preload from 'unplugin-inject-preload/vite';
 import eslintPlugin from '@nabla/vite-plugin-eslint';
 
+const ReactCompilerConfig = {
+  // compilationMode: "annotation",
+  logger: {
+    logEvent(...opts: (string | any)[]) {
+      for (const opt of opts) {
+        if (typeof(opt) !== "string" && opt.kind !== 'CompileSuccess') {
+          console.log(opt);
+        } else if(typeof(opt) === "string") {
+          console.log(opt)
+        }
+      }
+    }
+  }
+};
+
 export default defineConfig((configEnv) => {
   return {
     assetsInclude: ['**/*.md', '**/*.geojson', '**/*.json5'],
     base: './',
     plugins: [
-      react(),
+      react({
+        babel: {
+          plugins: [
+            ["babel-plugin-react-compiler", ReactCompilerConfig],
+          ],
+        },
+      }),
       eslintPlugin(),
       tsconfigPaths(),
       splitVendorChunkPlugin(),

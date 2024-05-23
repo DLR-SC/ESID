@@ -6,7 +6,7 @@ import {useTheme} from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import * as am5 from '@amcharts/amcharts5';
 import {useTranslation} from 'react-i18next';
-import {NumberFormatter} from 'util/hooks';
+import {useNumberFormatter} from 'util/hooks';
 import {HeatmapLegend} from '../../types/heatmapLegend';
 
 export default function HeatLegend(props: {
@@ -20,7 +20,7 @@ export default function HeatLegend(props: {
 }): JSX.Element {
   const id = props.id + String(Date.now() + Math.random()); // "guarantee" unique id
   const {i18n} = useTranslation();
-  const {formatNumber} = NumberFormatter(i18n.language, 3, 8);
+  const {formatNumber} = useNumberFormatter(i18n.language, 3, 8);
   const theme = useTheme();
 
   useEffect(() => {

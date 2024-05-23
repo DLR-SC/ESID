@@ -11,6 +11,7 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import {useTranslation} from 'react-i18next';
 import countyData from '../../../assets/lk_germany_reduced_list.json?url';
+import {useDidMount} from 'rooks';
 
 /** Type definition for the CountyItems of the Autocomplete field
  *  @see DataSelectionSlice
@@ -42,7 +43,7 @@ export default function SearchBar(): JSX.Element {
     }
   }, [t, selectedDistrict, dispatch]);
 
-  useEffect(() => {
+  useDidMount(() => {
     // get option list from assets
     fetch(countyData, {
       headers: {
@@ -72,8 +73,7 @@ export default function SearchBar(): JSX.Element {
         }
       );
     // this init should only run once on first render
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [t]);
+  });
 
   return (
     <Container>

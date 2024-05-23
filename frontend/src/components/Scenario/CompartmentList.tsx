@@ -8,11 +8,11 @@ import ListItemButton from '@mui/material/ListItemButton';
 import {selectCompartment, setStartDate, toggleCompartmentExpansion} from '../../store/DataSelectionSlice';
 import ListItemText from '@mui/material/ListItemText';
 import Button from '@mui/material/Button';
-import React, {MouseEvent, useEffect, useMemo, useState} from 'react';
+import React, {MouseEvent, useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {darken, useTheme} from '@mui/material/styles';
 import {useTranslation} from 'react-i18next';
 import {useAppDispatch, useAppSelector} from '../../store/hooks';
-import {NumberFormatter} from '../../util/hooks';
+import {useNumberFormatter} from '../../util/hooks';
 import {useGetSimulationStartValues} from './hooks';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
@@ -22,7 +22,7 @@ import {DatePicker} from '@mui/x-date-pickers/DatePicker';
 import dayjs, {Dayjs} from 'dayjs';
 import {dateToISOString} from '../../util/util';
 import {setReferenceDayTop} from '../../store/LayoutSlice';
-import {useBoundingclientrectRef} from 'rooks';
+import {useDidMount, useMutationObserver} from 'rooks';
 
 /**
  * The component renders a list of compartments with their name on the left and the case data values at simulation start
@@ -34,20 +34,34 @@ export default function CompartmentList(): JSX.Element {
   const theme = useTheme();
   const {t, i18n} = useTranslation();
   const dispatch = useAppDispatch();
-  const {formatNumber} = NumberFormatter(i18n.language, 1, 0);
+  const {formatNumber} = useNumberFormatter(i18n.language, 1, 0);
 
   const compartments = useAppSelector((state) => state.scenarioList.compartments);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
   const compartmentsExpanded = useAppSelector((state) => state.dataSelection.compartmentsExpanded);
   const compartmentValues = useGetSimulationStartValues();
 
-  const [resizeRef, resizeBoundingRect] = useBoundingclientrectRef();
+  const resizeRef = useRef<HTMLElement | null>(null);
+
+  const [domRect, setDomRect] = useState<DOMRect | null>(null);
+  const update = useCallback(() => {
+    const newRect = resizeRef.current?.getBoundingClientRect();
+    if (newRect?.width !== domRect?.width) {
+      setDomRect(resizeRef.current?.getBoundingClientRect() ?? null);
+    }
+  }, [domRect, resizeRef]);
+
+  useDidMount(() => {
+    update();
+  });
+
+  useMutationObserver(resizeRef, update);
 
   useEffect(() => {
-    const x = resizeBoundingRect?.x ?? 0;
-    const w = resizeBoundingRect?.width ?? 0;
+    const x = domRect?.x ?? 0;
+    const w = domRect?.width ?? 0;
     dispatch(setReferenceDayTop(x + w));
-  }, [dispatch, resizeBoundingRect]);
+  }, [dispatch, domRect]);
 
   /** This function either returns the value at simulation start of a compartment or 'no data'. */
   const getCompartmentValue = (compartment: string): string => {
@@ -147,11 +161,15 @@ function SimulationStartTitle(): JSX.Element {
   const minDate = useAppSelector((state) => state.dataSelection.minDate);
   const maxDate = useAppSelector((state) => state.dataSelection.maxDate);
 
-  function updateDate(newDate: Dayjs | null) {
-    if (newDate) {
-      dispatch(setStartDate(dateToISOString(newDate.toDate())));
-    }
-  }
+  const updateDate = useCallback(
+    (newDate: Dayjs | null) => {
+      console.log('here');
+      if (newDate) {
+        dispatch(setStartDate(dateToISOString(newDate.toDate())));
+      }
+    },
+    [dispatch]
+  );
 
   return (
     <Box

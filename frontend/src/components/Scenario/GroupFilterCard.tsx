@@ -8,7 +8,7 @@ import Box from '@mui/material/Box';
 import {useGetSingleGroupFilterDataQuery} from '../../store/services/groupApi';
 import Typography from '@mui/material/Typography';
 import {useTranslation} from 'react-i18next';
-import {NumberFormatter} from '../../util/hooks';
+import {useNumberFormatter} from '../../util/hooks';
 import {ScrollSyncPane} from 'react-scroll-sync';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -70,7 +70,7 @@ function GroupFilterCardCompartmentValues(props: GroupFilterCardProps): JSX.Elem
   const {t, i18n} = useTranslation();
   const theme = useTheme();
 
-  const {formatNumber} = NumberFormatter(i18n.language, 1, 0);
+  const {formatNumber} = useNumberFormatter(i18n.language, 1, 0);
 
   const day = useAppSelector((state) => state.dataSelection.date);
   const node = useAppSelector((state) => state.dataSelection.district?.ags);

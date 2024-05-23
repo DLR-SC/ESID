@@ -25,7 +25,7 @@ import {useCallback, useEffect, useRef, useState} from 'react';
  * - 0,000123456789  => 0,0001
  * - 0,0000123456789 => 0
  */
-export function NumberFormatter(
+export function useNumberFormatter(
   lang: string,
   significantDigits: number,
   maxFractionalDigits: number

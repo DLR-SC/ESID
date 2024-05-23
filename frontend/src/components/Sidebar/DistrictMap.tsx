@@ -15,7 +15,7 @@ import Tooltip from '@mui/material/Tooltip';
 import LockIcon from '@mui/icons-material/Lock';
 import {useGetSimulationDataByDateQuery} from 'store/services/scenarioApi';
 import HeatLegend from './HeatLegend';
-import {NumberFormatter} from 'util/hooks';
+import {useNumberFormatter} from 'util/hooks';
 import HeatLegendEdit from './HeatLegendEdit';
 import {HeatmapLegend} from '../../types/heatmapLegend';
 import LockOpen from '@mui/icons-material/LockOpen';
@@ -73,7 +73,7 @@ export default function DistrictMap(): JSX.Element {
   const legendRef = useRef<am5.HeatLegend | null>(null);
   const {t, i18n} = useTranslation();
   const {t: tBackend} = useTranslation('backend');
-  const {formatNumber} = NumberFormatter(i18n.language, 1, 0);
+  const {formatNumber} = useNumberFormatter(i18n.language, 1, 0);
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const lastSelectedPolygon = useRef<am5map.MapPolygon | null>(null);

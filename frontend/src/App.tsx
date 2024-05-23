@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, {Suspense, useEffect} from 'react';
+import React, {StrictMode, Suspense, useEffect} from 'react';
 import {Provider} from 'react-redux';
 
 import './App.scss';
@@ -26,35 +26,38 @@ import {MUILocalization} from './components/shared/MUILocalization';
  */
 export default function App(): JSX.Element {
   return (
-    <Suspense fallback='loading'>
-      <Provider store={Store}>
-        <ThemeProvider theme={Theme}>
-          <PersistGate loading={null} persistor={Persistor}>
-            <I18nextProvider i18n={i18n}>
-              <MUILocalization>
+    <StrictMode>
+      <Suspense fallback='loading'>
+        <Provider store={Store}>
+          <ThemeProvider theme={Theme}>
+            <PersistGate loading={null} persistor={Persistor}>
+              <I18nextProvider i18n={i18n}>
                 <Initializer />
-                <Box id='app' display='flex' flexDirection='column' sx={{height: '100%', width: '100%'}}>
-                  <TopBar />
-                  <Box
-                    id='app-content'
-                    sx={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      flexGrow: 1,
-                      alignItems: 'stretch',
-                      width: '100%',
-                    }}
-                  >
-                    <Sidebar />
-                    <MainContent />
+                <MUILocalization>
+                  <Initializer />
+                  <Box id='app' display='flex' flexDirection='column' sx={{height: '100%', width: '100%'}}>
+                    <TopBar />
+                    <Box
+                      id='app-content'
+                      sx={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        flexGrow: 1,
+                        alignItems: 'stretch',
+                        width: '100%',
+                      }}
+                    >
+                      <Sidebar />
+                      <MainContent />
+                    </Box>
                   </Box>
-                </Box>
-              </MUILocalization>
-            </I18nextProvider>
-          </PersistGate>
-        </ThemeProvider>
-      </Provider>
-    </Suspense>
+                </MUILocalization>
+              </I18nextProvider>
+            </PersistGate>
+          </ThemeProvider>
+        </Provider>
+      </Suspense>
+    </StrictMode>
   );
 }
 
