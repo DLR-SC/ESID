@@ -16,6 +16,8 @@ import {useTranslation} from 'react-i18next';
 import {useAppDispatch, useAppSelector} from '../store/hooks';
 import {selectTab} from '../store/UserPreferenceSlice';
 import {useTheme} from '@mui/material/styles';
+import ContactMatrix from './ConctactMatrix';
+import {SocialDistance} from '@mui/icons-material';
 
 // Lazily load the tab contents to enable code splitting.
 const ParameterEditor = React.lazy(() => import('./ParameterEditor'));
@@ -70,6 +72,16 @@ export default function MainContentTabs() {
             </Box>
           </Box>
         </TabPanel>
+        <TabPanel value='3' sx={{flexGrow: 1, padding: 0}}>
+          <Box id='main-content-contact-matrix-wrapper' sx={{height: '100%', display: 'flex', flexDirection: 'column'}}>
+            <Box sx={{flexGrow: 2}}>
+              <SimulationChart />
+            </Box>
+            <Box sx={{flexGrow: 1}}>
+              <ContactMatrix />
+            </Box>
+            </Box>
+        </TabPanel>
         <Box sx={{flexGrow: 0, borderTop: 1, borderColor: 'divider', width: '100%'}}>
           <TabList
             onChange={handleChange}
@@ -90,6 +102,13 @@ export default function MainContentTabs() {
               icon={<Coronavirus />}
               iconPosition='start'
               value='2'
+              sx={tabStyle}
+            />
+            <Tab
+              label={<Typography variant='body1'>{t('bottomTabs.contactMatrix')}</Typography>}
+              icon={<SocialDistance />}
+              iconPosition='start'
+              value='3'
               sx={tabStyle}
             />
           </TabList>
