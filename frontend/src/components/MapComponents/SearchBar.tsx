@@ -2,11 +2,11 @@ import Container from '@mui/material/Container';
 import {Box, Autocomplete} from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import {SyntheticEvent, useEffect, useState} from 'react';
-import {Feature, FeatureCollection, FeatureProperties} from '../../types/Maptypes';
-import MapAdapter from '../../utils/MapAdapter';
+import React from 'react';
+import {FeatureProperties, FeatureCollection, Feature} from 'types/map';
 
 interface SearchBarProps {
-  data: string | FeatureCollection;
+  data: undefined | FeatureCollection;
   defaultValue?: FeatureProperties;
   sortProperty?: string;
   optionLabel: (option: FeatureProperties) => string;
@@ -26,8 +26,8 @@ export default function SearchBar({
   sortProperty,
   optionLabel,
   autoCompleteValue,
-  optionEqualProperty  = 'id',
-  valueEqualProperty  = 'id',
+  optionEqualProperty = 'id',
+  valueEqualProperty = 'id',
   onChange,
   placeholder = '',
   background = '#F0F0F2',
@@ -39,21 +39,18 @@ export default function SearchBar({
 
   // fetch data from URL, add default value and sort by sortProperty
   useEffect(() => {
-    const fetchData = async () => {
-      const geoData = await MapAdapter(data);
-      const properties = geoData.features.map((feature: Feature) => {
-        return feature.properties;
+    if (!data) return;
+    const properties = data.features.map((feature: Feature) => {
+      return feature.properties;
+    });
+    if (defaultValue) properties.push(defaultValue);
+    if (sortProperty) {
+      properties.sort((a: FeatureProperties, b: FeatureProperties) => {
+        return a[sortProperty].toString().localeCompare(b[sortProperty].toString());
       });
-      if (defaultValue) properties.push(defaultValue);
-      if (sortProperty) {
-        properties.sort((a: FeatureProperties, b: FeatureProperties) => {
-          return a[sortProperty].toString().localeCompare(b[sortProperty].toString());
-        });
-        setFeatureProperties(properties);
-      }
-    };
-    fetchData();
-  }, [sortProperty, defaultValue, data, optionLabel]);
+      setFeatureProperties(properties);
+    }
+  }, [data, defaultValue, sortProperty]);
   return (
     <Container>
       <Box

@@ -1,7 +1,8 @@
 import {useEffect} from 'react';
 import * as am5 from '@amcharts/amcharts5';
-import {HeatmapLegend} from '../../types/Maptypes';
 import {Box} from '@mui/material';
+import React from 'react';
+import {HeatmapLegend} from 'types/heatmapLegend';
 
 interface HeatProps {
   legend: HeatmapLegend;
@@ -78,7 +79,19 @@ export default function HeatLegend({
       root.dispose();
       exposeLegend(null);
     };
-  }, [id, min, max, displayText, exposeLegend, unique_id, legend, localization.numberFormatter, tooltipStartColor, tooltipEndColor, localization]);
+  }, [
+    id,
+    min,
+    max,
+    displayText,
+    exposeLegend,
+    unique_id,
+    legend,
+    localization.numberFormatter,
+    tooltipStartColor,
+    tooltipEndColor,
+    localization,
+  ]);
 
   return <Box id={unique_id} sx={style} />;
 }

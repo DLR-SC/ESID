@@ -2,7 +2,8 @@ import {Tooltip} from '@mui/material';
 import {LockOpen} from '@mui/icons-material';
 import {IconButton} from '@mui/material';
 import LockIcon from '@mui/icons-material/Lock';
-import { useTheme } from '@mui/material';
+import {useTheme} from '@mui/material';
+import React from 'react';
 
 interface LockMaxValueProps {
   setFixedLegendMaxValue: (value: number | null) => void;
@@ -17,7 +18,7 @@ export default function LockMaxValue({
   aggregatedMax,
   t,
 }: LockMaxValueProps) {
-    const theme = useTheme();
+  const theme = useTheme();
   return (
     <Tooltip title={t('heatlegend.lock').toString()} placement='right' arrow>
       <IconButton

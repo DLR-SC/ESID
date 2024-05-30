@@ -2,14 +2,15 @@ import {useState, useEffect, useRef, useMemo} from 'react';
 import * as am5 from '@amcharts/amcharts5';
 import * as am5map from '@amcharts/amcharts5/map';
 import {GeoJSON} from 'geojson';
-import {FeatureCollection} from '../../types/Maptypes';
-import svgZoomResetURL from '../../assets/svg/zoom_out_map_white_24dp.svg?url';
-import svgZoomInURL from '../../assets/svg/zoom_in_white_24dp.svg?url';
-import svgZoomOutURL from '../../assets/svg/zoom_out_white_24dp.svg?url';
-import {FeatureProperties} from '../../types/Maptypes';
-import {HeatmapLegend} from '../../types/Maptypes';
+import {FeatureCollection} from '../../types/map';
+import svgZoomResetURL from '../../../assets/svg/zoom_out_map_white_24dp.svg?url';
+import svgZoomInURL from '../../../assets/svg/zoom_in_white_24dp.svg?url';
+import svgZoomOutURL from '../../../assets/svg/zoom_out_white_24dp.svg?url';
+import {FeatureProperties} from '../../types/map';
+import {HeatmapLegend} from '../../types/heatmapLegend';
 import {Box} from '@mui/material';
 import {useTheme} from '@mui/material/styles';
+import React from 'react';
 
 interface MapProps {
   mapData: undefined | FeatureCollection;
@@ -32,14 +33,8 @@ interface MapProps {
   legendRef: React.MutableRefObject<am5.HeatLegend | null>;
   longLoad: boolean;
   setLongLoad: (longLoad: boolean) => void;
+  formatNumber: (value: number) => string;
   idValuesToMap?: string;
-  localization: {
-    numberFormatter: (value: number) => string;
-    customLang?: string;
-    overrides?: {
-      [key: string]: string;
-    };
-  };
 }
 
 export default function HeatMap({
@@ -63,8 +58,8 @@ export default function HeatMap({
   legendRef,
   longLoad,
   setLongLoad,
+  formatNumber,
   idValuesToMap = 'id',
-  localization,
 }: MapProps) {
   const theme = useTheme();
   const lastSelectedPolygon = useRef<am5map.MapPolygon | null>(null);
@@ -210,7 +205,7 @@ export default function HeatMap({
     polygonTemplate.events.on('pointerover', (e) => {
       if (legendRef.current) {
         const value = (e.target.dataItem?.dataContext as {value: number}).value;
-        legendRef.current.showValue(value,  localization.numberFormatter(value));
+        legendRef.current.showValue(value, formatNumber(value));
       }
     });
     //hide tooltip on heat legend when not hovering anymore event
@@ -226,7 +221,18 @@ export default function HeatMap({
       chart.dispose();
       root.dispose();
     };
-  }, [defaultFill, fillOpacity, mapId, theme.palette.background.default, theme.palette.primary.main, localization.numberFormatter, mapData, setSelectedArea, defaultSelectedValue, legendRef, localization]);
+  }, [
+    defaultFill,
+    fillOpacity,
+    mapId,
+    theme.palette.background.default,
+    theme.palette.primary.main,
+    formatNumber,
+    mapData,
+    setSelectedArea,
+    defaultSelectedValue,
+    legendRef,
+  ]);
 
   // Highlight selected district
   useEffect(() => {
@@ -270,10 +276,7 @@ export default function HeatMap({
 
     if (selectedScenario !== null && !isFetching) {
       polygonSeries.mapPolygons.each((polygon) => {
-        const originalRegionData = polygon.dataItem?.dataContext as FeatureProperties;
-
-        const regionData = {...originalRegionData};
-
+        const regionData = polygon.dataItem?.dataContext as FeatureProperties;
         regionData.value = map.get(regionData[idValuesToMap]) ?? Number.NaN;
         // determine fill color
         let fillColor = am5.color(defaultFill);
@@ -296,8 +299,7 @@ export default function HeatMap({
       });
     } else if (longLoad || !values) {
       polygonSeries.mapPolygons.each((polygon) => {
-        const originalRegionData = polygon.dataItem?.dataContext as FeatureProperties;
-        const regionData = {...originalRegionData};
+        const regionData = polygon.dataItem?.dataContext as FeatureProperties;
         regionData.value = Number.NaN;
         polygon.setAll({
           tooltipText: tooltipTextWhileFetching(regionData),

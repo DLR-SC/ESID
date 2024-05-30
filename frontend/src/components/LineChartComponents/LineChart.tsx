@@ -16,17 +16,13 @@ import am5locales_de_DE from '@amcharts/amcharts5/locales/de_DE';
 import {darken, useTheme} from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import {useTranslation} from 'react-i18next';
-import {dateToISOString} from '../../utils/DateFormatter';
-import {
-  SimulationDataByNode,
-  CaseDataByNode,
-  GroupResponse,
-  GroupData,
-  Dictionary,
-  SelectedScenarioPercentileData,
-  PercentileDataByDay,
-  Scenario,
-} from '../../types/LineCharttypes';
+import {Dictionary, dateToISOString} from '../../util/util';
+import React from 'react';
+import {Scenario} from 'store/ScenarioSlice';
+import {SelectedScenarioPercentileData, PercentileDataByDay} from 'store/services/scenarioApi';
+import {CaseDataByNode} from 'types/caseData';
+import {GroupResponse, GroupData} from 'types/group';
+import {SimulationDataByNode} from 'types/scenario';
 
 interface ScenarioList {
   scenarios: {
@@ -390,7 +386,18 @@ export default function LineChart({
       };
     },
     // Re-run if scenario, group filter, or selected scenario (percentile series) change. (t, tBackend, and theme do not change during runtime).
-    [scenarioList, groupFilterList, selectedScenario, defaultT, customT, theme, isDataSet, chartId, simulationDataChartName, localization.overrides]
+    [
+      scenarioList,
+      groupFilterList,
+      selectedScenario,
+      defaultT,
+      customT,
+      theme,
+      isDataSet,
+      chartId,
+      simulationDataChartName,
+      localization.overrides,
+    ]
   );
 
   // Effect to hide disabled scenarios (and show them again if not hidden anymore)
@@ -644,10 +651,10 @@ export default function LineChart({
             ? customT(localization.overrides['dateFormat'])
             : defaultT('dateFormat')
         }")} (${
-      localization.overrides && localization.overrides[`compartments.${selectedCompartment}`]
-        ? customT(localization.overrides[`compartments.${selectedCompartment}`])
-        : defaultT(`compartments.${selectedCompartment}`)
-    })</strong>
+          localization.overrides && localization.overrides[`compartments.${selectedCompartment}`]
+            ? customT(localization.overrides[`compartments.${selectedCompartment}`])
+            : defaultT(`compartments.${selectedCompartment}`)
+        })</strong>
         <table>
           ${
             // Table row for each series of an active scenario
@@ -834,7 +841,25 @@ export default function LineChart({
 
     setReferenceDayX();
     // Re-run this effect whenever the data itself changes (or any variable the effect uses)
-  }, [percentileData, simulationData, caseData, groupFilterData, activeScenarios, selectedScenario, scenarioList, selectedCompartment, theme, groupFilterList, defaultT, customT, setReferenceDayX, chartId, isSeriesSet, localization.overrides, exportedFileName]);
+  }, [
+    percentileData,
+    simulationData,
+    caseData,
+    groupFilterData,
+    activeScenarios,
+    selectedScenario,
+    scenarioList,
+    selectedCompartment,
+    theme,
+    groupFilterList,
+    defaultT,
+    customT,
+    setReferenceDayX,
+    chartId,
+    isSeriesSet,
+    localization.overrides,
+    exportedFileName,
+  ]);
 
   return (
     <>

@@ -16,6 +16,7 @@ import {useTranslation} from 'react-i18next';
 import {useAppDispatch, useAppSelector} from '../store/hooks';
 import {selectTab} from '../store/UserPreferenceSlice';
 import {useTheme} from '@mui/material/styles';
+import LineChartContainer from './LineChartContainer';
 
 // Lazily load the tab contents to enable code splitting.
 const ParameterEditor = React.lazy(() => import('./ParameterEditor'));
@@ -60,7 +61,7 @@ export default function MainContentTabs() {
       <TabContext value={selectedTab}>
         <TabPanel value='1' sx={{flexGrow: 1, padding: 0}}>
           <Box id='main-content-simulation-chart-wrapper' sx={{height: '100%'}}>
-            <SimulationChart />
+            <LineChartContainer />
           </Box>
         </TabPanel>
         <TabPanel value='2' sx={{flexGrow: 1, padding: 0}}>
