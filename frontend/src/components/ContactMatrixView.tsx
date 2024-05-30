@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, {useLayoutEffect, useRef} from 'react';
+import React, {useLayoutEffect, useState} from 'react';
 import LoadingContainer from './shared/LoadingContainer';
 import Box from '@mui/material/Box';
 import {useTheme} from '@mui/material/styles';
@@ -11,19 +11,25 @@ import {DateAxis} from '@amcharts/amcharts5/.internal/charts/xy/axes/DateAxis';
 import {AxisRenderer} from '@amcharts/amcharts5/.internal/charts/xy/axes/AxisRenderer';
 import {Tooltip} from '@amcharts/amcharts5/.internal/core/render/Tooltip';
 import {AxisRendererX} from '@amcharts/amcharts5/.internal/charts/xy/axes/AxisRendererX';
+import {SimulationChart} from './SimulationChart';
+import ContactMatrix from './ConctactMatrix';
 
-export default function TimeSeriesComponent() {
+export default function ContactMatrixView() {
   const theme = useTheme();
 
-  const rootRef = useRef<Root | null>(null);
-  const chartRef = useRef<XYChart | null>(null);
-  const xAxisRef = useRef<DateAxis<AxisRenderer> | null>(null);
+  const [root, setRoot] = useState<Root | null>(null);
+  const [chart, setChart] = useState<XYChart | null>(null);
+  const [xAxis, setXAxis] = useState<DateAxis<AxisRenderer> | null>(null);
 
   useLayoutEffect(() => {
     // Create root and chart
-    const root = Root.new('chartdiv');
-    const chart = root.container.children.push(
-      XYChart.new(root, {
+    const newRoot = Root.new('chartdiv');
+
+    // Set number formatter
+    newRoot.numberFormatter.set('numberFormat', '#,###.');
+
+    const newChart = newRoot.container.children.push(
+      XYChart.new(newRoot, {
         panX: false,
         panY: false,
         wheelX: 'panX',
@@ -32,13 +38,12 @@ export default function TimeSeriesComponent() {
       })
     );
 
-    // Set number formatter
-    root.numberFormatter.set('numberFormat', '#,###.');
+    newChart.leftAxesContainer.set('layout', newRoot.verticalLayout);
 
     // Create x-axis
-    const xAxis = chart.xAxes.push(
-      DateAxis.new(root, {
-        renderer: AxisRendererX.new(root, {}),
+    const newXAxis = newChart.xAxes.push(
+      DateAxis.new(newRoot, {
+        renderer: AxisRendererX.new(newRoot, {}),
         // Set base interval and aggregated intervals when the chart is zoomed out
         baseInterval: {timeUnit: 'day', count: 1},
         gridIntervals: [
@@ -50,35 +55,31 @@ export default function TimeSeriesComponent() {
           {timeUnit: 'year', count: 1},
         ],
         // Add tooltip instance so cursor can display value
-        tooltip: Tooltip.new(root, {}),
+        tooltip: Tooltip.new(newRoot, {}),
       })
     );
+
     // Change axis renderer to have ticks/labels on day center
-    const xRenderer = xAxis.get('renderer');
+    const xRenderer = newXAxis.get('renderer');
     xRenderer.ticks.template.setAll({
       location: 0.5,
     });
 
-    // Set refs to be used in other effects
-    rootRef.current = root;
-    chartRef.current = chart;
-    xAxisRef.current = xAxis;
+    setRoot(newRoot);
+    setChart(newChart);
+    setXAxis(newXAxis);
 
     // Clean-up before re-running this effect
     return () => {
       // Dispose old root and chart before creating a new instance
-      chartRef.current?.dispose();
-      rootRef.current?.dispose();
-      xAxisRef.current?.dispose();
+      newRoot?.dispose();
+      newChart?.dispose();
+      newXAxis?.dispose();
     };
   }, []);
 
   return (
-    <LoadingContainer
-      sx={{width: '100%', height: '100%'}}
-      show={caseDataFetching || simulationFetching}
-      overlayColor={theme.palette.background.paper}
-    >
+    <LoadingContainer sx={{width: '100%', height: '100%'}} show={false} overlayColor={theme.palette.background.paper}>
       <Box
         id='chartdiv'
         sx={{
@@ -91,6 +92,8 @@ export default function TimeSeriesComponent() {
           cursor: 'crosshair',
         }}
       />
+      <SimulationChart root={root} chart={chart} xAxis={xAxis} />
+      <ContactMatrix root={root} chart={chart} xAxis={xAxis} />
     </LoadingContainer>
   );
 }

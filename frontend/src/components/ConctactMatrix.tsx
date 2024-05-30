@@ -1,10 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, {useEffect, useMemo, useRef} from 'react';
-import LoadingContainer from './shared/LoadingContainer';
-import Box from '@mui/material/Box';
-import {useTheme} from '@mui/material/styles';
+import React, {useEffect, useMemo, useState} from 'react';
 import {Root} from '@amcharts/amcharts5/.internal/core/Root';
 import {XYChart} from '@amcharts/amcharts5/.internal/charts/xy/XYChart';
 import {DateAxis} from '@amcharts/amcharts5/.internal/charts/xy/axes/DateAxis';
@@ -18,6 +15,7 @@ import {DataProcessor} from '@amcharts/amcharts5/.internal/core/util/DataProcess
 import {dateToISOString, Dictionary} from '../util/util';
 import {useGetSimulationsQuery} from '../store/services/scenarioApi';
 import {color} from '@amcharts/amcharts5/.internal/core/util/Color';
+import {AxisRenderer} from '@amcharts/amcharts5/.internal/charts/xy/axes/AxisRenderer';
 
 const data: Dictionary<Array<number[]>> = {
   home: [
@@ -59,85 +57,51 @@ function average(numbers: Array<number>) {
   return sum / numbers.length;
 }
 
-export default function ContactMatrix(): JSX.Element {
-  const theme = useTheme();
+export default function ContactMatrix(
+  props: Readonly<{
+    root: Root | null;
+    chart: XYChart | null;
+    xAxis: DateAxis<AxisRenderer> | null;
+  }>
+): JSX.Element {
   const dispatch = useAppDispatch();
 
-  const rootRef = useRef<Root | null>(null);
-  const chartRef = useRef<XYChart | null>(null);
   const minDate = useAppSelector((state) => state.dataSelection.minDate);
   const maxDate = useAppSelector((state) => state.dataSelection.maxDate);
 
   const {data: scenarioListData} = useGetSimulationsQuery();
 
-  // Effect to initialize root & chart
   useEffect(
     () => {
-      // Create root and chart
-      const root = Root.new('contact-matrix-root');
-      const chart = root.container.children.push(
-        XYChart.new(root, {
-          panX: false,
-          panY: false,
-          // wheelX: 'panX',
-          // wheelY: 'zoomX',
-          maxTooltipDistance: -1,
-        })
-      );
-
-      // Set number formatter
-      root.numberFormatter.set('numberFormat', '#,###.###');
-
-      // Create x-axis
-      const xAxis = chart.xAxes.push(
-        DateAxis.new(root, {
-          renderer: AxisRendererX.new(root, {}),
-          // Set base interval and aggregated intervals when the chart is zoomed out
-          baseInterval: {timeUnit: 'day', count: 1},
-          // Add tooltip instance so cursor can display value
-          tooltip: Tooltip.new(root, {}),
-        })
-      );
-      // Change axis renderer to have ticks/labels on day center
-      const xRenderer = xAxis.get('renderer');
-      xRenderer.ticks.template.setAll({
-        location: 0.5,
-      });
+      if (!props.chart || !props.root) {
+        return;
+      }
 
       // Create y-axis
-      chart.yAxes.push(
-        CategoryAxis.new(root, {
-          renderer: AxisRendererY.new(root, {}),
+      props.chart.yAxes.push(
+        CategoryAxis.new(props.root, {
+          renderer: AxisRendererY.new(props.root, {}),
           // Add tooltip instance so cursor can display value
-          tooltip: Tooltip.new(root, {}),
+          tooltip: Tooltip.new(props.root, {}),
           categoryField: 'category',
         })
       );
-
-      // Set refs to be used in other effects
-      rootRef.current = root;
-      chartRef.current = chart;
-
-      // Clean-up before re-running this effect
-      return () => {
-        // Dispose old root and chart before creating a new instance
-        chartRef.current?.dispose();
-        rootRef.current?.dispose();
-      };
     },
     // This effect should only run once. dispatch should not change during runtime
-    [dispatch]
+    [dispatch, props.chart, props.root]
   );
 
+  const [series, setSeries] = useState<ColumnSeries | null>(null);
+
   useEffect(() => {
-    if (rootRef.current && chartRef.current) {
-      const yAxis = chartRef.current.yAxes.getIndex(0)!;
+    if (props.root && props.chart) {
+      const yAxis = props.chart.yAxes.getIndex(1)!;
       yAxis.data.setAll(Object.keys(data).map((key) => ({category: key})));
 
-      const series = chartRef.current.series.push(
-        ColumnSeries.new(rootRef.current, {
-          xAxis: chartRef.current.xAxes.getIndex(0)!,
-          yAxis: chartRef.current.yAxes.getIndex(0)!,
+      const series = props.chart.series.push(
+        ColumnSeries.new(props.root, {
+          xAxis: props.chart.xAxes.getIndex(0)!,
+          yAxis: props.chart.yAxes.getIndex(1)!,
           openValueXField: 'fromDate',
           valueXField: 'toDate',
           categoryYField: 'category',
@@ -151,7 +115,7 @@ export default function ContactMatrix(): JSX.Element {
         tooltipText: '{category}: {averageContacts}',
       });
 
-      series.data.processor = DataProcessor.new(rootRef.current, {
+      series.data.processor = DataProcessor.new(props.root, {
         dateFields: ['fromDate', 'toDate'],
         dateFormat: 'yyyy-MM-dd',
       });
@@ -167,20 +131,22 @@ export default function ContactMatrix(): JSX.Element {
           key: 'fill',
         },
       ]);
+
+      setSeries(series);
     }
-  }, []);
+  }, [props.chart, props.root]);
 
   // Effect to update min/max date.
   useEffect(() => {
     // Skip if root or chart is not initialized
-    if (!rootRef.current || !chartRef.current || !minDate || !maxDate) {
+    if (!props.root || !props.chart || !minDate || !maxDate) {
       return;
     }
 
-    const xAxis: DateAxis<AxisRendererX> = chartRef.current.xAxes.getIndex(0) as DateAxis<AxisRendererX>;
+    const xAxis: DateAxis<AxisRendererX> = props.chart.xAxes.getIndex(0) as DateAxis<AxisRendererX>;
     xAxis.set('min', new Date(minDate).setHours(0));
     xAxis.set('max', new Date(maxDate).setHours(23, 59, 59));
-  }, [minDate, maxDate]);
+  }, [minDate, maxDate, props.root, props.chart]);
 
   const categoryData = useMemo(() => {
     if (!scenarioListData?.results[0]) {
@@ -212,24 +178,10 @@ export default function ContactMatrix(): JSX.Element {
   }, [scenarioListData]);
 
   useEffect(() => {
-    if (chartRef.current) {
-      const series = chartRef.current.series.getIndex(0)!;
+    if (series) {
       series.data.setAll(categoryData);
     }
-  }, [categoryData]);
+  }, [categoryData, props.chart, series]);
 
-  return (
-    <LoadingContainer sx={{width: '100%', height: '100%'}} show={false} overlayColor={theme.palette.background.paper}>
-      <Box
-        id='contact-matrix-root'
-        sx={{
-          height: '100%',
-          margin: 0,
-          padding: 0,
-          backgroundColor: theme.palette.background.paper,
-          cursor: 'crosshair',
-        }}
-      />
-    </LoadingContainer>
-  );
+  return <></>;
 }

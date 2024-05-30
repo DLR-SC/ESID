@@ -16,8 +16,8 @@ import {useTranslation} from 'react-i18next';
 import {useAppDispatch, useAppSelector} from '../store/hooks';
 import {selectTab} from '../store/UserPreferenceSlice';
 import {useTheme} from '@mui/material/styles';
-import ContactMatrix from './ConctactMatrix';
 import {SocialDistance} from '@mui/icons-material';
+import ContactMatrixView from './ContactMatrixView';
 
 // Lazily load the tab contents to enable code splitting.
 const ParameterEditor = React.lazy(() => import('./ParameterEditor'));
@@ -73,14 +73,9 @@ export default function MainContentTabs() {
           </Box>
         </TabPanel>
         <TabPanel value='3' sx={{flexGrow: 1, padding: 0}}>
-          <Box id='main-content-contact-matrix-wrapper' sx={{height: '100%', display: 'flex', flexDirection: 'column'}}>
-            <Box sx={{flexGrow: 2}}>
-              <SimulationChart />
-            </Box>
-            <Box sx={{flexGrow: 1}}>
-              <ContactMatrix />
-            </Box>
-            </Box>
+          <Box id='main-content-contact-matrix-wrapper' sx={{height: '100%'}}>
+            <ContactMatrixView />
+          </Box>
         </TabPanel>
         <Box sx={{flexGrow: 0, borderTop: 1, borderColor: 'divider', width: '100%'}}>
           <TabList

@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, {useCallback, useEffect, useRef} from 'react';
+import React, {useCallback, useEffect, useLayoutEffect, useState} from 'react';
 import {Root} from '@amcharts/amcharts5/.internal/core/Root';
 import {Tooltip} from '@amcharts/amcharts5/.internal/core/render/Tooltip';
 import {RoundedRectangle} from '@amcharts/amcharts5/.internal/core/render/RoundedRectangle';
@@ -32,12 +32,100 @@ import LoadingContainer from './shared/LoadingContainer';
 import {useGetMultipleGroupFilterDataQuery} from 'store/services/groupApi';
 import {GroupData} from 'types/group';
 import {setReferenceDayBottom} from '../store/LayoutSlice';
+import {AxisRenderer} from '@amcharts/amcharts5/.internal/charts/xy/axes/AxisRenderer';
+import {useArrayState} from 'rooks';
+
+export default function StandaloneSimulationChart(): JSX.Element {
+  const theme = useTheme();
+
+  const [root, setRoot] = useState<Root | null>(null);
+  const [chart, setChart] = useState<XYChart | null>(null);
+  const [xAxis, setXAxis] = useState<DateAxis<AxisRenderer> | null>(null);
+
+  useLayoutEffect(() => {
+    // Create root and chart
+    const newRoot = Root.new('chartdiv');
+    const newChart = newRoot.container.children.push(
+      XYChart.new(newRoot, {
+        panX: false,
+        panY: false,
+        wheelX: 'panX',
+        wheelY: 'zoomX',
+        maxTooltipDistance: -1,
+      })
+    );
+
+    // Set number formatter
+    newRoot.numberFormatter.set('numberFormat', '#,###.');
+
+    // Create x-axis
+    const newXAxis = newChart.xAxes.push(
+      DateAxis.new(newRoot, {
+        renderer: AxisRendererX.new(newRoot, {}),
+        // Set base interval and aggregated intervals when the chart is zoomed out
+        baseInterval: {timeUnit: 'day', count: 1},
+        gridIntervals: [
+          {timeUnit: 'day', count: 1},
+          {timeUnit: 'day', count: 3},
+          {timeUnit: 'day', count: 7},
+          {timeUnit: 'month', count: 1},
+          {timeUnit: 'month', count: 3},
+          {timeUnit: 'year', count: 1},
+        ],
+        // Add tooltip instance so cursor can display value
+        tooltip: Tooltip.new(newRoot, {}),
+      })
+    );
+
+    // Change axis renderer to have ticks/labels on day center
+    const xRenderer = newXAxis.get('renderer');
+    xRenderer.ticks.template.setAll({
+      location: 0.5,
+    });
+
+    setRoot(newRoot);
+    setChart(newChart);
+    setXAxis(newXAxis);
+
+    // Clean-up before re-running this effect
+    return () => {
+      // Dispose old root and chart before creating a new instance
+      newRoot?.dispose();
+      newChart?.dispose();
+      newXAxis?.dispose();
+    };
+  }, []);
+
+  return (
+    <LoadingContainer sx={{width: '100%', height: '100%'}} show={false} overlayColor={theme.palette.background.paper}>
+      <Box
+        id='chartdiv'
+        sx={{
+          height: '100%',
+          margin: 0,
+          padding: 0,
+          backgroundColor: theme.palette.background.paper,
+          backgroundImage: 'radial-gradient(#E2E4E6 10%, transparent 11%)',
+          backgroundSize: '10px 10px',
+          cursor: 'crosshair',
+        }}
+      />
+      <SimulationChart root={root} chart={chart} xAxis={xAxis} />
+    </LoadingContainer>
+  );
+}
 
 /**
  * React Component to render the Simulation Chart Section
  * @returns {JSX.Element} JSX Element to render the scenario chart container and the scenario graph within.
  */
-export default function SimulationChart(): JSX.Element {
+export function SimulationChart(
+  props: Readonly<{
+    root: Root | null;
+    chart: XYChart | null;
+    xAxis: DateAxis<AxisRenderer> | null;
+  }>
+): JSX.Element {
   const {t, i18n} = useTranslation();
   const {t: tBackend} = useTranslation('backend');
   const theme = useTheme();
@@ -99,160 +187,113 @@ export default function SimulationChart(): JSX.Element {
     {skip: selectedScenario === null || selectedScenario === 0 || !selectedCompartment}
   );
 
-  const rootRef = useRef<Root | null>(null);
-  const chartRef = useRef<XYChart | null>(null);
-
   const setReferenceDayX = useCallback(() => {
-    if (!chartRef.current || !rootRef.current || !referenceDay) {
+    if (!props.chart || !props.root || !props.xAxis || !referenceDay) {
       return;
     }
 
     const midday = new Date(referenceDay).setHours(12, 0, 0);
 
-    const xAxis: DateAxis<AxisRendererX> = chartRef.current.xAxes.getIndex(0) as DateAxis<AxisRendererX>;
-    const xAxisPosition = xAxis.width() * xAxis.toGlobalPosition(xAxis.dateToPosition(new Date(midday)));
-    const globalPosition = xAxis.toGlobal({x: xAxisPosition, y: 0});
-    const docPosition = rootRef.current.rootPointToDocument(globalPosition).x;
+    const xAxisPosition =
+      props.xAxis.width() * props.xAxis.toGlobalPosition(props.xAxis.dateToPosition(new Date(midday)));
+    const globalPosition = props.xAxis.toGlobal({x: xAxisPosition, y: 0});
+    const docPosition = props.root.rootPointToDocument(globalPosition).x;
     dispatch(setReferenceDayBottom(docPosition));
-  }, [dispatch, referenceDay]);
+  }, [dispatch, props.chart, props.root, props.xAxis, referenceDay]);
 
   // Effect to initialize root & chart
   useEffect(
     () => {
-      // Create root and chart
-      const root = Root.new('chartdiv');
-      const chart = root.container.children.push(
-        XYChart.new(root, {
-          panX: false,
-          panY: false,
-          wheelX: 'panX',
-          wheelY: 'zoomX',
-          maxTooltipDistance: -1,
-        })
-      );
-
-      // Set number formatter
-      root.numberFormatter.set('numberFormat', '#,###.');
-
-      // Create x-axis
-      const xAxis = chart.xAxes.push(
-        DateAxis.new(root, {
-          renderer: AxisRendererX.new(root, {}),
-          // Set base interval and aggregated intervals when the chart is zoomed out
-          baseInterval: {timeUnit: 'day', count: 1},
-          gridIntervals: [
-            {timeUnit: 'day', count: 1},
-            {timeUnit: 'day', count: 3},
-            {timeUnit: 'day', count: 7},
-            {timeUnit: 'month', count: 1},
-            {timeUnit: 'month', count: 3},
-            {timeUnit: 'year', count: 1},
-          ],
-          // Add tooltip instance so cursor can display value
-          tooltip: Tooltip.new(root, {}),
-        })
-      );
-      // Change axis renderer to have ticks/labels on day center
-      const xRenderer = xAxis.get('renderer');
-      xRenderer.ticks.template.setAll({
-        location: 0.5,
-      });
+      if (!props.chart || !props.root || !props.xAxis) {
+        return;
+      }
 
       // Create y-axis
-      chart.yAxes.push(
-        ValueAxis.new(root, {
-          renderer: AxisRendererY.new(root, {}),
+      props.chart.yAxes.push(
+        ValueAxis.new(props.root, {
+          renderer: AxisRendererY.new(props.root, {}),
           // Fix lower end to 0
           min: 0,
           // Add tooltip instance so cursor can display value
-          tooltip: Tooltip.new(root, {}),
+          tooltip: Tooltip.new(props.root, {}),
         })
       );
 
       // Add cursor
-      chart.set(
+      props.chart.set(
         'cursor',
-        XYCursor.new(root, {
+        XYCursor.new(props.root, {
           // Only allow zooming along x-axis
           behavior: 'zoomX',
           // Snap cursor to xAxis ticks
-          xAxis: xAxis,
+          xAxis: props.xAxis,
         })
       );
 
       // Add event on double click to select date
-      chart.events.on('click', (ev) => {
+      props.chart.events.on('click', (ev) => {
         // Get date from axis position from cursor position
-        const date = xAxis.positionToDate(
-          xAxis.toAxisPosition(ev.target.get('cursor')?.getPrivate('positionX') as number)
+        const date = props.xAxis?.positionToDate(
+          props.xAxis.toAxisPosition(ev.target.get('cursor')?.getPrivate('positionX') as number)
         );
         // Remove time information to only have a date
-        date.setHours(0, 0, 0, 0);
+        date?.setHours(0, 0, 0, 0);
         // Set date in store
-        dispatch(selectDate(dateToISOString(date)));
+        dispatch(selectDate(dateToISOString(date!)));
       });
-
-      // Set refs to be used in other effects
-      rootRef.current = root;
-      chartRef.current = chart;
-
-      // Clean-up before re-running this effect
-      return () => {
-        // Dispose old root and chart before creating a new instance
-        chartRef.current?.dispose();
-        rootRef.current?.dispose();
-      };
     },
     // This effect should only run once. dispatch should not change during runtime
-    [dispatch]
+    [dispatch, props.chart, props.root, props.xAxis]
   );
 
   // Effect to change localization of chart if language changes
   useEffect(
     () => {
       // Skip if root or chart is not initialized
-      if (!rootRef.current || !chartRef.current) {
+      if (!props.root || !props.chart) {
         return;
       }
 
       // Set localization
-      rootRef.current.locale = i18n.language === 'de' ? am5locales_de_DE : am5locales_en_US;
+      props.root.locale = i18n.language === 'de' ? am5locales_de_DE : am5locales_en_US;
 
       // Change date formats for ticks & tooltip (use fallback object to suppress undefined object warnings as this cannot be undefined)
-      const xAxis: DateAxis<AxisRendererX> = chartRef.current.xAxes.getIndex(0) as DateAxis<AxisRendererX>;
+      const xAxis: DateAxis<AxisRendererX> = props.chart.xAxes.getIndex(0) as DateAxis<AxisRendererX>;
       xAxis.get('dateFormats', {day: ''})['day'] = t('dayFormat');
       xAxis.get('tooltipDateFormats', {day: ''})['day'] = t('dayFormat');
       // Fix first date of the month falling back to wrong format (also with fallback object)
       xAxis.get('periodChangeDateFormats', {day: ''})['day'] = t('dayFormat');
     },
     // Re-run effect if language changes
-    [i18n.language, t]
+    [i18n.language, props.chart, props.root, t]
   );
 
   // Effect to update min/max date.
   useEffect(() => {
     // Skip if root or chart is not initialized
-    if (!rootRef.current || !chartRef.current || !minDate || !maxDate) {
+    if (!props.root || !props.chart || !minDate || !maxDate) {
       return;
     }
 
-    const xAxis: DateAxis<AxisRendererX> = chartRef.current.xAxes.getIndex(0) as DateAxis<AxisRendererX>;
+    const xAxis: DateAxis<AxisRendererX> = props.chart.xAxes.getIndex(0) as DateAxis<AxisRendererX>;
     xAxis.set('min', new Date(minDate).setHours(0));
     xAxis.set('max', new Date(maxDate).setHours(23, 59, 59));
-  }, [minDate, maxDate]);
+  }, [minDate, maxDate, props.root, props.chart]);
 
   // Effect to add series to chart
   useEffect(
     () => {
       // Skip if root or chart not initialized
-      if (!rootRef.current || !chartRef.current) {
+      if (!props.root || !props.chart) {
         return;
       }
 
-      const chart: XYChart = chartRef.current;
-      const root: Root = rootRef.current;
+      const chart: XYChart = props.chart;
+      const root: Root = props.root;
       const xAxis: DateAxis<AxisRendererX> = chart.xAxes.getIndex(0) as DateAxis<AxisRendererX>;
       const yAxis: ValueAxis<AxisRendererY> = chart.yAxes.getIndex(0) as ValueAxis<AxisRendererY>;
+
+      const lineSeries: Array<LineSeries> = [];
 
       // Add series for case data
       const caseDataSeries = chart.series.push(
@@ -269,6 +310,9 @@ export default function SimulationChart(): JSX.Element {
           stroke: color('#000'),
         })
       );
+
+      lineSeries.push(caseDataSeries);
+
       caseDataSeries.strokes.template.setAll({
         strokeWidth: 2,
       });
@@ -292,6 +336,9 @@ export default function SimulationChart(): JSX.Element {
               : undefined,
         })
       );
+
+      lineSeries.push(percentileSeries);
+
       percentileSeries.strokes.template.setAll({
         strokeWidth: 0,
       });
@@ -322,6 +369,9 @@ export default function SimulationChart(): JSX.Element {
             stroke: color(theme.custom.scenarios[scenario.id % theme.custom.scenarios.length][0]),
           })
         );
+
+        lineSeries.push(series);
+
         series.strokes.template.setAll({
           strokeWidth: 2,
         });
@@ -360,6 +410,9 @@ export default function SimulationChart(): JSX.Element {
                 stroke: color(theme.custom.scenarios[selectedScenario % theme.custom.scenarios.length][0]),
               })
             );
+
+            lineSeries.push(series);
+
             series.strokes.template.setAll({
               strokeWidth: 2,
               // Loop through stroke list if group filters exceeds list length
@@ -370,18 +423,28 @@ export default function SimulationChart(): JSX.Element {
 
       // Clean-up function
       return () => {
-        // Remove all series
-        chart.series.clear();
+        lineSeries.forEach((series) => {
+          chart.series.removeValue(series);
+        });
       };
     },
     // Re-run if scenario, group filter, or selected scenario (percentile series) change. (t, tBackend, and theme do not change during runtime).
-    [scenarioList, groupFilterList, selectedScenario, t, tBackend, theme]
+    [
+      scenarioList,
+      groupFilterList,
+      selectedScenario,
+      t,
+      tBackend,
+      theme,
+      props.root,
+      props.chart
+    ]
   );
 
   // Effect to hide disabled scenarios (and show them again if not hidden anymore)
   useEffect(
     () => {
-      const allSeries = chartRef.current?.series;
+      const allSeries = props.chart?.series;
       // Skip effect if chart is not initialized (contains no series yet)
       if (!allSeries) return;
 
@@ -402,17 +465,17 @@ export default function SimulationChart(): JSX.Element {
       });
     },
     // Re-run effect when the active scenario list changes
-    [activeScenarios]
+    [activeScenarios, props.chart?.series]
   );
 
   // Effect to hide deviations if no scenario is selected
   useEffect(
     () => {
       // Skip effect if chart is not initialized (contains no series yet)
-      if (!chartRef.current) return;
+      if (!props.chart) return;
 
       // Find percentile series and only show it if there is a selected scenario
-      chartRef.current?.series.values
+      props.chart?.series.values
         .filter((series) => series.get('id') === 'percentiles')
         .map((percentileSeries) => {
           if (selectedScenario === null || selectedScenario === 0) {
@@ -423,18 +486,18 @@ export default function SimulationChart(): JSX.Element {
         });
     },
     // Re-run effect when the selected scenario changes
-    [selectedScenario]
+    [props.chart, selectedScenario]
   );
 
   // Effect to add Guide when date selected
   useEffect(() => {
     // Skip effect if chart (or root) is not initialized yet or no date is selected
-    if (!chartRef.current || !rootRef.current || !selectedDate) {
+    if (!props.chart || !props.root || !selectedDate) {
       return;
     }
 
     // Get xAxis from chart
-    const xAxis = chartRef.current.xAxes.getIndex(0) as DateAxis<AxisRendererX>;
+    const xAxis = props.chart.xAxes.getIndex(0) as DateAxis<AxisRendererX>;
 
     // Create data item for range
     const rangeDataItem = xAxis.makeDataItem({
@@ -474,7 +537,7 @@ export default function SimulationChart(): JSX.Element {
         day: '2-digit',
       }),
       location: 0.5,
-      background: RoundedRectangle.new(rootRef.current, {
+      background: RoundedRectangle.new(props.root, {
         fill: color(theme.palette.primary.main),
       }),
       // Put Label to the topmost layer to make sure it is drawn on top of the axis tick labels
@@ -485,18 +548,18 @@ export default function SimulationChart(): JSX.Element {
       // Discard range before re-running this effect
       xAxis.axisRanges.removeValue(range);
     };
-  }, [selectedDate, theme, i18n.language]);
+  }, [selectedDate, theme, i18n.language, props.chart, props.root]);
 
   // Effect to add guide for the reference day
   useEffect(
     () => {
       // Skip effect if chart (or root) is not initialized yet or no date is selected
-      if (!chartRef.current || !rootRef.current || !referenceDay) {
+      if (!props.chart || !props.root || !referenceDay) {
         return;
       }
 
       // Get xAxis from chart
-      const xAxis = chartRef.current.xAxes.getIndex(0) as DateAxis<AxisRendererX>;
+      const xAxis = props.chart.xAxes.getIndex(0) as DateAxis<AxisRendererX>;
 
       const referenceDate = new Date(referenceDay);
       const start = referenceDate.setHours(12, 0, 0);
@@ -524,7 +587,7 @@ export default function SimulationChart(): JSX.Element {
       xAxis.onPrivate('selectionMin', setReferenceDayX);
       xAxis.onPrivate('selectionMax', setReferenceDayX);
       const resizeObserver = new ResizeObserver(setReferenceDayX);
-      resizeObserver.observe(rootRef.current.dom);
+      resizeObserver.observe(props.root.dom);
 
       return () => {
         // Discard range before re-running this effect
@@ -533,13 +596,13 @@ export default function SimulationChart(): JSX.Element {
       };
     },
     // Re-run effect when selection changes (date/scenario/compartment/district) or when the active scenarios/filters change (theme and translation do not change after initialization)
-    [referenceDay, theme, i18n.language, setReferenceDayX]
+    [referenceDay, theme, i18n.language, setReferenceDayX, props.chart, props.root]
   );
 
   // Effect to update Simulation and case data
   useEffect(() => {
     // Skip effect if chart is not initialized yet
-    if (!chartRef.current) return;
+    if (!props.chart) return;
     // Also skip if there is no scenario or compartment selected
     if (selectedScenario === null || !selectedCompartment) return;
 
@@ -599,10 +662,10 @@ export default function SimulationChart(): JSX.Element {
     });
 
     // Put data into series
-    chartRef.current.series.each((series, i) => {
+    props.chart.series.each((series, i) => {
       // Set-up data processors for first series (not needed for others since all use the same data)
       if (i === 0) {
-        series.data.processor = DataProcessor.new(rootRef.current as Root, {
+        series.data.processor = DataProcessor.new(props.root as Root, {
           // Define date fields and their format (incoming format from API)
           dateFields: ['date'],
           dateFormat: 'yyyy-MM-dd',
@@ -621,7 +684,7 @@ export default function SimulationChart(): JSX.Element {
         <table>
           ${
             // Table row for each series of an active scenario
-            chartRef.current.series.values
+            props.chart.series.values
               .filter((series) => activeScenarios?.includes(Number(series.get('id'))))
               .map((series): string => {
                 /* Skip if series:
@@ -679,7 +742,7 @@ export default function SimulationChart(): JSX.Element {
                   series.get('id') !== selectedScenario.toString()
                     ? ''
                     : // Add table row for each active group filter
-                      (chartRef.current as XYChart).series.values
+                      (props.chart as XYChart).series.values
                         .filter((s) => s.get('id')?.startsWith('group-filter-') && !s.isHidden())
                         .map((groupFilterSeries) => {
                           return `
@@ -705,8 +768,8 @@ export default function SimulationChart(): JSX.Element {
       `;
 
     // Attach tooltip to series
-    chartRef.current.series.each((series) => {
-      const tooltip = Tooltip.new(rootRef.current as Root, {
+    props.chart.series.each((series) => {
+      const tooltip = Tooltip.new(props.root as Root, {
         labelHTML: tooltipHTML,
         getFillFromSprite: false,
         autoTextColor: false,
@@ -763,8 +826,8 @@ export default function SimulationChart(): JSX.Element {
     import('@amcharts/amcharts5/plugins/exporting')
       .then((module) => {
         // Update export menu
-        module.Exporting.new(rootRef.current as Root, {
-          menu: module.ExportingMenu.new(rootRef.current as Root, {}),
+        module.Exporting.new(props.root as Root, {
+          menu: module.ExportingMenu.new(props.root as Root, {}),
           filePrefix: 'Covid Simulation Data',
           dataSource: data,
           dateFields: ['date'],
@@ -791,26 +854,9 @@ export default function SimulationChart(): JSX.Element {
     t,
     tBackend,
     setReferenceDayX,
+    props.chart,
+    props.root,
   ]);
 
-  return (
-    <LoadingContainer
-      sx={{width: '100%', height: '100%'}}
-      show={caseDataFetching || simulationFetching}
-      overlayColor={theme.palette.background.paper}
-    >
-      <Box
-        id='chartdiv'
-        sx={{
-          height: '100%',
-          margin: 0,
-          padding: 0,
-          backgroundColor: theme.palette.background.paper,
-          backgroundImage: 'radial-gradient(#E2E4E6 10%, transparent 11%)',
-          backgroundSize: '10px 10px',
-          cursor: 'crosshair',
-        }}
-      />
-    </LoadingContainer>
-  );
+  return <></>;
 }

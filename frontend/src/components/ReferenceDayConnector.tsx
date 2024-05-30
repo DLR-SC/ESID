@@ -50,7 +50,7 @@ export function ReferenceDayConnector(): JSX.Element {
         height: theme.spacing(4),
       }}
     >
-      {selectedTab === '1' ? (
+      {selectedTab === '1' || selectedTab === '3' ? (
         <Box
           sx={{
             borderBottom: `2px dashed ${darken(theme.palette.divider, 0.25)}`,
