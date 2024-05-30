@@ -5,6 +5,19 @@ SPDX-License-Identifier: CC-BY-4.0
 
 # ESID Änderungshistorie
 
+## v0.3.1-beta
+
+**Veröffentlichungsdatum:** TBD
+
+### Neue Funktionen
+
+### Verbesserungen
+
+### Fehlerbehebungen
+- Fehlende Übersetzungen wurden ergänzt.
+
+---
+
 ## v0.3.0-beta
 
 **Veröffentlichungsdatum:** 03.05.2024
@@ -47,7 +60,6 @@ SPDX-License-Identifier: CC-BY-4.0
 - Ein Fehler wurde behoben, der Landkreise mit fehlenden Daten verschwinden lies.
 - Ein Fehler wurde behoben, der die Webseite abstürzen lässt, nachdem die zugrunde liegenden Daten aktualisiert wurden.
 - Ein Fehler wurde behoben, der die Webseite abstürzen lässt, wenn ein Szenario aus der Datenbank entfernt wurde.
-- Fehlende Übersetzungen wurden ergänzt.
 
 ---
 

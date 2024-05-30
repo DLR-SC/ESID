@@ -5,6 +5,19 @@ SPDX-License-Identifier: CC-BY-4.0
 
 # ESID Changelog
 
+## v0.3.1-beta
+
+**Release Date:** TBD
+
+### New Features
+
+### Improvements
+
+### Bug fixes
+- Missing translations were fixed.
+
+---
+
 ## v0.3.0-beta
 
 **Release Date:** 03.05.2024
@@ -47,7 +60,6 @@ SPDX-License-Identifier: CC-BY-4.0
 - Fixed an error, where districts with missing values weren't shown.
 - Fixed an error, which crashed the website when the data was updated.
 - Fixed an error, which crashed the website when a scenario was removed from the database.
-- Missing translations were fixed.
 
 ---
 
