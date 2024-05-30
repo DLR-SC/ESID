@@ -143,16 +143,6 @@ export default function HeatLegendEdit(): JSX.Element {
               {availablePresets.map((preset, i) => (
                 <MenuItem key={'legendPresetSelect' + i.toString()} value={preset.name}>
                   <Box sx={{width: '100%'}}>
-                    {/*<HeatLegend*/}
-                    {/*  legend={preset}*/}
-                    {/*  exposeLegend={() => {*/}
-                    {/*    return;*/}
-                    {/*  }}*/}
-                    {/*  min={0}*/}
-                    {/*  max={preset.steps[preset.steps.length - 1].value}*/}
-                    {/*  displayText={!preset.isNormalized}*/}
-                    {/*  id={preset.name}*/}
-                    {/*/>*/}
                     <LegendGradient legend={preset} />
                     <Box>
                       <Typography variant='h2' align='center'>
