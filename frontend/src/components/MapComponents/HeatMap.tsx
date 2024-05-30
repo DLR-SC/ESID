@@ -276,7 +276,8 @@ export default function HeatMap({
 
     if (selectedScenario !== null && !isFetching) {
       polygonSeries.mapPolygons.each((polygon) => {
-        const regionData = polygon.dataItem?.dataContext as FeatureProperties;
+        const originalRegionData = polygon.dataItem?.dataContext as FeatureProperties;
+        const regionData = {...originalRegionData};
         regionData.value = map.get(regionData[idValuesToMap]) ?? Number.NaN;
         // determine fill color
         let fillColor = am5.color(defaultFill);

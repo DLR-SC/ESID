@@ -1,6 +1,6 @@
 import {useCallback, useContext, useEffect, useState} from 'react';
 import LineChart from './LineChartComponents/LineChart';
-
+import {SelectedScenarioPercentileData} from 'store/services/scenarioApi';
 import LoadingContainer from './shared/LoadingContainer';
 import {useTheme} from '@mui/material';
 import {useTranslation} from 'react-i18next';
@@ -11,8 +11,9 @@ import {Dictionary} from 'util/util';
 import {Scenario} from 'store/ScenarioSlice';
 import {SimulationDataByNode} from 'types/scenario';
 import {CaseDataByNode} from 'types/caseData';
-import {SelectedScenarioPercentileData} from 'store/services/scenarioApi';
 import {GroupResponse} from 'types/group';
+import {setSelectedDateStore} from 'store/LineChartSlice';
+import {setReferenceDayBottom} from 'store/LayoutSlice';
 
 export default function LineChartContainer() {
   const theme = useTheme();
@@ -82,7 +83,7 @@ export default function LineChartContainer() {
   const [activeScenarios, setActiveScenarios] = useState([0, 1, 2]);
 
   const [selectedDate, setSelectedDate] = useState<string>('2021-09-01');
-  const [referenceDayBottom, setReferenceDayBottom] = useState<number | null>(null);
+  const [referenceDayb, setReferenceDayb] = useState<number>(0);
 
   const simulationDataChartName = useCallback(
     (scenario: Scenario) => tBackend(`scenario-names.${scenario.label}`),
@@ -92,10 +93,13 @@ export default function LineChartContainer() {
   const {caseData, simulationData, percentileData, groupFilterData, isChartDataFetching} = useContext(DataContext);
 
   const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(setSelectedDateStore(selectedDate));
+  }, [selectedDate, dispatch]);
 
-  //   useEffect(() => {
-  //     dispatch(setSelectedDateInChart({chartId: 'lineChart1', date: selectedDate}));
-  //   }, [selectedDate, dispatch]);
+  useEffect(() => {
+    dispatch(setReferenceDayBottom(referenceDayb));
+  }, [referenceDayb, dispatch]);
 
   return (
     <LoadingContainer
@@ -107,7 +111,7 @@ export default function LineChartContainer() {
         chartId={'lineChart1'}
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
-        setReferenceDayBottom={setReferenceDayBottom}
+        setReferenceDayBottom={setReferenceDayb}
         simulationDataChartName={simulationDataChartName}
         simulationData={simulationData as SimulationDataByNode[]}
         caseData={caseData as CaseDataByNode}

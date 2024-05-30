@@ -20,13 +20,7 @@ interface HeatLegendEditProps {
   legend: HeatmapLegend;
   selectedScenario?: number | null;
   t?: (key: string) => string;
-  localization: {
-    numberFormatter: (value: number) => string;
-    customLang?: string;
-    overrides?: {
-      [key: string]: string;
-    };
-  };
+  formatNumber: (value: number) => string;
 }
 /**
  * This component displays an edit button to access a modal. In the modal you can edit the heatmap legend.
@@ -36,7 +30,7 @@ export default function HeatLegendEdit({
   legend,
   selectedScenario = null,
   t = (key: string) => key,
-  localization,
+  formatNumber,
 }: HeatLegendEditProps) {
   const theme = useTheme();
   // // This contains all legends using the default colors.
@@ -159,7 +153,7 @@ export default function HeatLegendEdit({
                         max={preset.steps[preset.steps.length - 1].value}
                         displayText={!preset.isNormalized}
                         id={preset.name}
-                        localization={localization}
+                        formatNumber={formatNumber}
                       />
                     </Grid>
                     <Grid item xs={12}>

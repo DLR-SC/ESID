@@ -7,14 +7,14 @@ export interface SelectedDistrict {
 const initialState: SelectedDistrict = {};
 
 export const SelectedDistrictSlice = createSlice({
-  name: 'SelectedDistrict',
+  name: 'SelectedArea',
   initialState,
   reducers: {
-    setSelectedDistrict: (state, action) => {
-      state = action.payload as SelectedDistrict;
+    setSelectedAreaStore: (_state, action) => {
+      return action.payload as SelectedDistrict;
     },
   },
 });
 
-export const {setSelectedDistrict} = SelectedDistrictSlice.actions;
+export const {setSelectedAreaStore} = SelectedDistrictSlice.actions;
 export default SelectedDistrictSlice.reducer;

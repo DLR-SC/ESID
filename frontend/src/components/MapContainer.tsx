@@ -15,7 +15,7 @@ import LoadingContainer from './shared/LoadingContainer';
 import {NumberFormatter} from 'util/hooks';
 import HeatMap from './MapComponents/HeatMap';
 import HeatLegend from './MapComponents/HeatLegend';
-import {setSelectedDistrict} from 'store/MapSlice';
+import {setSelectedAreaStore} from 'store/MapSlice';
 import {DataContext} from 'DataContext';
 import SidebarTabs from './Sidebar/SidebarTabs';
 import Container from '@mui/material/Container';
@@ -23,16 +23,21 @@ import Box from '@mui/material/Box';
 
 export default function MapContainer() {
   const {t} = useTranslation();
-  const {t: tBackend} = useTranslation('backend');
   const {formatNumber} = NumberFormatter(i18n.language, 1, 0);
+  const {t: tBackend} = useTranslation('backend');
   const theme = useTheme();
 
-  const [selectedArea, setSelectedArea] = useState<FeatureProperties>({
-    RS: '00000',
-    GEN: t('germany'),
-    BEZ: '',
-    id: -1,
-  });
+  const defaultValue = useMemo(() => {
+    return {
+      RS: '00000',
+      GEN: t('germany'),
+      BEZ: '',
+      id: -1,
+    };
+  }, [t]);
+
+  const [geoData, setGeoData] = useState<FeatureCollection>();
+  const [selectedArea, setSelectedArea] = useState<FeatureProperties>(defaultValue);
 
   const [aggregatedMax, setAggregatedMax] = useState<number>(1);
   const legendRef = useRef<am5.HeatLegend | null>(null);
@@ -56,7 +61,20 @@ export default function MapContainer() {
     areMapValuesFetching: false,
   };
 
-  const [geodata, setGeodata] = useState<FeatureCollection | undefined>();
+  // Fetch Map Coordinates and properties from GeoJSON file via URL and set GeoData
+  useEffect(() => {
+    const fetchData = async () => {
+      const geoData = await fetch(data, {
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+      });
+      const geoDataJson = await geoData.json();
+      setGeoData(geoDataJson);
+    };
+    fetchData();
+  }, []);
 
   const selectedCompartment = 'Infected';
 
@@ -79,49 +97,11 @@ export default function MapContainer() {
     [t]
   );
 
-  const defaultValue = useMemo(() => {
-    return {
-      RS: '00000',
-      GEN: t('germany'),
-      BEZ: '',
-      id: -1,
-    };
-  }, [t]);
-
-  // fetch geojson
-  useEffect(() => {
-    fetch(data, {
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-    })
-      .then((response) => response.json())
-      .then(
-        // resolve Promise
-        (geojson: FeatureCollection) => {
-          setGeodata(geojson);
-        },
-        // reject promise
-        () => {
-          console.warn('Failed to fetch geoJSON');
-        }
-      );
-  }, []);
-
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(setSelectedDistrict(defaultValue));
-  }, [defaultValue, dispatch]);
-
-  useEffect(() => {
-    dispatch(setSelectedDistrict(selectedArea));
+    dispatch(setSelectedAreaStore(selectedArea));
   }, [selectedArea, dispatch]);
-
-  // const localization = useMemo(() => {
-  //   return {numberFormatter: formatNumber};
-  // }, [formatNumber]);
 
   return (
     <Stack
@@ -137,7 +117,7 @@ export default function MapContainer() {
     >
       <Box id='sidebar-map-search-bar-wrapper'>
         <SearchBar
-          data={geodata}
+          data={geoData}
           defaultValue={{
             RS: '00000',
             GEN: t('germany'),
@@ -170,7 +150,7 @@ export default function MapContainer() {
             legend={legend}
             legendRef={legendRef}
             fixedLegendMaxValue={fixedLegendMaxValue}
-            mapData={geodata}
+            mapData={geoData}
             tooltipText={calculateToolTip}
             tooltipTextWhileFetching={calculateToolTipFetching}
             defaultSelectedValue={defaultValue}
@@ -199,7 +179,7 @@ export default function MapContainer() {
                 }
                 displayText={true}
                 id={'legend'}
-                localization={{numberFormatter: formatNumber}}
+                formatNumber={formatNumber}
               />
             </Grid>
             <Grid item container justifyContent='center' direction={'column'} xs={1}>
@@ -213,7 +193,7 @@ export default function MapContainer() {
                 legend={legend}
                 setLegend={setLegend}
                 selectedScenario={selectedScenario}
-                localization={{numberFormatter: formatNumber}}
+                formatNumber={formatNumber}
               />
             </Grid>
           </Grid>

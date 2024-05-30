@@ -16,11 +16,10 @@ import {useTranslation} from 'react-i18next';
 import {useAppDispatch, useAppSelector} from '../store/hooks';
 import {selectTab} from '../store/UserPreferenceSlice';
 import {useTheme} from '@mui/material/styles';
-import LineChartContainer from './LineChartContainer';
 
 // Lazily load the tab contents to enable code splitting.
 const ParameterEditor = React.lazy(() => import('./ParameterEditor'));
-const SimulationChart = React.lazy(() => import('./SimulationChart'));
+const SimulationChart = React.lazy(() => import('./LineChartContainer'));
 
 /**
  * This component manages the main content, which is a collection of tabs that the user can navigate through. By default
@@ -61,7 +60,7 @@ export default function MainContentTabs() {
       <TabContext value={selectedTab}>
         <TabPanel value='1' sx={{flexGrow: 1, padding: 0}}>
           <Box id='main-content-simulation-chart-wrapper' sx={{height: '100%'}}>
-            <LineChartContainer />
+            <SimulationChart />
           </Box>
         </TabPanel>
         <TabPanel value='2' sx={{flexGrow: 1, padding: 0}}>

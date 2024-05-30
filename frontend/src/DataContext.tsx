@@ -1,4 +1,4 @@
-import {createContext, useState, useEffect} from 'react';
+import {createContext, useState, useEffect, useMemo} from 'react';
 import React from 'react';
 import {useGetCaseDataByDateQuery} from 'store/services/caseDataApi';
 import {useGetMultipleGroupFilterDataQuery} from 'store/services/groupApi';
@@ -13,6 +13,8 @@ import {SimulationDataByNode} from 'types/scenario';
 import {Dictionary} from 'util/util';
 import {useGetCaseDataByDistrictQuery} from 'store/services/caseDataApi';
 import {useGetMultipleSimulationDataByNodeQuery} from 'store/services/scenarioApi';
+import {useAppSelector} from 'store/hooks';
+
 // Create the context
 export const DataContext = createContext<{
   mapData: {id: string; value: number}[] | undefined;
@@ -39,67 +41,71 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
   const selectedScenario = 1;
   const activeScenarios = [0, 1, 2];
   const selectedCompartment = 'Infected';
-  const selectedDate = '2021-09-04';
-  const selectedDistrict = {RS: '11000', GEN: 'Berlin', BEZ: 'Berlin'};
-  const groupFilterList = {
-    '3ce4e1be-1a8c-42a4-841d-8e93e2ab0d87': {
-      id: '3ce4e1be-1a8c-42a4-841d-8e93e2ab0d87',
-      name: 'aaaaa',
-      isVisible: true,
-      groups: {
-        age: ['age_0', 'age_1', 'age_2'],
-        gender: ['male', 'nonbinary', 'female'],
+  const selectedDistrict = useAppSelector((state) => state.mapSlice);
+  const selectedDate = useAppSelector((state) => state.lineChartSlice.selectedDate);
+  const groupFilterList = useMemo(() => {
+    return {
+      '3ce4e1be-1a8c-42a4-841d-8e93e2ab0d87': {
+        id: '3ce4e1be-1a8c-42a4-841d-8e93e2ab0d87',
+        name: 'aaaaa',
+        isVisible: true,
+        groups: {
+          age: ['age_0', 'age_1', 'age_2'],
+          gender: ['male', 'nonbinary', 'female'],
+        },
       },
-    },
-    'f9b26583-78df-440f-b35d-bf22b5c3a439': {
-      id: 'f9b26583-78df-440f-b35d-bf22b5c3a439',
-      name: 'lllllllllllllll',
-      isVisible: true,
-      groups: {
-        age: ['age_0', 'age_1', 'age_3', 'age_2', 'age_4'],
-        gender: ['female', 'male', 'nonbinary'],
+      'f9b26583-78df-440f-b35d-bf22b5c3a439': {
+        id: 'f9b26583-78df-440f-b35d-bf22b5c3a439',
+        name: 'lllllllllllllll',
+        isVisible: true,
+        groups: {
+          age: ['age_0', 'age_1', 'age_3', 'age_2', 'age_4'],
+          gender: ['female', 'male', 'nonbinary'],
+        },
       },
-    },
-  };
-  const scenarioList = {
-    scenarios: {
-      '1': {
-        id: 1,
-        label: 'Summer 2021 Simulation 1',
+    };
+  }, []);
+  const scenarioList = useMemo(() => {
+    return {
+      scenarios: {
+        '1': {
+          id: 1,
+          label: 'Summer 2021 Simulation 1',
+        },
+        '2': {
+          id: 2,
+          label: 'Summer 2021 Simulation 2',
+        },
       },
-      '2': {
-        id: 2,
-        label: 'Summer 2021 Simulation 2',
-      },
-    },
-    compartments: [
-      'Infected',
-      'Hospitalized',
-      'ICU',
-      'Dead',
-      'Exposed',
-      'Recovered',
-      'Carrier',
-      'Susceptible',
-      'CarrierT',
-      'CarrierTV1',
-      'CarrierTV2',
-      'CarrierV1',
-      'CarrierV2',
-      'ExposedV1',
-      'ExposedV2',
-      'HospitalizedV1',
-      'HospitalizedV2',
-      'ICUV1',
-      'ICUV2',
-      'InfectedT',
-      'InfectedTV1',
-      'InfectedTV2',
-      'InfectedV1',
-      'InfectedV2',
-      'SusceptibleV1',
-    ],
-  };
+      compartments: [
+        'Infected',
+        'Hospitalized',
+        'ICU',
+        'Dead',
+        'Exposed',
+        'Recovered',
+        'Carrier',
+        'Susceptible',
+        'CarrierT',
+        'CarrierTV1',
+        'CarrierTV2',
+        'CarrierV1',
+        'CarrierV2',
+        'ExposedV1',
+        'ExposedV2',
+        'HospitalizedV1',
+        'HospitalizedV2',
+        'ICUV1',
+        'ICUV2',
+        'InfectedT',
+        'InfectedTV1',
+        'InfectedTV2',
+        'InfectedV1',
+        'InfectedV2',
+        'SusceptibleV1',
+      ],
+    };
+  }, []);
 
   // useEffect(() => {
   //   const fetchMapValues = async () => {
@@ -161,30 +167,36 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
             );
           })
         : [],
-      node: selectedDistrict.RS,
+      node: selectedDistrict.RS as string,
       groups: ['total'],
       compartments: [selectedCompartment ?? ''],
     },
-    {skip: !selectedCompartment}
+    {skip: !selectedCompartment || Object.keys(selectedDistrict).length == 0}
   );
 
   const {data: chartCaseData, isFetching: chartCaseDataFetching} = useGetCaseDataByDistrictQuery(
     {
-      node: selectedDistrict.RS,
+      node: selectedDistrict.RS as string,
       groups: ['total'],
       compartments: [selectedCompartment ?? ''],
     },
-    {skip: !selectedCompartment}
+    {skip: !selectedCompartment || Object.keys(selectedDistrict).length == 0}
   );
 
   const {data: percentileData} = useGetPercentileDataQuery(
     {
       id: selectedScenario as number,
-      node: selectedDistrict.RS,
+      node: selectedDistrict.RS as string,
       groups: ['total'],
       compartment: selectedCompartment as string,
     },
-    {skip: selectedScenario === null || selectedScenario === 0 || !selectedCompartment}
+    {
+      skip:
+        selectedScenario === null ||
+        selectedScenario === 0 ||
+        !selectedCompartment ||
+        Object.keys(selectedDistrict).length == 0,
+    }
   );
 
   const {data: groupFilterData} = useGetMultipleGroupFilterDataQuery(
@@ -194,12 +206,13 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
           .map((groupFilter) => {
             return {
               id: selectedScenario,
-              node: selectedDistrict.RS,
+              node: selectedDistrict.RS as string,
               compartment: selectedCompartment,
               groupFilter: groupFilter,
             };
           })
-      : []
+      : [],
+    {skip: !selectedDistrict || Object.keys(selectedDistrict).length == 0}
   );
 
   useEffect(() => {

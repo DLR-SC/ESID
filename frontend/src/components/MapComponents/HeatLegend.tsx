@@ -14,13 +14,7 @@ interface HeatProps {
   tooltipStartColor?: string;
   tooltipEndColor?: string;
   style?: React.CSSProperties;
-  localization: {
-    numberFormatter: (value: number) => string;
-    customLang?: string;
-    overrides?: {
-      [key: string]: string;
-    };
-  };
+  formatNumber: (value: number) => string;
 }
 
 export default function HeatLegend({
@@ -37,9 +31,9 @@ export default function HeatLegend({
     margin: '5px',
     height: '50px',
   },
-  localization,
+  formatNumber,
 }: HeatProps) {
-  const unique_id = id + String(Date.now() + Math.random()); // "guarantee" unique id
+  const unique_id = id + String(Date.now() + Math.random());
 
   useEffect(() => {
     const root = am5.Root.new(unique_id);
@@ -47,9 +41,9 @@ export default function HeatLegend({
       am5.HeatLegend.new(root, {
         orientation: 'horizontal',
         startValue: min,
-        startText: displayText ? localization.numberFormatter(min) : ' ',
+        startText: displayText ? formatNumber(min) : ' ',
         endValue: max,
-        endText: displayText ? localization.numberFormatter(max) : ' ',
+        endText: displayText ? formatNumber(max) : ' ',
         // set start & end color to paper background as gradient is overwritten later and this sets the tooltip background color
         startColor: am5.color(tooltipStartColor),
         endColor: am5.color(tooltipEndColor),
@@ -79,19 +73,8 @@ export default function HeatLegend({
       root.dispose();
       exposeLegend(null);
     };
-  }, [
-    id,
-    min,
-    max,
-    displayText,
-    exposeLegend,
-    unique_id,
-    legend,
-    localization.numberFormatter,
-    tooltipStartColor,
-    tooltipEndColor,
-    localization,
-  ]);
+    
+  }, [displayText, formatNumber, legend.isNormalized, legend.steps, max, min, tooltipEndColor, tooltipStartColor]);
 
   return <Box id={unique_id} sx={style} />;
 }
