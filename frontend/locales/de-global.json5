@@ -52,6 +52,7 @@
     'confirm-discard-title': 'Änderungen Verwerfen',
     'confirm-discard-text': 'Sie haben ungespeicherte Änderungen. Wollen sie diese verwerfen?',
     discard: 'Verwerfen',
+    delete: 'Löschen',
   },
   chart: {
     caseData: 'Geschätzte Fälle',
