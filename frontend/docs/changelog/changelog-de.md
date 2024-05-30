@@ -14,6 +14,7 @@ SPDX-License-Identifier: CC-BY-4.0
 ### Verbesserungen
 
 ### Fehlerbehebungen
+
 - Fehlende Übersetzungen wurden ergänzt.
 
 ---
