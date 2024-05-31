@@ -4,7 +4,7 @@ import data from '../../assets/lk_germany_reduced.geojson?url';
 import {Grid, Stack, useTheme} from '@mui/material';
 import * as am5 from '@amcharts/amcharts5';
 import React from 'react';
-import {useAppDispatch} from 'store/hooks';
+import {useAppDispatch, useAppSelector} from 'store/hooks';
 import {HeatmapLegend} from 'types/heatmapLegend';
 import {FeatureProperties, FeatureCollection} from 'types/map';
 import i18n from 'util/i18n';
@@ -15,11 +15,12 @@ import LoadingContainer from './shared/LoadingContainer';
 import {NumberFormatter} from 'util/hooks';
 import HeatMap from './MapComponents/HeatMap';
 import HeatLegend from './MapComponents/HeatLegend';
-import {setSelectedAreaStore} from 'store/MapSlice';
 import {DataContext} from 'DataContext';
 import SidebarTabs from './Sidebar/SidebarTabs';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
+import {setSelectedAreaStore} from 'store/MapSlice';
+import {selectDistrict} from 'store/DataSelectionSlice';
 
 export default function MapContainer() {
   const {t} = useTranslation();
@@ -51,7 +52,7 @@ export default function MapContainer() {
   });
   const [longLoad, setLongLoad] = useState(false);
   const [fixedLegendMaxValue, setFixedLegendMaxValue] = useState<number | null>(null);
-  const selectedScenario = 0;
+  const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
 
   const {
     mapData,
@@ -61,22 +62,28 @@ export default function MapContainer() {
     areMapValuesFetching: false,
   };
 
-  // Fetch Map Coordinates and properties from GeoJSON file via URL and set GeoData
+  // fetch geojson
   useEffect(() => {
-    const fetchData = async () => {
-      const geoData = await fetch(data, {
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
+    fetch(data, {
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+    })
+      .then((response) => response.json())
+      .then(
+        // resolve Promise
+        (geojson: FeatureCollection) => {
+          setGeoData(geojson);
         },
-      });
-      const geoDataJson = await geoData.json();
-      setGeoData(geoDataJson);
-    };
-    fetchData();
+        // reject promise
+        () => {
+          console.warn('Failed to fetch geoJSON');
+        }
+      );
   }, []);
 
-  const selectedCompartment = 'Infected';
+  const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
 
   const calculateToolTip = useCallback(
     (regionData: FeatureProperties) => {
@@ -86,7 +93,7 @@ export default function MapContainer() {
         ? `${bez} {GEN}\n${compartmentName}: ${formatNumber(Number(regionData.value))}`
         : `${bez} {GEN}`;
     },
-    [formatNumber, t, tBackend]
+    [formatNumber, selectedCompartment, selectedScenario, t, tBackend]
   );
 
   const calculateToolTipFetching = useCallback(
@@ -98,6 +105,16 @@ export default function MapContainer() {
   );
 
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(
+      selectDistrict({
+        ags: String(selectedArea['RS']),
+        name: String(selectedArea['GEN']),
+        type: String(selectedArea['BEZ']),
+      })
+    );
+  }, [selectedArea, dispatch]);
 
   useEffect(() => {
     dispatch(setSelectedAreaStore(selectedArea));
@@ -118,12 +135,7 @@ export default function MapContainer() {
       <Box id='sidebar-map-search-bar-wrapper'>
         <SearchBar
           data={geoData}
-          defaultValue={{
-            RS: '00000',
-            GEN: t('germany'),
-            BEZ: '',
-            id: -1,
-          }}
+          defaultValue={defaultValue}
           sortProperty={'GEN'}
           optionLabel={(option) => `${option.GEN}${option.BEZ ? ` (${t(`BEZ.${option.BEZ}`)})` : ''}`}
           autoCompleteValue={{

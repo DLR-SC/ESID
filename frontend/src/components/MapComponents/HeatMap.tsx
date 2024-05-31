@@ -300,7 +300,8 @@ export default function HeatMap({
       });
     } else if (longLoad || !values) {
       polygonSeries.mapPolygons.each((polygon) => {
-        const regionData = polygon.dataItem?.dataContext as FeatureProperties;
+        const originalRegionData = polygon.dataItem?.dataContext as FeatureProperties;
+        const regionData = {...originalRegionData};
         regionData.value = Number.NaN;
         polygon.setAll({
           tooltipText: tooltipTextWhileFetching(regionData),

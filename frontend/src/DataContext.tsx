@@ -1,4 +1,4 @@
-import {createContext, useState, useEffect, useMemo} from 'react';
+import {createContext, useState, useEffect} from 'react';
 import React from 'react';
 import {useGetCaseDataByDateQuery} from 'store/services/caseDataApi';
 import {useGetMultipleGroupFilterDataQuery} from 'store/services/groupApi';
@@ -38,101 +38,13 @@ export const DataContext = createContext<{
 export const DataProvider = ({children}: {children: React.ReactNode}) => {
   const [mapData, setMapData] = useState<{id: string; value: number}[] | undefined>(undefined);
 
-  const selectedScenario = 1;
-  const activeScenarios = [0, 1, 2];
-  const selectedCompartment = 'Infected';
-  const selectedDistrict = useAppSelector((state) => state.mapSlice);
-  const selectedDate = useAppSelector((state) => state.lineChartSlice.selectedDate);
-  const groupFilterList = useMemo(() => {
-    return {
-      '3ce4e1be-1a8c-42a4-841d-8e93e2ab0d87': {
-        id: '3ce4e1be-1a8c-42a4-841d-8e93e2ab0d87',
-        name: 'aaaaa',
-        isVisible: true,
-        groups: {
-          age: ['age_0', 'age_1', 'age_2'],
-          gender: ['male', 'nonbinary', 'female'],
-        },
-      },
-      'f9b26583-78df-440f-b35d-bf22b5c3a439': {
-        id: 'f9b26583-78df-440f-b35d-bf22b5c3a439',
-        name: 'lllllllllllllll',
-        isVisible: true,
-        groups: {
-          age: ['age_0', 'age_1', 'age_3', 'age_2', 'age_4'],
-          gender: ['female', 'male', 'nonbinary'],
-        },
-      },
-    };
-  }, []);
-  const scenarioList = useMemo(() => {
-    return {
-      scenarios: {
-        '1': {
-          id: 1,
-          label: 'Summer 2021 Simulation 1',
-        },
-        '2': {
-          id: 2,
-          label: 'Summer 2021 Simulation 2',
-        },
-      },
-      compartments: [
-        'Infected',
-        'Hospitalized',
-        'ICU',
-        'Dead',
-        'Exposed',
-        'Recovered',
-        'Carrier',
-        'Susceptible',
-        'CarrierT',
-        'CarrierTV1',
-        'CarrierTV2',
-        'CarrierV1',
-        'CarrierV2',
-        'ExposedV1',
-        'ExposedV2',
-        'HospitalizedV1',
-        'HospitalizedV2',
-        'ICUV1',
-        'ICUV2',
-        'InfectedT',
-        'InfectedTV1',
-        'InfectedTV2',
-        'InfectedV1',
-        'InfectedV2',
-        'SusceptibleV1',
-      ],
-    };
-  }, []);
-
-  // useEffect(() => {
-  //   const fetchMapValues = async () => {
-  //     try {
-  //       setAreMapValuesFetching(true);
-  //       const response = await fetch(
-  //         'http://hpcagainstcorona.sc.bs.dlr.de:8000/api/v1/simulation/2/2021-09-04/?all&groups=total&compartments=Infected'
-  //       );
-  //       const result = (await response.json()) as {
-  //         results: Array<{name: string; day: string; compartments: {Infected: number}}>;
-  //       };
-  //       console.log(result);
-  //       let data: Array<{id: string; value: number}> = [];
-  //       result.results.forEach((element: {name: string; day: string; compartments: {Infected: number}}) => {
-  //         data.push({id: element.name, value: element.compartments.Infected});
-  //       });
-  //       data = data.filter((element) => {
-  //         return element.id != '00000';
-  //       });
-  //       setMapData(data);
-  //       setAreMapValuesFetching(false);
-  //     } catch (error) {
-  //       console.error('Error fetching data:', error);
-  //     }
-  //   };
-  //   fetchMapValues();
-  // }, []);
+  const selectedDistrict = useAppSelector((state) => state.dataSelection.district.ags);
+  const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
+  const activeScenarios = useAppSelector((state) => state.dataSelection.activeScenarios);
+  const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
+  const selectedDate = useAppSelector((state) => state.dataSelection.date);
+  const groupFilterList = useAppSelector((state) => state.dataSelection.groupFilters);
+  const scenarioList = useAppSelector((state) => state.scenarioList);
 
   const {data: mapSimulationData, isFetching: mapIsSimulationDataFetching} = useGetSimulationDataByDateQuery(
     {
@@ -160,33 +72,33 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
         ? activeScenarios.filter((s: number) => {
             return (
               s !== 0 &&
-              (scenarioList.scenarios[s.toString() as keyof typeof scenarioList.scenarios] as {
+              (scenarioList.scenarios[s] as {
                 id: number;
                 label: string;
               })
             );
           })
         : [],
-      node: selectedDistrict.RS as string,
+      node: selectedDistrict,
       groups: ['total'],
       compartments: [selectedCompartment ?? ''],
     },
-    {skip: !selectedCompartment || Object.keys(selectedDistrict).length == 0}
+    {skip: !selectedCompartment || selectedDistrict === undefined}
   );
 
   const {data: chartCaseData, isFetching: chartCaseDataFetching} = useGetCaseDataByDistrictQuery(
     {
-      node: selectedDistrict.RS as string,
+      node: selectedDistrict,
       groups: ['total'],
       compartments: [selectedCompartment ?? ''],
     },
-    {skip: !selectedCompartment || Object.keys(selectedDistrict).length == 0}
+    {skip: !selectedCompartment || selectedDistrict === undefined || Object.keys(selectedDistrict).length == 0}
   );
 
   const {data: percentileData} = useGetPercentileDataQuery(
     {
       id: selectedScenario as number,
-      node: selectedDistrict.RS as string,
+      node: selectedDistrict,
       groups: ['total'],
       compartment: selectedCompartment as string,
     },
@@ -195,6 +107,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
         selectedScenario === null ||
         selectedScenario === 0 ||
         !selectedCompartment ||
+        selectedDistrict === undefined ||
         Object.keys(selectedDistrict).length == 0,
     }
   );
@@ -206,17 +119,17 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
           .map((groupFilter) => {
             return {
               id: selectedScenario,
-              node: selectedDistrict.RS as string,
+              node: selectedDistrict,
               compartment: selectedCompartment,
               groupFilter: groupFilter,
             };
           })
       : [],
-    {skip: !selectedDistrict || Object.keys(selectedDistrict).length == 0}
+    {skip: !selectedDistrict || selectedDistrict === undefined || Object.keys(selectedDistrict).length == 0}
   );
 
   useEffect(() => {
-    if (mapSimulationData) {
+    if (mapSimulationData && selectedCompartment) {
       setMapData(
         mapSimulationData.results
           .filter((element: {name: string}) => {
@@ -226,7 +139,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
             return {id: element.name, value: element.compartments[selectedCompartment]} as {id: string; value: number};
           })
       );
-    } else if (mapCaseData) {
+    } else if (mapCaseData && selectedCompartment) {
       setMapData(
         mapCaseData.results
           .filter((element: {name: string}) => {

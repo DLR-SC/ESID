@@ -73,7 +73,8 @@ export default function HeatLegend({
       root.dispose();
       exposeLegend(null);
     };
-    
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [displayText, formatNumber, legend.isNormalized, legend.steps, max, min, tooltipEndColor, tooltipStartColor]);
 
   return <Box id={unique_id} sx={style} />;

@@ -47,8 +47,8 @@ interface LineChartProps {
   caseData: CaseDataByNode;
   percentileData?: SelectedScenarioPercentileData[] | null;
   groupFilterData?: Dictionary<GroupResponse> | null;
-  minDate: string;
-  maxDate: string;
+  minDate?: string | null;
+  maxDate?: string | null;
   selectedScenario?: number | null;
   activeScenarios?: number[] | null;
   referenceDay?: string | null;
@@ -75,12 +75,12 @@ export default function LineChart({
   simulationDataChartName,
   percentileData = null,
   groupFilterData = null,
-  minDate,
-  maxDate,
+  minDate = null,
+  maxDate = null,
   selectedScenario = null,
   activeScenarios = null,
   referenceDay = null,
-  selectedCompartment = '',
+  selectedCompartment,
   scenarioList,
   groupFilterList = null,
   exportedFileName = 'Data',
