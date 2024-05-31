@@ -5,6 +5,20 @@ SPDX-License-Identifier: CC-BY-4.0
 
 # ESID Änderungshistorie
 
+## v0.3.1-beta
+
+**Veröffentlichungsdatum:** TBD
+
+### Neue Funktionen
+
+### Verbesserungen
+
+### Fehlerbehebungen
+
+- Fehlende Übersetzungen wurden ergänzt.
+
+---
+
 ## v0.3.0-beta
 
 **Veröffentlichungsdatum:** 03.05.2024

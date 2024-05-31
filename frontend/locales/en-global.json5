@@ -61,6 +61,7 @@
     'confirm-discard-title': 'Discard Changes',
     'confirm-discard-text': 'You have unsaved changes. Do you want to discard them?',
     discard: 'Discard',
+    delete: 'Delete',
   },
   chart: {
     caseData: 'Estimated Cases',
