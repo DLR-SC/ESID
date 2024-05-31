@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
+
 import Container from '@mui/material/Container';
 import {Box, Autocomplete} from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';

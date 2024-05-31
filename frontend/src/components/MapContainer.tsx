@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
+
 import {useState, useEffect, useRef, useCallback, useMemo, useContext} from 'react';
 import {useTranslation} from 'react-i18next';
 import data from '../../assets/lk_germany_reduced.geojson?url';
@@ -19,7 +22,6 @@ import {DataContext} from 'DataContext';
 import SidebarTabs from './Sidebar/SidebarTabs';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
-import {setSelectedAreaStore} from 'store/MapSlice';
 import {selectDistrict} from 'store/DataSelectionSlice';
 
 export default function MapContainer() {
@@ -116,10 +118,6 @@ export default function MapContainer() {
     );
   }, [selectedArea, dispatch]);
 
-  useEffect(() => {
-    dispatch(setSelectedAreaStore(selectedArea));
-  }, [selectedArea, dispatch]);
-
   return (
     <Stack
       id='sidebar-root'
@@ -178,10 +176,10 @@ export default function MapContainer() {
             <Grid item container xs={11} alignItems='flex-end'>
               <HeatLegend
                 legend={legend}
-                exposeLegend={(legend: am5.HeatLegend | null) => {
+                exposeLegend={useCallback((legend: am5.HeatLegend | null) => {
                   // move exposed legend item (or null if disposed) into ref
                   legendRef.current = legend;
-                }}
+                }, [])}
                 min={0}
                 // use math.round to convert the numbers to integers
                 max={

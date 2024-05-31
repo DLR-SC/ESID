@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
+
 import {useCallback, useContext, useEffect, useState} from 'react';
 import LineChart from './LineChartComponents/LineChart';
 import {SelectedScenarioPercentileData} from 'store/services/scenarioApi';

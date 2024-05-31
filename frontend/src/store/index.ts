@@ -11,8 +11,6 @@ import {persistReducer, persistStore} from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import {groupApi} from './services/groupApi';
 import LayoutReducer from './LayoutSlice';
-import MapReducer from './MapSlice';
-import LineChartReducer from './LineChartSlice';
 
 const persistConfig = {
   key: 'root',
@@ -25,8 +23,6 @@ const rootReducer = combineReducers({
   scenarioList: ScenarioReducer,
   userPreference: UserPreferenceReducer,
   layoutSlice: LayoutReducer,
-  mapSlice: MapReducer,
-  lineChartSlice: LineChartReducer,
   [caseDataApi.reducerPath]: caseDataApi.reducer,
   [scenarioApi.reducerPath]: scenarioApi.reducer,
   [groupApi.reducerPath]: groupApi.reducer,

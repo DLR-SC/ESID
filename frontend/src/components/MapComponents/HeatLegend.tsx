@@ -1,4 +1,7 @@
-import {useEffect} from 'react';
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
+
+import {useEffect, useMemo} from 'react';
 import * as am5 from '@amcharts/amcharts5';
 import {Box} from '@mui/material';
 import React from 'react';
@@ -33,7 +36,7 @@ export default function HeatLegend({
   },
   formatNumber,
 }: HeatProps) {
-  const unique_id = id + String(Date.now() + Math.random());
+  const unique_id = useMemo(() => id + String(Date.now() + Math.random()), [id]);
 
   useEffect(() => {
     const root = am5.Root.new(unique_id);
@@ -73,9 +76,18 @@ export default function HeatLegend({
       root.dispose();
       exposeLegend(null);
     };
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [displayText, formatNumber, legend.isNormalized, legend.steps, max, min, tooltipEndColor, tooltipStartColor]);
+  }, [
+    displayText,
+    exposeLegend,
+    formatNumber,
+    legend.isNormalized,
+    legend.steps,
+    max,
+    min,
+    tooltipEndColor,
+    tooltipStartColor,
+    unique_id,
+  ]);
 
   return <Box id={unique_id} sx={style} />;
 }
