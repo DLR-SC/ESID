@@ -16,6 +16,7 @@ SPDX-License-Identifier: CC-BY-4.0
 ### Fehlerbehebungen
 
 - Fehlende Übersetzungen wurden ergänzt.
+- Die Auswahl der Farblegenden zeigt jetzt wieder eine Vorschau für alle Optionen.
 
 ---
 

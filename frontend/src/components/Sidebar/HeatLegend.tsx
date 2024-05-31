@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, {useEffect} from 'react';
+import React, {useLayoutEffect} from 'react';
 import {useTheme} from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import * as am5 from '@amcharts/amcharts5';
@@ -9,21 +9,23 @@ import {useTranslation} from 'react-i18next';
 import {NumberFormatter} from 'util/hooks';
 import {HeatmapLegend} from '../../types/heatmapLegend';
 
-export default function HeatLegend(props: {
-  // add is_dynamic/absolute?
-  legend: HeatmapLegend;
-  exposeLegend: (legend: am5.HeatLegend | null) => void;
-  min: number;
-  max: number;
-  displayText: boolean;
-  id: string;
-}): JSX.Element {
+export default function HeatLegend(
+  props: Readonly<{
+    // add is_dynamic/absolute?
+    legend: HeatmapLegend;
+    exposeLegend: (legend: am5.HeatLegend | null) => void;
+    min: number;
+    max: number;
+    displayText: boolean;
+    id: string;
+  }>
+): JSX.Element {
   const id = props.id + String(Date.now() + Math.random()); // "guarantee" unique id
   const {i18n} = useTranslation();
   const {formatNumber} = NumberFormatter(i18n.language, 3, 8);
   const theme = useTheme();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const root = am5.Root.new(id);
     const heatLegend = root.container.children.push(
       am5.HeatLegend.new(root, {

@@ -16,6 +16,7 @@ SPDX-License-Identifier: CC-BY-4.0
 ### Bug fixes
 
 - Missing translations were fixed.
+- The heat legend selection now shows a preview for all legends again.
 
 ---
 

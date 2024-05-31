@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useLayoutEffect, useRef, useState} from 'react';
 import {useTheme} from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -13,7 +13,6 @@ import MenuItem from '@mui/material/MenuItem';
 import Select, {SelectChangeEvent} from '@mui/material/Select';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
-import HeatLegend from './HeatLegend';
 import EditIcon from '@mui/icons-material/Edit';
 import {useAppDispatch, useAppSelector} from '../../store/hooks';
 import {selectHeatmapLegend} from '../../store/UserPreferenceSlice';
@@ -143,25 +142,14 @@ export default function HeatLegendEdit(): JSX.Element {
             <Select id='heatmap-select' aria-label={t('heatlegend.select')} value={legend.name} onChange={handleChange}>
               {availablePresets.map((preset, i) => (
                 <MenuItem key={'legendPresetSelect' + i.toString()} value={preset.name}>
-                  <Grid container maxWidth='lg'>
-                    <Grid item xs={12}>
-                      <HeatLegend
-                        legend={preset}
-                        exposeLegend={() => {
-                          return;
-                        }}
-                        min={0}
-                        max={preset.steps[preset.steps.length - 1].value}
-                        displayText={!preset.isNormalized}
-                        id={preset.name}
-                      />
-                    </Grid>
-                    <Grid item xs={12}>
+                  <Box sx={{width: '100%'}}>
+                    <LegendGradient legend={preset} />
+                    <Box>
                       <Typography variant='h2' align='center'>
                         {preset.name}
                       </Typography>
-                    </Grid>
-                  </Grid>
+                    </Box>
+                  </Box>
                 </MenuItem>
               ))}
             </Select>
@@ -174,6 +162,32 @@ export default function HeatLegendEdit(): JSX.Element {
         </Box>
       </Dialog>
     </>
+  );
+}
+
+function LegendGradient(props: Readonly<{legend: HeatmapLegend}>): JSX.Element {
+  const divRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    if (!divRef.current) {
+      return;
+    }
+
+    const gradient = props.legend.steps
+      .map(({color, value}) => {
+        return `${color} ${Math.round(value * 100)}%`;
+      })
+      .join(', ');
+
+    divRef.current.style.background = `linear-gradient(90deg, ${gradient})`;
+  }, [props.legend]);
+
+  return (
+    <div
+      ref={divRef}
+      id={`legend-gradient-${props.legend.name}`}
+      style={{width: '100%', height: '50px', margin: '5px'}}
+    />
   );
 }
 
