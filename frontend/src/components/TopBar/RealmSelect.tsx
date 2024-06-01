@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR) and CISPA Helmholtz Center for Information Security
+// SPDX-License-Identifier: Apache-2.0
+
 import React from 'react';
 import {FormControl, InputLabel, Select, OutlinedInput, MenuItem} from '@mui/material';
 import {useAppDispatch, useAppSelector} from 'store/hooks';
@@ -8,8 +11,12 @@ function RealmSelect() {
   const dispatch = useAppDispatch();
 
   // realms are hardcoded for now
-  // should be fetched from keycloak
-  const realms = ['lha-a', 'lha-b', 'lha-c'];
+  // TODO: should be fetched from keycloak
+  const realms = [
+    {id: 'lha-a', name: 'LHA A', disabled: false},
+    {id: 'lha-b', name: 'LHA B', disabled: true},
+    {id: 'lha-c', name: 'LHA C', disabled: true},
+  ];
 
   return (
     <FormControl sx={{m: 2, minWidth: 120}} size='small'>
@@ -22,8 +29,8 @@ function RealmSelect() {
         input={<OutlinedInput label='Realm' />}
       >
         {realms.map((realm) => (
-          <MenuItem key={realm} value={realm}>
-            {realm}
+          <MenuItem key={realm.id} value={realm.id} disabled={realm.disabled}>
+            {realm.name}
           </MenuItem>
         ))}
       </Select>
