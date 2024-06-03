@@ -99,9 +99,7 @@ export default function HeatMap({
     } else if (values) {
       let max = 1;
       values.forEach((value) => {
-        if (value.value > max) {
-          max = value.value;
-        }
+        max = Math.max(value.value, max);
       });
       setAggregatedMax(max);
     }
@@ -271,13 +269,12 @@ export default function HeatMap({
   // set Data
   useEffect(() => {
     if (!polygonSeries) return;
-    const map = new Map<string | number, number>();
-    if (!values) return;
-    values.forEach((value) => {
-      map.set(value.id, value.value);
-    });
-
-    if (selectedScenario !== null && !isFetching) {
+    if (selectedScenario !== null && !isFetching && values && Number.isFinite(aggregatedMax)) {
+      const map = new Map<string | number, number>();
+      if (!values) return;
+      values.forEach((value) => {
+        map.set(value.id, value.value);
+      });
       polygonSeries.mapPolygons.each((polygon) => {
         const originalRegionData = polygon.dataItem?.dataContext as FeatureProperties;
         const regionData = {...originalRegionData};

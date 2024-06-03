@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
+
 import {createContext, useState, useEffect} from 'react';
 import React from 'react';
 import {useGetCaseDataByDateQuery} from 'store/services/caseDataApi';
@@ -129,7 +132,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
   );
 
   useEffect(() => {
-    if (mapSimulationData && selectedCompartment) {
+    if (mapSimulationData && selectedCompartment && selectedScenario) {
       setMapData(
         mapSimulationData.results
           .filter((element: {name: string}) => {
@@ -150,7 +153,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
           })
       );
     }
-  }, [mapSimulationData, selectedCompartment, mapCaseData]);
+  }, [mapSimulationData, selectedCompartment, mapCaseData, selectedScenario]);
 
   return (
     <DataContext.Provider

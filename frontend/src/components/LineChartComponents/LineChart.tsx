@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import {useCallback, useEffect, useRef, useState} from 'react';
+import {useCallback, useEffect, useRef} from 'react';
 import {Root} from '@amcharts/amcharts5/.internal/core/Root';
 import {Tooltip} from '@amcharts/amcharts5/.internal/core/render/Tooltip';
 import {RoundedRectangle} from '@amcharts/amcharts5/.internal/core/render/RoundedRectangle';
@@ -100,9 +100,6 @@ export default function LineChart({
 
   const rootRef = useRef<Root | null>(null);
   const chartRef = useRef<XYChart | null>(null);
-
-  const [isDataSet, setIsDataSet] = useState<boolean>(false);
-  const [isSeriesSet, setIsSeriesSet] = useState<boolean>(false);
 
   const setReferenceDayX = useCallback(() => {
     if (!chartRef.current || !rootRef.current || !referenceDay) {
@@ -381,7 +378,6 @@ export default function LineChart({
             });
           });
       }
-      setIsSeriesSet(true);
       // Clean-up function
       return () => {
         // Remove all series
@@ -396,7 +392,6 @@ export default function LineChart({
       defaultT,
       customT,
       theme,
-      isDataSet,
       chartId,
       simulationDataChartName,
       localization.overrides,
@@ -644,8 +639,6 @@ export default function LineChart({
       series.data.setAll(data);
     });
 
-    setIsDataSet(true);
-
     // Set up HTML tooltip
     const tooltipHTML = `
         ${'' /* Current Date and selected compartment name */}
@@ -859,7 +852,6 @@ export default function LineChart({
     customT,
     setReferenceDayX,
     chartId,
-    isSeriesSet,
     localization.overrides,
     exportedFileName,
   ]);
