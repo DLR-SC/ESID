@@ -29,8 +29,19 @@ export default function MapContainer() {
   const {formatNumber} = NumberFormatter(i18n.language, 1, 0);
   const {t: tBackend} = useTranslation('backend');
   const theme = useTheme();
+  const dispatch = useAppDispatch();
+
+  const {
+    mapData,
+    areMapValuesFetching,
+  }: {mapData: {id: string; value: number}[] | undefined; areMapValuesFetching: boolean} = useContext(DataContext) || {
+    mapData: [],
+    areMapValuesFetching: false,
+  };
 
   const storeSelectedArea = useAppSelector((state) => state.dataSelection.district);
+  const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
+  const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
 
   const defaultValue = useMemo(() => {
     return {
@@ -47,9 +58,7 @@ export default function MapContainer() {
       ? {RS: storeSelectedArea.ags, GEN: storeSelectedArea.name, BEZ: storeSelectedArea.type}
       : defaultValue
   );
-
   const [aggregatedMax, setAggregatedMax] = useState<number>(1);
-  const legendRef = useRef<am5.HeatLegend | null>(null);
   const [legend, setLegend] = useState<HeatmapLegend>({
     name: 'uninitialized',
     isNormalized: true,
@@ -60,15 +69,8 @@ export default function MapContainer() {
   });
   const [longLoad, setLongLoad] = useState(false);
   const [fixedLegendMaxValue, setFixedLegendMaxValue] = useState<number | null>(null);
-  const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
 
-  const {
-    mapData,
-    areMapValuesFetching,
-  }: {mapData: {id: string; value: number}[] | undefined; areMapValuesFetching: boolean} = useContext(DataContext) || {
-    mapData: [],
-    areMapValuesFetching: false,
-  };
+  const legendRef = useRef<am5.HeatLegend | null>(null);
 
   // fetch geojson
   useEffect(() => {
@@ -91,7 +93,15 @@ export default function MapContainer() {
       );
   }, []);
 
-  const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
+  useEffect(() => {
+    dispatch(
+      selectDistrict({
+        ags: String(selectedArea['RS']),
+        name: String(selectedArea['GEN']),
+        type: String(selectedArea['BEZ']),
+      })
+    );
+  }, [selectedArea, dispatch]);
 
   const calculateToolTip = useCallback(
     (regionData: FeatureProperties) => {
@@ -111,18 +121,6 @@ export default function MapContainer() {
     },
     [t]
   );
-
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    dispatch(
-      selectDistrict({
-        ags: String(selectedArea['RS']),
-        name: String(selectedArea['GEN']),
-        type: String(selectedArea['BEZ']),
-      })
-    );
-  }, [selectedArea, dispatch]);
 
   return (
     <Stack

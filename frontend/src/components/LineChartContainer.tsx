@@ -15,7 +15,12 @@ import {setReferenceDayBottom} from 'store/LayoutSlice';
 
 export default function LineChartContainer() {
   const theme = useTheme();
+  const dispatch = useAppDispatch();
   const {t: tBackend} = useTranslation('backend');
+
+  const {chartCaseData, chartSimulationData, chartPercentileData, chartGroupFilterData, isChartDataFetching} =
+    useContext(DataContext);
+
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
   const groupFilterList = useAppSelector((state) => state.dataSelection.groupFilters);
@@ -33,11 +38,6 @@ export default function LineChartContainer() {
     (scenario: Scenario) => tBackend(`scenario-names.${scenario.label}`),
     [tBackend]
   );
-
-  const {chartCaseData, chartSimulationData, chartPercentileData, chartGroupFilterData, isChartDataFetching} =
-    useContext(DataContext);
-
-  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(selectDate(selectedDate));
