@@ -53,7 +53,8 @@ export default function SearchBar({
       });
       setFeatureProperties(properties);
     }
-  }, [data, defaultValue, sortProperty]);
+    console.log(autoCompleteValue);
+  }, [autoCompleteValue, data, defaultValue, sortProperty]);
   return (
     <Container>
       <Box

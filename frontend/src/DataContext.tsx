@@ -10,8 +10,6 @@ import {
   useGetPercentileDataQuery,
   useGetSimulationDataByDateQuery,
 } from 'store/services/scenarioApi';
-import {CaseDataByNode} from 'types/caseData';
-import {GroupResponse} from 'types/group';
 import {SimulationDataByNode} from 'types/scenario';
 import {Dictionary} from 'util/util';
 import {useGetCaseDataByDistrictQuery} from 'store/services/caseDataApi';
@@ -22,24 +20,36 @@ import {useAppSelector} from 'store/hooks';
 export const DataContext = createContext<{
   mapData: {id: string; value: number}[] | undefined;
   areMapValuesFetching: boolean;
-  caseData: CaseDataByNode | undefined;
-  simulationData: SimulationDataByNode[] | undefined;
-  percentileData: SelectedScenarioPercentileData[] | undefined;
-  groupFilterData: Dictionary<GroupResponse> | undefined;
+  chartCaseData: {day: string; value: number}[] | undefined;
+  chartSimulationData: ({day: string; value: number}[] | null)[] | undefined;
+  chartPercentileData: {day: string; value: number}[][] | undefined;
+  chartGroupFilterData: Dictionary<{day: string; value: number}[]> | undefined;
   isChartDataFetching: boolean;
 }>({
   mapData: undefined,
   areMapValuesFetching: false,
-  caseData: undefined,
-  simulationData: undefined,
-  percentileData: undefined,
-  groupFilterData: undefined,
+  chartCaseData: undefined,
+  chartSimulationData: undefined,
+  chartPercentileData: undefined,
+  chartGroupFilterData: undefined,
   isChartDataFetching: false,
 });
 
 // Create a provider component
 export const DataProvider = ({children}: {children: React.ReactNode}) => {
   const [mapData, setMapData] = useState<{id: string; value: number}[] | undefined>(undefined);
+  const [processedChartCaseData, setProcessedChartCaseData] = useState<{day: string; value: number}[] | undefined>(
+    undefined
+  );
+  const [processedChartSimulationData, setProcessedChartSimulationData] = useState<
+    ({day: string; value: number}[] | null)[] | undefined
+  >(undefined);
+  const [processedChartPercentileData, setProcessedChartPercentileData] = useState<
+    {day: string; value: number}[][] | undefined
+  >(undefined);
+  const [processedChartGroupFilterData, setProcessedChartGroupFilterData] = useState<
+    Dictionary<{day: string; value: number}[]> | undefined
+  >(undefined);
 
   const selectedDistrict = useAppSelector((state) => state.dataSelection.district.ags);
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
@@ -98,7 +108,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
     {skip: !selectedCompartment || selectedDistrict === undefined || Object.keys(selectedDistrict).length == 0}
   );
 
-  const {data: percentileData} = useGetPercentileDataQuery(
+  const {data: chartPercentileData} = useGetPercentileDataQuery(
     {
       id: selectedScenario as number,
       node: selectedDistrict,
@@ -115,7 +125,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
     }
   );
 
-  const {data: groupFilterData} = useGetMultipleGroupFilterDataQuery(
+  const {data: chartGroupFilterData} = useGetMultipleGroupFilterDataQuery(
     groupFilterList && selectedScenario && selectedDistrict && selectedCompartment
       ? Object.values(groupFilterList)
           .filter((groupFilter) => groupFilter.isVisible)
@@ -155,15 +165,63 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
     }
   }, [mapSimulationData, selectedCompartment, mapCaseData, selectedScenario]);
 
+  useEffect(() => {
+    if (chartCaseData && chartCaseData.results && chartCaseData.results.length > 0 && selectedCompartment) {
+      setProcessedChartCaseData(
+        chartCaseData.results.map((element: {day: string; compartments: {[key: string]: number}}) => {
+          return {day: element.day, value: element.compartments[selectedCompartment]} as {day: string; value: number};
+        })
+      );
+    }
+    if (chartSimulationData && chartSimulationData.length > 0 && selectedCompartment) {
+      setProcessedChartSimulationData(
+        chartSimulationData.map((element: SimulationDataByNode | null) => {
+          if (element && element.results && element.results.length > 0) {
+            return element.results.map((element: {day: string; compartments: {[key: string]: number}}) => {
+              return {day: element.day, value: element.compartments[selectedCompartment]} as {
+                day: string;
+                value: number;
+              };
+            });
+          }
+          return [];
+        })
+      );
+    }
+    if (chartPercentileData && chartPercentileData.length > 0 && selectedCompartment) {
+      setProcessedChartPercentileData(
+        chartPercentileData.map((element: SelectedScenarioPercentileData) => {
+          return element.results!.map((element: {day: string; compartments: {[key: string]: number}}) => {
+            return {day: element.day, value: element.compartments[selectedCompartment]} as {day: string; value: number};
+          });
+        })
+      );
+    }
+    if (chartGroupFilterData && Object.keys(chartGroupFilterData).length > 0 && selectedCompartment) {
+      const processedData: Dictionary<{day: string; value: number}[]> = {};
+      Object.keys(chartGroupFilterData).forEach((key) => {
+        processedData[key] = chartGroupFilterData[key].results.map(
+          (element: {day: string; compartments: {[key: string]: number}}) => {
+            return {day: element.day, value: element.compartments[selectedCompartment]} as {
+              day: string;
+              value: number;
+            };
+          }
+        );
+      });
+      setProcessedChartGroupFilterData(processedData);
+    }
+  }, [chartCaseData, chartGroupFilterData, chartPercentileData, chartSimulationData, selectedCompartment]);
+
   return (
     <DataContext.Provider
       value={{
         mapData: mapData,
         areMapValuesFetching: mapIsCaseDataFetching || mapIsSimulationDataFetching,
-        caseData: chartCaseData,
-        simulationData: chartSimulationData,
-        percentileData: percentileData,
-        groupFilterData: groupFilterData,
+        chartCaseData: processedChartCaseData,
+        chartSimulationData: processedChartSimulationData,
+        chartPercentileData: processedChartPercentileData,
+        chartGroupFilterData: processedChartGroupFilterData,
         isChartDataFetching: chartCaseDataFetching || chartSimulationFetching,
       }}
     >

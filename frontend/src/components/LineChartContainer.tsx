@@ -3,18 +3,13 @@
 
 import {useCallback, useContext, useEffect, useState} from 'react';
 import LineChart from './LineChartComponents/LineChart';
-import {SelectedScenarioPercentileData} from 'store/services/scenarioApi';
 import LoadingContainer from './shared/LoadingContainer';
 import {useTheme} from '@mui/material';
 import {useTranslation} from 'react-i18next';
 import {DataContext} from '../DataContext';
 import React from 'react';
 import {useAppDispatch, useAppSelector} from 'store/hooks';
-import {Dictionary} from 'util/util';
 import {Scenario} from 'store/ScenarioSlice';
-import {SimulationDataByNode} from 'types/scenario';
-import {CaseDataByNode} from 'types/caseData';
-import {GroupResponse} from 'types/group';
 import {selectDate} from 'store/DataSelectionSlice';
 import {setReferenceDayBottom} from 'store/LayoutSlice';
 
@@ -31,7 +26,7 @@ export default function LineChartContainer() {
   const minDate = useAppSelector((state) => state.dataSelection.minDate);
   const maxDate = useAppSelector((state) => state.dataSelection.maxDate);
 
-  const [selectedDate, setSelectedDate] = useState<string>('2021-09-01');
+  const [selectedDate, setSelectedDate] = useState<string>(selectedDateInStore ? selectedDateInStore : '2021-09-01');
   const [referenceDayb, setReferenceDayb] = useState<number>(0);
 
   const simulationDataChartName = useCallback(
@@ -39,9 +34,11 @@ export default function LineChartContainer() {
     [tBackend]
   );
 
-  const {caseData, simulationData, percentileData, groupFilterData, isChartDataFetching} = useContext(DataContext);
+  const {chartCaseData, chartSimulationData, chartPercentileData, chartGroupFilterData, isChartDataFetching} =
+    useContext(DataContext);
 
   const dispatch = useAppDispatch();
+
   useEffect(() => {
     dispatch(selectDate(selectedDate));
   }, [selectedDate, dispatch]);
@@ -68,10 +65,10 @@ export default function LineChartContainer() {
         setSelectedDate={setSelectedDate}
         setReferenceDayBottom={setReferenceDayb}
         simulationDataChartName={simulationDataChartName}
-        simulationData={simulationData as SimulationDataByNode[]}
-        caseData={caseData as CaseDataByNode}
-        percentileData={percentileData as SelectedScenarioPercentileData[]}
-        groupFilterData={groupFilterData as Dictionary<GroupResponse>}
+        simulationData={chartSimulationData}
+        caseData={chartCaseData}
+        percentileData={chartPercentileData}
+        groupFilterData={chartGroupFilterData}
         minDate={minDate}
         maxDate={maxDate}
         selectedScenario={selectedScenario}

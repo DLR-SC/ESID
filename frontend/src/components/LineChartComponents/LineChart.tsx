@@ -22,10 +22,6 @@ import {useTranslation} from 'react-i18next';
 import {Dictionary, dateToISOString} from '../../util/util';
 import React from 'react';
 import {Scenario} from 'store/ScenarioSlice';
-import {SelectedScenarioPercentileData, PercentileDataByDay} from 'store/services/scenarioApi';
-import {CaseDataByNode} from 'types/caseData';
-import {GroupResponse, GroupData} from 'types/group';
-import {SimulationDataByNode} from 'types/scenario';
 
 interface ScenarioList {
   scenarios: {
@@ -45,11 +41,11 @@ interface LineChartProps {
   selectedDate: string;
   setSelectedDate: (date: string) => void;
   setReferenceDayBottom?: (docPos: number) => void;
-  simulationData?: SimulationDataByNode[] | null;
+  simulationData?: ({day: string; value: number}[] | null)[] | null;
   simulationDataChartName: (scenario: Scenario) => string;
-  caseData: CaseDataByNode;
-  percentileData?: SelectedScenarioPercentileData[] | null;
-  groupFilterData?: Dictionary<GroupResponse> | null;
+  caseData: {day: string; value: number}[] | undefined;
+  percentileData?: {day: string; value: number}[][] | null;
+  groupFilterData?: Dictionary<{day: string; value: number}[]> | null;
   minDate?: string | null;
   maxDate?: string | null;
   selectedScenario?: number | null;
@@ -574,29 +570,29 @@ export default function LineChart({
     // Cycle through scenarios
     activeScenarios?.forEach((scenarioId) => {
       if (scenarioId) {
-        simulationData?.[scenarioId]?.results.forEach(({day, compartments}) => {
+        simulationData?.[scenarioId]?.forEach(({day, value}) => {
           // Add scenario data to map (upsert date entry)
-          dataMap.set(day, {...dataMap.get(day), [scenarioId]: compartments[selectedCompartment]});
+          dataMap.set(day, {...dataMap.get(day), [scenarioId]: value});
         });
       }
 
       if (scenarioId === 0) {
         // Add case data values (upsert date entry)
-        caseData?.results.forEach((entry) => {
-          dataMap.set(entry.day, {...dataMap.get(entry.day), [0]: entry.compartments[selectedCompartment]});
+        caseData?.forEach((entry) => {
+          dataMap.set(entry.day, {...dataMap.get(entry.day), [0]: entry.value});
         });
       }
     });
 
     if (percentileData) {
       // Add 25th percentile data
-      percentileData[0].results?.forEach((entry: PercentileDataByDay) => {
-        dataMap.set(entry.day, {...dataMap.get(entry.day), percentileDown: entry.compartments[selectedCompartment]});
+      percentileData[0].forEach((entry) => {
+        dataMap.set(entry.day, {...dataMap.get(entry.day), percentileDown: entry.value});
       });
 
       // Add 75th percentile data
-      percentileData[1].results?.forEach((entry: PercentileDataByDay) => {
-        dataMap.set(entry.day, {...dataMap.get(entry.day), percentileUp: entry.compartments[selectedCompartment]});
+      percentileData[1].forEach((entry) => {
+        dataMap.set(entry.day, {...dataMap.get(entry.day), percentileUp: entry.value});
       });
     }
 
@@ -606,10 +602,10 @@ export default function LineChart({
         if (groupFilter?.isVisible) {
           // Check if data for filter is available (else report error)
           if (groupFilterData[groupFilter.name]) {
-            groupFilterData[groupFilter.name].results.forEach((entry: GroupData) => {
+            groupFilterData[groupFilter.name].forEach((entry) => {
               dataMap.set(entry.day, {
                 ...dataMap.get(entry.day),
-                [groupFilter.name]: entry.compartments[selectedCompartment],
+                [groupFilter.name]: entry.value,
               });
             });
           } else {

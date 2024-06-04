@@ -30,6 +30,8 @@ export default function MapContainer() {
   const {t: tBackend} = useTranslation('backend');
   const theme = useTheme();
 
+  const storeSelectedArea = useAppSelector((state) => state.dataSelection.district);
+
   const defaultValue = useMemo(() => {
     return {
       RS: '00000',
@@ -40,7 +42,11 @@ export default function MapContainer() {
   }, [t]);
 
   const [geoData, setGeoData] = useState<FeatureCollection>();
-  const [selectedArea, setSelectedArea] = useState<FeatureProperties>(defaultValue);
+  const [selectedArea, setSelectedArea] = useState<FeatureProperties>(
+    storeSelectedArea.ags != '00000'
+      ? {RS: storeSelectedArea.ags, GEN: storeSelectedArea.name, BEZ: storeSelectedArea.type}
+      : defaultValue
+  );
 
   const [aggregatedMax, setAggregatedMax] = useState<number>(1);
   const legendRef = useRef<am5.HeatLegend | null>(null);
@@ -148,6 +154,8 @@ export default function MapContainer() {
             }
           }}
           placeholder={`${selectedArea.GEN}${selectedArea.BEZ ? ` (${t(`BEZ.${selectedArea.BEZ}`)})` : ''}`}
+          optionEqualProperty='RS'
+          valueEqualProperty='RS'
         />
       </Box>
       <Box id='sidebar-map-wrapper'>

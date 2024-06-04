@@ -250,8 +250,9 @@ export default function HeatMap({
     // Highlight selected polygon
     polygonSeries.mapPolygons.each((mapPolygon) => {
       if (mapPolygon.dataItem && mapPolygon.dataItem.dataContext) {
-        const {id} = mapPolygon.dataItem.dataContext as {id: string};
-        if (id == selectedArea.id) {
+        const areaData = mapPolygon.dataItem.dataContext as FeatureProperties;
+        const id: string | number = areaData[idValuesToMap];
+        if (id == selectedArea[idValuesToMap]) {
           mapPolygon.states.create('default', {
             stroke: am5.color(theme.palette.primary.main),
             strokeWidth: 2,
@@ -264,7 +265,14 @@ export default function HeatMap({
         }
       }
     });
-  }, [polygonSeries, selectedArea.id, theme.palette.background.default, theme.palette.primary.main]);
+  }, [
+    idValuesToMap,
+    polygonSeries,
+    selectedArea,
+    selectedArea.id,
+    theme.palette.background.default,
+    theme.palette.primary.main,
+  ]);
 
   // set Data
   useEffect(() => {
