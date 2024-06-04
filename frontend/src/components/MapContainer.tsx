@@ -207,12 +207,7 @@ export default function MapContainer() {
                 aggregatedMax={aggregatedMax}
                 t={t}
               />
-              <HeatLegendEdit
-                legend={legend}
-                setLegend={setLegend}
-                selectedScenario={selectedScenario}
-                formatNumber={formatNumber}
-              />
+              <HeatLegendEdit legend={legend} setLegend={setLegend} selectedScenario={selectedScenario} />
             </Grid>
           </Grid>
         </LoadingContainer>

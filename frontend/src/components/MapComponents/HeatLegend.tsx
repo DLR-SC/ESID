@@ -1,11 +1,12 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import {useEffect, useMemo} from 'react';
+import {useLayoutEffect, useMemo} from 'react';
 import * as am5 from '@amcharts/amcharts5';
 import {Box} from '@mui/material';
 import React from 'react';
 import {HeatmapLegend} from 'types/heatmapLegend';
+import {useTheme} from '@mui/material/styles';
 
 interface HeatProps {
   legend: HeatmapLegend;
@@ -14,8 +15,6 @@ interface HeatProps {
   max: number;
   displayText: boolean;
   id: string;
-  tooltipStartColor?: string;
-  tooltipEndColor?: string;
   style?: React.CSSProperties;
   formatNumber: (value: number) => string;
 }
@@ -27,18 +26,17 @@ export default function HeatLegend({
   max,
   displayText,
   id,
-  tooltipStartColor = '#F8F8F9',
-  tooltipEndColor = '#F8F8F9',
   style = {
     width: '100%',
     margin: '5px',
     height: '50px',
   },
   formatNumber,
-}: HeatProps) {
+}: Readonly<HeatProps>) {
   const unique_id = useMemo(() => id + String(Date.now() + Math.random()), [id]);
+  const theme = useTheme();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const root = am5.Root.new(unique_id);
     const heatLegend = root.container.children.push(
       am5.HeatLegend.new(root, {
@@ -48,8 +46,8 @@ export default function HeatLegend({
         endValue: max,
         endText: displayText ? formatNumber(max) : ' ',
         // set start & end color to paper background as gradient is overwritten later and this sets the tooltip background color
-        startColor: am5.color(tooltipStartColor),
-        endColor: am5.color(tooltipEndColor),
+        startColor: am5.color(theme.palette.background.paper),
+        endColor: am5.color(theme.palette.background.paper),
       })
     );
 
@@ -84,8 +82,7 @@ export default function HeatLegend({
     legend.steps,
     max,
     min,
-    tooltipEndColor,
-    tooltipStartColor,
+    theme.palette.background.paper,
     unique_id,
   ]);
 
