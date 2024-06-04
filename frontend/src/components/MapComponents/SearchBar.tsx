@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import Container from '@mui/material/Container';
-import {Box, Autocomplete} from '@mui/material';
+import {Box, Autocomplete, useTheme} from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import {SyntheticEvent, useEffect, useState} from 'react';
 import React from 'react';
@@ -33,12 +33,9 @@ export default function SearchBar({
   valueEqualProperty = 'id',
   onChange,
   placeholder = '',
-  background = '#F0F0F2',
-  borderColor = '#D2D1DB',
-  borderColorHover = '#998BF5',
-  borderColorFocus = '#543CF0',
 }: SearchBarProps) {
   const [featureproperties, setFeatureProperties] = useState<FeatureProperties[]>([]);
+  const theme = useTheme();
 
   // fetch data from URL, add default value and sort by sortProperty
   useEffect(() => {
@@ -53,8 +50,7 @@ export default function SearchBar({
       });
       setFeatureProperties(properties);
     }
-    console.log(autoCompleteValue);
-  }, [autoCompleteValue, data, defaultValue, sortProperty]);
+  }, [data, defaultValue, sortProperty]);
   return (
     <Container>
       <Box
@@ -66,15 +62,14 @@ export default function SearchBar({
           width: 1,
           my: 3, // sx-shorthand for margin-top & -bottom = theme.spacing(3)
           borderRadius: 4,
-          //   background: theme.palette.background.default,
+          background: theme.palette.background.default,
           borderStyle: 'solid',
           borderWidth: '2px',
-          background: background,
-          borderColor: borderColor,
-          '&:hover': {borderColor: borderColorHover},
-          '&:hover *': {borderColor: borderColorHover},
-          '&:focus-within': {borderColor: borderColorFocus},
-          '&:focus-within *': {borderColor: borderColorFocus},
+          borderColor: theme.palette.divider,
+          '&:hover': {borderColor: theme.palette.primary.light},
+          '&:hover *': {borderColor: theme.palette.primary.light},
+          '&:focus-within': {borderColor: theme.palette.primary.main},
+          '&:focus-within *': {borderColor: theme.palette.primary.main},
         }}
       >
         <SearchIcon

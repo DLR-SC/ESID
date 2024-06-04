@@ -205,7 +205,7 @@ export default function HeatMap({
     //show tooltip on heat legend when hovering
     polygonTemplate.events.on('pointerover', (e) => {
       if (legendRef.current) {
-        const value = (e.target.dataItem?.dataContext as {value: number}).value;
+        const value = (e.target.dataItem?.dataContext as FeatureProperties).value as number;
         legendRef.current.showValue(value, formatNumber(value));
       }
     });
@@ -224,15 +224,15 @@ export default function HeatMap({
     };
   }, [
     defaultFill,
+    defaultSelectedValue,
     fillOpacity,
+    formatNumber,
+    legendRef,
+    mapData,
     mapId,
+    setSelectedArea,
     theme.palette.background.default,
     theme.palette.primary.main,
-    formatNumber,
-    mapData,
-    setSelectedArea,
-    defaultSelectedValue,
-    legendRef,
   ]);
 
   // Highlight selected district
@@ -284,8 +284,7 @@ export default function HeatMap({
         map.set(value.id, value.value);
       });
       polygonSeries.mapPolygons.each((polygon) => {
-        const originalRegionData = polygon.dataItem?.dataContext as FeatureProperties;
-        const regionData = {...originalRegionData};
+        const regionData = polygon.dataItem?.dataContext as FeatureProperties;
         regionData.value = map.get(regionData[idValuesToMap]) ?? Number.NaN;
         // determine fill color
         let fillColor = am5.color(defaultFill);
@@ -308,8 +307,7 @@ export default function HeatMap({
       });
     } else if (longLoad || !values) {
       polygonSeries.mapPolygons.each((polygon) => {
-        const originalRegionData = polygon.dataItem?.dataContext as FeatureProperties;
-        const regionData = {...originalRegionData};
+        const regionData = polygon.dataItem?.dataContext as FeatureProperties;
         regionData.value = Number.NaN;
         polygon.setAll({
           tooltipText: tooltipTextWhileFetching(regionData),
