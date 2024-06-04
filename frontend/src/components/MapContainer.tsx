@@ -23,6 +23,7 @@ import SidebarTabs from './Sidebar/SidebarTabs';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import {selectDistrict} from 'store/DataSelectionSlice';
+import {selectHeatmapLegend} from 'store/UserPreferenceSlice';
 
 export default function MapContainer() {
   const {t} = useTranslation();
@@ -42,6 +43,7 @@ export default function MapContainer() {
   const storeSelectedArea = useAppSelector((state) => state.dataSelection.district);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
+  const storeLegend = useAppSelector((state) => state.userPreference.selectedHeatmap);
 
   const defaultValue = useMemo(() => {
     return {
@@ -59,14 +61,18 @@ export default function MapContainer() {
       : defaultValue
   );
   const [aggregatedMax, setAggregatedMax] = useState<number>(1);
-  const [legend, setLegend] = useState<HeatmapLegend>({
-    name: 'uninitialized',
-    isNormalized: true,
-    steps: [
-      {color: 'rgb(255,255,255)', value: 0},
-      {color: 'rgb(255,255,255)', value: 1},
-    ],
-  });
+  const [legend, setLegend] = useState<HeatmapLegend>(
+    storeLegend
+      ? storeLegend
+      : {
+          name: 'uninitialized',
+          isNormalized: true,
+          steps: [
+            {color: 'rgb(255,255,255)', value: 0},
+            {color: 'rgb(255,255,255)', value: 1},
+          ],
+        }
+  );
   const [longLoad, setLongLoad] = useState(false);
   const [fixedLegendMaxValue, setFixedLegendMaxValue] = useState<number | null>(null);
 
@@ -102,6 +108,10 @@ export default function MapContainer() {
       })
     );
   }, [selectedArea, dispatch]);
+
+  useEffect(() => {
+    dispatch(selectHeatmapLegend({legend: legend}));
+  }, [legend, dispatch]);
 
   const calculateToolTip = useCallback(
     (regionData: FeatureProperties) => {
