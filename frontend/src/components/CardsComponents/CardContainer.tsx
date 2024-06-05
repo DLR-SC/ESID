@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
+
 import DataCard from './DataCard';
 import {useTranslation} from 'react-i18next';
 import {Scenario, cardValue, filterValue} from '../../types/Cardtypes';

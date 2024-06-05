@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
 import {Box, Collapse, useTheme} from '@mui/material';
 import FilterButton from './FilterButton';
 import FilterCard from './FilterCard';

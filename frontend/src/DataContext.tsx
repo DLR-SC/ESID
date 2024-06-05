@@ -1,5 +1,6 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
+
 import {useGetSimulationStartValues} from 'components/Scenario/hooks';
 import React, {useMemo} from 'react';
 import {createContext, useState, useEffect} from 'react';

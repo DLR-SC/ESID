@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
+
 import {Box, Button, Dialog, useTheme} from '@mui/material';
 import ConfirmDialog from './ConfirmDialog';
 import {useState} from 'react';

@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
+
 import {Box, TextField, Typography, FormGroup, FormControlLabel, Checkbox, Button, useTheme} from '@mui/material';
 import {useState, useEffect, useCallback} from 'react';
 import {useTranslation} from 'react-i18next';

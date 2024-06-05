@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
+
 import {ListItemButton, ListItemText, ListItemIcon, ClickAwayListener, Tooltip, useTheme} from '@mui/material';
 import {InfoOutlined} from '@mui/icons-material';
 import {Dispatch, SetStateAction, useState} from 'react';
