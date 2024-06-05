@@ -76,7 +76,7 @@ export interface GroupCategory {
   description: string;
 }
 
-interface GroupCategories {
+export interface GroupCategories {
   count: number;
   next: null;
   previous: null;
@@ -90,7 +90,7 @@ export interface GroupSubcategory {
   category: string;
 }
 
-interface GroupSubcategories {
+export interface GroupSubcategories {
   count: number;
   next: null;
   previous: null;

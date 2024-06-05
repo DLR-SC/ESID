@@ -1,20 +1,36 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
-
+import {useGetSimulationStartValues} from 'components/Scenario/hooks';
+import React, {useMemo} from 'react';
 import {createContext, useState, useEffect} from 'react';
-import React from 'react';
-import {useGetCaseDataByDateQuery} from 'store/services/caseDataApi';
-import {useGetMultipleGroupFilterDataQuery} from 'store/services/groupApi';
+import {useAppSelector} from 'store/hooks';
+import {
+  useGetCaseDataByDateQuery,
+  useGetCaseDataByDistrictQuery,
+  useGetCaseDataSingleSimulationEntryQuery,
+} from 'store/services/caseDataApi';
+import {
+  useGetMultipleGroupFilterDataQuery,
+  useGetGroupCategoriesQuery,
+  useGetGroupSubcategoriesQuery,
+  GroupCategories,
+  GroupSubcategories,
+  PostFilter,
+} from 'store/services/groupApi';
 import {
   SelectedScenarioPercentileData,
   useGetPercentileDataQuery,
   useGetSimulationDataByDateQuery,
+  useGetMultipleSimulationDataByNodeQuery,
+  useGetSimulationModelQuery,
+  useGetSimulationModelsQuery,
+  useGetSimulationsQuery,
+  useGetSingleSimulationEntryQuery,
 } from 'store/services/scenarioApi';
-import {SimulationDataByNode} from 'types/scenario';
+import {CaseDataByNode} from 'types/caseData';
+import {GroupResponse} from 'types/group';
+import {Simulations, SimulationModel, SimulationDataByNode} from 'types/scenario';
 import {Dictionary} from 'util/util';
-import {useGetCaseDataByDistrictQuery} from 'store/services/caseDataApi';
-import {useGetMultipleSimulationDataByNodeQuery} from 'store/services/scenarioApi';
-import {useAppSelector} from 'store/hooks';
 
 // Create the context
 export const DataContext = createContext<{
@@ -25,6 +41,20 @@ export const DataContext = createContext<{
   chartPercentileData: {day: string; value: number}[][] | undefined;
   chartGroupFilterData: Dictionary<{day: string; value: number}[]> | undefined;
   isChartDataFetching: boolean;
+  selectedScenario: number | null;
+  selectedCompartment: string | null;
+  startValues: Dictionary<number> | null;
+  groupCategories: GroupCategories | undefined;
+  groupSubCategories: GroupSubcategories | undefined;
+  scenarioListData: Simulations | undefined;
+  referenceDay: string | null;
+  caseScenarioSimulationData: CaseDataByNode | undefined;
+  simulationModelData: SimulationModel | undefined;
+  caseScenarioData: SimulationDataByNode | undefined;
+  scenarioSimulationDataFirstCard: SimulationDataByNode | undefined;
+  scenarioSimulationDataSecondCard: SimulationDataByNode | undefined;
+  scenarioSimulationDataFirstCardFiltersValues: Dictionary<GroupResponse> | undefined;
+  scenarioSimulationDataSecondCardFiltersValues: Dictionary<GroupResponse> | undefined;
 }>({
   mapData: undefined,
   areMapValuesFetching: false,
@@ -33,6 +63,20 @@ export const DataContext = createContext<{
   chartPercentileData: undefined,
   chartGroupFilterData: undefined,
   isChartDataFetching: false,
+  selectedScenario: 0,
+  selectedCompartment: '',
+  startValues: {},
+  groupCategories: undefined,
+  groupSubCategories: undefined,
+  scenarioListData: undefined,
+  referenceDay: null,
+  caseScenarioSimulationData: undefined,
+  simulationModelData: undefined,
+  caseScenarioData: undefined,
+  scenarioSimulationDataFirstCard: undefined,
+  scenarioSimulationDataSecondCard: undefined,
+  scenarioSimulationDataFirstCardFiltersValues: undefined,
+  scenarioSimulationDataSecondCardFiltersValues: undefined,
 });
 
 // Create a provider component
@@ -50,6 +94,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
   const [processedChartGroupFilterData, setProcessedChartGroupFilterData] = useState<
     Dictionary<{day: string; value: number}[]> | undefined
   >(undefined);
+  const [simulationModelKey, setSimulationModelKey] = useState<string>('unset');
 
   const selectedDistrict = useAppSelector((state) => state.dataSelection.district.ags);
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
@@ -58,6 +103,81 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
   const selectedDate = useAppSelector((state) => state.dataSelection.date);
   const groupFilterList = useAppSelector((state) => state.dataSelection.groupFilters);
   const scenarioList = useAppSelector((state) => state.scenarioList);
+  const referenceDay = useAppSelector((state) => state.dataSelection.simulationStart);
+
+  const groupFilterParams1: PostFilter[] = useMemo(() => {
+    if (selectedDistrict && groupFilterList) {
+      return Object.values(groupFilterList)
+        .filter((groupFilter) => groupFilter.isVisible)
+        .map((groupFilter) => ({
+          id: 1,
+          node: selectedDistrict,
+          groupFilter: groupFilter,
+          day: selectedDate ?? '',
+        }));
+    }
+    return [];
+  }, [selectedDate, groupFilterList, selectedDistrict]);
+
+  const groupFilterParams2: PostFilter[] = useMemo(() => {
+    if (selectedDistrict && groupFilterList) {
+      return Object.values(groupFilterList)
+        .filter((groupFilter) => groupFilter.isVisible)
+        .map((groupFilter) => ({
+          id: 2,
+          node: selectedDistrict,
+          groupFilter: groupFilter,
+          day: selectedDate ?? '',
+        }));
+    }
+    return [];
+  }, [selectedDate, groupFilterList, selectedDistrict]);
+
+  const startValues = useGetSimulationStartValues();
+  const caseScenarioSimulationData = useGetCaseDataByDistrictQuery({
+    node: '00000',
+    groups: null,
+    compartments: null,
+  });
+  const {data: groupCategories} = useGetGroupCategoriesQuery();
+  const {data: groupSubCategories} = useGetGroupSubcategoriesQuery();
+  const {data: scenarioListData} = useGetSimulationsQuery();
+  const {data: simulationModelsData} = useGetSimulationModelsQuery();
+  const {data: simulationModelData} = useGetSimulationModelQuery(simulationModelKey, {
+    skip: simulationModelKey === 'unset',
+  });
+
+  const {data: caseScenarioData} = useGetCaseDataSingleSimulationEntryQuery(
+    {
+      node: selectedDistrict,
+      day: selectedDate ?? '',
+      groups: ['total'],
+    },
+    {skip: selectedDate === null}
+  );
+
+  const {data: scenarioSimulationDataFirstCard} = useGetSingleSimulationEntryQuery(
+    {
+      id: 1,
+      node: selectedDistrict,
+      day: selectedDate ?? '',
+      groups: ['total'],
+    },
+    {skip: !selectedDate}
+  );
+
+  const {data: scenarioSimulationDataSecondCard} = useGetSingleSimulationEntryQuery(
+    {
+      id: 2,
+      node: selectedDistrict,
+      day: selectedDate ?? '',
+      groups: ['total'],
+    },
+    {skip: !selectedDate}
+  );
+
+  const {data: scenarioSimulationDataFirstCardFiltersValues} = useGetMultipleGroupFilterDataQuery(groupFilterParams1);
+  const {data: scenarioSimulationDataSecondCardFiltersValues} = useGetMultipleGroupFilterDataQuery(groupFilterParams2);
 
   const {data: mapSimulationData, isFetching: mapIsSimulationDataFetching} = useGetSimulationDataByDateQuery(
     {
@@ -142,6 +262,13 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
   );
 
   useEffect(() => {
+    if (simulationModelsData && simulationModelsData.results.length > 0) {
+      const {key} = simulationModelsData.results[0];
+      setSimulationModelKey(key);
+    }
+  }, [simulationModelsData]);
+
+  useEffect(() => {
     if (mapSimulationData && selectedCompartment && selectedScenario) {
       setMapData(
         mapSimulationData.results
@@ -223,6 +350,20 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
         chartPercentileData: processedChartPercentileData,
         chartGroupFilterData: processedChartGroupFilterData,
         isChartDataFetching: chartCaseDataFetching || chartSimulationFetching,
+        selectedScenario,
+        selectedCompartment,
+        startValues,
+        groupCategories,
+        groupSubCategories,
+        scenarioListData,
+        referenceDay,
+        caseScenarioSimulationData: caseScenarioSimulationData.data,
+        simulationModelData: simulationModelData?.results,
+        caseScenarioData,
+        scenarioSimulationDataFirstCard,
+        scenarioSimulationDataSecondCard,
+        scenarioSimulationDataFirstCardFiltersValues: scenarioSimulationDataFirstCardFiltersValues,
+        scenarioSimulationDataSecondCardFiltersValues: scenarioSimulationDataSecondCardFiltersValues,
       }}
     >
       {children}

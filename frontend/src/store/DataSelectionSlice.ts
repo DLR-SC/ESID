@@ -19,7 +19,11 @@ export type AGS = string;
  * IMPORTANT: ALL NEW ADDITIONS MUST BE NULLABLE TO ENSURE EXISTING CACHES DOESN'T BREAK ON UPDATES!
  */
 export interface DataSelection {
-  district: {ags: AGS; name: string; type: string};
+  district: {
+    ags: AGS;
+    name: string;
+    type: string;
+  };
   /** The current date in the store. Must be an ISO 8601 date cutoff at time (YYYY-MM-DD) */
   date: string | null;
   scenario: number | null;
@@ -30,7 +34,7 @@ export interface DataSelection {
   simulationStart: string | null;
   minDate: string | null;
   maxDate: string | null;
-  groupFilters: Dictionary<GroupFilter> | null;
+  groupFilters: Dictionary<GroupFilter> | undefined;
 }
 
 const initialState: DataSelection = {
@@ -54,6 +58,12 @@ export const DataSelectionSlice = createSlice({
   name: 'DataSelection',
   initialState,
   reducers: {
+    setActiveScenario(state, action: PayloadAction<number[] | null>) {
+      state.activeScenarios = action.payload;
+    },
+    setGroupFilters(state, action: PayloadAction<Dictionary<GroupFilter> | undefined>) {
+      state.groupFilters = action.payload;
+    },
     selectDistrict(state, action: PayloadAction<{ags: AGS; name: string; type: string}>) {
       state.district = action.payload;
     },
@@ -141,6 +151,8 @@ export const DataSelectionSlice = createSlice({
 
 export const {
   selectDistrict,
+  setActiveScenario,
+  setGroupFilters,
   selectDate,
   previousDay,
   nextDay,
