@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import {createContext, useState, useEffect, useMemo} from 'react';
+import {createContext, useState, useEffect} from 'react';
 import React from 'react';
 import {useGetCaseDataByDateQuery} from 'store/services/caseDataApi';
 import {useGetMultipleGroupFilterDataQuery} from 'store/services/groupApi';
@@ -213,27 +213,19 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
     }
   }, [chartCaseData, chartGroupFilterData, chartPercentileData, chartSimulationData, selectedCompartment]);
 
-  const value = useMemo(
-    () => ({
-      mapData: mapData,
-      areMapValuesFetching: mapIsCaseDataFetching || mapIsSimulationDataFetching,
-      chartCaseData: processedChartCaseData,
-      chartSimulationData: processedChartSimulationData,
-      chartPercentileData: processedChartPercentileData,
-      chartGroupFilterData: processedChartGroupFilterData,
-      isChartDataFetching: chartCaseDataFetching || chartSimulationFetching,
-    }),
-    [
-      mapData,
-      mapIsCaseDataFetching,
-      mapIsSimulationDataFetching,
-      processedChartCaseData,
-      processedChartSimulationData,
-      processedChartPercentileData,
-      processedChartGroupFilterData,
-      chartCaseDataFetching,
-      chartSimulationFetching,
-    ]
+  return (
+    <DataContext.Provider
+      value={{
+        mapData: mapData,
+        areMapValuesFetching: mapIsCaseDataFetching || mapIsSimulationDataFetching,
+        chartCaseData: processedChartCaseData,
+        chartSimulationData: processedChartSimulationData,
+        chartPercentileData: processedChartPercentileData,
+        chartGroupFilterData: processedChartGroupFilterData,
+        isChartDataFetching: chartCaseDataFetching || chartSimulationFetching,
+      }}
+    >
+      {children}
+    </DataContext.Provider>
   );
-  return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
 };
