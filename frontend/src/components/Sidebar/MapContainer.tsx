@@ -3,7 +3,7 @@
 
 import {useState, useEffect, useRef, useCallback, useMemo, useContext} from 'react';
 import {useTranslation} from 'react-i18next';
-import data from '../../assets/lk_germany_reduced.geojson?url';
+import data from '../../../assets/lk_germany_reduced.geojson?url';
 import {Grid, Stack, useTheme} from '@mui/material';
 import * as am5 from '@amcharts/amcharts5';
 import React from 'react';
@@ -14,12 +14,12 @@ import i18n from 'util/i18n';
 import LockMaxValue from './MapComponents/LockMaxValue';
 import HeatLegendEdit from './MapComponents/HeatLegendEdit';
 import SearchBar from './MapComponents/SearchBar';
-import LoadingContainer from './shared/LoadingContainer';
+import LoadingContainer from '../shared/LoadingContainer';
 import {NumberFormatter} from 'util/hooks';
 import HeatMap from './MapComponents/HeatMap';
 import HeatLegend from './MapComponents/HeatLegend';
 import {DataContext} from 'DataContext';
-import SidebarTabs from './Sidebar/SidebarTabs';
+import SidebarTabs from './SidebarTabs';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import {selectDistrict} from 'store/DataSelectionSlice';

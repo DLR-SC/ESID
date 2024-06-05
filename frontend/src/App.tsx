@@ -7,7 +7,7 @@ import {Provider} from 'react-redux';
 import './App.scss';
 
 import TopBar from './components/TopBar';
-import MapContainer from './components/MapContainer';
+import MapContainer from './components/Sidebar/MapContainer';
 import MainContent from './components/MainContent';
 import {Persistor, Store} from './store';
 import Box from '@mui/material/Box';

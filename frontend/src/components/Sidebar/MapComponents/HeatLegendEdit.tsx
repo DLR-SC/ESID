@@ -1,8 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, {useCallback, useEffect, useState} from 'react';
-import {useTheme} from '@mui/material/styles';
+import React, {useCallback, useEffect, useLayoutEffect, useRef, useState} from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -13,25 +12,29 @@ import MenuItem from '@mui/material/MenuItem';
 import Select, {SelectChangeEvent} from '@mui/material/Select';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
-import HeatLegend from './HeatLegend';
 import EditIcon from '@mui/icons-material/Edit';
-import {useAppDispatch, useAppSelector} from '../../store/hooks';
-import {selectHeatmapLegend} from '../../store/UserPreferenceSlice';
-import {HeatmapLegend} from '../../types/heatmapLegend';
-import {useTranslation} from 'react-i18next';
-import legendPresets from '../../../assets/heatmap_legend_presets.json?url';
+import legendPresets from '../../../../assets/heatmap_legend_presets.json?url';
+import {useTheme} from '@mui/material';
+import {HeatmapLegend} from 'types/heatmapLegend';
 
+interface HeatLegendEditProps {
+  setLegend: (legend: HeatmapLegend) => void;
+  legend: HeatmapLegend;
+  selectedScenario?: number | null;
+  t?: (key: string) => string;
+}
 /**
  * This component displays an edit button to access a modal. In the modal you can edit the heatmap legend.
  */
-export default function HeatLegendEdit(): JSX.Element {
-  const dispatch = useAppDispatch();
-  const activeScenario = useAppSelector((state) => state.dataSelection.scenario);
-  const legend = useAppSelector((state) => state.userPreference.selectedHeatmap);
+export default function HeatLegendEdit({
+  setLegend,
+  legend,
+  selectedScenario = null,
+  t = (key: string) => key,
+}: HeatLegendEditProps) {
   const theme = useTheme();
-  const {t} = useTranslation();
-
-  // This contains all legends using the default colors.
+  // // This contains all legends using the default colors.
+  // const [defaultLegends, setDefaultLegends] = useState<Array<HeatmapLegend>>([]);
   const defaultLegends = useDefaultLegends();
 
   // This contains all legends from the presets file.
@@ -48,13 +51,11 @@ export default function HeatLegendEdit(): JSX.Element {
     (name: string) => {
       const preset = availablePresets.find((preset) => preset.name === name);
       if (preset) {
-        dispatch(selectHeatmapLegend({legend: preset}));
+        setLegend(preset);
       }
     },
-    [dispatch, availablePresets]
+    [availablePresets, setLegend]
   );
-
-  const handleChange = (event: SelectChangeEvent) => selectLegendByName(event.target.value);
 
   // This effect loads the presets file, once the modal is opened the first time.
   useEffect(() => {
@@ -89,35 +90,28 @@ export default function HeatLegendEdit(): JSX.Element {
 
   // This effect builds the list of available presets from the "defaultLegends" and "heatmapLegends".
   useEffect(() => {
-    if (activeScenario === null || defaultLegends.length === 0) {
+    if (selectedScenario == null || defaultLegends.length === 0) {
       return;
     }
-
-    const scenarioDefault = defaultLegends[activeScenario % defaultLegends.length];
+    const scenarioDefault = defaultLegends[selectedScenario % defaultLegends.length];
     const legends = [...heatmapLegends];
     legends.unshift(scenarioDefault);
 
-    // In the case, where a non default legend is selected, but the legends haven't been loaded from file we add the
-    // legend to the selection.
     if (legend.name !== 'Default' && heatmapLegends.length === 0) {
       legends.push(legend);
     }
 
     setAvailablePresets(legends);
-  }, [defaultLegends, heatmapLegends, activeScenario, legend]);
+  }, [selectedScenario, defaultLegends, heatmapLegends, legend]);
 
   // This effect updates the selected legend, if a default legend is selected and the scenario changes.
   useEffect(() => {
-    if (activeScenario === null) {
-      return;
-    }
-
     if (legend.name !== 'Default' && legend.name !== 'uninitialized') {
       return;
     }
 
     selectLegendByName('Default');
-  }, [activeScenario, legend, selectLegendByName]);
+  }, [legend, selectLegendByName]);
 
   return (
     <>
@@ -139,29 +133,23 @@ export default function HeatLegendEdit(): JSX.Element {
             background: theme.palette.background.paper,
           }}
         >
-          <FormControl fullWidth sx={{marginBottom: theme.spacing(3)}}>
-            <Select id='heatmap-select' aria-label={t('heatlegend.select')} value={legend.name} onChange={handleChange}>
+          <FormControl fullWidth sx={{marginBottom: 3}}>
+            <Select
+              id='heatmap-select'
+              aria-label={t('heatlegend.select')}
+              value={legend.name}
+              onChange={(event: SelectChangeEvent) => selectLegendByName(event.target.value)}
+            >
               {availablePresets.map((preset, i) => (
                 <MenuItem key={'legendPresetSelect' + i.toString()} value={preset.name}>
-                  <Grid container maxWidth='lg'>
-                    <Grid item xs={12}>
-                      <HeatLegend
-                        legend={preset}
-                        exposeLegend={() => {
-                          return;
-                        }}
-                        min={0}
-                        max={preset.steps[preset.steps.length - 1].value}
-                        displayText={!preset.isNormalized}
-                        id={preset.name}
-                      />
-                    </Grid>
-                    <Grid item xs={12}>
+                  <Box sx={{width: '100%'}}>
+                    <LegendGradient legend={preset} />
+                    <Box>
                       <Typography variant='h2' align='center'>
                         {preset.name}
                       </Typography>
-                    </Grid>
-                  </Grid>
+                    </Box>
+                  </Box>
                 </MenuItem>
               ))}
             </Select>
@@ -174,6 +162,28 @@ export default function HeatLegendEdit(): JSX.Element {
         </Box>
       </Dialog>
     </>
+  );
+}
+
+function LegendGradient({legend}: Readonly<{legend: HeatmapLegend}>): JSX.Element {
+  const divRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    if (!divRef.current) {
+      return;
+    }
+
+    const gradient = legend.steps
+      .map(({color, value}) => {
+        return `${color} ${Math.round(value * 100)}%`;
+      })
+      .join(', ');
+
+    divRef.current.style.background = `linear-gradient(90deg, ${gradient})`;
+  }, [legend]);
+
+  return (
+    <div ref={divRef} id={`legend-gradient-${legend.name}`} style={{width: '100%', height: '50px', margin: '5px'}} />
   );
 }
 
@@ -190,11 +200,13 @@ function useDefaultLegends(): Array<HeatmapLegend> {
     for (const element of theme.custom.scenarios) {
       const steps = [];
       for (let j = 0; j < stepCount; j++) {
-        steps.push({color: element[stepCount - 1 - j], value: j / (stepCount - 1)});
+        steps.push({
+          color: element[stepCount - 1 - j],
+          value: j / (stepCount - 1),
+        });
       }
       legends.push({name: 'Default', isNormalized: true, steps});
     }
-
     setDefaultLegends(legends);
   }, [theme, setDefaultLegends]);
 
