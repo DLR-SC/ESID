@@ -71,7 +71,7 @@ export default function HeatMap({
 
   // This memo returns if the required data is currently being fetched. Either the case data or the scenario data.
   const isFetching = useMemo(() => {
-    if (selectedScenario === null) {
+    if (selectedScenario == null) {
       return true;
     }
     return isDataFetching;

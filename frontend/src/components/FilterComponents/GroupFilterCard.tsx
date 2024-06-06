@@ -49,7 +49,7 @@ export default function GroupFilterCard(props: GroupFilterCardProps) {
   const {t: customT} = useTranslation(customLang || undefined);
   const theme = useTheme();
 
-  const ChangeVisibility = (id: string) => {
+  const changeVisibility = (id: string) => {
     // Find the filter with the specific id
     const filterToChange = props.groupFilters![id];
 
@@ -69,7 +69,7 @@ export default function GroupFilterCard(props: GroupFilterCardProps) {
     }
   };
 
-  const DeleteFilter = (id: string) => {
+  const deleteFilter = (id: string) => {
     // Create a new copy of groupFilters without the filter with the specific id
     const newGroupFilters = {...props.groupFilters};
     delete newGroupFilters[id];
@@ -108,7 +108,7 @@ export default function GroupFilterCard(props: GroupFilterCardProps) {
           icon={<VisibilityOffOutlined color='disabled' />}
           checked={props.item.isVisible}
           onClick={() => {
-            ChangeVisibility(props.item.id);
+            changeVisibility(props.item.id);
           }}
         />
         <ConfirmDialog
@@ -127,7 +127,7 @@ export default function GroupFilterCard(props: GroupFilterCardProps) {
           }
           onAnswer={(answer) => {
             if (answer) {
-              DeleteFilter(props.item.id);
+              deleteFilter(props.item.id);
             }
             setConfirmDialogOpen(false);
           }}

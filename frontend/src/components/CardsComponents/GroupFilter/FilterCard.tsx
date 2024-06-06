@@ -88,7 +88,7 @@ export default function FilterCard({
           localization={localization}
         />
       </Box>
-      {groupFilterIndex != totalCardNumber - 1 ? <Divider orientation='vertical' flexItem /> : null}
+      {groupFilterIndex != totalCardNumber - 1 && <Divider orientation='vertical' flexItem />}
     </Box>
   );
 }

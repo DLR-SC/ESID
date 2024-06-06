@@ -46,6 +46,7 @@ export default function CardRows({
   const {t: defaultT} = useTranslation();
   const customLang = localization.customLang;
   const {t: customT} = useTranslation(customLang || undefined);
+
   function GetFormattedAndTranslatedValues(filteredValues: number | null): string {
     if (filteredValues) return localization.numberFormatter(filteredValues);
     else if ((!filteredValues && index === 0) || (compartmentValues && Object.keys(compartmentValues).length !== 0))
@@ -142,14 +143,14 @@ export default function CardRows({
                         whiteSpace: 'nowrap',
                       }}
                     />
-                    {arrow ? (
+                    {arrow && (
                       <TrendArrow
                         value={parseFloat(
                           GetFormattedAndTranslatedValues(compartmentValues ? compartmentValues[comp] : null)
                         )}
                         rate={getCompartmentRate(comp)}
                       />
-                    ) : null}
+                    )}
                   </ListItem>
                 );
               })}

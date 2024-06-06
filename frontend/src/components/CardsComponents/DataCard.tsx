@@ -61,33 +61,27 @@ export default function DataCard({
   const [visibility, setVisibility] = useState<boolean>(true);
 
   const filteredTitles: string[] = useMemo(() => {
-    const temp: string[] = [];
     if (activeScenarios?.includes(index) && filterValues?.[index.toString()]) {
-      filterValues[index.toString()].forEach((filterValue: filterValue) => {
-        temp.push(filterValue.filteredTitle);
-      });
+      return filterValues[index.toString()].map((filterValue: filterValue) => filterValue.filteredTitle);
     }
-    return temp;
+    return [];
   }, [activeScenarios, filterValues, index]);
+
   const filteredValues: Array<Dictionary<number> | null> = useMemo(() => {
-    const temp: Array<Dictionary<number> | null> = [];
     if (activeScenarios?.includes(index) && filterValues?.[index.toString()]) {
-      filterValues[index.toString()].forEach((filterValue: filterValue) => {
-        temp.push(filterValue.filteredValues);
-      });
+      return filterValues[index.toString()].map((filterValue: filterValue) => filterValue.filteredValues);
     }
-    return temp;
+    return [];
   }, [activeScenarios, filterValues, index]);
 
   useEffect(() => {
     function checkVisibility(): boolean {
-      const check = Object.values(groupFilters || {})?.map((filter) => {
-        if (filter.name == filteredTitles[0]) {
-          return filter.isVisible;
-        } else return false;
-      });
-      if (!check.includes(true)) return false;
-      else return true;
+      if (groupFilters) {
+        return Object.values(groupFilters)
+          .map((filter) => (filter.name == filteredTitles[0] ? filter.isVisible : false))
+          .includes(true);
+      }
+      return false;
     }
     setVisibility(checkVisibility);
   }, [filteredTitles, groupFilters]);
@@ -122,23 +116,23 @@ export default function DataCard({
         localization={localization}
       />
       {activeScenarios?.includes(index) &&
-      filterValues?.[index.toString()] &&
-      Object.keys(groupFilters || {}).length !== 0 &&
-      visibility ? (
-        <FiltersContainer
-          index={index}
-          filteredTitles={filteredTitles}
-          folded={folded}
-          setFolded={setFolded}
-          compartmentsExpanded={compartmentsExpanded}
-          compartments={compartments}
-          selectedCompartment={selectedCompartment}
-          filteredValues={filteredValues}
-          minCompartmentsRows={minCompartmentsRows}
-          maxCompartmentsRows={maxCompartmentsRows}
-          localization={localization}
-        />
-      ) : null}
+        filterValues?.[index.toString()] &&
+        Object.keys(groupFilters || {}).length !== 0 &&
+        visibility && (
+          <FiltersContainer
+            index={index}
+            filteredTitles={filteredTitles}
+            folded={folded}
+            setFolded={setFolded}
+            compartmentsExpanded={compartmentsExpanded}
+            compartments={compartments}
+            selectedCompartment={selectedCompartment}
+            filteredValues={filteredValues}
+            minCompartmentsRows={minCompartmentsRows}
+            maxCompartmentsRows={maxCompartmentsRows}
+            localization={localization}
+          />
+        )}
     </Box>
   );
 }

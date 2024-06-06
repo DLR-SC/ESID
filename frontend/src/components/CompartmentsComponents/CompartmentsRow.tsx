@@ -39,11 +39,7 @@ export default function CompartmentsRow({
   const {t: customT} = useTranslation(customLang || undefined);
   const theme = useTheme();
   const [tooltipOpen, setTooltipOpen] = useState(false);
-  const openTooltip = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    event.stopPropagation();
-    setTooltipOpen(true);
-  };
-  const closeTooltip = () => setTooltipOpen(false);
+
   return (
     <ListItemButton
       key={id}
@@ -100,12 +96,15 @@ export default function CompartmentsRow({
           minWidth: 'auto',
         }}
       >
-        <ClickAwayListener onClickAway={closeTooltip}>
+        <ClickAwayListener onClickAway={() => setTooltipOpen(false)}>
           <Tooltip
             arrow
             open={tooltipOpen}
-            onClose={closeTooltip}
-            onClick={openTooltip}
+            onClose={() => setTooltipOpen(false)}
+            onClick={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+              event.stopPropagation();
+              setTooltipOpen(true);
+            }}
             title={
               localization.overrides && localization.overrides['compartments.tooltip']
                 ? customT(localization.overrides['compartments.tooltip'])
