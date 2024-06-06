@@ -40,6 +40,9 @@
     LK: 'Rural District',
     KS: 'Urban District',
     SK: 'Urban District',
+    /* [CDtemp-begin] */
+    ST: 'City District',
+    /* [CDtemp-end] */
   },
   scenario: {
     add: 'Add scenario',

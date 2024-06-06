@@ -31,6 +31,9 @@
     LK: 'Landkreis',
     KS: 'Kreisfreie Stadt',
     SK: 'Stadtkreis',
+    /* [CDtemp-begin] */
+    ST: 'Stadtteil',
+    /* [CDtemp-end] */
   },
   scenario: {
     add: 'Szenario hinzufügen',

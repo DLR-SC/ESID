@@ -26,6 +26,13 @@ import svgZoomResetURL from '../../../assets/svg/zoom_out_map_white_24dp.svg?url
 import svgZoomInURL from '../../../assets/svg/zoom_in_white_24dp.svg?url';
 import svgZoomOutURL from '../../../assets/svg/zoom_out_white_24dp.svg?url';
 
+/* [CDtemp-begin] */
+// temporary Implementation for colognes districts
+import cologneDistricts from '../../../assets/stadtteile_cologne.geojson?url';
+import {District} from 'types/cologneDisticts';
+// TODO: calculate values => hardcode factors => calculate on every request, add to search option list, fix border?
+/* [CDtemp-end] */
+
 interface IRegionPolygon {
   value: number;
 
@@ -37,6 +44,11 @@ interface IRegionPolygon {
 
   /** AGS (district ID) */
   RS: string;
+
+  /* [CDtemp-begin] */
+  // Add district info if available
+  district?: District;
+  /* [CDtemp-end] */
 }
 
 export default function DistrictMap(): JSX.Element {
@@ -138,6 +150,46 @@ export default function DistrictMap(): JSX.Element {
 
   // fetch geojson
   useEffect(() => {
+    /* [CDtemp-begin] */
+    // Fetch both in one Promise
+    Promise.all([
+      fetch(mapData, {
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+      }).then((result) => result.json()),
+      fetch(cologneDistricts, {
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+      }).then((result) => result.json()),
+    ]).then(
+      // on promises accept
+      ([geodata, colognedata]: [GeoJSON.FeatureCollection, GeoJSON.FeatureCollection]) => {
+        // Remove Cologne from data
+        geodata.features = geodata.features.filter((feat) => feat.properties!['RS'] !== '05315');
+        // Add RS, GEN, BEZ to cologne districts
+        geodata.features.push(
+          ...colognedata.features.map((feat) => {
+            // Append Stadtteil ID to AGS
+            feat.properties!['RS'] = `05315${feat.properties!['Stadtteil_ID']}`;
+            // Append Name (e.g. Köln - Braunsfeld (Lindenthal))
+            feat.properties!['GEN'] = `Köln - ${feat.properties!['Stadtteil']} (${feat.properties!['Stadtbezirk']})`;
+            // Use ST for Stadtteil
+            feat.properties!['BEZ'] = 'ST';
+            return feat;
+          })
+        );
+        setGeodata(geodata);
+      },
+      // on promises reject
+      () => {
+        console.warn('Failed to fetch geoJSON');
+      }
+    );
+    /* [CDtemp-end] */
     fetch(mapData, {
       headers: {
         'Content-Type': 'application/json',
@@ -147,7 +199,7 @@ export default function DistrictMap(): JSX.Element {
       .then((response) => response.json())
       .then(
         // resolve Promise
-        (geojson: GeoJSON.GeoJSON) => {
+        (geojson: GeoJSON.FeatureCollection) => {
           setGeodata(geojson);
         },
         // reject promise
@@ -164,7 +216,7 @@ export default function DistrictMap(): JSX.Element {
     const chart = root.container.children.push(
       am5map.MapChart.new(root, {
         projection: am5map.geoMercator(),
-        maxZoomLevel: 4,
+        maxZoomLevel: 32, // [CDtemp] originally 4
         maxPanOut: 0.4,
         zoomControl: am5map.ZoomControl.new(root, {
           paddingBottom: 25,
