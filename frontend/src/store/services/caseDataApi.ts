@@ -16,11 +16,11 @@ export const caseDataApi = createApi({
         const compartments = arg.compartments ? `&compartments=${arg.compartments.join(',')}` : '';
 
         // fetch all days
-        const secondResult = await fetchWithBQ(`/${arg.node}/?all${groups}${compartments}`);
+        const queryResult = await fetchWithBQ(
         // return error if any occurs
-        if (secondResult.error) return {error: secondResult.error};
+        if (queryResult.error) return {error: queryResult.error};
 
-        const result = secondResult.data as CaseDataByNode;
+        const result = queryResult.data as CaseDataByNode;
         return {data: result};
       },
     }),
@@ -31,11 +31,11 @@ export const caseDataApi = createApi({
         const compartments = arg.compartments ? `&compartments=${arg.compartments.join(',')}` : '';
 
         // fetch all days
-        const secondResult = await fetchWithBQ(`/${arg.day}/?all${groups}${compartments}`);
+        const queryResult = await fetchWithBQ(`/${arg.day}/?all${groups}${compartments}`);
         // return error if any occurs
-        if (secondResult.error) return {error: secondResult.error};
+        if (queryResult.error) return {error: queryResult.error};
 
-        const result = secondResult.data as CaseDataByDate;
+        const result = queryResult.data as CaseDataByDate;
         return {data: result};
       },
     }),
