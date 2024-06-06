@@ -77,7 +77,6 @@ export default function LineChartContainer() {
         selectedCompartment={selectedCompartment ?? ''}
         groupFilterList={groupFilterList}
         scenarioList={scenarioList}
-        localization={{}}
       />
     </LoadingContainer>
   );

@@ -14,6 +14,7 @@ import {HeatmapLegend} from '../../../types/heatmapLegend';
 import {Box} from '@mui/material';
 import {useTheme} from '@mui/material/styles';
 import React from 'react';
+import {Localization} from 'types/localization';
 
 interface MapProps {
   mapData: undefined | FeatureCollection;
@@ -36,7 +37,7 @@ interface MapProps {
   legendRef: React.MutableRefObject<am5.HeatLegend | null>;
   longLoad: boolean;
   setLongLoad: (longLoad: boolean) => void;
-  formatNumber: (value: number) => string;
+  localization?: Localization;
   idValuesToMap?: string;
 }
 
@@ -61,7 +62,7 @@ export default function HeatMap({
   legendRef,
   longLoad,
   setLongLoad,
-  formatNumber,
+  localization = {formatNumber: (value: number) => value.toString(), customLang: 'global', overrides: {}},
   idValuesToMap = 'id',
 }: MapProps) {
   const theme = useTheme();
@@ -206,7 +207,7 @@ export default function HeatMap({
     polygonTemplate.events.on('pointerover', (e) => {
       if (legendRef.current) {
         const value = (e.target.dataItem?.dataContext as FeatureProperties).value as number;
-        legendRef.current.showValue(value, formatNumber(value));
+        legendRef.current.showValue(value, localization.formatNumber!(value));
       }
     });
     //hide tooltip on heat legend when not hovering anymore event
@@ -226,13 +227,14 @@ export default function HeatMap({
     defaultFill,
     defaultSelectedValue,
     fillOpacity,
-    formatNumber,
+    localization.formatNumber,
     legendRef,
     mapData,
     mapId,
     setSelectedArea,
     theme.palette.background.default,
     theme.palette.primary.main,
+    localization,
   ]);
 
   // Highlight selected district

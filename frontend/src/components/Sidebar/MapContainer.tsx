@@ -122,6 +122,12 @@ export default function MapContainer() {
     [t]
   );
 
+  const localization = useMemo(() => {
+    return {
+      formatNumber: formatNumber,
+    };
+  }, [formatNumber]);
+
   return (
     <Stack
       id='sidebar-root'
@@ -157,7 +163,7 @@ export default function MapContainer() {
         />
       </Box>
       <Box id='sidebar-map-wrapper'>
-        <LoadingContainer show={areMapValuesFetching && longLoad} overlayColor={theme.palette.background.default}>
+        <LoadingContainer show={areMapValuesFetching || longLoad} overlayColor={theme.palette.background.default}>
           <HeatMap
             selectedArea={selectedArea}
             setSelectedArea={setSelectedArea}
@@ -176,7 +182,7 @@ export default function MapContainer() {
             setLongLoad={setLongLoad}
             selectedScenario={selectedScenario}
             idValuesToMap={'RS'}
-            formatNumber={formatNumber}
+            localization={localization}
           />
           <Grid container px={1}>
             <Grid item container xs={11} alignItems='flex-end'>
@@ -195,7 +201,7 @@ export default function MapContainer() {
                 }
                 displayText={true}
                 id={'legend'}
-                formatNumber={formatNumber}
+                localization={localization}
               />
             </Grid>
             <Grid item container justifyContent='center' direction={'column'} xs={1}>
@@ -203,7 +209,6 @@ export default function MapContainer() {
                 fixedLegendMaxValue={fixedLegendMaxValue}
                 setFixedLegendMaxValue={setFixedLegendMaxValue}
                 aggregatedMax={aggregatedMax}
-                t={t}
               />
               <HeatLegendEdit legend={legend} setLegend={setLegend} selectedScenario={selectedScenario} />
             </Grid>

@@ -16,12 +16,14 @@ import EditIcon from '@mui/icons-material/Edit';
 import legendPresets from '../../../../assets/heatmap_legend_presets.json?url';
 import {useTheme} from '@mui/material';
 import {HeatmapLegend} from 'types/heatmapLegend';
+import {Localization} from 'types/localization';
+import {useTranslation} from 'react-i18next';
 
 interface HeatLegendEditProps {
   setLegend: (legend: HeatmapLegend) => void;
   legend: HeatmapLegend;
   selectedScenario?: number | null;
-  t?: (key: string) => string;
+  localization?: Localization;
 }
 /**
  * This component displays an edit button to access a modal. In the modal you can edit the heatmap legend.
@@ -30,9 +32,15 @@ export default function HeatLegendEdit({
   setLegend,
   legend,
   selectedScenario = null,
-  t = (key: string) => key,
+  localization = {
+    formatNumber: (value) => value.toLocaleString(),
+    customLang: 'global',
+    overrides: {},
+  },
 }: HeatLegendEditProps) {
   const theme = useTheme();
+  const {t: defaultT} = useTranslation();
+  const {t: customT} = useTranslation(localization.customLang);
   // // This contains all legends using the default colors.
   // const [defaultLegends, setDefaultLegends] = useState<Array<HeatmapLegend>>([]);
   const defaultLegends = useDefaultLegends();
@@ -115,11 +123,23 @@ export default function HeatLegendEdit({
 
   return (
     <>
-      <Tooltip title={t('heatlegend.edit').toString()} placement='right' arrow>
+      <Tooltip
+        title={
+          localization.overrides && localization.overrides['heatlegend.edit']
+            ? customT(localization.overrides['heatlegend.edit'])
+            : defaultT('heatlegend.edit')
+        }
+        placement='right'
+        arrow
+      >
         <IconButton
           color={'primary'}
           onClick={() => setHeatLegendEditOpen(true)}
-          aria-label={t('heatlegend.edit')}
+          aria-label={
+            localization.overrides && localization.overrides['heatlegend.edit']
+              ? customT(localization.overrides['heatlegend.edit'])
+              : defaultT('heatlegend.edit')
+          }
           size='small'
           sx={{padding: theme.spacing(0), marginBottom: theme.spacing(1)}}
         >
@@ -136,7 +156,11 @@ export default function HeatLegendEdit({
           <FormControl fullWidth sx={{marginBottom: 3}}>
             <Select
               id='heatmap-select'
-              aria-label={t('heatlegend.select')}
+              aria-label={
+                localization.overrides && localization.overrides['heatlegend.edit']
+                  ? customT(localization.overrides['heatlegend.edit'])
+                  : defaultT('heatlegend.edit')
+              }
               value={legend.name}
               onChange={(event: SelectChangeEvent) => selectLegendByName(event.target.value)}
             >
@@ -156,7 +180,9 @@ export default function HeatLegendEdit({
           </FormControl>
           <Grid container item justifyContent={'flex-end'}>
             <Button variant='contained' onClick={() => setHeatLegendEditOpen(false)}>
-              {t('okay')}
+              {localization.overrides && localization.overrides['okay']
+                ? customT(localization.overrides['okay'])
+                : defaultT('okay')}
             </Button>
           </Grid>
         </Box>

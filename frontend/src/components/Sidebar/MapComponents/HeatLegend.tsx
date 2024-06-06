@@ -7,6 +7,7 @@ import {Box} from '@mui/material';
 import React from 'react';
 import {HeatmapLegend} from 'types/heatmapLegend';
 import {useTheme} from '@mui/material/styles';
+import {Localization} from 'types/localization';
 
 interface HeatProps {
   legend: HeatmapLegend;
@@ -16,7 +17,7 @@ interface HeatProps {
   displayText: boolean;
   id: string;
   style?: React.CSSProperties;
-  formatNumber: (value: number) => string;
+  localization?: Localization;
 }
 
 export default function HeatLegend({
@@ -31,7 +32,11 @@ export default function HeatLegend({
     margin: '5px',
     height: '50px',
   },
-  formatNumber,
+  localization = {
+    formatNumber: (value) => value.toLocaleString(),
+    customLang: 'global',
+    overrides: {},
+  },
 }: Readonly<HeatProps>) {
   const unique_id = useMemo(() => id + String(Date.now() + Math.random()), [id]);
   const theme = useTheme();
@@ -42,9 +47,9 @@ export default function HeatLegend({
       am5.HeatLegend.new(root, {
         orientation: 'horizontal',
         startValue: min,
-        startText: displayText ? formatNumber(min) : ' ',
+        startText: displayText ? localization.formatNumber!(min) : ' ',
         endValue: max,
-        endText: displayText ? formatNumber(max) : ' ',
+        endText: displayText ? localization.formatNumber!(max) : ' ',
         // set start & end color to paper background as gradient is overwritten later and this sets the tooltip background color
         startColor: am5.color(theme.palette.background.paper),
         endColor: am5.color(theme.palette.background.paper),
@@ -77,13 +82,14 @@ export default function HeatLegend({
   }, [
     displayText,
     exposeLegend,
-    formatNumber,
+    localization.formatNumber,
     legend.isNormalized,
     legend.steps,
     max,
     min,
     theme.palette.background.paper,
     unique_id,
+    localization,
   ]);
 
   return <Box id={unique_id} sx={style} />;

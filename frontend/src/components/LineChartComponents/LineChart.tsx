@@ -22,6 +22,7 @@ import {useTranslation} from 'react-i18next';
 import {Dictionary, dateToISOString} from '../../util/util';
 import React from 'react';
 import {Scenario} from 'store/ScenarioSlice';
+import {Localization} from 'types/localization';
 
 interface ScenarioList {
   scenarios: {
@@ -55,13 +56,7 @@ interface LineChartProps {
   scenarioList: ScenarioList;
   groupFilterList?: Dictionary<GroupFilter> | null;
   exportedFileName?: string;
-  localization: {
-    numberFormatter?: (value: number) => string;
-    customLang?: string;
-    overrides?: {
-      [key: string]: string;
-    };
-  };
+  localization?: Localization;
 }
 
 export default function LineChart({
@@ -84,14 +79,13 @@ export default function LineChart({
   groupFilterList = null,
   exportedFileName = 'Data',
   localization = {
-    numberFormatter: undefined,
-    customLang: 'en',
-    overrides: undefined,
+    formatNumber: (value) => value.toLocaleString(),
+    customLang: 'global',
+    overrides: {},
   },
 }: LineChartProps) {
-  const {t: defaultT} = useTranslation();
-  const customLang = localization.customLang;
-  const {t: customT} = useTranslation(customLang || undefined);
+  const {t: defaultT, i18n} = useTranslation();
+  const {t: customT} = useTranslation(localization.customLang);
   const theme = useTheme();
 
   const rootRef = useRef<Root | null>(null);
@@ -211,7 +205,7 @@ export default function LineChart({
       }
 
       // Set localization
-      rootRef.current.locale = localization.customLang === 'de' ? am5locales_de_DE : am5locales_en_US;
+      rootRef.current.locale = i18n.language === 'de' ? am5locales_de_DE : am5locales_en_US;
 
       // Change date formats for ticks & tooltip (use fallback object to suppress undefined object warnings as this cannot be undefined)
       const xAxis: DateAxis<AxisRendererX> = chartRef.current.xAxes.getIndex(0) as DateAxis<AxisRendererX>;
@@ -230,7 +224,7 @@ export default function LineChart({
           : defaultT('dayFormat');
     },
     // Re-run effect if language changes
-    [localization.customLang, defaultT, customT, localization.overrides]
+    [localization.customLang, defaultT, customT, localization.overrides, i18n.language]
   );
 
   // Effect to update min/max date.

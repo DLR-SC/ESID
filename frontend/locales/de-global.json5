@@ -52,6 +52,7 @@
     'confirm-discard-title': 'Änderungen Verwerfen',
     'confirm-discard-text': 'Sie haben ungespeicherte Änderungen. Wollen sie diese verwerfen?',
     discard: 'Verwerfen',
+    delete: 'Löschen',
   },
   chart: {
     caseData: 'Geschätzte Fälle',
@@ -77,65 +78,4 @@
   'no-data': 'Keine Daten',
   'loki-logo': 'LOKI-Logo',
   okay: 'Okay',
-  'group-filters-editor': {
-    categories: {
-      age: 'Alter',
-      gender: 'Geschlecht',
-    },
-    groups: {
-      age_0: '0 - 4 Jahre',
-      age_1: '5 - 14 Jahre',
-      age_2: '15 - 34 Jahre',
-      age_3: '35 - 59 Jahre',
-      age_4: '60 - 79 Jahre',
-      age_5: 'Über 80 Jahre',
-      total: 'Gesamt',
-      female: 'Weiblich',
-      male: 'Männlich',
-      nonbinary: 'Divers',
-    },
-  },
-  compartments: {
-    Infected: 'Infiziert',
-    MildInfections: 'Milde Infektion',
-    Hospitalized: 'Hospitalisiert',
-    ICU: 'Intensivpatient',
-    Dead: 'Verstorben',
-    DeadV1: 'Verstorben (💉)',
-    DeadV2: 'Verstorben (💉💉)',
-    Exposed: 'Kontaktperson',
-    Recovered: 'Genesen',
-    Carrier: 'Träger',
-    Susceptible: 'Empfänglich',
-    InfectedT: 'Infiziert (🧪)',
-    InfectedTV1: 'Infiziert (🧪 + 💉)',
-    InfectedTV2: 'Infiziert (🧪 + 💉💉)',
-    InfectedV1: 'Infiziert (💉)',
-    InfectedV2: 'Infiziert (💉💉)',
-    HospitalizedV1: 'Hospitalisiert (💉)',
-    HospitalizedV2: 'Hospitalisiert (💉💉)',
-    ICUV1: 'Intensivpatient (💉)',
-    ICUV2: 'Intensivpatient (💉💉)',
-    ExposedV1: 'Kontaktperson (💉)',
-    ExposedV2: 'Kontaktperson (💉💉)',
-    CarrierT: 'Träger (🧪)',
-    CarrierTV1: 'Träger (🧪 + 💉)',
-    CarrierTV2: 'Träger (🧪 + 💉💉)',
-    CarrierV1: 'Träger (💉)',
-    CarrierV2: 'Träger (💉💉)',
-    SusceptibleV1: 'Empfänglich (💉)',
-    SusceptibleV2: 'Empfänglich (💉💉)',
-    tooltip: 'Die hier angezeigten Zahlen zu Infizierten und Hospitalisierten basieren auf Annahmen zur Immunität,\
-              Dauer und Schweregrad einer Infektion mit Sars-CoV-2. Sie berechnen sich über ein komplexes mehrstufiges\
-              Verfahren aus den berichteten Fallzahlen und eine einfach Formel kann nicht angegeben werden. Ein\
-              Anstieg/Rückgang der Fallzahlen bedeutet einen Anstieg/Rückgang der Anzahl Infizierter, sodass in\
-              Relation zu den Werten der vergangenen Tagen bewertet werden kann, ob die Situation sich verbessert oder\
-              verschlimmert. Sofern verfügbar, kommen die Zahlen zu den Intensivpatient:innen aus dem DIVI\
-              Intensivregister.',
-  },
-  'scenario-names': {
-    'Baseline Scenario': 'Geschätzte Fälle',
-    'Summer 2021 Simulation 1': 'Szenario ohne Maßnahmen',
-    'Summer 2021 Simulation 2': 'Szenario mit Maßnahmen',
-  },
 }
