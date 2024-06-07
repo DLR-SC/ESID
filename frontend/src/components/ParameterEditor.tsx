@@ -93,6 +93,9 @@ export default function ParameterEditor() {
   );
 }
 
+/**
+ * Creates the header row of the parameter editor.
+ */
 function TableHeader(): JSX.Element {
   const {t: tBackend} = useTranslation('backend');
   const {data: groups} = useGetGroupSubcategoriesQuery();
