@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import {Dictionary} from 'util/util';
+import {deepCopy, Dictionary} from 'util/util';
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 import {
   SimulationDataByDate,
@@ -10,6 +10,8 @@ import {
   SimulationModels,
   Simulations,
 } from '../../types/scenario';
+import cologneData from '../../../assets/stadtteile_cologne_list.json';
+import {District} from '../../types/cologneDisticts';
 
 export const scenarioApi = createApi({
   reducerPath: 'scenarioApi',
@@ -43,7 +45,28 @@ export const scenarioApi = createApi({
         if (currResult.error) return {error: currResult.error};
 
         const data = currResult.data as SimulationDataByDate;
-
+        /* [CDtemp-begin] */
+        // get data for cologne
+        const cologneResult = data.results.find((res) => res.name === '05315');
+        // if cologne is in results also calculate districts
+        if (cologneResult) {
+          // loop thru cologne districts
+          (cologneData as unknown as Array<District>).forEach((dist) => {
+            // calculate compartment data
+            const districtCompartments = deepCopy(cologneResult.compartments);
+            // loop thru compartments
+            Object.keys(districtCompartments).forEach((compName) => {
+              // apply district weight
+              districtCompartments[compName] *= dist.Population_rel;
+            });
+            // create result entry for district
+            data.results.push({
+              name: `05315${dist.Stadtteil_ID}`,
+              compartments: districtCompartments,
+            });
+          });
+        }
+        /* [CDtemp-end] */
         return {data};
       },
     }),
