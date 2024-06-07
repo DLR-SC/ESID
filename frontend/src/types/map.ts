@@ -5,7 +5,7 @@ export interface Feature {
   type: string;
   geometry: {
     type: string;
-    coordinates: number[];
+    coordinates: number[][][];
   };
   properties: {
     [key: string]: string | number;

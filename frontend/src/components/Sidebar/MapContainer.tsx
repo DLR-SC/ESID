@@ -54,7 +54,7 @@ export default function MapContainer() {
 
   const [geoData, setGeoData] = useState<FeatureCollection>();
   const [selectedArea, setSelectedArea] = useState<FeatureProperties>(
-    storeSelectedArea.ags != '00000'
+    storeSelectedArea.name != ''
       ? {RS: storeSelectedArea.ags, GEN: storeSelectedArea.name, BEZ: storeSelectedArea.type}
       : defaultValue
   );

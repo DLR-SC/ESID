@@ -1,32 +1,109 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React from 'react';
-import {describe, test, expect, afterEach} from 'vitest';
-import {act, cleanup, render, screen} from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-
+import React, {useState, useMemo} from 'react';
+import {describe, test, afterEach} from 'vitest';
+import {render, screen, cleanup} from '@testing-library/react';
 import i18n from '../../../util/i18nForTests';
-
-import SearchBar from '../../../components/Sidebar/SearchBar';
 import {I18nextProvider} from 'react-i18next';
-import {Provider} from 'react-redux';
-import {Store} from '../../../store';
-import {selectDistrict} from '../../../store/DataSelectionSlice';
+import SearchBar from 'components/Sidebar/MapComponents/SearchBar';
+import userEvent from '@testing-library/user-event';
+import {FeatureProperties} from 'types/map';
 
-describe('SearchBar', () => {
+const SearchBarTest = () => {
+  const geoData = {
+    type: 'FeatureCollection',
+    features: [
+      {
+        type: 'Feature',
+        properties: {
+          RS: '09771',
+          GEN: 'Aichach-Friedberg',
+          BEZ: 'LK',
+        },
+        geometry: {
+          type: 'Polygon',
+          coordinates: [
+            [
+              [10.0, 50.0],
+              [11.0, 50.0],
+              [11.0, 51.0],
+              [10.0, 51.0],
+              [10.0, 50.0],
+            ],
+          ],
+        },
+      },
+      {
+        type: 'Feature',
+        properties: {
+          RS: '12345',
+          GEN: 'Test District',
+          BEZ: 'Test Type',
+        },
+        geometry: {
+          type: 'Polygon',
+          coordinates: [
+            [
+              [12.0, 52.0],
+              [13.0, 52.0],
+              [13.0, 53.0],
+              [12.0, 53.0],
+              [12.0, 52.0],
+            ],
+          ],
+        },
+      },
+    ],
+  };
+
+  const defaultValue = useMemo(
+    () => ({
+      RS: '00000',
+      GEN: 'germany',
+      BEZ: '',
+      id: -1,
+    }),
+    []
+  );
+
+  const [selectedArea, setSelectedArea] = useState<FeatureProperties>(defaultValue);
+
+  return (
+    <SearchBar
+      data={geoData}
+      defaultValue={defaultValue}
+      sortProperty={'GEN'}
+      optionLabel={(option) => `${option.GEN}${option.BEZ ? ` (BEZ.${option.BEZ})` : ''}`}
+      autoCompleteValue={{
+        RS: selectedArea['RS'],
+        GEN: selectedArea['GEN'],
+        BEZ: selectedArea['BEZ'],
+        id: selectedArea['id'],
+      }}
+      onChange={(_event, option) => {
+        if (option) {
+          setSelectedArea(option);
+        }
+      }}
+      placeholder={`${selectedArea.GEN}${selectedArea.BEZ ? ` (BEZ.${selectedArea.BEZ})` : ''}`}
+      optionEqualProperty='RS'
+      valueEqualProperty='RS'
+    />
+  );
+};
+
+describe('Searchbar', () => {
   test('countyList loaded correctly', async () => {
     render(
       <I18nextProvider i18n={i18n}>
-        <Provider store={Store}>
-          <SearchBar />
-        </Provider>
+        <SearchBarTest />
       </I18nextProvider>
     );
 
-    await screen.findByPlaceholderText('germany');
+    const searchbar = await screen.findByPlaceholderText('germany');
 
-    await userEvent.click(screen.getByPlaceholderText('germany'));
+    await userEvent.click(searchbar);
 
     await screen.findByText('A');
     await screen.findByText('Aichach-Friedberg (BEZ.LK)');
@@ -36,62 +113,31 @@ describe('SearchBar', () => {
     await screen.findByText('Test District (BEZ.Test Type)');
   });
 
-  test('district changed by store', async () => {
-    render(
-      <I18nextProvider i18n={i18n}>
-        <Provider store={Store}>
-          <SearchBar />
-        </Provider>
-      </I18nextProvider>
-    );
-
-    act(() => {
-      Store.dispatch(selectDistrict({ags: '12345', name: 'Test District', type: 'Test Type'}));
-    });
-
-    await screen.findByDisplayValue('Test District (BEZ.Test Type)');
-  });
-
   test('select district by dropdown selection partial name (autocomplete)', async () => {
     render(
       <I18nextProvider i18n={i18n}>
-        <Provider store={Store}>
-          <SearchBar />
-        </Provider>
+        <SearchBarTest />
       </I18nextProvider>
     );
 
     await userEvent.type(screen.getByPlaceholderText('germany'), 'Aic{Enter}');
 
     await screen.findByDisplayValue('Aichach-Friedberg (BEZ.LK)');
-    expect(Store.getState().dataSelection.district).toStrictEqual({
-      ags: '09771',
-      name: 'Aichach-Friedberg',
-      type: 'LK',
-    });
   });
 
   test('select district by dropdown selection with keyboard (Arrow-Down)', async () => {
     render(
       <I18nextProvider i18n={i18n}>
-        <Provider store={Store}>
-          <SearchBar />
-        </Provider>
+        <SearchBarTest />
       </I18nextProvider>
     );
 
     await userEvent.type(screen.getByPlaceholderText('germany'), '{ArrowDown}{Enter}');
 
     await screen.findByDisplayValue('Test District (BEZ.Test Type)');
-    expect(Store.getState().dataSelection.district).toStrictEqual({
-      ags: '12345',
-      name: 'Test District',
-      type: 'Test Type',
-    });
   });
 
   afterEach(() => {
     cleanup();
-    Store.dispatch(selectDistrict({ags: '00000', name: '', type: ''}));
   });
 });

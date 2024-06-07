@@ -637,9 +637,9 @@ export default function LineChart({
             ? customT(localization.overrides['dateFormat'])
             : defaultT('dateFormat')
         }")} (${
-          localization.overrides && localization.overrides[`compartments.${selectedCompartment}`]
-            ? customT(localization.overrides[`compartments.${selectedCompartment}`])
-            : defaultT(`compartments.${selectedCompartment}`)
+          localization.overrides && localization.overrides[`compartment.${selectedCompartment}`]
+            ? customT(localization.overrides[`compartment.${selectedCompartment}`])
+            : defaultT(`compartment.${selectedCompartment}`)
         })</strong>
         <table>
           ${
