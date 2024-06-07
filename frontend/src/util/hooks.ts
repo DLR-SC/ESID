@@ -77,7 +77,7 @@ export function usePrevious<T>(value: T, initialValue: T): T {
  * This is basically the same as useEffect, except that it prints the changed dependencies. This can be used, if you
  * want to know which dependency changed and triggered a rerender.
  */
-export function useEffectDebugger(effectHook: {(): void}, dependencies: Array<unknown>, dependencyNames = []): void {
+export function useEffectDebugger(effectHook: () => void, dependencies: Array<unknown>, dependencyNames = []): void {
   const previousDeps = usePrevious(dependencies, []);
 
   const changedDeps = dependencies.reduce((accum, dependency, index) => {
@@ -100,4 +100,14 @@ export function useEffectDebugger(effectHook: {(): void}, dependencies: Array<un
   }
 
   useEffect(effectHook, [effectHook, ...dependencies]);
+}
+
+export function useConst<T>(value: T): T {
+  const ref = useRef<T>();
+
+  if (!ref.current) {
+    ref.current = value;
+  }
+
+  return ref.current;
 }

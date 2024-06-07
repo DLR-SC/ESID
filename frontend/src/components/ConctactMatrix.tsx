@@ -1,11 +1,10 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, {useEffect, useMemo, useState} from 'react';
+import {useLayoutEffect, useMemo, useState} from 'react';
 import {Root} from '@amcharts/amcharts5/.internal/core/Root';
 import {XYChart} from '@amcharts/amcharts5/.internal/charts/xy/XYChart';
 import {DateAxis} from '@amcharts/amcharts5/.internal/charts/xy/axes/DateAxis';
-import {AxisRendererX} from '@amcharts/amcharts5/.internal/charts/xy/axes/AxisRendererX';
 import {Tooltip} from '@amcharts/amcharts5/.internal/core/render/Tooltip';
 import {AxisRendererY} from '@amcharts/amcharts5/.internal/charts/xy/axes/AxisRendererY';
 import {useAppDispatch, useAppSelector} from '../store/hooks';
@@ -16,6 +15,7 @@ import {dateToISOString, Dictionary} from '../util/util';
 import {useGetSimulationsQuery} from '../store/services/scenarioApi';
 import {color} from '@amcharts/amcharts5/.internal/core/util/Color';
 import {AxisRenderer} from '@amcharts/amcharts5/.internal/charts/xy/axes/AxisRenderer';
+import {useTheme} from '@mui/material/styles';
 
 const data: Dictionary<Array<number[]>> = {
   home: [
@@ -57,96 +57,93 @@ function average(numbers: Array<number>) {
   return sum / numbers.length;
 }
 
-export default function ContactMatrix(
-  props: Readonly<{
-    root: Root | null;
-    chart: XYChart | null;
-    xAxis: DateAxis<AxisRenderer> | null;
-  }>
-): JSX.Element {
+export default function useContactMatrix(
+  root: Root | null,
+  chart: XYChart | null,
+) {
+  const theme = useTheme();
   const dispatch = useAppDispatch();
 
-  const minDate = useAppSelector((state) => state.dataSelection.minDate);
-  const maxDate = useAppSelector((state) => state.dataSelection.maxDate);
-
   const {data: scenarioListData} = useGetSimulationsQuery();
+  const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
 
-  useEffect(
+  const [yAxis, setYAxis] = useState<CategoryAxis<AxisRenderer>>();
+
+  useLayoutEffect(
     () => {
-      if (!props.chart || !props.root) {
+      if (!chart || !root) {
         return;
       }
 
-      // Create y-axis
-      props.chart.yAxes.push(
-        CategoryAxis.new(props.root, {
-          renderer: AxisRendererY.new(props.root, {}),
+      const newYAxis = chart.yAxes.push(
+        CategoryAxis.new(root, {
+          renderer: AxisRendererY.new(root, {}),
           // Add tooltip instance so cursor can display value
-          tooltip: Tooltip.new(props.root, {}),
+          tooltip: Tooltip.new(root, {}),
           categoryField: 'category',
         })
       );
+
+      setYAxis(newYAxis);
+
+      return () => {
+        chart?.yAxes.removeValue(newYAxis);
+        newYAxis?.dispose();
+      };
     },
     // This effect should only run once. dispatch should not change during runtime
-    [dispatch, props.chart, props.root]
+    [dispatch, chart, root]
   );
 
   const [series, setSeries] = useState<ColumnSeries | null>(null);
 
-  useEffect(() => {
-    if (props.root && props.chart) {
-      const yAxis = props.chart.yAxes.getIndex(1)!;
-      yAxis.data.setAll(Object.keys(data).map((key) => ({category: key})));
-
-      const series = props.chart.series.push(
-        ColumnSeries.new(props.root, {
-          xAxis: props.chart.xAxes.getIndex(0)!,
-          yAxis: props.chart.yAxes.getIndex(1)!,
-          openValueXField: 'fromDate',
-          valueXField: 'toDate',
-          categoryYField: 'category',
-          valueField: 'averageContacts',
-        })
-      );
-
-      series.columns.template.setAll({
-        templateField: 'columnSettings',
-        strokeOpacity: 0,
-        tooltipText: '{category}: {averageContacts}',
-      });
-
-      series.data.processor = DataProcessor.new(props.root, {
-        dateFields: ['fromDate', 'toDate'],
-        dateFormat: 'yyyy-MM-dd',
-      });
-
-      series.set('heatRules', [
-        {
-          target: series.columns.template,
-          minValue: 0,
-          maxValue: 0.75,
-          min: color('#FFFFFF'),
-          max: color('#FF0000'),
-          dataField: 'value',
-          key: 'fill',
-        },
-      ]);
-
-      setSeries(series);
-    }
-  }, [props.chart, props.root]);
-
-  // Effect to update min/max date.
-  useEffect(() => {
-    // Skip if root or chart is not initialized
-    if (!props.root || !props.chart || !minDate || !maxDate) {
+  useLayoutEffect(() => {
+    if (!(root && chart && yAxis && selectedScenario)) {
       return;
     }
+    yAxis.data.setAll(Object.keys(data).map((key) => ({category: key})));
 
-    const xAxis: DateAxis<AxisRendererX> = props.chart.xAxes.getIndex(0) as DateAxis<AxisRendererX>;
-    xAxis.set('min', new Date(minDate).setHours(0));
-    xAxis.set('max', new Date(maxDate).setHours(23, 59, 59));
-  }, [minDate, maxDate, props.root, props.chart]);
+    const newSeries = chart.series.push(
+      ColumnSeries.new(root, {
+        xAxis: chart.xAxes.getIndex(0)!,
+        yAxis: chart.yAxes.getIndex(1)!,
+        openValueXField: 'fromDate',
+        valueXField: 'toDate',
+        categoryYField: 'category',
+        valueField: 'averageContacts',
+      })
+    );
+
+    newSeries.columns.template.setAll({
+      templateField: 'columnSettings',
+      strokeOpacity: 0,
+      tooltipText: '{category}: {averageContacts}',
+    });
+
+    newSeries.data.processor = DataProcessor.new(root, {
+      dateFields: ['fromDate', 'toDate'],
+      dateFormat: 'yyyy-MM-dd',
+    });
+
+    newSeries.set('heatRules', [
+      {
+        target: newSeries.columns.template,
+        minValue: 0,
+        maxValue: 0.75,
+        min: color(theme.custom.scenarios[selectedScenario % theme.custom.scenarios.length][0]),
+        max: color(theme.custom.scenarios[selectedScenario % theme.custom.scenarios.length].at(-1)!),
+        dataField: 'value',
+        key: 'fill',
+      },
+    ]);
+
+    setSeries(newSeries);
+
+    return () => {
+      chart?.series?.removeValue(newSeries);
+      newSeries.dispose();
+    };
+  }, [chart, root, selectedScenario, theme.custom.scenarios, yAxis]);
 
   const categoryData = useMemo(() => {
     if (!scenarioListData?.results[0]) {
@@ -177,11 +174,9 @@ export default function ContactMatrix(
     return result;
   }, [scenarioListData]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (series) {
       series.data.setAll(categoryData);
     }
-  }, [categoryData, props.chart, series]);
-
-  return <></>;
+  }, [categoryData, chart, series]);
 }

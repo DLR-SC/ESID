@@ -12,9 +12,7 @@ import {ScrollSync} from 'react-scroll-sync';
 import ConfirmDialog from '../shared/ConfirmDialog';
 import CompartmentList from './CompartmentList';
 import DataCardList from './DataCardList';
-
-// Let's import pop-ups only once they are opened.
-const ManageGroupDialog = React.lazy(() => import('../ManageGroupDialog'));
+import ManageGroupDialog from '../ManageGroupDialog';
 
 /**
  * React Component to render the Scenario Cards Section
