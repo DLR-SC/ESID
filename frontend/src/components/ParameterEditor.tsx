@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
 import TableHead from '@mui/material/TableHead';
@@ -14,9 +14,10 @@ import {useTheme} from '@mui/material/styles';
 import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
 import MathMarkdown from './shared/MathMarkdown';
-import {ParameterData, useGetScenarioParametersQuery} from '../store/services/scenarioApi';
+import {ParameterData, useGetScenarioParametersQuery, useGetSimulationsQuery} from '../store/services/scenarioApi';
 import {useTranslation} from 'react-i18next';
 import {useGetGroupSubcategoriesQuery} from '../store/services/groupApi';
+import {useAppSelector} from '../store/hooks';
 
 /**
  * This component visualizes the parameters of the selected scenario. It uses a table with the following format:
@@ -33,7 +34,23 @@ import {useGetGroupSubcategoriesQuery} from '../store/services/groupApi';
 export default function ParameterEditor() {
   const {t} = useTranslation('backend');
   const theme = useTheme();
-  const {data} = useGetScenarioParametersQuery(1);
+
+  const {data: simulations} = useGetSimulationsQuery();
+  const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
+  const [scenarioId, setScenarioId] = useState<number | null>(null);
+
+  useEffect(() => {
+    const scenario = simulations?.results.find((sim) => sim.id === selectedScenario);
+    const scenarioIdResult = scenario?.scenario.match(/(\d+)(?!.*\d)/);
+    if (scenarioIdResult) {
+      const id = parseInt(scenarioIdResult[0]);
+      setScenarioId(id);
+    } else {
+      setScenarioId(null);
+    }
+  }, [simulations, selectedScenario]);
+
+  const {data} = useGetScenarioParametersQuery(scenarioId);
   const {data: groups} = useGetGroupSubcategoriesQuery();
 
   return (
