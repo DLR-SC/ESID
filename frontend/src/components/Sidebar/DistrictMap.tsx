@@ -30,7 +30,6 @@ import svgZoomOutURL from '../../../assets/svg/zoom_out_white_24dp.svg?url';
 // temporary Implementation for colognes districts
 import cologneDistricts from '../../../assets/stadtteile_cologne.geojson?url';
 import {District} from 'types/cologneDisticts';
-// TODO: calculate values => hardcode factors => calculate on every request, add to search option list, fix border?
 /* [CDtemp-end] */
 
 interface IRegionPolygon {

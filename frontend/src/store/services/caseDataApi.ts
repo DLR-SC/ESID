@@ -29,7 +29,6 @@ export const caseDataApi = createApi({
           cologneDistrict = arg.node.slice(-3);
           // restore node to fetch cologne data
           node = arg.node.slice(0, 5);
-          console.log(arg.node, cologneDistrict);
         } else {
           node = arg.node;
         }
@@ -129,7 +128,6 @@ export const caseDataApi = createApi({
           cologneDistrict = arg.node.slice(-3);
           // restore node to fetch cologne data
           node = arg.node.slice(0, 5);
-          console.log(arg.node, cologneDistrict);
         } else {
           node = arg.node;
         }
