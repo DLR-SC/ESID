@@ -65,13 +65,15 @@ export default function SearchBar(): JSX.Element {
           jsonlist.push({RS: '00000', GEN: t('germany'), BEZ: ''});
           /* [CDtemp-begin] */
           // append city districts
-          jsonlist.push(...(cologneData as unknown as Array<District>).map((dist) => {
-            return {
-              RS: `05315${dist.Stadtteil_ID}`,
-              GEN: `Köln - ${dist.Stadtteil} (${dist.Stadtbezirk})`,
-              BEZ: 'ST'
-            }
-          }));
+          jsonlist.push(
+            ...(cologneData as unknown as Array<District>).map((dist) => {
+              return {
+                RS: `05315${dist.Stadtteil_ID}`,
+                GEN: `Köln - ${dist.Stadtteil} (${dist.Stadtbezirk})`,
+                BEZ: 'ST',
+              };
+            })
+          );
           /* [CDtemp-end] */
           // sort list to put germany at the right place (loading and sorting takes 1.5 ~ 2 sec)
           jsonlist.sort((a, b) => {
