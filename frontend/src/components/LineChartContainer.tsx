@@ -48,16 +48,6 @@ export default function LineChartContainer() {
     [tBackend]
   );
 
-  const localization = useMemo(() => {
-    return {
-      formatNumber: (value: number) => value.toLocaleString(),
-      customLang: 'backend',
-      overrides: {
-        [`compartments.${selectedCompartment}`]: `infection-states.${selectedCompartment}`,
-      },
-    };
-  }, [selectedCompartment]);
-
   useEffect(() => {
     dispatch(selectDate(selectedDate));
   }, [selectedDate, dispatch]);
