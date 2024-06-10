@@ -17,6 +17,7 @@ SPDX-License-Identifier: CC-BY-4.0
 
 - Missing translations were fixed.
 - The heat legend selection now shows a preview for all legends again.
+- The colors of the scenarios was calculated wrongly which could lead to multiple scenarios with the same colors.
 
 ---
 

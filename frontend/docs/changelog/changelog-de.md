@@ -17,6 +17,7 @@ SPDX-License-Identifier: CC-BY-4.0
 
 - Fehlende Übersetzungen wurden ergänzt.
 - Die Auswahl der Farblegenden zeigt jetzt wieder eine Vorschau für alle Optionen.
+- Die Farben der Szenarien wurden zum Teil falsch berechnet, was zu mehreren Szenarien mit den gleichen Farben führte.
 
 ---
 

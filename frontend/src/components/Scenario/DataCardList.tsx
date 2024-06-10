@@ -17,6 +17,7 @@ import {
 import {setCompartments, setScenarios} from '../../store/ScenarioSlice';
 import {useGetSimulationStartValues} from './hooks';
 import {useGetCaseDataByDistrictQuery} from '../../store/services/caseDataApi';
+import {getScenarioPrimaryColor} from '../../util/Theme';
 
 export default function DataCardList(): JSX.Element {
   const theme = useTheme();
@@ -139,13 +140,13 @@ export default function DataCardList(): JSX.Element {
         onClick={() => dispatch(selectScenario(0))}
         onToggle={() => dispatch(toggleScenario(0))}
       />
-      {Object.entries(scenarioList.scenarios).map(([, scenario], i) => (
+      {Object.entries(scenarioList.scenarios).map(([, scenario]) => (
         <ScenarioCard
           key={scenario.id}
           scenario={scenario}
           selected={selectedScenario === scenario.id}
           active={!!activeScenarios && activeScenarios.includes(scenario.id)}
-          color={theme.custom.scenarios[(i + 1) % theme.custom.scenarios.length][0]}
+          color={getScenarioPrimaryColor(scenario.id, theme)}
           startValues={startValues}
           onClick={() => {
             // set active scenario to this one and send dispatches

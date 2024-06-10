@@ -3,7 +3,7 @@
 
 // add List Element typography using module augmentation
 import React from 'react';
-import {createTheme} from '@mui/material/styles';
+import {createTheme, Theme} from '@mui/material/styles';
 
 declare module '@mui/material/styles' {
   interface TypographyVariants {
@@ -159,3 +159,11 @@ export default createTheme({
     ],
   },
 });
+
+export function getScenarioColorPalette(scenarioId: number, theme: Theme): Array<string> {
+  return theme.custom.scenarios[(scenarioId % (theme.custom.scenarios.length - 1)) + 1];
+}
+
+export function getScenarioPrimaryColor(scenarioId: number, theme: Theme): string {
+  return getScenarioColorPalette(scenarioId, theme)[0];
+}
