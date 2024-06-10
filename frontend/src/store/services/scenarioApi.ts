@@ -249,8 +249,12 @@ export const scenarioApi = createApi({
       },
     }),
 
-    getScenarioParameters: builder.query<Array<ParameterData>, number>({
-      queryFn: async function (arg: number, _queryApi, _extraOptions, fetchWithBQ) {
+    getScenarioParameters: builder.query<Array<ParameterData> | null, number | null>({
+      queryFn: async function (arg: number | null, _queryApi, _extraOptions, fetchWithBQ) {
+        if (!arg) {
+          return {data: null};
+        }
+
         const response = await fetchWithBQ(`scenarios/${arg}/`);
         if (response.error) return {error: response.error};
         const parameters = response.data as ParameterRESTData;

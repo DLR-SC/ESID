@@ -81,6 +81,9 @@
     timeSeries: 'Time Series',
     parameters: 'Parameters',
   },
+  parameters: {
+    'no-parameters': 'No parameters available for the selected scenario.',
+  },
   today: 'Today',
   more: 'More',
   less: 'Less',

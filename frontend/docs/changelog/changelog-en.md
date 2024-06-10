@@ -15,10 +15,13 @@ SPDX-License-Identifier: CC-BY-4.0
 
 ### Improvements
 
+- Added translations for additional scenarios.
+
 ### Bug fixes
 
 - Missing translations were fixed.
 - The heat legend selection now shows a preview for all legends again.
+- The Parameters will now correctly be associated with the selected scenario and an info will be displayed, when no parameters are available.
 
 ---
 

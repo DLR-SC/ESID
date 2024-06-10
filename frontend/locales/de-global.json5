@@ -72,6 +72,9 @@
     timeSeries: 'Zeitreihe',
     parameters: 'Parameter',
   },
+  parameters: {
+    'no-parameters': 'Für das ausgewählte Szenario existieren keine Parameter.',
+  },
   today: 'Heute',
   more: 'Mehr',
   less: 'Weniger',
