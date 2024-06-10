@@ -23,6 +23,7 @@ import SidebarTabs from './SidebarTabs';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import {selectDistrict} from 'store/DataSelectionSlice';
+import legendPresets from '../../../assets/heatmap_legend_presets.json?url';
 
 export default function MapContainer() {
   const {t} = useTranslation();
@@ -200,7 +201,6 @@ export default function MapContainer() {
                     : Math.round(legend.steps[legend.steps.length - 1].value)
                 }
                 displayText={true}
-                id={'legend'}
                 localization={localization}
               />
             </Grid>
@@ -210,7 +210,12 @@ export default function MapContainer() {
                 setFixedLegendMaxValue={setFixedLegendMaxValue}
                 aggregatedMax={aggregatedMax}
               />
-              <HeatLegendEdit legend={legend} setLegend={setLegend} selectedScenario={selectedScenario} />
+              <HeatLegendEdit
+                legend={legend}
+                setLegend={setLegend}
+                selectedScenario={selectedScenario}
+                legendPresetsUrl={legendPresets}
+              />
             </Grid>
           </Grid>
         </LoadingContainer>
