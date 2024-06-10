@@ -122,14 +122,27 @@ export const caseDataApi = createApi({
         const groups = arg.groups && arg.groups.length > 0 ? `&groups=${arg.groups.join(',')}` : '&groups=total';
 
         let cologneDistrict = '';
+        let node = '';
         // check if node is cologne city district (8 digits instead of 5)
         if (arg.node.length > 5) {
           // store city district (last 3)
           cologneDistrict = arg.node.slice(-3);
+          // restore node to fetch cologne data
+          node = arg.node.slice(0, 5);
+          console.log(arg.node, cologneDistrict);
+        } else {
+          node = arg.node;
         }
 
         // fetch data
-        const queryResult = await fetchWithBQ(`${arg.node}/?all${day}${groups}`);
+        const queryResult = await fetchWithBQ(
+          `${
+            /* [CDtemp-begin] */
+            // arg.node
+            node
+            /* [CDtemp-end] */
+          }/?all${day}${groups}`
+        );
         // return error if any occurs
         if (queryResult.error) return {error: queryResult.error};
         const result = queryResult.data as SimulationDataByNode;
