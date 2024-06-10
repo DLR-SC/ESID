@@ -8,35 +8,75 @@ import CardTooltip from './CardTooltip';
 import CardRows from './CardRows';
 import {hexToRGB} from 'util/util';
 import {Dictionary} from 'types/Cardtypes';
+import {Localization} from 'types/localization';
 
 interface MainCardProps {
+  /* A unique identifier for the card. */
   index: number;
+
+  /* The title of the card. */
   label: string;
-  hover: boolean;
-  compartmentValues: Dictionary<number> | null;
-  startValues: Dictionary<number> | null;
-  setHover: React.Dispatch<React.SetStateAction<boolean>>;
-  compartments: string[];
-  compartmentsExpanded: boolean;
-  selectedCompartment: string;
+
+  /* The color of the card. */
   color: string;
+
+  /* A dictionary of compartment values associated with the card. */
+  compartmentValues: Dictionary<number> | null;
+
+  /* A dictionary of start values used for calculating the rate. This determines whether the values have increased, decreased, or remained the same. */
+  startValues: Dictionary<number> | null;
+
+  /* An array of compartment names. */
+  compartments: string[];
+
+  /* A boolean indicating whether the compartments are expanded. */
+  compartmentsExpanded: boolean;
+
+  /* The compartment that is currently selected. */
+  selectedCompartment: string;
+
+  /* A boolean indicating whether the user is hovering over the card. */
+  hover: boolean;
+
+  /* A function to set the hover state of the card. */
+  setHover: React.Dispatch<React.SetStateAction<boolean>>;
+
+  /* A boolean indicating whether the scenario is selected. */
   selectedScenario: boolean;
-  activeScenario: boolean;
+
+  /* A function to set the selected scenario. */
   setSelectedScenario: React.Dispatch<React.SetStateAction<number | null>>;
-  setActiveScenarios: React.Dispatch<React.SetStateAction<number[] | null>>;
+
+  /* The number of the selected scenario. */
   numberSelectedScenario: number | null;
+
+  /* A boolean indicating whether the scenario is active. */
+  activeScenario: boolean;
+
+  /* A function to set the active scenarios. */
+  setActiveScenarios: React.Dispatch<React.SetStateAction<number[] | null>>;
+
+  /* An array of active scenarios. */
   activeScenarios: number[] | null;
+
+  /* The minimum number of compartment rows. */
   minCompartmentsRows: number;
+
+  /* The maximum number of compartment rows. */
   maxCompartmentsRows: number;
-  localization: {
-    numberFormatter: (value: number) => string;
-    customLang?: string;
-    overrides?: {
-      [key: string]: string;
-    };
-  };
+
+  //*An object containing localization information (translation & number formattation).*/
+  localization?: Localization;
+
+  /* Boolean to determine if the arrow is displayed */
+  arrow?: boolean;
 }
 
+/**
+ * This component renders a card for either the case data or the scenario cards. Each card contains a title,
+ * a list of compartment values, and change rates relative to the simulation start. Additionally, a tooltip is used to set whether the card is active or not.
+ * Furthermore, the card is clickable, and if clicked, it will become the selected scenario.
+ */
 function MainCard({
   index,
   label,
@@ -56,7 +96,8 @@ function MainCard({
   setActiveScenarios,
   activeScenarios,
   maxCompartmentsRows,
-  localization,
+  localization = {formatNumber: (value: number) => value.toString(), customLang: 'global', overrides: {}},
+  arrow = true,
 }: MainCardProps) {
   return (
     <Box
@@ -113,7 +154,7 @@ function MainCard({
             width: 'full',
           }}
         >
-          <CardTitle label={label} isFlipped={activeScenarios?.includes(index)} color={color} />
+          <CardTitle label={label} isFlipped={activeScenarios?.includes(index) ? true : false} color={color} />
         </Box>
         <CardRows
           index={index}
@@ -127,6 +168,7 @@ function MainCard({
           minCompartmentsRows={minCompartmentsRows}
           maxCompartmentsRows={maxCompartmentsRows}
           localization={localization}
+          arrow={arrow}
         />
       </Box>
       <CardTooltip

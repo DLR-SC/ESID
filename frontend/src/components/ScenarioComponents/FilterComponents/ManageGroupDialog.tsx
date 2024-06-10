@@ -8,27 +8,42 @@ import ConfirmDialog from './ConfirmDialog';
 import GroupFilterCard from './GroupFilterCard';
 import GroupFilterEditor from './GroupFilterEditor';
 import {useTranslation} from 'react-i18next';
-import {Dictionary} from '../../types/Cardtypes';
-import {GroupFilter} from '../../types/Filtertypes';
 import React from 'react';
 import {GroupCategory, GroupSubcategory} from 'store/services/groupApi';
+import {GroupFilter} from 'types/group';
+import {Dictionary} from 'util/util';
+import {Localization} from 'types/localization';
 
 export interface ManageGroupDialogProps {
+  /* A dictionary of group filters.*/
   groupFilters: Dictionary<GroupFilter> | undefined;
+
+  /* An array of group category.*/
   groupCategories: GroupCategory[];
+
+  /* An array of group subcategory.*/
   groupSubCategories: GroupSubcategory[];
+
+  /* Callback function, which is called, when the close button is called.*/
   onCloseRequest: () => void;
+
+  /**
+   * A callback that notifies the parent, if there are currently unsaved changes for this group filter.
+   * @param unsavedChanges - If the group filter has been modified without saving.
+   */
   unsavedChangesCallback: (unsavedChanges: boolean) => void;
+
+  /* A function that allows setting the groupFilter state so that if the user adds a filter, the new filter will be visible.*/
   setGroupFilters: React.Dispatch<React.SetStateAction<Dictionary<GroupFilter> | undefined>>;
-  localization: {
-    numberFormatter?: (value: number) => string;
-    customLang?: string;
-    overrides?: {
-      [key: string]: string;
-    };
-  };
+
+  /* An object containing localization information (translation & number formattation).*/
+  localization?: Localization;
 }
 
+/**
+ * This dialog provides an editor to create, edit, toggle and delete group filters. It uses a classic master detail view
+ * with the available filters on the left and the filter configuration on the right.
+ */
 export default function ManageGroupDialog({
   groupFilters,
   groupCategories,
@@ -36,11 +51,10 @@ export default function ManageGroupDialog({
   onCloseRequest,
   unsavedChangesCallback,
   setGroupFilters,
-  localization,
+  localization = {formatNumber: (value: number) => value.toString(), customLang: 'global', overrides: {}},
 }: ManageGroupDialogProps) {
   const {t: defaultT} = useTranslation();
-  const customLang = localization.customLang;
-  const {t: customT} = useTranslation(customLang || undefined);
+  const {t: customT} = useTranslation(localization.customLang);
   // The currently selected filter.
   const [selectedGroupFilter, setSelectedGroupFilter] = useState<GroupFilter | null>(null);
 
@@ -184,7 +198,7 @@ export default function ManageGroupDialog({
             groupFilter={selectedGroupFilter}
             groupFilters={groupFilters}
             setGroupFilters={setGroupFilters}
-            selectGroupFilterCallback={(groupFilter) => setNextSelectedGroupFilter(groupFilter)}
+            selectGroupFilterCallback={(groupFilter: GroupFilter | null) => setNextSelectedGroupFilter(groupFilter)}
             unsavedChangesCallback={(edited) => setUnsavedChanges(edited)}
             groupCategories={groupCategories}
             groupSubCategories={groupSubCategories}

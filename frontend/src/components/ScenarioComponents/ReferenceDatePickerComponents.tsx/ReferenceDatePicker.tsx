@@ -10,16 +10,27 @@ import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
 import React from 'react';
 
 interface DatePickerProps {
-  referenceDay: string | null;
-  setReferenceDay: Dispatch<SetStateAction<string | null>>;
+  /* Start day, the one displayed with a dashed line in the line chart */
+  startDay: string | null;
+
+  /* Function used to set the new start date */
+  setStartDay: Dispatch<SetStateAction<string | null>>;
+
+  /* Minimum date pickable for which some data are provided */
   minDate: string | null;
+
+  /* Maximum date pickable for which some data are provided */
   maxDate: string | null;
 }
 
-export default function ReferenceDatePicker({referenceDay, setReferenceDay, minDate, maxDate}: DatePickerProps) {
+/**
+ * This component renders the MUI date picker
+ */
+export default function ReferenceDatePicker({startDay, setStartDay, minDate, maxDate}: DatePickerProps) {
+  // Function used to update the starting date
   const updateDate = (newDate: Dayjs | null): void => {
     if (newDate) {
-      setReferenceDay(newDate.toString());
+      setStartDay(newDate.toString());
     }
   };
 
@@ -37,7 +48,7 @@ export default function ReferenceDatePicker({referenceDay, setReferenceDay, minD
       >
         <DatePicker<Dayjs>
           label={'Reference-day'}
-          value={dayjs(referenceDay)}
+          value={dayjs(startDay)}
           minDate={dayjs(minDate)}
           maxDate={dayjs(maxDate)}
           onChange={updateDate}

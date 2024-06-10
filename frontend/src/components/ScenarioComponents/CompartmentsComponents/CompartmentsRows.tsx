@@ -4,27 +4,41 @@
 import {List} from '@mui/material';
 import {ScrollSyncPane} from 'react-scroll-sync';
 import {Dispatch, SetStateAction} from 'react';
-import {Dictionary} from '../../types/Cardtypes';
 import CompartmentsRow from './CompartmentsRow';
 import React from 'react';
+import {Dictionary} from 'types/Cardtypes';
+import {Localization} from 'types/localization';
 
 interface CompartmentsRowsProps {
+  /* Boolean to determine if the compartments are expanded */
   compartmentsExpanded: boolean;
+
+  /* Array of compartment names */
   compartments: string[];
+
+  /* Currently selected compartment */
   selectedCompartment: string;
+
+  /* Function to set the selected compartment */
   setSelectedCompartment: Dispatch<SetStateAction<string>>;
+
+  /* Minimum number of compartment rows */
   minCompartmentsRows: number;
+
+  /* Maximum number of compartment rows */
   maxCompartmentsRows: number;
+
+  /* Values for each compartment */
   compartmentValues: Dictionary<number> | null;
-  localization: {
-    numberFormatter: (value: number) => string;
-    customLang?: string;
-    overrides?: {
-      [key: string]: string;
-    };
-  };
+
+  /* An object containing localization information (translation & number formattation). */
+  localization?: Localization;
 }
 
+/**
+ * This component renders a list of compartments with synchronized scrolling,
+ * expand/collapse functionality, and localization support.
+ */
 export default function CompartmentsRows({
   compartmentsExpanded,
   compartments,
@@ -33,10 +47,11 @@ export default function CompartmentsRows({
   maxCompartmentsRows,
   setSelectedCompartment,
   compartmentValues,
-  localization,
+  localization = {formatNumber: (value: number) => value.toString(), customLang: 'global', overrides: {}},
 }: CompartmentsRowsProps) {
   function GetFormattedAndTranslatedValues(filteredValues: number | null): string {
-    if (filteredValues) return localization.numberFormatter(filteredValues);
+    if (filteredValues)
+      return localization.formatNumber ? localization.formatNumber(filteredValues) : filteredValues.toString();
     else return '0';
   }
   return (

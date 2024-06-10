@@ -2,13 +2,12 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React from 'react';
-import ScenarioContainer from './ScenarioContainer/ScenarioContainer';
 import IconBar from './IconBar';
-
 import Grid from '@mui/material/Grid';
 import {useTheme} from '@mui/material/styles';
 import MainContentTabs from './MainContentTabs';
 import {ReferenceDayConnector} from './ReferenceDayConnector';
+import ScenarioContainer from './ScenarioComponents/ScenarioContainer';
 
 export default function MainContent(): JSX.Element {
   const theme = useTheme();

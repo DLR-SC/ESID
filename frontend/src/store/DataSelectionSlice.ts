@@ -40,7 +40,7 @@ export interface DataSelection {
 const initialState: DataSelection = {
   district: {ags: '00000', name: '', type: ''},
   date: null,
-  scenario: null,
+  scenario: 0,
   compartment: null,
   compartmentsExpanded: null,
   activeScenarios: [0],
@@ -59,7 +59,8 @@ export const DataSelectionSlice = createSlice({
   initialState,
   reducers: {
     setActiveScenario(state, action: PayloadAction<number[] | null>) {
-      state.activeScenarios = action.payload;
+      if (action.payload) state.activeScenarios = action.payload;
+      else state.activeScenarios = null;
     },
     setGroupFilters(state, action: PayloadAction<Dictionary<GroupFilter> | undefined>) {
       state.groupFilters = action.payload;
@@ -104,7 +105,8 @@ export const DataSelectionSlice = createSlice({
       }
     },
     selectScenario(state, action: PayloadAction<number | null>) {
-      state.scenario = action.payload;
+      if (action.payload != null) state.scenario = action.payload;
+      else state.scenario = null;
     },
     toggleScenario(state, action: PayloadAction<number>) {
       if (!state.activeScenarios) {

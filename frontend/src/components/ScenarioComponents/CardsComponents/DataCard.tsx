@@ -5,37 +5,77 @@ import Box from '@mui/material/Box';
 import {useEffect, useMemo, useState} from 'react';
 import MainCard from './MainCard/MainCard';
 import FiltersContainer from './GroupFilter/FiltersContainer';
-import {Dictionary, filterValue} from '../../types/Cardtypes';
 import React from 'react';
 import {GroupFilter} from 'types/group';
+import {filterValue} from 'types/Cardtypes';
+import {Dictionary} from 'util/util';
+import {Localization} from 'types/localization';
 
 interface DataCardProps {
+  /*A unique identifier for the card.*/
   index: number;
+
+  /*A dictionary of compartment values associated with the card.*/
   compartmentValues: Dictionary<number> | null;
+
+  /* A dictionary of start values used for calculating the rate. This determines whether the values have increased, decreased, or remained the same. */
   startValues: Dictionary<number> | null;
+
+  /*The title of the card.*/
   label: string;
+
+  /*A boolean indicating whether the compartments are expanded.*/
   compartmentsExpanded: boolean;
+
+  /*An array of compartments.*/
   compartments: string[];
+
+  /*The compartment that is currently selected.*/
   selectedCompartment: string;
+
+  /*A boolean indicating whether the scenario is selected.*/
   selectedScenario: boolean;
+
+  /*The color of the card.*/
   color: string;
+
+  /*An array of active scenarios.*/
   activeScenarios: number[] | null;
+
+  /* A dictionary of filter values. This is an array of objects, each containing a title and a dictionary of numbers representing
+   * the filtered information to be displayed, it's used a disctionary because each card has to have the same amount of filter. */
   filterValues?: Dictionary<filterValue[]> | null;
+
+  /*A function to set the selected scenario.*/
   setSelectedScenario: React.Dispatch<React.SetStateAction<number | null>>;
+
+  /*A function to set the active scenarios.*/
   setActiveScenarios: React.Dispatch<React.SetStateAction<number[] | null>>;
+
+  /*The number of the selected scenario.*/
   numberSelectedScenario: number | null;
+
+  /*The minimum number of compartment rows.*/
   minCompartmentsRows: number;
+
+  /*The maximum number of compartment rows.*/
   maxCompartmentsRows: number;
-  localization: {
-    numberFormatter: (value: number) => string;
-    customLang?: string;
-    overrides?: {
-      [key: string]: string;
-    };
-  };
+
+  /*An object containing localization information (translation & number formattation).*/
+  localization?: Localization;
+
+  /*A dictionary of group filters.*/
   groupFilters: Dictionary<GroupFilter> | undefined;
+
+  /* Boolean to determine if the arrow is displayed */
+  arrow?: boolean;
 }
 
+/**
+ * This component renders a card for either the case data or the scenario cards. Each card contains a title, a list of
+ * compartment values, and change rates relative to the simulation start. Additionally, the component includes a filter container.
+ * The filter container renders a button and generates the necessary number of cards based on the presence of any filters.
+ */
 export default function DataCard({
   index,
   compartmentValues,
@@ -53,8 +93,9 @@ export default function DataCard({
   maxCompartmentsRows,
   setSelectedScenario,
   setActiveScenarios,
-  localization,
+  localization = {formatNumber: (value: number) => value.toString(), customLang: 'global', overrides: {}},
   groupFilters,
+  arrow = true,
 }: DataCardProps) {
   const [hover, setHover] = useState<boolean>(false);
   const [folded, setFolded] = useState<boolean>(false);
@@ -74,6 +115,11 @@ export default function DataCard({
     return [];
   }, [activeScenarios, filterValues, index]);
 
+  /*
+   * This useEffect hook updates the visibility of the component based on groupFilters and filteredTitles.
+   * It checks if the first title in filteredTitles matches any filter name in groupFilters and if that filter is visible.
+   * If at least one matching filter is visible, the component becomes visible; otherwise, it remains hidden.
+   */
   useEffect(() => {
     function checkVisibility(): boolean {
       if (groupFilters) {
@@ -85,6 +131,7 @@ export default function DataCard({
     }
     setVisibility(checkVisibility);
   }, [filteredTitles, groupFilters]);
+
   return (
     <Box
       id={`data-card-${index}`}
@@ -114,6 +161,7 @@ export default function DataCard({
         minCompartmentsRows={minCompartmentsRows}
         maxCompartmentsRows={maxCompartmentsRows}
         localization={localization}
+        arrow={arrow}
       />
       {activeScenarios?.includes(index) &&
         filterValues?.[index.toString()] &&

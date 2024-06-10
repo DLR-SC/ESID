@@ -16,48 +16,61 @@ import {
 import {useState} from 'react';
 import ConfirmDialog from './ConfirmDialog';
 import {useTranslation} from 'react-i18next';
-import {GroupFilter} from '../../types/Filtertypes';
-import {Dictionary} from '../../types/Cardtypes';
 import React from 'react';
+import {GroupFilter} from 'types/group';
+import {Dictionary} from 'util/util';
+import {Localization} from 'types/localization';
 
 interface GroupFilterCardProps {
   /** The GroupFilter item to be displayed. */
   item: GroupFilter;
 
+  /* A dictionary of group filters.*/
   groupFilters: Dictionary<GroupFilter> | undefined;
 
+  /* A function that allows setting the groupFilter state so that if the user adds a filter, the new filter will be visible */
   setGroupFilters: React.Dispatch<React.SetStateAction<Dictionary<GroupFilter> | undefined>>;
 
   /** Whether the filter is selected or not. If it is selected, the detail view is displaying this filter's config. */
   selected: boolean;
 
+  /**
+   * Callback function that is called when the filter is selected or unselected.
+   * @param groupFilter - Either this filter, if it was selected or null, if it was unselected.
+   */
   selectFilterCallback: (groupFilter: GroupFilter | null) => void;
 
-  localization: {
-    numberFormatter?: (value: number) => string;
-    customLang?: string;
-    overrides?: {
-      [key: string]: string;
-    };
-  };
+  /* An object containing localization information (translation & number formattation).*/
+  localization?: Localization;
 }
 
-export default function GroupFilterCard(props: GroupFilterCardProps) {
+/**
+ * GroupFilterCard component displays a card that represents a single filter for the group filter list. The card shows
+ * the filter name, a toggle switch to turn on or off the filter, and a delete button to remove the filter.
+ */
+export default function GroupFilterCard({
+  item,
+  groupFilters,
+  setGroupFilters,
+  selected,
+  selectFilterCallback,
+  localization = {formatNumber: (value: number) => value.toString(), customLang: 'global', overrides: {}},
+}: GroupFilterCardProps) {
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const {t: defaultT} = useTranslation();
-  const customLang = props.localization.customLang;
-  const {t: customT} = useTranslation(customLang || undefined);
+  const {t: customT} = useTranslation(localization.customLang);
   const theme = useTheme();
 
-  const changeVisibility = (id: string) => {
+  //Function used to change the visibility of the filter
+  const ChangeVisibility = (id: string) => {
     // Find the filter with the specific id
-    const filterToChange = props.groupFilters![id];
+    const filterToChange = groupFilters![id];
 
     // Check if the filter exists
     if (filterToChange) {
       // Create a new copy of groupFilters with the updated filter
       const newGroupFilters = {
-        ...props.groupFilters,
+        ...groupFilters,
         [id]: {
           ...filterToChange,
           isVisible: !filterToChange.isVisible,
@@ -65,17 +78,18 @@ export default function GroupFilterCard(props: GroupFilterCardProps) {
       };
 
       // Update the state with the new copy of groupFilters
-      props.setGroupFilters(newGroupFilters);
+      setGroupFilters(newGroupFilters);
     }
   };
 
-  const deleteFilter = (id: string) => {
+  // Function used to delete filters
+  const DeleteFilter = (id: string) => {
     // Create a new copy of groupFilters without the filter with the specific id
-    const newGroupFilters = {...props.groupFilters};
+    const newGroupFilters = {...groupFilters};
     delete newGroupFilters[id];
 
     // Update the state with the new copy of groupFilters
-    props.setGroupFilters(newGroupFilters);
+    setGroupFilters(newGroupFilters);
   };
 
   return (
@@ -89,15 +103,15 @@ export default function GroupFilterCard(props: GroupFilterCardProps) {
     >
       <CardActionArea
         onClick={() => {
-          props.selectFilterCallback(props.selected ? null : props.item);
+          selectFilterCallback(selected ? null : item);
         }}
       >
-        <CardContent sx={{backgroundColor: props.selected ? theme.palette.info.main : theme.palette.background.paper}}>
+        <CardContent sx={{backgroundColor: selected ? theme.palette.info.main : theme.palette.background.paper}}>
           <Typography
             variant='body1'
-            sx={{color: props.selected ? theme.palette.primary.contrastText : theme.palette.text.primary}}
+            sx={{color: selected ? theme.palette.primary.contrastText : theme.palette.text.primary}}
           >
-            {props.item.name}
+            {item.name}
           </Typography>
         </CardContent>
       </CardActionArea>
@@ -106,28 +120,28 @@ export default function GroupFilterCard(props: GroupFilterCardProps) {
         <Checkbox
           checkedIcon={<Visibility />}
           icon={<VisibilityOffOutlined color='disabled' />}
-          checked={props.item.isVisible}
+          checked={item.isVisible}
           onClick={() => {
-            changeVisibility(props.item.id);
+            ChangeVisibility(item.id);
           }}
         />
         <ConfirmDialog
           open={confirmDialogOpen}
           title={
-            props.localization.overrides && props.localization.overrides['group-filters.confirm-deletion-title']
-              ? customT(props.localization.overrides['group-filters.confirm-deletion-title'])
+            localization.overrides && localization.overrides['group-filters.confirm-deletion-title']
+              ? customT(localization.overrides['group-filters.confirm-deletion-title'])
               : defaultT('group-filters.confirm-deletion-title')
           }
           text={
-            props.localization.overrides && props.localization.overrides['group-filters.confirm-deletion-text']
-              ? customT(props.localization.overrides['group-filters.confirm-deletion-text'], {
-                  groupName: props.item.name,
+            localization.overrides && localization.overrides['group-filters.confirm-deletion-text']
+              ? customT(localization.overrides['group-filters.confirm-deletion-text'], {
+                  groupName: item.name,
                 })
-              : defaultT('group-filters.confirm-deletion-text', {groupName: props.item.name})
+              : defaultT('group-filters.confirm-deletion-text', {groupName: item.name})
           }
           onAnswer={(answer) => {
             if (answer) {
-              deleteFilter(props.item.id);
+              DeleteFilter(item.id);
             }
             setConfirmDialogOpen(false);
           }}

@@ -9,14 +9,60 @@ import Typography from '@mui/material/Typography';
 import React from 'react';
 
 export interface ConfirmDialogProps {
+  /** Whether the dialog should be open or not. */
   open: boolean;
+
+  /** The title of the dialog. */
   title: string;
+
+  /** The text to be displayed in the dialog. */
   text: string;
+
+  /**
+   * A callback function that is called when the user provides an answer.
+   * @param answer `true` for confirming, `false` for aborting.
+   */
   onAnswer: (answer: boolean) => void;
+
+  /** The text to be displayed on the abort button. */
   abortButtonText?: string;
+
+  /** The text to be displayed on the confirm button. */
   confirmButtonText?: string;
 }
 
+/**
+ * A component that displays a confirmation dialog.
+ * @param props The properties for the component.
+ *
+ * @example
+ * ```js
+ *   function ExampleComponent() {
+ *     // State to keep track of whether the dialog should be open or not.
+ *     const [open, setOpen] = useState(false);
+ *
+ *     // Function to handle the user's answer.
+ *     const handleAnswer = (answer: boolean) => {
+ *       console.log(`The user answered ${answer ? 'yes' : 'no'}.`);
+ *       setOpen(false);
+ *     };
+ *
+ *     return (
+ *       <div>
+ *         <button onClick={() => setOpen(true)}>Open Confirm Dialog</button>
+ *         <ConfirmDialog
+ *           open={open}
+ *           title='Confirm Action'
+ *           text='Are you sure you want to perform this action?'
+ *           onAnswer={handleAnswer}
+ *           abortButtonText='Cancel'
+ *           confirmButtonText='Yes, I am sure'
+ *         />
+ *       </div>
+ *     );
+ *   }
+ * ```
+ */
 export default function ConfirmDialog(props: ConfirmDialogProps) {
   return (
     <Dialog open={props.open} sx={{backdropFilter: 'none'}}>

@@ -6,38 +6,44 @@ import ConfirmDialog from './ConfirmDialog';
 import {useState} from 'react';
 import ManageGroupDialog from './ManageGroupDialog';
 import {useTranslation} from 'react-i18next';
-import {Dictionary} from '../../types/Cardtypes';
-import {GroupFilter} from '../../types/Filtertypes';
 import React from 'react';
 import {GroupCategory, GroupSubcategory} from 'store/services/groupApi';
+import {GroupFilter} from 'types/group';
+import {Dictionary} from 'util/util';
+import {Localization} from 'types/localization';
 
 export interface FilterDialogContainerProps {
+  /* A dictionary of group filters.*/
   groupFilters: Dictionary<GroupFilter> | undefined;
+
+  /* An array of group category.*/
   groupCategories: GroupCategory[];
+
+  /* An array of group subcategory.*/
   groupSubCategories: GroupSubcategory[];
+
+  /* A function that allows setting the groupFilter state so that if the user adds a filter, the new filter will be visible */
   setGroupFilters: React.Dispatch<React.SetStateAction<Dictionary<GroupFilter> | undefined>>;
-  localization: {
-    numberFormatter?: (value: number) => string;
-    customLang?: string;
-    overrides?: {
-      [key: string]: string;
-    };
-  };
+
+  /*An object containing localization information (translation & number formattation).*/
+  localization?: Localization;
 }
 
+/**
+ * This component renders a the container for the filters dialog.
+ */
 export default function FilterDialogContainer({
   groupFilters,
   setGroupFilters,
   groupCategories,
   groupSubCategories,
-  localization,
+  localization = {formatNumber: (value: number) => value.toString(), customLang: 'global', overrides: {}},
 }: FilterDialogContainerProps) {
   const [open, setOpen] = useState(false);
   const [closeDialogOpen, setCloseDialogOpen] = useState(false);
   const [groupEditorUnsavedChanges, setGroupEditorUnsavedChanges] = useState(false);
   const {t: defaultT} = useTranslation();
-  const customLang = localization.customLang;
-  const {t: customT} = useTranslation(customLang || undefined);
+  const {t: customT} = useTranslation(localization.customLang);
   const theme = useTheme();
   return (
     <>

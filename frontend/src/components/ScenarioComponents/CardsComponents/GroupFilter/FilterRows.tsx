@@ -4,27 +4,40 @@
 import {Box, List, ListItem, ListItemText} from '@mui/material';
 import {ScrollSyncPane} from 'react-scroll-sync';
 import {useTranslation} from 'react-i18next';
-import {Dictionary} from '../../../types/Cardtypes';
 import React from 'react';
+import {Dictionary} from 'types/Cardtypes';
+import {Localization} from 'types/localization';
 
 interface FilterRowsProps {
+  /* Array of compartments */
   compartments: string[];
+
+  /* Dictionary of filtered values */
   filteredValues: Dictionary<number> | null;
+
+  /* Boolean to determine if the rows are flipped */
   isFlipped?: boolean;
-  arrow?: boolean;
+
+  /* Boolean to determine if the compartment is expanded */
   compartmentExpanded?: boolean;
+
+  /* Selected compartment */
   selectedCompartment: string;
+
+  /* Minimum number of compartment rows */
   minCompartmentsRows: number;
+
+  /* Maximum number of compartment rows */
   maxCompartmentsRows: number;
-  localization: {
-    numberFormatter: (value: number) => string;
-    customLang?: string;
-    overrides?: {
-      [key: string]: string;
-    };
-  };
+
+  /*An object containing localization information (translation & number formattation).*/
+  localization?: Localization;
 }
 
+/**
+ * This component renders rows of filter values.
+ * It also supports localization.
+ */
 export default function FilterRows({
   compartments,
   filteredValues,
@@ -33,20 +46,20 @@ export default function FilterRows({
   selectedCompartment,
   minCompartmentsRows,
   maxCompartmentsRows,
-  localization,
+  localization = {formatNumber: (value: number) => value.toString(), customLang: 'global', overrides: {}},
 }: FilterRowsProps) {
   const {t: defaultT} = useTranslation();
-  const customLang = localization.customLang;
-  const {t: customT} = useTranslation(customLang || undefined);
+  const {t: customT} = useTranslation(localization.customLang);
 
+  // Function to get formatted and translated values
   function GetFormattedAndTranslatedValues(filteredValues: number | null): string {
-    if (filteredValues) return localization.numberFormatter(filteredValues);
+    if (filteredValues)
+      return localization.formatNumber ? localization.formatNumber(filteredValues) : filteredValues.toString();
     else
       return localization.overrides && localization.overrides['no-data']
         ? customT(localization.overrides['no-data'])
         : defaultT('no-data');
   }
-
   return (
     <Box
       id={`compartment-row-container`}

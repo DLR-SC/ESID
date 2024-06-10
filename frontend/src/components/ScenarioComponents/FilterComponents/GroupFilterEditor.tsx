@@ -4,50 +4,66 @@
 import {Box, TextField, Typography, FormGroup, FormControlLabel, Checkbox, Button, useTheme} from '@mui/material';
 import {useState, useEffect, useCallback} from 'react';
 import {useTranslation} from 'react-i18next';
-import {GroupFilter} from '../../types/Filtertypes';
-import {Dictionary} from '../../types/Cardtypes';
 import React from 'react';
-import {GroupCategory} from 'store/services/groupApi';
-
-interface GroupSubcategory {
-  key: string;
-  name: string;
-  description: string;
-  category: string;
-}
+import {GroupCategory, GroupSubcategory} from 'store/services/groupApi';
+import {GroupFilter} from 'types/group';
+import {Dictionary} from 'util/util';
+import {Localization} from 'types/localization';
 
 interface GroupFilterEditorProps {
   /** The GroupFilter item to be edited. */
   groupFilter: GroupFilter;
 
+  /* A dictionary of group filters.*/
   groupFilters: Dictionary<GroupFilter> | undefined;
 
+  /* An array of group category.*/
   groupCategories: GroupCategory[];
 
+  /* An array of group subcategory.*/
   groupSubCategories: GroupSubcategory[];
 
+  /* A function that allows setting the groupFilter state so that if the user adds a filter, the new filter will be visible */
   setGroupFilters: React.Dispatch<React.SetStateAction<Dictionary<GroupFilter> | undefined>>;
 
+  /**
+   * Callback function that is called, when a new filter is created, so it will be selected immediately or when the user
+   * wants to close the editor.
+   * @param groupFilter - Either the current filter or null when the user wants to close the current filter's editor.
+   */
   selectGroupFilterCallback: (groupFilter: GroupFilter | null) => void;
 
+  /**
+   * A callback that notifies the parent, if there are currently unsaved changes for this group filter.
+   * @param unsavedChanges - If the group filter has been modified without saving.
+   */
   unsavedChangesCallback: (unsavedChanges: boolean) => void;
 
-  localization: {
-    numberFormatter?: (value: number) => string;
-    customLang?: string;
-    overrides?: {
-      [key: string]: string;
-    };
-  };
+  /* An object containing localization information (translation & number formattation).*/
+  localization?: Localization;
 }
 
-export default function GroupFilterEditor(props: GroupFilterEditorProps) {
+/**
+ * This is the detail view of the GroupFilter dialog. It allows to edit and create groups. It has a text field for the
+ * name at the top and columns of checkboxes for groups in the center. It requires that at least one checkbox of each
+ * group is selected before the apply button becomes available. It is also possible to discard changes by clicking the
+ * abort button before applying the changes.
+ */
+export default function GroupFilterEditor({
+  groupFilter,
+  groupFilters,
+  groupCategories,
+  groupSubCategories,
+  setGroupFilters,
+  selectGroupFilterCallback,
+  unsavedChangesCallback,
+  localization = {formatNumber: (value: number) => value.toString(), customLang: 'global', overrides: {}},
+}: GroupFilterEditorProps) {
   const {t: defaultT} = useTranslation();
-  const customLang = props.localization.customLang;
-  const {t: customT} = useTranslation(customLang || undefined);
+  const {t: customT} = useTranslation(localization.customLang);
   const theme = useTheme();
-  const [name, setName] = useState(props.groupFilter.name);
-  const [groups, setGroups] = useState(props.groupFilter.groups);
+  const [name, setName] = useState(groupFilter.name);
+  const [groups, setGroups] = useState(groupFilter.groups);
 
   // Every group must have at least one element selected to be valid.
   const [valid, setValid] = useState(name.length > 0 && Object.values(groups).every((group) => group.length > 0));
@@ -56,12 +72,12 @@ export default function GroupFilterEditor(props: GroupFilterEditorProps) {
   // Checks if the group filer is in a valid state.
   useEffect(() => {
     setValid(name.length > 0 && Object.values(groups).every((group) => group.length > 0));
-  }, [name, groups, props]);
+  }, [name, groups]);
 
   // Updates the parent about the current save state of the group filter.
   useEffect(() => {
-    props.unsavedChangesCallback(unsavedChanges);
-  }, [props, unsavedChanges]);
+    unsavedChangesCallback(unsavedChanges);
+  }, [unsavedChanges, unsavedChangesCallback]);
 
   const toggleGroup = useCallback(
     (subGroup: GroupSubcategory) => {
@@ -93,8 +109,8 @@ export default function GroupFilterEditor(props: GroupFilterEditorProps) {
     >
       <TextField
         label={
-          props.localization.overrides && props.localization.overrides['group-filters.name']
-            ? customT(props.localization.overrides['group-filters.name'])
+          localization.overrides && localization.overrides['group-filters.name']
+            ? customT(localization.overrides['group-filters.name'])
             : defaultT('group-filters.name')
         }
         variant='outlined'
@@ -116,7 +132,7 @@ export default function GroupFilterEditor(props: GroupFilterEditorProps) {
           paddingBottom: 2,
         }}
       >
-        {props.groupCategories.map((group) => (
+        {groupCategories.map((group) => (
           <Box
             key={group.key}
             sx={{
@@ -128,23 +144,21 @@ export default function GroupFilterEditor(props: GroupFilterEditorProps) {
               color={groups[group.key].length > 0 ? theme.palette.text.primary : theme.palette.error.main}
               variant='h2'
             >
-              {props.localization.overrides &&
-              props.localization.overrides[`group-filters-editor.categories.${group.key}`]
-                ? customT(props.localization.overrides[`group-filters-editor.categories.${group.key}`])
-                : defaultT(`group-filters-editor.categories.${group.key}`)}
+              {localization.overrides && localization.overrides[`group-filters.categories.${group.key}`]
+                ? customT(localization.overrides[`group-filters.categories.${group.key}`])
+                : defaultT(`group-filters.categories.${group.key}`)}
             </Typography>
             <FormGroup>
-              {props.groupSubCategories
+              {groupSubCategories
                 ?.filter((subCategory) => subCategory.category === group.key)
                 .filter((subGroup) => subGroup.key !== 'total') // TODO: We filter out the total group for now.
                 .map((subGroup) => (
                   <FormControlLabel
                     key={subGroup.key}
                     label={
-                      props.localization.overrides &&
-                      props.localization.overrides[`group-filters-editor.groups.${subGroup.key}`]
-                        ? customT(props.localization.overrides[`group-filters-editor.groups.${subGroup.key}`])
-                        : defaultT(`group-filters-editor.groups.${subGroup.key}`)
+                      localization.overrides && localization.overrides[`group-filters.groups.${subGroup.key}`]
+                        ? customT(localization.overrides[`group-filters.groups.${subGroup.key}`])
+                        : defaultT(`group-filters.groups.${subGroup.key}`)
                     }
                     control={
                       <Checkbox
@@ -173,11 +187,11 @@ export default function GroupFilterEditor(props: GroupFilterEditorProps) {
           sx={{marginRight: theme.spacing(2)}}
           onClick={() => {
             setUnsavedChanges(false);
-            props.selectGroupFilterCallback(null);
+            selectGroupFilterCallback(null);
           }}
         >
-          {props.localization.overrides && props.localization.overrides['group-filters.close']
-            ? customT(props.localization.overrides['group-filters.close'])
+          {localization.overrides && localization.overrides['group-filters.close']
+            ? customT(localization.overrides['group-filters.close'])
             : defaultT('group-filters.close')}
         </Button>
         <Button
@@ -187,19 +201,19 @@ export default function GroupFilterEditor(props: GroupFilterEditorProps) {
           onClick={() => {
             setUnsavedChanges(false);
             const newFilter = {
-              id: props.groupFilter.id,
+              id: groupFilter.id,
               name: name,
               isVisible: true,
               groups: groups,
             };
-            props.setGroupFilters({
-              ...props.groupFilters,
+            setGroupFilters({
+              ...groupFilters,
               [newFilter.id]: newFilter,
             });
           }}
         >
-          {props.localization.overrides && props.localization.overrides['group-filters.apply']
-            ? customT(props.localization.overrides['group-filters.apply'])
+          {localization.overrides && localization.overrides['group-filters.apply']
+            ? customT(localization.overrides['group-filters.apply'])
             : defaultT('group-filters.apply')}
         </Button>
       </Box>

@@ -4,31 +4,38 @@
 import Button from '@mui/material/Button';
 import {useTranslation} from 'react-i18next';
 import React from 'react';
+import {Localization} from 'types/localization';
 
 interface GeneralButtonProps {
-  buttonTexts: {expanded: string; collapsed: string};
+  /* Texts for the button in both states: clicked and unclicked */
+  buttonTexts: {clicked: string; unclicked: string};
+
+  /* Function to determine if the button is disabled */
   isDisabled: () => boolean;
+
+  /* Function to handle the button click event */
   handleClick: () => void;
+
+  /* Boolean to determine if the button is in expanded state */
   isExpanded: boolean;
-  localization: {
-    numberFormatter?: (value: number) => string;
-    customLang?: string;
-    overrides?: {
-      [key: string]: string;
-    };
-  };
+
+  /*An object containing localization information (translation & number formattation).*/
+  localization?: Localization;
 }
 
+/**
+ * This component renders a general button with clicked/unclicked texts,
+ * disabled state, click handler, and localization support.
+ */
 export default function GeneralButton({
   buttonTexts,
   isDisabled,
   handleClick,
   isExpanded,
-  localization,
+  localization = {formatNumber: (value: number) => value.toString(), customLang: 'global', overrides: {}},
 }: GeneralButtonProps) {
   const {t: defaultT} = useTranslation();
-  const customLang = localization.customLang;
-  const {t: customT} = useTranslation(customLang || undefined);
+  const {t: customT} = useTranslation(localization.customLang);
   return (
     <Button
       id='toggle-expanded-compartments-button'
@@ -43,7 +50,7 @@ export default function GeneralButton({
       }
       onClick={() => handleClick()}
     >
-      {isExpanded ? buttonTexts.expanded : buttonTexts.collapsed}
+      {isExpanded ? buttonTexts.clicked : buttonTexts.unclicked}
     </Button>
   );
 }

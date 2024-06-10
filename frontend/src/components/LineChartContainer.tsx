@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import {useCallback, useContext, useEffect, useState} from 'react';
+import {useCallback, useContext, useEffect, useMemo, useState} from 'react';
 import LineChart from './LineChartComponents/LineChart';
 import LoadingContainer from './shared/LoadingContainer';
 import {useTheme} from '@mui/material';
@@ -38,6 +38,16 @@ export default function LineChartContainer() {
     (scenario: Scenario) => tBackend(`scenario-names.${scenario.label}`),
     [tBackend]
   );
+
+  const localization = useMemo(() => {
+    return {
+      formatNumber: (value: number) => value.toLocaleString(),
+      customLang: 'backend',
+      overrides: {
+        [`compartments.${selectedCompartment}`]: `infection-states.${selectedCompartment}`,
+      },
+    };
+  }, [selectedCompartment]);
 
   useEffect(() => {
     dispatch(selectDate(selectedDate));
@@ -77,6 +87,7 @@ export default function LineChartContainer() {
         selectedCompartment={selectedCompartment ?? ''}
         groupFilterList={groupFilterList}
         scenarioList={scenarioList}
+        localization={localization}
       />
     </LoadingContainer>
   );

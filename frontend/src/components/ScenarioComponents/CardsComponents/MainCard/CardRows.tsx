@@ -3,32 +3,53 @@
 import {Box, List, ListItem, ListItemText} from '@mui/material';
 import TrendArrow from './TrendArrow';
 import {ScrollSyncPane} from 'react-scroll-sync';
-import {Dictionary} from '../../../types/Cardtypes';
 import {useTranslation} from 'react-i18next';
 import React from 'react';
-import {hexToRGB} from 'util/util';
+import {Dictionary, hexToRGB} from 'util/util';
+import {Localization} from 'types/localization';
 
 interface CardRowsProps {
+  /* Index of the card*/
   index: number;
+
+  /* Array of compartments */
   compartments: string[];
+
+  /* Dictionary of compartment values */
   compartmentValues: Dictionary<number> | null;
+
+  /* Dictionary of start values */
   startValues: Dictionary<number> | null;
+
+  /* Boolean to determine if the card is flipped */
   isFlipped?: boolean;
+
+  /* Boolean to determine if the arrow is displayed */
   arrow?: boolean;
+
+  /* Boolean to determine if the compartment is expanded */
   compartmentExpanded?: boolean;
+
+  /* Selected compartment */
   selectedCompartment: string;
+
+  /* Color of the card row */
   color: string;
+
+  /* Minimum number of compartment rows */
   minCompartmentsRows: number;
+
+  /* Maximum number of compartment rows */
   maxCompartmentsRows: number;
-  localization: {
-    numberFormatter: (value: number) => string;
-    customLang?: string;
-    overrides?: {
-      [key: string]: string;
-    };
-  };
+
+  /* Localization object for custom language and overrides */
+  localization?: Localization;
 }
 
+/**
+ * This component renders the rows which containing the compartment values, and change rates relative to the simulation start.
+ * It also supports localization.
+ */
 export default function CardRows({
   index,
   compartments,
@@ -41,14 +62,15 @@ export default function CardRows({
   color,
   minCompartmentsRows,
   maxCompartmentsRows,
-  localization,
+  localization = {formatNumber: (value: number) => value.toString(), customLang: 'global', overrides: {}},
 }: CardRowsProps) {
   const {t: defaultT} = useTranslation();
-  const customLang = localization.customLang;
-  const {t: customT} = useTranslation(customLang || undefined);
+  const {t: customT} = useTranslation(localization.customLang);
 
+  // Function to get formatted and translated values
   function GetFormattedAndTranslatedValues(filteredValues: number | null): string {
-    if (filteredValues) return localization.numberFormatter(filteredValues);
+    if (filteredValues)
+      return localization.formatNumber ? localization.formatNumber(filteredValues) : filteredValues.toString();
     else if ((!filteredValues && index === 0) || (compartmentValues && Object.keys(compartmentValues).length !== 0))
       return '0';
     else
@@ -56,6 +78,8 @@ export default function CardRows({
         ? customT(localization.overrides['no-data'])
         : defaultT('no-data');
   }
+
+  // Function to get compartment rate
   const getCompartmentRate = (compartment: string): string => {
     if (!compartmentValues || !(compartment in compartmentValues) || !startValues || !(compartment in startValues)) {
       // Return a Figure Dash (‒) where a rate cannot be calculated.

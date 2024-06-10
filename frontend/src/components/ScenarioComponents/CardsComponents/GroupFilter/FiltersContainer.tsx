@@ -3,29 +3,49 @@
 import {Box, Collapse, useTheme} from '@mui/material';
 import FilterButton from './FilterButton';
 import FilterCard from './FilterCard';
-import {Dictionary} from '../../../types/Cardtypes';
 import React from 'react';
+import {Dictionary} from 'types/Cardtypes';
+import {Localization} from 'types/localization';
 
 interface FiltersContainerProps {
+  /* Array of filtered titles */
   filteredTitles: string[];
+
+  /* Index of the filter container */
   index: number;
+
+  /* Boolean to determine if the filter container is folded */
   folded: boolean;
+
+  /* Function to set the folded state */
   setFolded: (folded: boolean) => void;
+
+  /* Boolean to determine if the compartments are expanded */
   compartmentsExpanded: boolean;
+
+  /* Selected compartment */
   selectedCompartment: string;
+
+  /* Array of compartments */
   compartments: string[];
+
+  /* Array of filtered values */
   filteredValues: Array<Dictionary<number> | null>;
+
+  /* Minimum number of compartment rows */
   minCompartmentsRows: number;
+
+  /* Maximum number of compartment rows */
   maxCompartmentsRows: number;
-  localization: {
-    numberFormatter: (value: number) => string;
-    customLang?: string;
-    overrides?: {
-      [key: string]: string;
-    };
-  };
+
+  /*An object containing localization information (translation & number formattation).*/
+  localization?: Localization;
 }
 
+/**
+ * This component renders a container for filter cards. The container can be opened by clicking a button, which triggers a collapsing animation.
+ * It also supports localization.
+ */
 export default function FiltersContainer({
   index,
   folded,
@@ -37,7 +57,7 @@ export default function FiltersContainer({
   filteredTitles,
   maxCompartmentsRows,
   minCompartmentsRows,
-  localization,
+  localization = {formatNumber: (value: number) => value.toString(), customLang: 'global', overrides: {}},
 }: FiltersContainerProps) {
   const theme = useTheme();
   return (

@@ -6,25 +6,40 @@ import {CheckBox, CheckBoxOutlineBlank} from '@mui/icons-material';
 import {useTranslation} from 'react-i18next';
 import React from 'react';
 import {hexToRGB} from 'util/util';
+import {Localization} from 'types/localization';
 
 interface CardTooltipProps {
+  /* A boolean indicating whether the user is hovering over the card. */
   hover: boolean;
+
+  /* The color of the card. */
   color: string;
+
+  /* The title of the card. */
   index: number;
+
+  /* A boolean indicating whether the scenario is active. */
   activeScenario: boolean;
+
+  /* An array of active scenarios. */
   activeScenarios: number[] | null;
+
+  /* The number of the selected scenario. */
   numberSelectedScenario: number | null;
+
+  /* The number of the selected scenario. */
   setSelectedScenario: React.Dispatch<React.SetStateAction<number | null>>;
+
+  /* A function to set the active scenarios. */
   setActiveScenarios: React.Dispatch<React.SetStateAction<number[] | null>>;
-  localization: {
-    numberFormatter: (value: number) => string;
-    customLang?: string;
-    overrides?: {
-      [key: string]: string;
-    };
-  };
+
+  /*An object containing localization information (translation & number formattation).*/
+  localization?: Localization;
 }
 
+/**
+ * This component renders a tooltip which is used to set whether the card is active or not.
+ */
 export default function CardTooltip({
   index,
   hover,
@@ -34,14 +49,23 @@ export default function CardTooltip({
   numberSelectedScenario,
   setActiveScenarios,
   setSelectedScenario,
-  localization,
+  localization = {formatNumber: (value: number) => value.toString(), customLang: 'global', overrides: {}},
 }: CardTooltipProps) {
   const {t: defaultT} = useTranslation();
-  const customLang = localization.customLang;
-  const {t: customT} = useTranslation(customLang || undefined);
+  const {t: customT} = useTranslation(localization.customLang);
 
+  /**
+   * Manages the scenario based on the given index.
+   * If the scenario is active and there are no other active scenarios, it clears the active scenarios and selected scenario.
+   * Otherwise, it adds or removes the index from the active scenarios list and updates the selected scenario accordingly.
+   * @param index - The index of the scenario to manage.
+   */
   const manageScenario = (index: number) => {
     const isActive = activeScenarios?.includes(index);
+    if (isActive && activeScenarios?.length === 0) {
+      setActiveScenarios(null);
+      setSelectedScenario(null);
+    }
     const newActiveScenarios = isActive
       ? activeScenarios!.filter((id) => id !== index)
       : [...(activeScenarios || []), index];
@@ -86,7 +110,7 @@ export default function CardTooltip({
         <IconButton
           color={'primary'}
           onClick={(event) => {
-            event.stopPropagation();
+            event.stopPropagation(); // Used in order to avoid triggering the click event on the card and only allow triggering the event that handles adding the card to the active scenarios.
             manageScenario(index);
           }}
           aria-label={

@@ -6,24 +6,37 @@ import {InfoOutlined} from '@mui/icons-material';
 import {Dispatch, SetStateAction, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import React from 'react';
+import {Localization} from 'types/localization';
 
 interface CompartmentsRowProps {
+  /* Unique identifier for the row */
   id: number;
+
+  /* Boolean to determine if the row is selected */
   selected: boolean;
+
+  /* Name of the compartment */
   compartment: string;
+
+  /* Value of the compartment */
   value: string;
+
+  /* Boolean to determine if the compartments are expanded */
   compartmentsExpanded: boolean;
+
+  /* Function to set the selected compartment */
   setSelectedCompartment: Dispatch<SetStateAction<string>>;
+
+  /* Minimum number of compartment rows */
   minCompartmentsRows: number;
-  localization: {
-    numberFormatter: (value: number) => string;
-    customLang?: string;
-    overrides?: {
-      [key: string]: string;
-    };
-  };
+
+  /* Localization object for custom language and overrides */
+  localization?: Localization;
 }
 
+/**
+ * This component renders a single row from the compartment List offering also localization support.
+ */
 export default function CompartmentsRow({
   id,
   selected,
@@ -32,14 +45,17 @@ export default function CompartmentsRow({
   compartmentsExpanded,
   setSelectedCompartment,
   minCompartmentsRows,
-  localization,
+  localization = {formatNumber: (value: number) => value.toString(), customLang: 'backend', overrides: {}},
 }: CompartmentsRowProps) {
   const {t: defaultT} = useTranslation();
-  const customLang = localization.customLang;
-  const {t: customT} = useTranslation(customLang || undefined);
+  const {t: customT} = useTranslation(localization.customLang);
   const theme = useTheme();
   const [tooltipOpen, setTooltipOpen] = useState(false);
-
+  const openTooltip = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    event.stopPropagation();
+    setTooltipOpen(true);
+  };
+  const closeTooltip = () => setTooltipOpen(false);
   return (
     <ListItemButton
       key={id}
@@ -66,8 +82,8 @@ export default function CompartmentsRow({
     >
       <ListItemText
         primary={
-          localization.overrides && localization.overrides[`compartments.${compartment}`]
-            ? customT(localization.overrides[`compartments.${compartment}`])
+          localization?.overrides && localization?.overrides[`compartments.${compartment}`]
+            ? customT(localization?.overrides[`compartments.${compartment}`])
             : defaultT(`compartments.${compartment}`)
         }
         disableTypography={true}
@@ -96,19 +112,16 @@ export default function CompartmentsRow({
           minWidth: 'auto',
         }}
       >
-        <ClickAwayListener onClickAway={() => setTooltipOpen(false)}>
+        <ClickAwayListener onClickAway={closeTooltip}>
           <Tooltip
             arrow
             open={tooltipOpen}
-            onClose={() => setTooltipOpen(false)}
-            onClick={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-              event.stopPropagation();
-              setTooltipOpen(true);
-            }}
+            onClose={closeTooltip}
+            onClick={openTooltip}
             title={
-              localization.overrides && localization.overrides['compartments.tooltip']
-                ? customT(localization.overrides['compartments.tooltip'])
-                : defaultT('compartments.tooltip')
+              localization?.overrides && localization?.overrides[`compartments.${compartment}`]
+                ? customT(localization?.overrides[`compartments.${compartment}`])
+                : defaultT(`compartments.${compartment}`)
             }
           >
             <InfoOutlined

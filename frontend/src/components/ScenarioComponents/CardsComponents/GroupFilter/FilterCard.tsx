@@ -5,29 +5,49 @@ import {Box} from '@mui/material';
 import Divider from '@mui/material/Divider';
 import FilterRows from './FilterRows';
 import CardTitle from '../MainCard/CardTitle';
-import {Dictionary} from '../../../types/Cardtypes';
 import React from 'react';
+import {Dictionary} from 'types/Cardtypes';
+import {Localization} from 'types/localization';
 
 interface FilterCardProps {
+  /* Title of the filter card */
   title: string;
+
+  /* Color of the filter card */
   color: string;
+
+  /* Array of compartments */
   compartments: string[];
+
+  /* Dictionary of filtered values */
   filteredValues: Dictionary<number> | null;
+
+  /* Index of the group filter */
   groupFilterIndex: number;
+
+  /* Total number of cards */
   totalCardNumber: number;
+
+  /* Boolean to determine if the compartment is expanded */
   compartmentExpanded?: boolean;
+
+  /* Selected compartment */
   selectedCompartment: string;
+
+  /* Minimum number of compartment rows */
   minCompartmentsRows: number;
+
+  /* Maximum number of compartment rows */
   maxCompartmentsRows: number;
-  localization: {
-    numberFormatter: (value: number) => string;
-    customLang?: string;
-    overrides?: {
-      [key: string]: string;
-    };
-  };
+
+  /*An object containing localization information (translation & number formattation).*/
+  localization?: Localization;
 }
 
+/**
+ * This component renders a filter card with a title, and a list of values that are the filtered values.
+ * It also supports localization.
+ */
 export default function FilterCard({
   title,
   color,
@@ -39,7 +59,7 @@ export default function FilterCard({
   selectedCompartment,
   maxCompartmentsRows,
   minCompartmentsRows,
-  localization,
+  localization = {formatNumber: (value: number) => value.toString(), customLang: 'global', overrides: {}},
 }: FilterCardProps) {
   return (
     <Box
@@ -80,7 +100,6 @@ export default function FilterCard({
         <FilterRows
           compartments={compartments}
           filteredValues={filteredValues}
-          arrow={false}
           compartmentExpanded={compartmentExpanded}
           selectedCompartment={selectedCompartment}
           maxCompartmentsRows={maxCompartmentsRows}
