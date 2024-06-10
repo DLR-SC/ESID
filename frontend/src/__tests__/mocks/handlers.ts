@@ -4,6 +4,21 @@
 import {http, HttpResponse} from 'msw';
 
 export default [
+  http.get('*/api/v1/simulations/', () => {
+    return HttpResponse.json({
+      results: [
+        {
+          id: 1,
+          name: 'Test Scenario',
+          description: 'Test',
+          startDay: '2024-01-01',
+          numberOfDays: 30,
+          scenario: 'http://localhost:8000/api/v1/scenarios/1/',
+          percentiles: [5, 15, 25, 50, 75, 85, 95],
+        },
+      ],
+    });
+  }),
   http.get('*/api/v1/scenarios/1/', () => {
     return HttpResponse.json({
       results: {

@@ -13,10 +13,13 @@ SPDX-License-Identifier: CC-BY-4.0
 
 ### Verbesserungen
 
+- Es wurde mehr Übersetzungen für Szenarien hinzugefügt.
+
 ### Fehlerbehebungen
 
 - Fehlende Übersetzungen wurden ergänzt.
 - Die Auswahl der Farblegenden zeigt jetzt wieder eine Vorschau für alle Optionen.
+- Die Parameter werden jetzt korrekt dem ausgewählten Szenario zugeordnet und eine Info wird angezeigt, wenn keine Parameter verfügbar sind.
 - Die Farben der Szenarien wurden zum Teil falsch berechnet, was zu mehreren Szenarien mit den gleichen Farben führte.
 
 ---
