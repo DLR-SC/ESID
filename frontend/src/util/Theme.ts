@@ -160,10 +160,16 @@ export default createTheme({
   },
 });
 
+/**
+ * This function assigns a color palette to a scenario and consistently returns the same palette for the same id.
+ */
 export function getScenarioColorPalette(scenarioId: number, theme: Theme): Array<string> {
   return theme.custom.scenarios[(scenarioId % (theme.custom.scenarios.length - 1)) + 1];
 }
 
+/**
+ * This function assigns a primary color to a scenario and consistently returns the same color for the same id.
+ */
 export function getScenarioPrimaryColor(scenarioId: number, theme: Theme): string {
   return getScenarioColorPalette(scenarioId, theme)[0];
 }
