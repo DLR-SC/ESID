@@ -278,7 +278,7 @@
     baseline: 'Baseline Scenario',
     closed_schools: 'Schools Closed',
     remote_work: 'Home Office',
-    '10p_reduced_contacts ': '10% Reduced Contacts',
+    '10p_reduced_contacts': '10% Reduced Contacts',
     'Summer 2021 Simulation 1': 'Scenario without Interventions',
     'Summer 2021 Simulation 2': 'Scenario with Interventions',
   },
