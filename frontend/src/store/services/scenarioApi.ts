@@ -10,8 +10,11 @@ import {
   SimulationModels,
   Simulations,
 } from '../../types/scenario';
+        /* [CDtemp-begin] */
 import cologneData from '../../../assets/stadtteile_cologne_list.json';
 import {District} from '../../types/cologneDisticts';
+        /* [CDtemp-end] */
+
 
 export const scenarioApi = createApi({
   reducerPath: 'scenarioApi',
@@ -72,19 +75,105 @@ export const scenarioApi = createApi({
     }),
 
     getSimulationDataByNode: builder.query<SimulationDataByNode, SimulationDataByNodeParameters>({
-      query: (arg: SimulationDataByNodeParameters) => {
+      async queryFn (arg, _queryApi, _extraOptions, fetchWithBQ) {
         const groups = arg.groups && arg.groups.length > 0 ? `&groups=${arg.groups.join(',')}` : '&groups=total';
         const compartments = arg.compartments ? `&compartments=${arg.compartments.join(',')}&all` : '';
 
-        return `simulation/${arg.id}/${arg.node}/?all${groups}${compartments}`;
+        /* [CDtemp-begin] */
+        let cologneDistrict = '';
+        let node = '';
+
+        // check if node is cologne district (8 digits instead of 5)
+        if (arg.node.length > 5) {
+          // store city district (last 3)
+          cologneDistrict = arg.node.slice(-3);
+          // restore node to fetch cologne data
+          node = arg.node.slice(0,5);
+        } else {
+          node = arg.node;
+        }
+        /* [CDtemp-end] */
+        
+        const currResult = await fetchWithBQ(
+          `simulation/${arg.id}/${
+            /* [CDtemp-begin] */
+            // arg.node
+            node
+            /* [CDtemp-end] */
+          }/?all${groups}${compartments}`
+        );
+        if (currResult.error) return {error: currResult.error};
+        const data = currResult.data as SimulationDataByNode;
+
+        /* [CDtemp-begin] */
+        // if node was cologne district apply weight
+        if (cologneDistrict) {
+          const weight = (cologneData as unknown as Array<District>).find(
+            (dist) => dist.Stadtteil_ID === cologneDistrict
+          )!.Population_rel;
+          // loop thru days and overwrite cologne result with weighted result
+          data.results = data.results.map(({day, compartments}) => {
+            //loop through compartments and apply weight
+            Object.keys(compartments).forEach((compName) => {
+              compartments[compName] *= weight;
+            });
+            return {day, compartments};
+          });
+        }
+        /* [CDtemp-end] */
+        return {data: data}
       },
     }),
 
     getSingleSimulationEntry: builder.query<SimulationDataByNode, SingleSimulationEntryParameters>({
-      query: (arg: SingleSimulationEntryParameters) =>
-        `simulation/${arg.id}/${arg.node}/?all&day=${arg.day}&groups=${
-          arg.groups && arg.groups.length > 0 ? arg.groups.join(',') : 'total'
-        }`,
+      async queryFn (arg, _queryApi, _extraOptions, fetchWithBQ) {
+        const day = arg.day ? `&day=${arg.day}` : '';
+        const groups = arg.groups && arg.groups.length > 0 ? `&groups=${arg.groups.join(',')}` : '&groups=total';
+        
+        /* [CDtemp-begin] */
+        let cologneDistrict = '';
+        let node = '';
+
+        // check if node is cologne district (8 digits instead of 5)
+        if (arg.node.length > 5) {
+          // store city district (last 3)
+          cologneDistrict = arg.node.slice(-3);
+          // restore node to fetch cologne data
+          node = arg.node.slice(0,5);
+        } else {
+          node = arg.node;
+        }
+        /* [CDtemp-end] */
+        
+        const currResult = await fetchWithBQ(
+          `simulation/${arg.id}/${
+            /* [CDtemp-begin] */
+            // arg.node
+            node
+            /* [CDtemp-end] */
+          }/?all${day}${groups}`
+        );
+        if (currResult.error) return {error: currResult.error};
+        const data = currResult.data as SimulationDataByNode;
+        
+        /* [CDtemp-begin] */
+        // if node was cologne district apply weight
+        if (cologneDistrict) {
+          const weight = (cologneData as unknown as Array<District>).find(
+            (dist) => dist.Stadtteil_ID === cologneDistrict
+          )!.Population_rel;
+          // loop thru days and overwrite cologne result with weighted result
+          data.results = data.results.map(({day, compartments}) => {
+            //loop through compartments and apply weight
+            Object.keys(compartments).forEach((compName) => {
+              compartments[compName] *= weight;
+            });
+            return {day, compartments};
+          });
+        }
+        /* [CDtemp-end] */
+        return {data: data};
+      }
     }),
 
     getMultipleSimulationDataByNode: builder.query<SimulationDataByNode[], MultipleSimulationDataByNodeParameters>({
