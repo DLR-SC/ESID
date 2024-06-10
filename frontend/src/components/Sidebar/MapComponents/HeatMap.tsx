@@ -35,8 +35,8 @@ interface MapProps {
   fixedLegendMaxValue?: number | null;
   legend: HeatmapLegend;
   legendRef: React.MutableRefObject<am5.HeatLegend | null>;
-  longLoad: boolean;
-  setLongLoad: (longLoad: boolean) => void;
+  longLoad?: boolean;
+  setLongLoad?: (longLoad: boolean) => void;
   localization?: Localization;
   idValuesToMap?: string;
 }
@@ -60,15 +60,27 @@ export default function HeatMap({
   fixedLegendMaxValue,
   legend,
   legendRef,
-  longLoad,
-  setLongLoad,
-  localization = {formatNumber: (value: number) => value.toString(), customLang: 'global', overrides: {}},
+  longLoad = false,
+  setLongLoad = () => {},
+  localization,
   idValuesToMap = 'id',
 }: MapProps) {
   const theme = useTheme();
   const lastSelectedPolygon = useRef<am5map.MapPolygon | null>(null);
   const [polygonSeries, setPolygonSeries] = useState<am5map.MapPolygonSeries | null>(null);
   const [longLoadTimeout, setLongLoadTimeout] = useState<number>();
+
+  // Memoize the default localization object to avoid infinite re-renders
+  const defaultLocalization = useMemo(() => {
+    return {
+      formatNumber: (value: number) => value.toString(),
+      customLang: 'global',
+      overrides: {},
+    };
+  }, []);
+
+  // Use the provided localization or default to the memoized one
+  const localizationToUse = localization || defaultLocalization;
 
   // This memo returns if the required data is currently being fetched. Either the case data or the scenario data.
   const isFetching = useMemo(() => {
@@ -109,7 +121,6 @@ export default function HeatMap({
   // Create Map with GeoData
   useEffect(() => {
     if (!mapData) return;
-
     // Create map instance
     const root = am5.Root.new(mapId);
     const chart = root.container.children.push(
@@ -207,7 +218,7 @@ export default function HeatMap({
     polygonTemplate.events.on('pointerover', (e) => {
       if (legendRef.current) {
         const value = (e.target.dataItem?.dataContext as FeatureProperties).value as number;
-        legendRef.current.showValue(value, localization.formatNumber!(value));
+        legendRef.current.showValue(value, localizationToUse.formatNumber!(value));
       }
     });
     //hide tooltip on heat legend when not hovering anymore event
@@ -227,14 +238,13 @@ export default function HeatMap({
     defaultFill,
     defaultSelectedValue,
     fillOpacity,
-    localization.formatNumber,
     legendRef,
+    localizationToUse.formatNumber,
     mapData,
     mapId,
     setSelectedArea,
     theme.palette.background.default,
     theme.palette.primary.main,
-    localization,
   ]);
 
   // Highlight selected district

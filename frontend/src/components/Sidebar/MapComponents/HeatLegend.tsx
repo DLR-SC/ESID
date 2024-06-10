@@ -15,7 +15,7 @@ interface HeatProps {
   min: number;
   max: number;
   displayText: boolean;
-  id: string;
+  id?: string;
   style?: React.CSSProperties;
   localization?: Localization;
 }
@@ -26,7 +26,7 @@ export default function HeatLegend({
   min,
   max,
   displayText,
-  id,
+  id = 'legend',
   style = {
     width: '100%',
     margin: '5px',

@@ -13,7 +13,6 @@ import Select, {SelectChangeEvent} from '@mui/material/Select';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import EditIcon from '@mui/icons-material/Edit';
-import legendPresets from '../../../../assets/heatmap_legend_presets.json?url';
 import {useTheme} from '@mui/material';
 import {HeatmapLegend} from 'types/heatmapLegend';
 import {Localization} from 'types/localization';
@@ -24,6 +23,7 @@ interface HeatLegendEditProps {
   legend: HeatmapLegend;
   selectedScenario?: number | null;
   localization?: Localization;
+  legendPresetsUrl?: string | null;
 }
 /**
  * This component displays an edit button to access a modal. In the modal you can edit the heatmap legend.
@@ -37,6 +37,7 @@ export default function HeatLegendEdit({
     customLang: 'global',
     overrides: {},
   },
+  legendPresetsUrl = null,
 }: HeatLegendEditProps) {
   const theme = useTheme();
   const {t: defaultT} = useTranslation();
@@ -67,8 +68,8 @@ export default function HeatLegendEdit({
 
   // This effect loads the presets file, once the modal is opened the first time.
   useEffect(() => {
-    if (heatmapLegends.length === 0 && heatLegendEditOpen) {
-      fetch(legendPresets, {
+    if (heatmapLegends.length === 0 && heatLegendEditOpen && legendPresetsUrl) {
+      fetch(legendPresetsUrl, {
         headers: {
           'Content-Type': 'application/json',
           Accept: 'application/json',
@@ -94,7 +95,7 @@ export default function HeatLegendEdit({
           }
         );
     }
-  }, [setHeatmapLegends, heatmapLegends, heatLegendEditOpen]);
+  }, [setHeatmapLegends, heatmapLegends, heatLegendEditOpen, legendPresetsUrl]);
 
   // This effect builds the list of available presets from the "defaultLegends" and "heatmapLegends".
   useEffect(() => {

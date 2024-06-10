@@ -34,6 +34,15 @@ export default function LineChartContainer() {
   const [selectedDate, setSelectedDate] = useState<string>(selectedDateInStore ? selectedDateInStore : '2021-09-01');
   const [referenceDayb, setReferenceDayb] = useState<number>(0);
 
+  const localization = useMemo(() => {
+    return {
+      customLang: 'backend',
+      overrides: {
+        [`compartment.${selectedCompartment}`]: `infection-states.${selectedCompartment}`,
+      },
+    };
+  }, [selectedCompartment]);
+
   const simulationDataChartName = useCallback(
     (scenario: Scenario) => tBackend(`scenario-names.${scenario.label}`),
     [tBackend]
@@ -66,11 +75,10 @@ export default function LineChartContainer() {
   return (
     <LoadingContainer
       sx={{width: '100%', height: '100%'}}
-      show={isChartDataFetching as boolean}
+      show={isChartDataFetching}
       overlayColor={theme.palette.background.paper}
     >
       <LineChart
-        chartId={'lineChart1'}
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
         setReferenceDayBottom={setReferenceDayb}
