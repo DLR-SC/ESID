@@ -11,7 +11,7 @@ import {Localization} from 'types/localization';
 
 interface HeatProps {
   legend: HeatmapLegend;
-  exposeLegend: (legend: am5.HeatLegend | null) => void;
+  exposeLegend?: (legend: am5.HeatLegend | null) => void;
   min: number;
   max: number;
   displayText: boolean;
@@ -22,7 +22,7 @@ interface HeatProps {
 
 export default function HeatLegend({
   legend,
-  exposeLegend,
+  exposeLegend = () => {},
   min,
   max,
   displayText,

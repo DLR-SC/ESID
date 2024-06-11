@@ -43,7 +43,7 @@ interface LineChartProps {
   setSelectedDate: (date: string) => void;
   setReferenceDayBottom?: (docPos: number) => void;
   simulationData?: ({day: string; value: number}[] | null)[] | null;
-  simulationDataChartName: (scenario: Scenario) => string;
+  simulationDataChartName?: (scenario: Scenario) => string;
   caseData: {day: string; value: number}[] | undefined;
   percentileData?: {day: string; value: number}[][] | null;
   groupFilterData?: Dictionary<{day: string; value: number}[]> | null;
@@ -53,7 +53,7 @@ interface LineChartProps {
   activeScenarios?: number[] | null;
   referenceDay?: string | null;
   selectedCompartment: string;
-  scenarioList: ScenarioList;
+  scenarioList?: ScenarioList | null;
   groupFilterList?: Dictionary<GroupFilter> | null;
   exportedFileName?: string;
   localization?: Localization;
@@ -66,7 +66,7 @@ export default function LineChart({
   setReferenceDayBottom = () => {},
   simulationData = null,
   caseData,
-  simulationDataChartName,
+  simulationDataChartName = () => '',
   percentileData = null,
   groupFilterData = null,
   minDate = null,
@@ -75,7 +75,7 @@ export default function LineChart({
   activeScenarios = null,
   referenceDay = null,
   selectedCompartment,
-  scenarioList,
+  scenarioList = null,
   groupFilterList = null,
   exportedFileName = 'Data',
   localization = {
@@ -302,31 +302,33 @@ export default function LineChart({
       });
 
       // Add series for each scenario
-      Object.entries(scenarioList.scenarios).forEach(([scenarioId, scenario]) => {
-        const series = chart.series.push(
-          LineSeries.new(root, {
-            xAxis: xAxis,
-            yAxis: yAxis,
-            id: `${chartId}_${scenarioId}`,
-            name: simulationDataChartName(scenario),
-            valueXField: 'date',
-            valueYField: scenarioId,
-            // Prevent data points from connecting across gaps in the data
-            connect: false,
-            // Fallback Tooltip (if HTML breaks for some reason)
-            // For text color: loop around the theme's scenario color list if scenario IDs exceed color list length, then pick first color of sub-palette which is the main color
-            tooltip: Tooltip.new(root, {
-              labelText: `[bold ${
-                theme.custom.scenarios[scenario.id % theme.custom.scenarios.length][0]
-              }]${simulationDataChartName(scenario)}:[/] {${scenarioId}}`,
-            }),
-            stroke: color(theme.custom.scenarios[scenario.id % theme.custom.scenarios.length][0]),
-          })
-        );
-        series.strokes.template.setAll({
-          strokeWidth: 2,
+      if (scenarioList) {
+        Object.entries(scenarioList.scenarios).forEach(([scenarioId, scenario]) => {
+          const series = chart.series.push(
+            LineSeries.new(root, {
+              xAxis: xAxis,
+              yAxis: yAxis,
+              id: `${chartId}_${scenarioId}`,
+              name: simulationDataChartName(scenario),
+              valueXField: 'date',
+              valueYField: scenarioId,
+              // Prevent data points from connecting across gaps in the data
+              connect: false,
+              // Fallback Tooltip (if HTML breaks for some reason)
+              // For text color: loop around the theme's scenario color list if scenario IDs exceed color list length, then pick first color of sub-palette which is the main color
+              tooltip: Tooltip.new(root, {
+                labelText: `[bold ${
+                  theme.custom.scenarios[scenario.id % theme.custom.scenarios.length][0]
+                }]${simulationDataChartName(scenario)}:[/] {${scenarioId}}`,
+              }),
+              stroke: color(theme.custom.scenarios[scenario.id % theme.custom.scenarios.length][0]),
+            })
+          );
+          series.strokes.template.setAll({
+            strokeWidth: 2,
+          });
         });
-      });
+      }
 
       // Add series for groupFilter (if there are any)
       if (groupFilterList && selectedScenario) {
@@ -787,7 +789,7 @@ export default function LineChart({
     if (activeScenarios) {
       activeScenarios.forEach((scenarioId) => {
         // Skip case data (already added)
-        if (scenarioId === 0 || !scenarioId || !scenarioList.scenarios[scenarioId]) {
+        if (scenarioId === 0 || !scenarioId || !scenarioList || !scenarioList.scenarios[scenarioId]) {
           return;
         }
 
