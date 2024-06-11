@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
+
 import Theme from 'util/Theme';
 import {ThemeProvider} from '@mui/system';
 import LockMaxValue from 'components/Sidebar/MapComponents/LockMaxValue';
