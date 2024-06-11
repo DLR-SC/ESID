@@ -36,7 +36,6 @@ describe('LockMaxValue', () => {
     const openLock = screen.getByTestId('LockOpenIcon');
     const closedLock = screen.queryByTestId('LockIcon');
 
-    screen.debug();
     expect(openLock).toBeInTheDocument();
     expect(closedLock).not.toBeInTheDocument();
 

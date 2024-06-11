@@ -116,8 +116,6 @@ describe('HeatMap', () => {
       </ThemeProvider>
     );
 
-    screen.debug();
-
     expect(screen.getByTestId('map')).toBeInTheDocument();
   });
 });
