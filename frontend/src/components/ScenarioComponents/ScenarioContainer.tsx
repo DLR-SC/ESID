@@ -8,7 +8,6 @@ import {GroupFilter} from '../../types/Filtertypes';
 import {GroupCategories, GroupSubcategories} from 'store/services/groupApi';
 import {NumberFormatter} from 'util/hooks';
 import {useTranslation} from 'react-i18next';
-
 import {
   selectCompartment,
   selectScenario,
@@ -33,6 +32,7 @@ import ReferenceDatePicker from './ReferenceDatePickerComponents.tsx/ReferenceDa
 import {GroupResponse} from 'types/group';
 import {SimulationModel, SimulationDataByNode, Simulations} from 'types/scenario';
 import {CaseDataByNode} from 'types/caseData';
+import {useAppDispatch, useAppSelector} from 'store/hooks';
 
 interface ScenarioContainerProps {
   /*The minimum number of compartment rows.*/
