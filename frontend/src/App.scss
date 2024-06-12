@@ -48,3 +48,28 @@ body {
   border-radius: 13px;
   border: 3px solid transparent;
 }
+
+/* New CSS class for different heights in Firefox and Edge for the CmpartmentsRow listItem */
+/* Firefox */
+@-moz-document url-prefix() {
+  .row {
+    height: 45px;
+  }
+}
+
+/* Chrome, Edge, and Safari */
+.row {
+  height: 40px;
+}
+
+/* New CSS class for different PaddingTop in Firefox and Edge for aligning the sync scroling row in all the components */
+/* Firefox */
+@-moz-document url-prefix() {
+  .datepicker-paddingTop {
+    padding-top: 24px;
+  }
+}
+
+.datepicker-paddingTop {
+  padding-top: 19px;
+}

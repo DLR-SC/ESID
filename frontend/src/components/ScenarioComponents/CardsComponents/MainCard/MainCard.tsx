@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React from 'react';
-import {Box} from '@mui/material';
+import {Box, useTheme} from '@mui/material';
 import CardTitle from './CardTitle';
 import CardTooltip from './CardTooltip';
 import CardRows from './CardRows';
@@ -99,6 +99,7 @@ function MainCard({
   localization = {formatNumber: (value: number) => value.toString(), customLang: 'global', overrides: {}},
   arrow = true,
 }: MainCardProps) {
+  const theme = useTheme();
   return (
     <Box
       id={`main-card-external-container-${index}`}
@@ -133,7 +134,7 @@ function MainCard({
           boxSizing: 'border-box',
           minWidth: '200px',
           maxWidth: '210px',
-          bgcolor: 'white',
+          bgcolor: theme.palette.background.paper,
           zIndex: 0,
           display: 'flex',
           flexDirection: 'column',
@@ -149,7 +150,7 @@ function MainCard({
           id={`main-card-title-container-${index}`}
           sx={{
             display: 'flex',
-            height: '75px',
+            height: '65px',
             alignItems: 'self-end',
             width: 'full',
           }}

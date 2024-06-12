@@ -17,7 +17,7 @@ interface FilterButtonProps {
   borderColor: string;
 
   /* Background color of the button */
-  backgroundColor?: string;
+  backgroundColor: string;
 
   /* ID number of the button */
   idNumber: number;
@@ -35,6 +35,7 @@ export default function FilterButton({
   setFolded,
   borderColor,
   idNumber,
+  backgroundColor,
   maxCompartmentsRows,
 }: FilterButtonProps) {
   return (
@@ -47,7 +48,7 @@ export default function FilterButton({
         boxSizing: 'border-box',
         borderRight: `1px solid ${borderColor}`,
         marginRight: '1px',
-        bgcolor: 'white',
+        bgcolor: backgroundColor,
       }}
       onClick={() => setFolded(!folded)}
     >

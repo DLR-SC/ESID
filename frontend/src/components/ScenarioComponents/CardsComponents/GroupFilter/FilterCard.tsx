@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import {Box} from '@mui/material';
+import {Box, useTheme} from '@mui/material';
 import Divider from '@mui/material/Divider';
 import FilterRows from './FilterRows';
 import CardTitle from '../MainCard/CardTitle';
@@ -61,6 +61,7 @@ export default function FilterCard({
   minCompartmentsRows,
   localization = {formatNumber: (value: number) => value.toString(), customLang: 'global', overrides: {}},
 }: FilterCardProps) {
+  const theme = useTheme();
   return (
     <Box
       id={`external-cardfilter-container-${groupFilterIndex}`}
@@ -76,7 +77,7 @@ export default function FilterCard({
         sx={{
           maxHeight: `${(335 / 6) * maxCompartmentsRows}px`,
           minWidth: '130px',
-          bgcolor: 'white',
+          bgcolor: theme.palette.background.paper,
           zIndex: 0,
           display: 'flex',
           flexDirection: 'column',
@@ -88,7 +89,7 @@ export default function FilterCard({
           id={`cardfilter-title-container-${groupFilterIndex}`}
           sx={{
             display: 'flex',
-            height: '67px',
+            height: '58px',
             alignItems: 'self-end',
             width: 'full',
             paddingRight: 2,

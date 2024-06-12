@@ -59,13 +59,13 @@ export default function CompartmentsRow({
   return (
     <ListItemButton
       key={id}
+      className='row'
       sx={{
         display: compartmentsExpanded || id < minCompartmentsRows ? 'flex' : 'none',
         paddingLeft: '8px',
         paddingRight: '8px',
         paddingTop: 2,
         paddingBottom: 2,
-        height: '40px',
         bgcolor: `${selected ? theme.palette.background.default : 'none'}`,
         borderLeft: `2px ${selected ? theme.palette.primary.main : 'transparent'} solid`,
         borderTop: `2px ${selected ? theme.palette.background.paper : 'transparent'} solid`,

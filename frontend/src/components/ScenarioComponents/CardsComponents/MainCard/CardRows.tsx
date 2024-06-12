@@ -1,6 +1,6 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
-import {Box, List, ListItem, ListItemText} from '@mui/material';
+import {Box, List, ListItem, ListItemText, useTheme} from '@mui/material';
 import TrendArrow from './TrendArrow';
 import {ScrollSyncPane} from 'react-scroll-sync';
 import {useTranslation} from 'react-i18next';
@@ -66,7 +66,7 @@ export default function CardRows({
 }: CardRowsProps) {
   const {t: defaultT} = useTranslation();
   const {t: customT} = useTranslation(localization.customLang);
-
+  const theme = useTheme();
   // Function to get formatted and translated values
   function GetFormattedAndTranslatedValues(filteredValues: number | null): string {
     if (filteredValues)
@@ -114,7 +114,7 @@ export default function CardRows({
       className='hide-scrollbar'
       sx={{
         width: 'full',
-        bgcolor: 'white',
+        bgcolor: theme.palette.background.paper,
         pd: 2,
         overflowX: 'auto',
         visibility: isFlipped ? 'visible' : 'hidden',

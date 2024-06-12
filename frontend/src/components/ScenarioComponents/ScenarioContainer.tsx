@@ -357,7 +357,6 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
           sx={{
             display: 'flex',
             flexDirection: 'row',
-            paddingTop: 1,
             alignItems: 'flex-start',
             justifyContent: 'space-between',
             height: '100%',
@@ -379,6 +378,7 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
           >
             <Box
               ref={resizeRef}
+              className='datepicker-paddingTop'
               sx={{
                 borderRight: `2px dashed ${darken(theme.palette.divider, 0.25)}`,
                 flexDirection: 'column',
@@ -387,7 +387,6 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
                 width: '274px',
                 boxSizing: 'border-box',
                 gap: 1,
-                paddingTop: '29px',
                 height: '100%',
               }}
             >
@@ -400,7 +399,7 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
               />
               <Box
                 sx={{
-                  height: compartmentsExpanded ? (248 / 6) * maxCompartmentsRows : 'auto',
+                  height: compartmentsExpanded ? (240 / 6) * maxCompartmentsRows : 'auto',
                   paddingBottom: 2,
                   width: '272px',
                 }}
@@ -423,7 +422,6 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
                   paddingRight: 3,
                   paddingLeft: 3,
                   marginTop: 3,
-                  marginBottom: 2,
                 }}
               >
                 <GeneralButton
@@ -439,7 +437,6 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
                   isExpanded={compartmentsExpanded}
                 />
               </Box>
-              <Box sx={{height: 10}} />
             </Box>
             <CardContainer
               compartmentsExpanded={compartmentsExpanded}

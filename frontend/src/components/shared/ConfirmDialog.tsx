@@ -1,13 +1,12 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
-import {useTheme} from '@mui/material/styles';
+import React from 'react';
 
 export interface ConfirmDialogProps {
   /** Whether the dialog should be open or not. */
@@ -64,21 +63,19 @@ export interface ConfirmDialogProps {
  *   }
  * ```
  */
-export default function ConfirmDialog(props: ConfirmDialogProps): JSX.Element {
-  const theme = useTheme();
-
+export default function ConfirmDialog(props: ConfirmDialogProps) {
   return (
     <Dialog open={props.open} sx={{backdropFilter: 'none'}}>
       <Box
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          padding: theme.spacing(4),
+          padding: '26px',
         }}
       >
         <Typography variant='h2'>{props.title}</Typography>
         <Divider orientation='horizontal' flexItem />
-        <Typography variant='body1' sx={{paddingY: theme.spacing(3)}}>
+        <Typography variant='body1' sx={{paddingY: '12px'}}>
           {props.text}
         </Typography>
         <Box
@@ -88,15 +85,16 @@ export default function ConfirmDialog(props: ConfirmDialogProps): JSX.Element {
             justifyContent: 'flex-end',
           }}
         >
-          <Button
-            variant='outlined'
-            color='error'
-            sx={{marginRight: theme.spacing(2)}}
-            onClick={() => props.onAnswer(false)}
-          >
+          <Button variant='outlined' color='error' sx={{marginRight: '8px'}} onClick={() => props.onAnswer(false)}>
             {props.abortButtonText ?? 'Abort'}
           </Button>
-          <Button variant='outlined' color='primary' onClick={() => props.onAnswer(true)}>
+          <Button
+            variant='outlined'
+            color='primary'
+            onClick={() => {
+              props.onAnswer(true);
+            }}
+          >
             {props.confirmButtonText ?? 'Confirm'}
           </Button>
         </Box>

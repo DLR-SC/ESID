@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import {Box, List, ListItem, ListItemText} from '@mui/material';
+import {Box, List, ListItem, ListItemText, useTheme} from '@mui/material';
 import {ScrollSyncPane} from 'react-scroll-sync';
 import {useTranslation} from 'react-i18next';
 import React from 'react';
@@ -50,6 +50,7 @@ export default function FilterRows({
 }: FilterRowsProps) {
   const {t: defaultT} = useTranslation();
   const {t: customT} = useTranslation(localization.customLang);
+  const theme = useTheme();
 
   // Function to get formatted and translated values
   function GetFormattedAndTranslatedValues(filteredValues: number | null): string {
@@ -66,7 +67,7 @@ export default function FilterRows({
       className='hide-scrollbar'
       sx={{
         width: '130px',
-        bgcolor: 'white',
+        bgcolor: theme.palette.background.paper,
         overflow: 'auto',
         pd: 2,
         visibility: isFlipped ? 'visible' : 'hidden',

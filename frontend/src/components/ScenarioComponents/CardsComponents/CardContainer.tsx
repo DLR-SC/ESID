@@ -131,8 +131,8 @@ export default function CardContainer({
         flexDirection: 'row',
         gap: 4,
         minHeight: compartmentsExpanded
-          ? `${(410 / 6) * maxCompartmentsRows}px`
-          : `${(335 / 4) * minCompartmentsRows}px`,
+          ? `${(400 / 6) * maxCompartmentsRows}px`
+          : `${(325 / 4) * minCompartmentsRows}px`,
         overflowX: 'auto',
         minWidth: 400,
         paddingLeft: 4,

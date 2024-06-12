@@ -71,7 +71,7 @@ export default function FiltersContainer({
         border: 1,
         borderColor: theme.custom.scenarios[index % theme.custom.scenarios.length][0],
         borderRadius: 1,
-        bgcolor: 'white',
+        bgcolor: theme.palette.background.paper,
         zIndex: 2,
       }}
     >
@@ -79,7 +79,7 @@ export default function FiltersContainer({
         folded={folded}
         setFolded={setFolded}
         borderColor={theme.palette.divider}
-        backgroundColor='white'
+        backgroundColor={theme.palette.background.paper}
         idNumber={1}
         maxCompartmentsRows={maxCompartmentsRows}
       />

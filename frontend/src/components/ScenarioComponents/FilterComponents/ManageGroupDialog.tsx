@@ -4,7 +4,7 @@
 import {Close, GroupAdd} from '@mui/icons-material';
 import {Box, Typography, IconButton, Divider, Card, CardActionArea, CardContent, Button, useTheme} from '@mui/material';
 import {useState, useEffect} from 'react';
-import ConfirmDialog from './ConfirmDialog';
+import ConfirmDialog from '../../shared/ConfirmDialog';
 import GroupFilterCard from './GroupFilterCard';
 import GroupFilterEditor from './GroupFilterEditor';
 import {useTranslation} from 'react-i18next';

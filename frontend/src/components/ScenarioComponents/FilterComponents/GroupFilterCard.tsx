@@ -14,7 +14,7 @@ import {
   useTheme,
 } from '@mui/material';
 import {useState} from 'react';
-import ConfirmDialog from './ConfirmDialog';
+import ConfirmDialog from '../../shared/ConfirmDialog';
 import {useTranslation} from 'react-i18next';
 import React from 'react';
 import {GroupFilter} from 'types/group';
@@ -138,6 +138,16 @@ export default function GroupFilterCard({
                   groupName: item.name,
                 })
               : defaultT('group-filters.confirm-deletion-text', {groupName: item.name})
+          }
+          abortButtonText={
+            localization.overrides && localization.overrides['group-filters.close']
+              ? customT(localization.overrides['group-filters.close'])
+              : defaultT('group-filters.close')
+          }
+          confirmButtonText={
+            localization.overrides && localization.overrides['group-filters.discard']
+              ? customT(localization.overrides['group-filters.discard'])
+              : defaultT('group-filters.discard')
           }
           onAnswer={(answer) => {
             if (answer) {

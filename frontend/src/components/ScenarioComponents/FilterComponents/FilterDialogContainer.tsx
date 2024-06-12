@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import {Box, Button, Dialog, useTheme} from '@mui/material';
-import ConfirmDialog from './ConfirmDialog';
+import ConfirmDialog from '../../shared/ConfirmDialog';
 import {useState} from 'react';
 import ManageGroupDialog from './ManageGroupDialog';
 import {useTranslation} from 'react-i18next';
@@ -52,9 +52,8 @@ export default function FilterDialogContainer({
         sx={{
           minHeight: '20vh',
           paddingLeft: 4,
-          paddingRight: 2,
+          paddingRight: 4,
           paddingTop: 2,
-          gap: '20px',
           display: 'flex',
           flexDirection: 'column',
         }}
@@ -92,6 +91,7 @@ export default function FilterDialogContainer({
           sx={{
             width: '200px',
             alignSelf: 'center',
+            marginTop: '20px',
           }}
           onClick={() => {
             setOpen(true);
