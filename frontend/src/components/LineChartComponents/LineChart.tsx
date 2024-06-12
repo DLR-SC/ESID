@@ -149,7 +149,7 @@ export default function LineChart({
     customLang: 'global',
     overrides: {},
   },
-}: LineChartProps) {
+}: LineChartProps): JSX.Element {
   const {t: defaultT, i18n} = useTranslation();
   const {t: customT} = useTranslation(localization.customLang);
   const theme = useTheme();
