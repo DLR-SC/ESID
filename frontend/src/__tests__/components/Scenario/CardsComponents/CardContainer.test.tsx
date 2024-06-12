@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
+
 import CardContainer from 'components/ScenarioComponents/CardsComponents/CardContainer';
 import React, {useState} from 'react';
 import {filterValue, cardValue} from 'types/Cardtypes';
@@ -105,7 +108,6 @@ describe('CardContainer', () => {
     expect(screen.getByText('scenario-names.Scenario 1')).toBeInTheDocument();
     expect(screen.getByText('scenario-names.Scenario 2')).toBeInTheDocument();
     expect(screen.getByText('scenario-names.Scenario 3')).toBeInTheDocument();
-    screen.debug();
   });
   const compartments: string[] = ['Compartment 1', 'Compartment 2', 'Compartment 3'];
 

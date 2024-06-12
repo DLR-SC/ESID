@@ -8,7 +8,7 @@ import {GroupFilter} from '../../types/Filtertypes';
 import {GroupCategories, GroupSubcategories} from 'store/services/groupApi';
 import {NumberFormatter} from 'util/hooks';
 import {useTranslation} from 'react-i18next';
-import {useAppDispatch, useAppSelector} from 'store/hooks';
+
 import {
   selectCompartment,
   selectScenario,
