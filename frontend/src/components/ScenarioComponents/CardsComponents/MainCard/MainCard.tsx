@@ -132,8 +132,7 @@ function MainCard({
           overflow: 'auto',
           paddingBottom: '9px',
           boxSizing: 'border-box',
-          minWidth: '200px',
-          maxWidth: '210px',
+          width: '200px',
           bgcolor: theme.palette.background.paper,
           zIndex: 0,
           display: 'flex',
@@ -179,6 +178,7 @@ function MainCard({
         activeScenario={activeScenarios?.includes(index) || false}
         activeScenarios={activeScenarios}
         numberSelectedScenario={numberSelectedScenario}
+        compartmentsExpanded={compartmentsExpanded}
         setActiveScenarios={setActiveScenarios}
         setSelectedScenario={setSelectedScenario}
         localization={localization}

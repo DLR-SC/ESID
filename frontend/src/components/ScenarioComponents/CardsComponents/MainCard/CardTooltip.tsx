@@ -27,6 +27,9 @@ interface CardTooltipProps {
   /* The number of the selected scenario. */
   numberSelectedScenario: number | null;
 
+  /* A boolean indicating whether the compartments are expanded. */
+  compartmentsExpanded: boolean;
+
   /* The number of the selected scenario. */
   setSelectedScenario: React.Dispatch<React.SetStateAction<number | null>>;
 
@@ -47,6 +50,7 @@ export default function CardTooltip({
   activeScenario,
   activeScenarios,
   numberSelectedScenario,
+  compartmentsExpanded,
   setActiveScenarios,
   setSelectedScenario,
   localization = {formatNumber: (value: number) => value.toString(), customLang: 'global', overrides: {}},
@@ -88,11 +92,11 @@ export default function CardTooltip({
       sx={{
         zIndex: 2,
         width: 'full',
-        height: '50px',
-        borderRadius: '0 0 4px 4px',
+        height: compartmentsExpanded ? '40px' : '50px',
         boxShadow: hover || activeScenarios?.includes(index) ? 'none' : `0px 0px 0px 6px ${hexToRGB(color, 0.4)}`,
         display: hover ? 'flex' : 'none',
         alignItems: 'flex-end',
+        alignContent: 'flex-start',
       }}
     >
       <Tooltip
