@@ -8,6 +8,8 @@ import {DatePicker} from '@mui/x-date-pickers';
 import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
 import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
 import React from 'react';
+import {Localization} from 'types/localization';
+import {useTranslation} from 'react-i18next';
 
 interface DatePickerProps {
   /* Start day, the one displayed with a dashed line in the line chart */
@@ -21,19 +23,33 @@ interface DatePickerProps {
 
   /* Maximum date pickable for which some data are provided */
   maxDate: string | null;
+
+  /*An object containing localization information (translation & number formattation).*/
+  localization?: Localization;
 }
 
 /**
  * This component renders the MUI date picker
  */
-export default function ReferenceDatePicker({startDay, setStartDay, minDate, maxDate}: DatePickerProps) {
+export default function ReferenceDatePicker({
+  startDay,
+  setStartDay,
+  minDate,
+  maxDate,
+  localization = {formatNumber: (value: number) => value.toString(), customLang: 'global', overrides: {}},
+}: DatePickerProps) {
   // Function used to update the starting date
+  const {t: defaultT} = useTranslation();
+  const {t: customT} = useTranslation(localization.customLang);
   const updateDate = (newDate: Dayjs | null): void => {
-    if (newDate) {
+    if (
+      (newDate && minDate && maxDate && newDate.isAfter(dayjs(minDate)) && newDate.isBefore(dayjs(maxDate))) ||
+      (newDate && minDate && newDate.isSame(dayjs(minDate))) ||
+      (newDate && maxDate && newDate.isSame(dayjs(maxDate)))
+    )
       setStartDay(newDate.toString());
-    }
+    else return;
   };
-
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Box
@@ -47,7 +63,11 @@ export default function ReferenceDatePicker({startDay, setStartDay, minDate, max
         }}
       >
         <DatePicker<Dayjs>
-          label={'Reference-day'}
+          label={
+            localization.overrides && localization.overrides['scenario.reference-day']
+              ? customT(localization.overrides['scenario.reference-day'])
+              : defaultT('scenario.reference-day')
+          }
           value={dayjs(startDay)}
           minDate={dayjs(minDate)}
           maxDate={dayjs(maxDate)}

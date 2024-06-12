@@ -28,7 +28,7 @@ import React from 'react';
 import CardContainer from './CardsComponents/CardContainer';
 import CompartmentsRows from './CompartmentsComponents/CompartmentsRows';
 import FilterDialogContainer from './FilterComponents/FilterDialogContainer';
-import GeneralButton from './GeneralButtonComponents/GeneralButton';
+import GeneralButton from './ExpandedButtonComponents/ExpandedButton';
 import ReferenceDatePicker from './ReferenceDatePickerComponents.tsx/ReferenceDatePicker';
 import {GroupResponse} from 'types/group';
 import {SimulationModel, SimulationDataByNode, Simulations} from 'types/scenario';
@@ -396,6 +396,7 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
                 setStartDay={setStartDay}
                 minDate={useAppSelector((state) => state.dataSelection.minDate)}
                 maxDate={useAppSelector((state) => state.dataSelection.maxDate)}
+                localization={localization}
               />
               <Box
                 sx={{

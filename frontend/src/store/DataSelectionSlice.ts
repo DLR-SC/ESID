@@ -44,7 +44,6 @@ const initialState: DataSelection = {
   compartment: null,
   compartmentsExpanded: null,
   activeScenarios: [0],
-
   simulationStart: null,
   minDate: null,
   maxDate: null,

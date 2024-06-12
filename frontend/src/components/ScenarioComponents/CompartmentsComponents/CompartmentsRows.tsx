@@ -64,6 +64,7 @@ export default function CompartmentsRows({
           }}
         >
           <List
+            id='compartments-list'
             dense
             sx={{
               display: 'flex',
