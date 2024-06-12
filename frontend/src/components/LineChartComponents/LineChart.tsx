@@ -38,27 +38,68 @@ interface GroupFilter {
 }
 
 interface LineChartProps {
+  /** Optional unique identifier for the chart. */
   chartId?: string;
+
+  /** The currently selected date in the chart. */
   selectedDate: string;
+
+  /** Callback function to update the selected date. */
   setSelectedDate: (date: string) => void;
+
+  /** Optional callback function to get the top position of the reference date in the graph. */
   setReferenceDayBottom?: (docPos: number) => void;
+
+  /** Optional array of arrays containing simulation data points, where each data point includes a day and its corresponding value. The first element in the array should be null. */
   simulationData?: ({day: string; value: number}[] | null)[] | null;
+
+  /** Optional function to determine the chart name for a given simulation scenario. */
   simulationDataChartName?: (scenario: Scenario) => string;
+
+  /** Array of data points representing case data, where each data point includes a day and its corresponding value. */
   caseData: {day: string; value: number}[] | undefined;
+
+  /** Optional array of arrays containing percentile data points, where each data point includes a day and its corresponding value. */
   percentileData?: {day: string; value: number}[][] | null;
+
+  /** Optional dictionary of filtered group data points, where each entry includes a day and its corresponding value. */
   groupFilterData?: Dictionary<{day: string; value: number}[]> | null;
+
+  /** Optional minimum date for the chart. */
   minDate?: string | null;
+
+  /** Optional maximum date for the chart. */
   maxDate?: string | null;
+
+  /** Optional currently selected scenario identifier. */
   selectedScenario?: number | null;
+
+  /** Optional array of active scenario identifiers. */
   activeScenarios?: number[] | null;
+
+  /** Optional reference day for the chart. */
   referenceDay?: string | null;
+
+  /** The currently selected compartment in the chart. */
   selectedCompartment: string;
+
+  /** Optional list of scenarios available for selection. */
   scenarioList?: ScenarioList | null;
+
+  /** Optional dictionary of group filter configurations. */
   groupFilterList?: Dictionary<GroupFilter> | null;
+
+  /** Optional name for the exported file. */
   exportedFileName?: string;
+
+  /** Optional localization settings for the chart. */
   localization?: Localization;
 }
 
+/**
+ * React Component to render the Linechart Section
+ * @returns {JSX.Element} JSX Element to render the linechart container and the graphs within.
+ */
 export default function LineChart({
   chartId = 'chartdiv',
   selectedDate,
