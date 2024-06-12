@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
 import TableHead from '@mui/material/TableHead';
@@ -14,9 +14,11 @@ import {useTheme} from '@mui/material/styles';
 import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
 import MathMarkdown from './shared/MathMarkdown';
-import {ParameterData, useGetScenarioParametersQuery} from '../store/services/scenarioApi';
+import {ParameterData, useGetScenarioParametersQuery, useGetSimulationsQuery} from '../store/services/scenarioApi';
 import {useTranslation} from 'react-i18next';
 import {useGetGroupSubcategoriesQuery} from '../store/services/groupApi';
+import {useAppSelector} from '../store/hooks';
+import GridOff from '@mui/icons-material/GridOff';
 
 /**
  * This component visualizes the parameters of the selected scenario. It uses a table with the following format:
@@ -31,28 +33,84 @@ import {useGetGroupSubcategoriesQuery} from '../store/services/groupApi';
  * be different socio-economic groups, e.g. age.
  */
 export default function ParameterEditor() {
-  const {t} = useTranslation('backend');
+  const {t} = useTranslation();
   const theme = useTheme();
-  const {data} = useGetScenarioParametersQuery(1);
-  const {data: groups} = useGetGroupSubcategoriesQuery();
+
+  const [scenarioId, setScenarioId] = useState<number | null>(null);
+
+  const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
+  const {data: simulations} = useGetSimulationsQuery();
+  const {data: parameters} = useGetScenarioParametersQuery(scenarioId);
+
+  // This effect gets the id of the scenario, where the parameters are stored.
+  useEffect(() => {
+    const scenario = simulations?.results.find((sim) => sim.id === selectedScenario);
+
+    // The scenario id is unfortunately hidden in a URL. It is always the last number in the URL, so we use the
+    // following regex to extract that number.
+    const scenarioIdResult = scenario?.scenario.match(/(\d+)(?!.*\d)/);
+    if (scenarioIdResult) {
+      const id = parseInt(scenarioIdResult[0]);
+      setScenarioId(id);
+    } else {
+      setScenarioId(null);
+    }
+  }, [simulations, selectedScenario]);
+
+  if (scenarioId !== null) {
+    return (
+      <TableContainer sx={{background: theme.palette.background.paper, height: '100%'}}>
+        <Table stickyHeader size='small' sx={{position: 'relative'}}>
+          <TableHeader />
+          <TableBody>
+            {parameters?.map((entry) => <ParameterRow key={'row-' + crypto.randomUUID()} params={entry} />)}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    );
+  }
 
   return (
-    <TableContainer sx={{background: theme.palette.background.paper, height: '100%'}}>
-      <Table stickyHeader size='small' sx={{position: 'relative'}}>
-        <TableHead>
-          <TableRow>
-            <ParameterColumHeader colSpan={2} name='Parameter' />
-            {groups?.results // Currently only age groups are supported. We also need to ignore the 'total' group.
-              ?.filter((group) => group.key !== 'total')
-              .filter((group) => group.category === 'age')
-              .map((group) => <ParameterColumHeader key={group.key} name={t(`group-filters.groups.${group.key}`)} />)}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {data?.map((entry) => <ParameterRow key={'row-' + crypto.randomUUID()} params={entry} />)}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <Box sx={{background: theme.palette.background.paper, display: 'flex', flexDirection: 'column', height: '100%'}}>
+      <TableContainer>
+        <Table stickyHeader size='small' sx={{position: 'relative'}}>
+          <TableHeader />
+        </Table>
+      </TableContainer>
+      <Box
+        sx={{
+          margin: 'auto',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexDirection: 'column',
+        }}
+      >
+        <GridOff color='primary' fontSize='large' />
+        <Typography variant='body1'>{t('parameters.no-parameters')}</Typography>
+      </Box>
+    </Box>
+  );
+}
+
+/**
+ * Creates the header row of the parameter editor.
+ */
+function TableHeader(): JSX.Element {
+  const {t: tBackend} = useTranslation('backend');
+  const {data: groups} = useGetGroupSubcategoriesQuery();
+  return (
+    <TableHead>
+      <TableRow>
+        <ParameterColumHeader colSpan={2} name='Parameter' />
+        {groups?.results // Currently only age groups are supported. We also need to ignore the 'total' group.
+          ?.filter((group) => group.key !== 'total')
+          .filter((group) => group.category === 'age')
+          .map((group) => (
+            <ParameterColumHeader key={group.key} name={tBackend(`group-filters.groups.${group.key}`)} />
+          ))}
+      </TableRow>
+    </TableHead>
   );
 }
 

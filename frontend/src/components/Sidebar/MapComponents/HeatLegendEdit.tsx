@@ -19,14 +19,36 @@ import {Localization} from 'types/localization';
 import {useTranslation} from 'react-i18next';
 
 interface HeatLegendEditProps {
+  /**
+   * Function to set a new heatmap legend.
+   */
   setLegend: (legend: HeatmapLegend) => void;
+
+  /**
+   * The current heatmap legend to be edited.
+   */
   legend: HeatmapLegend;
+
+  /**
+   * Optional ID of the selected scenario. Defaults to null.
+   */
   selectedScenario?: number | null;
+
+  /**
+   * Optional localization settings for the component.
+   * Includes number formatting and language overrides.
+   */
   localization?: Localization;
+
+  /**
+   * Optional URL to fetch the legend presets from. Defaults to null.
+   */
   legendPresetsUrl?: string | null;
 }
+
 /**
- * This component displays an edit button to access a modal. In the modal you can edit the heatmap legend.
+ * React Component to render a Heatmap Legend Editor.
+ * @returns {JSX.Element} JSX Element to render the Heatmap Legend Editor.
  */
 export default function HeatLegendEdit({
   setLegend,
@@ -38,12 +60,12 @@ export default function HeatLegendEdit({
     overrides: {},
   },
   legendPresetsUrl = null,
-}: HeatLegendEditProps) {
+}: HeatLegendEditProps): JSX.Element {
   const theme = useTheme();
   const {t: defaultT} = useTranslation();
   const {t: customT} = useTranslation(localization.customLang);
-  // // This contains all legends using the default colors.
-  // const [defaultLegends, setDefaultLegends] = useState<Array<HeatmapLegend>>([]);
+
+  // This contains all legends using the default colors.
   const defaultLegends = useDefaultLegends();
 
   // This contains all legends from the presets file.

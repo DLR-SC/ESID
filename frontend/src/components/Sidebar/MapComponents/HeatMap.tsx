@@ -17,30 +17,77 @@ import React from 'react';
 import {Localization} from 'types/localization';
 
 interface MapProps {
+  /** The data to be displayed on the map, in GeoJSON format. */
   mapData: undefined | FeatureCollection;
+
+  /** Optional unique identifier for the map. Default is 'map'. */
   mapId?: string;
+
+  /** Optional height for the map. Default is '650px'. */
   mapHeight?: string;
+
+  /** Optional default fill color for the map regions. Default is '#8c8c8c'. */
   defaultFill?: number | string;
+
+  /** Optional fill opacity for the map regions. Default is 1. */
   fillOpacity?: number;
+
+  /** Optional function to generate tooltip text for each region based on its data. Default is a function that returns the region's ID. */
   tooltipText?: (regionData: FeatureProperties) => string;
+
+  /** Optional function to generate tooltip text while data is being fetched. Default is a function that returns 'Loading...'. */
   tooltipTextWhileFetching?: (regionData: FeatureProperties) => string;
+
+  /** The default selected region's data. */
   defaultSelectedValue: FeatureProperties;
+
+  /** Optional currently selected scenario identifier. */
   selectedScenario?: number | null;
+
+  /** Optional flag indicating if data is being fetched. Default is false. */
   isDataFetching?: boolean;
+
+  /** Array of values for the map regions, where each value includes an ID and a corresponding numeric value. */
   values: {id: string | number; value: number}[] | undefined;
+
+  /** Callback function to update the selected region's data. */
   setSelectedArea: (area: FeatureProperties) => void;
+
+  /** The currently selected region's data. */
   selectedArea: FeatureProperties;
+
+  /** The maximum aggregated value for the heatmap legend. */
   aggregatedMax: number;
+
+  /** Callback function to update the maximum aggregated value. */
   setAggregatedMax: (max: number) => void;
+
+  /** Optional fixed maximum value for the heatmap legend. */
   fixedLegendMaxValue?: number | null;
+
+  /** The heatmap legend configuration. */
   legend: HeatmapLegend;
+
+  /** Reference to the heatmap legend element. */
   legendRef: React.MutableRefObject<am5.HeatLegend | null>;
+
+  /** Optional flag indicating if data loading takes a long time. Default is false. */
   longLoad?: boolean;
+
+  /** Optional callback function to update the long load flag. Default is an empty function. */
   setLongLoad?: (longLoad: boolean) => void;
+
+  /** Optional localization settings for the heatmap. */
   localization?: Localization;
+
+  /** Optional identifier for mapping values to regions. Default is 'id'. */
   idValuesToMap?: string;
 }
 
+/**
+ * React Component to render a Heatmap.
+ * @returns {JSX.Element} JSX Element to render a Heatmap.
+ */
 export default function HeatMap({
   mapData,
   mapId = 'map',
@@ -64,7 +111,7 @@ export default function HeatMap({
   setLongLoad = () => {},
   localization,
   idValuesToMap = 'id',
-}: MapProps) {
+}: MapProps): JSX.Element {
   const theme = useTheme();
   const lastSelectedPolygon = useRef<am5map.MapPolygon | null>(null);
   const [polygonSeries, setPolygonSeries] = useState<am5map.MapPolygonSeries | null>(null);

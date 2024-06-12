@@ -38,27 +38,93 @@ interface GroupFilter {
 }
 
 interface LineChartProps {
+  /** Optional unique identifier for the chart. Defaults to 'chartdiv'. */
   chartId?: string;
+
+  /** The currently selected date in the chart in ISO format (YYYY-MM-DD). */
   selectedDate: string;
+
+  /** Callback function to update the selected date in the chart. */
   setSelectedDate: (date: string) => void;
+
+  /**
+   * Optional callback function to get the x-coordinate position of the reference date in the chart.
+   * This can be used for positioning elements in relation to the reference date.
+   */
   setReferenceDayBottom?: (docPos: number) => void;
+
+  /**
+   * Optional array of arrays containing simulation data points.
+   * Each sub-array corresponds to a different simulation scenario and contains objects with `day` and `value` properties.
+   * The first element in the array should be null.
+   */
   simulationData?: ({day: string; value: number}[] | null)[] | null;
-  simulationDataChartName: (scenario: Scenario) => string;
+
+  /**
+   * Optional function to determine the chart name for a given simulation scenario.
+   * This function is passed a `Scenario` object and returns a string name.
+   */
+  simulationDataChartName?: (scenario: Scenario) => string;
+
+  /**
+   * Array of data points representing case data, where each data point includes a `day` and its corresponding `value`.
+   * This data is used to plot the actual case data on the chart.
+   */
   caseData: {day: string; value: number}[] | undefined;
+
+  /**
+   * Optional array of arrays containing percentile data points, where each data point includes a `day` and its corresponding `value`.
+   * This data is used to plot percentile ranges on the chart.
+   */
   percentileData?: {day: string; value: number}[][] | null;
+
+  /**
+   * Optional dictionary of filtered group data points, where each entry includes a `day` and its corresponding `value`.
+   * This data is used to plot different filtered group data on the chart.
+   */
   groupFilterData?: Dictionary<{day: string; value: number}[]> | null;
+
+  /** Optional minimum date for the chart in ISO format (YYYY-MM-DD). */
   minDate?: string | null;
+
+  /** Optional maximum date for the chart in ISO format (YYYY-MM-DD). */
   maxDate?: string | null;
+
+  /** Optional currently selected scenario identifier. */
   selectedScenario?: number | null;
+
+  /** Optional array of active scenario identifiers. These scenarios will be displayed on the chart. */
   activeScenarios?: number[] | null;
+
+  /** Optional reference day for the chart in ISO format (YYYY-MM-DD). */
   referenceDay?: string | null;
+
+  /** The currently selected compartment in the chart, which represents different categories or groups in the data. */
   selectedCompartment: string;
-  scenarioList: ScenarioList;
+
+  /**
+   * Optional list of scenarios available for selection.
+   * This list includes the details of all possible scenarios that can be plotted on the chart.
+   */
+  scenarioList?: ScenarioList | null;
+
+  /**
+   * Optional dictionary of group filter configurations.
+   * This includes settings for how different groups should be filtered and displayed on the chart.
+   */
   groupFilterList?: Dictionary<GroupFilter> | null;
+
+  /** Optional name for the exported file when the chart data is downloaded. Defaults to 'Data'. */
   exportedFileName?: string;
+
+  /** Optional localization settings for the chart, including number formatting and language overrides. */
   localization?: Localization;
 }
 
+/**
+ * React Component to render the Linechart Section
+ * @returns {JSX.Element} JSX Element to render the linechart container and the graphs within.
+ */
 export default function LineChart({
   chartId = 'chartdiv',
   selectedDate,
@@ -66,7 +132,7 @@ export default function LineChart({
   setReferenceDayBottom = () => {},
   simulationData = null,
   caseData,
-  simulationDataChartName,
+  simulationDataChartName = () => '',
   percentileData = null,
   groupFilterData = null,
   minDate = null,
@@ -75,7 +141,7 @@ export default function LineChart({
   activeScenarios = null,
   referenceDay = null,
   selectedCompartment,
-  scenarioList,
+  scenarioList = null,
   groupFilterList = null,
   exportedFileName = 'Data',
   localization = {
@@ -302,31 +368,33 @@ export default function LineChart({
       });
 
       // Add series for each scenario
-      Object.entries(scenarioList.scenarios).forEach(([scenarioId, scenario]) => {
-        const series = chart.series.push(
-          LineSeries.new(root, {
-            xAxis: xAxis,
-            yAxis: yAxis,
-            id: `${chartId}_${scenarioId}`,
-            name: simulationDataChartName(scenario),
-            valueXField: 'date',
-            valueYField: scenarioId,
-            // Prevent data points from connecting across gaps in the data
-            connect: false,
-            // Fallback Tooltip (if HTML breaks for some reason)
-            // For text color: loop around the theme's scenario color list if scenario IDs exceed color list length, then pick first color of sub-palette which is the main color
-            tooltip: Tooltip.new(root, {
-              labelText: `[bold ${
-                theme.custom.scenarios[scenario.id % theme.custom.scenarios.length][0]
-              }]${simulationDataChartName(scenario)}:[/] {${scenarioId}}`,
-            }),
-            stroke: color(theme.custom.scenarios[scenario.id % theme.custom.scenarios.length][0]),
-          })
-        );
-        series.strokes.template.setAll({
-          strokeWidth: 2,
+      if (scenarioList) {
+        Object.entries(scenarioList.scenarios).forEach(([scenarioId, scenario]) => {
+          const series = chart.series.push(
+            LineSeries.new(root, {
+              xAxis: xAxis,
+              yAxis: yAxis,
+              id: `${chartId}_${scenarioId}`,
+              name: simulationDataChartName(scenario),
+              valueXField: 'date',
+              valueYField: scenarioId,
+              // Prevent data points from connecting across gaps in the data
+              connect: false,
+              // Fallback Tooltip (if HTML breaks for some reason)
+              // For text color: loop around the theme's scenario color list if scenario IDs exceed color list length, then pick first color of sub-palette which is the main color
+              tooltip: Tooltip.new(root, {
+                labelText: `[bold ${
+                  theme.custom.scenarios[scenario.id % theme.custom.scenarios.length][0]
+                }]${simulationDataChartName(scenario)}:[/] {${scenarioId}}`,
+              }),
+              stroke: color(theme.custom.scenarios[scenario.id % theme.custom.scenarios.length][0]),
+            })
+          );
+          series.strokes.template.setAll({
+            strokeWidth: 2,
+          });
         });
-      });
+      }
 
       // Add series for groupFilter (if there are any)
       if (groupFilterList && selectedScenario) {
@@ -787,7 +855,7 @@ export default function LineChart({
     if (activeScenarios) {
       activeScenarios.forEach((scenarioId) => {
         // Skip case data (already added)
-        if (scenarioId === 0 || !scenarioId || !scenarioList.scenarios[scenarioId]) {
+        if (scenarioId === 0 || !scenarioId || !scenarioList || !scenarioList.scenarios[scenarioId]) {
           return;
         }
 

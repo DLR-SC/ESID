@@ -10,19 +10,58 @@ import {useTheme} from '@mui/material/styles';
 import {Localization} from 'types/localization';
 
 interface HeatProps {
+  /**
+   * Object defining the legend for the heatmap.
+   * Includes the steps and normalization settings for the legend.
+   */
   legend: HeatmapLegend;
-  exposeLegend: (legend: am5.HeatLegend | null) => void;
+
+  /**
+   * Optional callback function to expose the legend object (an instance of `am5.HeatLegend`).
+   * This can be used to interact with the legend outside of the component.
+   */
+  exposeLegend?: (legend: am5.HeatLegend | null) => void;
+
+  /**
+   * The minimum value represented on the heatmap. This value is used as the start value for the legend.
+   */
   min: number;
+
+  /**
+   * The maximum value represented on the heatmap. This value is used as the end value for the legend.
+   */
   max: number;
+
+  /**
+   * Boolean flag indicating whether to display text labels for the start and end values on the legend.
+   */
   displayText: boolean;
+
+  /**
+   * Optional unique identifier for the legend. Defaults to 'legend'.
+   */
   id?: string;
+
+  /**
+   * Optional CSS properties to style the legend container.
+   * Defaults to width: '100%', margin: '5px', height: '50px'.
+   */
   style?: React.CSSProperties;
+
+  /**
+   * Optional localization settings for the legend.
+   * Includes number formatting and language overrides.
+   */
   localization?: Localization;
 }
 
+/**
+ * React Component to render a Legend for a Heatmap.
+ * @returns {JSX.Element} JSX Element to render the Heatmap Legend.
+ */
 export default function HeatLegend({
   legend,
-  exposeLegend,
+  exposeLegend = () => {},
   min,
   max,
   displayText,
@@ -37,7 +76,7 @@ export default function HeatLegend({
     customLang: 'global',
     overrides: {},
   },
-}: Readonly<HeatProps>) {
+}: Readonly<HeatProps>): JSX.Element {
   const unique_id = useMemo(() => id + String(Date.now() + Math.random()), [id]);
   const theme = useTheme();
 

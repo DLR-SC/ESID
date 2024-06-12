@@ -5,6 +5,24 @@ SPDX-License-Identifier: CC-BY-4.0
 
 # ESID Changelog
 
+## v0.3.1-beta
+
+**Release Date:** TBD
+
+### New Features
+
+### Improvements
+
+- Added translations for additional scenarios.
+
+### Bug fixes
+
+- Missing translations were fixed.
+- The heat legend selection now shows a preview for all legends again.
+- The Parameters will now correctly be associated with the selected scenario and an info will be displayed, when no parameters are available.
+
+---
+
 ## v0.3.0-beta
 
 **Release Date:** 03.05.2024

@@ -23,6 +23,11 @@ interface SearchBarProps {
   borderColorHover?: string;
   borderColorFocus?: string;
 }
+
+/**
+ * React Component to render a Search Bar for the Map.
+ * @returns {JSX.Element} JSX Element to render the Search Bar.
+ */
 export default function SearchBar({
   data,
   defaultValue,
@@ -33,7 +38,7 @@ export default function SearchBar({
   valueEqualProperty = 'id',
   onChange,
   placeholder = '',
-}: SearchBarProps) {
+}: SearchBarProps): JSX.Element {
   const [featureproperties, setFeatureProperties] = useState<FeatureProperties[]>([]);
   const theme = useTheme();
 

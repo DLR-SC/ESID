@@ -5,6 +5,24 @@ SPDX-License-Identifier: CC-BY-4.0
 
 # ESID Änderungshistorie
 
+## v0.3.1-beta
+
+**Veröffentlichungsdatum:** TBD
+
+### Neue Funktionen
+
+### Verbesserungen
+
+- Es wurde mehr Übersetzungen für Szenarien hinzugefügt.
+
+### Fehlerbehebungen
+
+- Fehlende Übersetzungen wurden ergänzt.
+- Die Auswahl der Farblegenden zeigt jetzt wieder eine Vorschau für alle Optionen.
+- Die Parameter werden jetzt korrekt dem ausgewählten Szenario zugeordnet und eine Info wird angezeigt, wenn keine Parameter verfügbar sind.
+
+---
+
 ## v0.3.0-beta
 
 **Veröffentlichungsdatum:** 03.05.2024
