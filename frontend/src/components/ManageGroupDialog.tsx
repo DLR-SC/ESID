@@ -280,6 +280,8 @@ function GroupFilterCard(props: GroupFilterCardProps) {
           open={confirmDialogOpen}
           title={t('group-filters.confirm-deletion-title')}
           text={t('group-filters.confirm-deletion-text', {groupName: props.item.name})}
+          abortButtonText={t('group-filters.close')}
+          confirmButtonText={t('group-filters.delete')}
           onAnswer={(answer) => {
             if (answer) {
               dispatch(deleteGroupFilter(props.item.id));

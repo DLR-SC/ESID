@@ -38,61 +38,86 @@ interface GroupFilter {
 }
 
 interface LineChartProps {
-  /** Optional unique identifier for the chart. */
+  /** Optional unique identifier for the chart. Defaults to 'chartdiv'. */
   chartId?: string;
 
-  /** The currently selected date in the chart. */
+  /** The currently selected date in the chart in ISO format (YYYY-MM-DD). */
   selectedDate: string;
 
-  /** Callback function to update the selected date. */
+  /** Callback function to update the selected date in the chart. */
   setSelectedDate: (date: string) => void;
 
-  /** Optional callback function to get the top position of the reference date in the graph. */
+  /**
+   * Optional callback function to get the x-coordinate position of the reference date in the chart.
+   * This can be used for positioning elements in relation to the reference date.
+   */
   setReferenceDayBottom?: (docPos: number) => void;
 
-  /** Optional array of arrays containing simulation data points, where each data point includes a day and its corresponding value. The first element in the array should be null. */
+  /**
+   * Optional array of arrays containing simulation data points.
+   * Each sub-array corresponds to a different simulation scenario and contains objects with `day` and `value` properties.
+   * The first element in the array should be null.
+   */
   simulationData?: ({day: string; value: number}[] | null)[] | null;
 
-  /** Optional function to determine the chart name for a given simulation scenario. */
+  /**
+   * Optional function to determine the chart name for a given simulation scenario.
+   * This function is passed a `Scenario` object and returns a string name.
+   */
   simulationDataChartName?: (scenario: Scenario) => string;
 
-  /** Array of data points representing case data, where each data point includes a day and its corresponding value. */
+  /**
+   * Array of data points representing case data, where each data point includes a `day` and its corresponding `value`.
+   * This data is used to plot the actual case data on the chart.
+   */
   caseData: {day: string; value: number}[] | undefined;
 
-  /** Optional array of arrays containing percentile data points, where each data point includes a day and its corresponding value. */
+  /**
+   * Optional array of arrays containing percentile data points, where each data point includes a `day` and its corresponding `value`.
+   * This data is used to plot percentile ranges on the chart.
+   */
   percentileData?: {day: string; value: number}[][] | null;
 
-  /** Optional dictionary of filtered group data points, where each entry includes a day and its corresponding value. */
+  /**
+   * Optional dictionary of filtered group data points, where each entry includes a `day` and its corresponding `value`.
+   * This data is used to plot different filtered group data on the chart.
+   */
   groupFilterData?: Dictionary<{day: string; value: number}[]> | null;
 
-  /** Optional minimum date for the chart. */
+  /** Optional minimum date for the chart in ISO format (YYYY-MM-DD). */
   minDate?: string | null;
 
-  /** Optional maximum date for the chart. */
+  /** Optional maximum date for the chart in ISO format (YYYY-MM-DD). */
   maxDate?: string | null;
 
   /** Optional currently selected scenario identifier. */
   selectedScenario?: number | null;
 
-  /** Optional array of active scenario identifiers. */
+  /** Optional array of active scenario identifiers. These scenarios will be displayed on the chart. */
   activeScenarios?: number[] | null;
 
-  /** Optional reference day for the chart. */
+  /** Optional reference day for the chart in ISO format (YYYY-MM-DD). */
   referenceDay?: string | null;
 
-  /** The currently selected compartment in the chart. */
+  /** The currently selected compartment in the chart, which represents different categories or groups in the data. */
   selectedCompartment: string;
 
-  /** Optional list of scenarios available for selection. */
+  /**
+   * Optional list of scenarios available for selection.
+   * This list includes the details of all possible scenarios that can be plotted on the chart.
+   */
   scenarioList?: ScenarioList | null;
 
-  /** Optional dictionary of group filter configurations. */
+  /**
+   * Optional dictionary of group filter configurations.
+   * This includes settings for how different groups should be filtered and displayed on the chart.
+   */
   groupFilterList?: Dictionary<GroupFilter> | null;
 
-  /** Optional name for the exported file. */
+  /** Optional name for the exported file when the chart data is downloaded. Defaults to 'Data'. */
   exportedFileName?: string;
 
-  /** Optional localization settings for the chart. */
+  /** Optional localization settings for the chart, including number formatting and language overrides. */
   localization?: Localization;
 }
 
