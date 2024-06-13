@@ -5,15 +5,22 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import LoadingOverlay from './LoadingOverlay';
 import {SxProps} from '@mui/system';
+import {useTheme} from '@mui/material/styles';
 
 /**
  * This is a wrapper component for a container that can have a loading indicator overlayed.
  */
 export default function LoadingContainer(props: LoadingContainerProps): JSX.Element {
+  const theme = useTheme();
+
   return (
     <Box sx={{...props.sx, position: 'relative'}}>
       {props.children}
-      <LoadingOverlay show={props.show} overlayColor={props.overlayColor} />
+      <LoadingOverlay
+        show={props.show}
+        overlayColor={props.overlayColor}
+        throbberColor={props.throbberColor ? props.throbberColor : theme.palette.primary.main}
+      />
     </Box>
   );
 }
@@ -27,6 +34,9 @@ interface LoadingContainerProps {
 
   /** The color of the overlay. */
   overlayColor: string;
+
+  /** The color of the throbber. Theme primary color by default. */
+  throbberColor?: string;
 
   /** React prop to allow nesting components. Do not set manually. */
   children: React.ReactNode;
