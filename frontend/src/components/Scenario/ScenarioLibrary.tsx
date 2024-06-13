@@ -214,7 +214,9 @@ function LibraryCard(props: Readonly<{id: number; label: string}>): JSX.Element 
                 color: theme.palette.primary.light,
                 textAlign: 'center',
                 flexGrow: 1,
-                alignContent: 'center',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
               }}
               aria-label={'+'}
             >
