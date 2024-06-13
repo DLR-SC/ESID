@@ -42,6 +42,7 @@
     deactivate: 'Scenario deaktivieren',
     'manage-groups': 'Filter',
     'reference-day': 'Referenztag',
+    hide: 'In die Bibliothek verschieben'
   },
   'group-filters': {
     title: 'Gruppen Verwalten',

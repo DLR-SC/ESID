@@ -51,6 +51,7 @@
     deactivate: 'Deactivate scenario',
     'manage-groups': 'Filters',
     'reference-day': 'Reference Day',
+    hide: 'Move to the library'
   },
   'group-filters': {
     title: 'Manage Groups',

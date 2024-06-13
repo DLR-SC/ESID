@@ -21,9 +21,9 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import {GroupFilterAppendage} from './GroupFilterAppendage';
-import {Delete} from '@mui/icons-material';
 import {hideScenario} from '../../store/DataSelectionSlice';
 import {ScenarioState} from './hooks';
+import Close from '@mui/icons-material/Close';
 
 interface DataCardProps {
   scenario: ScenarioState;
@@ -182,7 +182,7 @@ export function DataCard(props: Readonly<DataCardProps>): JSX.Element {
               }}
               aria-label={t('scenario.hide')}
             >
-              <Delete />
+              <Close />
             </IconButton>
           </Tooltip>
         </Box>
