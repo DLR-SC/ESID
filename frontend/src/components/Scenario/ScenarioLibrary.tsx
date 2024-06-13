@@ -57,13 +57,13 @@ export default function ScenarioLibrary(): JSX.Element {
           marginTop: theme.spacing(2),
           fontWeight: 'bolder',
           fontSize: '3rem',
-          border: `2px ${theme.palette.divider} dashed`,
+          border: `2px ${theme.palette.primary.light} dashed`,
           borderRadius: '3px',
-          color: theme.palette.divider,
+          color: theme.palette.primary.light,
           alignSelf: 'top',
 
           '&:hover': {
-            border: `2px ${theme.palette.divider} dashed`,
+            border: `2px ${theme.palette.primary.light} dashed`,
             background: '#E7E7E7',
           },
         }}
