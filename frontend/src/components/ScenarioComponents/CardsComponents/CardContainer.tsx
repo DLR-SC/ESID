@@ -13,6 +13,7 @@ import {GroupFilter} from 'types/Filtertypes';
 import {Scenario} from 'store/ScenarioSlice';
 import {cardValue, filterValue} from 'types/Cardtypes';
 import {Localization} from 'types/localization';
+import {getScenarioPrimaryColor} from 'util/Theme';
 
 interface CardContainerProps {
   /* A boolean indicating whether the compartments are expanded. */
@@ -97,7 +98,7 @@ export default function CardContainer({
       <DataCard
         key={scenario.id}
         index={scenario.id}
-        color={scenario.id == 0 ? '#000000' : theme.custom.scenarios[scenario.id % theme.custom.scenarios.length][0]}
+        color={scenario.id == 0 ? '#000000' : getScenarioPrimaryColor(scenario.id, theme)}
         label={
           localization.overrides && localization.overrides[`scenario-names.${scenario.label}`]
             ? customT(localization.overrides[`scenario-names.${scenario.label}`])
