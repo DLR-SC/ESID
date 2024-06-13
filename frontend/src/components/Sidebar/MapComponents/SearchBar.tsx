@@ -4,12 +4,12 @@
 import Container from '@mui/material/Container';
 import {Box, Autocomplete, useTheme} from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import {SyntheticEvent, useEffect, useState} from 'react';
+import {SyntheticEvent} from 'react';
 import React from 'react';
-import {FeatureProperties, FeatureCollection, Feature} from 'types/map';
+import {FeatureProperties} from 'types/map';
 
 interface SearchBarProps {
-  data: undefined | FeatureCollection;
+  data: FeatureProperties[] | undefined;
   defaultValue?: FeatureProperties;
   sortProperty?: string;
   optionLabel: (option: FeatureProperties) => string;
@@ -30,7 +30,6 @@ interface SearchBarProps {
  */
 export default function SearchBar({
   data,
-  defaultValue,
   sortProperty,
   optionLabel,
   autoCompleteValue,
@@ -39,23 +38,8 @@ export default function SearchBar({
   onChange,
   placeholder = '',
 }: SearchBarProps): JSX.Element {
-  const [featureproperties, setFeatureProperties] = useState<FeatureProperties[]>([]);
   const theme = useTheme();
 
-  // fetch data from URL, add default value and sort by sortProperty
-  useEffect(() => {
-    if (!data) return;
-    const properties = data.features.map((feature: Feature) => {
-      return feature.properties;
-    });
-    if (defaultValue) properties.push(defaultValue);
-    if (sortProperty) {
-      properties.sort((a: FeatureProperties, b: FeatureProperties) => {
-        return a[sortProperty].toString().localeCompare(b[sortProperty].toString());
-      });
-      setFeatureProperties(properties);
-    }
-  }, [data, defaultValue, sortProperty]);
   return (
     <Container>
       <Box
@@ -98,7 +82,7 @@ export default function SearchBar({
           // selects highlighted option on focus loss
           //autoSelect
           // provide countyList as options for drop down
-          options={featureproperties}
+          options={data || []}
           // group dropdown contents by first letter (json array needs to be sorted alphabetically by name for this to work correctly)
           groupBy={sortProperty ? (option) => option[sortProperty].toString()[0] : undefined}
           // provide function to display options in dropdown menu

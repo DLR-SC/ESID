@@ -32,11 +32,20 @@ import {CaseDataByNode} from 'types/caseData';
 import {GroupResponse} from 'types/group';
 import {Simulations, SimulationModel, SimulationDataByNode} from 'types/scenario';
 import {Dictionary} from 'util/util';
+import data from '../assets/lk_germany_reduced.geojson?url';
+import {FeatureCollection, FeatureProperties} from 'types/map';
+import cologneDistricts from '../assets/stadtteile_cologne.geojson?url';
+import {District} from 'types/cologneDistricts';
+import searchbarMapData from '../assets/lk_germany_reduced_list.json?url';
+import searchbarCologneData from '../assets/stadtteile_cologne_list.json';
+import {useTranslation} from 'react-i18next';
 
 // Create the context
 export const DataContext = createContext<{
+  geoData: FeatureCollection | undefined;
   mapData: {id: string; value: number}[] | undefined;
   areMapValuesFetching: boolean;
+  searchBarData: FeatureProperties[] | undefined;
   chartCaseData: {day: string; value: number}[] | undefined;
   chartSimulationData: ({day: string; value: number}[] | null)[] | undefined;
   chartPercentileData: {day: string; value: number}[][] | undefined;
@@ -57,8 +66,10 @@ export const DataContext = createContext<{
   scenarioSimulationDataFirstCardFiltersValues: Dictionary<GroupResponse> | undefined;
   scenarioSimulationDataSecondCardFiltersValues: Dictionary<GroupResponse> | undefined;
 }>({
+  geoData: undefined,
   mapData: undefined,
   areMapValuesFetching: false,
+  searchBarData: undefined,
   chartCaseData: undefined,
   chartSimulationData: undefined,
   chartPercentileData: undefined,
@@ -82,7 +93,10 @@ export const DataContext = createContext<{
 
 // Create a provider component
 export const DataProvider = ({children}: {children: React.ReactNode}) => {
+  const {t} = useTranslation();
+  const [geoData, setGeoData] = useState<FeatureCollection>();
   const [mapData, setMapData] = useState<{id: string; value: number}[] | undefined>(undefined);
+  const [searchBarData, setSearchBarData] = useState<FeatureProperties[] | undefined>(undefined);
   const [processedChartCaseData, setProcessedChartCaseData] = useState<{day: string; value: number}[] | undefined>(
     undefined
   );
@@ -263,6 +277,110 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
   );
 
   useEffect(() => {
+    /* [CDtemp-begin] */
+    // Fetch both in one Promise
+    Promise.all([
+      fetch(data, {
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+      }).then((result) => result.json()),
+      fetch(cologneDistricts, {
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+      }).then((result) => result.json()),
+    ]).then(
+      // on promises accept
+      ([geodata, colognedata]: [GeoJSON.FeatureCollection, GeoJSON.FeatureCollection]) => {
+        // Remove Cologne from data
+        geodata.features = geodata.features.filter((feat) => feat.properties!['RS'] !== '05315');
+        // Add RS, GEN, BEZ to cologne districts
+        geodata.features.push(
+          ...colognedata.features.map((feat) => {
+            // Append Stadtteil ID to AGS
+            feat.properties!['RS'] = `05315${feat.properties!['Stadtteil_ID']}`;
+            // Append Name (e.g. Köln - Braunsfeld (Lindenthal))
+            feat.properties!['GEN'] = `Köln - ${feat.properties!['Stadtteil']} (${feat.properties!['Stadtbezirk']})`;
+            // Use ST for Stadtteil
+            feat.properties!['BEZ'] = 'ST';
+            return feat;
+          })
+        );
+        setGeoData(geodata as FeatureCollection);
+      },
+      // on promises reject
+      () => {
+        console.warn('Failed to fetch geoJSON');
+      }
+    );
+    /* [CDtemp-end] */
+    fetch(data, {
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+    })
+      .then((response) => response.json())
+      .then(
+        // resolve Promise
+        (geojson: FeatureCollection) => {
+          setGeoData(geojson);
+        },
+        // reject promise
+        () => {
+          console.warn('Failed to fetch geoJSON');
+        }
+      );
+  }, []);
+
+  useEffect(() => {
+    // get option list from assets
+    fetch(searchbarMapData, {
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+    })
+      .then((response) => {
+        // interpret content as JSON
+        return response.json();
+      })
+      .then(
+        // Resolve Promise
+        (jsonlist: FeatureProperties[]) => {
+          /* [CDtemp-begin] */
+          // append germany to list
+          jsonlist.push({RS: '00000', GEN: t('germany'), BEZ: ''});
+          // append city districts
+          jsonlist.push(
+            ...(searchbarCologneData as unknown as Array<District>).map((dist) => {
+              return {
+                RS: `05315${dist.Stadtteil_ID}`,
+                GEN: `Köln - ${dist.Stadtteil} (${dist.Stadtbezirk})`,
+                BEZ: 'ST',
+              };
+            })
+          );
+          /* [CDtemp-end] */
+          // sort list to put germany at the right place (loading and sorting takes 1.5 ~ 2 sec)
+          jsonlist.sort((a: FeatureProperties, b: FeatureProperties) => {
+            return a.GEN.toString().localeCompare(b.GEN.toString());
+          });
+          // fill countyList state with list
+          setSearchBarData(jsonlist);
+        },
+        // Reject Promise
+        () => {
+          console.warn('Did not receive proper county list');
+        }
+      );
+    // this init should only run once on first render
+  }, [t]);
+
+  useEffect(() => {
     if (simulationModelsData && simulationModelsData.results.length > 0) {
       const {key} = simulationModelsData.results[0];
       setSimulationModelKey(key);
@@ -344,8 +462,10 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
   return (
     <DataContext.Provider
       value={{
+        geoData: geoData,
         mapData: mapData,
         areMapValuesFetching: mapIsCaseDataFetching || mapIsSimulationDataFetching,
+        searchBarData: searchBarData,
         chartCaseData: processedChartCaseData,
         chartSimulationData: processedChartSimulationData,
         chartPercentileData: processedChartPercentileData,

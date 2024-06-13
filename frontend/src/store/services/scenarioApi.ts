@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import {Dictionary} from 'util/util';
+import {deepCopy, Dictionary} from 'util/util';
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 import {
   SimulationDataByDate,
@@ -10,6 +10,40 @@ import {
   SimulationModels,
   Simulations,
 } from '../../types/scenario';
+/* [CDtemp-begin] */
+import cologneData from '../../../assets/stadtteile_cologne_list.json';
+import {District} from '../../types/cologneDistricts';
+
+/** Checks if input node is a city district and returns the node to fetch data, and the city distrct suffix if there is one */
+function validateDistrictNode(inNode: string): {node: string; cologneDistrict?: string} {
+  if (inNode.length > 5) {
+    return {node: inNode.slice(0, 5), cologneDistrict: inNode.slice(-3)};
+  }
+  return {node: inNode.slice(0, 5)};
+}
+
+/** Applies the city district weight if a district suffix is supplied */
+function modifyDistrictResults(cologneDistrict: string | undefined, data: SimulationDataByNode): SimulationDataByNode {
+  // pass data if it is not for a city district
+  if (!cologneDistrict) return data;
+
+  // find weight for city district
+  const weight = (cologneData as unknown as Array<District>).find(
+    (dist) => dist.Stadtteil_ID === cologneDistrict
+  )!.Population_rel;
+
+  // loop thru days in data to replace compartment data
+  data.results = data.results.map(({day, compartments}) => {
+    // loop through compartments and apply weight
+    Object.keys(compartments).forEach((compName) => {
+      compartments[compName] *= weight;
+    });
+    return {day, compartments};
+  });
+  // return modified data
+  return data;
+}
+/* [CDtemp-end] */
 
 export const scenarioApi = createApi({
   reducerPath: 'scenarioApi',
@@ -38,30 +72,85 @@ export const scenarioApi = createApi({
       async queryFn(arg, _queryApi, _extraOptions, fetchWithBQ) {
         const groups = arg.groups && arg.groups.length > 0 ? `&groups=${arg.groups.join(',')}` : '&groups=total';
         const compartments = arg.compartments ? `&compartments=${arg.compartments.join(',')}` : '';
-
         const currResult = await fetchWithBQ(`simulation/${arg.id}/${arg.day}/?all${groups}${compartments}`);
         if (currResult.error) return {error: currResult.error};
 
         const data = currResult.data as SimulationDataByDate;
-
+        /* [CDtemp-begin] */
+        // get data for cologne
+        const cologneResult = data.results.find((res) => res.name === '05315');
+        // if cologne is in results also calculate districts
+        if (cologneResult) {
+          // loop thru cologne districts
+          (cologneData as unknown as Array<District>).forEach((dist) => {
+            // calculate compartment data
+            const districtCompartments = deepCopy(cologneResult.compartments);
+            // loop thru compartments
+            Object.keys(districtCompartments).forEach((compName) => {
+              // apply district weight
+              districtCompartments[compName] *= dist.Population_rel;
+            });
+            // create result entry for district
+            data.results.push({
+              name: `05315${dist.Stadtteil_ID}`,
+              compartments: districtCompartments,
+            });
+          });
+        }
+        /* [CDtemp-end] */
         return {data};
       },
     }),
 
     getSimulationDataByNode: builder.query<SimulationDataByNode, SimulationDataByNodeParameters>({
-      query: (arg: SimulationDataByNodeParameters) => {
+      async queryFn(arg, _queryApi, _extraOptions, fetchWithBQ) {
         const groups = arg.groups && arg.groups.length > 0 ? `&groups=${arg.groups.join(',')}` : '&groups=total';
         const compartments = arg.compartments ? `&compartments=${arg.compartments.join(',')}&all` : '';
 
-        return `simulation/${arg.id}/${arg.node}/?all${groups}${compartments}`;
+        /* [CDtemp-begin] */
+        const {node, cologneDistrict} = validateDistrictNode(arg.node);
+        /* [CDtemp-end] */
+
+        const currResult = await fetchWithBQ(
+          `simulation/${arg.id}/${
+            // [CDtemp] arg.node
+            node
+          }/?all${groups}${compartments}`
+        );
+        if (currResult.error) return {error: currResult.error};
+        // [CDtemp] const data = currResult.data as SimulationDataByNode;
+
+        /* [CDtemp-begin] */
+        // if node was cologne district apply weight
+        const data = modifyDistrictResults(cologneDistrict, currResult.data as SimulationDataByNode);
+        /* [CDtemp-end] */
+        return {data: data};
       },
     }),
 
     getSingleSimulationEntry: builder.query<SimulationDataByNode, SingleSimulationEntryParameters>({
-      query: (arg: SingleSimulationEntryParameters) =>
-        `simulation/${arg.id}/${arg.node}/?all&day=${arg.day}&groups=${
-          arg.groups && arg.groups.length > 0 ? arg.groups.join(',') : 'total'
-        }`,
+      async queryFn(arg, _queryApi, _extraOptions, fetchWithBQ) {
+        const day = arg.day ? `&day=${arg.day}` : '';
+        const groups = arg.groups && arg.groups.length > 0 ? `&groups=${arg.groups.join(',')}` : '&groups=total';
+
+        /* [CDtemp-begin] */
+        const {node, cologneDistrict} = validateDistrictNode(arg.node);
+        /* [CDtemp-end] */
+
+        const currResult = await fetchWithBQ(
+          `simulation/${arg.id}/${
+            // [CDtemp] arg.node
+            node
+          }/?all${day}${groups}`
+        );
+        if (currResult.error) return {error: currResult.error};
+        // [CDtemp] const data = currResult.data as SimulationDataByNode;
+
+        /* [CDtemp-begin] */
+        const data = modifyDistrictResults(cologneDistrict, currResult.data as SimulationDataByNode);
+        /* [CDtemp-end] */
+        return {data: data};
+      },
     }),
 
     getMultipleSimulationDataByNode: builder.query<SimulationDataByNode[], MultipleSimulationDataByNodeParameters>({
@@ -71,15 +160,29 @@ export const scenarioApi = createApi({
 
         const result: SimulationDataByNode[] = [];
 
+        /* [CDtemp-begin] */
+        const {node, cologneDistrict} = validateDistrictNode(arg.node);
+        /* [CDtemp-end] */
+
         // fetch simulation data for each id
         for (const id of arg.ids) {
-          // fetch all entries
-          const fullResult = await fetchWithBQ(`simulation/${id}/${arg.node}/?all${groups}${compartments}`);
+          // fetch entry
+          const fullResult = await fetchWithBQ(
+            `simulation/${id}/${
+              // [CDtemp] arg.node
+              node
+            }/?all${groups}${compartments}`
+          );
           // return if errors occur
           if (fullResult.error) return {error: fullResult.error};
+          // [CDtemp] const data = fullResult.data as SimulationDataByNode;
+
+          /* [CDtemp-begin] */
+          const data = modifyDistrictResults(cologneDistrict, fullResult.data as SimulationDataByNode);
+          /* [CDtemp-end] */
 
           // put result into list to return
-          result[id] = fullResult.data as SimulationDataByNode;
+          result[id] = data;
         }
 
         return {data: result};
@@ -89,8 +192,17 @@ export const scenarioApi = createApi({
     getPercentileData: builder.query<SelectedScenarioPercentileData[], SelectedScenario>({
       async queryFn(arg, _queryApi, _extraOptions, fetchWithBQ) {
         const groups = arg.groups && arg.groups.length > 0 ? `&groups=${arg.groups.join(',')}` : '&groups=total';
+        const compartments = arg.compartment ? `&compartments=${arg.compartment}` : '';
+
+        /* [CDtemp-begin] */
+        const {node, cologneDistrict} = validateDistrictNode(arg.node);
+        /* [CDtemp-end] */
+
         const url = (percentile: number) =>
-          `simulation/${arg.id}/${arg.node}/?all&percentile=${percentile}&compartments=${arg.compartment}${groups}`;
+          `simulation/${arg.id}/${
+            // [CDtemp] arg.node
+            node
+          }/?all&percentile=${percentile}${compartments}${groups}`;
 
         const result: SelectedScenarioPercentileData[] = [];
 
@@ -103,6 +215,34 @@ export const scenarioApi = createApi({
         //return if errors occur
         if (percentile75.error) return {error: percentile75.error};
         result[1] = percentile75.data as SelectedScenarioPercentileData;
+
+        /* [CDtemp-begin] */
+        if (cologneDistrict) {
+          // get weight for city district
+          const weight = (cologneData as unknown as Array<District>).find(
+            (dist) => dist.Stadtteil_ID === cologneDistrict
+          )!.Population_rel;
+
+          // loop through both results to adjust city district results
+          return {
+            data: result.map((percData) => {
+              // skip if results are null
+              if (percData.results === null) return percData;
+
+              // loop thru days in data to replace compartment data
+              percData.results = percData.results.map(({day, compartments}) => {
+                // loop through compartments and apply weight
+                Object.keys(compartments).forEach((compName) => {
+                  compartments[compName] *= weight;
+                });
+                return {day, compartments};
+              });
+              // return omdified data
+              return percData;
+            }),
+          };
+        }
+        /* [CDtemp-end] */
 
         return {data: result};
       },

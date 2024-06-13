@@ -23,6 +23,7 @@ import {Dictionary, dateToISOString} from '../../util/util';
 import React from 'react';
 import {Scenario} from 'store/ScenarioSlice';
 import {Localization} from 'types/localization';
+import {getScenarioPrimaryColor} from 'util/Theme';
 
 interface ScenarioList {
   scenarios: {
@@ -355,7 +356,7 @@ export default function LineChart({
           // Add fill color according to selected scenario (if selected scenario is set and it's not case data)
           fill:
             selectedScenario !== null && selectedScenario > 0
-              ? color(theme.custom.scenarios[selectedScenario % theme.custom.scenarios.length][0])
+              ? color(getScenarioPrimaryColor(selectedScenario, theme))
               : undefined,
         })
       );
@@ -383,11 +384,9 @@ export default function LineChart({
               // Fallback Tooltip (if HTML breaks for some reason)
               // For text color: loop around the theme's scenario color list if scenario IDs exceed color list length, then pick first color of sub-palette which is the main color
               tooltip: Tooltip.new(root, {
-                labelText: `[bold ${
-                  theme.custom.scenarios[scenario.id % theme.custom.scenarios.length][0]
-                }]${simulationDataChartName(scenario)}:[/] {${scenarioId}}`,
+                labelText: `[bold ${getScenarioPrimaryColor(scenario.id, theme)}]${simulationDataChartName(scenario)}:[/] {${scenarioId}}`,
               }),
-              stroke: color(theme.custom.scenarios[scenario.id % theme.custom.scenarios.length][0]),
+              stroke: color(getScenarioPrimaryColor(scenario.id, theme)),
             })
           );
           series.strokes.template.setAll({
@@ -422,11 +421,11 @@ export default function LineChart({
                 // Fallback Tooltip (if HTML breaks for some reason)
                 // Use color of selected scenario (scenario ID is 1-based index, color list is 0-based index) loop if scenario ID exceeds length of color list; use first color of palette (main color)
                 tooltip: Tooltip.new(root, {
-                  labelText: `[bold ${theme.custom.scenarios[selectedScenario % theme.custom.scenarios.length][0]}]${
+                  labelText: `[bold ${getScenarioPrimaryColor(selectedScenario, theme)}]${
                     groupFilter.name
                   }:[/] {${groupFilter.name}}`,
                 }),
-                stroke: color(theme.custom.scenarios[selectedScenario % theme.custom.scenarios.length][0]),
+                stroke: color(getScenarioPrimaryColor(selectedScenario, theme)),
               })
             );
             series.strokes.template.setAll({

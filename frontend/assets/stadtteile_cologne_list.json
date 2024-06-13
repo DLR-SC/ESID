@@ -1,0 +1,604 @@
+[
+  {
+    "Stadtteil": "Braunsfeld",
+    "Stadtbezirk": "Lindenthal",
+    "Stadtteil_ID": "304",
+    "Population_rel": 0.011246829160692622,
+    "Population_abs": 12237
+  },
+  {
+    "Stadtteil": "Muelheim",
+    "Stadtbezirk": "Muelheim",
+    "Stadtteil_ID": "901",
+    "Population_rel": 0.039184221168339396,
+    "Population_abs": 42634
+  },
+  {
+    "Stadtteil": "Suerth",
+    "Stadtbezirk": "Rodenkirchen",
+    "Stadtteil_ID": "210",
+    "Population_rel": 0.01003639572074556,
+    "Population_abs": 10920
+  },
+  {
+    "Stadtteil": "Lindweiler",
+    "Stadtbezirk": "Chorweiler",
+    "Stadtteil_ID": "605",
+    "Population_rel": 0.0032020881585235837,
+    "Population_abs": 3484
+  },
+  {
+    "Stadtteil": "Junkersdorf",
+    "Stadtbezirk": "Lindenthal",
+    "Stadtteil_ID": "306",
+    "Population_rel": 0.01415297231719422,
+    "Population_abs": 15399
+  },
+  {
+    "Stadtteil": "Widdersdorf",
+    "Stadtbezirk": "Lindenthal",
+    "Stadtteil_ID": "309",
+    "Population_rel": 0.011445351273850227,
+    "Population_abs": 12453
+  },
+  {
+    "Stadtteil": "Eil",
+    "Stadtbezirk": "Porz",
+    "Stadtteil_ID": "705",
+    "Population_rel": 0.008521745524061616,
+    "Population_abs": 9272
+  },
+  {
+    "Stadtteil": "Seeberg",
+    "Stadtbezirk": "Chorweiler",
+    "Stadtteil_ID": "603",
+    "Population_rel": 0.010228484246902687,
+    "Population_abs": 11129
+  },
+  {
+    "Stadtteil": "Grengel",
+    "Stadtbezirk": "Porz",
+    "Stadtteil_ID": "709",
+    "Population_rel": 0.005118378000808794,
+    "Population_abs": 5569
+  },
+  {
+    "Stadtteil": "Buchforst",
+    "Stadtbezirk": "Muelheim",
+    "Stadtteil_ID": "902",
+    "Population_rel": 0.0068526892393662,
+    "Population_abs": 7456
+  },
+  {
+    "Stadtteil": "Holweide",
+    "Stadtbezirk": "Muelheim",
+    "Stadtteil_ID": "904",
+    "Population_rel": 0.019263078563288114,
+    "Population_abs": 20959
+  },
+  {
+    "Stadtteil": "Merheim",
+    "Stadtbezirk": "Kalk",
+    "Stadtteil_ID": "806",
+    "Population_rel": 0.010300172787765155,
+    "Population_abs": 11207
+  },
+  {
+    "Stadtteil": "Duennwald",
+    "Stadtbezirk": "Muelheim",
+    "Stadtteil_ID": "907",
+    "Population_rel": 0.010678835336936142,
+    "Population_abs": 11619
+  },
+  {
+    "Stadtteil": "Bocklemuend/Mengenich",
+    "Stadtbezirk": "Ehrenfeld",
+    "Stadtteil_ID": "405",
+    "Population_rel": 0.00986544612330429,
+    "Population_abs": 10734
+  },
+  {
+    "Stadtteil": "Porz",
+    "Stadtbezirk": "Porz",
+    "Stadtteil_ID": "706",
+    "Population_rel": 0.013807396786882834,
+    "Population_abs": 15023
+  },
+  {
+    "Stadtteil": "Muengersdorf",
+    "Stadtbezirk": "Lindenthal",
+    "Stadtteil_ID": "305",
+    "Population_rel": 0.008169736406749752,
+    "Population_abs": 8889
+  },
+  {
+    "Stadtteil": "Zollstock",
+    "Stadtbezirk": "Rodenkirchen",
+    "Stadtteil_ID": "205",
+    "Population_rel": 0.02145141722730782,
+    "Population_abs": 23340
+  },
+  {
+    "Stadtteil": "Klettenberg",
+    "Stadtbezirk": "Lindenthal",
+    "Stadtteil_ID": "301",
+    "Population_rel": 0.009716554538436086,
+    "Population_abs": 10572
+  },
+  {
+    "Stadtteil": "Urbach",
+    "Stadtbezirk": "Porz",
+    "Stadtteil_ID": "707",
+    "Population_rel": 0.01195268556303077,
+    "Population_abs": 13005
+  },
+  {
+    "Stadtteil": "Neubrueck",
+    "Stadtbezirk": "Kalk",
+    "Stadtteil_ID": "809",
+    "Population_rel": 0.008312194404617477,
+    "Population_abs": 9044
+  },
+  {
+    "Stadtteil": "Stammheim",
+    "Stadtbezirk": "Muelheim",
+    "Stadtteil_ID": "908",
+    "Population_rel": 0.007681702878570641,
+    "Population_abs": 8358
+  },
+  {
+    "Stadtteil": "Bayenthal",
+    "Stadtbezirk": "Rodenkirchen",
+    "Stadtteil_ID": "201",
+    "Population_rel": 0.009582368295283262,
+    "Population_abs": 10426
+  },
+  {
+    "Stadtteil": "Raderberg",
+    "Stadtbezirk": "Rodenkirchen",
+    "Stadtteil_ID": "203",
+    "Population_rel": 0.006152347340171317,
+    "Population_abs": 6694
+  },
+  {
+    "Stadtteil": "Rodenkirchen",
+    "Stadtbezirk": "Rodenkirchen",
+    "Stadtteil_ID": "208",
+    "Population_rel": 0.015909341568324693,
+    "Population_abs": 17310
+  },
+  {
+    "Stadtteil": "Mauenheim",
+    "Stadtbezirk": "Nippes",
+    "Stadtteil_ID": "502",
+    "Population_rel": 0.005209367302672696,
+    "Population_abs": 5668
+  },
+  {
+    "Stadtteil": "Ossendorf",
+    "Stadtbezirk": "Ehrenfeld",
+    "Stadtteil_ID": "406",
+    "Population_rel": 0.01095272232638506,
+    "Population_abs": 11917
+  },
+  {
+    "Stadtteil": "Vogelsang",
+    "Stadtbezirk": "Ehrenfeld",
+    "Stadtteil_ID": "404",
+    "Population_rel": 0.007579684570420205,
+    "Population_abs": 8247
+  },
+  {
+    "Stadtteil": "Wei\u00df",
+    "Stadtbezirk": "Rodenkirchen",
+    "Stadtteil_ID": "209",
+    "Population_rel": 0.005429028344546156,
+    "Population_abs": 5907
+  },
+  {
+    "Stadtteil": "Neuehrenfeld",
+    "Stadtbezirk": "Ehrenfeld",
+    "Stadtteil_ID": "402",
+    "Population_rel": 0.022265725524796883,
+    "Population_abs": 24226
+  },
+  {
+    "Stadtteil": "Ehrenfeld",
+    "Stadtbezirk": "Ehrenfeld",
+    "Stadtteil_ID": "401",
+    "Population_rel": 0.035298334620050734,
+    "Population_abs": 38406
+  },
+  {
+    "Stadtteil": "Hahnwald",
+    "Stadtbezirk": "Rodenkirchen",
+    "Stadtteil_ID": "207",
+    "Population_rel": 0.0018988272489981986,
+    "Population_abs": 2066
+  },
+  {
+    "Stadtteil": "Esch/Auweiler",
+    "Stadtbezirk": "Chorweiler",
+    "Stadtteil_ID": "607",
+    "Population_rel": 0.006420719826476968,
+    "Population_abs": 6986
+  },
+  {
+    "Stadtteil": "Suelz",
+    "Stadtbezirk": "Lindenthal",
+    "Stadtteil_ID": "302",
+    "Population_rel": 0.03378827984265284,
+    "Population_abs": 36763
+  },
+  {
+    "Stadtteil": "Lindenthal",
+    "Stadtbezirk": "Lindenthal",
+    "Stadtteil_ID": "303",
+    "Population_rel": 0.028208521745524063,
+    "Population_abs": 30692
+  },
+  {
+    "Stadtteil": "Nippes",
+    "Stadtbezirk": "Nippes",
+    "Stadtteil_ID": "501",
+    "Population_rel": 0.03375335465607882,
+    "Population_abs": 36725
+  },
+  {
+    "Stadtteil": "Bilderstoeckchen",
+    "Stadtbezirk": "Nippes",
+    "Stadtteil_ID": "507",
+    "Population_rel": 0.014425940222785927,
+    "Population_abs": 15696
+  },
+  {
+    "Stadtteil": "Ostheim",
+    "Stadtbezirk": "Kalk",
+    "Stadtteil_ID": "805",
+    "Population_rel": 0.01286165949781258,
+    "Population_abs": 13994
+  },
+  {
+    "Stadtteil": "Vingst",
+    "Stadtbezirk": "Kalk",
+    "Stadtteil_ID": "803",
+    "Population_rel": 0.01186996801588177,
+    "Population_abs": 12915
+  },
+  {
+    "Stadtteil": "Buchheim",
+    "Stadtbezirk": "Muelheim",
+    "Stadtteil_ID": "903",
+    "Population_rel": 0.011759677953016433,
+    "Population_abs": 12795
+  },
+  {
+    "Stadtteil": "Hoehenhaus",
+    "Stadtbezirk": "Muelheim",
+    "Stadtteil_ID": "906",
+    "Population_rel": 0.01447005624793206,
+    "Population_abs": 15744
+  },
+  {
+    "Stadtteil": "Lind",
+    "Stadtbezirk": "Porz",
+    "Stadtteil_ID": "712",
+    "Population_rel": 0.00332064997610382,
+    "Population_abs": 3613
+  },
+  {
+    "Stadtteil": "Riehl",
+    "Stadtbezirk": "Nippes",
+    "Stadtteil_ID": "503",
+    "Population_rel": 0.010873681114664902,
+    "Population_abs": 11831
+  },
+  {
+    "Stadtteil": "Loevenich",
+    "Stadtbezirk": "Lindenthal",
+    "Stadtteil_ID": "308",
+    "Population_rel": 0.008442704312341459,
+    "Population_abs": 9186
+  },
+  {
+    "Stadtteil": "Rath/Heumar",
+    "Stadtbezirk": "Kalk",
+    "Stadtteil_ID": "808",
+    "Population_rel": 0.01082313150251829,
+    "Population_abs": 11776
+  },
+  {
+    "Stadtteil": "Neustadt/Sued",
+    "Stadtbezirk": "Innenstadt",
+    "Stadtteil_ID": "102",
+    "Population_rel": 0.03501709495974413,
+    "Population_abs": 38100
+  },
+  {
+    "Stadtteil": "Altstadt/Nord",
+    "Stadtbezirk": "Innenstadt",
+    "Stadtteil_ID": "103",
+    "Population_rel": 0.01683945443182236,
+    "Population_abs": 18322
+  },
+  {
+    "Stadtteil": "Brueck",
+    "Stadtbezirk": "Kalk",
+    "Stadtteil_ID": "807",
+    "Population_rel": 0.009427962207271792,
+    "Population_abs": 10258
+  },
+  {
+    "Stadtteil": "Longerich",
+    "Stadtbezirk": "Nippes",
+    "Stadtteil_ID": "506",
+    "Population_rel": 0.012702657990515055,
+    "Population_abs": 13821
+  },
+  {
+    "Stadtteil": "Langel",
+    "Stadtbezirk": "Porz",
+    "Stadtteil_ID": "715",
+    "Population_rel": 0.003217712584096173,
+    "Population_abs": 3501
+  },
+  {
+    "Stadtteil": "Hoehenberg",
+    "Stadtbezirk": "Kalk",
+    "Stadtteil_ID": "804",
+    "Population_rel": 0.011558398588287196,
+    "Population_abs": 12576
+  },
+  {
+    "Stadtteil": "Ensen",
+    "Stadtbezirk": "Porz",
+    "Stadtteil_ID": "703",
+    "Population_rel": 0.007082460203668982,
+    "Population_abs": 7706
+  },
+  {
+    "Stadtteil": "Volkhoven/Weiler",
+    "Stadtbezirk": "Chorweiler",
+    "Stadtteil_ID": "608",
+    "Population_rel": 0.005511745891695158,
+    "Population_abs": 5997
+  },
+  {
+    "Stadtteil": "Chorweiler",
+    "Stadtbezirk": "Chorweiler",
+    "Stadtteil_ID": "609",
+    "Population_rel": 0.011839638248593801,
+    "Population_abs": 12882
+  },
+  {
+    "Stadtteil": "Deutz",
+    "Stadtbezirk": "Innenstadt",
+    "Stadtteil_ID": "105",
+    "Population_rel": 0.014260505128487923,
+    "Population_abs": 15516
+  },
+  {
+    "Stadtteil": "Godorf",
+    "Stadtbezirk": "Rodenkirchen",
+    "Stadtteil_ID": "211",
+    "Population_rel": 0.002508179846329179,
+    "Population_abs": 2729
+  },
+  {
+    "Stadtteil": "Elsdorf",
+    "Stadtbezirk": "Porz",
+    "Stadtteil_ID": "708",
+    "Population_rel": 0.0015753097312598801,
+    "Population_abs": 1714
+  },
+  {
+    "Stadtteil": "Immendorf",
+    "Stadtbezirk": "Rodenkirchen",
+    "Stadtteil_ID": "212",
+    "Population_rel": 0.001895150913569354,
+    "Population_abs": 2062
+  },
+  {
+    "Stadtteil": "Bickendorf",
+    "Stadtbezirk": "Ehrenfeld",
+    "Stadtteil_ID": "403",
+    "Population_rel": 0.015218190507701923,
+    "Population_abs": 16558
+  },
+  {
+    "Stadtteil": "Wahn",
+    "Stadtbezirk": "Porz",
+    "Stadtteil_ID": "711",
+    "Population_rel": 0.006638542700636006,
+    "Population_abs": 7223
+  },
+  {
+    "Stadtteil": "Niehl",
+    "Stadtbezirk": "Nippes",
+    "Stadtteil_ID": "504",
+    "Population_rel": 0.01849656262637403,
+    "Population_abs": 20125
+  },
+  {
+    "Stadtteil": "Roggendorf/Thenhoven",
+    "Stadtbezirk": "Chorweiler",
+    "Stadtteil_ID": "611",
+    "Population_rel": 0.004171721627881328,
+    "Population_abs": 4539
+  },
+  {
+    "Stadtteil": "Flittard",
+    "Stadtbezirk": "Muelheim",
+    "Stadtteil_ID": "909",
+    "Population_rel": 0.007414249476122201,
+    "Population_abs": 8067
+  },
+  {
+    "Stadtteil": "Dellbrueck",
+    "Stadtbezirk": "Muelheim",
+    "Stadtteil_ID": "905",
+    "Population_rel": 0.020132531892209846,
+    "Population_abs": 21905
+  },
+  {
+    "Stadtteil": "Altstadt/Sued",
+    "Stadtbezirk": "Innenstadt",
+    "Stadtteil_ID": "101",
+    "Population_rel": 0.025717804492481892,
+    "Population_abs": 27982
+  },
+  {
+    "Stadtteil": "Neustadt/Nord",
+    "Stadtbezirk": "Innenstadt",
+    "Stadtteil_ID": "104",
+    "Population_rel": 0.02631520899966913,
+    "Population_abs": 28632
+  },
+  {
+    "Stadtteil": "Rondorf",
+    "Stadtbezirk": "Rodenkirchen",
+    "Stadtteil_ID": "206",
+    "Population_rel": 0.008599867651924562,
+    "Population_abs": 9357
+  },
+  {
+    "Stadtteil": "Meschenich",
+    "Stadtbezirk": "Rodenkirchen",
+    "Stadtteil_ID": "213",
+    "Population_rel": 0.0073747288702621224,
+    "Population_abs": 8024
+  },
+  {
+    "Stadtteil": "Weiden",
+    "Stadtbezirk": "Lindenthal",
+    "Stadtteil_ID": "307",
+    "Population_rel": 0.016040770559905885,
+    "Population_abs": 17453
+  },
+  {
+    "Stadtteil": "Finkenberg",
+    "Stadtbezirk": "Porz",
+    "Stadtteil_ID": "716",
+    "Population_rel": 0.006271828241608764,
+    "Population_abs": 6824
+  },
+  {
+    "Stadtteil": "Raderthal",
+    "Stadtbezirk": "Rodenkirchen",
+    "Stadtteil_ID": "204",
+    "Population_rel": 0.004475019300761001,
+    "Population_abs": 4869
+  },
+  {
+    "Stadtteil": "Merkenich",
+    "Stadtbezirk": "Chorweiler",
+    "Stadtteil_ID": "601",
+    "Population_rel": 0.005390426822543289,
+    "Population_abs": 5865
+  },
+  {
+    "Stadtteil": "Westhoven",
+    "Stadtbezirk": "Porz",
+    "Stadtteil_ID": "702",
+    "Population_rel": 0.005144112348810705,
+    "Population_abs": 5597
+  },
+  {
+    "Stadtteil": "Pesch",
+    "Stadtbezirk": "Chorweiler",
+    "Stadtteil_ID": "606",
+    "Population_rel": 0.007126576228815117,
+    "Population_abs": 7754
+  },
+  {
+    "Stadtteil": "Weidenpesch",
+    "Stadtbezirk": "Nippes",
+    "Stadtteil_ID": "505",
+    "Population_rel": 0.012723796919230911,
+    "Population_abs": 13844
+  },
+  {
+    "Stadtteil": "Kalk",
+    "Stadtbezirk": "Kalk",
+    "Stadtteil_ID": "802",
+    "Population_rel": 0.022175655306790193,
+    "Population_abs": 24128
+  },
+  {
+    "Stadtteil": "Gremberghoven",
+    "Stadtbezirk": "Porz",
+    "Stadtteil_ID": "704",
+    "Population_rel": 0.002819749273923753,
+    "Population_abs": 3068
+  },
+  {
+    "Stadtteil": "Zuendorf",
+    "Stadtbezirk": "Porz",
+    "Stadtteil_ID": "714",
+    "Population_rel": 0.0107496047939414,
+    "Population_abs": 11696
+  },
+  {
+    "Stadtteil": "Heimersdorf",
+    "Stadtbezirk": "Chorweiler",
+    "Stadtteil_ID": "604",
+    "Population_rel": 0.005706591669423919,
+    "Population_abs": 6209
+  },
+  {
+    "Stadtteil": "Wahnheide",
+    "Stadtbezirk": "Porz",
+    "Stadtteil_ID": "710",
+    "Population_rel": 0.007240542627109298,
+    "Population_abs": 7878
+  },
+  {
+    "Stadtteil": "Marienburg",
+    "Stadtbezirk": "Rodenkirchen",
+    "Stadtteil_ID": "202",
+    "Population_rel": 0.006670710635638396,
+    "Population_abs": 7258
+  },
+  {
+    "Stadtteil": "Worringen",
+    "Stadtbezirk": "Chorweiler",
+    "Stadtteil_ID": "612",
+    "Population_rel": 0.00940222785926988,
+    "Population_abs": 10230
+  },
+  {
+    "Stadtteil": "Fuehlingen",
+    "Stadtbezirk": "Chorweiler",
+    "Stadtteil_ID": "602",
+    "Population_rel": 0.0019236425131428992,
+    "Population_abs": 2093
+  },
+  {
+    "Stadtteil": "Blumenberg",
+    "Stadtbezirk": "Chorweiler",
+    "Stadtteil_ID": "610",
+    "Population_rel": 0.004867468107790155,
+    "Population_abs": 5296
+  },
+  {
+    "Stadtteil": "Libur",
+    "Stadtbezirk": "Porz",
+    "Stadtteil_ID": "713",
+    "Population_rel": 0.0010284548362192566,
+    "Population_abs": 1119
+  },
+  {
+    "Stadtteil": "Poll",
+    "Stadtbezirk": "Porz",
+    "Stadtteil_ID": "701",
+    "Population_rel": 0.010356236903055035,
+    "Population_abs": 11268
+  },
+  {
+    "Stadtteil": "Humboldt/Gremberg",
+    "Stadtbezirk": "Kalk",
+    "Stadtteil_ID": "801",
+    "Population_rel": 0.013886437998602992,
+    "Population_abs": 15109
+  }
+]

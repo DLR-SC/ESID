@@ -32,6 +32,9 @@ interface MapProps {
   /** Optional fill opacity for the map regions. Default is 1. */
   fillOpacity?: number;
 
+  /** Optional maximum zoom level for the map. Default is 4. */
+  maxZoomLevel?: number;
+
   /** Optional function to generate tooltip text for each region based on its data. Default is a function that returns the region's ID. */
   tooltipText?: (regionData: FeatureProperties) => string;
 
@@ -94,6 +97,7 @@ export default function HeatMap({
   mapHeight = '650px',
   defaultFill = '#8c8c8c',
   fillOpacity = 1,
+  maxZoomLevel = 4,
   tooltipText = () => '{id}',
   tooltipTextWhileFetching = () => 'Loading...',
   defaultSelectedValue,
@@ -173,7 +177,7 @@ export default function HeatMap({
     const chart = root.container.children.push(
       am5map.MapChart.new(root, {
         projection: am5map.geoMercator(),
-        maxZoomLevel: 4,
+        maxZoomLevel: maxZoomLevel,
         maxPanOut: 0.4,
         zoomControl: am5map.ZoomControl.new(root, {
           paddingBottom: 25,
@@ -292,6 +296,7 @@ export default function HeatMap({
     setSelectedArea,
     theme.palette.background.default,
     theme.palette.primary.main,
+    maxZoomLevel,
   ]);
 
   // Highlight selected district
