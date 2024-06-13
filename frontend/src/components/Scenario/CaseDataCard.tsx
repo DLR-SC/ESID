@@ -7,13 +7,13 @@ import React, {useMemo} from 'react';
 import {useAppSelector} from '../../store/hooks';
 import {useGetCaseDataSingleSimulationEntryQuery} from '../../store/services/caseDataApi';
 import {DataCard} from './DataCard';
+import {ScenarioState} from './hooks';
 
 interface CaseDataCardProps {
+  scenario: ScenarioState;
+
   /** If the card is currently selected. */
   selected: boolean;
-
-  /** If the card is active or flipped over. */
-  active: boolean;
 
   /** The simulation start values for all compartments. */
   startValues: Dictionary<number> | null;
@@ -28,7 +28,7 @@ interface CaseDataCardProps {
 /**
  * This component renders a list of values and rates for each compartment for case data inside a black card.
  */
-export function CaseDataCard(props: CaseDataCardProps): JSX.Element {
+export function CaseDataCard(props: Readonly<CaseDataCardProps>): JSX.Element {
   const {t} = useTranslation();
 
   const node = useAppSelector((state) => state.dataSelection.district?.ags);
@@ -53,11 +53,10 @@ export function CaseDataCard(props: CaseDataCardProps): JSX.Element {
 
   return (
     <DataCard
-      id={0}
+      scenario={props.scenario}
       label={t('chart.caseData')}
       color={'#000000'}
       selected={props.selected}
-      active={props.active}
       compartmentValues={compartmentValues}
       startValues={props.startValues}
       onClick={props.onClick}

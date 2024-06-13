@@ -33,6 +33,7 @@ import {useGetMultipleGroupFilterDataQuery} from 'store/services/groupApi';
 import {GroupData} from 'types/group';
 import {setReferenceDayBottom} from '../store/LayoutSlice';
 import {getScenarioPrimaryColor} from '../util/Theme';
+import {useActiveScenarios} from './Scenario/hooks';
 
 /**
  * React Component to render the Simulation Chart Section
@@ -51,8 +52,7 @@ export default function SimulationChart(): JSX.Element {
   const minDate = useAppSelector((state) => state.dataSelection.minDate);
   const maxDate = useAppSelector((state) => state.dataSelection.maxDate);
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
-  const activeScenarios = useAppSelector((state) => state.dataSelection.activeScenarios);
-  const shownScenarios = useAppSelector((state) => state.dataSelection.shownScenarios);
+  const activeScenarios = useActiveScenarios();
   const groupFilterList = useAppSelector((state) => state.dataSelection.groupFilters);
   const dispatch = useAppDispatch();
 
@@ -83,9 +83,7 @@ export default function SimulationChart(): JSX.Element {
   const {data: simulationData, isFetching: simulationFetching} = useGetMultipleSimulationDataByNodeQuery(
     {
       // Filter only scenarios (scenario id 0 is case data)
-      ids: activeScenarios
-        ? activeScenarios.filter((s) => s !== 0 && shownScenarios?.includes(s) && scenarioList.scenarios[s])
-        : [],
+      ids: activeScenarios.filter((s) => s.id !== 0).map((s) => s.id),
       node: selectedDistrict,
       groups: ['total'],
       compartments: [selectedCompartment ?? ''],
@@ -398,7 +396,7 @@ export default function SimulationChart(): JSX.Element {
           return;
         }
 
-        if (!activeScenarios?.includes(Number(seriesID))) {
+        if (!activeScenarios.find((scenario) => scenario.id === Number(seriesID))) {
           void series.hide();
         } else {
           void series.show();
@@ -551,13 +549,13 @@ export default function SimulationChart(): JSX.Element {
     const dataMap = new Map<string, {[key: string]: number}>();
 
     // Cycle through scenarios
-    activeScenarios?.forEach((scenarioId) => {
-      simulationData?.[scenarioId]?.results.forEach(({day, compartments}) => {
+    activeScenarios?.forEach((scenario) => {
+      simulationData?.[scenario.id]?.results.forEach(({day, compartments}) => {
         // Add scenario data to map (upsert date entry)
-        dataMap.set(day, {...dataMap.get(day), [scenarioId]: compartments[selectedCompartment]});
+        dataMap.set(day, {...dataMap.get(day), [scenario.id]: compartments[selectedCompartment]});
       });
 
-      if (scenarioId === 0) {
+      if (scenario.id === 0) {
         // Add case data values (upsert date entry)
         caseData?.results.forEach((entry) => {
           dataMap.set(entry.day, {...dataMap.get(entry.day), [0]: entry.compartments[selectedCompartment]});
@@ -626,7 +624,7 @@ export default function SimulationChart(): JSX.Element {
           ${
             // Table row for each series of an active scenario
             chartRef.current.series.values
-              .filter((series) => activeScenarios?.includes(Number(series.get('id'))))
+              .filter((series) => !!activeScenarios.find((scenario) => scenario.id === Number(series.get('id'))))
               .map((series): string => {
                 /* Skip if series:
                  * - is hidden
@@ -743,21 +741,21 @@ export default function SimulationChart(): JSX.Element {
     const dataFieldsOrder = ['date', 'caseData'];
     // Loop through active scenarios (if there are any)
     if (activeScenarios) {
-      activeScenarios.forEach((scenarioId) => {
+      activeScenarios.forEach((scenario) => {
         // Skip case data (already added)
-        if (scenarioId === 0 || !scenarioList.scenarios[scenarioId]) {
+        if (scenario.id === 0 || !scenarioList.scenarios[scenario.id]) {
           return;
         }
 
         // Add scenario label to export data field names
         dataFields = {
           ...dataFields,
-          [scenarioId]: scenarioList.scenarios[scenarioId].label,
+          [scenario.id]: scenarioList.scenarios[scenario.id].label,
         };
         // Add scenario id to export data field order (for sorted export like csv)
-        dataFieldsOrder.push(`${scenarioId}`);
+        dataFieldsOrder.push(`${scenario.id}`);
         // If this is the selected scenario also add percentiles after it
-        if (scenarioId == selectedScenario) {
+        if (scenario.id == selectedScenario) {
           dataFieldsOrder.push('percentileDown', 'percentileUp');
         }
       });

@@ -1,32 +1,32 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React from 'react';
-import {Paper, Popper} from '@mui/material';
+import React, {useRef, useState} from 'react';
+import Paper from '@mui/material/Paper';
+import Popper from '@mui/material/Popper';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import {useTheme} from '@mui/material/styles';
 import {useTranslation} from 'react-i18next';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
-import {useGetHiddenScenarios} from './hooks';
+import {ScenarioState, useHiddenScenarios} from './hooks';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import {showScenario} from '../../store/DataSelectionSlice';
 import {useAppDispatch} from '../../store/hooks';
 import IconButton from '@mui/material/IconButton';
 import Close from '@mui/icons-material/Close';
 import {CardTitle} from './DataCard';
-import {WebAssetOff} from '@mui/icons-material';
+import WebAssetOff from '@mui/icons-material/WebAssetOff';
 
 export default function ScenarioLibrary(): JSX.Element {
   const {t} = useTranslation();
-  const {t: tBackend} = useTranslation('backend');
   const theme = useTheme();
 
-  const libScenarios = useGetHiddenScenarios();
-  const anchorRef = React.useRef<HTMLButtonElement>(null);
+  const libScenarios = useHiddenScenarios();
+  const anchorRef = useRef<HTMLButtonElement>(null);
 
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
   };
@@ -115,13 +115,7 @@ export default function ScenarioLibrary(): JSX.Element {
                 }}
               >
                 {libScenarios.length > 0 ? (
-                  libScenarios.map((scenario) => (
-                    <LibraryCard
-                      key={scenario.id}
-                      id={scenario.id}
-                      label={tBackend(`scenario-names.${scenario.label}`)}
-                    />
-                  ))
+                  libScenarios.map((scenario) => <LibraryCard key={scenario.id} {...scenario} />)
                 ) : (
                   <Box
                     sx={{
@@ -145,9 +139,10 @@ export default function ScenarioLibrary(): JSX.Element {
   );
 }
 
-function LibraryCard(props: Readonly<{id: number; label: string}>): JSX.Element {
+function LibraryCard(props: Readonly<ScenarioState>): JSX.Element {
   const dispatch = useAppDispatch();
   const theme = useTheme();
+  const {t: tBackend} = useTranslation('backend');
 
   return (
     <Box
@@ -194,7 +189,7 @@ function LibraryCard(props: Readonly<{id: number; label: string}>): JSX.Element 
               background: '#EEEEEEEE',
             },
           }}
-          onClick={() => dispatch(showScenario(props.id))}
+          onClick={() => dispatch(showScenario(props.name))}
         >
           <Box
             id={`card-front-${props.id}`}
@@ -206,7 +201,7 @@ function LibraryCard(props: Readonly<{id: number; label: string}>): JSX.Element 
               flexDirection: 'column',
             }}
           >
-            <CardTitle title={props.label} id={props.id} isFront />
+            <CardTitle title={tBackend(`scenario-names.${props.name}`)} id={props.id} isFront />
             <Box
               sx={{
                 fontWeight: 'bolder',

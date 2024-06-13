@@ -30,22 +30,78 @@ export function useGetSimulationStartValues() {
   return compartmentValues;
 }
 
-export function useGetShownScenarios() {
-  const scenarios = useAppSelector((state) => state.scenarioList.scenarios);
-  const shownScenarios = useAppSelector((state) => state.dataSelection.shownScenarios);
+function getState(
+  name: string,
+  shownScenarios: string[] | null,
+  activeScenarios: string[] | null
+): 'active' | 'inactive' | 'hidden' {
+  if (shownScenarios?.includes(name) && activeScenarios?.includes(name)) {
+    return 'active';
+  }
 
-  return useMemo(
-    () => Object.values(scenarios).filter((scenario) => shownScenarios?.includes(scenario.id)),
-    [shownScenarios, scenarios]
-  );
+  if (shownScenarios?.includes(name)) {
+    return 'inactive';
+  }
+
+  return 'hidden';
 }
 
-export function useGetHiddenScenarios() {
+export type ScenarioState = {id: number; name: string; state: 'active' | 'inactive' | 'hidden'};
+
+export function useScenarioState(): Array<ScenarioState> {
   const scenarios = useAppSelector((state) => state.scenarioList.scenarios);
   const shownScenarios = useAppSelector((state) => state.dataSelection.shownScenarios);
+  const activeScenarios = useAppSelector((state) => state.dataSelection.activeScenarios);
 
-  return useMemo(
-    () => Object.values(scenarios).filter((scenario) => !shownScenarios?.includes(scenario.id)),
-    [shownScenarios, scenarios]
-  );
+  return useMemo(() => {
+    const result = [
+      {
+        id: 0,
+        name: 'casedata',
+        state: getState('casedata', shownScenarios, activeScenarios),
+      },
+    ];
+
+    for (const scenario of Object.values(scenarios)) {
+      result.push({
+        id: scenario.id,
+        name: scenario.label,
+        state: getState(scenario.label, shownScenarios, activeScenarios),
+      });
+    }
+
+    return result;
+  }, [scenarios, shownScenarios, activeScenarios]);
+}
+
+export function useActiveScenarios() {
+  const scenarios = useScenarioState();
+
+  return useMemo(() => scenarios.filter((scenario) => scenario.state === 'active'), [scenarios]);
+}
+
+export function useInactiveScenarios() {
+  const scenarios = useScenarioState();
+
+  return useMemo(() => scenarios.filter((scenario) => scenario.state === 'inactive'), [scenarios]);
+}
+
+export function useShownScenarios() {
+  const scenarios = useScenarioState();
+
+  return useMemo(() => scenarios.filter((scenario) => scenario.state !== 'hidden'), [scenarios]);
+}
+
+export function useHiddenScenarios() {
+  const scenarios = useScenarioState();
+
+  return useMemo(() => scenarios.filter((scenario) => scenario.state === 'hidden'), [scenarios]);
+}
+
+export function isActive(name: string, activeScenarios: Array<ScenarioState>): boolean {
+  return !!activeScenarios.find((scenario) => scenario.name === name);
+}
+
+export function isShown(name: string, shownScenarios: Array<ScenarioState>): boolean {
+  return !!shownScenarios.find((scenario) => scenario.name === name);
 }

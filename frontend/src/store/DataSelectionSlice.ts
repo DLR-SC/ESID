@@ -27,10 +27,10 @@ export interface DataSelection {
   scenario: number | null;
 
   /** The scenarios that are visible in the scenario view. */
-  shownScenarios: number[] | null;
+  shownScenarios: string[] | null;
 
   /** The scenarios which are currently forward facing and thus active. */
-  activeScenarios: number[] | null;
+  activeScenarios: string[] | null;
 
   compartment: string | null;
 
@@ -48,8 +48,8 @@ const initialState: DataSelection = {
   scenario: null,
   compartment: null,
   compartmentsExpanded: null,
-  shownScenarios: [0],
-  activeScenarios: [0],
+  shownScenarios: ['casedata', 'baseline'],
+  activeScenarios: ['casedata', 'baseline'],
 
   simulationStart: null,
   minDate: null,
@@ -106,9 +106,9 @@ export const DataSelectionSlice = createSlice({
     selectScenario(state, action: PayloadAction<number | null>) {
       state.scenario = action.payload;
     },
-    toggleScenario(state, action: PayloadAction<number>) {
+    toggleScenario(state, action: PayloadAction<string>) {
       if (!state.activeScenarios) {
-        state.activeScenarios = [0];
+        state.activeScenarios = ['casedata', 'baseline'];
       }
       const index = state.activeScenarios.indexOf(action.payload);
       if (index == -1) {
@@ -117,9 +117,9 @@ export const DataSelectionSlice = createSlice({
         state.activeScenarios.splice(index, 1);
       }
     },
-    showScenario(state, action: PayloadAction<number>) {
+    showScenario(state, action: PayloadAction<string>) {
       if (!state.shownScenarios) {
-        state.shownScenarios = [0];
+        state.shownScenarios = ['casedata', 'baseline'];
       }
 
       const index = state.shownScenarios.indexOf(action.payload);
@@ -127,9 +127,9 @@ export const DataSelectionSlice = createSlice({
         state.shownScenarios.push(action.payload);
       }
     },
-    hideScenario(state, action: PayloadAction<number>) {
+    hideScenario(state, action: PayloadAction<string>) {
       if (!state.shownScenarios) {
-        state.shownScenarios = [0];
+        state.shownScenarios = ['casedata', 'baseline'];
       }
 
       const index = state.shownScenarios.indexOf(action.payload);

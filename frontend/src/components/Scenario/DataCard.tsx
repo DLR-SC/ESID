@@ -23,10 +23,10 @@ import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import {GroupFilterAppendage} from './GroupFilterAppendage';
 import {Delete} from '@mui/icons-material';
 import {hideScenario} from '../../store/DataSelectionSlice';
+import {ScenarioState} from './hooks';
 
 interface DataCardProps {
-  /** The scenario id of the card. Note that id 0 is reserved for case data. */
-  id: number;
+  scenario: ScenarioState;
 
   /** This is the title of the card. */
   label: string;
@@ -36,9 +36,6 @@ interface DataCardProps {
 
   /** If the card is the selected one. Only one card can be selected at the same time. */
   selected: boolean;
-
-  /** If this card is active. If not the card is flipped and only the title is shown. */
-  active: boolean;
 
   /** All the values that correspond to this card. */
   compartmentValues: Dictionary<number> | null;
@@ -120,7 +117,7 @@ export function DataCard(props: Readonly<DataCardProps>): JSX.Element {
 
   return (
     <Box
-      id={`scenario-card-root-${props.id}`}
+      id={`scenario-card-root-${props.scenario.id}`}
       sx={{
         display: 'flex',
         flexDirection: 'row',
@@ -147,7 +144,7 @@ export function DataCard(props: Readonly<DataCardProps>): JSX.Element {
       >
         {/*hover-state*/}
         <Box
-          id={`scenario-card-settings-list-${props.id}`}
+          id={`scenario-card-settings-list-${props.scenario.id}`}
           sx={{
             position: 'absolute',
             zIndex: -2,
@@ -162,33 +159,35 @@ export function DataCard(props: Readonly<DataCardProps>): JSX.Element {
           }}
         >
           <Tooltip
-            title={props.active ? t('scenario.deactivate').toString() : t('scenario.activate').toString()}
+            title={
+              props.scenario.state === 'active'
+                ? t('scenario.deactivate').toString()
+                : t('scenario.activate').toString()
+            }
             arrow={true}
           >
             <IconButton
               color={'primary'}
               onClick={() => props.onToggle()}
-              aria-label={props.active ? t('scenario.deactivate') : t('scenario.activate')}
+              aria-label={props.scenario.state === 'active' ? t('scenario.deactivate') : t('scenario.activate')}
             >
-              {props.active ? <CheckBox /> : <CheckBoxOutlineBlank />}
+              {props.scenario.state === 'active' ? <CheckBox /> : <CheckBoxOutlineBlank />}
             </IconButton>
           </Tooltip>
-          {props.id !== 0 ? (
-            <Tooltip title={t('scenario.hide').toString()} arrow={true}>
-              <IconButton
-                color={'primary'}
-                onClick={() => {
-                  dispatch(hideScenario(props.id));
-                }}
-                aria-label={t('scenario.hide')}
-              >
-                <Delete />
-              </IconButton>
-            </Tooltip>
-          ) : null}
+          <Tooltip title={t('scenario.hide').toString()} arrow={true}>
+            <IconButton
+              color={'primary'}
+              onClick={() => {
+                dispatch(hideScenario(props.scenario.name));
+              }}
+              aria-label={t('scenario.hide')}
+            >
+              <Delete />
+            </IconButton>
+          </Tooltip>
         </Box>
         <Box
-          id={`scenario-card-main-card-${props.id}`}
+          id={`scenario-card-main-card-${props.scenario.id}`}
           sx={{
             position: 'relative',
             zIndex: 0,
@@ -203,13 +202,13 @@ export function DataCard(props: Readonly<DataCardProps>): JSX.Element {
             boxShadow: props.selected && !hover ? `0px 0px 0px 6px ${hexToRGB(props.color, 0.4)}` : 'none',
             transition: 'transform 0.5s',
             transformStyle: 'preserve-3d',
-            transform: !props.active ? 'rotateY(180deg)' : 'none',
+            transform: props.scenario.state === 'inactive' ? 'rotateY(180deg)' : 'none',
           }}
-          onClick={props.active ? () => props.onClick() : () => true}
+          onClick={props.scenario.state === 'active' ? () => props.onClick() : () => true}
           onMouseEnter={() => setHover(true)}
         >
           <Box
-            id={`scenario-card-back-${props.id}`}
+            id={`scenario-card-back-${props.scenario.id}`}
             sx={{
               position: 'absolute',
               backfaceVisibility: 'hidden',
@@ -217,10 +216,10 @@ export function DataCard(props: Readonly<DataCardProps>): JSX.Element {
               margin: '6px',
             }}
           >
-            <CardTitle title={props.label} id={props.id} isFront={false} />
+            <CardTitle title={props.label} id={props.scenario.id} isFront={false} />
           </Box>
           <Box
-            id={`scenario-card-front-${props.id}`}
+            id={`scenario-card-front-${props.scenario.id}`}
             sx={{
               transform: 'rotateY(0deg)', //firefox ignores backface-visibility if the object is not rotated
               backfaceVisibility: 'hidden',
@@ -228,10 +227,10 @@ export function DataCard(props: Readonly<DataCardProps>): JSX.Element {
               marginBottom: '6px',
             }}
           >
-            <CardTitle title={props.label} id={props.id} isFront />
+            <CardTitle title={props.label} id={props.scenario.id} isFront />
             <ScrollSyncPane group='compartments'>
               <List
-                id={`scenario-card-compartment-list-${props.id}`}
+                id={`scenario-card-compartment-list-${props.scenario.id}`}
                 className='hide-scrollbar'
                 dense={true}
                 disablePadding={true}
@@ -256,7 +255,9 @@ export function DataCard(props: Readonly<DataCardProps>): JSX.Element {
           </Box>
         </Box>
       </Box>
-      {props.active && props.id !== 0 ? <GroupFilterAppendage scenarioId={props.id} color={props.color} /> : null}
+      {props.scenario.state === 'active' && props.scenario.id !== 0 ? (
+        <GroupFilterAppendage scenarioId={props.scenario.id} color={props.color} />
+      ) : null}
     </Box>
   );
 }

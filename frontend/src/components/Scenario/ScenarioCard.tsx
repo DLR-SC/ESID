@@ -9,17 +9,12 @@ import {Dictionary} from '../../util/util';
 import {useTranslation} from 'react-i18next';
 import {DataCard} from './DataCard';
 import {getScenarioPrimaryColor} from '../../util/Theme';
+import {ScenarioState} from './hooks';
 
 /** Type definition for the ScenarioCard props */
 interface ScenarioCardProps {
   /** The scenario this card is displaying. */
-  scenario: {
-    /** The identifier for the scenario. */
-    id: number;
-
-    /** The label for the scenario displayed to the user. */
-    label: string;
-  };
+  scenario: ScenarioState;
 
   /** The key for this scenario (index from the map function for the scenario list). */
   key: number;
@@ -74,11 +69,10 @@ export function ScenarioCard(props: Readonly<ScenarioCardProps>): JSX.Element {
 
   return (
     <DataCard
-      id={props.scenario.id}
-      label={tBackend(`scenario-names.${props.scenario.label}`)}
+      scenario={props.scenario}
+      label={tBackend(`scenario-names.${props.scenario.name}`)}
       color={getScenarioPrimaryColor(props.scenario.id, theme)}
       selected={props.selected}
-      active={props.active}
       compartmentValues={compartmentValues}
       startValues={props.startValues}
       onClick={props.onClick}

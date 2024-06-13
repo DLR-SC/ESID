@@ -274,6 +274,7 @@
     },
   },
   'scenario-names': {
+    'casedata': 'Estimated Cases',
     'Baseline Scenario': 'Baseline Scenario',
     baseline: 'Baseline Scenario',
     closed_schools: 'Schools Closed',

@@ -15,7 +15,7 @@ import {
   useGetSimulationsQuery,
 } from '../../store/services/scenarioApi';
 import {setCompartments, setScenarios} from '../../store/ScenarioSlice';
-import {useGetShownScenarios, useGetSimulationStartValues} from './hooks';
+import {useShownScenarios, useGetSimulationStartValues, useActiveScenarios, isActive, isShown} from './hooks';
 import {useGetCaseDataByDistrictQuery} from '../../store/services/caseDataApi';
 import {getScenarioPrimaryColor} from '../../util/Theme';
 
@@ -23,8 +23,8 @@ export default function DataCardList(): JSX.Element {
   const theme = useTheme();
   const dispatch = useAppDispatch();
 
-  const scenarioList = useGetShownScenarios();
-  const activeScenarios = useAppSelector((state) => state.dataSelection.activeScenarios);
+  const shownScenarios = useShownScenarios();
+  const activeScenarios = useActiveScenarios();
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
 
   const [simulationModelKey, setSimulationModelKey] = useState<string>('unset');
@@ -63,13 +63,6 @@ export default function DataCardList(): JSX.Element {
       const scenarios = scenarioListData.results.map((scenario) => ({id: scenario.id, label: scenario.description}));
       dispatch(setScenarios(scenarios));
 
-      //activate all scenarios initially
-      if (!activeScenarios) {
-        scenarios.forEach((scenario) => {
-          dispatch(toggleScenario(scenario.id));
-        });
-      }
-
       if (scenarios.length > 0) {
         // The simulation data (results) are only available one day after the start day onward.
         const startDay = new Date(scenarioListData.results[0].startDay);
@@ -107,23 +100,16 @@ export default function DataCardList(): JSX.Element {
     if (minDate && maxDate) {
       dispatch(setMinMaxDates({minDate, maxDate}));
     }
-  }, [activeScenarios, scenarioListData, dispatch, caseData]);
+  }, [scenarioListData, dispatch, caseData]);
 
-  //effect to switch active scenario
+  // effect to switch active scenario
   useEffect(() => {
-    if (activeScenarios) {
-      if (activeScenarios.length == 0) {
-        dispatch(selectScenario(null));
-      } else if (
-        selectedScenario === null ||
-        !activeScenarios
-          .filter((scenario) => scenario === 0 || !!scenarioList.find((s) => s.id === scenario))
-          .includes(selectedScenario)
-      ) {
-        dispatch(selectScenario(activeScenarios[0]));
-      }
+    if (activeScenarios.length === 0) {
+      dispatch(selectScenario(null));
+    } else if (selectedScenario === null || !activeScenarios.find((s) => s.id === selectedScenario)) {
+      dispatch(selectScenario(activeScenarios[0].id));
     }
-  }, [activeScenarios, selectedScenario, dispatch, scenarioList]);
+  }, [activeScenarios, selectedScenario, dispatch]);
 
   return (
     <Box
@@ -138,30 +124,34 @@ export default function DataCardList(): JSX.Element {
         minWidth: '400px',
       }}
     >
-      <CaseDataCard
-        selected={selectedScenario === 0}
-        active={!!activeScenarios && activeScenarios.includes(0)}
-        startValues={startValues}
-        onClick={() => dispatch(selectScenario(0))}
-        onToggle={() => dispatch(toggleScenario(0))}
-      />
-      {Object.entries(scenarioList).map(([, scenario]) => (
-        <ScenarioCard
-          key={scenario.id}
-          scenario={scenario}
-          selected={selectedScenario === scenario.id}
-          active={!!activeScenarios && activeScenarios.includes(scenario.id)}
-          color={getScenarioPrimaryColor(scenario.id, theme)}
+      {isShown('casedata', shownScenarios) ? (
+        <CaseDataCard
+          scenario={{id: 0, name: 'casedata', state: isActive('casedata', activeScenarios) ? 'active' : 'inactive'}}
+          selected={selectedScenario === 0}
           startValues={startValues}
-          onClick={() => {
-            // set active scenario to this one and send dispatches
-            dispatch(selectScenario(scenario.id));
-          }}
-          onToggle={() => {
-            dispatch(toggleScenario(scenario.id));
-          }}
+          onClick={() => dispatch(selectScenario(0))}
+          onToggle={() => dispatch(toggleScenario('casedata'))}
         />
-      ))}
+      ) : null}
+      {shownScenarios
+        .filter((scenario) => scenario.name !== 'casedata')
+        .map((scenario) => (
+          <ScenarioCard
+            key={scenario.id}
+            scenario={scenario}
+            selected={selectedScenario === scenario.id}
+            active={isActive(scenario.name, activeScenarios)}
+            color={getScenarioPrimaryColor(scenario.id, theme)}
+            startValues={startValues}
+            onClick={() => {
+              // set active scenario to this one and send dispatches
+              dispatch(selectScenario(scenario.id));
+            }}
+            onToggle={() => {
+              dispatch(toggleScenario(scenario.name));
+            }}
+          />
+        ))}
     </Box>
   );
 }
