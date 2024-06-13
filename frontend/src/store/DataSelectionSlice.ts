@@ -30,7 +30,6 @@ export interface DataSelection {
   compartment: string | null;
   compartmentsExpanded: boolean | null;
   activeScenarios: number[] | null;
-
   simulationStart: string | null;
   minDate: string | null;
   maxDate: string | null;

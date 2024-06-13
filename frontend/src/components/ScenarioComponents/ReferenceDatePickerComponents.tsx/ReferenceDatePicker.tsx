@@ -62,18 +62,20 @@ export default function ReferenceDatePicker({
           marginBottom: 1,
         }}
       >
-        <DatePicker<Dayjs>
-          label={
-            localization.overrides && localization.overrides['scenario.reference-day']
-              ? customT(localization.overrides['scenario.reference-day'])
-              : defaultT('scenario.reference-day')
-          }
-          value={dayjs(startDay)}
-          minDate={dayjs(minDate)}
-          maxDate={dayjs(maxDate)}
-          onChange={updateDate}
-          slotProps={{textField: {size: 'small'}}}
-        />
+        {startDay && (
+          <DatePicker<Dayjs>
+            label={
+              localization.overrides && localization.overrides['scenario.reference-day']
+                ? customT(localization.overrides['scenario.reference-day'])
+                : defaultT('scenario.reference-day')
+            }
+            value={dayjs(startDay)}
+            minDate={dayjs(minDate)}
+            maxDate={dayjs(maxDate)}
+            onChange={updateDate}
+            slotProps={{textField: {size: 'small'}}}
+          />
+        )}
       </Box>
     </LocalizationProvider>
   );
