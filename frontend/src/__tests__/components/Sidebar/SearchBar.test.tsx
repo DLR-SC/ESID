@@ -82,12 +82,19 @@ describe('SearchBar', () => {
 
     await userEvent.type(screen.getByPlaceholderText('germany'), '{ArrowDown}{Enter}');
 
-    await screen.findByDisplayValue('Test District (BEZ.Test Type)');
+    /* [CDtemp-begin] */
+    await screen.findByDisplayValue('Köln - Altstadt/Nord (Innenstadt) (BEZ.ST)');
     expect(Store.getState().dataSelection.district).toStrictEqual({
-      ags: '12345',
-      name: 'Test District',
-      type: 'Test Type',
+      ags: '05315103',
+      name: 'Köln - Altstadt/Nord (Innenstadt)',
+      type: 'ST',
     });
+    // [CDtemp] await screen.findByDisplayValue('Test District (BEZ.Test Type)');
+    // [CDtemp] expect(Store.getState().dataSelection.district).toStrictEqual({
+    // [CDtemp]   ags: '12345',
+    // [CDtemp]   name: 'Test District',
+    // [CDtemp]   type: 'Test Type',
+    // [CDtemp] });
   });
 
   afterEach(() => {
