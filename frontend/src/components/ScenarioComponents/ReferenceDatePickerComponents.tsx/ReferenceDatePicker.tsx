@@ -43,12 +43,13 @@ export default function ReferenceDatePicker({
   const {t: customT} = useTranslation(localization.customLang);
   const updateDate = (newDate: Dayjs | null): void => {
     if (
-      (newDate && minDate && maxDate && newDate.isAfter(dayjs(minDate)) && newDate.isBefore(dayjs(maxDate))) ||
-      (newDate && minDate && newDate.isSame(dayjs(minDate))) ||
-      (newDate && maxDate && newDate.isSame(dayjs(maxDate)))
+      newDate &&
+      minDate &&
+      maxDate &&
+      (newDate.isAfter(dayjs(minDate)) || newDate.isSame(dayjs(minDate))) &&
+      (newDate.isBefore(dayjs(maxDate)) || newDate.isSame(dayjs(maxDate)))
     )
       setStartDay(newDate.toString());
-    else return;
   };
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>

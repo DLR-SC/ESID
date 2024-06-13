@@ -106,7 +106,7 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
   const [activeScenarios, setActiveScenarios] = useState<number[] | null>(storeActiveScenarios);
   const [selectedScenario, setSelectedScenario] = useState<number | null>(storeSelectedScenario);
   const [selectedCompartment, setSelectedCompartment] = useState<string>(storeSelectedCompartment ?? 'Infected');
-  const [startDay, setStartDay] = useState<string | null>(storeStartDay ?? '06-07-2021');
+  const [startDay, setStartDay] = useState<string | null>(storeStartDay ?? '2021-06-07');
   const [resizeRef, resizeBoundingRect] = useBoundingclientrectRef();
 
   const scenarios: Scenario[] = useMemo(() => {
@@ -210,9 +210,7 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
 
   // This effect updates the start date in the state whenever the reference day changes.
   useEffect(() => {
-    if (startDay) {
-      dispatch(setStartDate(dateToISOString(new Date(startDay))));
-    }
+    dispatch(setStartDate(startDay!));
   }, [startDay, dispatch]);
 
   /*
