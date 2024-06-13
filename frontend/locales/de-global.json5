@@ -78,7 +78,7 @@
   'scenario-library': {
     'title': 'Szenarienbibliothek',
     'add': 'Hinzufügen',
-    'no-scenarios': 'Keine Szenarien verfügbar.'
+    'no-scenarios': 'Keine weiteren Szenarien verfügbar.'
   },
   today: 'Heute',
   more: 'Mehr',

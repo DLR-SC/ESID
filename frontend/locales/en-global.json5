@@ -87,7 +87,7 @@
   'scenario-library': {
     'title': 'Scenario Library',
     'add': 'Add',
-    'no-scenarios': 'No scenarios available.'
+    'no-scenarios': 'No further scenarios available.'
   },
   today: 'Today',
   more: 'More',
