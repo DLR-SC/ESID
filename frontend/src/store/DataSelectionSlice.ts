@@ -16,16 +16,25 @@ export type AGS = string;
 /**
  * This contains all the state, that the user can configure directly.
  *
- * IMPORTANT: ALL NEW ADDITIONS MUST BE NULLABLE TO ENSURE EXISTING CACHES DOESN'T BREAK ON UPDATES!
+ * IMPORTANT: ALL NEW ADDITIONS MUST BE NULLABLE TO ENSURE EXISTING CACHES DON'T BREAK ON UPDATES!
  */
 export interface DataSelection {
   district: {ags: AGS; name: string; type: string};
   /** The current date in the store. Must be an ISO 8601 date cutoff at time (YYYY-MM-DD) */
   date: string | null;
+
+  /** The currently selected scenario. */
   scenario: number | null;
-  compartment: string | null;
-  compartmentsExpanded: boolean | null;
+
+  /** The scenarios that are visible in the scenario view. */
+  shownScenarios: number[] | null;
+
+  /** The scenarios which are currently forward facing and thus active. */
   activeScenarios: number[] | null;
+
+  compartment: string | null;
+
+  compartmentsExpanded: boolean | null;
 
   simulationStart: string | null;
   minDate: string | null;
@@ -39,6 +48,7 @@ const initialState: DataSelection = {
   scenario: null,
   compartment: null,
   compartmentsExpanded: null,
+  shownScenarios: [0],
   activeScenarios: [0],
 
   simulationStart: null,
