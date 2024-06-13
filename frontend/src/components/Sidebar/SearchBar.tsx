@@ -11,6 +11,10 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import {useTranslation} from 'react-i18next';
 import countyData from '../../../assets/lk_germany_reduced_list.json?url';
+/* [CDtemp-begin] */
+import cologneData from '../../../assets/stadtteile_cologne_list.json';
+import {District} from 'types/cologneDisticts';
+/* [CDtemp-end] */
 
 /** Type definition for the CountyItems of the Autocomplete field
  *  @see DataSelectionSlice
@@ -59,6 +63,18 @@ export default function SearchBar(): JSX.Element {
         (jsonlist: CountyItem[]) => {
           // append germany to list
           jsonlist.push({RS: '00000', GEN: t('germany'), BEZ: ''});
+          /* [CDtemp-begin] */
+          // append city districts
+          jsonlist.push(
+            ...(cologneData as unknown as Array<District>).map((dist) => {
+              return {
+                RS: `05315${dist.Stadtteil_ID}`,
+                GEN: `Köln - ${dist.Stadtteil} (${dist.Stadtbezirk})`,
+                BEZ: 'ST',
+              };
+            })
+          );
+          /* [CDtemp-end] */
           // sort list to put germany at the right place (loading and sorting takes 1.5 ~ 2 sec)
           jsonlist.sort((a, b) => {
             return a.GEN.localeCompare(b.GEN);

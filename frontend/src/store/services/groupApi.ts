@@ -4,6 +4,10 @@
 import {Dictionary} from 'util/util';
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 import {GroupFilter, GroupResponse} from 'types/group';
+/* [CDtemp-begin] */
+import cologneData from '../../../assets/stadtteile_cologne_list.json';
+import {District} from '../../types/cologneDisticts';
+/* [CDtemp-end] */
 
 export const groupApi = createApi({
   reducerPath: 'groupApi',
@@ -26,9 +30,24 @@ export const groupApi = createApi({
       async queryFn(arg, _queryApi, _extraOptions, fetchWithBQ) {
         const result: Dictionary<GroupResponse> = {};
         for (const post of arg) {
+          /* [CDtemp-begin] */
+          let node = '';
+          let cologneDistrict = '';
+
+          if (post.node.length > 5) {
+            node = post.node.slice(0, 5);
+            cologneDistrict = post.node.slice(-3);
+          } else {
+            node = post.node;
+          }
+          /* [CDtemp-end] */
+
           const singleResult = await fetchWithBQ({
             url:
-              `simulation/${post.id}/${post.node}/?all` +
+              `simulation/${post.id}/${
+                // [CDtemp] post.node
+                node
+              }/?all` +
               (post.day ? `&day=${post.day}` : '') +
               (post.compartment ? `&compartments=${post.compartment}` : ''),
             method: 'POST',
@@ -38,6 +57,26 @@ export const groupApi = createApi({
           if (singleResult.error) return {error: singleResult.error};
 
           result[post.groupFilter.name] = singleResult.data as GroupResponse;
+
+          /* [CDtemp-begin] */
+          // adjust data if it is for a city district
+          if (cologneDistrict) {
+            // find weight for city district
+            const weight = (cologneData as unknown as Array<District>).find(
+              (dist) => dist.Stadtteil_ID === cologneDistrict
+            )!.Population_rel;
+            // go thru results
+            result[post.groupFilter.name].results = result[post.groupFilter.name].results.map(
+              ({compartments, day, name}) => {
+                // loop thru compartments and apply weight
+                Object.keys(compartments).forEach((compName) => {
+                  compartments[compName] *= weight;
+                });
+                return {compartments, day, name};
+              }
+            );
+          }
+          /* [CDtemp-end] */
         }
         return {data: result};
       },
@@ -45,9 +84,24 @@ export const groupApi = createApi({
 
     getSingleGroupFilterData: builder.query<GroupResponse, PostFilter>({
       async queryFn(arg, _queryApi, _extraOptions, fetchWithBQ) {
+        /* [CDtemp-begin] */
+        let node = '';
+        let cologneDistrict = '';
+
+        if (arg.node.length > 5) {
+          node = arg.node.slice(0, 5);
+          cologneDistrict = arg.node.slice(-3);
+        } else {
+          node = arg.node;
+        }
+        /* [CDtemp-end] */
+
         const result = await fetchWithBQ({
           url:
-            `simulation/${arg.id}/${arg.node}/?all` +
+            `simulation/${arg.id}/${
+              // [CDtemp] arg.node
+              node
+            }/?all` +
             (arg.day ? `&day=${arg.day}` : '') +
             (arg.compartment ? `&compartments=${arg.compartment}` : ''),
           method: 'POST',
@@ -55,8 +109,26 @@ export const groupApi = createApi({
         });
 
         if (result.error) return {error: result.error};
+        const data = result.data as GroupResponse;
 
-        return {data: result.data as GroupResponse};
+        /* [CDtemp-begin] */
+        // Adjust data if it is a city district
+        if (cologneDistrict) {
+          // find weight for city district
+          const weight = (cologneData as unknown as Array<District>).find(
+            (dist) => dist.Stadtteil_ID === cologneDistrict
+          )!.Population_rel;
+          // loop thru results
+          data.results = data.results.map(({compartments, day, name}) => {
+            Object.keys(compartments).forEach((compName) => {
+              compartments[compName] *= weight;
+            });
+            return {compartments, day, name};
+          });
+        }
+        /* [CDtemp-end] */
+
+        return {data: data};
       },
     }),
   }),

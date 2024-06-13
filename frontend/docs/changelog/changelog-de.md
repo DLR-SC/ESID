@@ -11,6 +11,8 @@ SPDX-License-Identifier: CC-BY-4.0
 
 ### Neue Funktionen
 
+- Die Daten von Köln werden nun mit einer Auflösung in Stadtteilen angezeigt
+
 ### Verbesserungen
 
 - Es wurde mehr Übersetzungen für Szenarien hinzugefügt.

@@ -11,6 +11,8 @@ SPDX-License-Identifier: CC-BY-4.0
 
 ### New Features
 
+- The data for cologne is now displayed on a city district level
+
 ### Improvements
 
 - Added translations for additional scenarios.
