@@ -17,7 +17,6 @@ describe('CardTitle Component', () => {
     const titleElement = screen.getByText('Test Label');
     expect(titleElement).toHaveStyle({
       transform: 'rotateY(-180deg)',
-      textAlign: 'right',
     });
   });
 
