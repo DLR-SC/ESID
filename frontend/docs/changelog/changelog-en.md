@@ -11,6 +11,8 @@ SPDX-License-Identifier: CC-BY-4.0
 
 ### New Features
 
+- The data for cologne is now displayed on a city district level
+
 ### Improvements
 
 - Added translations for additional scenarios.
@@ -20,6 +22,7 @@ SPDX-License-Identifier: CC-BY-4.0
 - Missing translations were fixed.
 - The heat legend selection now shows a preview for all legends again.
 - The Parameters will now correctly be associated with the selected scenario and an info will be displayed, when no parameters are available.
+- The colors of the scenarios was calculated wrongly which could lead to multiple scenarios with the same colors.
 
 ---
 
