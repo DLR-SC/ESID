@@ -12,6 +12,7 @@ import {ScrollSync} from 'react-scroll-sync';
 import ConfirmDialog from '../shared/ConfirmDialog';
 import CompartmentList from './CompartmentList';
 import DataCardList from './DataCardList';
+import ScenarioLibrary from './ScenarioLibrary';
 
 // Let's import pop-ups only once they are opened.
 const ManageGroupDialog = React.lazy(() => import('../ManageGroupDialog'));
@@ -58,31 +59,7 @@ export default function Scenario(): JSX.Element {
             flexDirection: 'column',
           }}
         >
-          <Button
-            id='scenario-add-button'
-            variant='outlined'
-            color='success'
-            sx={{
-              height: '244px',
-              width: '200px',
-              margin: theme.spacing(3),
-              marginTop: theme.spacing(2),
-              fontWeight: 'bolder',
-              fontSize: '3rem',
-              border: `2px ${theme.palette.divider} dashed`,
-              borderRadius: '3px',
-              color: theme.palette.divider,
-              alignSelf: 'top',
-
-              '&:hover': {
-                border: `2px ${theme.palette.divider} dashed`,
-                background: '#E7E7E7',
-              },
-            }}
-            aria-label={t('scenario.add')}
-          >
-            +
-          </Button>
+          <ScenarioLibrary />
 
           <Button
             id='manage-filters-button'

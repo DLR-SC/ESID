@@ -46,7 +46,7 @@ interface ScenarioCardProps {
  * @prop {ScenarioCardProps} props - The props for the component.
  * @returns {JSX.Element} JSX Element to render the scenario card.
  */
-export function ScenarioCard(props: ScenarioCardProps): JSX.Element {
+export function ScenarioCard(props: Readonly<ScenarioCardProps>): JSX.Element {
   const {t: tBackend} = useTranslation('backend');
   const theme = useTheme();
 

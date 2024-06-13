@@ -117,6 +117,26 @@ export const DataSelectionSlice = createSlice({
         state.activeScenarios.splice(index, 1);
       }
     },
+    showScenario(state, action: PayloadAction<number>) {
+      if (!state.shownScenarios) {
+        state.shownScenarios = [0];
+      }
+
+      const index = state.shownScenarios.indexOf(action.payload);
+      if (index === -1) {
+        state.shownScenarios.push(action.payload);
+      }
+    },
+    hideScenario(state, action: PayloadAction<number>) {
+      if (!state.shownScenarios) {
+        state.shownScenarios = [0];
+      }
+
+      const index = state.shownScenarios.indexOf(action.payload);
+      if (index !== -1) {
+        state.shownScenarios.splice(index, 1);
+      }
+    },
     selectCompartment(state, action: PayloadAction<string>) {
       state.compartment = action.payload;
     },
@@ -163,6 +183,8 @@ export const {
   deleteGroupFilter,
   toggleGroupFilter,
   toggleScenario,
+  showScenario,
+  hideScenario,
 } = DataSelectionSlice.actions;
 
 export default DataSelectionSlice.reducer;

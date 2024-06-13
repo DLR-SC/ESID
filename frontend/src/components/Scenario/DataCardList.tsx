@@ -15,14 +15,15 @@ import {
   useGetSimulationsQuery,
 } from '../../store/services/scenarioApi';
 import {setCompartments, setScenarios} from '../../store/ScenarioSlice';
-import {useGetSimulationStartValues} from './hooks';
+import {useGetShownScenarios, useGetSimulationStartValues} from './hooks';
 import {useGetCaseDataByDistrictQuery} from '../../store/services/caseDataApi';
 
 export default function DataCardList(): JSX.Element {
   const theme = useTheme();
   const dispatch = useAppDispatch();
 
-  const scenarioList = useAppSelector((state) => state.scenarioList);
+  // const scenarioList = useAppSelector((state) => state.scenarioList);
+  const scenarioList = useGetShownScenarios();
   const activeScenarios = useAppSelector((state) => state.dataSelection.activeScenarios);
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
 
@@ -139,7 +140,7 @@ export default function DataCardList(): JSX.Element {
         onClick={() => dispatch(selectScenario(0))}
         onToggle={() => dispatch(toggleScenario(0))}
       />
-      {Object.entries(scenarioList.scenarios).map(([, scenario], i) => (
+      {Object.entries(scenarioList).map(([, scenario], i) => (
         <ScenarioCard
           key={scenario.id}
           scenario={scenario}

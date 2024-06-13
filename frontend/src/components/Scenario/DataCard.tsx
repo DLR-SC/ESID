@@ -5,7 +5,7 @@ import {Dictionary} from '../../util/util';
 import {useTheme} from '@mui/material/styles';
 import {useTranslation} from 'react-i18next';
 import {NumberFormatter} from '../../util/hooks';
-import {useAppSelector} from '../../store/hooks';
+import {useAppDispatch, useAppSelector} from '../../store/hooks';
 import React, {useState} from 'react';
 import Box from '@mui/material/Box';
 import Tooltip from '@mui/material/Tooltip';
@@ -21,6 +21,8 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import {GroupFilterAppendage} from './GroupFilterAppendage';
+import {Delete} from '@mui/icons-material';
+import {hideScenario} from '../../store/DataSelectionSlice';
 
 interface DataCardProps {
   /** The scenario id of the card. Note that id 0 is reserved for case data. */
@@ -55,9 +57,11 @@ interface DataCardProps {
  * This component renders a card for either the case data card or the scenario cards. It contains a title and a list of
  * compartment values and change rates relative to the simulation start.
  */
-export function DataCard(props: DataCardProps): JSX.Element {
+export function DataCard(props: Readonly<DataCardProps>): JSX.Element {
   const theme = useTheme();
   const {t, i18n} = useTranslation();
+
+  const dispatch = useAppDispatch();
 
   const {formatNumber} = NumberFormatter(i18n.language, 1, 0);
 
@@ -169,6 +173,19 @@ export function DataCard(props: DataCardProps): JSX.Element {
               {props.active ? <CheckBox /> : <CheckBoxOutlineBlank />}
             </IconButton>
           </Tooltip>
+          <Tooltip title={t('scenario.hide').toString()} arrow={true}>
+            <IconButton
+              color={'primary'}
+              onClick={() => {
+                if (props.id !== 0) {
+                  dispatch(hideScenario(props.id));
+                }
+              }}
+              aria-label={t('scenario.hide')}
+            >
+              <Delete />
+            </IconButton>
+          </Tooltip>
         </Box>
         <Box
           id={`scenario-card-main-card-${props.id}`}
@@ -256,7 +273,7 @@ interface CardTitleProps {
 }
 
 /** Renders the card title. Depending, if the card is flipped or not the title will be left or right aligned. */
-function CardTitle(props: CardTitleProps): JSX.Element {
+export function CardTitle(props: Readonly<CardTitleProps>): JSX.Element {
   const theme = useTheme();
 
   return (

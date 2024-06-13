@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import {useEffect, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {Dictionary} from '../../util/util';
 import {useGetCaseDataSingleSimulationEntryQuery} from '../../store/services/caseDataApi';
 import {useAppSelector} from '../../store/hooks';
@@ -28,4 +28,22 @@ export function useGetSimulationStartValues() {
   }, [caseData]);
 
   return compartmentValues;
+}
+
+export function useGetShownScenarios() {
+  const scenarios = useAppSelector((state) => state.scenarioList.scenarios);
+  const shownScenarios = useAppSelector((state) => state.dataSelection.shownScenarios);
+
+  return useMemo(() => {
+    return Object.values(scenarios).filter((scenario) => shownScenarios?.includes(scenario.id));
+  }, [shownScenarios, scenarios]);
+}
+
+export function useGetHiddenScenarios() {
+  const scenarios = useAppSelector((state) => state.scenarioList.scenarios);
+  const shownScenarios = useAppSelector((state) => state.dataSelection.shownScenarios);
+
+  return useMemo(() => {
+    return Object.values(scenarios).filter((scenario) => !shownScenarios?.includes(scenario.id));
+  }, [shownScenarios, scenarios]);
 }
