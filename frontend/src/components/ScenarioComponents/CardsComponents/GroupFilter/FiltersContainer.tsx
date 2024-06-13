@@ -6,6 +6,7 @@ import FilterCard from './FilterCard';
 import React from 'react';
 import {Dictionary} from 'types/Cardtypes';
 import {Localization} from 'types/localization';
+import {getScenarioPrimaryColor} from 'util/Theme';
 
 interface FiltersContainerProps {
   /* Array of filtered titles */
@@ -69,7 +70,7 @@ export default function FiltersContainer({
         maxHeight: `${(340 / 6) * maxCompartmentsRows}px`,
         boxSizing: 'border-box',
         border: 1,
-        borderColor: theme.custom.scenarios[index % theme.custom.scenarios.length][0],
+        borderColor: getScenarioPrimaryColor(index, theme),
         borderRadius: 1,
         bgcolor: theme.palette.background.paper,
         zIndex: 2,
@@ -98,7 +99,7 @@ export default function FiltersContainer({
           {filteredValues.map((_, id: number) => (
             <FilterCard
               key={id}
-              color={theme.custom.scenarios[index % theme.custom.scenarios.length][0]}
+              color={getScenarioPrimaryColor(index, theme)}
               title={filteredTitles[id]}
               compartments={compartments}
               groupFilterIndex={id}
