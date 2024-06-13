@@ -26,10 +26,10 @@ export default function CardTitle({label, isFlipped = true, color}: CardTitlePro
         color: color,
         fontSize: '13pt',
         fontFamily: ['Inter', 'Arial', 'sans-serif'].join(','),
-        marginLeft: isFlipped ? 2 : 4,
+        paddingLeft: 3,
         marginTop: 4,
         transform: isFlipped ? 'none' : 'rotateY(-180deg)',
-        textAlign: isFlipped ? 'left' : 'right',
+        textAlign: 'left',
       }}
     >
       {label}

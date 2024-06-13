@@ -71,7 +71,7 @@ export default function CompartmentsRow({
         borderTop: `2px ${selected ? theme.palette.background.paper : 'transparent'} solid`,
         borderBottom: `2px ${selected ? theme.palette.background.paper : 'transparent'} solid`,
         '&.MuiListItemButton-root.Mui-selected': {
-          backgroundColor: `${selected ? 'white' : theme.palette.background.paper}`,
+          backgroundColor: theme.palette.background.paper,
         },
         alignItems: 'center',
       }}
