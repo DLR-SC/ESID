@@ -76,7 +76,7 @@ export default function ScenarioLibrary(): JSX.Element {
           <ClickAwayListener onClickAway={handleClose}>
             <Box
               sx={{
-                width: '600px',
+                width: '700px',
                 margin: theme.spacing(2),
                 display: 'flex',
                 flexDirection: 'column',
