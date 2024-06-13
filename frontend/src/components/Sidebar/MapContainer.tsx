@@ -3,7 +3,6 @@
 
 import {useState, useEffect, useRef, useCallback, useMemo, useContext} from 'react';
 import {useTranslation} from 'react-i18next';
-import data from '../../../assets/lk_germany_reduced.geojson?url';
 import {Grid, Stack, useTheme} from '@mui/material';
 import * as am5 from '@amcharts/amcharts5';
 import React from 'react';
@@ -33,11 +32,20 @@ export default function MapContainer() {
   const dispatch = useAppDispatch();
 
   const {
+    geoData,
     mapData,
     areMapValuesFetching,
-  }: {mapData: {id: string; value: number}[] | undefined; areMapValuesFetching: boolean} = useContext(DataContext) || {
+    searchBarData,
+  }: {
+    geoData: FeatureCollection | undefined;
+    mapData: {id: string; value: number}[] | undefined;
+    areMapValuesFetching: boolean;
+    searchBarData: FeatureProperties[] | undefined;
+  } = useContext(DataContext) || {
+    geoData: {type: 'FeatureCollection', features: []},
     mapData: [],
     areMapValuesFetching: false,
+    searchBarData: [],
   };
 
   const storeSelectedArea = useAppSelector((state) => state.dataSelection.district);
@@ -53,7 +61,6 @@ export default function MapContainer() {
     };
   }, [t]);
 
-  const [geoData, setGeoData] = useState<FeatureCollection>();
   const [selectedArea, setSelectedArea] = useState<FeatureProperties>(
     storeSelectedArea.name != ''
       ? {RS: storeSelectedArea.ags, GEN: storeSelectedArea.name, BEZ: storeSelectedArea.type}
@@ -72,27 +79,6 @@ export default function MapContainer() {
   const [fixedLegendMaxValue, setFixedLegendMaxValue] = useState<number | null>(null);
 
   const legendRef = useRef<am5.HeatLegend | null>(null);
-
-  // fetch geojson
-  useEffect(() => {
-    fetch(data, {
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-    })
-      .then((response) => response.json())
-      .then(
-        // resolve Promise
-        (geojson: FeatureCollection) => {
-          setGeoData(geojson);
-        },
-        // reject promise
-        () => {
-          console.warn('Failed to fetch geoJSON');
-        }
-      );
-  }, []);
 
   useEffect(() => {
     dispatch(
@@ -143,7 +129,7 @@ export default function MapContainer() {
     >
       <Box id='sidebar-map-search-bar-wrapper'>
         <SearchBar
-          data={geoData}
+          data={searchBarData}
           defaultValue={defaultValue}
           sortProperty={'GEN'}
           optionLabel={(option) => `${option.GEN}${option.BEZ ? ` (${t(`BEZ.${option.BEZ}`)})` : ''}`}
@@ -184,6 +170,7 @@ export default function MapContainer() {
             selectedScenario={selectedScenario}
             idValuesToMap={'RS'}
             localization={localization}
+            maxZoomLevel={12}
           />
           <Grid container px={1}>
             <Grid item container xs={11} alignItems='flex-end'>

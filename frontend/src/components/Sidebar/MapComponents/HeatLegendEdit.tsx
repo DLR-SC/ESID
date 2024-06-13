@@ -124,7 +124,8 @@ export default function HeatLegendEdit({
     if (selectedScenario == null || defaultLegends.length === 0) {
       return;
     }
-    const scenarioDefault = defaultLegends[selectedScenario % defaultLegends.length];
+    const scenarioDefault =
+      selectedScenario === 0 ? defaultLegends[0] : defaultLegends[(selectedScenario % (defaultLegends.length - 1)) + 1];
     const legends = [...heatmapLegends];
     legends.unshift(scenarioDefault);
 
