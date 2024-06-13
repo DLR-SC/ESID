@@ -173,19 +173,19 @@ export function DataCard(props: Readonly<DataCardProps>): JSX.Element {
               {props.active ? <CheckBox /> : <CheckBoxOutlineBlank />}
             </IconButton>
           </Tooltip>
-          <Tooltip title={t('scenario.hide').toString()} arrow={true}>
-            <IconButton
-              color={'primary'}
-              onClick={() => {
-                if (props.id !== 0) {
+          {props.id !== 0 ? (
+            <Tooltip title={t('scenario.hide').toString()} arrow={true}>
+              <IconButton
+                color={'primary'}
+                onClick={() => {
                   dispatch(hideScenario(props.id));
-                }
-              }}
-              aria-label={t('scenario.hide')}
-            >
-              <Delete />
-            </IconButton>
-          </Tooltip>
+                }}
+                aria-label={t('scenario.hide')}
+              >
+                <Delete />
+              </IconButton>
+            </Tooltip>
+          ) : null}
         </Box>
         <Box
           id={`scenario-card-main-card-${props.id}`}

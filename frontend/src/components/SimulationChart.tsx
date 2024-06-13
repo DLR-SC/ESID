@@ -51,6 +51,7 @@ export default function SimulationChart(): JSX.Element {
   const maxDate = useAppSelector((state) => state.dataSelection.maxDate);
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
   const activeScenarios = useAppSelector((state) => state.dataSelection.activeScenarios);
+  const shownScenarios = useAppSelector((state) => state.dataSelection.shownScenarios);
   const groupFilterList = useAppSelector((state) => state.dataSelection.groupFilters);
   const dispatch = useAppDispatch();
 
@@ -81,7 +82,9 @@ export default function SimulationChart(): JSX.Element {
   const {data: simulationData, isFetching: simulationFetching} = useGetMultipleSimulationDataByNodeQuery(
     {
       // Filter only scenarios (scenario id 0 is case data)
-      ids: activeScenarios ? activeScenarios.filter((s) => s !== 0 && scenarioList.scenarios[s]) : [],
+      ids: activeScenarios
+        ? activeScenarios.filter((s) => s !== 0 && shownScenarios?.includes(s) && scenarioList.scenarios[s])
+        : [],
       node: selectedDistrict,
       groups: ['total'],
       compartments: [selectedCompartment ?? ''],

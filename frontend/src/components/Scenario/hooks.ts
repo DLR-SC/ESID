@@ -34,16 +34,18 @@ export function useGetShownScenarios() {
   const scenarios = useAppSelector((state) => state.scenarioList.scenarios);
   const shownScenarios = useAppSelector((state) => state.dataSelection.shownScenarios);
 
-  return useMemo(() => {
-    return Object.values(scenarios).filter((scenario) => shownScenarios?.includes(scenario.id));
-  }, [shownScenarios, scenarios]);
+  return useMemo(
+    () => Object.values(scenarios).filter((scenario) => shownScenarios?.includes(scenario.id)),
+    [shownScenarios, scenarios]
+  );
 }
 
 export function useGetHiddenScenarios() {
   const scenarios = useAppSelector((state) => state.scenarioList.scenarios);
   const shownScenarios = useAppSelector((state) => state.dataSelection.shownScenarios);
 
-  return useMemo(() => {
-    return Object.values(scenarios).filter((scenario) => !shownScenarios?.includes(scenario.id));
-  }, [shownScenarios, scenarios]);
+  return useMemo(
+    () => Object.values(scenarios).filter((scenario) => !shownScenarios?.includes(scenario.id)),
+    [shownScenarios, scenarios]
+  );
 }

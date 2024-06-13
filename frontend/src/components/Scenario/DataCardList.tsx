@@ -22,7 +22,6 @@ export default function DataCardList(): JSX.Element {
   const theme = useTheme();
   const dispatch = useAppDispatch();
 
-  // const scenarioList = useAppSelector((state) => state.scenarioList);
   const scenarioList = useGetShownScenarios();
   const activeScenarios = useAppSelector((state) => state.dataSelection.activeScenarios);
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
@@ -114,11 +113,16 @@ export default function DataCardList(): JSX.Element {
     if (activeScenarios) {
       if (activeScenarios.length == 0) {
         dispatch(selectScenario(null));
-      } else if (selectedScenario === null || !activeScenarios.includes(selectedScenario)) {
+      } else if (
+        selectedScenario === null ||
+        !activeScenarios
+          .filter((scenario) => scenario === 0 || !!scenarioList.find((s) => s.id === scenario))
+          .includes(selectedScenario)
+      ) {
         dispatch(selectScenario(activeScenarios[0]));
       }
     }
-  }, [activeScenarios, selectedScenario, dispatch]);
+  }, [activeScenarios, selectedScenario, dispatch, scenarioList]);
 
   return (
     <Box

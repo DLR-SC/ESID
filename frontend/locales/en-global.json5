@@ -81,6 +81,11 @@
   parameters: {
     'no-parameters': 'No parameters available for the selected scenario.',
   },
+  'scenario-library': {
+    'title': 'Scenario Library',
+    'add': 'Add',
+    'no-scenarios': 'No scenarios available.'
+  },
   today: 'Today',
   more: 'More',
   less: 'Less',

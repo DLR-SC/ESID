@@ -9,32 +9,44 @@ import {useTheme} from '@mui/material/styles';
 import {useTranslation} from 'react-i18next';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
-import {CardTitle} from './DataCard';
 import {useGetHiddenScenarios} from './hooks';
-import {useAppDispatch} from '../../store/hooks';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
 import {showScenario} from '../../store/DataSelectionSlice';
+import {useAppDispatch} from '../../store/hooks';
+import IconButton from '@mui/material/IconButton';
+import Close from '@mui/icons-material/Close';
+import {CardTitle} from './DataCard';
+import {WebAssetOff} from '@mui/icons-material';
 
 export default function ScenarioLibrary(): JSX.Element {
   const {t} = useTranslation();
+  const {t: tBackend} = useTranslation('backend');
   const theme = useTheme();
 
   const libScenarios = useGetHiddenScenarios();
+  const anchorRef = React.useRef<HTMLButtonElement>(null);
 
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(anchorEl ? null : event.currentTarget);
+  const [open, setOpen] = React.useState(false);
+  const handleToggle = () => {
+    setOpen((prevOpen) => !prevOpen);
   };
 
-  const open = Boolean(anchorEl);
   const id = open ? 'simple-popper' : undefined;
+  const handleClose = (event: Event | React.SyntheticEvent) => {
+    if (anchorRef.current?.contains(event.target as HTMLElement)) {
+      return;
+    }
+
+    setOpen(false);
+  };
 
   return (
     <Box>
       <Button
+        ref={anchorRef}
         aria-describedby={id}
         type='button'
-        onClick={handleClick}
+        onClick={handleToggle}
         id='scenario-add-button'
         variant='outlined'
         color='success'
@@ -55,19 +67,78 @@ export default function ScenarioLibrary(): JSX.Element {
             background: '#E7E7E7',
           },
         }}
-        aria-label={t('scenario.add')}
+        aria-label={t('scenario-library.add')}
       >
         +
       </Button>
-      <Popper id={id} open={open} anchorEl={anchorEl} sx={{zIndex: 100}}>
+      <Popper id={id} open={open} anchorEl={anchorRef.current} placement='bottom-start' sx={{zIndex: 100}}>
         <Paper>
-          <Box sx={{width: '400px', margin: theme.spacing(2)}}>
-            <Typography variant='h1'>Scenario Library</Typography>
-            <Divider />
-            {libScenarios.map((scenario) => (
-              <LibraryCard key={scenario.id} id={scenario.id} label={scenario.label} />
-            ))}
-          </Box>
+          <ClickAwayListener onClickAway={handleClose}>
+            <Box
+              sx={{
+                width: '600px',
+                margin: theme.spacing(2),
+                display: 'flex',
+                flexDirection: 'column',
+                flexGrow: '1',
+                padding: theme.spacing(4),
+                alignItems: 'center',
+              }}
+            >
+              <Box
+                id='group-filter-dialog-title-bar'
+                sx={{
+                  display: 'grid',
+                  gridTemplateColumns: '1fr auto 1fr',
+                  gridColumnGap: '5px',
+                  alignItems: 'center',
+                  justifyItems: 'center',
+                  width: '100%',
+                  marginBottom: theme.spacing(2),
+                }}
+              >
+                <div />
+                <Typography variant='h1'>{t('scenario-library.title')}</Typography>
+                <IconButton color='primary' sx={{marginLeft: 'auto'}} onClick={() => setOpen(false)}>
+                  <Close />
+                </IconButton>
+              </Box>
+              <Divider orientation='horizontal' variant='middle' flexItem />
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  flexGrow: '1',
+                  flexWrap: 'wrap',
+                  width: '100%',
+                  marginTop: theme.spacing(2),
+                }}
+              >
+                {libScenarios.length > 0 ? (
+                  libScenarios.map((scenario) => (
+                    <LibraryCard
+                      key={scenario.id}
+                      id={scenario.id}
+                      label={tBackend(`scenario-names.${scenario.label}`)}
+                    />
+                  ))
+                ) : (
+                  <Box
+                    sx={{
+                      margin: 'auto',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexDirection: 'column',
+                    }}
+                  >
+                    <WebAssetOff color='primary' fontSize='large' />
+                    <Typography variant='body1'>{t('scenario-library.no-scenarios')}</Typography>
+                  </Box>
+                )}
+              </Box>
+            </Box>
+          </ClickAwayListener>
         </Paper>
       </Popper>
     </Box>
@@ -75,23 +146,23 @@ export default function ScenarioLibrary(): JSX.Element {
 }
 
 function LibraryCard(props: Readonly<{id: number; label: string}>): JSX.Element {
-  const theme = useTheme();
   const dispatch = useAppDispatch();
+  const theme = useTheme();
 
   return (
     <Box
-      id={`scenario-card-root-${props.id}`}
+      id={`card-root-${props.id}`}
       sx={{
         display: 'flex',
         flexDirection: 'row',
-        color: 'grey', // TODO
+        color: theme.palette.divider,
         width: 'min-content',
         paddingLeft: theme.spacing(3),
         paddingRight: theme.spacing(3),
       }}
     >
       <Box
-        id='scenario-card-container'
+        id='card-container'
         sx={{
           position: 'relative',
           zIndex: 0,
@@ -105,29 +176,50 @@ function LibraryCard(props: Readonly<{id: number; label: string}>): JSX.Element 
         }}
       >
         <Box
-          id={`scenario-card-main-card-${props.id}`}
+          id={`card-main-card-${props.id}`}
           sx={{
             position: 'relative',
             zIndex: 0,
             boxSizing: 'border-box',
-            height: 'min-content',
+            height: '244px',
             paddingTop: theme.spacing(2),
             paddingBottom: theme.spacing(2),
-            border: `2px solid ${'grey'}`, // TODO
+            border: `2px solid ${theme.palette.primary.light}`,
             borderRadius: '3px',
             background: theme.palette.background.paper,
-            color: 'grey', // TODO
+            color: theme.palette.primary.main,
+            cursor: 'pointer',
+
+            '&:hover': {
+              background: '#EEEEEEEE',
+            },
           }}
           onClick={() => dispatch(showScenario(props.id))}
         >
           <Box
-            id={`scenario-card-front-${props.id}`}
+            id={`card-front-${props.id}`}
             sx={{
               marginTop: '6px',
               marginBottom: '6px',
+              height: '100%',
+              display: 'flex',
+              flexDirection: 'column',
             }}
           >
             <CardTitle title={props.label} id={props.id} isFront />
+            <Box
+              sx={{
+                fontWeight: 'bolder',
+                fontSize: '3rem',
+                color: theme.palette.primary.light,
+                textAlign: 'center',
+                flexGrow: 1,
+                alignContent: 'center',
+              }}
+              aria-label={'+'}
+            >
+              +
+            </Box>
           </Box>
         </Box>
       </Box>
