@@ -32,6 +32,7 @@ import LoadingContainer from './shared/LoadingContainer';
 import {useGetMultipleGroupFilterDataQuery} from 'store/services/groupApi';
 import {GroupData} from 'types/group';
 import {setReferenceDayBottom} from '../store/LayoutSlice';
+import {getScenarioPrimaryColor} from '../util/Theme';
 
 /**
  * React Component to render the Simulation Chart Section
@@ -291,7 +292,7 @@ export default function SimulationChart(): JSX.Element {
           // Add fill color according to selected scenario (if selected scenario is set and it's not case data)
           fill:
             selectedScenario !== null && selectedScenario > 0
-              ? color(theme.custom.scenarios[selectedScenario % theme.custom.scenarios.length][0])
+              ? color(getScenarioPrimaryColor(selectedScenario, theme))
               : undefined,
         })
       );
@@ -318,11 +319,11 @@ export default function SimulationChart(): JSX.Element {
             // Fallback Tooltip (if HTML breaks for some reason)
             // For text color: loop around the theme's scenario color list if scenario IDs exceed color list length, then pick first color of sub-palette which is the main color
             tooltip: Tooltip.new(root, {
-              labelText: `[bold ${theme.custom.scenarios[scenario.id % theme.custom.scenarios.length][0]}]${tBackend(
+              labelText: `[bold ${getScenarioPrimaryColor(scenario.id, theme)}]${tBackend(
                 `scenario-names.${scenario.label}`
               )}:[/] {${scenarioId}}`,
             }),
-            stroke: color(theme.custom.scenarios[scenario.id % theme.custom.scenarios.length][0]),
+            stroke: color(getScenarioPrimaryColor(scenario.id, theme)),
           })
         );
         series.strokes.template.setAll({
@@ -356,11 +357,11 @@ export default function SimulationChart(): JSX.Element {
                 // Fallback Tooltip (if HTML breaks for some reason)
                 // Use color of selected scenario (scenario ID is 1-based index, color list is 0-based index) loop if scenario ID exceeds length of color list; use first color of palette (main color)
                 tooltip: Tooltip.new(root, {
-                  labelText: `[bold ${theme.custom.scenarios[selectedScenario % theme.custom.scenarios.length][0]}]${
+                  labelText: `[bold ${getScenarioPrimaryColor(selectedScenario, theme)}]${
                     groupFilter.name
                   }:[/] {${groupFilter.name}}`,
                 }),
-                stroke: color(theme.custom.scenarios[selectedScenario % theme.custom.scenarios.length][0]),
+                stroke: color(getScenarioPrimaryColor(selectedScenario, theme)),
               })
             );
             series.strokes.template.setAll({

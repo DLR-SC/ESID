@@ -92,7 +92,8 @@ export default function HeatLegendEdit(): JSX.Element {
       return;
     }
 
-    const scenarioDefault = defaultLegends[activeScenario % defaultLegends.length];
+    const scenarioDefault =
+      activeScenario === 0 ? defaultLegends[0] : defaultLegends[(activeScenario % (defaultLegends.length - 1)) + 1];
     const legends = [...heatmapLegends];
     legends.unshift(scenarioDefault);
 

@@ -8,6 +8,7 @@ import {useGetSingleSimulationEntryQuery} from 'store/services/scenarioApi';
 import {Dictionary} from '../../util/util';
 import {useTranslation} from 'react-i18next';
 import {DataCard} from './DataCard';
+import {getScenarioPrimaryColor} from '../../util/Theme';
 
 /** Type definition for the ScenarioCard props */
 interface ScenarioCardProps {
@@ -75,7 +76,7 @@ export function ScenarioCard(props: Readonly<ScenarioCardProps>): JSX.Element {
     <DataCard
       id={props.scenario.id}
       label={tBackend(`scenario-names.${props.scenario.label}`)}
-      color={theme.custom.scenarios[props.scenario.id % theme.custom.scenarios.length][0]}
+      color={getScenarioPrimaryColor(props.scenario.id, theme)}
       selected={props.selected}
       active={props.active}
       compartmentValues={compartmentValues}
