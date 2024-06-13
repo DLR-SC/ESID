@@ -4,7 +4,6 @@
 import {Box, darken, useTheme} from '@mui/material';
 import {Dictionary, Scenario, cardValue, filterValue} from '../../types/Cardtypes';
 import {useContext, useEffect, useMemo, useState} from 'react';
-import {GroupFilter} from '../../types/Filtertypes';
 import {GroupCategories, GroupSubcategories} from 'store/services/groupApi';
 import {NumberFormatter} from 'util/hooks';
 import {useTranslation} from 'react-i18next';
@@ -29,7 +28,7 @@ import CompartmentsRows from './CompartmentsComponents/CompartmentsRows';
 import FilterDialogContainer from './FilterComponents/FilterDialogContainer';
 import GeneralButton from './ExpandedButtonComponents/ExpandedButton';
 import ReferenceDatePicker from './ReferenceDatePickerComponents.tsx/ReferenceDatePicker';
-import {GroupResponse} from 'types/group';
+import {GroupFilter, GroupResponse} from 'types/group';
 import {SimulationModel, SimulationDataByNode, Simulations} from 'types/scenario';
 import {CaseDataByNode} from 'types/caseData';
 import {useAppDispatch, useAppSelector} from 'store/hooks';
