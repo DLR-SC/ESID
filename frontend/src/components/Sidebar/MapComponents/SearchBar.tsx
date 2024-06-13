@@ -10,7 +10,6 @@ import {FeatureProperties} from 'types/map';
 
 interface SearchBarProps {
   data: FeatureProperties[] | undefined;
-  defaultValue?: FeatureProperties;
   sortProperty?: string;
   optionLabel: (option: FeatureProperties) => string;
   autoCompleteValue: FeatureProperties;
@@ -18,10 +17,6 @@ interface SearchBarProps {
   valueEqualProperty?: string;
   onChange: (event: SyntheticEvent<Element, Event>, value: FeatureProperties | null) => void;
   placeholder?: string;
-  background?: string;
-  borderColor?: string;
-  borderColorHover?: string;
-  borderColorFocus?: string;
 }
 
 /**

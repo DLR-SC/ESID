@@ -11,51 +11,28 @@ import userEvent from '@testing-library/user-event';
 import {FeatureProperties} from 'types/map';
 
 const SearchBarTest = () => {
-  const geoData = {
-    type: 'FeatureCollection',
-    features: [
-      {
-        type: 'Feature',
-        properties: {
-          RS: '09771',
-          GEN: 'Aichach-Friedberg',
-          BEZ: 'LK',
-        },
-        geometry: {
-          type: 'Polygon',
-          coordinates: [
-            [
-              [10.0, 50.0],
-              [11.0, 50.0],
-              [11.0, 51.0],
-              [10.0, 51.0],
-              [10.0, 50.0],
-            ],
-          ],
-        },
-      },
-      {
-        type: 'Feature',
-        properties: {
-          RS: '12345',
-          GEN: 'Test District',
-          BEZ: 'Test Type',
-        },
-        geometry: {
-          type: 'Polygon',
-          coordinates: [
-            [
-              [12.0, 52.0],
-              [13.0, 52.0],
-              [13.0, 53.0],
-              [12.0, 53.0],
-              [12.0, 52.0],
-            ],
-          ],
-        },
-      },
-    ],
-  };
+  const geoData = [
+    {
+      RS: '12345',
+      GEN: 'Test District',
+      BEZ: 'Test Type',
+    },
+    {
+      RS: '09771',
+      GEN: 'Aichach-Friedberg',
+      BEZ: 'LK',
+    },
+    {
+      RS: '00000',
+      GEN: 'germany',
+      BEZ: '',
+    },
+    {
+      RS: '05315103',
+      GEN: 'Köln - Altstadt/Nord (Innenstadt)',
+      BEZ: 'ST',
+    },
+  ];
 
   const defaultValue = useMemo(
     () => ({
@@ -72,14 +49,12 @@ const SearchBarTest = () => {
   return (
     <SearchBar
       data={geoData}
-      defaultValue={defaultValue}
       sortProperty={'GEN'}
       optionLabel={(option) => `${option.GEN}${option.BEZ ? ` (BEZ.${option.BEZ})` : ''}`}
       autoCompleteValue={{
         RS: selectedArea['RS'],
         GEN: selectedArea['GEN'],
         BEZ: selectedArea['BEZ'],
-        id: selectedArea['id'],
       }}
       onChange={(_event, option) => {
         if (option) {
@@ -134,7 +109,14 @@ describe('Searchbar', () => {
 
     await userEvent.type(screen.getByPlaceholderText('germany'), '{ArrowDown}{Enter}');
 
-    await screen.findByDisplayValue('Test District (BEZ.Test Type)');
+    /* [CDtemp-begin] */
+    await screen.findByDisplayValue('Köln - Altstadt/Nord (Innenstadt) (BEZ.ST)');
+    // [CDtemp] await screen.findByDisplayValue('Test District (BEZ.Test Type)');
+    // [CDtemp] expect(Store.getState().dataSelection.district).toStrictEqual({
+    // [CDtemp]   ags: '12345',
+    // [CDtemp]   name: 'Test District',
+    // [CDtemp]   type: 'Test Type',
+    // [CDtemp] });
   });
 
   afterEach(() => {

@@ -130,7 +130,6 @@ export default function MapContainer() {
       <Box id='sidebar-map-search-bar-wrapper'>
         <SearchBar
           data={searchBarData}
-          defaultValue={defaultValue}
           sortProperty={'GEN'}
           optionLabel={(option) => `${option.GEN}${option.BEZ ? ` (${t(`BEZ.${option.BEZ}`)})` : ''}`}
           autoCompleteValue={{
@@ -170,7 +169,7 @@ export default function MapContainer() {
             selectedScenario={selectedScenario}
             idValuesToMap={'RS'}
             localization={localization}
-            maxZoomLevel={12}
+            maxZoomLevel={32}
           />
           <Grid container px={1}>
             <Grid item container xs={11} alignItems='flex-end'>
