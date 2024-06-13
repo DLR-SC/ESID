@@ -9,11 +9,11 @@ import React from 'react';
 import {useTheme} from '@mui/material/styles';
 import Box from '@mui/material/Box/Box';
 import {Dictionary} from 'util/util';
-import {GroupFilter} from 'types/Filtertypes';
 import {Scenario} from 'store/ScenarioSlice';
 import {cardValue, filterValue} from 'types/Cardtypes';
 import {Localization} from 'types/localization';
 import {getScenarioPrimaryColor} from 'util/Theme';
+import {GroupFilter} from 'types/group';
 
 interface CardContainerProps {
   /* A boolean indicating whether the compartments are expanded. */
