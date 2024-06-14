@@ -9,13 +9,46 @@ import React from 'react';
 import {FeatureProperties} from 'types/map';
 
 interface SearchBarProps {
+  /**
+   * Array of data items to be used as options in the autocomplete.
+   */
   data: FeatureProperties[] | undefined;
+
+  /**
+   * Property name by which the options are sorted and grouped.
+   */
   sortProperty?: string;
+
+  /**
+   * Function to determine the label for each option.
+   * @param option - The option whose label is being determined.
+   * @returns The label for the given option.
+   */
   optionLabel: (option: FeatureProperties) => string;
+
+  /**
+   * The currently selected value for the autocomplete.
+   */
   autoCompleteValue: FeatureProperties;
+
+  /**
+   * Property name used to compare options for equality.
+   */
   optionEqualProperty?: string;
+
+  /**
+   * Property name used to compare the selected value for equality.
+   */
   valueEqualProperty?: string;
+
+  /**
+   * Event handler for when the selected option changes.
+   */
   onChange: (event: SyntheticEvent<Element, Event>, value: FeatureProperties | null) => void;
+
+  /**
+   * Placeholder text for the search input field.
+   */
   placeholder?: string;
 }
 
