@@ -13,7 +13,7 @@ import {groupApi} from './services/groupApi';
 import LayoutReducer from './LayoutSlice';
 
 const persistConfig = {
-  key: 'root',
+  key: 'root' + window.location.pathname, // Ensure that each hosted version has a different store.
   storage,
   whitelist: ['dataSelection', 'userPreference'],
 };
