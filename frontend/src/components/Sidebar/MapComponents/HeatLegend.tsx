@@ -52,7 +52,6 @@ interface HeatProps {
 
   /**
    * Optional localization settings for the legend.
-   * Includes number formatting and language overrides.
    */
   localization?: Localization;
 }
@@ -73,29 +72,37 @@ export default function HeatLegend({
     margin: '5px',
     height: '50px',
   },
-  localization = {
-    formatNumber: (value) => value.toLocaleString(),
-    customLang: 'global',
-    overrides: {},
-  },
+  localization,
 }: Readonly<HeatProps>): JSX.Element {
   const unique_id = useMemo(() => id + String(Date.now() + Math.random()), [id]);
   const theme = useTheme();
 
   const root = useRoot(unique_id);
 
+  // Memoize the default localization object to avoid infinite re-renders
+  const defaultLocalization = useMemo(() => {
+    return {
+      formatNumber: (value: number) => value.toString(),
+      customLang: 'global',
+      overrides: {},
+    };
+  }, []);
+
+  // Use the provided localization or default to the memoized one
+  const localizationToUse = localization || defaultLocalization;
+
   const heatLegendSettings = useMemo(() => {
     return {
       orientation: 'horizontal' as 'horizontal' | 'vertical',
       startValue: min,
-      startText: displayText ? localization.formatNumber!(min) : ' ',
+      startText: displayText ? localizationToUse.formatNumber!(min) : ' ',
       endValue: max,
-      endText: displayText ? localization.formatNumber!(max) : ' ',
+      endText: displayText ? localizationToUse.formatNumber!(max) : ' ',
       // set start & end color to paper background as gradient is overwritten later and this sets the tooltip background color
       startColor: am5.color(theme.palette.background.paper),
       endColor: am5.color(theme.palette.background.paper),
     };
-  }, [min, max, displayText, localization.formatNumber, theme.palette.background.paper]);
+  }, [min, displayText, localizationToUse.formatNumber, max, theme.palette.background.paper]);
 
   const stoplist = useMemo(() => {
     return legend.steps.map((item) => ({
