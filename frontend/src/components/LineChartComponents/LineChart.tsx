@@ -259,7 +259,7 @@ export default function LineChart({
         rootRef.current?.dispose();
       };
     },
-    // This effect should only run once. dispatch should not change during runtime
+    // This effect should only run once.
     [chartId, setSelectedDate]
   );
 

@@ -6,7 +6,7 @@ import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 import {GroupFilter, GroupResponse} from 'types/group';
 /* [CDtemp-begin] */
 import cologneData from '../../../assets/stadtteile_cologne_list.json';
-import {District} from '../../types/cologneDisticts';
+import {District} from '../../types/cologneDistricts';
 /* [CDtemp-end] */
 
 export const groupApi = createApi({
