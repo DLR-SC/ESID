@@ -15,6 +15,10 @@ import {Box} from '@mui/material';
 import {useTheme} from '@mui/material/styles';
 import React from 'react';
 import {Localization} from 'types/localization';
+import useRoot from '../MapWrapper/Root';
+import usePolygonSeries from '../MapWrapper/PoligonSeries';
+import useMapChart from '../MapWrapper/Map';
+import { useConst } from 'util/hooks';
 
 interface MapProps {
   /** The data to be displayed on the map, in GeoJSON format. */
@@ -89,7 +93,6 @@ interface MapProps {
 
 /**
  * React Component to render a Heatmap.
- * @returns {JSX.Element} JSX Element to render a Heatmap.
  */
 export default function HeatMap({
   mapData,
@@ -115,10 +118,9 @@ export default function HeatMap({
   setLongLoad = () => {},
   localization,
   idValuesToMap = 'id',
-}: MapProps): JSX.Element {
+}: MapProps) {
   const theme = useTheme();
   const lastSelectedPolygon = useRef<am5map.MapPolygon | null>(null);
-  const [polygonSeries, setPolygonSeries] = useState<am5map.MapPolygonSeries | null>(null);
   const [longLoadTimeout, setLongLoadTimeout] = useState<number>();
 
   // Memoize the default localization object to avoid infinite re-renders
@@ -169,137 +171,105 @@ export default function HeatMap({
     }
   }, [fixedLegendMaxValue, setAggregatedMax, values]);
 
-  // Create Map with GeoData
-  useEffect(() => {
-    if (!mapData) return;
-    // Create map instance
-    const root = am5.Root.new(mapId);
-    const chart = root.container.children.push(
-      am5map.MapChart.new(root, {
+  const mapRoot = useRoot(mapId);
+
+  const mapSettings = useMemo(() => {
+    if (mapRoot) {
+      return {
         projection: am5map.geoMercator(),
         maxZoomLevel: maxZoomLevel,
         maxPanOut: 0.4,
-        zoomControl: am5map.ZoomControl.new(root, {
-          paddingBottom: 25,
-          opacity: 50,
-        }),
-      })
-    );
+        zoomControl: am5map.ZoomControl.new(mapRoot, {paddingBottom: 25, opacity: 0.5}),
+      };
+    } else return;
+  }, [mapRoot, maxZoomLevel]);
 
-    // Add home button to reset pan & zoom
-    chart.get('zoomControl')?.homeButton.set('visible', true);
+  const chart = useMapChart(mapRoot, mapSettings, useConst(() => {}));
 
-    // Settings to fix positioning of images on buttons
-    const fixSVGPosition = {
-      width: 25,
-      height: 25,
-      dx: -5,
-      dy: -3,
-    };
+  const polygon = useMemo(() => {
+    return {
+      geoJSON: mapData as GeoJSON,
+      tooltipPosition: 'fixed',
+    } as am5map.IMapPolygonSeriesSettings;
+  }, [mapData]);
 
-    // Set svg icon for home button
-    chart.get('zoomControl')?.homeButton.set(
-      'icon',
-      am5.Picture.new(root, {
-        src: svgZoomResetURL,
-        ...fixSVGPosition,
-      }) as unknown as am5.Graphics
-    );
+  const polygonSeries = usePolygonSeries(mapRoot, chart, polygon);
 
-    // Add function to select germany when home button is pressed
-    chart.get('zoomControl')?.homeButton.events.on('click', () => {
-      if (defaultSelectedValue) {
-        setSelectedArea(defaultSelectedValue);
-      }
-    });
+  useEffect(() => {
+    if (mapRoot && chart && polygonSeries) {
+      chart.zoomControl = am5map.ZoomControl.new(mapRoot, {paddingBottom: 25, opacity: 0.5});
 
-    // Set svg icon for plus button
-    chart.get('zoomControl')?.plusButton.set(
-      'icon',
-      am5.Picture.new(root, {
-        src: svgZoomInURL,
-        ...fixSVGPosition,
-      }) as unknown as am5.Graphics
-    );
+      const fixSVGPosition = {width: 25, height: 25, dx: -5, dy: -3};
 
-    // Set svg icon for minus button
-    chart.get('zoomControl')?.minusButton.set(
-      'icon',
-      am5.Picture.new(root, {
-        src: svgZoomOutURL,
-        ...fixSVGPosition,
-      }) as unknown as am5.Graphics
-    );
+      chart.zoomControl.homeButton.events.on('click', () => {
+        if (defaultSelectedValue) {
+          setSelectedArea(defaultSelectedValue);
+        }
+      });
 
-    // Create polygon series
-    const polygonSeries = chart.series.push(
-      am5map.MapPolygonSeries.new(root, {
-        geoJSON: mapData as GeoJSON,
-        tooltipPosition: 'fixed',
-      })
-    );
+      chart.zoomControl.homeButton.set(
+        'icon',
+        am5.Picture.new(mapRoot, {
+          src: svgZoomResetURL,
+          ...fixSVGPosition,
+        }) as unknown as am5.Graphics
+      );
 
-    // Get template for polygons to attach events etc to each
-    const polygonTemplate = polygonSeries.mapPolygons.template;
+      chart.zoomControl.plusButton.set(
+        'icon',
+        am5.Picture.new(mapRoot, {src: svgZoomInURL, ...fixSVGPosition}) as unknown as am5.Graphics
+      );
+      chart.zoomControl.minusButton.set(
+        'icon',
+        am5.Picture.new(mapRoot, {src: svgZoomOutURL, ...fixSVGPosition}) as unknown as am5.Graphics
+      );
 
-    // Set properties for each polygon
-    polygonTemplate.setAll({
-      fill: am5.color(defaultFill),
-      stroke: am5.color(theme.palette.background.default),
-      strokeWidth: 1,
-      fillOpacity: fillOpacity,
-    });
+      const polygonTemplate = polygonSeries.mapPolygons.template;
+      polygonTemplate.setAll({
+        fill: am5.color(defaultFill),
+        stroke: am5.color(theme.palette.background.default),
+        strokeWidth: 1,
+        fillOpacity: fillOpacity,
+      });
 
-    // Set hover properties for each polygon
-    polygonTemplate.states.create('hover', {
-      stroke: am5.color(theme.palette.primary.main),
-      strokeWidth: 2,
-      layer: 1,
-    });
+      polygonTemplate.states.create('hover', {
+        stroke: am5.color(theme.palette.primary.main),
+        strokeWidth: 2,
+        layer: 1,
+      });
 
-    // Set click properties for each polygon
-    polygonTemplate.events.on('click', function (ev) {
-      if (ev.target.dataItem && ev.target.dataItem.dataContext) {
-        setSelectedArea(ev.target.dataItem.dataContext as FeatureProperties);
-      }
-    });
+      polygonTemplate.events.on('click', function (ev) {
+        if (ev.target.dataItem?.dataContext) {
+          setSelectedArea(ev.target.dataItem.dataContext as FeatureProperties);
+        }
+      });
 
-    // Set heat map properties
-    //show tooltip on heat legend when hovering
-    polygonTemplate.events.on('pointerover', (e) => {
-      if (legendRef.current) {
-        const value = (e.target.dataItem?.dataContext as FeatureProperties).value as number;
-        legendRef.current.showValue(value, localizationToUse.formatNumber!(value));
-      }
-    });
-    //hide tooltip on heat legend when not hovering anymore event
-    polygonTemplate.events.on('pointerout', () => {
-      if (legendRef.current) {
-        void legendRef.current.hideTooltip();
-      }
-    });
+      polygonTemplate.events.on('pointerover', (e) => {
+        if (legendRef.current) {
+          const value = (e.target.dataItem?.dataContext as FeatureProperties).value as number;
+          legendRef.current.showValue(value, localizationToUse.formatNumber!(value));
+        }
+      });
 
-    setPolygonSeries(polygonSeries);
-
-    return () => {
-      chart.dispose();
-      root.dispose();
-    };
+      polygonTemplate.events.on('pointerout', () => {
+        if (legendRef.current) {
+          void legendRef.current.hideTooltip();
+        }
+      });
+    }
   }, [
+    mapRoot,
+    chart,
+    polygonSeries,
     defaultFill,
-    defaultSelectedValue,
-    fillOpacity,
-    legendRef,
-    localizationToUse.formatNumber,
-    mapData,
-    mapId,
-    setSelectedArea,
     theme.palette.background.default,
     theme.palette.primary.main,
-    maxZoomLevel,
+    fillOpacity,
+    setSelectedArea,
+    localizationToUse.formatNumber,
+    legendRef,
   ]);
 
-  // Highlight selected district
   useEffect(() => {
     if (!polygonSeries) return;
     // Reset last selected polygon
@@ -380,6 +350,8 @@ export default function HeatMap({
       });
     }
   }, [
+    mapRoot,
+    chart,
     aggregatedMax,
     defaultFill,
     idValuesToMap,
@@ -393,7 +365,8 @@ export default function HeatMap({
     tooltipTextWhileFetching,
     values,
   ]);
-  return <Box id={mapId} height={mapHeight}></Box>;
+
+  return <Box id={mapId} height={mapHeight} />;
 }
 
 function getColorFromLegend(
