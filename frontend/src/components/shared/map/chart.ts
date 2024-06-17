@@ -1,13 +1,17 @@
-import {useLayoutEffect, useState} from 'react';
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
+
+import {useState, useLayoutEffect} from 'react';
 import * as am5map from '@amcharts/amcharts5/map';
 import {Root} from '@amcharts/amcharts5/.internal/core/Root';
+import {MapChart} from '@amcharts/amcharts5/map';
 
 export default function useMapChart(
   root: Root | null,
-  settings: am5map.IMapChartSettings,
-  initializer?: (chart: am5map.MapChart) => void
-): am5map.MapChart | null {
-  const [chart, setChart] = useState<am5map.MapChart | null>(null);
+  settings: am5map.IMapChartSettings | null,
+  initializer?: (chart: MapChart) => void
+): MapChart | null {
+  const [chart, setChart] = useState<MapChart>();
 
   useLayoutEffect(() => {
     if (!root || !settings) {
@@ -15,6 +19,7 @@ export default function useMapChart(
     }
 
     const newChart = root.container.children.push(am5map.MapChart.new(root, settings));
+
     setChart(newChart);
 
     if (initializer) {
@@ -26,5 +31,5 @@ export default function useMapChart(
     };
   }, [root, settings, initializer]);
 
-  return chart;
+  return chart ?? null;
 }

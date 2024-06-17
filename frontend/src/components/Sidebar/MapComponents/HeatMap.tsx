@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import {useState, useEffect, useRef, useMemo} from 'react';
+import {useState, useEffect, useRef, useMemo, useCallback} from 'react';
 import * as am5 from '@amcharts/amcharts5';
 import * as am5map from '@amcharts/amcharts5/map';
 import {GeoJSON} from 'geojson';
@@ -15,10 +15,10 @@ import {Box} from '@mui/material';
 import {useTheme} from '@mui/material/styles';
 import React from 'react';
 import {Localization} from 'types/localization';
-import useRoot from '../MapWrapper/Root';
-import usePolygonSeries from '../MapWrapper/PoligonSeries';
-import useMapChart from '../MapWrapper/Map';
-import { useConst } from 'util/hooks';
+import useRoot from 'components/shared/map/Root';
+import useMapChart from 'components/shared/map/chart';
+import useZoomControl from 'components/shared/map/zoom';
+import usePolygonSeries from 'components/shared/map/polygon';
 
 interface MapProps {
   /** The data to be displayed on the map, in GeoJSON format. */
@@ -143,6 +143,132 @@ export default function HeatMap({
     return isDataFetching;
   }, [isDataFetching, selectedScenario]);
 
+  const root = useRoot(mapId);
+
+  const zoomSettings = useMemo(() => {
+    return {
+      paddingBottom: 25,
+      opacity: 50,
+    };
+  }, []);
+
+  const zoom = useZoomControl(root, zoomSettings);
+
+  const chartSettings = useMemo(() => {
+    if (!zoom) return null;
+    return {
+      projection: am5map.geoMercator(),
+      maxZoomLevel: maxZoomLevel,
+      maxPanOut: 0.4,
+      zoomControl: zoom,
+    };
+  }, [maxZoomLevel, zoom]);
+
+  const chart = useMapChart(
+    root,
+    chartSettings,
+    useCallback(
+      (chart: am5map.MapChart) => {
+        if (!root) return;
+        const zoom = chart.get('zoomControl') as am5map.ZoomControl;
+        zoom.homeButton.set('visible', true);
+        const fixSVGPosition = {
+          width: 25,
+          height: 25,
+          dx: -5,
+          dy: -3,
+        };
+        zoom.homeButton.set(
+          'icon',
+          am5.Picture.new(root, {
+            src: svgZoomResetURL,
+            ...fixSVGPosition,
+          }) as unknown as am5.Graphics
+        );
+        zoom.homeButton.events.on('click', () => {
+          setSelectedArea(defaultSelectedValue);
+        });
+        zoom.plusButton.set(
+          'icon',
+          am5.Picture.new(root, {
+            src: svgZoomInURL,
+            ...fixSVGPosition,
+          }) as unknown as am5.Graphics
+        );
+        zoom.minusButton.set(
+          'icon',
+          am5.Picture.new(root, {
+            src: svgZoomOutURL,
+            ...fixSVGPosition,
+          }) as unknown as am5.Graphics
+        );
+      },
+      [root, setSelectedArea, defaultSelectedValue]
+    )
+  );
+
+  const polygonSettings = useMemo(() => {
+    return {
+      geoJSON: mapData as GeoJSON,
+      tooltipPosition: 'fixed',
+    } as am5map.IMapPolygonSeriesSettings;
+  }, [mapData]);
+
+  const polygonSeries = usePolygonSeries(
+    root,
+    chart,
+    polygonSettings,
+    useCallback(
+      (polygonSeries: am5map.MapPolygonSeries) => {
+        const polygonTemplate = polygonSeries.mapPolygons.template;
+
+        // Set properties for each polygon
+        polygonTemplate.setAll({
+          fill: am5.color(defaultFill),
+          stroke: am5.color(theme.palette.background.default),
+          strokeWidth: 1,
+          fillOpacity: fillOpacity,
+        });
+
+        polygonTemplate.states.create('hover', {
+          stroke: am5.color(theme.palette.primary.main),
+          strokeWidth: 2,
+          layer: 1,
+        });
+
+        polygonTemplate.events.on('click', function (ev) {
+          if (ev.target.dataItem?.dataContext) {
+            setSelectedArea(ev.target.dataItem.dataContext as FeatureProperties);
+          }
+        });
+
+        // Set heat map properties
+        //show tooltip on heat legend when hovering
+        polygonTemplate.events.on('pointerover', (e) => {
+          if (legendRef.current) {
+            const value = (e.target.dataItem?.dataContext as FeatureProperties).value as number;
+            legendRef.current.showValue(value, localizationToUse.formatNumber!(value));
+          }
+        });
+        //hide tooltip on heat legend when not hovering anymore event
+        polygonTemplate.events.on('pointerout', () => {
+          if (legendRef.current) {
+            void legendRef.current.hideTooltip();
+          }
+        });
+      },
+      [
+        defaultFill,
+        fillOpacity,
+        legendRef,
+        localizationToUse.formatNumber,
+        setSelectedArea,
+        theme.palette.background.default,
+        theme.palette.primary.main,
+      ]
+    )
+  );
+
   // This effect is responsible for showing the loading indicator if the data is not ready within 1 second. This
   // prevents that the indicator is showing for every little change.
   useEffect(() => {
@@ -171,105 +297,7 @@ export default function HeatMap({
     }
   }, [fixedLegendMaxValue, setAggregatedMax, values]);
 
-  const mapRoot = useRoot(mapId);
-
-  const mapSettings = useMemo(() => {
-    if (mapRoot) {
-      return {
-        projection: am5map.geoMercator(),
-        maxZoomLevel: maxZoomLevel,
-        maxPanOut: 0.4,
-        zoomControl: am5map.ZoomControl.new(mapRoot, {paddingBottom: 25, opacity: 0.5}),
-      };
-    } else return;
-  }, [mapRoot, maxZoomLevel]);
-
-  const chart = useMapChart(mapRoot, mapSettings, useConst(() => {}));
-
-  const polygon = useMemo(() => {
-    return {
-      geoJSON: mapData as GeoJSON,
-      tooltipPosition: 'fixed',
-    } as am5map.IMapPolygonSeriesSettings;
-  }, [mapData]);
-
-  const polygonSeries = usePolygonSeries(mapRoot, chart, polygon);
-
-  useEffect(() => {
-    if (mapRoot && chart && polygonSeries) {
-      chart.zoomControl = am5map.ZoomControl.new(mapRoot, {paddingBottom: 25, opacity: 0.5});
-
-      const fixSVGPosition = {width: 25, height: 25, dx: -5, dy: -3};
-
-      chart.zoomControl.homeButton.events.on('click', () => {
-        if (defaultSelectedValue) {
-          setSelectedArea(defaultSelectedValue);
-        }
-      });
-
-      chart.zoomControl.homeButton.set(
-        'icon',
-        am5.Picture.new(mapRoot, {
-          src: svgZoomResetURL,
-          ...fixSVGPosition,
-        }) as unknown as am5.Graphics
-      );
-
-      chart.zoomControl.plusButton.set(
-        'icon',
-        am5.Picture.new(mapRoot, {src: svgZoomInURL, ...fixSVGPosition}) as unknown as am5.Graphics
-      );
-      chart.zoomControl.minusButton.set(
-        'icon',
-        am5.Picture.new(mapRoot, {src: svgZoomOutURL, ...fixSVGPosition}) as unknown as am5.Graphics
-      );
-
-      const polygonTemplate = polygonSeries.mapPolygons.template;
-      polygonTemplate.setAll({
-        fill: am5.color(defaultFill),
-        stroke: am5.color(theme.palette.background.default),
-        strokeWidth: 1,
-        fillOpacity: fillOpacity,
-      });
-
-      polygonTemplate.states.create('hover', {
-        stroke: am5.color(theme.palette.primary.main),
-        strokeWidth: 2,
-        layer: 1,
-      });
-
-      polygonTemplate.events.on('click', function (ev) {
-        if (ev.target.dataItem?.dataContext) {
-          setSelectedArea(ev.target.dataItem.dataContext as FeatureProperties);
-        }
-      });
-
-      polygonTemplate.events.on('pointerover', (e) => {
-        if (legendRef.current) {
-          const value = (e.target.dataItem?.dataContext as FeatureProperties).value as number;
-          legendRef.current.showValue(value, localizationToUse.formatNumber!(value));
-        }
-      });
-
-      polygonTemplate.events.on('pointerout', () => {
-        if (legendRef.current) {
-          void legendRef.current.hideTooltip();
-        }
-      });
-    }
-  }, [
-    mapRoot,
-    chart,
-    polygonSeries,
-    defaultFill,
-    theme.palette.background.default,
-    theme.palette.primary.main,
-    fillOpacity,
-    setSelectedArea,
-    localizationToUse.formatNumber,
-    legendRef,
-  ]);
-
+  // Create Map with GeoData
   useEffect(() => {
     if (!polygonSeries) return;
     // Reset last selected polygon
@@ -350,7 +378,7 @@ export default function HeatMap({
       });
     }
   }, [
-    mapRoot,
+    root,
     chart,
     aggregatedMax,
     defaultFill,

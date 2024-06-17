@@ -19,6 +19,7 @@ const HeatLegendTest = () => {
       ],
     };
   }, []);
+
   return <HeatLegend legend={legend} min={0} max={1} displayText={false} />;
 };
 
