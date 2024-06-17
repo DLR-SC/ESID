@@ -7,9 +7,6 @@ interface CardTitleProps {
   /* Label for the card title */
   label: string;
 
-  /* Boolean to determine if the card is flipped */
-  isFlipped?: boolean;
-
   /* Color of the card title */
   color?: string;
 }
@@ -17,7 +14,7 @@ interface CardTitleProps {
 /**
  * This component renders the title of a card with optional flipping and color customization.
  */
-export default function CardTitle({label, isFlipped = true, color}: CardTitleProps) {
+export default function CardTitle({label, color}: CardTitleProps) {
   return (
     <Typography
       variant='h2'
@@ -28,7 +25,6 @@ export default function CardTitle({label, isFlipped = true, color}: CardTitlePro
         fontFamily: ['Inter', 'Arial', 'sans-serif'].join(','),
         paddingLeft: 3,
         marginTop: 4,
-        transform: isFlipped ? 'none' : 'rotateY(-180deg)',
         textAlign: 'left',
       }}
     >

@@ -151,10 +151,12 @@ function MainCard({
             display: 'flex',
             height: '65px',
             alignItems: 'self-end',
+            justifyContent: 'left',
             width: 'full',
+            transform: activeScenarios?.includes(index) ? 'none' : 'rotateY(180deg)',
           }}
         >
-          <CardTitle label={label} isFlipped={activeScenarios?.includes(index) ? true : false} color={color} />
+          <CardTitle label={label} color={color} />
         </Box>
         <CardRows
           index={index}
