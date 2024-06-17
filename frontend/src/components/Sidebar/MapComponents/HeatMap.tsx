@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import {useState, useEffect, useRef, useMemo} from 'react';
+import {useState, useEffect, useRef, useMemo, useCallback} from 'react';
 import * as am5 from '@amcharts/amcharts5';
 import * as am5map from '@amcharts/amcharts5/map';
 import {GeoJSON} from 'geojson';
@@ -15,6 +15,9 @@ import {Box} from '@mui/material';
 import {useTheme} from '@mui/material/styles';
 import React from 'react';
 import {Localization} from 'types/localization';
+import useRoot from 'components/shared/map/Root';
+import useMapChart from 'components/shared/map/chart';
+import useZoomControl from 'components/shared/map/zoom';
 
 interface MapProps {
   /** The data to be displayed on the map, in GeoJSON format. */
@@ -141,6 +144,70 @@ export default function HeatMap({
     return isDataFetching;
   }, [isDataFetching, selectedScenario]);
 
+  const root = useRoot(mapId);
+
+  const zoomSettings = useMemo(() => {
+    return {
+      paddingBottom: 25,
+      opacity: 50,
+    };
+  }, []);
+
+  const zoom = useZoomControl(root, zoomSettings);
+
+  const chartSettings = useMemo(() => {
+    if (!zoom) return null;
+    return {
+      projection: am5map.geoMercator(),
+      maxZoomLevel: maxZoomLevel,
+      maxPanOut: 0.4,
+      zoomControl: zoom,
+    };
+  }, [maxZoomLevel, zoom]);
+
+  const chart = useMapChart(
+    root,
+    chartSettings,
+    useCallback(
+      (chart: am5map.MapChart) => {
+        if (!root) return;
+        const zoom = chart.get('zoomControl') as am5map.ZoomControl;
+        zoom.homeButton.set('visible', true);
+        const fixSVGPosition = {
+          width: 25,
+          height: 25,
+          dx: -5,
+          dy: -3,
+        };
+        zoom.homeButton.set(
+          'icon',
+          am5.Picture.new(root, {
+            src: svgZoomResetURL,
+            ...fixSVGPosition,
+          }) as unknown as am5.Graphics
+        );
+        zoom.homeButton.events.on('click', () => {
+          setSelectedArea(defaultSelectedValue);
+        });
+        zoom.plusButton.set(
+          'icon',
+          am5.Picture.new(root, {
+            src: svgZoomInURL,
+            ...fixSVGPosition,
+          }) as unknown as am5.Graphics
+        );
+        zoom.minusButton.set(
+          'icon',
+          am5.Picture.new(root, {
+            src: svgZoomOutURL,
+            ...fixSVGPosition,
+          }) as unknown as am5.Graphics
+        );
+      },
+      [root, setSelectedArea, defaultSelectedValue]
+    )
+  );
+
   // This effect is responsible for showing the loading indicator if the data is not ready within 1 second. This
   // prevents that the indicator is showing for every little change.
   useEffect(() => {
@@ -171,65 +238,7 @@ export default function HeatMap({
 
   // Create Map with GeoData
   useEffect(() => {
-    if (!mapData) return;
-    // Create map instance
-    const root = am5.Root.new(mapId);
-    const chart = root.container.children.push(
-      am5map.MapChart.new(root, {
-        projection: am5map.geoMercator(),
-        maxZoomLevel: maxZoomLevel,
-        maxPanOut: 0.4,
-        zoomControl: am5map.ZoomControl.new(root, {
-          paddingBottom: 25,
-          opacity: 50,
-        }),
-      })
-    );
-
-    // Add home button to reset pan & zoom
-    chart.get('zoomControl')?.homeButton.set('visible', true);
-
-    // Settings to fix positioning of images on buttons
-    const fixSVGPosition = {
-      width: 25,
-      height: 25,
-      dx: -5,
-      dy: -3,
-    };
-
-    // Set svg icon for home button
-    chart.get('zoomControl')?.homeButton.set(
-      'icon',
-      am5.Picture.new(root, {
-        src: svgZoomResetURL,
-        ...fixSVGPosition,
-      }) as unknown as am5.Graphics
-    );
-
-    // Add function to select germany when home button is pressed
-    chart.get('zoomControl')?.homeButton.events.on('click', () => {
-      if (defaultSelectedValue) {
-        setSelectedArea(defaultSelectedValue);
-      }
-    });
-
-    // Set svg icon for plus button
-    chart.get('zoomControl')?.plusButton.set(
-      'icon',
-      am5.Picture.new(root, {
-        src: svgZoomInURL,
-        ...fixSVGPosition,
-      }) as unknown as am5.Graphics
-    );
-
-    // Set svg icon for minus button
-    chart.get('zoomControl')?.minusButton.set(
-      'icon',
-      am5.Picture.new(root, {
-        src: svgZoomOutURL,
-        ...fixSVGPosition,
-      }) as unknown as am5.Graphics
-    );
+    if (!mapData || !root || !chart) return;
 
     // Create polygon series
     const polygonSeries = chart.series.push(
@@ -280,12 +289,9 @@ export default function HeatMap({
     });
 
     setPolygonSeries(polygonSeries);
-
-    return () => {
-      chart.dispose();
-      root.dispose();
-    };
   }, [
+    chart,
+    root,
     defaultFill,
     defaultSelectedValue,
     fillOpacity,

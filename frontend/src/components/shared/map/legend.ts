@@ -20,11 +20,6 @@ export default function useHeatLegend(
     }
     const newLegend = root.container.children.push(am5.HeatLegend.new(root, settings));
 
-    newLegend.markers.template.adapters.add('fillGradient', (gradient) => {
-      gradient?.set('stops', stoplist);
-      return gradient;
-    });
-
     setLegend(newLegend);
 
     if (initializer) {

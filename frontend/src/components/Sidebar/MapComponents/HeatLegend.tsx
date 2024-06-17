@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import {useLayoutEffect, useMemo} from 'react';
+import {useCallback, useLayoutEffect, useMemo} from 'react';
 import * as am5 from '@amcharts/amcharts5';
 import {Box} from '@mui/material';
 import React from 'react';
@@ -112,7 +112,20 @@ export default function HeatLegend({
     }));
   }, [legend, min, max]);
 
-  const heatLegend = useHeatLegend(root, heatLegendSettings, stoplist);
+  const heatLegend = useHeatLegend(
+    root,
+    heatLegendSettings,
+    stoplist,
+    useCallback(
+      (legend: am5.HeatLegend) => {
+        legend.markers.template.adapters.add('fillGradient', (gradient) => {
+          gradient?.set('stops', stoplist);
+          return gradient;
+        });
+      },
+      [stoplist]
+    )
+  );
 
   useLayoutEffect(() => {
     if (!heatLegend) {
