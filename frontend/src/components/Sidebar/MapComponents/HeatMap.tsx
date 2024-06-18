@@ -18,6 +18,7 @@ import {Localization} from 'types/localization';
 import useRoot from 'components/shared/map/Root';
 import useMapChart from 'components/shared/map/chart';
 import useZoomControl from 'components/shared/map/zoom';
+import usePolygonSeries from 'components/shared/map/polygon';
 
 interface MapProps {
   /** The data to be displayed on the map, in GeoJSON format. */
@@ -92,7 +93,6 @@ interface MapProps {
 
 /**
  * React Component to render a Heatmap.
- * @returns {JSX.Element} JSX Element to render a Heatmap.
  */
 export default function HeatMap({
   mapData,
@@ -118,10 +118,9 @@ export default function HeatMap({
   setLongLoad = () => {},
   localization,
   idValuesToMap = 'id',
-}: MapProps): JSX.Element {
+}: MapProps) {
   const theme = useTheme();
   const lastSelectedPolygon = useRef<am5map.MapPolygon | null>(null);
-  const [polygonSeries, setPolygonSeries] = useState<am5map.MapPolygonSeries | null>(null);
   const [longLoadTimeout, setLongLoadTimeout] = useState<number>();
 
   // Memoize the default localization object to avoid infinite re-renders
@@ -208,6 +207,68 @@ export default function HeatMap({
     )
   );
 
+  const polygonSettings = useMemo(() => {
+    return {
+      geoJSON: mapData as GeoJSON,
+      tooltipPosition: 'fixed',
+    } as am5map.IMapPolygonSeriesSettings;
+  }, [mapData]);
+
+  const polygonSeries = usePolygonSeries(
+    root,
+    chart,
+    polygonSettings,
+    useCallback(
+      (polygonSeries: am5map.MapPolygonSeries) => {
+        const polygonTemplate = polygonSeries.mapPolygons.template;
+
+        // Set properties for each polygon
+        polygonTemplate.setAll({
+          fill: am5.color(defaultFill),
+          stroke: am5.color(theme.palette.background.default),
+          strokeWidth: 1,
+          fillOpacity: fillOpacity,
+        });
+
+        polygonTemplate.states.create('hover', {
+          stroke: am5.color(theme.palette.primary.main),
+          strokeWidth: 2,
+          layer: 1,
+        });
+
+        polygonTemplate.events.on('click', function (ev) {
+          if (ev.target.dataItem?.dataContext) {
+            setSelectedArea(ev.target.dataItem.dataContext as FeatureProperties);
+          }
+        });
+
+        // Set heat map properties
+        //show tooltip on heat legend when hovering
+        polygonTemplate.events.on('pointerover', (e) => {
+          if (legendRef.current) {
+            const value = (e.target.dataItem?.dataContext as FeatureProperties).value as number;
+            legendRef.current.showValue(value, localizationToUse.formatNumber!(value));
+          }
+        });
+        //hide tooltip on heat legend when not hovering anymore event
+        polygonTemplate.events.on('pointerout', () => {
+          if (legendRef.current) {
+            void legendRef.current.hideTooltip();
+          }
+        });
+      },
+      [
+        defaultFill,
+        fillOpacity,
+        legendRef,
+        localizationToUse.formatNumber,
+        setSelectedArea,
+        theme.palette.background.default,
+        theme.palette.primary.main,
+      ]
+    )
+  );
+
   // This effect is responsible for showing the loading indicator if the data is not ready within 1 second. This
   // prevents that the indicator is showing for every little change.
   useEffect(() => {
@@ -237,75 +298,6 @@ export default function HeatMap({
   }, [fixedLegendMaxValue, setAggregatedMax, values]);
 
   // Create Map with GeoData
-  useEffect(() => {
-    if (!mapData || !root || !chart) return;
-
-    // Create polygon series
-    const polygonSeries = chart.series.push(
-      am5map.MapPolygonSeries.new(root, {
-        geoJSON: mapData as GeoJSON,
-        tooltipPosition: 'fixed',
-      })
-    );
-
-    // Get template for polygons to attach events etc to each
-    const polygonTemplate = polygonSeries.mapPolygons.template;
-
-    // Set properties for each polygon
-    polygonTemplate.setAll({
-      fill: am5.color(defaultFill),
-      stroke: am5.color(theme.palette.background.default),
-      strokeWidth: 1,
-      fillOpacity: fillOpacity,
-    });
-
-    // Set hover properties for each polygon
-    polygonTemplate.states.create('hover', {
-      stroke: am5.color(theme.palette.primary.main),
-      strokeWidth: 2,
-      layer: 1,
-    });
-
-    // Set click properties for each polygon
-    polygonTemplate.events.on('click', function (ev) {
-      if (ev.target.dataItem && ev.target.dataItem.dataContext) {
-        setSelectedArea(ev.target.dataItem.dataContext as FeatureProperties);
-      }
-    });
-
-    // Set heat map properties
-    //show tooltip on heat legend when hovering
-    polygonTemplate.events.on('pointerover', (e) => {
-      if (legendRef.current) {
-        const value = (e.target.dataItem?.dataContext as FeatureProperties).value as number;
-        legendRef.current.showValue(value, localizationToUse.formatNumber!(value));
-      }
-    });
-    //hide tooltip on heat legend when not hovering anymore event
-    polygonTemplate.events.on('pointerout', () => {
-      if (legendRef.current) {
-        void legendRef.current.hideTooltip();
-      }
-    });
-
-    setPolygonSeries(polygonSeries);
-  }, [
-    chart,
-    root,
-    defaultFill,
-    defaultSelectedValue,
-    fillOpacity,
-    legendRef,
-    localizationToUse.formatNumber,
-    mapData,
-    mapId,
-    setSelectedArea,
-    theme.palette.background.default,
-    theme.palette.primary.main,
-    maxZoomLevel,
-  ]);
-
-  // Highlight selected district
   useEffect(() => {
     if (!polygonSeries) return;
     // Reset last selected polygon
@@ -386,6 +378,8 @@ export default function HeatMap({
       });
     }
   }, [
+    root,
+    chart,
     aggregatedMax,
     defaultFill,
     idValuesToMap,
@@ -399,7 +393,8 @@ export default function HeatMap({
     tooltipTextWhileFetching,
     values,
   ]);
-  return <Box id={mapId} height={mapHeight}></Box>;
+
+  return <Box id={mapId} height={mapHeight} />;
 }
 
 function getColorFromLegend(
