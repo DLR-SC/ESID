@@ -119,9 +119,9 @@ export default function CompartmentsRow({
             onClose={closeTooltip}
             onClick={openTooltip}
             title={
-              localization?.overrides && localization?.overrides[`infection-states.tooltip`]
-                ? customT(localization?.overrides[`infection-states.tooltip`])
-                : defaultT(`infection-states.tooltip`)
+              localization?.overrides && localization?.overrides[`tooltip`]
+                ? customT(localization?.overrides[`tooltip`])
+                : defaultT(`tooltip`)
             }
           >
             <InfoOutlined
