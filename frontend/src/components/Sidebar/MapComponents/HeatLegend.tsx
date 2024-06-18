@@ -115,7 +115,6 @@ export default function HeatLegend({
   const heatLegend = useHeatLegend(
     root,
     heatLegendSettings,
-    stoplist,
     useCallback(
       (legend: am5.HeatLegend) => {
         legend.markers.template.adapters.add('fillGradient', (gradient) => {
