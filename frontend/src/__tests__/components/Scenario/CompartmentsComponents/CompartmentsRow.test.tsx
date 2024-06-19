@@ -9,7 +9,7 @@ import Theme from 'util/Theme';
 import CompartmentsRow from 'components/ScenarioComponents/CompartmentsComponents/CompartmentsRow';
 import userEvent from '@testing-library/user-event';
 
-export default function CompartmentsRowTest() {
+const CompartmentsRowTest = () => {
   const compartmentsExpanded = true;
   const compartments = ['Compartment 1', 'Compartment 2', 'Compartment 3'];
   const [selectedCompartment, setSelectedCompartment] = useState('Compartment 1');
@@ -38,7 +38,7 @@ export default function CompartmentsRowTest() {
       </ThemeProvider>
     </div>
   );
-}
+};
 
 describe('CompartmentsRows', () => {
   test('renders the correct compartment names', async () => {

@@ -14,8 +14,7 @@ interface CardTooltipTestInterface {
   activeScenario: boolean;
   scenarios: number[];
 }
-
-export default function CardTooltipTest({hovertest, scenarios, index, activeScenario}: CardTooltipTestInterface) {
+const CardTooltipTest = ({hovertest, scenarios, index, activeScenario}: CardTooltipTestInterface) => {
   const color = '#00000';
   const [activeScenarios, setActiveScenarios] = useState<number[] | null>(scenarios);
   const [numberSelectedScenario, setSelectedScenario] = useState<number | null>(index);
@@ -36,7 +35,7 @@ export default function CardTooltipTest({hovertest, scenarios, index, activeScen
       />
     </ThemeProvider>
   );
-}
+};
 
 describe('CardTooltip', () => {
   test('renders the tooltip when hover is true', () => {

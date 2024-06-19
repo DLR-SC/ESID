@@ -11,7 +11,7 @@ import Theme from 'util/Theme';
 import {ThemeProvider} from '@mui/system';
 import DataCard from 'components/ScenarioComponents/CardsComponents/DataCard';
 
-function DataCardTest() {
+const DataCardTest = () => {
   const Index = 0;
   const CompartmentValues: Dictionary<number> = {
     'Compartment 1': 10,
@@ -105,7 +105,7 @@ function DataCardTest() {
       />
     </ThemeProvider>
   );
-}
+};
 
 describe('DataCard', () => {
   test('renders DataCard correctly', () => {

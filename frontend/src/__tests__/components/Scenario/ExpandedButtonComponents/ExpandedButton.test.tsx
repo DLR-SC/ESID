@@ -9,7 +9,7 @@ import {ThemeProvider} from '@emotion/react';
 
 import Theme from 'util/Theme';
 
-export default function GeneralButtonTest() {
+const GeneralButtonTest = () => {
   const buttonTexts = {clicked: 'Clicked', unclicked: 'Unclicked'};
   const isDisabled = () => true;
   const handleClick = () => {};
@@ -21,7 +21,7 @@ export default function GeneralButtonTest() {
       </ThemeProvider>
     </div>
   );
-}
+};
 
 describe('GeneralButtonTest', () => {
   test('renders the button with the correct initial text', async () => {
