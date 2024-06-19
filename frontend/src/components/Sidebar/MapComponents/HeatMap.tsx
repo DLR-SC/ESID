@@ -240,7 +240,7 @@ export default function HeatMap({
         const value = (e.target.dataItem?.dataContext as FeatureProperties).value as number;
         legendRef.current.showValue(
           value,
-          localization && localization.formatNumber ? localization.formatNumber!(value) : value.toString()
+          localization && localization.formatNumber ? localization.formatNumber(value) : value.toString()
         );
       }
     });

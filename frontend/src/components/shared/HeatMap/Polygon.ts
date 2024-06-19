@@ -29,7 +29,7 @@ export default function usePolygonSeries(
     return () => {
       newPolygon.dispose();
     };
-  }, [root, settings, chart]);
+  }, [root, settings, chart, initializer]);
 
   return polygon;
 }
