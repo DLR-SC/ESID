@@ -8,7 +8,7 @@ import {ThemeProvider} from '@emotion/react';
 import {render, screen, waitFor} from '@testing-library/react';
 import Theme from 'util/Theme';
 
-export default function CompartmentsRowsTest() {
+const CompartmentsRowsTest = () => {
   const compartmentsExpanded = true;
   const compartments = ['Compartment 1', 'Compartment 2', 'Compartment 3'];
   const [selectedCompartment, setSelectedCompartment] = useState('Compartment 1');
@@ -35,7 +35,7 @@ export default function CompartmentsRowsTest() {
       </ThemeProvider>
     </div>
   );
-}
+};
 
 describe('CompartmentsRows', () => {
   test('renders the correct number of compartments', async () => {

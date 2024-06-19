@@ -9,7 +9,7 @@ import Theme from 'util/Theme';
 import {Dictionary} from 'types/Cardtypes';
 import MainCard from 'components/ScenarioComponents/CardsComponents/MainCard/MainCard';
 
-function MainCardTest() {
+const MainCardTest = () => {
   const Index = 0;
   const CompartmentValues: Dictionary<number> = {
     'Compartment 1': 10,
@@ -61,7 +61,7 @@ function MainCardTest() {
       />
     </ThemeProvider>
   );
-}
+};
 
 describe('MainCard', () => {
   test('renders MainCard correctly', () => {

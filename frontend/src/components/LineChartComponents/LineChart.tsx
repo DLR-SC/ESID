@@ -371,7 +371,7 @@ export default function LineChart({
     const globalPosition = xAxis.toGlobal({x: xAxisPosition, y: 0});
     const docPosition = root.rootPointToDocument(globalPosition).x;
     setReferenceDayBottom(docPosition);
-  }, [chart, root, xAxis, referenceDay]);
+  }, [chart, root, xAxis, referenceDay, setReferenceDayBottom]);
 
   useLayoutEffect(() => {
     if (!root || !chart || !xAxis) {
@@ -449,7 +449,7 @@ export default function LineChart({
           ? color(getScenarioPrimaryColor(selectedScenario, theme))
           : undefined,
     };
-  }, [selectedScenario, theme.custom.scenarios, xAxis, yAxis, chartId, theme]);
+  }, [selectedScenario, xAxis, yAxis, chartId, theme]);
   useLineSeries(
     root,
     chart,
@@ -486,7 +486,7 @@ export default function LineChart({
       }),
       stroke: color(getScenarioPrimaryColor(scenario.id, theme)),
     }));
-  }, [scenarioList, root, simulationDataChartName, theme.custom.scenarios, xAxis, yAxis, chartId, theme]);
+  }, [scenarioList, root, simulationDataChartName, xAxis, yAxis, chartId, theme]);
   useLineSeriesList(
     root,
     chart,
@@ -532,7 +532,7 @@ export default function LineChart({
         }),
         stroke: color(getScenarioPrimaryColor(selectedScenario, theme)),
       }));
-  }, [groupFilterList, root, selectedScenario, theme.custom.scenarios, xAxis, yAxis, chartId, theme]);
+  }, [groupFilterList, root, selectedScenario, xAxis, yAxis, chartId, theme]);
   useLineSeriesList(
     root,
     chart,

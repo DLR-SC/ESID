@@ -12,7 +12,7 @@ import {render, screen} from '@testing-library/react';
 import Theme from 'util/Theme';
 import {ThemeProvider} from '@mui/system';
 
-export default function CardContainerTest() {
+const CardContainerTest = () => {
   // Mock data for the props
   const compartmentsExpanded = true;
   const selectedCompartment = 'Compartment 1';
@@ -94,7 +94,7 @@ export default function CardContainerTest() {
       </ThemeProvider>
     </div>
   );
-}
+};
 
 describe('CardContainer', () => {
   test('renders data cards correctly', () => {
