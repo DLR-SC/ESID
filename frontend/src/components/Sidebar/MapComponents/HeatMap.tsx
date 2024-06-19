@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import {useState, useEffect, useRef, useMemo, useCallback} from 'react';
+import {useState, useEffect, useRef, useMemo, useCallback, useLayoutEffect} from 'react';
 import * as am5 from '@amcharts/amcharts5';
 import * as am5map from '@amcharts/amcharts5/map';
 import {GeoJSON} from 'geojson';
@@ -19,6 +19,7 @@ import useRoot from 'components/shared/Root';
 import useMapChart from 'components/shared/HeatMap/Map';
 import useZoomControl from 'components/shared/HeatMap/Zoom';
 import usePolygonSeries from 'components/shared/HeatMap/Polygon';
+import {useConst} from 'util/hooks';
 
 interface MapProps {
   /** The data to be displayed on the map, in GeoJSON format. */
@@ -205,59 +206,51 @@ export default function HeatMap({
     root,
     chart,
     polygonSettings,
-    useCallback(
-      (polygonSeries: am5map.MapPolygonSeries) => {
-        const polygonTemplate = polygonSeries.mapPolygons.template;
+    useConst((polygonSeries: am5map.MapPolygonSeries) => {
+      const polygonTemplate = polygonSeries.mapPolygons.template;
+      // Set properties for each polygon
+      polygonTemplate.setAll({
+        fill: am5.color(defaultFill),
+        stroke: am5.color(theme.palette.background.default),
+        strokeWidth: 1,
+        fillOpacity: fillOpacity,
+      });
 
-        // Set properties for each polygon
-        polygonTemplate.setAll({
-          fill: am5.color(defaultFill),
-          stroke: am5.color(theme.palette.background.default),
-          strokeWidth: 1,
-          fillOpacity: fillOpacity,
-        });
+      polygonTemplate.states.create('hover', {
+        stroke: am5.color(theme.palette.primary.main),
+        strokeWidth: 2,
+        layer: 1,
+      });
 
-        polygonTemplate.states.create('hover', {
-          stroke: am5.color(theme.palette.primary.main),
-          strokeWidth: 2,
-          layer: 1,
-        });
-
-        polygonTemplate.events.on('click', function (ev) {
-          if (ev.target.dataItem?.dataContext) {
-            setSelectedArea(ev.target.dataItem.dataContext as FeatureProperties);
-          }
-        });
-
-        // Set heat map properties
-        //show tooltip on heat legend when hovering
-        polygonTemplate.events.on('pointerover', (e) => {
-          if (legendRef.current) {
-            const value = (e.target.dataItem?.dataContext as FeatureProperties).value as number;
-            legendRef.current.showValue(
-              value,
-              localization && localization.formatNumber ? localization.formatNumber(value) : value.toString()
-            );
-          }
-        });
-        //hide tooltip on heat legend when not hovering anymore event
-        polygonTemplate.events.on('pointerout', () => {
-          if (legendRef.current) {
-            void legendRef.current.hideTooltip();
-          }
-        });
-      },
-      [
-        defaultFill,
-        fillOpacity,
-        legendRef,
-        setSelectedArea,
-        theme.palette.background.default,
-        theme.palette.primary.main,
-        localization,
-      ]
-    )
+      polygonTemplate.events.on('click', function (ev) {
+        if (ev.target.dataItem?.dataContext) {
+          setSelectedArea(ev.target.dataItem.dataContext as FeatureProperties);
+        }
+      });
+    })
   );
+
+  // This effect is responsible for showing the tooltip on the heat legend when hovering over a region.
+  useLayoutEffect(() => {
+    if (!polygonSeries) return;
+    const polygonTemplate = polygonSeries.mapPolygons.template;
+    //show tooltip on heat legend when hovering
+    polygonTemplate.events.on('pointerover', (e) => {
+      if (legendRef.current) {
+        const value = (e.target.dataItem?.dataContext as FeatureProperties).value as number;
+        legendRef.current.showValue(
+          value,
+          localization && localization.formatNumber ? localization.formatNumber!(value) : value.toString()
+        );
+      }
+    });
+    //hide tooltip on heat legend when not hovering anymore event
+    polygonTemplate.events.on('pointerout', () => {
+      if (legendRef.current) {
+        void legendRef.current.hideTooltip();
+      }
+    });
+  }, [polygonSeries, legendRef, localization]);
 
   // This effect is responsible for showing the loading indicator if the data is not ready within 1 second. This
   // prevents that the indicator is showing for every little change.
