@@ -1,16 +1,15 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import {useCallback, useEffect, useRef} from 'react';
+import {useCallback, useEffect, useLayoutEffect, useMemo} from 'react';
 import {Root} from '@amcharts/amcharts5/.internal/core/Root';
 import {Tooltip} from '@amcharts/amcharts5/.internal/core/render/Tooltip';
 import {RoundedRectangle} from '@amcharts/amcharts5/.internal/core/render/RoundedRectangle';
 import {Color, color} from '@amcharts/amcharts5/.internal/core/util/Color';
 import {DataProcessor} from '@amcharts/amcharts5/.internal/core/util/DataProcessor';
-import {XYChart} from '@amcharts/amcharts5/.internal/charts/xy/XYChart';
-import {DateAxis} from '@amcharts/amcharts5/.internal/charts/xy/axes/DateAxis';
+import {IXYChartSettings, XYChart} from '@amcharts/amcharts5/.internal/charts/xy/XYChart';
+import {IDateAxisSettings} from '@amcharts/amcharts5/.internal/charts/xy/axes/DateAxis';
 import {AxisRendererX} from '@amcharts/amcharts5/.internal/charts/xy/axes/AxisRendererX';
-import {ValueAxis} from '@amcharts/amcharts5/.internal/charts/xy/axes/ValueAxis';
 import {AxisRendererY} from '@amcharts/amcharts5/.internal/charts/xy/axes/AxisRendererY';
 import {XYCursor} from '@amcharts/amcharts5/.internal/charts/xy/XYCursor';
 import {LineSeries} from '@amcharts/amcharts5/.internal/charts/xy/series/LineSeries';
@@ -19,11 +18,19 @@ import am5locales_de_DE from '@amcharts/amcharts5/locales/de_DE';
 import {darken, useTheme} from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import {useTranslation} from 'react-i18next';
-import {Dictionary, dateToISOString} from '../../util/util';
+import {Dictionary} from '../../util/util';
 import React from 'react';
 import {Scenario} from 'store/ScenarioSlice';
 import {Localization} from 'types/localization';
 import {getScenarioPrimaryColor} from 'util/Theme';
+import useRoot from 'components/shared/Root';
+import {useConst} from 'util/hooks';
+import useXYChart from 'components/shared/LineChart/Chart';
+import useDateAxis from 'components/shared/LineChart/DateAxis';
+import useValueAxis from 'components/shared/LineChart/ValueAxis';
+import {useDateSelectorFilter} from 'components/shared/LineChart/Filter';
+import useDateAxisRange from 'components/shared/LineChart/AxisRange';
+import useLineSeries, {useLineSeriesList} from 'components/shared/LineChart/LineSeries';
 
 interface ScenarioList {
   scenarios: {
@@ -155,127 +162,114 @@ export default function LineChart({
   const {t: customT} = useTranslation(localization.customLang);
   const theme = useTheme();
 
-  const rootRef = useRef<Root | null>(null);
-  const chartRef = useRef<XYChart | null>(null);
+  const root = useRoot(
+    chartId,
+    undefined,
+    useConst((root) => {
+      root.numberFormatter.set('numberFormat', '#,###.');
+    })
+  );
 
-  const setReferenceDayX = useCallback(() => {
-    if (!chartRef.current || !rootRef.current || !referenceDay) {
+  const chartSettings = useConst<IXYChartSettings>({
+    panX: false,
+    panY: false,
+    wheelX: 'panX',
+    wheelY: 'zoomX',
+    maxTooltipDistance: -1,
+  });
+
+  const chart = useXYChart(
+    root,
+    chartSettings,
+    useCallback(
+      (chart: XYChart) => {
+        if (root) {
+          chart.leftAxesContainer.set('layout', root.verticalLayout);
+        }
+      },
+      [root]
+    )
+  );
+
+  const xAxisSettings = useMemo(() => {
+    if (!root || !chart) {
+      return null;
+    }
+
+    return {
+      renderer: AxisRendererX.new(root, {}),
+      // Set base interval and aggregated intervals when the chart is zoomed out
+      baseInterval: {timeUnit: 'day', count: 1},
+      gridIntervals: [
+        {timeUnit: 'day', count: 1},
+        {timeUnit: 'day', count: 3},
+        {timeUnit: 'day', count: 7},
+        {timeUnit: 'month', count: 1},
+        {timeUnit: 'month', count: 3},
+        {timeUnit: 'year', count: 1},
+      ],
+      // Add tooltip instance so cursor can display value
+      tooltip: Tooltip.new(root, {}),
+    } as IDateAxisSettings<AxisRendererX>;
+  }, [root, chart]);
+
+  const xAxis = useDateAxis(
+    root,
+    chart,
+    xAxisSettings,
+    useConst((axis) => {
+      axis.get('renderer').ticks.template.setAll({location: 0.5});
+    })
+  );
+
+  const yAxisSettings = useMemo(() => {
+    if (!root || !chart) {
+      return null;
+    }
+
+    return {
+      renderer: AxisRendererY.new(root, {}),
+      // Fix lower end to 0
+      min: 0,
+      // Add tooltip instance so cursor can display value
+      tooltip: Tooltip.new(root, {}),
+    };
+  }, [root, chart]);
+
+  const yAxis = useValueAxis(root, chart, yAxisSettings);
+
+  // Effect to add cursor to chart
+  useLayoutEffect(() => {
+    if (!chart || !root || !xAxis) {
       return;
     }
 
-    const midday = new Date(referenceDay).setHours(12, 0, 0);
+    // Add cursor
+    chart.set(
+      'cursor',
+      XYCursor.new(root, {
+        // Only allow zooming along x-axis
+        behavior: 'zoomX',
+        // Snap cursor to xAxis ticks
+        xAxis: xAxis,
+      })
+    );
+  }, [chart, root, xAxis]);
 
-    const xAxis: DateAxis<AxisRendererX> = chartRef.current.xAxes.getIndex(0) as DateAxis<AxisRendererX>;
-    const xAxisPosition = xAxis.width() * xAxis.toGlobalPosition(xAxis.dateToPosition(new Date(midday)));
-    const globalPosition = xAxis.toGlobal({x: xAxisPosition, y: 0});
-    const docPosition = rootRef.current.rootPointToDocument(globalPosition).x;
-    setReferenceDayBottom(docPosition);
-  }, [referenceDay, setReferenceDayBottom]);
-
-  // Effect to initialize root & chart
-  useEffect(
-    () => {
-      // Create root and chart
-      const root = Root.new(chartId);
-      const chart = root.container.children.push(
-        XYChart.new(root, {
-          panX: false,
-          panY: false,
-          wheelX: 'panX',
-          wheelY: 'zoomX',
-          maxTooltipDistance: -1,
-        })
-      );
-
-      // Set number formatter
-      root.numberFormatter.set('numberFormat', '#,###.');
-
-      // Create x-axis
-      const xAxis = chart.xAxes.push(
-        DateAxis.new(root, {
-          renderer: AxisRendererX.new(root, {}),
-          // Set base interval and aggregated intervals when the chart is zoomed out
-          baseInterval: {timeUnit: 'day', count: 1},
-          gridIntervals: [
-            {timeUnit: 'day', count: 1},
-            {timeUnit: 'day', count: 3},
-            {timeUnit: 'day', count: 7},
-            {timeUnit: 'month', count: 1},
-            {timeUnit: 'month', count: 3},
-            {timeUnit: 'year', count: 1},
-          ],
-          // Add tooltip instance so cursor can display value
-          tooltip: Tooltip.new(root, {}),
-        })
-      );
-      // Change axis renderer to have ticks/labels on day center
-      const xRenderer = xAxis.get('renderer');
-      xRenderer.ticks.template.setAll({
-        location: 0.5,
-      });
-
-      // Create y-axis
-      chart.yAxes.push(
-        ValueAxis.new(root, {
-          renderer: AxisRendererY.new(root, {}),
-          // Fix lower end to 0
-          min: 0,
-          // Add tooltip instance so cursor can display value
-          tooltip: Tooltip.new(root, {}),
-        })
-      );
-
-      // Add cursor
-      chart.set(
-        'cursor',
-        XYCursor.new(root, {
-          // Only allow zooming along x-axis
-          behavior: 'zoomX',
-          // Snap cursor to xAxis ticks
-          xAxis: xAxis,
-        })
-      );
-
-      // Add event on double click to select date
-      chart.events.on('click', (ev) => {
-        // Get date from axis position from cursor position
-        const date = xAxis.positionToDate(
-          xAxis.toAxisPosition(ev.target.get('cursor')?.getPrivate('positionX') as number)
-        );
-        // Remove time information to only have a date
-        date.setHours(0, 0, 0, 0);
-        // Set date in store
-        setSelectedDate(dateToISOString(date));
-      });
-
-      // Set refs to be used in other effects
-      rootRef.current = root;
-      chartRef.current = chart;
-
-      // Clean-up before re-running this effect
-      return () => {
-        // Dispose old root and chart before creating a new instance
-        chartRef.current?.dispose();
-        rootRef.current?.dispose();
-      };
-    },
-    // This effect should only run once.
-    [chartId, setSelectedDate]
-  );
+  // Effect to add date selector filter to chart
+  useDateSelectorFilter(chart, xAxis, setSelectedDate);
 
   // Effect to change localization of chart if language changes
-  useEffect(
+  useLayoutEffect(
     () => {
-      // Skip if root or chart is not initialized
-      if (!rootRef.current || !chartRef.current) {
+      // Skip if root or chart or xAxis is not initialized
+      if (!root || !chart || !xAxis) {
         return;
       }
 
       // Set localization
-      rootRef.current.locale = i18n.language === 'de' ? am5locales_de_DE : am5locales_en_US;
+      root.locale = i18n.language === 'de' ? am5locales_de_DE : am5locales_en_US;
 
-      // Change date formats for ticks & tooltip (use fallback object to suppress undefined object warnings as this cannot be undefined)
-      const xAxis: DateAxis<AxisRendererX> = chartRef.current.xAxes.getIndex(0) as DateAxis<AxisRendererX>;
       xAxis.get('dateFormats', {day: ''})['day'] =
         localization.overrides && localization.overrides['dayFormat']
           ? customT(localization.overrides['dayFormat'])
@@ -291,182 +285,283 @@ export default function LineChart({
           : defaultT('dayFormat');
     },
     // Re-run effect if language changes
-    [localization.customLang, defaultT, customT, localization.overrides, i18n.language]
+    [i18n.language, root, chart, xAxis, defaultT, customT, localization.overrides]
   );
 
   // Effect to update min/max date.
-  useEffect(() => {
-    // Skip if root or chart is not initialized
-    if (!rootRef.current || !chartRef.current || !minDate || !maxDate) {
+  useLayoutEffect(() => {
+    // Skip if root or chart or xAxis is not initialized
+    if (!xAxis || !minDate || !maxDate) {
       return;
     }
 
-    const xAxis: DateAxis<AxisRendererX> = chartRef.current.xAxes.getIndex(0) as DateAxis<AxisRendererX>;
     xAxis.set('min', new Date(minDate).setHours(0));
     xAxis.set('max', new Date(maxDate).setHours(23, 59, 59));
-  }, [minDate, maxDate]);
+  }, [minDate, maxDate, xAxis]);
 
-  // Effect to add series to chart
-  useEffect(
-    () => {
-      // Skip if root or chart not initialized
-      if (!rootRef.current || !chartRef.current) {
-        return;
-      }
+  const selectedDateRangeSettings = useMemo(() => {
+    if (!root || !selectedDate) {
+      return {};
+    }
 
-      const chart: XYChart = chartRef.current;
-      const root: Root = rootRef.current;
-      const xAxis: DateAxis<AxisRendererX> = chart.xAxes.getIndex(0) as DateAxis<AxisRendererX>;
-      const yAxis: ValueAxis<AxisRendererY> = chart.yAxes.getIndex(0) as ValueAxis<AxisRendererY>;
+    return {
+      data: {
+        value: new Date(selectedDate).setHours(0, 0, 0),
+        endValue: new Date(selectedDate).setHours(23, 59, 59),
+        above: true,
+      },
+      grid: {
+        stroke: color(theme.palette.primary.main),
+        strokeOpacity: 1,
+        strokeWidth: 2,
+        location: 0.5,
+        visible: true,
+      },
+      axisFill: {
+        fill: color(theme.palette.primary.main),
+        fillOpacity: 0.3,
+        visible: true,
+      },
+      label: {
+        fill: color(theme.palette.primary.contrastText),
+        text: new Date(selectedDate).toLocaleDateString(i18n.language, {
+          year: 'numeric',
+          month: 'short',
+          day: '2-digit',
+        }),
+        location: 0.5,
+        background: RoundedRectangle.new(root, {
+          fill: color(theme.palette.primary.main),
+        }),
+        // Put Label to the topmost layer to make sure it is drawn on top of the axis tick labels
+        layer: Number.MAX_VALUE,
+      },
+    };
+  }, [i18n.language, root, selectedDate, theme.palette.primary.contrastText, theme.palette.primary.main]);
+  useDateAxisRange(selectedDateRangeSettings, root, chart, xAxis);
 
-      // Add series for case data
-      const caseDataSeries = chart.series.push(
-        LineSeries.new(root, {
-          xAxis: xAxis,
-          yAxis: yAxis,
-          // Case Data is always scenario id 0
-          id: `${chartId}_0`,
-          name:
-            localization.overrides && localization.overrides['chart.caseData']
-              ? customT(localization.overrides['chart.caseData'])
-              : defaultT('chart.caseData'),
-          valueXField: 'date',
-          valueYField: '0',
-          // Prevent data points from connecting across gaps in the data
-          connect: false,
-          stroke: color('#000'),
-        })
-      );
-      caseDataSeries.strokes.template.setAll({
+  const referenceDateRangeSettings = useMemo(() => {
+    if (!referenceDay) {
+      return {};
+    }
+
+    return {
+      data: {
+        value: new Date(referenceDay).setHours(12, 0, 0),
+        above: true,
+      },
+      grid: {
+        stroke: color(darken(theme.palette.divider, 0.25)),
+        strokeOpacity: 1,
+        strokeWidth: 2,
+        strokeDasharray: [6, 4],
+      },
+    };
+  }, [referenceDay, theme.palette.divider]);
+  useDateAxisRange(referenceDateRangeSettings, root, chart, xAxis);
+
+  const setReferenceDayX = useCallback(() => {
+    if (!chart || !root || !xAxis || !referenceDay) {
+      return;
+    }
+
+    const midday = new Date(referenceDay).setHours(12, 0, 0);
+
+    const xAxisPosition = xAxis.width() * xAxis.toGlobalPosition(xAxis.dateToPosition(new Date(midday)));
+    const globalPosition = xAxis.toGlobal({x: xAxisPosition, y: 0});
+    const docPosition = root.rootPointToDocument(globalPosition).x;
+    setReferenceDayBottom(docPosition);
+  }, [chart, root, xAxis, referenceDay]);
+
+  useLayoutEffect(() => {
+    if (!root || !chart || !xAxis) {
+      return;
+    }
+
+    setReferenceDayX();
+    const minEvent = xAxis.onPrivate('selectionMin', setReferenceDayX);
+    const maxEvent = xAxis.onPrivate('selectionMax', setReferenceDayX);
+    const seriesEvent = chart.series.events.on('push', (ev) => {
+      ev.newValue.events.on('boundschanged', setReferenceDayX);
+    });
+
+    const resizeObserver = new ResizeObserver(setReferenceDayX);
+    resizeObserver.observe(root.dom);
+
+    return () => {
+      resizeObserver.disconnect();
+      minEvent.dispose();
+      maxEvent.dispose();
+      seriesEvent.dispose();
+    };
+  }, [root, chart, xAxis, setReferenceDayX]);
+
+  const caseDataSeriesSettings = useMemo(() => {
+    if (!xAxis || !yAxis) {
+      return null;
+    }
+
+    return {
+      xAxis: xAxis,
+      yAxis: yAxis,
+      // Case Data is always scenario id 0
+      id: `${chartId}_0`,
+      name:
+        localization.overrides && localization.overrides['chart.caseData']
+          ? customT(localization.overrides['chart.caseData'])
+          : defaultT('chart.caseData'),
+      valueXField: 'date',
+      valueYField: '0',
+      // Prevent data points from connecting across gaps in the data
+      connect: false,
+      stroke: color('#000'),
+    };
+  }, [localization.overrides, defaultT, customT, xAxis, yAxis, chartId]);
+  useLineSeries(
+    root,
+    chart,
+    caseDataSeriesSettings,
+    useConst((series) => {
+      series.strokes.template.setAll({
         strokeWidth: 2,
       });
+    })
+  );
 
-      // Add series for percentile area
-      const percentileSeries = chart.series.push(
-        LineSeries.new(root, {
-          xAxis: xAxis,
-          yAxis: yAxis,
-          id: `${chartId}_percentiles`,
-          valueXField: 'date',
-          valueYField: 'percentileUp',
-          openValueYField: 'percentileDown',
-          connect: false,
-          // Percentiles are only visible if a scenario is selected and it is not case data
-          visible: selectedScenario !== null && selectedScenario > 0,
-          // Add fill color according to selected scenario (if selected scenario is set and it's not case data)
-          fill:
-            selectedScenario !== null && selectedScenario > 0
-              ? color(getScenarioPrimaryColor(selectedScenario, theme))
-              : undefined,
-        })
-      );
-      percentileSeries.strokes.template.setAll({
+  const percentileSeriesSettings = useMemo(() => {
+    if (!xAxis || !yAxis) {
+      return null;
+    }
+
+    return {
+      xAxis: xAxis,
+      yAxis: yAxis,
+      id: `${chartId}_percentiles`,
+      valueXField: 'date',
+      valueYField: 'percentileUp',
+      openValueYField: 'percentileDown',
+      connect: false,
+      // Percentiles are only visible if a scenario is selected and it is not case data
+      visible: selectedScenario !== null && selectedScenario > 0,
+      // Add fill color according to selected scenario (if selected scenario is set and it's not case data)
+      fill:
+        selectedScenario !== null && selectedScenario > 0
+          ? color(getScenarioPrimaryColor(selectedScenario, theme))
+          : undefined,
+    };
+  }, [selectedScenario, theme.custom.scenarios, xAxis, yAxis, chartId, theme]);
+  useLineSeries(
+    root,
+    chart,
+    percentileSeriesSettings,
+    useConst((series) => {
+      series.strokes.template.setAll({
         strokeWidth: 0,
       });
-      percentileSeries.fills.template.setAll({
+      series.fills.template.setAll({
         fillOpacity: 0.3,
         visible: true,
       });
+    })
+  );
 
-      // Add series for each scenario
-      if (scenarioList) {
-        Object.entries(scenarioList.scenarios).forEach(([scenarioId, scenario]) => {
-          const series = chart.series.push(
-            LineSeries.new(root, {
-              xAxis: xAxis,
-              yAxis: yAxis,
-              id: `${chartId}_${scenarioId}`,
-              name: simulationDataChartName(scenario),
-              valueXField: 'date',
-              valueYField: scenarioId,
-              // Prevent data points from connecting across gaps in the data
-              connect: false,
-              // Fallback Tooltip (if HTML breaks for some reason)
-              // For text color: loop around the theme's scenario color list if scenario IDs exceed color list length, then pick first color of sub-palette which is the main color
-              tooltip: Tooltip.new(root, {
-                labelText: `[bold ${getScenarioPrimaryColor(scenario.id, theme)}]${simulationDataChartName(scenario)}:[/] {${scenarioId}}`,
-              }),
-              stroke: color(getScenarioPrimaryColor(scenario.id, theme)),
-            })
-          );
-          series.strokes.template.setAll({
-            strokeWidth: 2,
-          });
-        });
-      }
+  const scenarioSeriesSettings = useMemo(() => {
+    if (!root || !xAxis || !yAxis || !scenarioList) {
+      return [];
+    }
 
-      // Add series for groupFilter (if there are any)
-      if (groupFilterList && selectedScenario) {
-        // Define line style variants for groups
-        const groupFilterStrokes = [
-          [2, 4], // dotted
-          [8, 4], // dashed
-          [8, 4, 2, 4], // dash-dotted
-          [8, 4, 2, 4, 2, 4], // dash-dot-dotted
-        ];
-        // Loop through visible group filters
-        Object.values(groupFilterList)
-          .filter((groupFilter) => groupFilter.isVisible)
-          .forEach((groupFilter, i) => {
-            // Add series for each group filter
-            const series = chart.series.push(
-              LineSeries.new(root, {
-                xAxis: xAxis,
-                yAxis: yAxis,
-                id: `${chartId}_group-filter-${groupFilter.name}`,
-                name: groupFilter.name,
-                valueXField: 'date',
-                valueYField: groupFilter.name,
-                connect: false,
-                // Fallback Tooltip (if HTML breaks for some reason)
-                // Use color of selected scenario (scenario ID is 1-based index, color list is 0-based index) loop if scenario ID exceeds length of color list; use first color of palette (main color)
-                tooltip: Tooltip.new(root, {
-                  labelText: `[bold ${getScenarioPrimaryColor(selectedScenario, theme)}]${
-                    groupFilter.name
-                  }:[/] {${groupFilter.name}}`,
-                }),
-                stroke: color(getScenarioPrimaryColor(selectedScenario, theme)),
-              })
-            );
-            series.strokes.template.setAll({
-              strokeWidth: 2,
-              // Loop through stroke list if group filters exceeds list length
-              strokeDasharray: groupFilterStrokes[i % groupFilterStrokes.length],
-            });
-          });
-      }
-      // Clean-up function
-      return () => {
-        // Remove all series
-        chart.series.clear();
-      };
-    },
-    // Re-run if scenario, group filter, or selected scenario (percentile series) change. (t, tBackend, and theme do not change during runtime).
-    [
-      scenarioList,
-      groupFilterList,
-      selectedScenario,
-      defaultT,
-      customT,
-      theme,
-      chartId,
-      simulationDataChartName,
-      localization.overrides,
-    ]
+    return Object.entries(scenarioList.scenarios).map(([scenarioId, scenario]) => ({
+      xAxis: xAxis,
+      yAxis: yAxis,
+      id: `${chartId}_${scenarioId}`,
+      name: simulationDataChartName(scenario),
+      valueXField: 'date',
+      valueYField: scenarioId,
+      // Prevent data points from connecting across gaps in the data
+      connect: false,
+      // Fallback Tooltip (if HTML breaks for some reason)
+      // For text color: loop around the theme's scenario color list if scenario IDs exceed color list length, then pick first color of sub-palette which is the main color
+      tooltip: Tooltip.new(root, {
+        labelText: `[bold ${getScenarioPrimaryColor(scenario.id, theme)}]${simulationDataChartName(scenario)}:[/] {${scenarioId}}`,
+      }),
+      stroke: color(getScenarioPrimaryColor(scenario.id, theme)),
+    }));
+  }, [scenarioList, root, simulationDataChartName, theme.custom.scenarios, xAxis, yAxis, chartId, theme]);
+  useLineSeriesList(
+    root,
+    chart,
+    scenarioSeriesSettings,
+    useConst((series) => {
+      series.strokes.template.setAll({
+        strokeWidth: 2,
+      });
+    })
+  );
+
+  const groupFilterStrokes = useMemo(() => {
+    return [
+      [2, 4], // dotted
+      [8, 4], // dashed
+      [8, 4, 2, 4], // dash-dotted
+      [8, 4, 2, 4, 2, 4], // dash-dot-dotted
+    ];
+  }, []);
+
+  const groupFilterSeriesSettings = useMemo(() => {
+    if (!root || !xAxis || !yAxis || !groupFilterList || !selectedScenario) {
+      return [];
+    }
+
+    // Loop through visible group filters
+    return Object.values(groupFilterList)
+      .filter((groupFilter) => groupFilter.isVisible)
+      .map((groupFilter) => ({
+        xAxis: xAxis,
+        yAxis: yAxis,
+        id: `${chartId}_group-filter-${groupFilter.name}`,
+        name: groupFilter.name,
+        valueXField: 'date',
+        valueYField: groupFilter.name,
+        connect: false,
+        // Fallback Tooltip (if HTML breaks for some reason)
+        // Use color of selected scenario (scenario ID is 1-based index, color list is 0-based index) loop if scenario ID exceeds length of color list; use first color of palette (main color)
+        tooltip: Tooltip.new(root, {
+          labelText: `[bold ${getScenarioPrimaryColor(selectedScenario, theme)}]${
+            groupFilter.name
+          }:[/] {${groupFilter.name}}`,
+        }),
+        stroke: color(getScenarioPrimaryColor(selectedScenario, theme)),
+      }));
+  }, [groupFilterList, root, selectedScenario, theme.custom.scenarios, xAxis, yAxis, chartId, theme]);
+  useLineSeriesList(
+    root,
+    chart,
+    groupFilterSeriesSettings,
+    useConst((series, i) => {
+      series.strokes.template.setAll({
+        strokeWidth: 2,
+        // Loop through stroke list if group filters exceeds list length
+        strokeDasharray: groupFilterStrokes[i % groupFilterStrokes.length],
+      });
+    })
   );
 
   // Effect to hide disabled scenarios (and show them again if not hidden anymore)
-  useEffect(
+  useLayoutEffect(
     () => {
-      const allSeries = chartRef.current?.series;
+      const allSeries = chart?.series;
       // Skip effect if chart is not initialized (contains no series yet)
       if (!allSeries) return;
 
       // Set visibility of each series
       allSeries.each((series) => {
+        if (!(series instanceof LineSeries)) {
+          return;
+        }
+
         // Everything but scenario series evaluate to NaN (because scenario series have their scenario id as series id while others have names)
         let seriesID = series.get('id');
-        if (seriesID?.includes(chartId)) seriesID = seriesID.split('_')[1];
+        if (seriesID) seriesID = seriesID.split('_')[1];
         // Hide series if it is a scenario series (and in the scenario list) but not in the active scenarios list
         if (seriesID === `percentiles`) {
           return;
@@ -480,20 +575,20 @@ export default function LineChart({
       });
     },
     // Re-run effect when the active scenario list changes
-    [activeScenarios, chartId]
+    [activeScenarios, chartId, chart]
   );
 
   // Effect to hide deviations if no scenario is selected
   useEffect(
     () => {
       // Skip effect if chart is not initialized (contains no series yet)
-      if (!chartRef.current) return;
+      if (!chart) return;
 
       // Find percentile series and only show it if there is a selected scenario
-      chartRef.current?.series.values
+      chart?.series.values
         .filter((series) => {
           let seriesID = series.get('id');
-          if (seriesID?.includes(chartId)) seriesID = seriesID.split('_')[1];
+          if (seriesID) seriesID = seriesID.split('_')[1];
           return seriesID === 'percentiles';
         })
         .map((percentileSeries) => {
@@ -505,123 +600,13 @@ export default function LineChart({
         });
     },
     // Re-run effect when the selected scenario changes
-    [chartId, selectedScenario]
-  );
-
-  // Effect to add Guide when date selected
-  useEffect(() => {
-    // Skip effect if chart (or root) is not initialized yet or no date is selected
-    if (!chartRef.current || !rootRef.current || !selectedDate) {
-      return;
-    }
-
-    // Get xAxis from chart
-    const xAxis = chartRef.current.xAxes.getIndex(0) as DateAxis<AxisRendererX>;
-
-    // Create data item for range
-    const rangeDataItem = xAxis.makeDataItem({
-      // Make sure the time of the start date object is set to first second of day
-      value: new Date(selectedDate).setHours(0, 0, 0),
-      // Make sure the time of the end date object is set to last second of day
-      endValue: new Date(selectedDate).setHours(23, 59, 59),
-      // Line and label should drawn above the other elements
-      above: true,
-    });
-
-    // Create the range with the data item
-    const range = xAxis.createAxisRange(rangeDataItem);
-
-    // Set stroke of range (line with label)
-    range.get('grid')?.setAll({
-      stroke: color(theme.palette.primary.main),
-      strokeOpacity: 1,
-      strokeWidth: 2,
-      location: 0.5,
-      visible: true,
-    });
-
-    // Set fill of range (rest of the day)
-    range.get('axisFill')?.setAll({
-      fill: color(theme.palette.primary.main),
-      fillOpacity: 0.3,
-      visible: true,
-    });
-
-    // Set label for range
-    range.get('label')?.setAll({
-      fill: color(theme.palette.primary.contrastText),
-      text: new Date(selectedDate).toLocaleDateString(localization.customLang, {
-        year: 'numeric',
-        month: 'short',
-        day: '2-digit',
-      }),
-      location: 0.5,
-      background: RoundedRectangle.new(rootRef.current, {
-        fill: color(theme.palette.primary.main),
-      }),
-      // Put Label to the topmost layer to make sure it is drawn on top of the axis tick labels
-      layer: Number.MAX_VALUE,
-    });
-
-    return () => {
-      // Discard range before re-running this effect
-      xAxis.axisRanges.removeValue(range);
-    };
-  }, [selectedDate, theme, localization.customLang]);
-
-  // Effect to add guide for the reference day
-  useEffect(
-    () => {
-      // Skip effect if chart (or root) is not initialized yet or no date is selected
-      if (!chartRef.current || !rootRef.current || !referenceDay) {
-        return;
-      }
-
-      // Get xAxis from chart
-      const xAxis = chartRef.current.xAxes.getIndex(0) as DateAxis<AxisRendererX>;
-
-      const referenceDate = new Date(referenceDay);
-      const start = referenceDate.setHours(12, 0, 0);
-
-      // Create data item for range
-      const rangeDataItem = xAxis.makeDataItem({
-        // Make sure the time of the start date object is set to first second of day
-        value: start,
-        // Line and label should drawn above the other elements
-        above: true,
-      });
-
-      // Create the range with the data item
-      const range = xAxis.createAxisRange(rangeDataItem);
-
-      // Set stroke of range (line with label)
-      range.get('grid')?.setAll({
-        stroke: color(darken(theme.palette.divider, 0.25)),
-        strokeOpacity: 1,
-        strokeWidth: 2,
-        strokeDasharray: [6, 4],
-      });
-
-      setReferenceDayX();
-      xAxis.onPrivate('selectionMin', setReferenceDayX);
-      xAxis.onPrivate('selectionMax', setReferenceDayX);
-      const resizeObserver = new ResizeObserver(setReferenceDayX);
-      resizeObserver.observe(rootRef.current.dom);
-
-      return () => {
-        // Discard range before re-running this effect
-        xAxis.axisRanges.removeValue(range);
-        resizeObserver.disconnect();
-      };
-    },
-    // Re-run effect when selection changes (date/scenario/compartment/district) or when the active scenarios/filters change (theme and translation do not change after initialization)
-    [referenceDay, theme, localization.customLang, setReferenceDayX]
+    [chartId, selectedScenario, chart]
   );
 
   // Effect to update Simulation and case data
   useEffect(() => {
     // Skip effect if chart is not initialized yet
-    if (!chartRef.current) return;
+    if (!chart) return;
     // Also skip if there is no scenario or compartment selected
     if (selectedScenario === null || !selectedCompartment) return;
 
@@ -683,10 +668,10 @@ export default function LineChart({
     });
 
     // Put data into series
-    chartRef.current.series.each((series, i) => {
+    chart.series.each((series, i) => {
       // Set-up data processors for first series (not needed for others since all use the same data)
       if (i === 0) {
-        series.data.processor = DataProcessor.new(rootRef.current as Root, {
+        series.data.processor = DataProcessor.new(root as Root, {
           // Define date fields and their format (incoming format from API)
           dateFields: ['date'],
           dateFormat: 'yyyy-MM-dd',
@@ -711,11 +696,11 @@ export default function LineChart({
         <table>
           ${
             // Table row for each series of an active scenario
-            chartRef.current.series.values
+            chart.series.values
               .filter((series) => {
                 if (!series.get('id')) return false;
                 let s = series.get('id');
-                if (series.get('id')?.includes(chartId)) s = s?.split('_')[1];
+                if (s) s = s?.split('_')[1];
                 return activeScenarios?.includes(Number(s));
               })
               .map((series): string => {
@@ -725,7 +710,7 @@ export default function LineChart({
                  * - is group filter series
                  */
                 let seriesID = series.get('id');
-                if (seriesID?.includes(chartId)) seriesID = seriesID?.split('_')[1];
+                if (seriesID) seriesID = seriesID?.split('_')[1];
                 if (series.isHidden() || seriesID === 'percentiles' || seriesID?.startsWith('group-filter-')) {
                   return '';
                 }
@@ -772,10 +757,10 @@ export default function LineChart({
                   seriesID !== selectedScenario.toString()
                     ? ''
                     : // Add table row for each active group filter
-                      (chartRef.current as XYChart).series.values
+                      chart.series.values
                         .filter((series) => {
                           let seriesID = series.get('id');
-                          if (seriesID?.includes(chartId)) seriesID = seriesID.split('_')[1];
+                          if (seriesID) seriesID = seriesID.split('_')[1];
                           return seriesID?.startsWith('group-filter-') && !series.isHidden();
                         })
                         .map((groupFilterSeries) => {
@@ -802,8 +787,8 @@ export default function LineChart({
       `;
 
     // Attach tooltip to series
-    chartRef.current.series.each((series) => {
-      const tooltip = Tooltip.new(rootRef.current as Root, {
+    chart.series.each((series) => {
+      const tooltip = Tooltip.new(root as Root, {
         labelHTML: tooltipHTML,
         getFillFromSprite: false,
         autoTextColor: false,
@@ -876,8 +861,8 @@ export default function LineChart({
     import('@amcharts/amcharts5/plugins/exporting')
       .then((module) => {
         // Update export menu
-        module.Exporting.new(rootRef.current as Root, {
-          menu: module.ExportingMenu.new(rootRef.current as Root, {}),
+        module.Exporting.new(root as Root, {
+          menu: module.ExportingMenu.new(root as Root, {}),
           filePrefix: exportedFileName,
           dataSource: data,
           dateFields: ['date'],
@@ -911,6 +896,8 @@ export default function LineChart({
     chartId,
     localization.overrides,
     exportedFileName,
+    chart,
+    root,
   ]);
 
   return (

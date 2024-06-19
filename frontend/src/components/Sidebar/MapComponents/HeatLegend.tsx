@@ -8,8 +8,8 @@ import React from 'react';
 import {HeatmapLegend} from 'types/heatmapLegend';
 import {useTheme} from '@mui/material/styles';
 import {Localization} from 'types/localization';
-import useRoot from 'components/shared/map/Root';
-import useHeatLegend from 'components/shared/map/legend';
+import useRoot from 'components/shared/Root';
+import useHeatLegend from 'components/shared/HeatMap/Legend';
 
 interface HeatProps {
   /**

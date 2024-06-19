@@ -15,10 +15,10 @@ import {Box} from '@mui/material';
 import {useTheme} from '@mui/material/styles';
 import React from 'react';
 import {Localization} from 'types/localization';
-import useRoot from 'components/shared/map/Root';
-import useMapChart from 'components/shared/map/chart';
-import useZoomControl from 'components/shared/map/zoom';
-import usePolygonSeries from 'components/shared/map/polygon';
+import useRoot from 'components/shared/Root';
+import useMapChart from 'components/shared/HeatMap/Map';
+import useZoomControl from 'components/shared/HeatMap/Zoom';
+import usePolygonSeries from 'components/shared/HeatMap/Polygon';
 
 interface MapProps {
   /** The data to be displayed on the map, in GeoJSON format. */
