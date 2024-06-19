@@ -31,7 +31,7 @@ export default function useLineSeries(
       chart.series.removeValue(series);
       series.dispose();
     };
-  }, [chart, root, settings, initializer]);
+  }, [root, initializer, chart, settings]);
 
   return series ?? null;
 }

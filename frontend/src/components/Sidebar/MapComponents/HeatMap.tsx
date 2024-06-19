@@ -123,18 +123,6 @@ export default function HeatMap({
   const lastSelectedPolygon = useRef<am5map.MapPolygon | null>(null);
   const [longLoadTimeout, setLongLoadTimeout] = useState<number>();
 
-  // Memoize the default localization object to avoid infinite re-renders
-  const defaultLocalization = useMemo(() => {
-    return {
-      formatNumber: (value: number) => value.toString(),
-      customLang: 'global',
-      overrides: {},
-    };
-  }, []);
-
-  // Use the provided localization or default to the memoized one
-  const localizationToUse = localization || defaultLocalization;
-
   // This memo returns if the required data is currently being fetched. Either the case data or the scenario data.
   const isFetching = useMemo(() => {
     if (selectedScenario == null) {
@@ -152,25 +140,12 @@ export default function HeatMap({
     };
   }, []);
 
-  const zoom = useZoomControl(root, zoomSettings);
-
-  const chartSettings = useMemo(() => {
-    if (!zoom) return null;
-    return {
-      projection: am5map.geoMercator(),
-      maxZoomLevel: maxZoomLevel,
-      maxPanOut: 0.4,
-      zoomControl: zoom,
-    };
-  }, [maxZoomLevel, zoom]);
-
-  const chart = useMapChart(
+  const zoom = useZoomControl(
     root,
-    chartSettings,
+    zoomSettings,
     useCallback(
-      (chart: am5map.MapChart) => {
+      (zoom: am5map.ZoomControl) => {
         if (!root) return;
-        const zoom = chart.get('zoomControl') as am5map.ZoomControl;
         zoom.homeButton.set('visible', true);
         const fixSVGPosition = {
           width: 25,
@@ -206,6 +181,18 @@ export default function HeatMap({
       [root, setSelectedArea, defaultSelectedValue]
     )
   );
+
+  const chartSettings = useMemo(() => {
+    if (!zoom) return null;
+    return {
+      projection: am5map.geoMercator(),
+      maxZoomLevel: maxZoomLevel,
+      maxPanOut: 0.4,
+      zoomControl: zoom,
+    };
+  }, [maxZoomLevel, zoom]);
+
+  const chart = useMapChart(root, chartSettings);
 
   const polygonSettings = useMemo(() => {
     return {
@@ -247,7 +234,10 @@ export default function HeatMap({
         polygonTemplate.events.on('pointerover', (e) => {
           if (legendRef.current) {
             const value = (e.target.dataItem?.dataContext as FeatureProperties).value as number;
-            legendRef.current.showValue(value, localizationToUse.formatNumber!(value));
+            legendRef.current.showValue(
+              value,
+              localization && localization.formatNumber ? localization.formatNumber(value) : value.toString()
+            );
           }
         });
         //hide tooltip on heat legend when not hovering anymore event
@@ -261,10 +251,10 @@ export default function HeatMap({
         defaultFill,
         fillOpacity,
         legendRef,
-        localizationToUse.formatNumber,
         setSelectedArea,
         theme.palette.background.default,
         theme.palette.primary.main,
+        localization,
       ]
     )
   );
