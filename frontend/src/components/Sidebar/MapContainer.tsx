@@ -76,6 +76,13 @@ export default function MapContainer() {
   const legendRef = useRef<am5.HeatLegend | null>(null);
 
   useEffect(() => {
+    if (selectedArea.RS === '00000') {
+      setSelectedArea(defaultValue);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [i18n.language]);
+
+  useEffect(() => {
     dispatch(
       selectDistrict({
         ags: String(selectedArea['RS']),
@@ -114,6 +121,13 @@ export default function MapContainer() {
     };
   }, [formatNumber]);
 
+  const optionLabel = useCallback(
+    (option: FeatureProperties) => {
+      return `${option.GEN}${option.BEZ ? ` (${t(`BEZ.${option.BEZ}`)})` : ''}`;
+    },
+    [t]
+  );
+
   return (
     <Stack
       id='sidebar-root'
@@ -130,16 +144,17 @@ export default function MapContainer() {
         <SearchBar
           data={searchBarData}
           sortProperty={'GEN'}
-          optionLabel={(option) => `${option.GEN}${option.BEZ ? ` (${t(`BEZ.${option.BEZ}`)})` : ''}`}
+          optionLabel={optionLabel}
           autoCompleteValue={{
-            RS: selectedArea['RS'],
-            GEN: selectedArea['GEN'],
-            BEZ: selectedArea['BEZ'],
-            id: selectedArea['id'],
+            RS: selectedArea.RS,
+            GEN: selectedArea.GEN,
+            BEZ: selectedArea.BEZ,
+            id: selectedArea.id,
           }}
           onChange={(_event, option) => {
             if (option) {
-              setSelectedArea(option);
+              if (option.RS && option.GEN && option.BEZ) setSelectedArea(option);
+              else setSelectedArea(defaultValue);
             }
           }}
           placeholder={`${selectedArea.GEN}${selectedArea.BEZ ? ` (${t(`BEZ.${selectedArea.BEZ}`)})` : ''}`}

@@ -6,7 +6,6 @@ import {Root} from '@amcharts/amcharts5/.internal/core/Root';
 import {XYChart} from '@amcharts/amcharts5/.internal/charts/xy/XYChart';
 import {AxisRenderer} from '@amcharts/amcharts5/.internal/charts/xy/axes/AxisRenderer';
 import {DateAxis, IDateAxisDataItem} from '@amcharts/amcharts5/.internal/charts/xy/axes/DateAxis';
-import {useTranslation} from 'react-i18next';
 import {IGridSettings} from '@amcharts/amcharts5/.internal/charts/xy/axes/Grid';
 import {IGraphicsSettings} from '@amcharts/amcharts5/.internal/core/render/Graphics';
 import {IAxisLabelSettings} from '@amcharts/amcharts5/.internal/charts/xy/axes/AxisLabel';
@@ -22,8 +21,6 @@ export default function useDateAxisRange(
   chart: XYChart | null,
   xAxis: DateAxis<AxisRenderer> | null
 ) {
-  const {i18n} = useTranslation();
-
   useLayoutEffect(() => {
     if (!chart || !root || !xAxis || !settings.data) {
       return;
@@ -47,5 +44,5 @@ export default function useDateAxisRange(
     return () => {
       xAxis?.axisRanges.removeValue(range);
     };
-  }, [chart, i18n.language, root, settings.axisFill, settings.data, settings.grid, settings.label, xAxis]);
+  }, [chart, root, settings.axisFill, settings.data, settings.grid, settings.label, xAxis]);
 }
