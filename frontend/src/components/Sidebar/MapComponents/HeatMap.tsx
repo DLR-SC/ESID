@@ -180,11 +180,15 @@ export default function HeatMap({
     )
   );
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!zoom || !root) return;
-    zoom.homeButton.events.on('click', () => {
-      setSelectedArea(defaultSelectedValue);
-    });
+    try {
+      zoom.homeButton.events.on('click', () => {
+        setSelectedArea(defaultSelectedValue);
+      });
+    } catch (error) {
+      console.error('Error adding event listener to home button:', error);
+    }
   }, [zoom, root, setSelectedArea, defaultSelectedValue]);
 
   const chartSettings = useMemo(() => {

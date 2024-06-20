@@ -10,7 +10,7 @@ export default function usePolygonSeries(
   chart: am5map.MapChart | null,
   settings: am5map.IMapPolygonSeriesSettings,
   initializer?: (polygon: am5map.MapPolygonSeries) => void
-): am5map.MapPolygonSeries | undefined {
+): am5map.MapPolygonSeries | null {
   const [polygon, setPolygon] = useState<am5map.MapPolygonSeries>();
 
   useLayoutEffect(() => {
@@ -31,6 +31,5 @@ export default function usePolygonSeries(
     };
   }, [root, settings, chart, initializer]);
 
-  console.log(chart, polygon);
-  return polygon;
+  return polygon ?? null;
 }
