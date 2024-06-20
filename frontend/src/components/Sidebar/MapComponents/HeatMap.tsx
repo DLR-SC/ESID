@@ -225,12 +225,6 @@ export default function HeatMap({
         strokeWidth: 2,
         layer: 1,
       });
-
-      polygonTemplate.events.on('click', function (ev) {
-        if (ev.target.dataItem?.dataContext) {
-          setSelectedArea(ev.target.dataItem.dataContext as FeatureProperties);
-        }
-      });
     })
   );
 
@@ -239,6 +233,12 @@ export default function HeatMap({
     if (!polygonSeries) return;
     const polygonTemplate = polygonSeries.mapPolygons.template;
     //show tooltip on heat legend when hovering
+    polygonTemplate.events.on('click', function (ev) {
+      if (ev.target.dataItem?.dataContext) {
+        setSelectedArea(ev.target.dataItem.dataContext as FeatureProperties);
+      }
+    });
+
     polygonTemplate.events.on('pointerover', (e) => {
       if (legendRef.current) {
         const value = (e.target.dataItem?.dataContext as FeatureProperties).value as number;
@@ -254,7 +254,7 @@ export default function HeatMap({
         void legendRef.current.hideTooltip();
       }
     });
-  }, [polygonSeries, legendRef, localization]);
+  }, [polygonSeries, legendRef, localization, setSelectedArea, theme.palette.primary.main]);
 
   // This effect is responsible for showing the loading indicator if the data is not ready within 1 second. This
   // prevents that the indicator is showing for every little change.
