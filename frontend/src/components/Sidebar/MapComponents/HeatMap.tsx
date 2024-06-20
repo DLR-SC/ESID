@@ -285,8 +285,10 @@ export default function HeatMap({
   }, [fixedLegendMaxValue, setAggregatedMax, values]);
 
   // Create Map with GeoData
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!polygonSeries) return;
+    if (isFetching) return;
+
     // Reset last selected polygon
     if (lastSelectedPolygon.current) {
       lastSelectedPolygon.current.states.create('default', {
@@ -321,6 +323,7 @@ export default function HeatMap({
     selectedArea.id,
     theme.palette.background.default,
     theme.palette.primary.main,
+    isFetching,
   ]);
 
   // set Data

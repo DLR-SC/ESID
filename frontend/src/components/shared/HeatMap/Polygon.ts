@@ -31,6 +31,5 @@ export default function usePolygonSeries(
     };
   }, [root, settings, chart, initializer]);
 
-  console.log(chart, polygon);
   return polygon;
 }
