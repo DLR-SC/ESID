@@ -354,7 +354,6 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
           /* [CDtemp-begin] */
           // append germany to list
           jsonlist.push({RS: '00000', GEN: t('germany'), BEZ: ''});
-          console.log({RS: '00000', GEN: t('germany'), BEZ: ''});
           // append city districts
           jsonlist.push(
             ...(searchbarCologneData as unknown as Array<District>).map((dist) => {

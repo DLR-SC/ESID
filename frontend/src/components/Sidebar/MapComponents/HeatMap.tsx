@@ -147,13 +147,13 @@ export default function HeatMap({
     useCallback(
       (zoom: am5map.ZoomControl) => {
         if (!root) return;
-        zoom.homeButton.set('visible', true);
         const fixSVGPosition = {
           width: 25,
           height: 25,
           dx: -5,
           dy: -3,
         };
+        zoom.homeButton.set('visible', true);
         zoom.homeButton.set(
           'icon',
           am5.Picture.new(root, {
@@ -161,9 +161,6 @@ export default function HeatMap({
             ...fixSVGPosition,
           }) as unknown as am5.Graphics
         );
-        zoom.homeButton.events.on('click', () => {
-          setSelectedArea(defaultSelectedValue);
-        });
         zoom.plusButton.set(
           'icon',
           am5.Picture.new(root, {
@@ -179,9 +176,16 @@ export default function HeatMap({
           }) as unknown as am5.Graphics
         );
       },
-      [root, setSelectedArea, defaultSelectedValue]
+      [root]
     )
   );
+
+  useLayoutEffect(() => {
+    if (!zoom || !root) return;
+    zoom.homeButton.events.on('click', () => {
+      setSelectedArea(defaultSelectedValue);
+    });
+  }, [zoom, root, setSelectedArea, defaultSelectedValue]);
 
   const chartSettings = useMemo(() => {
     if (!zoom) return null;
