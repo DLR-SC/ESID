@@ -181,14 +181,10 @@ export default function HeatMap({
   );
 
   useEffect(() => {
-    if (!zoom || !root) return;
-    try {
-      zoom.homeButton.events.on('click', () => {
-        setSelectedArea(defaultSelectedValue);
-      });
-    } catch (error) {
-      console.error('Error adding event listener to home button:', error);
-    }
+    if (!zoom || !root || root.isDisposed()) return;
+    zoom.homeButton.events.on('click', () => {
+      setSelectedArea(defaultSelectedValue);
+    });
   }, [zoom, root, setSelectedArea, defaultSelectedValue]);
 
   const chartSettings = useMemo(() => {
@@ -290,7 +286,7 @@ export default function HeatMap({
 
   // Create Map with GeoData
   useEffect(() => {
-    if (!polygonSeries) return;
+    if (!polygonSeries || isFetching) return;
     // Reset last selected polygon
     if (lastSelectedPolygon.current) {
       lastSelectedPolygon.current.states.create('default', {
@@ -319,6 +315,7 @@ export default function HeatMap({
       }
     });
   }, [
+    isFetching,
     idValuesToMap,
     polygonSeries,
     selectedArea,
