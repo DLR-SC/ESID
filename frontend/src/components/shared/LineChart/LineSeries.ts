@@ -15,7 +15,7 @@ export default function useLineSeries(
   const [series, setSeries] = useState<LineSeries>();
 
   useLayoutEffect(() => {
-    if (!root || !chart || !settings) {
+    if (!root || !chart || !settings || chart.isDisposed() || root.isDisposed()) {
       return;
     }
 
@@ -35,7 +35,6 @@ export default function useLineSeries(
 
   return series ?? null;
 }
-
 export function useLineSeriesList(
   root: Root | null,
   chart: XYChart | null,

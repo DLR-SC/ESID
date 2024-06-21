@@ -163,7 +163,7 @@ export default function MapContainer() {
         />
       </Box>
       <Box id='sidebar-map-wrapper'>
-        <LoadingContainer show={areMapValuesFetching || longLoad} overlayColor={theme.palette.background.default}>
+        <LoadingContainer show={areMapValuesFetching && longLoad} overlayColor={theme.palette.background.default}>
           <HeatMap
             selectedArea={selectedArea}
             setSelectedArea={setSelectedArea}

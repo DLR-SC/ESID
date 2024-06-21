@@ -49,7 +49,7 @@ export default function ReferenceDatePicker({
       (newDate.isAfter(dayjs(minDate)) || newDate.isSame(dayjs(minDate))) &&
       (newDate.isBefore(dayjs(maxDate)) || newDate.isSame(dayjs(maxDate)))
     )
-      setStartDay(newDate.toString());
+      setStartDay(newDate.format('YYYY-MM-DD'));
   };
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>

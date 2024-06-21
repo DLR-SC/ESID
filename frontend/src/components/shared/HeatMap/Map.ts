@@ -18,7 +18,8 @@ export default function useMapChart(
       return;
     }
 
-    const newChart = root.container.children.push(am5map.MapChart.new(root, settings));
+    const newChart = am5map.MapChart.new(root, settings);
+    root.container.children.push(newChart);
 
     setChart(newChart);
 
@@ -27,6 +28,7 @@ export default function useMapChart(
     }
 
     return () => {
+      root.container.children.removeValue(newChart);
       newChart.dispose();
     };
   }, [root, settings, initializer]);

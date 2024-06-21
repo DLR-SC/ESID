@@ -200,6 +200,7 @@ export default function HeatMap({
   const chart = useMapChart(root, chartSettings);
 
   const polygonSettings = useMemo(() => {
+    if (!mapData) return null;
     return {
       geoJSON: mapData as GeoJSON,
       tooltipPosition: 'fixed',
@@ -219,20 +220,18 @@ export default function HeatMap({
         strokeWidth: 1,
         fillOpacity: fillOpacity,
       });
-
-      polygonTemplate.states.create('hover', {
-        stroke: am5.color(theme.palette.primary.main),
-        strokeWidth: 2,
-        layer: 1,
-      });
     })
   );
-
-  // This effect is responsible for showing the tooltip on the heat legend when hovering over a region.
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!polygonSeries) return;
     const polygonTemplate = polygonSeries.mapPolygons.template;
-    //show tooltip on heat legend when hovering
+
+    polygonTemplate.states.create('hover', {
+      stroke: am5.color(theme.palette.primary.main),
+      strokeWidth: 2,
+      layer: 1,
+    });
+
     polygonTemplate.events.on('click', function (ev) {
       if (ev.target.dataItem?.dataContext) {
         setSelectedArea(ev.target.dataItem.dataContext as FeatureProperties);
@@ -284,7 +283,7 @@ export default function HeatMap({
     }
   }, [fixedLegendMaxValue, setAggregatedMax, values]);
 
-  // Create Map with GeoData
+  // This effect is responsible for highlighting the selected region on the map.
   useEffect(() => {
     if (!polygonSeries || isFetching) return;
     // Reset last selected polygon
@@ -325,11 +324,10 @@ export default function HeatMap({
   ]);
 
   // set Data
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!polygonSeries) return;
     if (selectedScenario !== null && !isFetching && values && Number.isFinite(aggregatedMax)) {
       const map = new Map<string | number, number>();
-      if (!values) return;
       values.forEach((value) => {
         map.set(value.id, value.value);
       });
@@ -366,8 +364,6 @@ export default function HeatMap({
       });
     }
   }, [
-    root,
-    chart,
     aggregatedMax,
     defaultFill,
     idValuesToMap,

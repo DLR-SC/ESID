@@ -226,7 +226,6 @@ export default function LineChart({
     if (!root || !chart) {
       return null;
     }
-
     return {
       renderer: AxisRendererY.new(root, {}),
       // Fix lower end to 0

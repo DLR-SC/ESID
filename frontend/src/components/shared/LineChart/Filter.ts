@@ -31,10 +31,9 @@ export function useDateSelectorFilter(
   );
 
   useLayoutEffect(() => {
-    if (!chart) {
+    if (!chart || chart.isDisposed()) {
       return;
     }
-
     const event = chart.events.on('click', setDateCallback);
 
     return () => {
