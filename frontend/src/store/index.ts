@@ -16,7 +16,7 @@ import RealmReducer from './RealmSlice';
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['dataSelection', 'userPreference'],
+  whitelist: ['dataSelection', 'userPreference', 'realm'],
 };
 
 const rootReducer = combineReducers({
