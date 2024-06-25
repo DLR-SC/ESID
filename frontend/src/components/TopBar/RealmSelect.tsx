@@ -9,8 +9,11 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import MenuItem from '@mui/material/MenuItem';
 import {useAppDispatch, useAppSelector} from 'store/hooks';
 import {setRealm} from 'store/RealmSlice';
+import {useTranslation} from 'react-i18next';
 
 function RealmSelect() {
+  const {t} = useTranslation();
+
   const realm = useAppSelector((state) => state.realm.name);
   const dispatch = useAppDispatch();
 
@@ -24,7 +27,7 @@ function RealmSelect() {
 
   return (
     <FormControl sx={{m: 2, minWidth: 120}} size='small'>
-      <InputLabel id='login-dialog-realm-select-label'>Realm</InputLabel>
+      <InputLabel id='login-dialog-realm-select-label'>{t('topBar.org')}</InputLabel>
       <Select
         labelId='login-dialog-realm-select-label'
         id='login-dialog-realm-select'
