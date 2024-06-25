@@ -32,7 +32,7 @@ function AuthProvider({children}: AuthProviderProps) {
       clientId: `${import.meta.env.VITE_OAUTH_CLIENT_ID}`,
       authorizationEndpoint: `${import.meta.env.VITE_OAUTH_API_URL}/realms/${realm}/protocol/openid-connect/auth`,
       tokenEndpoint: `${import.meta.env.VITE_OAUTH_API_URL}/realms/${realm}/protocol/openid-connect/token`,
-      redirectUri: window.location.origin, // always redirect to root
+      redirectUri: window.location.href,
       scope: 'openid profile email', // default scope without audience
       autoLogin: false,
     };
