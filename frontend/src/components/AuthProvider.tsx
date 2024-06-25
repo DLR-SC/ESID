@@ -23,7 +23,7 @@ function AuthProvider({children}: AuthProviderProps) {
       clientId: 'client-placeholder',
       authorizationEndpoint: 'auth-endpoint-placeholder',
       tokenEndpoint: 'token-endpoint-placeholder',
-      redirectUri: window.location.origin,
+      redirectUri: window.location.href,
       autoLogin: false,
     };
   } else {
