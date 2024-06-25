@@ -2,7 +2,11 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React from 'react';
-import {FormControl, InputLabel, Select, OutlinedInput, MenuItem} from '@mui/material';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import MenuItem from '@mui/material/MenuItem';
 import {useAppDispatch, useAppSelector} from 'store/hooks';
 import {setRealm} from 'store/RealmSlice';
 
