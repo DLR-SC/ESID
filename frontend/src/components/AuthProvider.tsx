@@ -23,7 +23,7 @@ function AuthProvider({children}: AuthProviderProps) {
       clientId: 'client-placeholder',
       authorizationEndpoint: 'auth-endpoint-placeholder',
       tokenEndpoint: 'token-endpoint-placeholder',
-      redirectUri: window.location.href,
+      redirectUri: window.location.origin,
       autoLogin: false,
     };
   } else {
@@ -32,7 +32,7 @@ function AuthProvider({children}: AuthProviderProps) {
       clientId: `${import.meta.env.VITE_OAUTH_CLIENT_ID}`,
       authorizationEndpoint: `${import.meta.env.VITE_OAUTH_API_URL}/realms/${realm}/protocol/openid-connect/auth`,
       tokenEndpoint: `${import.meta.env.VITE_OAUTH_API_URL}/realms/${realm}/protocol/openid-connect/token`,
-      redirectUri: window.location.href,
+      redirectUri: window.location.origin,
       scope: 'openid profile email', // default scope without audience
       autoLogin: false,
     };
