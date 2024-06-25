@@ -5,11 +5,11 @@ import React from 'react';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
-import OutlinedInput from '@mui/material/OutlinedInput';
 import MenuItem from '@mui/material/MenuItem';
 import {useAppDispatch, useAppSelector} from 'store/hooks';
 import {setRealm} from 'store/RealmSlice';
 import {useTranslation} from 'react-i18next';
+import Box from '@mui/material/Box';
 
 function RealmSelect() {
   const {t} = useTranslation();
@@ -26,22 +26,24 @@ function RealmSelect() {
   ];
 
   return (
-    <FormControl sx={{m: 2, minWidth: 120}} size='small'>
-      <InputLabel id='login-dialog-realm-select-label'>{t('topBar.org')}</InputLabel>
-      <Select
-        labelId='login-dialog-realm-select-label'
-        id='login-dialog-realm-select'
-        value={realm}
-        onChange={(event) => dispatch(setRealm(event.target.value))}
-        input={<OutlinedInput label='Realm' />}
-      >
-        {realms.map((realm) => (
-          <MenuItem key={realm.id} value={realm.id} disabled={realm.disabled}>
-            {realm.name}
-          </MenuItem>
-        ))}
-      </Select>
-    </FormControl>
+    <Box sx={{my: 2}}>
+      <FormControl size='small' sx={{minWidth: 120}}>
+        <InputLabel id='login-dialog-realm-select-label'>{t('topBar.org')}</InputLabel>
+        <Select
+          labelId='login-dialog-realm-select-label'
+          id='login-dialog-realm-select'
+          value={realm}
+          onChange={(event) => dispatch(setRealm(event.target.value))}
+          label={t('topBar.org')}
+        >
+          {realms.map((realm) => (
+            <MenuItem key={realm.id} value={realm.id} disabled={realm.disabled}>
+              {realm.name}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </Box>
   );
 }
 
