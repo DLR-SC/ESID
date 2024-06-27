@@ -488,6 +488,7 @@ export default function HeatMap({
       )
     )
       return;
+    console.log(settings);
     polygonSeries.data.setAll(settings);
   }, [settings, polygonSeries, defaultFill]);
 
