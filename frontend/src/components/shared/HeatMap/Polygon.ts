@@ -14,7 +14,7 @@ export default function usePolygonSeries(
   const [polygon, setPolygon] = useState<am5map.MapPolygonSeries>();
 
   useLayoutEffect(() => {
-    if (!root || !chart || !settings) {
+    if (!root || !chart || !settings || root.isDisposed() || chart.isDisposed()) {
       return;
     }
     const newPolygon = am5map.MapPolygonSeries.new(root, settings);

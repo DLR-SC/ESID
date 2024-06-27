@@ -97,11 +97,11 @@ export default function MapContainer() {
   }, [legend, dispatch]);
 
   const calculateToolTip = useCallback(
-    (regionData: FeatureProperties) => {
+    (regionData: FeatureProperties, value: number) => {
       const bez = t(`BEZ.${regionData.BEZ}`);
       const compartmentName = tBackend(`infection-states.${selectedCompartment}`);
       return selectedScenario !== null && selectedCompartment
-        ? `${bez} {GEN}\n${compartmentName}: ${formatNumber(Number(regionData.value))}`
+        ? `${bez} {GEN}\n${compartmentName}: ${formatNumber(value)}`
         : `${bez} {GEN}`;
     },
     [formatNumber, selectedCompartment, selectedScenario, t, tBackend]

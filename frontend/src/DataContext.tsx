@@ -33,7 +33,7 @@ import {GroupResponse} from 'types/group';
 import {Simulations, SimulationModel, SimulationDataByNode} from 'types/scenario';
 import {Dictionary} from 'util/util';
 import data from '../assets/lk_germany_reduced.geojson?url';
-import {FeatureCollection, FeatureProperties} from 'types/map';
+import {Feature, FeatureCollection, FeatureProperties} from 'types/map';
 import cologneDistricts from '../assets/stadtteile_cologne.geojson?url';
 import {District} from 'types/cologneDistricts';
 import searchbarMapData from '../assets/lk_germany_reduced_list.json?url';
@@ -306,7 +306,10 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
             return feat;
           })
         );
-        setGeoData(geodata as FeatureCollection);
+        const newMap = geodata.features.map((district) => {
+          return {...district, id: district.properties?.RS};
+        });
+        setGeoData({type: 'FeatureCollection', features: newMap as Feature[]});
       },
       // on promises reject
       () => {
