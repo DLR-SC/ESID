@@ -127,7 +127,7 @@ export default function MapContainer() {
     },
     [t]
   );
- 
+
   return (
     <Stack
       id='sidebar-root'

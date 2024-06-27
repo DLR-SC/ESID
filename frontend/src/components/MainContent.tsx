@@ -34,7 +34,7 @@ export default function MainContent(): JSX.Element {
         <IconBar />
       </Grid>
       <Grid sx={{width: '100%', maxWidth: '100%'}} id='main-content-scenario-wrapper' item>
-        <ScenarioContainer/>
+        <ScenarioContainer />
       </Grid>
       <ReferenceDayConnector />
       <MainContentTabs />

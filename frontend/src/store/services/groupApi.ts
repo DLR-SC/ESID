@@ -6,7 +6,7 @@ import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 import {GroupFilter, GroupResponse} from 'types/group';
 /* [CDtemp-begin] */
 import cologneData from '../../../assets/stadtteile_cologne_list.json';
-import { District } from 'types/cologneDistricts';
+import {District} from 'types/cologneDistricts';
 /* [CDtemp-end] */
 
 export const groupApi = createApi({
@@ -29,17 +29,19 @@ export const groupApi = createApi({
     getMultipleGroupFilterData: builder.query<Array<Dictionary<GroupResponse>>, PostFilters>({
       async queryFn(arg, _queryApi, _extraOptions, fetchWithBQ) {
         const result: Array<Dictionary<GroupResponse>> = [];
-        console.log(arg.ids)
-        
+        console.log(arg.ids);
+
         for (const id of arg.ids) {
-          if(arg.groupFilterList){
-            console.log(arg.groupFilterList)
+          if (arg.groupFilterList) {
+            console.log(arg.groupFilterList);
             const groupResponse: Dictionary<GroupResponse> = {};
-            for (const groupFilter of Object.values(arg.groupFilterList).filter((groupFilter) => groupFilter.isVisible)) {
+            for (const groupFilter of Object.values(arg.groupFilterList).filter(
+              (groupFilter) => groupFilter.isVisible
+            )) {
               /* [CDtemp-begin] */
               let node = '';
               let cologneDistrict = '';
-    
+
               if (arg.node.length > 5) {
                 node = arg.node.slice(0, 5);
                 cologneDistrict = arg.node.slice(-3);
@@ -47,7 +49,7 @@ export const groupApi = createApi({
                 node = arg.node;
               }
               /* [CDtemp-end] */
-    
+
               const singleResult = await fetchWithBQ({
                 url:
                   `simulation/${id}/${
@@ -59,11 +61,11 @@ export const groupApi = createApi({
                 method: 'POST',
                 body: {groups: groupFilter.groups},
               });
-    
+
               if (singleResult.error) return {error: singleResult.error};
 
               groupResponse[groupFilter.name] = singleResult.data as GroupResponse;
-    
+
               /* [CDtemp-begin] */
               // adjust data if it is for a city district
               if (cologneDistrict) {
@@ -83,12 +85,11 @@ export const groupApi = createApi({
                 );
               }
               /* [CDtemp-end] */
-              
-              
-            }result.push(groupResponse);
+            }
+            result.push(groupResponse);
           }
         }
-        console.log(result)
+        console.log(result);
         return {data: result};
       },
     }),
@@ -212,7 +213,7 @@ export interface PostFilter {
 export interface PostFilters {
   ids: number[];
   node: string;
-  groupFilterList: Dictionary<GroupFilter> | undefined
+  groupFilterList: Dictionary<GroupFilter> | undefined;
   day?: string;
   compartment?: string;
 }
@@ -223,7 +224,7 @@ export interface GroupCategory {
   description: string;
 }
 
-interface GroupCategories {
+export interface GroupCategories {
   count: number;
   next: null;
   previous: null;
@@ -237,7 +238,7 @@ export interface GroupSubcategory {
   category: string;
 }
 
-interface GroupSubcategories {
+export interface GroupSubcategories {
   count: number;
   next: null;
   previous: null;

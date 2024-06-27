@@ -5,7 +5,7 @@ import {useEffect, useState} from 'react';
 import {Dictionary} from '../../util/util';
 import {useGetCaseDataSingleSimulationEntryQuery} from '../../store/services/caseDataApi';
 
-export function useGetSimulationStartValues(node: string, startDay: string|null) {
+export function useGetSimulationStartValues(node: string, startDay: string | null) {
   const [compartmentValues, setCompartmentValues] = useState<Dictionary<number> | null>(null);
 
   const {data: caseData} = useGetCaseDataSingleSimulationEntryQuery(

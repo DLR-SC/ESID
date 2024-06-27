@@ -179,7 +179,7 @@ export default function HeatMap({
       [root]
     )
   );
-  
+
   useEffect(() => {
     if (!zoom || !root || root.isDisposed()) return;
     zoom.homeButton.events.on('click', () => {

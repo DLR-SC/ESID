@@ -5,8 +5,8 @@ import {Box, Tooltip, IconButton} from '@mui/material';
 import {CheckBox, CheckBoxOutlineBlank} from '@mui/icons-material';
 import {useTranslation} from 'react-i18next';
 import React from 'react';
-import { Localization } from 'types/localization';
-import { hexToRGB } from 'util/util';
+import {Localization} from 'types/localization';
+import {hexToRGB} from 'util/util';
 
 interface CardTooltipProps {
   /** A boolean indicating whether the user is hovering over the card. */

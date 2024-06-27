@@ -6,8 +6,8 @@ import {Box, useTheme} from '@mui/material';
 import CardTitle from './CardTitle';
 import CardTooltip from './CardTooltip';
 import CardRows from './CardRows';
-import { Localization } from 'types/localization';
-import { Dictionary, hexToRGB } from 'util/util';
+import {Localization} from 'types/localization';
+import {Dictionary, hexToRGB} from 'util/util';
 
 interface MainCardProps {
   /** A unique identifier for the card. */

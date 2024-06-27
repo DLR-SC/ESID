@@ -12,7 +12,7 @@ import {
 } from '../../types/scenario';
 /* [CDtemp-begin] */
 import cologneData from '../../../assets/stadtteile_cologne_list.json';
-import { District } from 'types/cologneDistricts';
+import {District} from 'types/cologneDistricts';
 
 /** Checks if input node is a city district and returns the node to fetch data, and the city distrct suffix if there is one */
 function validateDistrictNode(inNode: string): {node: string; cologneDistrict?: string} {
@@ -163,23 +163,23 @@ export const scenarioApi = createApi({
         /* [CDtemp-begin] */
         const {node, cologneDistrict} = validateDistrictNode(arg.node);
         /* [CDtemp-end] */
-        for (const id of arg.ids){
+        for (const id of arg.ids) {
           const fullResult = await fetchWithBQ(
-          `simulation/${id}/${
-            // [CDtemp] arg.node
-            node
-          }/?all${day}${groups}`
-        );
-        if (fullResult.error) return {error: fullResult.error};
-        // [CDtemp] const data = currResult.data as SimulationDataByNode;
-        /* [CDtemp-begin] */
-        const data = modifyDistrictResults(cologneDistrict, fullResult.data as SimulationDataByNode);
+            `simulation/${id}/${
+              // [CDtemp] arg.node
+              node
+            }/?all${day}${groups}`
+          );
+          if (fullResult.error) return {error: fullResult.error};
+          // [CDtemp] const data = currResult.data as SimulationDataByNode;
+          /* [CDtemp-begin] */
+          const data = modifyDistrictResults(cologneDistrict, fullResult.data as SimulationDataByNode);
 
-        /* [CDtemp-end] */
-        result[id] = data;
-      }
-      return {data: result};
-    },
+          /* [CDtemp-end] */
+          result[id] = data;
+        }
+        return {data: result};
+      },
     }),
 
     getMultipleSimulationDataByNode: builder.query<SimulationDataByNode[], MultipleSimulationDataByNodeParameters>({

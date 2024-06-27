@@ -7,7 +7,7 @@ import {SimulationDataByNode} from '../../types/scenario';
 /* [CDtemp-begin] */
 import cologneData from '../../../assets/stadtteile_cologne_list.json';
 import {deepCopy} from '../../util/util';
-import { District } from 'types/cologneDistricts';
+import {District} from 'types/cologneDistricts';
 /* [CDtemp-end] */
 
 export const caseDataApi = createApi({

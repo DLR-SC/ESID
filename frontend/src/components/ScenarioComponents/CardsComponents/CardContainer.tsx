@@ -100,7 +100,7 @@ export default function CardContainer({
       <DataCard
         key={scenario.id}
         index={scenario.id}
-        color={getScenarioPrimaryColor(scenario.id - 1, theme)}
+        color={scenario.id == 0 ? '#00000' : getScenarioPrimaryColor(scenario.id, theme)}
         label={
           localization.overrides && localization.overrides[`scenario-names.${scenario.label}`]
             ? customT(localization.overrides[`scenario-names.${scenario.label}`])

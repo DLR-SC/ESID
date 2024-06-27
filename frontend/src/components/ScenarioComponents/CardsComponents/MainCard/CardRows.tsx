@@ -6,8 +6,8 @@ import TrendArrow from './TrendArrow';
 import {ScrollSyncPane} from 'react-scroll-sync';
 import {useTranslation} from 'react-i18next';
 import React from 'react';
-import { Localization } from 'types/localization';
-import { Dictionary, hexToRGB } from 'util/util';
+import {Localization} from 'types/localization';
+import {Dictionary, hexToRGB} from 'util/util';
 
 interface CardRowsProps {
   /** Index of the card*/

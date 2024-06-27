@@ -10,7 +10,7 @@ import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
 import React from 'react';
 import {Localization} from 'types/localization';
 import {useTranslation} from 'react-i18next';
-import { dateToISOString } from 'util/util';
+import {dateToISOString} from 'util/util';
 
 interface DatePickerProps {
   /* Start day, the one displayed with a dashed line in the line chart */
@@ -43,8 +43,7 @@ export default function ReferenceDatePicker({
   const {t: defaultT} = useTranslation();
   const {t: customT} = useTranslation(localization.customLang);
   const updateDate = (newDate: Dayjs | null): void => {
-    if(newDate)
-      setStartDay(dateToISOString(newDate.toDate()));
+    if (newDate) setStartDay(dateToISOString(newDate.toDate()));
   };
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>

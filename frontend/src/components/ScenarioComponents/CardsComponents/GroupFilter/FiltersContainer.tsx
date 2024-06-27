@@ -81,7 +81,7 @@ export default function FiltersContainer({
             : `${(325 / 4) * minCompartmentsRows}px`,
         boxSizing: 'border-box',
         border: 1,
-        borderColor: getScenarioPrimaryColor(index - 1, theme),
+        borderColor: getScenarioPrimaryColor(index, theme),
         borderRadius: 1,
         bgcolor: theme.palette.background.paper,
         zIndex: 2,
@@ -118,7 +118,7 @@ export default function FiltersContainer({
           {filteredValues.map((_, id: number) => (
             <FilterCard
               key={id}
-              color={getScenarioPrimaryColor(index - 1, theme)}
+              color={getScenarioPrimaryColor(index, theme)}
               title={filteredTitles[id]}
               compartments={compartments}
               groupFilterIndex={id}

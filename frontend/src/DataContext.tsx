@@ -14,8 +14,9 @@ import {
   useGetMultipleGroupFilterDataQuery,
   useGetGroupCategoriesQuery,
   useGetGroupSubcategoriesQuery,
-  PostFilter,
   useGetMultipleGroupFilterDataLineChartQuery,
+  GroupCategories,
+  GroupSubcategories,
 } from 'store/services/groupApi';
 import {
   SelectedScenarioPercentileData,
@@ -37,7 +38,7 @@ import {District} from 'types/cologneDistricts';
 import searchbarMapData from '../assets/lk_germany_reduced_list.json?url';
 import searchbarCologneData from '../assets/stadtteile_cologne_list.json';
 import {useTranslation} from 'react-i18next';
-import { GroupCategories, GroupResponse, GroupSubcategories } from 'types/group';
+import {GroupResponse} from 'types/group';
 
 // Create the context
 export const DataContext = createContext<{
@@ -60,11 +61,8 @@ export const DataContext = createContext<{
   caseScenarioSimulationData: CaseDataByNode | undefined;
   simulationModelData: SimulationModel | undefined;
   caseScenarioData: SimulationDataByNode | undefined;
-  scenarioSimulationDataForCardFiltersValues: Dictionary<GroupResponse>[] | undefined
-  getId: number[] | undefined
-  // scenarioSimulationDataSecondCard: SimulationDataByNode | undefined;
-  // scenarioSimulationDataFirstCardFiltersValues: Dictionary<GroupResponse> | undefined;
-  // scenarioSimulationDataSecondCardFiltersValues: Dictionary<GroupResponse> | undefined;
+  scenarioSimulationDataForCardFiltersValues: Dictionary<GroupResponse>[] | undefined;
+  getId: number[] | undefined;
   scenarioSimulationDataForCard: (SimulationDataByNode | undefined)[] | undefined;
 }>({
   geoData: undefined,
@@ -88,9 +86,6 @@ export const DataContext = createContext<{
   caseScenarioData: undefined,
   scenarioSimulationDataForCardFiltersValues: undefined,
   getId: undefined,
-  // scenarioSimulationDataSecondCard: undefined,
-  // scenarioSimulationDataFirstCardFiltersValues: undefined,
-  // scenarioSimulationDataSecondCardFiltersValues: undefined,
   scenarioSimulationDataForCard: undefined,
 });
 
@@ -462,10 +457,6 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
         caseScenarioData,
         scenarioSimulationDataForCardFiltersValues,
         getId,
-        // scenarioSimulationDataFirstCard,
-        // scenarioSimulationDataSecondCard,
-        // scenarioSimulationDataFirstCardFiltersValues: scenarioSimulationDataFirstCardFiltersValues,
-        // scenarioSimulationDataSecondCardFiltersValues: scenarioSimulationDataSecondCardFiltersValues,
         scenarioSimulationDataForCard: scenarioSimulationDataForCard,
       }}
     >
