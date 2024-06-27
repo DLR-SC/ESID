@@ -4,12 +4,8 @@
 import {useEffect, useState} from 'react';
 import {Dictionary} from '../../util/util';
 import {useGetCaseDataSingleSimulationEntryQuery} from '../../store/services/caseDataApi';
-import {useAppSelector} from '../../store/hooks';
 
-export function useGetSimulationStartValues() {
-  const startDay = useAppSelector((state) => state.dataSelection.simulationStart);
-  const node = useAppSelector((state) => state.dataSelection.district.ags);
-
+export function useGetSimulationStartValues(node: string, startDay: string|null) {
   const [compartmentValues, setCompartmentValues] = useState<Dictionary<number> | null>(null);
 
   const {data: caseData} = useGetCaseDataSingleSimulationEntryQuery(
@@ -26,6 +22,5 @@ export function useGetSimulationStartValues() {
       setCompartmentValues(caseData.results[0].compartments);
     }
   }, [caseData]);
-
   return compartmentValues;
 }

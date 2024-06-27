@@ -2,72 +2,72 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import Box from '@mui/material/Box';
-import {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import MainCard from './MainCard/MainCard';
 import FiltersContainer from './GroupFilter/FiltersContainer';
-import React from 'react';
-import {GroupFilter} from 'types/group';
-import {filterValue} from 'types/Cardtypes';
-import {Dictionary} from 'util/util';
-import {Localization} from 'types/localization';
+import { filterValue } from 'types/Cardtypes';
+import { GroupFilter } from 'types/group';
+import { Localization } from 'types/localization';
+import { Dictionary } from 'util/util';
+
 
 interface DataCardProps {
-  /*A unique identifier for the card.*/
+  /** A unique identifier for the card.*/
   index: number;
 
-  /*A dictionary of compartment values associated with the card.*/
+  /** A dictionary of compartment values associated with the card.*/
   compartmentValues: Dictionary<number> | null;
 
-  /* A dictionary of start values used for calculating the rate. This determines whether the values have increased, decreased, or remained the same. */
+  /** A dictionary of start values used for calculating the rate. This determines whether the values have increased, decreased, or remained the same. */
   startValues: Dictionary<number> | null;
 
-  /*The title of the card.*/
+  /** The title of the card.*/
   label: string;
 
-  /*A boolean indicating whether the compartments are expanded.*/
+  /** A boolean indicating whether the compartments are expanded.*/
   compartmentsExpanded: boolean;
 
-  /*An array of compartments.*/
+  /** An array of compartments.*/
   compartments: string[];
 
-  /*The compartment that is currently selected.*/
+  /** The compartment that is currently selected.*/
   selectedCompartment: string;
 
-  /*A boolean indicating whether the scenario is selected.*/
+  /** A boolean indicating whether the scenario is selected.*/
   selectedScenario: boolean;
 
-  /*The color of the card.*/
+  /** The color of the card.*/
   color: string;
 
-  /*An array of active scenarios.*/
+  /** An array of active scenarios.*/
   activeScenarios: number[] | null;
 
-  /* A dictionary of filter values. This is an array of objects, each containing a title and a dictionary of numbers representing
+  /** A dictionary of filter values. This is an array of objects, each containing a title and a dictionary of numbers representing
    * the filtered information to be displayed, it's used a disctionary because each card has to have the same amount of filter. */
   filterValues?: Dictionary<filterValue[]> | null;
 
-  /*A function to set the selected scenario.*/
+  /** A function to set the selected scenario.*/
   setSelectedScenario: React.Dispatch<React.SetStateAction<number | null>>;
 
-  /*A function to set the active scenarios.*/
+  /** A function to set the active scenarios.*/
   setActiveScenarios: React.Dispatch<React.SetStateAction<number[] | null>>;
 
-  /*The number of the selected scenario.*/
+  /** The number of the selected scenario.*/
   numberSelectedScenario: number | null;
 
   /*The minimum number of compartment rows.*/
   minCompartmentsRows: number;
 
-  /*The maximum number of compartment rows.*/
+  /** The maximum number of compartment rows.*/
   maxCompartmentsRows: number;
 
-  /*An object containing localization information (translation & number formattation).*/
+  /** An object containing localization information (translation & number formattation).*/
   localization?: Localization;
 
-  /*A dictionary of group filters.*/
+  /** A dictionary of group filters.*/
   groupFilters: Dictionary<GroupFilter> | undefined;
 
-  /* Boolean to determine if the arrow is displayed */
+  /** Boolean to determine if the arrow is displayed */
   arrow?: boolean;
 }
 
@@ -93,7 +93,11 @@ export default function DataCard({
   maxCompartmentsRows,
   setSelectedScenario,
   setActiveScenarios,
-  localization = {formatNumber: (value: number) => value.toString(), customLang: 'global', overrides: {}},
+  localization = {
+    formatNumber: (value: number) => value.toString(),
+    customLang: 'global',
+    overrides: {},
+  },
   groupFilters,
   arrow = true,
 }: DataCardProps) {

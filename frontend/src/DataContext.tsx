@@ -14,9 +14,8 @@ import {
   useGetMultipleGroupFilterDataQuery,
   useGetGroupCategoriesQuery,
   useGetGroupSubcategoriesQuery,
-  GroupCategories,
-  GroupSubcategories,
   PostFilter,
+  useGetMultipleGroupFilterDataLineChartQuery,
 } from 'store/services/groupApi';
 import {
   SelectedScenarioPercentileData,
@@ -26,11 +25,10 @@ import {
   useGetSimulationModelQuery,
   useGetSimulationModelsQuery,
   useGetSimulationsQuery,
-  useGetSingleSimulationEntryQuery,
+  useGetMultipleSimulationEntryQuery,
 } from 'store/services/scenarioApi';
 import {CaseDataByNode} from 'types/caseData';
-import {GroupResponse} from 'types/group';
-import {Simulations, SimulationModel, SimulationDataByNode} from 'types/scenario';
+import {Simulations, SimulationModel, SimulationDataByNode, SimulationMetaData} from 'types/scenario';
 import {Dictionary} from 'util/util';
 import data from '../assets/lk_germany_reduced.geojson?url';
 import {FeatureCollection, FeatureProperties} from 'types/map';
@@ -39,6 +37,7 @@ import {District} from 'types/cologneDistricts';
 import searchbarMapData from '../assets/lk_germany_reduced_list.json?url';
 import searchbarCologneData from '../assets/stadtteile_cologne_list.json';
 import {useTranslation} from 'react-i18next';
+import { GroupCategories, GroupResponse, GroupSubcategories } from 'types/group';
 
 // Create the context
 export const DataContext = createContext<{
@@ -61,10 +60,12 @@ export const DataContext = createContext<{
   caseScenarioSimulationData: CaseDataByNode | undefined;
   simulationModelData: SimulationModel | undefined;
   caseScenarioData: SimulationDataByNode | undefined;
-  scenarioSimulationDataFirstCard: SimulationDataByNode | undefined;
-  scenarioSimulationDataSecondCard: SimulationDataByNode | undefined;
-  scenarioSimulationDataFirstCardFiltersValues: Dictionary<GroupResponse> | undefined;
-  scenarioSimulationDataSecondCardFiltersValues: Dictionary<GroupResponse> | undefined;
+  scenarioSimulationDataForCardFiltersValues: Dictionary<GroupResponse>[] | undefined
+  getId: number[] | undefined
+  // scenarioSimulationDataSecondCard: SimulationDataByNode | undefined;
+  // scenarioSimulationDataFirstCardFiltersValues: Dictionary<GroupResponse> | undefined;
+  // scenarioSimulationDataSecondCardFiltersValues: Dictionary<GroupResponse> | undefined;
+  scenarioSimulationDataForCard: (SimulationDataByNode | undefined)[] | undefined;
 }>({
   geoData: undefined,
   mapData: undefined,
@@ -85,10 +86,12 @@ export const DataContext = createContext<{
   caseScenarioSimulationData: undefined,
   simulationModelData: undefined,
   caseScenarioData: undefined,
-  scenarioSimulationDataFirstCard: undefined,
-  scenarioSimulationDataSecondCard: undefined,
-  scenarioSimulationDataFirstCardFiltersValues: undefined,
-  scenarioSimulationDataSecondCardFiltersValues: undefined,
+  scenarioSimulationDataForCardFiltersValues: undefined,
+  getId: undefined,
+  // scenarioSimulationDataSecondCard: undefined,
+  // scenarioSimulationDataFirstCardFiltersValues: undefined,
+  // scenarioSimulationDataSecondCardFiltersValues: undefined,
+  scenarioSimulationDataForCard: undefined,
 });
 
 // Create a provider component
@@ -120,43 +123,22 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
   const scenarioList = useAppSelector((state) => state.scenarioList);
   const referenceDay = useAppSelector((state) => state.dataSelection.simulationStart);
 
-  const groupFilterParams1: PostFilter[] = useMemo(() => {
-    if (selectedDistrict && groupFilterList) {
-      return Object.values(groupFilterList)
-        .filter((groupFilter) => groupFilter.isVisible)
-        .map((groupFilter) => ({
-          id: 1,
-          node: selectedDistrict,
-          groupFilter: groupFilter,
-          day: selectedDate ?? '',
-        }));
-    }
-    return [];
-  }, [selectedDate, groupFilterList, selectedDistrict]);
+  const startValues = useGetSimulationStartValues(selectedDistrict, referenceDay);
 
-  const groupFilterParams2: PostFilter[] = useMemo(() => {
-    if (selectedDistrict && groupFilterList) {
-      return Object.values(groupFilterList)
-        .filter((groupFilter) => groupFilter.isVisible)
-        .map((groupFilter) => ({
-          id: 2,
-          node: selectedDistrict,
-          groupFilter: groupFilter,
-          day: selectedDate ?? '',
-        }));
-    }
-    return [];
-  }, [selectedDate, groupFilterList, selectedDistrict]);
-
-  const startValues = useGetSimulationStartValues();
   const caseScenarioSimulationData = useGetCaseDataByDistrictQuery({
     node: '00000',
     groups: null,
     compartments: null,
   });
+
   const {data: groupCategories} = useGetGroupCategoriesQuery();
   const {data: groupSubCategories} = useGetGroupSubcategoriesQuery();
   const {data: scenarioListData} = useGetSimulationsQuery();
+  const getId = useMemo(() => {
+    return scenarioListData?.results.map((simulation: SimulationMetaData) => {
+      return simulation.id;
+    });
+  }, [scenarioListData?.results]);
   const {data: simulationModelsData} = useGetSimulationModelsQuery();
   const {data: simulationModelData} = useGetSimulationModelQuery(simulationModelKey, {
     skip: simulationModelKey === 'unset',
@@ -171,28 +153,25 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
     {skip: selectedDate === null}
   );
 
-  const {data: scenarioSimulationDataFirstCard} = useGetSingleSimulationEntryQuery(
+  const {data: scenarioSimulationDataForCardFiltersValues} = useGetMultipleGroupFilterDataQuery(
     {
-      id: 1,
+      ids: getId ?? [],
+      node: selectedDistrict,
+      day: selectedDate ?? '',
+      groupFilterList: groupFilterList,
+    },
+    {skip: !selectedDate}
+  );
+
+  const {data: scenarioSimulationDataForCard} = useGetMultipleSimulationEntryQuery(
+    {
+      ids: getId ?? [],
       node: selectedDistrict,
       day: selectedDate ?? '',
       groups: ['total'],
     },
     {skip: !selectedDate}
   );
-
-  const {data: scenarioSimulationDataSecondCard} = useGetSingleSimulationEntryQuery(
-    {
-      id: 2,
-      node: selectedDistrict,
-      day: selectedDate ?? '',
-      groups: ['total'],
-    },
-    {skip: !selectedDate}
-  );
-
-  const {data: scenarioSimulationDataFirstCardFiltersValues} = useGetMultipleGroupFilterDataQuery(groupFilterParams1);
-  const {data: scenarioSimulationDataSecondCardFiltersValues} = useGetMultipleGroupFilterDataQuery(groupFilterParams2);
 
   const {data: mapSimulationData, isFetching: mapIsSimulationDataFetching} = useGetSimulationDataByDateQuery(
     {
@@ -260,7 +239,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
     }
   );
 
-  const {data: chartGroupFilterData} = useGetMultipleGroupFilterDataQuery(
+  const {data: chartGroupFilterData} = useGetMultipleGroupFilterDataLineChartQuery(
     groupFilterList && selectedScenario && selectedDistrict && selectedCompartment
       ? Object.values(groupFilterList)
           .filter((groupFilter) => groupFilter.isVisible)
@@ -481,10 +460,13 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
         caseScenarioSimulationData: caseScenarioSimulationData.data,
         simulationModelData: simulationModelData?.results,
         caseScenarioData,
-        scenarioSimulationDataFirstCard,
-        scenarioSimulationDataSecondCard,
-        scenarioSimulationDataFirstCardFiltersValues: scenarioSimulationDataFirstCardFiltersValues,
-        scenarioSimulationDataSecondCardFiltersValues: scenarioSimulationDataSecondCardFiltersValues,
+        scenarioSimulationDataForCardFiltersValues,
+        getId,
+        // scenarioSimulationDataFirstCard,
+        // scenarioSimulationDataSecondCard,
+        // scenarioSimulationDataFirstCardFiltersValues: scenarioSimulationDataFirstCardFiltersValues,
+        // scenarioSimulationDataSecondCardFiltersValues: scenarioSimulationDataSecondCardFiltersValues,
+        scenarioSimulationDataForCard: scenarioSimulationDataForCard,
       }}
     >
       {children}

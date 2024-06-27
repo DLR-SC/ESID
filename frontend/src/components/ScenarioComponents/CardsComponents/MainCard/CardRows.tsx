@@ -1,48 +1,49 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
+
 import {Box, List, ListItem, ListItemText, useTheme} from '@mui/material';
 import TrendArrow from './TrendArrow';
 import {ScrollSyncPane} from 'react-scroll-sync';
 import {useTranslation} from 'react-i18next';
 import React from 'react';
-import {Dictionary, hexToRGB} from 'util/util';
-import {Localization} from 'types/localization';
+import { Localization } from 'types/localization';
+import { Dictionary, hexToRGB } from 'util/util';
 
 interface CardRowsProps {
-  /* Index of the card*/
+  /** Index of the card*/
   index: number;
 
-  /* Array of compartments */
+  /** Array of compartments */
   compartments: string[];
 
-  /* Dictionary of compartment values */
+  /** Dictionary of compartment values */
   compartmentValues: Dictionary<number> | null;
 
-  /* Dictionary of start values */
+  /** Dictionary of start values */
   startValues: Dictionary<number> | null;
 
-  /* Boolean to determine if the card is flipped */
+  /** Boolean to determine if the card is flipped */
   isFlipped?: boolean;
 
-  /* Boolean to determine if the arrow is displayed */
+  /** Boolean to determine if the arrow is displayed */
   arrow?: boolean;
 
-  /* Boolean to determine if the compartment is expanded */
+  /** Boolean to determine if the compartment is expanded */
   compartmentExpanded?: boolean;
 
-  /* Selected compartment */
+  /** Selected compartment */
   selectedCompartment: string;
 
-  /* Color of the card row */
+  /** Color of the card row */
   color: string;
 
-  /* Minimum number of compartment rows */
+  /** Minimum number of compartment rows */
   minCompartmentsRows: number;
 
-  /* Maximum number of compartment rows */
+  /** Maximum number of compartment rows */
   maxCompartmentsRows: number;
 
-  /* Localization object for custom language and overrides */
+  /** Localization object for custom language and overrides */
   localization?: Localization;
 }
 
@@ -62,7 +63,11 @@ export default function CardRows({
   color,
   minCompartmentsRows,
   maxCompartmentsRows,
-  localization = {formatNumber: (value: number) => value.toString(), customLang: 'global', overrides: {}},
+  localization = {
+    formatNumber: (value: number) => value.toString(),
+    customLang: 'global',
+    overrides: {},
+  },
 }: CardRowsProps) {
   const {t: defaultT} = useTranslation();
   const {t: customT} = useTranslation(localization.customLang);

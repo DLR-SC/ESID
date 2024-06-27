@@ -31,7 +31,7 @@ export default function LineChartContainer() {
   const minDate = useAppSelector((state) => state.dataSelection.minDate);
   const maxDate = useAppSelector((state) => state.dataSelection.maxDate);
 
-  const [selectedDate, setSelectedDate] = useState<string>(selectedDateInStore ? selectedDateInStore : '2021-09-01');
+  const [selectedDate, setSelectedDate] = useState<string>(selectedDateInStore ? selectedDateInStore : '2024-08-07');
   const [referenceDayb, setReferenceDayb] = useState<number>(0);
 
   const localization = useMemo(() => {

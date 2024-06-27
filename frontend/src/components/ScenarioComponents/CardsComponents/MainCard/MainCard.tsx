@@ -6,69 +6,68 @@ import {Box, useTheme} from '@mui/material';
 import CardTitle from './CardTitle';
 import CardTooltip from './CardTooltip';
 import CardRows from './CardRows';
-import {hexToRGB} from 'util/util';
-import {Dictionary} from 'types/Cardtypes';
-import {Localization} from 'types/localization';
+import { Localization } from 'types/localization';
+import { Dictionary, hexToRGB } from 'util/util';
 
 interface MainCardProps {
-  /* A unique identifier for the card. */
+  /** A unique identifier for the card. */
   index: number;
 
-  /* The title of the card. */
+  /** The title of the card. */
   label: string;
 
-  /* The color of the card. */
+  /** The color of the card. */
   color: string;
 
-  /* A dictionary of compartment values associated with the card. */
+  /** A dictionary of compartment values associated with the card. */
   compartmentValues: Dictionary<number> | null;
 
-  /* A dictionary of start values used for calculating the rate. This determines whether the values have increased, decreased, or remained the same. */
+  /** A dictionary of start values used for calculating the rate. This determines whether the values have increased, decreased, or remained the same. */
   startValues: Dictionary<number> | null;
 
-  /* An array of compartment names. */
+  /** An array of compartment names. */
   compartments: string[];
 
-  /* A boolean indicating whether the compartments are expanded. */
+  /** A boolean indicating whether the compartments are expanded. */
   compartmentsExpanded: boolean;
 
-  /* The compartment that is currently selected. */
+  /** The compartment that is currently selected. */
   selectedCompartment: string;
 
-  /* A boolean indicating whether the user is hovering over the card. */
+  /** A boolean indicating whether the user is hovering over the card. */
   hover: boolean;
 
-  /* A function to set the hover state of the card. */
+  /** A function to set the hover state of the card. */
   setHover: React.Dispatch<React.SetStateAction<boolean>>;
 
-  /* A boolean indicating whether the scenario is selected. */
+  /** A boolean indicating whether the scenario is selected. */
   selectedScenario: boolean;
 
-  /* A function to set the selected scenario. */
+  /** A function to set the selected scenario. */
   setSelectedScenario: React.Dispatch<React.SetStateAction<number | null>>;
 
-  /* The number of the selected scenario. */
+  /** The number of the selected scenario. */
   numberSelectedScenario: number | null;
 
-  /* A boolean indicating whether the scenario is active. */
+  /** A boolean indicating whether the scenario is active. */
   activeScenario: boolean;
 
-  /* A function to set the active scenarios. */
+  /** A function to set the active scenarios. */
   setActiveScenarios: React.Dispatch<React.SetStateAction<number[] | null>>;
 
-  /* An array of active scenarios. */
+  /** An array of active scenarios. */
   activeScenarios: number[] | null;
 
-  /* The minimum number of compartment rows. */
+  /** The minimum number of compartment rows. */
   minCompartmentsRows: number;
 
-  /* The maximum number of compartment rows. */
+  /** The maximum number of compartment rows. */
   maxCompartmentsRows: number;
 
-  //*An object containing localization information (translation & number formattation).*/
+  /** An object containing localization information (translation & number formattation).*/
   localization?: Localization;
 
-  /* Boolean to determine if the arrow is displayed */
+  /** Boolean to determine if the arrow is displayed */
   arrow?: boolean;
 }
 
@@ -96,7 +95,11 @@ function MainCard({
   setActiveScenarios,
   activeScenarios,
   maxCompartmentsRows,
-  localization = {formatNumber: (value: number) => value.toString(), customLang: 'global', overrides: {}},
+  localization = {
+    formatNumber: (value: number) => value.toString(),
+    customLang: 'global',
+    overrides: {},
+  },
   arrow = true,
 }: MainCardProps) {
   const theme = useTheme();
@@ -128,8 +131,11 @@ function MainCard({
         id={`main-card-title&compartments-container-${index}`}
         className='hide-scrollbar'
         sx={{
-          maxHeight: `${(335 / 6) * maxCompartmentsRows}px`,
-          overflow: 'auto',
+          maxHeight: compartmentsExpanded
+            ? maxCompartmentsRows > 5
+              ? `${(340 / 6) * maxCompartmentsRows}px`
+              : `${(480 / 6) * maxCompartmentsRows}px`
+            : 'auto',
           paddingBottom: '9px',
           boxSizing: 'border-box',
           width: '200px',
@@ -180,7 +186,6 @@ function MainCard({
         activeScenario={activeScenarios?.includes(index) || false}
         activeScenarios={activeScenarios}
         numberSelectedScenario={numberSelectedScenario}
-        compartmentsExpanded={compartmentsExpanded}
         setActiveScenarios={setActiveScenarios}
         setSelectedScenario={setSelectedScenario}
         localization={localization}

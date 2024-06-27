@@ -1,36 +1,36 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
+import React from 'react';
 import {Box, List, ListItem, ListItemText, useTheme} from '@mui/material';
 import {ScrollSyncPane} from 'react-scroll-sync';
 import {useTranslation} from 'react-i18next';
-import React from 'react';
-import {Dictionary} from 'types/Cardtypes';
-import {Localization} from 'types/localization';
+import { Localization } from 'types/localization';
+import { Dictionary } from 'types/Cardtypes';
 
 interface FilterRowsProps {
-  /* Array of compartments */
+  /** Array of compartments */
   compartments: string[];
 
-  /* Dictionary of filtered values */
+  /** Dictionary of filtered values */
   filteredValues: Dictionary<number> | null;
 
-  /* Boolean to determine if the rows are flipped */
+  /** Boolean to determine if the rows are flipped */
   isFlipped?: boolean;
 
-  /* Boolean to determine if the compartment is expanded */
+  /** Boolean to determine if the compartment is expanded */
   compartmentExpanded?: boolean;
 
-  /* Selected compartment */
+  /** Selected compartment */
   selectedCompartment: string;
 
-  /* Minimum number of compartment rows */
+  /** Minimum number of compartment rows */
   minCompartmentsRows: number;
 
-  /* Maximum number of compartment rows */
+  /** Maximum number of compartment rows */
   maxCompartmentsRows: number;
 
-  /*An object containing localization information (translation & number formattation).*/
+  /** An object containing localization information (translation & number formattation).*/
   localization?: Localization;
 }
 
@@ -46,7 +46,11 @@ export default function FilterRows({
   selectedCompartment,
   minCompartmentsRows,
   maxCompartmentsRows,
-  localization = {formatNumber: (value: number) => value.toString(), customLang: 'global', overrides: {}},
+  localization = {
+    formatNumber: (value: number) => value.toString(),
+    customLang: 'global',
+    overrides: {},
+  },
 }: FilterRowsProps) {
   const {t: defaultT} = useTranslation();
   const {t: customT} = useTranslation(localization.customLang);

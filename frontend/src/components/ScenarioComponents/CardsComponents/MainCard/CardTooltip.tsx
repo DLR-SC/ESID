@@ -5,38 +5,35 @@ import {Box, Tooltip, IconButton} from '@mui/material';
 import {CheckBox, CheckBoxOutlineBlank} from '@mui/icons-material';
 import {useTranslation} from 'react-i18next';
 import React from 'react';
-import {hexToRGB} from 'util/util';
-import {Localization} from 'types/localization';
+import { Localization } from 'types/localization';
+import { hexToRGB } from 'util/util';
 
 interface CardTooltipProps {
-  /* A boolean indicating whether the user is hovering over the card. */
+  /** A boolean indicating whether the user is hovering over the card. */
   hover: boolean;
 
-  /* The color of the card. */
+  /** The color of the card. */
   color: string;
 
-  /* The title of the card. */
+  /** The title of the card. */
   index: number;
 
-  /* A boolean indicating whether the scenario is active. */
+  /** A boolean indicating whether the scenario is active. */
   activeScenario: boolean;
 
-  /* An array of active scenarios. */
+  /** An array of active scenarios. */
   activeScenarios: number[] | null;
 
-  /* The number of the selected scenario. */
+  /** The number of the selected scenario. */
   numberSelectedScenario: number | null;
 
-  /* A boolean indicating whether the compartments are expanded. */
-  compartmentsExpanded: boolean;
-
-  /* The number of the selected scenario. */
+  /** The number of the selected scenario. */
   setSelectedScenario: React.Dispatch<React.SetStateAction<number | null>>;
 
-  /* A function to set the active scenarios. */
+  /** A function to set the active scenarios. */
   setActiveScenarios: React.Dispatch<React.SetStateAction<number[] | null>>;
 
-  /*An object containing localization information (translation & number formattation).*/
+  /** An object containing localization information (translation & number formattation).*/
   localization?: Localization;
 }
 
@@ -50,10 +47,13 @@ export default function CardTooltip({
   activeScenario,
   activeScenarios,
   numberSelectedScenario,
-  compartmentsExpanded,
   setActiveScenarios,
   setSelectedScenario,
-  localization = {formatNumber: (value: number) => value.toString(), customLang: 'global', overrides: {}},
+  localization = {
+    formatNumber: (value: number) => value.toString(),
+    customLang: 'global',
+    overrides: {},
+  },
 }: CardTooltipProps) {
   const {t: defaultT} = useTranslation();
   const {t: customT} = useTranslation(localization.customLang);
@@ -92,7 +92,7 @@ export default function CardTooltip({
       sx={{
         zIndex: 2,
         width: 'full',
-        height: compartmentsExpanded ? '40px' : '50px',
+        height: '40px',
         boxShadow: hover || activeScenarios?.includes(index) ? 'none' : `0px 0px 0px 6px ${hexToRGB(color, 0.4)}`,
         display: hover ? 'flex' : 'none',
         alignItems: 'flex-end',

@@ -4,10 +4,10 @@ import Typography from '@mui/material/Typography';
 import React from 'react';
 
 interface CardTitleProps {
-  /* Label for the card title */
+  /** Label for the card title */
   label: string;
 
-  /* Color of the card title */
+  /** Color of the card title */
   color?: string;
 }
 

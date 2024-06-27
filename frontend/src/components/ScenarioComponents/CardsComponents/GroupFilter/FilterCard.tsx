@@ -1,46 +1,48 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
-
+import React from 'react';
 import {Box, useTheme} from '@mui/material';
 import Divider from '@mui/material/Divider';
 import FilterRows from './FilterRows';
 import CardTitle from '../MainCard/CardTitle';
-import React from 'react';
 import {Dictionary} from 'types/Cardtypes';
 import {Localization} from 'types/localization';
 
 interface FilterCardProps {
-  /* Title of the filter card */
+  /** Title of the filter card */
   title: string;
 
-  /* Color of the filter card */
+  /** Color of the filter card */
   color: string;
 
-  /* Array of compartments */
+  /** Array of compartments */
   compartments: string[];
 
-  /* Dictionary of filtered values */
+  /** Dictionary of filtered values */
   filteredValues: Dictionary<number> | null;
 
-  /* Index of the group filter */
+  /** Index of the group filter */
   groupFilterIndex: number;
 
-  /* Total number of cards */
+  /** Total number of cards */
   totalCardNumber: number;
 
-  /* Boolean to determine if the compartment is expanded */
+  /** Boolean to determine if the compartment is expanded */
   compartmentExpanded?: boolean;
 
-  /* Selected compartment */
+  /** Selected compartment */
   selectedCompartment: string;
 
-  /* Minimum number of compartment rows */
+  /** Minimum number of compartment rows */
   minCompartmentsRows: number;
 
-  /* Maximum number of compartment rows */
+  /** Maximum number of compartment rows */
   maxCompartmentsRows: number;
 
-  /*An object containing localization information (translation & number formattation).*/
+  /** A boolean indicating whether the compartments are expanded. */
+  compartmentsExpanded: boolean;
+
+  /** An object containing localization information (translation & number formattation).*/
   localization?: Localization;
 }
 
@@ -59,7 +61,12 @@ export default function FilterCard({
   selectedCompartment,
   maxCompartmentsRows,
   minCompartmentsRows,
-  localization = {formatNumber: (value: number) => value.toString(), customLang: 'global', overrides: {}},
+  compartmentsExpanded,
+  localization = {
+    formatNumber: (value: number) => value.toString(),
+    customLang: 'global',
+    overrides: {},
+  },
 }: FilterCardProps) {
   const theme = useTheme();
   return (
@@ -75,7 +82,13 @@ export default function FilterCard({
         id={`cardfilter-title&cardContent-container-${groupFilterIndex}`}
         className='hide-scrollbar'
         sx={{
-          maxHeight: `${(335 / 6) * maxCompartmentsRows}px`,
+          maxHeight: compartmentsExpanded
+            ? maxCompartmentsRows > 5
+              ? `${(390 / 6) * maxCompartmentsRows}px`
+              : `${(480 / 6) * maxCompartmentsRows}px`
+            : minCompartmentsRows < 4
+              ? `${(365 / 4) * minCompartmentsRows}px`
+              : `${(325 / 4) * minCompartmentsRows}px`,
           minWidth: '130px',
           bgcolor: theme.palette.background.paper,
           zIndex: 0,

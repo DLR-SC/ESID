@@ -6,7 +6,7 @@ import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 import {GroupFilter, GroupResponse} from 'types/group';
 /* [CDtemp-begin] */
 import cologneData from '../../../assets/stadtteile_cologne_list.json';
-import {District} from '../../types/cologneDistricts';
+import { District } from 'types/cologneDistricts';
 /* [CDtemp-end] */
 
 export const groupApi = createApi({
@@ -26,7 +26,74 @@ export const groupApi = createApi({
       },
     }),
 
-    getMultipleGroupFilterData: builder.query<Dictionary<GroupResponse>, PostFilter[]>({
+    getMultipleGroupFilterData: builder.query<Array<Dictionary<GroupResponse>>, PostFilters>({
+      async queryFn(arg, _queryApi, _extraOptions, fetchWithBQ) {
+        const result: Array<Dictionary<GroupResponse>> = [];
+        console.log(arg.ids)
+        
+        for (const id of arg.ids) {
+          if(arg.groupFilterList){
+            console.log(arg.groupFilterList)
+            const groupResponse: Dictionary<GroupResponse> = {};
+            for (const groupFilter of Object.values(arg.groupFilterList).filter((groupFilter) => groupFilter.isVisible)) {
+              /* [CDtemp-begin] */
+              let node = '';
+              let cologneDistrict = '';
+    
+              if (arg.node.length > 5) {
+                node = arg.node.slice(0, 5);
+                cologneDistrict = arg.node.slice(-3);
+              } else {
+                node = arg.node;
+              }
+              /* [CDtemp-end] */
+    
+              const singleResult = await fetchWithBQ({
+                url:
+                  `simulation/${id}/${
+                    // [CDtemp] post.node
+                    node
+                  }/?all` +
+                  (arg.day ? `&day=${arg.day}` : '') +
+                  (arg.compartment ? `&compartments=${arg.compartment}` : ''),
+                method: 'POST',
+                body: {groups: groupFilter.groups},
+              });
+    
+              if (singleResult.error) return {error: singleResult.error};
+
+              groupResponse[groupFilter.name] = singleResult.data as GroupResponse;
+    
+              /* [CDtemp-begin] */
+              // adjust data if it is for a city district
+              if (cologneDistrict) {
+                // find weight for city district
+                const weight = (cologneData as unknown as Array<District>).find(
+                  (dist) => dist.Stadtteil_ID === cologneDistrict
+                )!.Population_rel;
+                // go thru results
+                groupResponse[groupFilter.name].results = groupResponse[groupFilter.name].results.map(
+                  ({compartments, day, name}) => {
+                    // loop thru compartments and apply weight
+                    Object.keys(compartments).forEach((compName) => {
+                      compartments[compName] *= weight;
+                    });
+                    return {compartments, day, name};
+                  }
+                );
+              }
+              /* [CDtemp-end] */
+              
+              
+            }result.push(groupResponse);
+          }
+        }
+        console.log(result)
+        return {data: result};
+      },
+    }),
+
+    getMultipleGroupFilterDataLineChart: builder.query<Dictionary<GroupResponse>, PostFilter[]>({
       async queryFn(arg, _queryApi, _extraOptions, fetchWithBQ) {
         const result: Dictionary<GroupResponse> = {};
         for (const post of arg) {
@@ -142,13 +209,21 @@ export interface PostFilter {
   compartment?: string;
 }
 
+export interface PostFilters {
+  ids: number[];
+  node: string;
+  groupFilterList: Dictionary<GroupFilter> | undefined
+  day?: string;
+  compartment?: string;
+}
+
 export interface GroupCategory {
   key: string;
   name: string;
   description: string;
 }
 
-export interface GroupCategories {
+interface GroupCategories {
   count: number;
   next: null;
   previous: null;
@@ -162,7 +237,7 @@ export interface GroupSubcategory {
   category: string;
 }
 
-export interface GroupSubcategories {
+interface GroupSubcategories {
   count: number;
   next: null;
   previous: null;
@@ -173,5 +248,6 @@ export const {
   useGetGroupCategoriesQuery,
   useGetGroupSubcategoriesQuery,
   useGetSingleGroupFilterDataQuery,
+  useGetMultipleGroupFilterDataLineChartQuery,
   useGetMultipleGroupFilterDataQuery,
 } = groupApi;

@@ -12,7 +12,7 @@ import {
 } from '../../types/scenario';
 /* [CDtemp-begin] */
 import cologneData from '../../../assets/stadtteile_cologne_list.json';
-import {District} from '../../types/cologneDistricts';
+import { District } from 'types/cologneDistricts';
 
 /** Checks if input node is a city district and returns the node to fetch data, and the city distrct suffix if there is one */
 function validateDistrictNode(inNode: string): {node: string; cologneDistrict?: string} {
@@ -72,6 +72,7 @@ export const scenarioApi = createApi({
       async queryFn(arg, _queryApi, _extraOptions, fetchWithBQ) {
         const groups = arg.groups && arg.groups.length > 0 ? `&groups=${arg.groups.join(',')}` : '&groups=total';
         const compartments = arg.compartments ? `&compartments=${arg.compartments.join(',')}` : '';
+
         const currResult = await fetchWithBQ(`simulation/${arg.id}/${arg.day}/?all${groups}${compartments}`);
         if (currResult.error) return {error: currResult.error};
 
@@ -151,6 +152,34 @@ export const scenarioApi = createApi({
         /* [CDtemp-end] */
         return {data: data};
       },
+    }),
+
+    getMultipleSimulationEntry: builder.query<SimulationDataByNode[], MultipleSimulationEntryParameters>({
+      async queryFn(arg, _queryApi, _extraOptions, fetchWithBQ) {
+        const day = arg.day ? `&day=${arg.day}` : '';
+        const groups = arg.groups && arg.groups.length > 0 ? `&groups=${arg.groups.join(',')}` : '&groups=total';
+
+        const result: SimulationDataByNode[] = [];
+        /* [CDtemp-begin] */
+        const {node, cologneDistrict} = validateDistrictNode(arg.node);
+        /* [CDtemp-end] */
+        for (const id of arg.ids){
+          const fullResult = await fetchWithBQ(
+          `simulation/${id}/${
+            // [CDtemp] arg.node
+            node
+          }/?all${day}${groups}`
+        );
+        if (fullResult.error) return {error: fullResult.error};
+        // [CDtemp] const data = currResult.data as SimulationDataByNode;
+        /* [CDtemp-begin] */
+        const data = modifyDistrictResults(cologneDistrict, fullResult.data as SimulationDataByNode);
+
+        /* [CDtemp-end] */
+        result[id] = data;
+      }
+      return {data: result};
+    },
     }),
 
     getMultipleSimulationDataByNode: builder.query<SimulationDataByNode[], MultipleSimulationDataByNodeParameters>({
@@ -343,6 +372,13 @@ interface SingleSimulationEntryParameters {
   groups: Array<string> | null;
 }
 
+interface MultipleSimulationEntryParameters {
+  ids: number[];
+  node: string;
+  day: string;
+  groups: Array<string> | null;
+}
+
 interface MultipleSimulationDataByNodeParameters {
   ids: number[];
   node: string;
@@ -357,6 +393,7 @@ export const {
   useGetSimulationDataByDateQuery,
   useGetSimulationDataByNodeQuery,
   useGetSingleSimulationEntryQuery,
+  useGetMultipleSimulationEntryQuery,
   useGetMultipleSimulationDataByNodeQuery,
   useGetPercentileDataQuery,
   useGetScenarioParametersQuery,

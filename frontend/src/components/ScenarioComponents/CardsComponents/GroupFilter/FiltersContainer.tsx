@@ -1,45 +1,46 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
+
 import {Box, Collapse, useTheme} from '@mui/material';
 import FilterButton from './FilterButton';
 import FilterCard from './FilterCard';
 import React from 'react';
-import {Dictionary} from 'types/Cardtypes';
 import {Localization} from 'types/localization';
 import {getScenarioPrimaryColor} from 'util/Theme';
+import {Dictionary} from 'util/util';
 
 interface FiltersContainerProps {
-  /* Array of filtered titles */
+  /** Array of filtered titles */
   filteredTitles: string[];
 
-  /* Index of the filter container */
+  /** Index of the filter container */
   index: number;
 
-  /* Boolean to determine if the filter container is folded */
+  /** Boolean to determine if the filter container is folded */
   folded: boolean;
 
-  /* Function to set the folded state */
+  /** Function to set the folded state */
   setFolded: (folded: boolean) => void;
 
-  /* Boolean to determine if the compartments are expanded */
+  /** Boolean to determine if the compartments are expanded */
   compartmentsExpanded: boolean;
 
-  /* Selected compartment */
+  /** Selected compartment */
   selectedCompartment: string;
 
-  /* Array of compartments */
+  /** Array of compartments */
   compartments: string[];
 
-  /* Array of filtered values */
+  /** Array of filtered values */
   filteredValues: Array<Dictionary<number> | null>;
 
-  /* Minimum number of compartment rows */
+  /** Minimum number of compartment rows */
   minCompartmentsRows: number;
 
-  /* Maximum number of compartment rows */
+  /** Maximum number of compartment rows */
   maxCompartmentsRows: number;
 
-  /*An object containing localization information (translation & number formattation).*/
+  /** An object containing localization information (translation & number formattation).*/
   localization?: Localization;
 }
 
@@ -58,7 +59,11 @@ export default function FiltersContainer({
   filteredTitles,
   maxCompartmentsRows,
   minCompartmentsRows,
-  localization = {formatNumber: (value: number) => value.toString(), customLang: 'global', overrides: {}},
+  localization = {
+    formatNumber: (value: number) => value.toString(),
+    customLang: 'global',
+    overrides: {},
+  },
 }: FiltersContainerProps) {
   const theme = useTheme();
   return (
@@ -67,10 +72,16 @@ export default function FiltersContainer({
       sx={{
         display: 'flex',
         flexDirection: 'row',
-        maxHeight: `${(340 / 6) * maxCompartmentsRows}px`,
+        maxHeight: compartmentsExpanded
+          ? maxCompartmentsRows > 5
+            ? `${(390 / 6) * maxCompartmentsRows}px`
+            : `${(480 / 6) * maxCompartmentsRows}px`
+          : minCompartmentsRows < 4
+            ? `${(365 / 4) * minCompartmentsRows}px`
+            : `${(325 / 4) * minCompartmentsRows}px`,
         boxSizing: 'border-box',
         border: 1,
-        borderColor: getScenarioPrimaryColor(index, theme),
+        borderColor: getScenarioPrimaryColor(index - 1, theme),
         borderRadius: 1,
         bgcolor: theme.palette.background.paper,
         zIndex: 2,
@@ -83,6 +94,8 @@ export default function FiltersContainer({
         backgroundColor={theme.palette.background.paper}
         idNumber={1}
         maxCompartmentsRows={maxCompartmentsRows}
+        compartmentsExpanded={compartmentsExpanded}
+        minCompartmentsRows={minCompartmentsRows}
       />
       <Collapse in={folded} orientation='horizontal'>
         <Box
@@ -93,13 +106,19 @@ export default function FiltersContainer({
             alignItems: 'center',
             paddingTop: '9px',
             paddingBottom: '9px',
-            maxHeight: `${(335 / 6) * maxCompartmentsRows}px`,
+            maxHeight: compartmentsExpanded
+              ? maxCompartmentsRows > 5
+                ? `${(390 / 6) * maxCompartmentsRows}px`
+                : `${(480 / 6) * maxCompartmentsRows}px`
+              : minCompartmentsRows < 4
+                ? `${(365 / 4) * minCompartmentsRows}px`
+                : `${(325 / 4) * minCompartmentsRows}px`,
           }}
         >
           {filteredValues.map((_, id: number) => (
             <FilterCard
               key={id}
-              color={getScenarioPrimaryColor(index, theme)}
+              color={getScenarioPrimaryColor(index - 1, theme)}
               title={filteredTitles[id]}
               compartments={compartments}
               groupFilterIndex={id}
@@ -110,6 +129,7 @@ export default function FiltersContainer({
               minCompartmentsRows={minCompartmentsRows}
               maxCompartmentsRows={maxCompartmentsRows}
               localization={localization}
+              compartmentsExpanded={compartmentsExpanded}
             />
           ))}
         </Box>

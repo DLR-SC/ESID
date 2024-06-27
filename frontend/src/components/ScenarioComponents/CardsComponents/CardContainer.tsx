@@ -3,64 +3,63 @@
 
 import DataCard from './DataCard';
 import {useTranslation} from 'react-i18next';
-
 import {Dispatch, SetStateAction} from 'react';
 import React from 'react';
 import {useTheme} from '@mui/material/styles';
 import Box from '@mui/material/Box/Box';
-import {Dictionary} from 'util/util';
 import {Scenario} from 'store/ScenarioSlice';
 import {cardValue, filterValue} from 'types/Cardtypes';
+import {GroupFilter} from 'types/group';
 import {Localization} from 'types/localization';
 import {getScenarioPrimaryColor} from 'util/Theme';
-import {GroupFilter} from 'types/group';
+import {Dictionary} from 'util/util';
 
 interface CardContainerProps {
-  /* A boolean indicating whether the compartments are expanded. */
+  /** A boolean indicating whether the compartments are expanded. */
   compartmentsExpanded: boolean;
 
-  /* A dictionary of card values. Each value is an object containing 'startValues', a dictionary used for rate calculation, and 'compartmentValues' for each card.
+  /** A dictionary of card values. Each value is an object containing 'startValues', a dictionary used for rate calculation, and 'compartmentValues' for each card.
    *'startValues' help determine whether the values have increased, decreased, or remained the same. */
   cardValues: Dictionary<cardValue> | undefined;
 
-  /* A dictionary of filter values. This is an array of objects, each containing a title and a dictionary of numbers representing
+  /** A dictionary of filter values. This is an array of objects, each containing a title and a dictionary of numbers representing
    * the filtered information to be displayed, it's used a disctionary because each card has to have the same amount of filter. */
   filterValues?: Dictionary<filterValue[]> | null;
 
-  /* The compartment that is currently selected. */
+  /** The compartment that is currently selected. */
   selectedCompartment: string;
 
-  /* An array of scenarios. */
+  /** An array of scenarios. */
   scenarios: Scenario[];
 
-  /* An array of compartments. */
+  /** An array of compartments. */
   compartments: string[];
 
-  /* An array of active scenarios. */
+  /** An array of active scenarios. */
   activeScenarios: number[] | null;
 
-  /* A function to set the active scenarios. */
+  /** A function to set the active scenarios. */
   setActiveScenarios: React.Dispatch<React.SetStateAction<number[] | null>>;
 
-  /* The selected scenario. */
+  /** The selected scenario. */
   selectedScenario: number | null;
 
-  /* A function to set the selected scenario. */
+  /** A function to set the selected scenario. */
   setSelectedScenario: Dispatch<SetStateAction<number | null>>;
 
-  /* The minimum number of compartment rows. */
+  /** The minimum number of compartment rows. */
   minCompartmentsRows: number;
 
-  /* The maximum number of compartment rows. */
+  /** The maximum number of compartment rows. */
   maxCompartmentsRows: number;
 
-  /* An object containing localization information (translation & number formattation). */
+  /** An object containing localization information (translation & number formattation). */
   localization?: Localization;
 
-  /* A dictionary of group filters. */
+  /** A dictionary of group filters. */
   groupFilters: Dictionary<GroupFilter> | undefined;
 
-  /* Boolean to determine if the arrow is displayed */
+  /** Boolean to determine if the arrow is displayed */
   arrow?: boolean;
 }
 
@@ -79,7 +78,11 @@ export default function CardContainer({
   minCompartmentsRows,
   maxCompartmentsRows,
   setActiveScenarios,
-  localization = {formatNumber: (value: number) => value.toString(), customLang: 'global', overrides: {}},
+  localization = {
+    formatNumber: (value: number) => value.toString(),
+    customLang: 'global',
+    overrides: {},
+  },
   selectedScenario,
   setSelectedScenario,
   groupFilters,
@@ -88,7 +91,6 @@ export default function CardContainer({
   const theme = useTheme();
   const {t: defaultT} = useTranslation();
   const {t: customT} = useTranslation(localization.customLang);
-
   const dataCards = scenarios.map((scenario) => {
     const cardValue = cardValues ? cardValues[scenario.id.toString()] : null;
     if (!cardValue) {
@@ -98,7 +100,7 @@ export default function CardContainer({
       <DataCard
         key={scenario.id}
         index={scenario.id}
-        color={scenario.id == 0 ? '#000000' : getScenarioPrimaryColor(scenario.id, theme)}
+        color={getScenarioPrimaryColor(scenario.id - 1, theme)}
         label={
           localization.overrides && localization.overrides[`scenario-names.${scenario.label}`]
             ? customT(localization.overrides[`scenario-names.${scenario.label}`])
@@ -132,8 +134,12 @@ export default function CardContainer({
         flexDirection: 'row',
         gap: 4,
         minHeight: compartmentsExpanded
-          ? `${(390 / 6) * maxCompartmentsRows}px`
-          : `${(325 / 4) * minCompartmentsRows}px`,
+          ? maxCompartmentsRows > 5
+            ? `${(390 / 6) * maxCompartmentsRows}px`
+            : `${(660 / 6) * maxCompartmentsRows}px`
+          : minCompartmentsRows < 4
+            ? `${(480 / 4) * minCompartmentsRows}px`
+            : `${(325 / 4) * minCompartmentsRows}px`,
         overflowX: 'auto',
         minWidth: 400,
         paddingLeft: 4,
