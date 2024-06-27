@@ -97,11 +97,11 @@ export default function MapContainer() {
   }, [legend, dispatch]);
 
   const calculateToolTip = useCallback(
-    (regionData: FeatureProperties) => {
+    (regionData: FeatureProperties, value: number) => {
       const bez = t(`BEZ.${regionData.BEZ}`);
       const compartmentName = tBackend(`infection-states.${selectedCompartment}`);
       return selectedScenario !== null && selectedCompartment
-        ? `${bez} {GEN}\n${compartmentName}: ${formatNumber(Number(regionData.value))}`
+        ? `${bez} {GEN}\n${compartmentName}: ${formatNumber(value)}`
         : `${bez} {GEN}`;
     },
     [formatNumber, selectedCompartment, selectedScenario, t, tBackend]
@@ -163,7 +163,7 @@ export default function MapContainer() {
         />
       </Box>
       <Box id='sidebar-map-wrapper'>
-        <LoadingContainer show={areMapValuesFetching || longLoad} overlayColor={theme.palette.background.default}>
+        <LoadingContainer show={areMapValuesFetching && longLoad} overlayColor={theme.palette.background.default}>
           <HeatMap
             selectedArea={selectedArea}
             setSelectedArea={setSelectedArea}

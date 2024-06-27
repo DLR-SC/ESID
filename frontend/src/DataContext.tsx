@@ -32,7 +32,7 @@ import {CaseDataByNode} from 'types/caseData';
 import {Simulations, SimulationModel, SimulationDataByNode, SimulationMetaData} from 'types/scenario';
 import {Dictionary} from 'util/util';
 import data from '../assets/lk_germany_reduced.geojson?url';
-import {FeatureCollection, FeatureProperties} from 'types/map';
+import {Feature, FeatureCollection, FeatureProperties} from 'types/map';
 import cologneDistricts from '../assets/stadtteile_cologne.geojson?url';
 import {District} from 'types/cologneDistricts';
 import searchbarMapData from '../assets/lk_germany_reduced_list.json?url';
@@ -57,7 +57,6 @@ export const DataContext = createContext<{
   groupCategories: GroupCategories | undefined;
   groupSubCategories: GroupSubcategories | undefined;
   scenarioListData: Simulations | undefined;
-  referenceDay: string | null;
   caseScenarioSimulationData: CaseDataByNode | undefined;
   simulationModelData: SimulationModel | undefined;
   caseScenarioData: SimulationDataByNode | undefined;
@@ -80,7 +79,6 @@ export const DataContext = createContext<{
   groupCategories: undefined,
   groupSubCategories: undefined,
   scenarioListData: undefined,
-  referenceDay: null,
   caseScenarioSimulationData: undefined,
   simulationModelData: undefined,
   caseScenarioData: undefined,
@@ -116,7 +114,6 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
   const selectedDate = useAppSelector((state) => state.dataSelection.date);
   const groupFilterList = useAppSelector((state) => state.dataSelection.groupFilters);
   const scenarioList = useAppSelector((state) => state.scenarioList);
-  const referenceDay = useAppSelector((state) => state.dataSelection.simulationStart);
 
   const startValues = useGetSimulationStartValues(selectedDistrict, referenceDay);
 
@@ -283,7 +280,10 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
             return feat;
           })
         );
-        setGeoData(geodata as FeatureCollection);
+        const newMap = geodata.features.map((district) => {
+          return {...district, id: district.properties?.RS as string};
+        });
+        setGeoData({type: 'FeatureCollection', features: newMap as Feature[]});
       },
       // on promises reject
       () => {
@@ -451,7 +451,6 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
         groupCategories,
         groupSubCategories,
         scenarioListData,
-        referenceDay,
         caseScenarioSimulationData: caseScenarioSimulationData.data,
         simulationModelData: simulationModelData?.results,
         caseScenarioData,

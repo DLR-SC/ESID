@@ -8,6 +8,7 @@ export interface Feature {
     coordinates: number[][][];
   };
   properties: {
+    id: string | number;
     [key: string]: string | number;
   };
   id?: string | number;
