@@ -307,7 +307,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
           })
         );
         const newMap = geodata.features.map((district) => {
-          return {...district, id: district.properties?.RS};
+          return {...district, id: district.properties?.RS as string};
         });
         setGeoData({type: 'FeatureCollection', features: newMap as Feature[]});
       },
