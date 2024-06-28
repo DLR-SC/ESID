@@ -14,22 +14,23 @@ export default function usePolygonSeries(
   const [polygon, setPolygon] = useState<am5map.MapPolygonSeries>();
 
   useLayoutEffect(() => {
-    if (!root || !chart || !settings || root.isDisposed() || chart.isDisposed()) {
+    if (!root || !chart || !settings) {
       return;
     }
-    const newPolygon = am5map.MapPolygonSeries.new(root, settings);
-    chart.series.push(newPolygon);
+
+    const newPolygonSeries = chart.series.push(am5map.MapPolygonSeries.new(root, settings));
 
     if (initializer) {
-      initializer(newPolygon);
+      initializer(newPolygonSeries);
     }
-    setPolygon(newPolygon);
+
+    setPolygon(newPolygonSeries);
 
     return () => {
-      chart.series.removeValue(newPolygon);
-      newPolygon.dispose();
+      chart.series.removeValue(newPolygonSeries);
+      newPolygonSeries.dispose();
     };
-  }, [root, settings, chart, initializer]);
+  }, [root, settings, initializer, chart]);
 
   return polygon ?? null;
 }

@@ -181,7 +181,7 @@ export default function MapContainer() {
             longLoad={longLoad}
             setLongLoad={setLongLoad}
             selectedScenario={selectedScenario}
-            idValuesToMap={'RS'}
+            areaId={'RS'}
             localization={localization}
             maxZoomLevel={32}
           />
