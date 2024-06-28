@@ -51,8 +51,6 @@ export const DataContext = createContext<{
   chartPercentileData: {day: string; value: number}[][] | undefined;
   chartGroupFilterData: Dictionary<{day: string; value: number}[]> | undefined;
   isChartDataFetching: boolean;
-  selectedScenario: number | null;
-  selectedCompartment: string | null;
   startValues: Dictionary<number> | null;
   groupCategories: GroupCategories | undefined;
   groupSubCategories: GroupSubcategories | undefined;
@@ -74,9 +72,7 @@ export const DataContext = createContext<{
   chartPercentileData: undefined,
   chartGroupFilterData: undefined,
   isChartDataFetching: false,
-  selectedScenario: 0,
-  selectedCompartment: '',
-  startValues: {},
+  startValues: null,
   groupCategories: undefined,
   groupSubCategories: undefined,
   scenarioListData: undefined,
@@ -445,8 +441,6 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
         chartPercentileData: processedChartPercentileData,
         chartGroupFilterData: processedChartGroupFilterData,
         isChartDataFetching: chartCaseDataFetching || chartSimulationFetching,
-        selectedScenario,
-        selectedCompartment,
         startValues,
         groupCategories,
         groupSubCategories,

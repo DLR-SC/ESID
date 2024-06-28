@@ -16,7 +16,7 @@ import {Localization} from 'types/localization';
 
 export interface ManageGroupDialogProps {
   /* A dictionary of group filters.*/
-  groupFilters: Dictionary<GroupFilter> | undefined;
+  groupFilters: Dictionary<GroupFilter>;
 
   /* An array of group category.*/
   groupCategories: GroupCategory[];
@@ -34,7 +34,7 @@ export interface ManageGroupDialogProps {
   unsavedChangesCallback: (unsavedChanges: boolean) => void;
 
   /* A function that allows setting the groupFilter state so that if the user adds a filter, the new filter will be visible.*/
-  setGroupFilters: React.Dispatch<React.SetStateAction<Dictionary<GroupFilter> | undefined>>;
+  setGroupFilters: React.Dispatch<React.SetStateAction<Dictionary<GroupFilter>>>;
 
   /* An object containing localization information (translation & number formattation).*/
   localization?: Localization;
