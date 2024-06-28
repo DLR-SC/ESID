@@ -262,7 +262,6 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
         return Object.values(groupFilters!)
           .filter((groupFilter) => groupFilter.isVisible)
           .map((groupFilter) => {
-            console.log(scenarioSimulation);
             const groupResponse = scenarioSimulation?.[groupFilter.name]?.results?.[0]?.compartments || null;
             return {
               filteredTitle: groupFilter.name,
@@ -270,7 +269,6 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
             };
           });
       }) || [];
-    console.log(filterValuesTemp);
     const temp: Dictionary<filterValue[]> = {};
     getId?.forEach((id, index) => {
       temp[id.toString()] = filterValuesTemp[index];

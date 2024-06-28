@@ -29,11 +29,8 @@ export const groupApi = createApi({
     getMultipleGroupFilterData: builder.query<Array<Dictionary<GroupResponse>>, PostFilters>({
       async queryFn(arg, _queryApi, _extraOptions, fetchWithBQ) {
         const result: Array<Dictionary<GroupResponse>> = [];
-        console.log(arg.ids);
-
         for (const id of arg.ids) {
           if (arg.groupFilterList) {
-            console.log(arg.groupFilterList);
             const groupResponse: Dictionary<GroupResponse> = {};
             for (const groupFilter of Object.values(arg.groupFilterList).filter(
               (groupFilter) => groupFilter.isVisible
@@ -89,7 +86,6 @@ export const groupApi = createApi({
             result.push(groupResponse);
           }
         }
-        console.log(result);
         return {data: result};
       },
     }),
