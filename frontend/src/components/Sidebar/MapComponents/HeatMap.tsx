@@ -2,34 +2,23 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import {useState, useEffect, useRef, useMemo, useCallback, useLayoutEffect} from 'react';
-import {useState, useEffect, useRef, useMemo, useCallback, useLayoutEffect} from 'react';
 import * as am5 from '@amcharts/amcharts5';
 import * as am5map from '@amcharts/amcharts5/map';
 import {GeoJSON} from 'geojson';
-import {FeatureCollection} from '../../../types/map';
-import {FeatureCollection} from '../../../types/map';
+import {FeatureCollection, FeatureProperties} from '../../../types/map';
 import svgZoomResetURL from '../../../../assets/svg/zoom_out_map_white_24dp.svg?url';
 import svgZoomInURL from '../../../../assets/svg/zoom_in_white_24dp.svg?url';
 import svgZoomOutURL from '../../../../assets/svg/zoom_out_white_24dp.svg?url';
-import {FeatureProperties} from '../../../types/map';
-import {HeatmapLegend} from '../../../types/heatmapLegend';
-import {FeatureProperties} from '../../../types/map';
-import {HeatmapLegend} from '../../../types/heatmapLegend';
-import {Box} from '@mui/material';
-import {useTheme} from '@mui/material/styles';
+import {Box} from '@mui/system';
+import useMapChart from 'components/shared/HeatMap/Map';
+import usePolygonSeries from 'components/shared/HeatMap/Polygon';
+import useZoomControl from 'components/shared/HeatMap/Zoom';
+import useRoot from 'components/shared/Root';
 import React from 'react';
+import {HeatmapLegend} from 'types/heatmapLegend';
 import {Localization} from 'types/localization';
-import useRoot from 'components/shared/Root';
-import useMapChart from 'components/shared/HeatMap/Map';
-import useZoomControl from 'components/shared/HeatMap/Zoom';
-import usePolygonSeries from 'components/shared/HeatMap/Polygon';
 import {useConst} from 'util/hooks';
-import {Localization} from 'types/localization';
-import useRoot from 'components/shared/Root';
-import useMapChart from 'components/shared/HeatMap/Map';
-import useZoomControl from 'components/shared/HeatMap/Zoom';
-import usePolygonSeries from 'components/shared/HeatMap/Polygon';
-import {useConst} from 'util/hooks';
+import {useTheme} from '@mui/material';
 
 interface MapProps {
   /** The data to be displayed on the map, in GeoJSON format. */
@@ -51,7 +40,6 @@ interface MapProps {
   maxZoomLevel?: number;
 
   /** Optional function to generate tooltip text for each region based on its data. Default is a function that returns the region's ID. */
-  tooltipText?: (regionData: FeatureProperties) => string;
   tooltipText?: (regionData: FeatureProperties) => string;
 
   /** Optional function to generate tooltip text while data is being fetched. Default is a function that returns 'Loading...'. */
@@ -126,14 +114,12 @@ export default function HeatMap({
   fixedLegendMaxValue,
   legend,
   legendRef,
-  legendRef,
   longLoad = false,
   setLongLoad = () => {},
   localization,
   areaId = 'id',
 }: MapProps) {
   const theme = useTheme();
-  const lastSelectedPolygon = useRef<am5map.MapPolygon | null>(null);
   const lastSelectedPolygon = useRef<am5map.MapPolygon | null>(null);
   const [longLoadTimeout, setLongLoadTimeout] = useState<number>();
 
@@ -234,22 +220,6 @@ export default function HeatMap({
         strokeWidth: 1,
         fillOpacity: fillOpacity,
       });
-    useConst((polygonSeries: am5map.MapPolygonSeries) => {
-      const polygonTemplate = polygonSeries.mapPolygons.template;
-      // Set properties for each polygon
-      polygonTemplate.setAll({
-        fill: am5.color(defaultFill),
-        stroke: am5.color(theme.palette.background.default),
-        strokeWidth: 1,
-        fillOpacity: fillOpacity,
-      });
-
-      polygonTemplate.states.create('hover', {
-        stroke: am5.color(theme.palette.primary.main),
-        strokeWidth: 2,
-        layer: 1,
-      });
-    })
       polygonTemplate.states.create('hover', {
         stroke: am5.color(theme.palette.primary.main),
         strokeWidth: 2,
@@ -397,7 +367,6 @@ export default function HeatMap({
     defaultFill,
     areaId,
     isFetching,
-    legend,
     legend,
     longLoad,
     selectedScenario,
