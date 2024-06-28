@@ -16,10 +16,8 @@ import {useTranslation} from 'react-i18next';
 import {useAppDispatch, useAppSelector} from '../store/hooks';
 import {selectTab} from '../store/UserPreferenceSlice';
 import {useTheme} from '@mui/material/styles';
-
-// Lazily load the tab contents to enable code splitting.
-const ParameterEditor = React.lazy(() => import('./ParameterEditor'));
-const SimulationChart = React.lazy(() => import('./LineChartContainer'));
+import SimulationChart from './LineChartContainer';
+import ParameterEditor from './ParameterEditor';
 
 /**
  * This component manages the main content, which is a collection of tabs that the user can navigate through. By default
