@@ -1,9 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-export interface Dictionary<T> {
-  [key: string]: T;
-}
+import {Dictionary} from 'util/util';
 
 export interface Scenario {
   id: number;

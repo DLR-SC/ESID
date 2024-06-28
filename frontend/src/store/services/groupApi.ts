@@ -29,7 +29,6 @@ export const groupApi = createApi({
     getMultipleGroupFilterData: builder.query<Array<Dictionary<GroupResponse>>, PostFilters>({
       async queryFn(arg, _queryApi, _extraOptions, fetchWithBQ) {
         const result: Array<Dictionary<GroupResponse>> = [];
-
         for (const id of arg.ids) {
           if (arg.groupFilterList) {
             const groupResponse: Dictionary<GroupResponse> = {};

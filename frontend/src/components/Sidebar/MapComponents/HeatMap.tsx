@@ -2,18 +2,28 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import {useState, useEffect, useRef, useMemo, useCallback, useLayoutEffect} from 'react';
+import {useState, useEffect, useRef, useMemo, useCallback, useLayoutEffect} from 'react';
 import * as am5 from '@amcharts/amcharts5';
 import * as am5map from '@amcharts/amcharts5/map';
 import {GeoJSON} from 'geojson';
+import {FeatureCollection} from '../../../types/map';
 import {FeatureCollection} from '../../../types/map';
 import svgZoomResetURL from '../../../../assets/svg/zoom_out_map_white_24dp.svg?url';
 import svgZoomInURL from '../../../../assets/svg/zoom_in_white_24dp.svg?url';
 import svgZoomOutURL from '../../../../assets/svg/zoom_out_white_24dp.svg?url';
 import {FeatureProperties} from '../../../types/map';
 import {HeatmapLegend} from '../../../types/heatmapLegend';
+import {FeatureProperties} from '../../../types/map';
+import {HeatmapLegend} from '../../../types/heatmapLegend';
 import {Box} from '@mui/material';
 import {useTheme} from '@mui/material/styles';
 import React from 'react';
+import {Localization} from 'types/localization';
+import useRoot from 'components/shared/Root';
+import useMapChart from 'components/shared/HeatMap/Map';
+import useZoomControl from 'components/shared/HeatMap/Zoom';
+import usePolygonSeries from 'components/shared/HeatMap/Polygon';
+import {useConst} from 'util/hooks';
 import {Localization} from 'types/localization';
 import useRoot from 'components/shared/Root';
 import useMapChart from 'components/shared/HeatMap/Map';
@@ -41,6 +51,7 @@ interface MapProps {
   maxZoomLevel?: number;
 
   /** Optional function to generate tooltip text for each region based on its data. Default is a function that returns the region's ID. */
+  tooltipText?: (regionData: FeatureProperties) => string;
   tooltipText?: (regionData: FeatureProperties) => string;
 
   /** Optional function to generate tooltip text while data is being fetched. Default is a function that returns 'Loading...'. */
@@ -77,7 +88,7 @@ interface MapProps {
   legend: HeatmapLegend;
 
   /** Reference to the heatmap legend element. */
-  legendRef?: React.MutableRefObject<am5.HeatLegend | null>;
+  legendRef: React.MutableRefObject<am5.HeatLegend | null>;
 
   /** Optional flag indicating if data loading takes a long time. Default is false. */
   longLoad?: boolean;
@@ -102,8 +113,8 @@ export default function HeatMap({
   defaultFill = '#8c8c8c',
   fillOpacity = 1,
   maxZoomLevel = 4,
-  tooltipText,
-  tooltipTextWhileFetching,
+  tooltipText = () => '{id}',
+  tooltipTextWhileFetching = () => 'Loading...',
   defaultSelectedValue,
   selectedScenario = 0,
   isDataFetching = false,
@@ -115,12 +126,14 @@ export default function HeatMap({
   fixedLegendMaxValue,
   legend,
   legendRef,
+  legendRef,
   longLoad = false,
   setLongLoad = () => {},
   localization,
   areaId = 'id',
 }: MapProps) {
   const theme = useTheme();
+  const lastSelectedPolygon = useRef<am5map.MapPolygon | null>(null);
   const lastSelectedPolygon = useRef<am5map.MapPolygon | null>(null);
   const [longLoadTimeout, setLongLoadTimeout] = useState<number>();
 
@@ -146,6 +159,7 @@ export default function HeatMap({
     zoomSettings,
     useCallback(
       (zoom: am5map.ZoomControl) => {
+        if (!root) return;
         if (!root) return;
         const fixSVGPosition = {
           width: 25,
@@ -181,7 +195,7 @@ export default function HeatMap({
   );
 
   useEffect(() => {
-    if (!zoom || zoom.isDisposed() || !root || root.isDisposed()) return;
+    if (!zoom || !root || root.isDisposed()) return;
     zoom.homeButton.events.on('click', () => {
       setSelectedArea(defaultSelectedValue);
     });
@@ -220,7 +234,22 @@ export default function HeatMap({
         strokeWidth: 1,
         fillOpacity: fillOpacity,
       });
+    useConst((polygonSeries: am5map.MapPolygonSeries) => {
+      const polygonTemplate = polygonSeries.mapPolygons.template;
+      // Set properties for each polygon
+      polygonTemplate.setAll({
+        fill: am5.color(defaultFill),
+        stroke: am5.color(theme.palette.background.default),
+        strokeWidth: 1,
+        fillOpacity: fillOpacity,
+      });
 
+      polygonTemplate.states.create('hover', {
+        stroke: am5.color(theme.palette.primary.main),
+        strokeWidth: 2,
+        layer: 1,
+      });
+    })
       polygonTemplate.states.create('hover', {
         stroke: am5.color(theme.palette.primary.main),
         strokeWidth: 2,
@@ -362,10 +391,13 @@ export default function HeatMap({
   }, [
     root,
     chart,
+    root,
+    chart,
     aggregatedMax,
     defaultFill,
     areaId,
     isFetching,
+    legend,
     legend,
     longLoad,
     selectedScenario,

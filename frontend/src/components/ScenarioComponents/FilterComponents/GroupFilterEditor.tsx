@@ -15,7 +15,7 @@ interface GroupFilterEditorProps {
   groupFilter: GroupFilter;
 
   /* A dictionary of group filters.*/
-  groupFilters: Dictionary<GroupFilter> | undefined;
+  groupFilters: Dictionary<GroupFilter>;
 
   /* An array of group category.*/
   groupCategories: GroupCategory[];
@@ -24,7 +24,7 @@ interface GroupFilterEditorProps {
   groupSubCategories: GroupSubcategory[];
 
   /* A function that allows setting the groupFilter state so that if the user adds a filter, the new filter will be visible */
-  setGroupFilters: React.Dispatch<React.SetStateAction<Dictionary<GroupFilter> | undefined>>;
+  setGroupFilters: React.Dispatch<React.SetStateAction<Dictionary<GroupFilter>>>;
 
   /**
    * Callback function that is called, when a new filter is created, so it will be selected immediately or when the user

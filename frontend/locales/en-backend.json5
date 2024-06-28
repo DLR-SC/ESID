@@ -274,7 +274,7 @@
     },
   },
   'scenario-names': {
-    'Baseline Scenario': 'Estimated Cases',
+    caseData: 'Estimated Cases',
     baseline: 'Baseline Scenario',
     closed_schools: 'Schools Closed',
     remote_work: 'Home Office',

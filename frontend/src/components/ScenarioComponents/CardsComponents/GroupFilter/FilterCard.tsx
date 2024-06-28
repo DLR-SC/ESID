@@ -5,8 +5,9 @@ import {Box, useTheme} from '@mui/material';
 import Divider from '@mui/material/Divider';
 import FilterRows from './FilterRows';
 import CardTitle from '../MainCard/CardTitle';
-import {Dictionary} from 'types/Cardtypes';
+
 import {Localization} from 'types/localization';
+import {Dictionary} from 'util/util';
 
 interface FilterCardProps {
   /** Title of the filter card */

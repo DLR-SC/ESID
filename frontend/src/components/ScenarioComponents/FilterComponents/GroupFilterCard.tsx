@@ -26,10 +26,10 @@ interface GroupFilterCardProps {
   item: GroupFilter;
 
   /* A dictionary of group filters.*/
-  groupFilters: Dictionary<GroupFilter> | undefined;
+  groupFilters: Dictionary<GroupFilter>;
 
   /* A function that allows setting the groupFilter state so that if the user adds a filter, the new filter will be visible */
-  setGroupFilters: React.Dispatch<React.SetStateAction<Dictionary<GroupFilter> | undefined>>;
+  setGroupFilters: React.Dispatch<React.SetStateAction<Dictionary<GroupFilter>>>;
 
   /** Whether the filter is selected or not. If it is selected, the detail view is displaying this filter's config. */
   selected: boolean;
@@ -64,7 +64,7 @@ export default function GroupFilterCard({
   //Function used to change the visibility of the filter
   const ChangeVisibility = (id: string) => {
     // Find the filter with the specific id
-    const filterToChange = groupFilters![id];
+    const filterToChange = groupFilters[id];
 
     // Check if the filter exists
     if (filterToChange) {

@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import {Box, darken, useTheme} from '@mui/material';
-import {Dictionary, Scenario, cardValue, filterValue} from '../../types/Cardtypes';
 import {useContext, useEffect, useMemo, useState} from 'react';
 import {NumberFormatter} from 'util/hooks';
 import {useTranslation} from 'react-i18next';
@@ -16,10 +15,10 @@ import {
   setStartDate,
   toggleCompartmentExpansion,
 } from 'store/DataSelectionSlice';
-import {dateToISOString} from 'util/util';
+import {Dictionary, dateToISOString} from 'util/util';
 import {DataContext} from 'DataContext';
 import {ScrollSync} from 'react-scroll-sync';
-import {setCompartments, setScenarios} from 'store/ScenarioSlice';
+import {Scenario, setCompartments, setScenarios} from 'store/ScenarioSlice';
 import {useBoundingclientrectRef} from 'rooks';
 import {setReferenceDayTop} from 'store/LayoutSlice';
 import React from 'react';
@@ -33,6 +32,7 @@ import {SimulationModel, SimulationDataByNode, Simulations} from 'types/scenario
 import {CaseDataByNode} from 'types/caseData';
 import {useAppDispatch, useAppSelector} from 'store/hooks';
 import {GroupCategories, GroupSubcategories} from 'store/services/groupApi';
+import {cardValue, filterValue} from 'types/Cardtypes';
 
 interface ScenarioContainerProps {
   /*The minimum number of compartment rows.*/
@@ -98,10 +98,10 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
 
   const [cardValues, setCardValues] = useState<Dictionary<cardValue> | undefined>();
   const [filterValues, setFilterValues] = useState<Dictionary<filterValue[]> | undefined>();
-  const [groupFilters, setgroupFilters] = useState<Dictionary<GroupFilter> | undefined>(storeGroupFilters);
+  const [groupFilters, setgroupFilters] = useState<Dictionary<GroupFilter>>(storeGroupFilters);
   const [compartmentsExpanded, setCompartmentsExpanded] = useState<boolean>(storeCompartmentsExpanded ?? false);
   const [activeScenarios, setActiveScenarios] = useState<number[] | null>(storeActiveScenarios);
-  const [selectedScenario, setSelectedScenario] = useState<number | null>(storeSelectedScenario);
+  const [selectedScenario, setSelectedScenario] = useState<number | null>(storeSelectedScenario ?? 0);
   const [selectedCompartment, setSelectedCompartment] = useState<string>(storeSelectedCompartment ?? 'MildInfections');
   const [startDay, setStartDay] = useState<string | null>(storeStartDay ?? '2024-07-08');
   const [resizeRef, resizeBoundingRect] = useBoundingclientrectRef();
@@ -110,7 +110,7 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
     const aux: Scenario[] = [];
     aux.push({
       id: 0,
-      label: `Baseline Scenario`,
+      label: `caseData`,
     });
     for (const scenarioKey in scenariosState) {
       aux.push(scenariosState[scenarioKey]);
@@ -157,7 +157,7 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
         ['compartments.SusceptibleV1']: 'infection-states.SusceptibleV1',
         ['compartments.SusceptibleV2']: 'infection-states.SusceptibleV2',
         ['tooltip']: 'infection-states.tooltip',
-        ['scenario-names.Baseline Scenario']: 'scenario-names.Baseline Scenario',
+        ['scenario-names.caseData']: 'scenario-names.caseData',
         ['scenario-names.baseline']: 'scenario-names.baseline',
         ['scenario-names.closed_schools']: 'scenario-names.closed_schools',
         ['scenario-names.remote_work']: 'scenario-names.remote_work',
@@ -259,7 +259,7 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
 
     const filterValuesTemp: Array<filterValue[]> =
       scenarioSimulationDataForCardFiltersValues?.map((scenarioSimulation) => {
-        return Object.values(groupFilters!)
+        return Object.values(groupFilters)
           .filter((groupFilter) => groupFilter.isVisible)
           .map((groupFilter) => {
             const groupResponse = scenarioSimulation?.[groupFilter.name]?.results?.[0]?.compartments || null;
