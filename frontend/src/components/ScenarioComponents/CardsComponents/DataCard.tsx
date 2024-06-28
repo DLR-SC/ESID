@@ -54,7 +54,7 @@ interface DataCardProps {
   /** The number of the selected scenario.*/
   numberSelectedScenario: number | null;
 
-  /*The minimum number of compartment rows.*/
+  /** The minimum number of compartment rows.*/
   minCompartmentsRows: number;
 
   /** The maximum number of compartment rows.*/

@@ -7,19 +7,19 @@ import React from 'react';
 import {Localization} from 'types/localization';
 
 interface GeneralButtonProps {
-  /* Texts for the button in both states: clicked and unclicked */
+  /** Texts for the button in both states: clicked and unclicked */
   buttonTexts: {clicked: string; unclicked: string};
 
-  /* Function to determine if the button is disabled */
+  /** Function to determine if the button is disabled */
   isDisabled: () => boolean;
 
-  /* Function to handle the button click event */
+  /** Function to handle the button click event */
   handleClick: () => void;
 
-  /* Boolean to determine if the button is in expanded state */
+  /** Boolean to determine if the button is in expanded state */
   isExpanded: boolean;
 
-  /*An object containing localization information (translation & number formattation).*/
+  /** An object containing localization information (translation & number formattation).*/
   localization?: Localization;
 }
 

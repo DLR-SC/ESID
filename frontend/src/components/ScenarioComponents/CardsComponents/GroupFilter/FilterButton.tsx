@@ -6,28 +6,28 @@ import ChevronRight from '@mui/icons-material/ChevronRight';
 import Button from '@mui/material/Button/Button';
 
 interface FilterButtonProps {
-  /* Boolean to determine if the filter button is folded */
+  /** Boolean to determine if the filter button is folded */
   folded: boolean;
 
-  /* Function to set the folded state */
+  /** Function to set the folded state */
   setFolded: (value: boolean) => void;
 
-  /* Color of the button border */
+  /** Color of the button border */
   borderColor: string;
 
-  /* Background color of the button */
+  /** Background color of the button */
   backgroundColor: string;
 
-  /* ID number of the button */
+  /** ID number of the button */
   idNumber: number;
 
-  /* Maximum number of compartment rows */
+  /** Maximum number of compartment rows */
   maxCompartmentsRows: number;
 
-  /* Minimum number of compartment rows */
+  /** Minimum number of compartment rows */
   minCompartmentsRows: number;
 
-  /* Boolean to determine if the compartments are expanded */
+  /** Boolean to determine if the compartments are expanded */
   compartmentsExpanded: boolean;
 }
 

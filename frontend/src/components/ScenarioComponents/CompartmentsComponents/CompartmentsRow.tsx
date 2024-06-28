@@ -9,28 +9,28 @@ import React from 'react';
 import {Localization} from 'types/localization';
 
 interface CompartmentsRowProps {
-  /* Unique identifier for the row */
+  /** Unique identifier for the row */
   id: number;
 
-  /* Boolean to determine if the row is selected */
+  /** Boolean to determine if the row is selected */
   selected: boolean;
 
-  /* Name of the compartment */
+  /** Name of the compartment */
   compartment: string;
 
-  /* Value of the compartment */
+  /** Value of the compartment */
   value: string;
 
-  /* Boolean to determine if the compartments are expanded */
+  /** Boolean to determine if the compartments are expanded */
   compartmentsExpanded: boolean;
 
-  /* Function to set the selected compartment */
+  /** Function to set the selected compartment */
   setSelectedCompartment: Dispatch<SetStateAction<string>>;
 
-  /* Minimum number of compartment rows */
+  /** Minimum number of compartment rows */
   minCompartmentsRows: number;
 
-  /* Localization object for custom language and overrides */
+  /** Localization object for custom language and overrides */
   localization?: Localization;
 }
 

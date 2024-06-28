@@ -7,7 +7,6 @@ import {NumberFormatter} from 'util/hooks';
 import {useTranslation} from 'react-i18next';
 import {
   selectCompartment,
-  selectDate,
   selectScenario,
   setActiveScenario,
   setGroupFilters,
@@ -35,10 +34,10 @@ import {GroupCategories, GroupSubcategories} from 'store/services/groupApi';
 import {cardValue, filterValue} from 'types/Cardtypes';
 
 interface ScenarioContainerProps {
-  /*The minimum number of compartment rows.*/
+  /** The minimum number of compartment rows.*/
   minCompartmentsRows?: number;
 
-  /*The maximum number of compartment rows.*/
+  /** The maximum number of compartment rows.*/
   maxCompartmentsRows?: number;
 }
 
@@ -298,8 +297,7 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
 
         minDate = dateToISOString(startDay);
         maxDate = dateToISOString(endDay);
-
-        dispatch(selectDate(minDate));
+        dispatch(setStartDate(minDate));
       }
     }
     if (caseScenarioSimulationData) {
@@ -307,7 +305,7 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
       const firstCaseDataDay = entries[0];
       if (!minDate) {
         minDate = firstCaseDataDay;
-        dispatch(selectDate(minDate));
+        dispatch(setStartDate(minDate));
       } else {
         minDate = minDate.localeCompare(firstCaseDataDay) < 0 ? minDate : firstCaseDataDay;
       }

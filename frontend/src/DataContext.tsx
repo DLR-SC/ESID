@@ -55,7 +55,6 @@ export const DataContext = createContext<{
   groupCategories: GroupCategories | undefined;
   groupSubCategories: GroupSubcategories | undefined;
   scenarioListData: Simulations | undefined;
-  referenceDay: string | null;
   caseScenarioSimulationData: CaseDataByNode | undefined;
   simulationModelData: SimulationModel | undefined;
   caseScenarioData: SimulationDataByNode | undefined;
@@ -76,7 +75,6 @@ export const DataContext = createContext<{
   groupCategories: undefined,
   groupSubCategories: undefined,
   scenarioListData: undefined,
-  referenceDay: null,
   caseScenarioSimulationData: undefined,
   simulationModelData: undefined,
   caseScenarioData: undefined,
@@ -112,9 +110,8 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
   const selectedDate = useAppSelector((state) => state.dataSelection.date);
   const groupFilterList = useAppSelector((state) => state.dataSelection.groupFilters);
   const scenarioList = useAppSelector((state) => state.scenarioList);
-  const referenceDay = useAppSelector((state) => state.dataSelection.simulationStart);
 
-  const startValues = useGetSimulationStartValues(selectedDistrict, referenceDay);
+  const startValues = useGetSimulationStartValues(selectedDistrict);
 
   const caseScenarioSimulationData = useGetCaseDataByDistrictQuery({
     node: '00000',
@@ -445,7 +442,6 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
         groupCategories,
         groupSubCategories,
         scenarioListData,
-        referenceDay,
         caseScenarioSimulationData: caseScenarioSimulationData.data,
         simulationModelData: simulationModelData?.results,
         caseScenarioData,
