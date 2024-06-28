@@ -6,7 +6,7 @@ import {Box, List, ListItem, ListItemText, useTheme} from '@mui/material';
 import {ScrollSyncPane} from 'react-scroll-sync';
 import {useTranslation} from 'react-i18next';
 import {Localization} from 'types/localization';
-import {Dictionary} from 'types/Cardtypes';
+import {Dictionary} from 'util/util';
 
 interface FilterRowsProps {
   /** Array of compartments */

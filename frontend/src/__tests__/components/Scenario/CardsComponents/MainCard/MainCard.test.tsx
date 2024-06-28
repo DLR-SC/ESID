@@ -6,8 +6,8 @@ import {render, screen, fireEvent} from '@testing-library/react';
 import {describe, test, expect} from 'vitest';
 import {ThemeProvider} from '@mui/material';
 import Theme from 'util/Theme';
-import {Dictionary} from 'types/Cardtypes';
 import MainCard from 'components/ScenarioComponents/CardsComponents/MainCard/MainCard';
+import {Dictionary} from 'util/util';
 
 const MainCardTest = () => {
   const Index = 0;

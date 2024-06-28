@@ -64,7 +64,7 @@ export default function GroupFilterCard({
   //Function used to change the visibility of the filter
   const ChangeVisibility = (id: string) => {
     // Find the filter with the specific id
-    const filterToChange = groupFilters![id];
+    const filterToChange = groupFilters[id];
 
     // Check if the filter exists
     if (filterToChange) {

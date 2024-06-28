@@ -6,8 +6,8 @@ import {ScrollSyncPane} from 'react-scroll-sync';
 import {Dispatch, SetStateAction} from 'react';
 import CompartmentsRow from './CompartmentsRow';
 import React from 'react';
-import {Dictionary} from 'types/Cardtypes';
 import {Localization} from 'types/localization';
+import {Dictionary} from 'util/util';
 
 interface CompartmentsRowsProps {
   /* Boolean to determine if the compartments are expanded */
