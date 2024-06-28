@@ -15,7 +15,7 @@ describe('DataSelectionSlice', () => {
   const initialState = {
     district: {ags: '00000', name: '', type: ''},
     date: null,
-    scenario: 0,
+    scenario: null,
     compartment: null,
     compartmentsExpanded: null,
     activeScenarios: [0],
