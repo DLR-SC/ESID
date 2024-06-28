@@ -103,7 +103,7 @@ export const DataSelectionSlice = createSlice({
       }
     },
     selectScenario(state, action: PayloadAction<number | null>) {
-      state.scenario = action.payload
+      state.scenario = action.payload;
     },
     selectCompartment(state, action: PayloadAction<string>) {
       state.compartment = action.payload;
