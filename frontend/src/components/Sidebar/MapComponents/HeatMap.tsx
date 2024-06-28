@@ -1,23 +1,25 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import {useState, useEffect, useMemo, useCallback, useRef} from 'react';
+import {useState, useEffect, useRef, useMemo, useCallback, useLayoutEffect} from 'react';
 import * as am5 from '@amcharts/amcharts5';
 import * as am5map from '@amcharts/amcharts5/map';
 import {GeoJSON} from 'geojson';
+import {FeatureCollection} from '../../../types/map';
 import svgZoomResetURL from '../../../../assets/svg/zoom_out_map_white_24dp.svg?url';
 import svgZoomInURL from '../../../../assets/svg/zoom_in_white_24dp.svg?url';
 import svgZoomOutURL from '../../../../assets/svg/zoom_out_white_24dp.svg?url';
+import {FeatureProperties} from '../../../types/map';
+import {HeatmapLegend} from '../../../types/heatmapLegend';
 import {Box} from '@mui/material';
 import {useTheme} from '@mui/material/styles';
 import React from 'react';
-import useMapChart from '../../shared/HeatMap/Map';
-import usePolygonSeries from '../../shared/HeatMap/Polygon';
-import useZoomControl from '../../shared/HeatMap/Zoom';
-import useRoot from '../../shared/Root';
-import {HeatmapLegend} from '../../../types/heatmapLegend';
-import {Localization} from '../../../types/localization';
-import {FeatureCollection, FeatureProperties} from '../../../types/map';
+import {Localization} from 'types/localization';
+import useRoot from 'components/shared/Root';
+import useMapChart from 'components/shared/HeatMap/Map';
+import useZoomControl from 'components/shared/HeatMap/Zoom';
+import usePolygonSeries from 'components/shared/HeatMap/Polygon';
+import {useConst} from 'util/hooks';
 
 interface MapProps {
   /** The data to be displayed on the map, in GeoJSON format. */
@@ -39,7 +41,7 @@ interface MapProps {
   maxZoomLevel?: number;
 
   /** Optional function to generate tooltip text for each region based on its data. Default is a function that returns the region's ID. */
-  tooltipText?: (regionData: FeatureProperties, value: number) => string;
+  tooltipText?: (regionData: FeatureProperties) => string;
 
   /** Optional function to generate tooltip text while data is being fetched. Default is a function that returns 'Loading...'. */
   tooltipTextWhileFetching?: (regionData: FeatureProperties) => string;
@@ -75,7 +77,7 @@ interface MapProps {
   legend: HeatmapLegend;
 
   /** Reference to the heatmap legend element. */
-  legendRef?: React.MutableRefObject<am5.HeatLegend | null>;
+  legendRef: React.MutableRefObject<am5.HeatLegend | null>;
 
   /** Optional flag indicating if data loading takes a long time. Default is false. */
   longLoad?: boolean;
@@ -100,8 +102,8 @@ export default function HeatMap({
   defaultFill = '#8c8c8c',
   fillOpacity = 1,
   maxZoomLevel = 4,
-  tooltipText,
-  tooltipTextWhileFetching,
+  tooltipText = () => '{id}',
+  tooltipTextWhileFetching = () => 'Loading...',
   defaultSelectedValue,
   selectedScenario = 0,
   isDataFetching = false,
@@ -112,24 +114,15 @@ export default function HeatMap({
   setAggregatedMax,
   fixedLegendMaxValue,
   legend,
-  legendRef = {current: null},
+  legendRef,
   longLoad = false,
   setLongLoad = () => {},
   localization,
   idValuesToMap = 'id',
 }: MapProps) {
   const theme = useTheme();
+  const lastSelectedPolygon = useRef<am5map.MapPolygon | null>(null);
   const [longLoadTimeout, setLongLoadTimeout] = useState<number>();
-  const [settings, setSettings] = useState<
-    | {
-        id: number | string;
-        value: number;
-        polygonSettings?: {[key: string]: am5.Color | number | string};
-      }[]
-    | undefined
-  >(values);
-
-  const lastSelectedPolygon = useRef<string | number>();
 
   // This memo returns if the required data is currently being fetched. Either the case data or the scenario data.
   const isFetching = useMemo(() => {
@@ -153,7 +146,7 @@ export default function HeatMap({
     zoomSettings,
     useCallback(
       (zoom: am5map.ZoomControl) => {
-        if (!root || root.isDisposed()) return;
+        if (!root) return;
         const fixSVGPosition = {
           width: 25,
           height: 25,
@@ -186,9 +179,9 @@ export default function HeatMap({
       [root]
     )
   );
-
+  
   useEffect(() => {
-    if (!zoom || zoom.isDisposed() || !root || root.isDisposed()) return;
+    if (!zoom || !root || root.isDisposed()) return;
     zoom.homeButton.events.on('click', () => {
       setSelectedArea(defaultSelectedValue);
     });
@@ -217,59 +210,51 @@ export default function HeatMap({
     root,
     chart,
     polygonSettings,
-    useCallback(
-      (polygonSeries: am5map.MapPolygonSeries) => {
-        const polygonTemplate = polygonSeries.mapPolygons.template;
+    useConst((polygonSeries: am5map.MapPolygonSeries) => {
+      const polygonTemplate = polygonSeries.mapPolygons.template;
+      // Set properties for each polygon
+      polygonTemplate.setAll({
+        fill: am5.color(defaultFill),
+        stroke: am5.color(theme.palette.background.default),
+        strokeWidth: 1,
+        fillOpacity: fillOpacity,
+      });
 
-        // Set properties for each polygon
-        polygonTemplate.setAll({
-          fill: am5.color(defaultFill),
-          stroke: am5.color(theme.palette.background.default),
-          strokeWidth: 1,
-          fillOpacity: fillOpacity,
-          templateField: 'polygonSettings',
-        });
-
-        polygonTemplate.states.create('hover', {
-          stroke: am5.color(theme.palette.primary.main),
-          strokeWidth: 2,
-          layer: 1,
-        });
-      },
-      [defaultFill, fillOpacity, theme.palette.background.default, theme.palette.primary.main]
-    )
+      polygonTemplate.states.create('hover', {
+        stroke: am5.color(theme.palette.primary.main),
+        strokeWidth: 2,
+        layer: 1,
+      });
+    })
   );
 
-  // Set heat map properties
-  //show tooltip on heat legend when hovering
-  useEffect(() => {
-    if (polygonSeries) {
-      const polygonTemplate = polygonSeries.mapPolygons.template;
+  // This effect is responsible for showing the tooltip on the heat legend when hovering over a region.
+  useLayoutEffect(() => {
+    if (!polygonSeries) return;
+    const polygonTemplate = polygonSeries.mapPolygons.template;
+    //show tooltip on heat legend when hovering
+    polygonTemplate.events.on('click', function (ev) {
+      if (ev.target.dataItem?.dataContext) {
+        setSelectedArea(ev.target.dataItem.dataContext as FeatureProperties);
+      }
+    });
 
-      polygonTemplate.events.on('click', function (ev) {
-        if (ev.target.dataItem?.dataContext) {
-          setSelectedArea(ev.target.dataItem.dataContext as FeatureProperties);
-        }
-      });
-
-      polygonTemplate.events.on('pointerover', (e) => {
-        if (legendRef && legendRef.current) {
-          const value = (e.target.dataItem?.dataContext as FeatureProperties).value as number;
-          legendRef.current.showValue(
-            value,
-            localization && localization.formatNumber ? localization.formatNumber(value) : value.toString()
-          );
-        }
-      });
-
-      //hide tooltip on heat legend when not hovering anymore event
-      polygonTemplate.events.on('pointerout', () => {
-        if (legendRef && legendRef.current) {
-          void legendRef.current.hideTooltip();
-        }
-      });
-    }
-  }, [localization, legendRef, polygonSeries, setSelectedArea]);
+    polygonTemplate.events.on('pointerover', (e) => {
+      if (legendRef.current) {
+        const value = (e.target.dataItem?.dataContext as FeatureProperties).value as number;
+        legendRef.current.showValue(
+          value,
+          localization && localization.formatNumber ? localization.formatNumber(value) : value.toString()
+        );
+      }
+    });
+    //hide tooltip on heat legend when not hovering anymore event
+    polygonTemplate.events.on('pointerout', () => {
+      if (legendRef.current) {
+        void legendRef.current.hideTooltip();
+      }
+    });
+  }, [polygonSeries, legendRef, localization, setSelectedArea, theme.palette.primary.main]);
 
   // This effect is responsible for showing the loading indicator if the data is not ready within 1 second. This
   // prevents that the indicator is showing for every little change.
@@ -299,198 +284,103 @@ export default function HeatMap({
     }
   }, [fixedLegendMaxValue, setAggregatedMax, values]);
 
-  // This effect is responsible for updating the fill color of the polygons based on the values and the legend.
+  // Create Map with GeoData
   useEffect(() => {
-    if (!polygonSeries) return;
-    if (selectedScenario !== null && values && Number.isFinite(aggregatedMax) && !isFetching) {
-      const polygonColors = values.map((value) => {
-        let fillColor = am5.color(defaultFill);
-        if (legend.steps[0].value == 0 && legend.steps[legend.steps.length - 1].value == 1) {
-          // if legend is normalized, also pass mix & max to color function
-          fillColor = getColorFromLegend(value.value, legend, {
-            min: 0,
-            max: aggregatedMax,
-          });
-        } else {
-          // if legend is not normalized, min & max are first and last stop of legend and don't need to be passed
-          fillColor = getColorFromLegend(value.value, legend);
-        }
-        return {
-          id: value.id,
-          value: value.value,
-          polygonSettings: {fill: fillColor},
-        };
+    if (!polygonSeries || isFetching) return;
+    // Reset last selected polygon
+    if (lastSelectedPolygon.current) {
+      lastSelectedPolygon.current.states.create('default', {
+        stroke: am5.color(theme.palette.background.default),
+        strokeWidth: 1,
+        layer: 0,
       });
-      setSettings((settings) => {
-        if (settings && settings.length > 0) {
-          return settings.map((setting) => {
-            const newSetting = polygonColors.find((newSetting) => newSetting.id === setting.id);
-            if (!setting.polygonSettings) return {id: setting.id, value: setting.value, ...newSetting?.polygonSettings};
-            return {
-              id: setting.id,
-              value: setting.value,
-              polygonSettings: {...setting.polygonSettings, ...newSetting?.polygonSettings},
-            };
-          });
-        }
-        return polygonColors;
-      });
-    } else if (longLoad || !values) {
-      polygonSeries.setAll({
-        fill: am5.color(theme.palette.text.disabled),
-      });
+      lastSelectedPolygon.current.states.apply('default');
     }
-  }, [
-    aggregatedMax,
-    isFetching,
-    longLoad,
-    theme.palette.text.disabled,
-    selectedScenario,
-    polygonSeries,
-    values,
-    legend,
-    defaultFill,
-  ]);
-
-  const [startingSelectedAreaSettings, setStartingSelectedAreaSettings] = useState<
-    | {
-        id: number | string;
-        value: number;
-        polygonSettings?: {[key: string]: am5.Color | number | string};
-      }[]
-    | undefined
-  >();
-
-  useEffect(() => {
-    if (startingSelectedAreaSettings === undefined && values) {
-      const initialSettings = values.map((value) => {
-        if (value.id === selectedArea[idValuesToMap]) {
-          return {
-            id: value.id,
-            value: value.value,
-            polygonSettings: {
-              stroke: am5.color(theme.palette.primary.main),
-              strokeWidth: 2,
-              layer: 1,
-            },
-          };
-        }
-        return {id: value.id, value: value.value};
-      });
-      setStartingSelectedAreaSettings(initialSettings);
-    }
-    // eslint-disable-next-line
-  }, [values]);
-
-  // This effect is responsible for updating the selected polygon's stroke color and width.
-  useEffect(() => {
-    setSettings((settings) => {
-      if (!settings) {
-        return startingSelectedAreaSettings;
-      } else {
-        const selectedId = selectedArea[idValuesToMap];
-        const lastSelectedId = lastSelectedPolygon.current;
-        const primaryStroke = am5.color(theme.palette.primary.main);
-        const defaultStroke = am5.color(theme.palette.background.default);
-
-        return settings.map((setting) => {
-          const isSelected = setting.id === selectedId;
-          const isLastSelected = setting.id === lastSelectedId;
-
-          if (isSelected || isLastSelected) {
-            return {
-              id: setting.id,
-              value: setting.value,
-              polygonSettings: {
-                ...setting.polygonSettings,
-                stroke: isSelected ? primaryStroke : defaultStroke,
-                strokeWidth: isSelected ? 2 : 1,
-                layer: isSelected ? 1 : 0,
-              },
-            };
+    // Highlight selected polygon
+    polygonSeries.mapPolygons.each((mapPolygon) => {
+      if (mapPolygon.dataItem && mapPolygon.dataItem.dataContext) {
+        const areaData = mapPolygon.dataItem.dataContext as FeatureProperties;
+        const id: string | number = areaData[idValuesToMap];
+        if (id == selectedArea[idValuesToMap]) {
+          mapPolygon.states.create('default', {
+            stroke: am5.color(theme.palette.primary.main),
+            strokeWidth: 2,
+            layer: 1,
+          });
+          if (!mapPolygon.isHover()) {
+            mapPolygon.states.apply('default');
           }
-
-          return setting;
-        });
+          lastSelectedPolygon.current = mapPolygon;
+        }
       }
     });
-    lastSelectedPolygon.current = selectedArea[idValuesToMap];
   }, [
-    selectedArea,
-    theme.palette.primary.main,
-    theme.palette.background.default,
+    isFetching,
     idValuesToMap,
-    startingSelectedAreaSettings,
+    polygonSeries,
+    selectedArea,
+    selectedArea.id,
+    theme.palette.background.default,
+    theme.palette.primary.main,
   ]);
-  const valuesMap = useMemo(() => {
-    const valuesMap = new Map<number | string, number>();
-    if (values)
-      values.forEach((value) => {
-        valuesMap.set(value.id, value.value);
-      });
-    return valuesMap;
-  }, [values]);
 
-  const tooltipsMap = useMemo(() => {
-    const tooltipsMap = new Map<number | string, string>();
-    if (mapData) {
-      mapData.features.forEach((feature) => {
-        if (feature.properties) {
-          const tooltip =
-            longLoad || valuesMap.size === 0
-              ? tooltipTextWhileFetching
-                ? tooltipTextWhileFetching(feature.properties)
-                : 'Loading...'
-              : tooltipText
-                ? tooltipText(feature.properties, valuesMap.get(feature.properties[idValuesToMap]) as number)
-                : `${feature.properties[idValuesToMap]}`;
-          tooltipsMap.set(feature.properties[idValuesToMap], tooltip);
+  // set Data
+  useEffect(() => {
+    if (!polygonSeries) return;
+    if (selectedScenario !== null && !isFetching && values && Number.isFinite(aggregatedMax)) {
+      const map = new Map<string | number, number>();
+      if (!values) return;
+      values.forEach((value) => {
+        map.set(value.id, value.value);
+      });
+      polygonSeries.mapPolygons.each((polygon) => {
+        const regionData = polygon.dataItem?.dataContext as FeatureProperties;
+        regionData.value = map.get(regionData[idValuesToMap]) ?? Number.NaN;
+        // determine fill color
+        let fillColor = am5.color(defaultFill);
+        if (Number.isFinite(regionData.value) && typeof regionData.value === 'number') {
+          if (legend.steps[0].value == 0 && legend.steps[legend.steps.length - 1].value == 1) {
+            // if legend is normalized, also pass mix & max to color function
+            fillColor = getColorFromLegend(regionData.value, legend, {
+              min: 0,
+              max: aggregatedMax,
+            });
+          } else {
+            // if legend is not normalized, min & max are first and last stop of legend and don't need to be passed
+            fillColor = getColorFromLegend(regionData.value, legend);
+          }
         }
+        polygon.setAll({
+          tooltipText: tooltipText(regionData),
+          fill: fillColor,
+        });
+      });
+    } else if (longLoad || !values) {
+      polygonSeries.mapPolygons.each((polygon) => {
+        const regionData = polygon.dataItem?.dataContext as FeatureProperties;
+        regionData.value = Number.NaN;
+        polygon.setAll({
+          tooltipText: tooltipTextWhileFetching(regionData),
+          fill: am5.color(theme.palette.text.disabled),
+        });
       });
     }
-    return tooltipsMap;
-  }, [mapData, valuesMap, longLoad, idValuesToMap, tooltipText, tooltipTextWhileFetching]);
-
-  // This effect is responsible for updating the tooltip text for each polygon.
-  useEffect(() => {
-    if (!mapData) return;
-    setSettings((settings) => {
-      if (!settings)
-        return mapData.features.map((feature) => {
-          return {
-            id: feature.properties[idValuesToMap],
-            value: 0,
-          };
-        });
-      return settings.map((setting) => {
-        return {
-          id: setting.id,
-          value: valuesMap.get(setting.id) as number,
-          polygonSettings: {
-            ...setting.polygonSettings,
-            tooltipText: tooltipsMap.get(setting.id) as string,
-          },
-        };
-      });
-    });
-  }, [valuesMap, tooltipsMap, mapData, idValuesToMap]);
-
-  // This effect is responsible for updating the map data when the mapData prop changes.
-  useEffect(() => {
-    if (
-      !polygonSeries ||
-      !settings ||
-      !settings.some(
-        (setting) =>
-          setting.polygonSettings &&
-          setting.polygonSettings.fill != am5.color(defaultFill) &&
-          setting.polygonSettings.tooltipText
-      )
-    )
-      return;
-    console.log(settings);
-    polygonSeries.data.setAll(settings);
-  }, [settings, polygonSeries, defaultFill]);
+  }, [
+    root,
+    chart,
+    aggregatedMax,
+    defaultFill,
+    idValuesToMap,
+    isFetching,
+    legend,
+    longLoad,
+    polygonSeries,
+    selectedScenario,
+    theme.palette.text.disabled,
+    tooltipText,
+    tooltipTextWhileFetching,
+    values,
+  ]);
 
   return <Box id={mapId} height={mapHeight} />;
 }
