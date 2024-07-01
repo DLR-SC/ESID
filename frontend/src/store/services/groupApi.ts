@@ -224,7 +224,11 @@ export interface GroupCategories {
   count: number;
   next: null;
   previous: null;
-  results: Array<GroupCategory> | null;
+  results: {
+    key: string;
+    name: string;
+    description: string;
+  }[];
 }
 
 export interface GroupSubcategory {
@@ -238,7 +242,12 @@ export interface GroupSubcategories {
   count: number;
   next: null;
   previous: null;
-  results: Array<GroupSubcategory> | null;
+  results: {
+    key: string;
+    name: string;
+    description: string;
+    category: string;
+  }[];
 }
 
 export const {

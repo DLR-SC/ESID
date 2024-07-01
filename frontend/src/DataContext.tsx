@@ -130,7 +130,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
   const {data: simulationModelData} = useGetSimulationModelQuery(simulationModelKey, {
     skip: simulationModelKey === 'unset',
   });
-
+  console.log(selectedScenario);
   const {data: caseScenarioData} = useGetCaseDataSingleSimulationEntryQuery(
     {
       node: selectedDistrict,
@@ -167,8 +167,9 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
       groups: ['total'],
       compartments: [selectedCompartment ?? ''],
     },
-    {skip: selectedScenario === null || selectedScenario === 0 || !selectedCompartment || !selectedDate}
+    {skip: selectedScenario == null || selectedScenario === 0 || !selectedCompartment || !selectedDate}
   );
+  console.log(mapIsSimulationDataFetching);
 
   const {currentData: mapCaseData, isFetching: mapIsCaseDataFetching} = useGetCaseDataByDateQuery(
     {
@@ -176,8 +177,9 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
       groups: ['total'],
       compartments: [selectedCompartment ?? ''],
     },
-    {skip: selectedScenario === null || selectedScenario > 0 || !selectedCompartment || !selectedDate}
+    {skip: selectedScenario == null || selectedScenario > 0 || !selectedCompartment || !selectedDate}
   );
+  console.log(mapIsCaseDataFetching);
 
   const {data: chartSimulationData, isFetching: chartSimulationFetching} = useGetMultipleSimulationDataByNodeQuery(
     {
@@ -346,11 +348,13 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
     // this init should only run once on first render
   }, [t]);
 
+  // This useEffect is used in order to set the SimulationModelKey
   useEffect(() => {
     if (simulationModelsData && simulationModelsData.results.length > 0) {
       const {key} = simulationModelsData.results[0];
       setSimulationModelKey(key);
     }
+    // This effect should re-run whenever simulationModelsData changes.
   }, [simulationModelsData]);
 
   // This effect sets the data for the map according to the selections.

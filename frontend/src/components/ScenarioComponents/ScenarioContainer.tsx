@@ -100,7 +100,7 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
   const [groupFilters, setgroupFilters] = useState<Dictionary<GroupFilter>>(storeGroupFilters);
   const [compartmentsExpanded, setCompartmentsExpanded] = useState<boolean>(storeCompartmentsExpanded ?? false);
   const [activeScenarios, setActiveScenarios] = useState<number[] | null>(storeActiveScenarios);
-  const [selectedScenario, setSelectedScenario] = useState<number | null>(storeSelectedScenario ?? 0);
+  const [selectedScenario, setSelectedScenario] = useState<number | null>(storeSelectedScenario);
   const [selectedCompartment, setSelectedCompartment] = useState<string>(storeSelectedCompartment ?? 'MildInfections');
   const [startDay, setStartDay] = useState<string | null>(storeStartDay ?? '2024-07-08');
   const [resizeRef, resizeBoundingRect] = useBoundingclientrectRef();
@@ -194,7 +194,7 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
 
   // This effect updates the selected scenario in the state whenever it changes.
   useEffect(() => {
-    dispatch(selectScenario(selectedScenario));
+    dispatch(selectScenario(selectedScenario == undefined ? null : selectedScenario));
   }, [selectedScenario, dispatch]);
 
   // This effect updates the active scenario in the state whenever the active scenarios change.
@@ -297,7 +297,6 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
 
         minDate = dateToISOString(startDay);
         maxDate = dateToISOString(endDay);
-        dispatch(setStartDate(minDate));
       }
     }
     if (caseScenarioSimulationData) {
@@ -305,7 +304,6 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
       const firstCaseDataDay = entries[0];
       if (!minDate) {
         minDate = firstCaseDataDay;
-        dispatch(setStartDate(minDate));
       } else {
         minDate = minDate.localeCompare(firstCaseDataDay) < 0 ? minDate : firstCaseDataDay;
       }
