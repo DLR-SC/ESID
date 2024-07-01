@@ -1,12 +1,8 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
+import {Scenario} from 'store/ScenarioSlice';
 import {Dictionary} from 'util/util';
-
-export interface Scenario {
-  id: number;
-  label: string;
-}
 
 export const initialState = {
   scenarios: [] as Scenario[],

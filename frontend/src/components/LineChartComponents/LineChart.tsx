@@ -12,7 +12,6 @@ import {IDateAxisSettings} from '@amcharts/amcharts5/.internal/charts/xy/axes/Da
 import {AxisRendererX} from '@amcharts/amcharts5/.internal/charts/xy/axes/AxisRendererX';
 import {AxisRendererY} from '@amcharts/amcharts5/.internal/charts/xy/axes/AxisRendererY';
 import {XYCursor} from '@amcharts/amcharts5/.internal/charts/xy/XYCursor';
-import {LineSeries} from '@amcharts/amcharts5/.internal/charts/xy/series/LineSeries';
 import am5locales_en_US from '@amcharts/amcharts5/locales/en_US';
 import am5locales_de_DE from '@amcharts/amcharts5/locales/de_DE';
 import {darken, useTheme} from '@mui/material/styles';
@@ -20,7 +19,6 @@ import Box from '@mui/material/Box';
 import {useTranslation} from 'react-i18next';
 import {Dictionary} from '../../util/util';
 import React from 'react';
-import {Scenario} from 'store/ScenarioSlice';
 import {Localization} from 'types/localization';
 import {getScenarioPrimaryColor} from 'util/Theme';
 import useRoot from 'components/shared/Root';
@@ -31,23 +29,23 @@ import useValueAxis from 'components/shared/LineChart/ValueAxis';
 import {useDateSelectorFilter} from 'components/shared/LineChart/Filter';
 import useDateAxisRange from 'components/shared/LineChart/AxisRange';
 import useLineSeries, {useLineSeriesList} from 'components/shared/LineChart/LineSeries';
-
-interface ScenarioList {
-  scenarios: {
-    [key: number]: Scenario;
-  };
-  compartments: string[];
-}
-interface GroupFilter {
-  id: string;
-  name: string;
-  isVisible: boolean;
-  groups: Dictionary<string[]>;
-}
+import {GroupFilter} from 'types/group';
+import {ScenarioList} from 'types/scenario';
+import {LineSeries} from '@amcharts/amcharts5/.internal/charts/xy/series/LineSeries';
 
 interface LineChartProps {
   /** Optional unique identifier for the chart. Defaults to 'chartdiv'. */
   chartId?: string;
+
+  lineChartData:
+    | {
+        values: {day: string; value: number}[];
+        name: string;
+        color: Color;
+        valueYField: string | number;
+        tooltipText?: string;
+      }[]
+    | undefined;
 
   /** The currently selected date in the chart in ISO format (YYYY-MM-DD). */
   selectedDate: string;
@@ -60,25 +58,6 @@ interface LineChartProps {
    * This can be used for positioning elements in relation to the reference date.
    */
   setReferenceDayBottom?: (docPos: number) => void;
-
-  /**
-   * Optional array of arrays containing simulation data points.
-   * Each sub-array corresponds to a different simulation scenario and contains objects with `day` and `value` properties.
-   * The first element in the array should be null.
-   */
-  simulationData?: ({day: string; value: number}[] | null)[] | null;
-
-  /**
-   * Optional function to determine the chart name for a given simulation scenario.
-   * This function is passed a `Scenario` object and returns a string name.
-   */
-  simulationDataChartName?: (scenario: Scenario) => string;
-
-  /**
-   * Array of data points representing case data, where each data point includes a `day` and its corresponding `value`.
-   * This data is used to plot the actual case data on the chart.
-   */
-  caseData: {day: string; value: number}[] | undefined;
 
   /**
    * Optional array of arrays containing percentile data points, where each data point includes a `day` and its corresponding `value`.
@@ -138,9 +117,6 @@ export default function LineChart({
   selectedDate,
   setSelectedDate,
   setReferenceDayBottom = () => {},
-  simulationData = null,
-  caseData,
-  simulationDataChartName = () => '',
   percentileData = null,
   groupFilterData = null,
   minDate = null,
@@ -157,6 +133,7 @@ export default function LineChart({
     customLang: 'global',
     overrides: {},
   },
+  lineChartData,
 }: LineChartProps): JSX.Element {
   const {t: defaultT, i18n} = useTranslation();
   const {t: customT} = useTranslation(localization.customLang);
@@ -395,38 +372,6 @@ export default function LineChart({
     };
   }, [root, chart, xAxis, setReferenceDayX]);
 
-  const caseDataSeriesSettings = useMemo(() => {
-    if (!xAxis || !yAxis) {
-      return null;
-    }
-
-    return {
-      xAxis: xAxis,
-      yAxis: yAxis,
-      // Case Data is always scenario id 0
-      id: `${chartId}_0`,
-      name:
-        localization.overrides && localization.overrides['chart.caseData']
-          ? customT(localization.overrides['chart.caseData'])
-          : defaultT('chart.caseData'),
-      valueXField: 'date',
-      valueYField: '0',
-      // Prevent data points from connecting across gaps in the data
-      connect: false,
-      stroke: color('#000'),
-    };
-  }, [localization.overrides, xAxis, yAxis, chartId, defaultT, customT]);
-  useLineSeries(
-    root,
-    chart,
-    caseDataSeriesSettings,
-    useConst((series) => {
-      series.strokes.template.setAll({
-        strokeWidth: 2,
-      });
-    })
-  );
-
   const percentileSeriesSettings = useMemo(() => {
     if (!xAxis || !yAxis || !selectedScenario) {
       return null;
@@ -464,32 +409,34 @@ export default function LineChart({
     })
   );
 
-  const scenarioSeriesSettings = useMemo(() => {
-    if (!root || !xAxis || !yAxis || !scenarioList) {
+  const lineChartDataSettings = useMemo(() => {
+    if (!root || !xAxis || !yAxis || !lineChartData) {
       return [];
     }
 
-    return Object.entries(scenarioList.scenarios).map(([scenarioId, scenario]) => ({
+    return lineChartData.map((line) => ({
       xAxis: xAxis,
       yAxis: yAxis,
-      id: `${chartId}_${scenarioId}`,
-      name: simulationDataChartName(scenario),
+      id: `${chartId}_${line.valueYField}`,
+      name:
+        localization.overrides && localization.overrides[line.name]
+          ? customT(localization.overrides[line.name])
+          : defaultT(line.name),
       valueXField: 'date',
-      valueYField: scenarioId,
-      // Prevent data points from connecting across gaps in the data
+      valueYField: String(line.valueYField),
       connect: false,
       // Fallback Tooltip (if HTML breaks for some reason)
-      // For text color: loop around the theme's scenario color list if scenario IDs exceed color list length, then pick first color of sub-palette which is the main color
       tooltip: Tooltip.new(root, {
-        labelText: `[bold ${getScenarioPrimaryColor(scenario.id, theme)}]${simulationDataChartName(scenario)}:[/] {${scenarioId}}`,
+        labelText: line.tooltipText,
       }),
-      stroke: color(getScenarioPrimaryColor(scenario.id, theme)),
+      stroke: line.color,
     }));
-  }, [scenarioList, root, simulationDataChartName, xAxis, yAxis, chartId, theme]);
+  }, [lineChartData, root, xAxis, yAxis, chartId, localization, defaultT, customT]);
+
   useLineSeriesList(
     root,
     chart,
-    scenarioSeriesSettings,
+    lineChartDataSettings,
     useConst((series) => {
       series.strokes.template.setAll({
         strokeWidth: 2,
@@ -612,22 +559,14 @@ export default function LineChart({
     // Create empty map to match dates
     const dataMap = new Map<string, {[key: string]: number}>();
 
-    // Cycle through scenarios
-    activeScenarios?.forEach((scenarioId) => {
-      if (scenarioId) {
-        simulationData?.[scenarioId]?.forEach(({day, value}) => {
-          // Add scenario data to map (upsert date entry)
-          dataMap.set(day, {...dataMap.get(day), [scenarioId]: value});
+    if (lineChartData) {
+      lineChartData.forEach((serie) => {
+        const id = serie.valueYField;
+        serie.values.forEach((entry) => {
+          dataMap.set(entry.day, {...dataMap.get(entry.day), [id]: entry.value});
         });
-      }
-
-      if (scenarioId === 0) {
-        // Add case data values (upsert date entry)
-        caseData?.forEach((entry) => {
-          dataMap.set(entry.day, {...dataMap.get(entry.day), [0]: entry.value});
-        });
-      }
-    });
+      });
+    }
 
     if (percentileData) {
       // Add 25th percentile data
@@ -880,8 +819,6 @@ export default function LineChart({
     // Re-run this effect whenever the data itself changes (or any variable the effect uses)
   }, [
     percentileData,
-    simulationData,
-    caseData,
     groupFilterData,
     activeScenarios,
     selectedScenario,
@@ -897,6 +834,7 @@ export default function LineChart({
     exportedFileName,
     chart,
     root,
+    lineChartData,
   ]);
 
   return (

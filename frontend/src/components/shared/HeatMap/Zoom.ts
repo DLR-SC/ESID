@@ -28,7 +28,7 @@ export default function useZoomControl(
     return () => {
       newZoom.dispose();
     };
-  }, [root, settings]);
+  }, [root, settings, initializer]);
 
   return zoom ?? null;
 }

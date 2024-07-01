@@ -1,25 +1,21 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import {useCallback, useContext, useEffect, useMemo, useState} from 'react';
+import {useContext, useEffect, useMemo, useState} from 'react';
 import LineChart from './LineChartComponents/LineChart';
 import LoadingContainer from './shared/LoadingContainer';
 import {useTheme} from '@mui/material';
-import {useTranslation} from 'react-i18next';
 import {DataContext} from '../DataContext';
 import React from 'react';
 import {useAppDispatch, useAppSelector} from 'store/hooks';
-import {Scenario} from 'store/ScenarioSlice';
 import {selectDate} from 'store/DataSelectionSlice';
 import {setReferenceDayBottom} from 'store/LayoutSlice';
 
 export default function LineChartContainer() {
   const theme = useTheme();
   const dispatch = useAppDispatch();
-  const {t: tBackend} = useTranslation('backend');
 
-  const {chartCaseData, chartSimulationData, chartPercentileData, chartGroupFilterData, isChartDataFetching} =
-    useContext(DataContext);
+  const {chartPercentileData, chartGroupFilterData, isChartDataFetching, lineChartData} = useContext(DataContext);
 
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
@@ -39,14 +35,13 @@ export default function LineChartContainer() {
       customLang: 'backend',
       overrides: {
         [`compartment.${selectedCompartment}`]: `infection-states.${selectedCompartment}`,
+        'scenario-names.baseline': 'scenario-names.baseline',
+        'scenario-names.closed_schools': 'scenario-names.closed_schools',
+        'scenario-names.remote_work': 'scenario-names.remote_work',
+        'scenario-names.10p_reduced_contacts': 'scenario-names.10p_reduced_contacts',
       },
     };
   }, [selectedCompartment]);
-
-  const simulationDataChartName = useCallback(
-    (scenario: Scenario) => tBackend(`scenario-names.${scenario.label}`),
-    [tBackend]
-  );
 
   useEffect(() => {
     dispatch(selectDate(selectedDate));
@@ -72,9 +67,7 @@ export default function LineChartContainer() {
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
         setReferenceDayBottom={setReferenceDayb}
-        simulationDataChartName={simulationDataChartName}
-        simulationData={chartSimulationData}
-        caseData={chartCaseData}
+        lineChartData={lineChartData}
         percentileData={chartPercentileData}
         groupFilterData={chartGroupFilterData}
         minDate={minDate}

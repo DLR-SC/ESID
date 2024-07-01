@@ -1,14 +1,12 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import {useState, useEffect, useRef, useCallback, useMemo, useContext} from 'react';
+import React, {useState, useEffect, useRef, useCallback, useMemo, useContext} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Grid, Stack, useTheme} from '@mui/material';
 import * as am5 from '@amcharts/amcharts5';
-import React from 'react';
 import {useAppDispatch, useAppSelector} from 'store/hooks';
 import {HeatmapLegend} from 'types/heatmapLegend';
-import {FeatureProperties, FeatureCollection} from 'types/map';
 import i18n from 'util/i18n';
 import LockMaxValue from './MapComponents/LockMaxValue';
 import HeatLegendEdit from './MapComponents/HeatLegendEdit';
@@ -24,6 +22,7 @@ import Box from '@mui/material/Box';
 import {selectDistrict} from 'store/DataSelectionSlice';
 import legendPresets from '../../../assets/heatmap_legend_presets.json?url';
 import {selectHeatmapLegend} from 'store/UserPreferenceSlice';
+import {GeoJSON, GeoJsonProperties} from 'geojson';
 
 export default function MapContainer() {
   const {t} = useTranslation();
@@ -38,10 +37,10 @@ export default function MapContainer() {
     areMapValuesFetching,
     searchBarData,
   }: {
-    geoData: FeatureCollection | undefined;
+    geoData: GeoJSON | undefined;
     mapData: {id: string; value: number}[] | undefined;
     areMapValuesFetching: boolean;
-    searchBarData: FeatureProperties[] | undefined;
+    searchBarData: GeoJsonProperties[] | undefined;
   } = useContext(DataContext) || {
     geoData: {type: 'FeatureCollection', features: []},
     mapData: [],
@@ -63,7 +62,7 @@ export default function MapContainer() {
     };
   }, [t]);
 
-  const [selectedArea, setSelectedArea] = useState<FeatureProperties>(
+  const [selectedArea, setSelectedArea] = useState<GeoJsonProperties>(
     storeSelectedArea.name != ''
       ? {RS: storeSelectedArea.ags, GEN: storeSelectedArea.name, BEZ: storeSelectedArea.type}
       : defaultValue
@@ -76,7 +75,7 @@ export default function MapContainer() {
   const legendRef = useRef<am5.HeatLegend | null>(null);
 
   useEffect(() => {
-    if (selectedArea.RS === '00000') {
+    if (selectedArea?.RS === '00000') {
       setSelectedArea(defaultValue);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -85,9 +84,9 @@ export default function MapContainer() {
   useEffect(() => {
     dispatch(
       selectDistrict({
-        ags: String(selectedArea['RS']),
-        name: String(selectedArea['GEN']),
-        type: String(selectedArea['BEZ']),
+        ags: String(selectedArea?.['RS']),
+        name: String(selectedArea?.['GEN']),
+        type: String(selectedArea?.['BEZ']),
       })
     );
   }, [selectedArea, dispatch]);
@@ -97,19 +96,19 @@ export default function MapContainer() {
   }, [legend, dispatch]);
 
   const calculateToolTip = useCallback(
-    (regionData: FeatureProperties) => {
-      const bez = t(`BEZ.${regionData.BEZ}`);
+    (regionData: GeoJsonProperties) => {
+      const bez = t(`BEZ.${regionData?.BEZ}`);
       const compartmentName = tBackend(`infection-states.${selectedCompartment}`);
       return selectedScenario !== null && selectedCompartment
-        ? `${bez} {GEN}\n${compartmentName}: ${formatNumber(Number(regionData.value))}`
+        ? `${bez} {GEN}\n${compartmentName}: ${formatNumber(Number(regionData?.value))}`
         : `${bez} {GEN}`;
     },
     [formatNumber, selectedCompartment, selectedScenario, t, tBackend]
   );
 
   const calculateToolTipFetching = useCallback(
-    (regionData: FeatureProperties) => {
-      const bez = t(`BEZ.${regionData.BEZ}`);
+    (regionData: GeoJsonProperties) => {
+      const bez = t(`BEZ.${regionData?.BEZ}`);
       return `${bez} {GEN}`;
     },
     [t]
@@ -122,8 +121,8 @@ export default function MapContainer() {
   }, [formatNumber]);
 
   const optionLabel = useCallback(
-    (option: FeatureProperties) => {
-      return `${option.GEN}${option.BEZ ? ` (${t(`BEZ.${option.BEZ}`)})` : ''}`;
+    (option: GeoJsonProperties) => {
+      return `${option?.GEN}${option?.BEZ ? ` (${t(`BEZ.${option?.BEZ}`)})` : ''}`;
     },
     [t]
   );
@@ -146,10 +145,10 @@ export default function MapContainer() {
           sortProperty={'GEN'}
           optionLabel={optionLabel}
           autoCompleteValue={{
-            RS: selectedArea.RS,
-            GEN: selectedArea.GEN,
-            BEZ: selectedArea.BEZ,
-            id: selectedArea.id,
+            RS: selectedArea?.RS as string,
+            GEN: selectedArea?.GEN as string,
+            BEZ: selectedArea?.BEZ as string,
+            id: selectedArea?.id as number,
           }}
           onChange={(_event, option) => {
             if (option) {
@@ -157,7 +156,7 @@ export default function MapContainer() {
               else setSelectedArea(defaultValue);
             }
           }}
-          placeholder={`${selectedArea.GEN}${selectedArea.BEZ ? ` (${t(`BEZ.${selectedArea.BEZ}`)})` : ''}`}
+          placeholder={`${selectedArea?.GEN}${selectedArea?.BEZ ? ` (${t(`BEZ.${selectedArea?.BEZ}`)})` : ''}`}
           optionEqualProperty='RS'
           valueEqualProperty='RS'
         />

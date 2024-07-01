@@ -31,22 +31,23 @@ import {CaseDataByNode} from 'types/caseData';
 import {Simulations, SimulationModel, SimulationDataByNode, SimulationMetaData} from 'types/scenario';
 import {Dictionary} from 'util/util';
 import data from '../assets/lk_germany_reduced.geojson?url';
-import {FeatureCollection, FeatureProperties} from 'types/map';
+import {GeoJSON, GeoJsonProperties} from 'geojson';
 import cologneDistricts from '../assets/stadtteile_cologne.geojson?url';
 import {District} from 'types/cologneDistricts';
 import searchbarMapData from '../assets/lk_germany_reduced_list.json?url';
 import searchbarCologneData from '../assets/stadtteile_cologne_list.json';
 import {useTranslation} from 'react-i18next';
 import {GroupResponse} from 'types/group';
+import {Color, color} from '@amcharts/amcharts5/.internal/core/util/Color';
+import {getScenarioPrimaryColor} from 'util/Theme';
+import {useTheme} from '@mui/material';
 
 // Create the context
 export const DataContext = createContext<{
-  geoData: FeatureCollection | undefined;
+  geoData: GeoJSON | undefined;
   mapData: {id: string; value: number}[] | undefined;
   areMapValuesFetching: boolean;
-  searchBarData: FeatureProperties[] | undefined;
-  chartCaseData: {day: string; value: number}[] | undefined;
-  chartSimulationData: ({day: string; value: number}[] | null)[] | undefined;
+  searchBarData: GeoJsonProperties[] | undefined;
   chartPercentileData: {day: string; value: number}[][] | undefined;
   chartGroupFilterData: Dictionary<{day: string; value: number}[]> | undefined;
   isChartDataFetching: boolean;
@@ -61,13 +62,20 @@ export const DataContext = createContext<{
   scenarioSimulationDataForCardFiltersValues: Dictionary<GroupResponse>[] | undefined;
   getId: number[] | undefined;
   scenarioSimulationDataForCard: (SimulationDataByNode | undefined)[] | undefined;
+  lineChartData:
+    | {
+        values: {day: string; value: number}[];
+        name: string;
+        color: Color;
+        valueYField: number | string;
+        tooltipText?: string;
+      }[]
+    | undefined;
 }>({
   geoData: undefined,
   mapData: undefined,
   areMapValuesFetching: false,
   searchBarData: undefined,
-  chartCaseData: undefined,
-  chartSimulationData: undefined,
   chartPercentileData: undefined,
   chartGroupFilterData: undefined,
   isChartDataFetching: false,
@@ -82,20 +90,17 @@ export const DataContext = createContext<{
   scenarioSimulationDataForCardFiltersValues: undefined,
   getId: undefined,
   scenarioSimulationDataForCard: undefined,
+  lineChartData: undefined,
 });
 
 // Create a provider component
 export const DataProvider = ({children}: {children: React.ReactNode}) => {
   const {t} = useTranslation();
-  const [geoData, setGeoData] = useState<FeatureCollection>();
+  const theme = useTheme();
+
+  const [geoData, setGeoData] = useState<GeoJSON>();
   const [mapData, setMapData] = useState<{id: string; value: number}[] | undefined>(undefined);
-  const [searchBarData, setSearchBarData] = useState<FeatureProperties[] | undefined>(undefined);
-  const [processedChartCaseData, setProcessedChartCaseData] = useState<{day: string; value: number}[] | undefined>(
-    undefined
-  );
-  const [processedChartSimulationData, setProcessedChartSimulationData] = useState<
-    ({day: string; value: number}[] | null)[] | undefined
-  >(undefined);
+  const [searchBarData, setSearchBarData] = useState<GeoJsonProperties[] | undefined>(undefined);
   const [processedChartPercentileData, setProcessedChartPercentileData] = useState<
     {day: string; value: number}[][] | undefined
   >(undefined);
@@ -103,6 +108,17 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
     Dictionary<{day: string; value: number}[]> | undefined
   >(undefined);
   const [simulationModelKey, setSimulationModelKey] = useState<string>('unset');
+
+  const [lineChartData, setLineChartData] = useState<
+    | {
+        values: {day: string; value: number}[];
+        name: string;
+        color: Color;
+        valueYField: string | number;
+        tooltipText?: string;
+      }[]
+    | undefined
+  >(undefined);
 
   const selectedDistrict = useAppSelector((state) => state.dataSelection.district.ags);
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
@@ -276,7 +292,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
             return feat;
           })
         );
-        setGeoData(geodata as FeatureCollection);
+        setGeoData(geodata as GeoJSON);
       },
       // on promises reject
       () => {
@@ -293,7 +309,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
       .then((response) => response.json())
       .then(
         // resolve Promise
-        (geojson: FeatureCollection) => {
+        (geojson: GeoJSON) => {
           setGeoData(geojson);
         },
         // reject promise
@@ -319,10 +335,10 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
       })
       .then(
         // Resolve Promise
-        (jsonlist: FeatureProperties[]) => {
+        (jsonlist: GeoJsonProperties[]) => {
           /* [CDtemp-begin] */
           // append germany to list
-          jsonlist.push({RS: '00000', GEN: t('germany'), BEZ: ''});
+          jsonlist.push({RS: '00000', GEN: t('germany'), BEZ: ''} as unknown as District);
           // append city districts
           jsonlist.push(
             ...(searchbarCologneData as unknown as Array<District>).map((dist) => {
@@ -335,8 +351,8 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
           );
           /* [CDtemp-end] */
           // sort list to put germany at the right place (loading and sorting takes 1.5 ~ 2 sec)
-          jsonlist.sort((a: FeatureProperties, b: FeatureProperties) => {
-            return a.GEN.toString().localeCompare(b.GEN.toString());
+          jsonlist.sort((a: GeoJsonProperties, b: GeoJsonProperties) => {
+            return String(a!.GEN).localeCompare(String(b!.GEN));
           });
           // fill countyList state with list
           setSearchBarData(jsonlist);
@@ -384,28 +400,6 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
 
   // This effect sets the chart data based on the selection.
   useEffect(() => {
-    if (chartCaseData && chartCaseData.results && chartCaseData.results.length > 0 && selectedCompartment) {
-      setProcessedChartCaseData(
-        chartCaseData.results.map((element: {day: string; compartments: {[key: string]: number}}) => {
-          return {day: element.day, value: element.compartments[selectedCompartment]} as {day: string; value: number};
-        })
-      );
-    }
-    if (chartSimulationData && chartSimulationData.length > 0 && selectedCompartment) {
-      setProcessedChartSimulationData(
-        chartSimulationData.map((element: SimulationDataByNode | null) => {
-          if (element && element.results && element.results.length > 0) {
-            return element.results.map((element: {day: string; compartments: {[key: string]: number}}) => {
-              return {day: element.day, value: element.compartments[selectedCompartment]} as {
-                day: string;
-                value: number;
-              };
-            });
-          }
-          return [];
-        })
-      );
-    }
     if (chartPercentileData && chartPercentileData.length > 0 && selectedCompartment) {
       setProcessedChartPercentileData(
         chartPercentileData.map((element: SelectedScenarioPercentileData) => {
@@ -432,15 +426,63 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
     // This should re-run whenever the data changes, or a different compartment is selected.
   }, [chartCaseData, chartGroupFilterData, chartPercentileData, chartSimulationData, selectedCompartment]);
 
+  useEffect(() => {
+    const lineChartData = [];
+    if (chartCaseData && chartCaseData.results && chartCaseData.results.length > 0 && selectedCompartment) {
+      const processedChartCaseData = chartCaseData.results.map(
+        (element: {day: string; compartments: {[key: string]: number}}) => {
+          return {day: element.day, value: element.compartments[selectedCompartment]} as {day: string; value: number};
+        }
+      );
+      lineChartData.push({
+        values: processedChartCaseData,
+        name: 'chart.caseData',
+        color: color('#000'),
+        valueYField: 0,
+      });
+    }
+    if (chartSimulationData && chartSimulationData.length > 0 && selectedCompartment) {
+      const processedChartSimulationData = chartSimulationData.map((element: SimulationDataByNode | null) => {
+        if (element && element.results && element.results.length > 0) {
+          return element.results.map((element: {day: string; compartments: {[key: string]: number}}) => {
+            return {day: element.day, value: element.compartments[selectedCompartment]} as {
+              day: string;
+              value: number;
+            };
+          });
+        }
+        return [];
+      });
+      const scenarioNames = [
+        'scenario-names.baseline',
+        'scenario-names.closed_schools',
+        'scenario-names.remote_work',
+        'scenario-names.10p_reduced_contacts',
+      ];
+      let scenarioNamesIndex = 0;
+      for (let i = 0; i < processedChartSimulationData.length; i++) {
+        if (processedChartSimulationData[i]) {
+          lineChartData.push({
+            values: processedChartSimulationData[i],
+            name: scenarioNames[scenarioNamesIndex],
+            color: color(getScenarioPrimaryColor(i, theme)),
+            valueYField: i,
+            tooltipText: `[bold ${getScenarioPrimaryColor(i, theme)}]${scenarioNames[scenarioNamesIndex++]}:[/] {${i}}`,
+          });
+        }
+      }
+    }
+    setLineChartData(lineChartData);
+    // This should re-run whenever the data changes, or a different compartment is selected.
+  }, [activeScenarios, chartCaseData, chartSimulationData, selectedCompartment, theme]);
+
   return (
     <DataContext.Provider
       value={{
-        geoData: geoData,
-        mapData: mapData,
+        geoData,
+        mapData,
         areMapValuesFetching: mapIsCaseDataFetching || mapIsSimulationDataFetching,
-        searchBarData: searchBarData,
-        chartCaseData: processedChartCaseData,
-        chartSimulationData: processedChartSimulationData,
+        searchBarData,
         chartPercentileData: processedChartPercentileData,
         chartGroupFilterData: processedChartGroupFilterData,
         isChartDataFetching: chartCaseDataFetching || chartSimulationFetching,
@@ -454,7 +496,8 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
         caseScenarioData,
         scenarioSimulationDataForCardFiltersValues,
         getId,
-        scenarioSimulationDataForCard: scenarioSimulationDataForCard,
+        scenarioSimulationDataForCard,
+        lineChartData,
       }}
     >
       {children}
