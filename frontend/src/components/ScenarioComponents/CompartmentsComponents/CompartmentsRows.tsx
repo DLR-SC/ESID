@@ -10,28 +10,28 @@ import {Localization} from 'types/localization';
 import {Dictionary} from 'util/util';
 
 interface CompartmentsRowsProps {
-  /* Boolean to determine if the compartments are expanded */
+  /** Boolean to determine if the compartments are expanded */
   compartmentsExpanded: boolean;
 
-  /* Array of compartment names */
+  /** Array of compartment names */
   compartments: string[];
 
-  /* Currently selected compartment */
+  /** Currently selected compartment */
   selectedCompartment: string;
 
-  /* Function to set the selected compartment */
+  /** Function to set the selected compartment */
   setSelectedCompartment: Dispatch<SetStateAction<string>>;
 
-  /* Minimum number of compartment rows */
+  /** Minimum number of compartment rows */
   minCompartmentsRows: number;
 
-  /* Maximum number of compartment rows */
+  /** Maximum number of compartment rows */
   maxCompartmentsRows: number;
 
-  /* Values for each compartment */
+  /** Values for each compartment */
   compartmentValues: Dictionary<number> | null;
 
-  /* An object containing localization information (translation & number formattation). */
+  /** An object containing localization information (translation & number formattation). */
   localization?: Localization;
 }
 

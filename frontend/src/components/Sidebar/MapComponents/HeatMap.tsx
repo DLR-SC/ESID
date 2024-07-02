@@ -8,15 +8,15 @@ import {Feature, GeoJSON, GeoJsonProperties} from 'geojson';
 import svgZoomResetURL from '../../../../assets/svg/zoom_out_map_white_24dp.svg?url';
 import svgZoomInURL from '../../../../assets/svg/zoom_in_white_24dp.svg?url';
 import svgZoomOutURL from '../../../../assets/svg/zoom_out_white_24dp.svg?url';
-import {HeatmapLegend} from '../../../types/heatmapLegend';
 import {Box} from '@mui/material';
+import useMapChart from 'components/shared/HeatMap/Map';
+import usePolygonSeries from 'components/shared/HeatMap/Polygon';
+import {HeatmapLegend} from '../../../types/heatmapLegend';
 import {useTheme} from '@mui/material/styles';
 import React from 'react';
 import {Localization} from 'types/localization';
 import useRoot from 'components/shared/Root';
-import useMapChart from 'components/shared/HeatMap/Map';
 import useZoomControl from 'components/shared/HeatMap/Zoom';
-import usePolygonSeries from 'components/shared/HeatMap/Polygon';
 import {useConst} from 'util/hooks';
 
 interface MapProps {
@@ -57,10 +57,10 @@ interface MapProps {
   values: {id: string | number; value: number}[] | undefined;
 
   /** Callback function to update the selected region's data. */
-  setSelectedArea: (area: Feature | GeoJsonProperties) => void;
+  setSelectedArea: (area: GeoJsonProperties) => void;
 
   /** The currently selected region's data. */
-  selectedArea: Feature | GeoJsonProperties;
+  selectedArea: GeoJsonProperties;
 
   /** The maximum aggregated value for the heatmap legend. */
   aggregatedMax: number;
@@ -219,7 +219,6 @@ export default function HeatMap({
         strokeWidth: 1,
         fillOpacity: fillOpacity,
       });
-
       polygonTemplate.states.create('hover', {
         stroke: am5.color(theme.palette.primary.main),
         strokeWidth: 2,
@@ -328,7 +327,7 @@ export default function HeatMap({
       polygonSeries.mapPolygons.each((polygon) => {
         const regionData = polygon.dataItem?.dataContext as GeoJsonProperties;
         if (!regionData) return;
-        regionData.value = map.get(regionData[areaId]) ?? Number.NaN;
+        regionData.value = map.get(regionData[areaId] as string | number) ?? Number.NaN;
         // determine fill color
         let fillColor = am5.color(defaultFill);
         if (Number.isFinite(regionData.value) && typeof regionData.value === 'number') {

@@ -6,7 +6,7 @@ import {render, screen} from '@testing-library/react';
 import {describe, test, expect} from 'vitest';
 import {Dictionary} from 'util/util';
 import {GroupFilter} from 'types/group';
-import {filterValue} from 'types/Cardtypes';
+import {filterValue} from 'types/card';
 import Theme from 'util/Theme';
 import {ThemeProvider} from '@mui/system';
 import DataCard from 'components/ScenarioComponents/CardsComponents/DataCard';

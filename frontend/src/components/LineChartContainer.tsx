@@ -15,7 +15,7 @@ export default function LineChartContainer() {
   const theme = useTheme();
   const dispatch = useAppDispatch();
 
-  const {chartPercentileData, chartGroupFilterData, isChartDataFetching, lineChartData} = useContext(DataContext);
+  const {chartPercentileData, isChartDataFetching, chartData} = useContext(DataContext);
 
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
@@ -27,7 +27,7 @@ export default function LineChartContainer() {
   const minDate = useAppSelector((state) => state.dataSelection.minDate);
   const maxDate = useAppSelector((state) => state.dataSelection.maxDate);
 
-  const [selectedDate, setSelectedDate] = useState<string>(selectedDateInStore ? selectedDateInStore : '2024-08-07');
+  const [selectedDate, setSelectedDate] = useState<string>(selectedDateInStore ?? '2024-08-07');
   const [referenceDayb, setReferenceDayb] = useState<number>(0);
 
   const localization = useMemo(() => {
@@ -67,9 +67,8 @@ export default function LineChartContainer() {
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
         setReferenceDayBottom={setReferenceDayb}
-        lineChartData={lineChartData}
+        lineChartData={chartData}
         percentileData={chartPercentileData}
-        groupFilterData={chartGroupFilterData}
         minDate={minDate}
         maxDate={maxDate}
         selectedScenario={selectedScenario}

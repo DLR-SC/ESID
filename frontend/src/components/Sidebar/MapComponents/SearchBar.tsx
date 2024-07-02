@@ -112,7 +112,7 @@ export default function SearchBar({
           // provide countyList as options for drop down
           options={data || []}
           // group dropdown contents by first letter (json array needs to be sorted alphabetically by name for this to work correctly)
-          groupBy={sortProperty ? (option) => option![sortProperty].toString()[0] : undefined}
+          groupBy={sortProperty ? (option) => (option![sortProperty] as string)[0] : undefined}
           // provide function to display options in dropdown menu
           getOptionLabel={optionLabel}
           sx={{

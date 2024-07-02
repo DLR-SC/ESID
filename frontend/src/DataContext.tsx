@@ -38,9 +38,10 @@ import searchbarMapData from '../assets/lk_germany_reduced_list.json?url';
 import searchbarCologneData from '../assets/stadtteile_cologne_list.json';
 import {useTranslation} from 'react-i18next';
 import {GroupResponse} from 'types/group';
-import {Color, color} from '@amcharts/amcharts5/.internal/core/util/Color';
+import {color} from '@amcharts/amcharts5/.internal/core/util/Color';
 import {getScenarioPrimaryColor} from 'util/Theme';
 import {useTheme} from '@mui/material';
+import {LineChartData} from 'types/lineChart';
 
 // Create the context
 export const DataContext = createContext<{
@@ -48,49 +49,37 @@ export const DataContext = createContext<{
   mapData: {id: string; value: number}[] | undefined;
   areMapValuesFetching: boolean;
   searchBarData: GeoJsonProperties[] | undefined;
+  chartData: LineChartData[] | undefined;
   chartPercentileData: {day: string; value: number}[][] | undefined;
-  chartGroupFilterData: Dictionary<{day: string; value: number}[]> | undefined;
   isChartDataFetching: boolean;
   startValues: Dictionary<number> | null;
   groupCategories: GroupCategories | undefined;
   groupSubCategories: GroupSubcategories | undefined;
   scenarioListData: Simulations | undefined;
-  referenceDay: string | null;
   caseScenarioSimulationData: CaseDataByNode | undefined;
   simulationModelData: SimulationModel | undefined;
   caseScenarioData: SimulationDataByNode | undefined;
   scenarioSimulationDataForCardFiltersValues: Dictionary<GroupResponse>[] | undefined;
   getId: number[] | undefined;
   scenarioSimulationDataForCard: (SimulationDataByNode | undefined)[] | undefined;
-  lineChartData:
-    | {
-        values: {day: string; value: number}[];
-        name: string;
-        color: Color;
-        valueYField: number | string;
-        tooltipText?: string;
-      }[]
-    | undefined;
 }>({
   geoData: undefined,
   mapData: undefined,
   areMapValuesFetching: false,
   searchBarData: undefined,
+  chartData: undefined,
   chartPercentileData: undefined,
-  chartGroupFilterData: undefined,
   isChartDataFetching: false,
   startValues: null,
   groupCategories: undefined,
   groupSubCategories: undefined,
   scenarioListData: undefined,
-  referenceDay: null,
   caseScenarioSimulationData: undefined,
   simulationModelData: undefined,
   caseScenarioData: undefined,
   scenarioSimulationDataForCardFiltersValues: undefined,
   getId: undefined,
   scenarioSimulationDataForCard: undefined,
-  lineChartData: undefined,
 });
 
 // Create a provider component
@@ -104,21 +93,8 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
   const [processedChartPercentileData, setProcessedChartPercentileData] = useState<
     {day: string; value: number}[][] | undefined
   >(undefined);
-  const [processedChartGroupFilterData, setProcessedChartGroupFilterData] = useState<
-    Dictionary<{day: string; value: number}[]> | undefined
-  >(undefined);
   const [simulationModelKey, setSimulationModelKey] = useState<string>('unset');
-
-  const [lineChartData, setLineChartData] = useState<
-    | {
-        values: {day: string; value: number}[];
-        name: string;
-        color: Color;
-        valueYField: string | number;
-        tooltipText?: string;
-      }[]
-    | undefined
-  >(undefined);
+  const [chartData, setChartData] = useState<LineChartData[] | undefined>(undefined);
 
   const selectedDistrict = useAppSelector((state) => state.dataSelection.district.ags);
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
@@ -127,9 +103,8 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
   const selectedDate = useAppSelector((state) => state.dataSelection.date);
   const groupFilterList = useAppSelector((state) => state.dataSelection.groupFilters);
   const scenarioList = useAppSelector((state) => state.scenarioList);
-  const referenceDay = useAppSelector((state) => state.dataSelection.simulationStart);
 
-  const startValues = useGetSimulationStartValues(selectedDistrict, referenceDay);
+  const startValues = useGetSimulationStartValues(selectedDistrict);
 
   const caseScenarioSimulationData = useGetCaseDataByDistrictQuery({
     node: '00000',
@@ -149,7 +124,6 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
   const {data: simulationModelData} = useGetSimulationModelQuery(simulationModelKey, {
     skip: simulationModelKey === 'unset',
   });
-
   const {data: caseScenarioData} = useGetCaseDataSingleSimulationEntryQuery(
     {
       node: selectedDistrict,
@@ -186,7 +160,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
       groups: ['total'],
       compartments: [selectedCompartment ?? ''],
     },
-    {skip: selectedScenario === null || selectedScenario === 0 || !selectedCompartment || !selectedDate}
+    {skip: selectedScenario == null || selectedScenario === 0 || !selectedCompartment || !selectedDate}
   );
 
   const {currentData: mapCaseData, isFetching: mapIsCaseDataFetching} = useGetCaseDataByDateQuery(
@@ -195,7 +169,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
       groups: ['total'],
       compartments: [selectedCompartment ?? ''],
     },
-    {skip: selectedScenario === null || selectedScenario > 0 || !selectedCompartment || !selectedDate}
+    {skip: selectedScenario == null || selectedScenario > 0 || !selectedCompartment || !selectedDate}
   );
 
   const {data: chartSimulationData, isFetching: chartSimulationFetching} = useGetMultipleSimulationDataByNodeQuery(
@@ -365,11 +339,13 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
     // this init should only run once on first render
   }, [t]);
 
+  // This useEffect is used in order to set the SimulationModelKey
   useEffect(() => {
     if (simulationModelsData && simulationModelsData.results.length > 0) {
       const {key} = simulationModelsData.results[0];
       setSimulationModelKey(key);
     }
+    // This effect should re-run whenever simulationModelsData changes.
   }, [simulationModelsData]);
 
   // This effect sets the data for the map according to the selections.
@@ -398,6 +374,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
     // This effect should re-run whenever there is new data or the selected card or compartment changed.
   }, [mapSimulationData, selectedCompartment, mapCaseData, selectedScenario]);
 
+  // To be refactored
   // This effect sets the chart data based on the selection.
   useEffect(() => {
     if (chartPercentileData && chartPercentileData.length > 0 && selectedCompartment) {
@@ -409,50 +386,53 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
         })
       );
     }
-    if (chartGroupFilterData && Object.keys(chartGroupFilterData).length > 0 && selectedCompartment) {
-      const processedData: Dictionary<{day: string; value: number}[]> = {};
-      Object.keys(chartGroupFilterData).forEach((key) => {
-        processedData[key] = chartGroupFilterData[key].results.map(
-          (element: {day: string; compartments: {[key: string]: number}}) => {
-            return {day: element.day, value: element.compartments[selectedCompartment]} as {
-              day: string;
-              value: number;
-            };
-          }
-        );
-      });
-      setProcessedChartGroupFilterData(processedData);
-    }
     // This should re-run whenever the data changes, or a different compartment is selected.
   }, [chartCaseData, chartGroupFilterData, chartPercentileData, chartSimulationData, selectedCompartment]);
 
+  // This effect sets the chart case data based on the selection.
   useEffect(() => {
-    const lineChartData = [];
+    const lineChartData: LineChartData[] = [];
     if (chartCaseData && chartCaseData.results && chartCaseData.results.length > 0 && selectedCompartment) {
+      // Process the case data for the selected compartment
       const processedChartCaseData = chartCaseData.results.map(
         (element: {day: string; compartments: {[key: string]: number}}) => {
           return {day: element.day, value: element.compartments[selectedCompartment]} as {day: string; value: number};
         }
       );
+      // Push the processed case data into the line chart data
       lineChartData.push({
         values: processedChartCaseData,
         name: 'chart.caseData',
-        color: color('#000'),
         valueYField: 0,
+        stroke: {color: color('#000')},
+        serieId: 0,
       });
     }
+    // Update the chart data state with the new line chart data
+    setChartData((prevData) => {
+      if (prevData) {
+        const seriesWithoutCase = prevData.filter((serie) => serie.serieId !== 0);
+        if (seriesWithoutCase.length > 0) return [...seriesWithoutCase, ...lineChartData];
+      }
+      return lineChartData;
+    });
+    // This should re-run whenever the case data changes, or a different compartment is selected.
+  }, [chartCaseData, selectedCompartment]);
+
+  // This effect sets the chart simulation data based on the selection.
+  useEffect(() => {
+    const lineChartData: LineChartData[] = [];
     if (chartSimulationData && chartSimulationData.length > 0 && selectedCompartment) {
+      // Process the simulation data for the selected compartment
       const processedChartSimulationData = chartSimulationData.map((element: SimulationDataByNode | null) => {
         if (element && element.results && element.results.length > 0) {
           return element.results.map((element: {day: string; compartments: {[key: string]: number}}) => {
-            return {day: element.day, value: element.compartments[selectedCompartment]} as {
-              day: string;
-              value: number;
-            };
+            return {day: element.day, value: element.compartments[selectedCompartment]} as {day: string; value: number};
           });
         }
         return [];
       });
+      // Define the scenario names for the simulation data
       const scenarioNames = [
         'scenario-names.baseline',
         'scenario-names.closed_schools',
@@ -460,21 +440,85 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
         'scenario-names.10p_reduced_contacts',
       ];
       let scenarioNamesIndex = 0;
+      // Push the processed simulation data into the line chart data
       for (let i = 0; i < processedChartSimulationData.length; i++) {
         if (processedChartSimulationData[i]) {
           lineChartData.push({
             values: processedChartSimulationData[i],
             name: scenarioNames[scenarioNamesIndex],
-            color: color(getScenarioPrimaryColor(i, theme)),
+            stroke: {color: color(getScenarioPrimaryColor(i, theme))},
+            serieId: i,
             valueYField: i,
             tooltipText: `[bold ${getScenarioPrimaryColor(i, theme)}]${scenarioNames[scenarioNamesIndex++]}:[/] {${i}}`,
           });
         }
       }
     }
-    setLineChartData(lineChartData);
-    // This should re-run whenever the data changes, or a different compartment is selected.
-  }, [activeScenarios, chartCaseData, chartSimulationData, selectedCompartment, theme]);
+    // Update the chart data state with the new line chart data
+    setChartData((prevData) => {
+      if (prevData) {
+        const seriesWithoutScenarios = prevData.filter(
+          (serie) => typeof serie.serieId === 'string' || serie.serieId === 0
+        );
+        if (seriesWithoutScenarios.length > 0) return [...seriesWithoutScenarios, ...lineChartData];
+      }
+      return lineChartData;
+    });
+    // This should re-run whenever the simulation data changes, or a different compartment is selected.
+  }, [chartSimulationData, selectedCompartment, theme]);
+
+  // This effect sets the chart group filter data based on the selection.
+  useEffect(() => {
+    const lineChartData: LineChartData[] = [];
+    if (
+      chartGroupFilterData &&
+      Object.keys(chartGroupFilterData).length > 0 &&
+      selectedCompartment &&
+      selectedScenario
+    ) {
+      const processedData: Dictionary<{day: string; value: number}[]> = {};
+      // Process the group filter data for the selected compartment
+      Object.keys(chartGroupFilterData).forEach((key) => {
+        processedData[key] = chartGroupFilterData[key].results.map(
+          (element: {day: string; compartments: {[key: string]: number}}) => {
+            return {day: element.day, value: element.compartments[selectedCompartment]} as {day: string; value: number};
+          }
+        );
+      });
+      // Define stroke styles for different group filters
+      const groupFilterStrokes = [
+        [2, 4], // dotted
+        [8, 4], // dashed
+        [8, 4, 2, 4], // dash-dotted
+        [8, 4, 2, 4, 2, 4], // dash-dot-dotted
+      ];
+      // Push the processed group filter data into the line chart data
+      for (let i = 0; i < Object.keys(processedData).length; i++) {
+        lineChartData.push({
+          values: processedData[Object.keys(processedData)[i]],
+          name: Object.keys(processedData)[i],
+          stroke: {
+            color: color(getScenarioPrimaryColor(selectedScenario, theme)),
+            strokeDasharray: groupFilterStrokes[i % groupFilterStrokes.length],
+          },
+          serieId: `group-filter-${Object.keys(processedData)[i]}`,
+          valueYField: Object.keys(processedData)[i],
+          tooltipText: `[bold ${getScenarioPrimaryColor(selectedScenario, theme)}]${Object.keys(processedData)[i]}:[/] {${Object.keys(processedData)[i]}}`,
+        });
+      }
+    }
+    // Update the chart data state with the new line chart data
+    setChartData((prevData) => {
+      if (prevData) {
+        const seriesWithoutGroup = prevData.filter(
+          (serie) => typeof serie.serieId === 'number' || !serie.serieId.startsWith('group-filter')
+        );
+        if (seriesWithoutGroup.length > 0) return [...seriesWithoutGroup, ...lineChartData];
+      }
+      return lineChartData;
+    });
+    // This should re-run whenever the group filter data changes, or a different compartment is selected.
+  }, [chartGroupFilterData, selectedCompartment, selectedScenario, theme]);
 
   return (
     <DataContext.Provider
@@ -483,21 +527,19 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
         mapData,
         areMapValuesFetching: mapIsCaseDataFetching || mapIsSimulationDataFetching,
         searchBarData,
+        chartData,
         chartPercentileData: processedChartPercentileData,
-        chartGroupFilterData: processedChartGroupFilterData,
         isChartDataFetching: chartCaseDataFetching || chartSimulationFetching,
         startValues,
         groupCategories,
         groupSubCategories,
         scenarioListData,
-        referenceDay,
         caseScenarioSimulationData: caseScenarioSimulationData.data,
         simulationModelData: simulationModelData?.results,
         caseScenarioData,
         scenarioSimulationDataForCardFiltersValues,
         getId,
         scenarioSimulationDataForCard,
-        lineChartData,
       }}
     >
       {children}

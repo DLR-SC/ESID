@@ -32,20 +32,14 @@ import useLineSeries, {useLineSeriesList} from 'components/shared/LineChart/Line
 import {GroupFilter} from 'types/group';
 import {ScenarioList} from 'types/scenario';
 import {LineSeries} from '@amcharts/amcharts5/.internal/charts/xy/series/LineSeries';
+import {LineChartData} from 'types/lineChart';
 
 interface LineChartProps {
   /** Optional unique identifier for the chart. Defaults to 'chartdiv'. */
   chartId?: string;
 
-  lineChartData:
-    | {
-        values: {day: string; value: number}[];
-        name: string;
-        color: Color;
-        valueYField: string | number;
-        tooltipText?: string;
-      }[]
-    | undefined;
+  /** Array of line chart data points to be plotted on the chart. */
+  lineChartData: LineChartData[] | undefined;
 
   /** The currently selected date in the chart in ISO format (YYYY-MM-DD). */
   selectedDate: string;
@@ -64,12 +58,6 @@ interface LineChartProps {
    * This data is used to plot percentile ranges on the chart.
    */
   percentileData?: {day: string; value: number}[][] | null;
-
-  /**
-   * Optional dictionary of filtered group data points, where each entry includes a `day` and its corresponding `value`.
-   * This data is used to plot different filtered group data on the chart.
-   */
-  groupFilterData?: Dictionary<{day: string; value: number}[]> | null;
 
   /** Optional minimum date for the chart in ISO format (YYYY-MM-DD). */
   minDate?: string | null;
@@ -114,11 +102,11 @@ interface LineChartProps {
  */
 export default function LineChart({
   chartId = 'chartdiv',
+  lineChartData,
   selectedDate,
   setSelectedDate,
   setReferenceDayBottom = () => {},
   percentileData = null,
-  groupFilterData = null,
   minDate = null,
   maxDate = null,
   selectedScenario = null,
@@ -133,7 +121,6 @@ export default function LineChart({
     customLang: 'global',
     overrides: {},
   },
-  lineChartData,
 }: LineChartProps): JSX.Element {
   const {t: defaultT, i18n} = useTranslation();
   const {t: customT} = useTranslation(localization.customLang);
@@ -372,6 +359,47 @@ export default function LineChart({
     };
   }, [root, chart, xAxis, setReferenceDayX]);
 
+  const lineChartDataSettings = useMemo(() => {
+    if (!root || !xAxis || !yAxis || !lineChartData) {
+      return [];
+    }
+
+    return lineChartData.map((line) => ({
+      xAxis: xAxis,
+      yAxis: yAxis,
+      id: `${chartId}_${line.serieId}`,
+      name:
+        localization.overrides && localization.overrides[line.name]
+          ? customT(localization.overrides[line.name])
+          : defaultT(line.name),
+      valueXField: 'date',
+      valueYField: String(line.valueYField),
+      connect: false,
+      // Fallback Tooltip (if HTML breaks for some reason)
+      tooltip: Tooltip.new(root, {
+        labelText: line.tooltipText,
+      }),
+      stroke: line.stroke.color,
+    }));
+  }, [lineChartData, root, xAxis, yAxis, chartId, localization, defaultT, customT]);
+
+  useLineSeriesList(
+    root,
+    chart,
+    lineChartDataSettings,
+    useCallback(
+      (series: LineSeries) => {
+        if (!lineChartData) return;
+        const serie = lineChartData.find((line) => line.serieId === series.get('id')?.split('_')[1]);
+        series.strokes.template.setAll({
+          strokeWidth: serie?.stroke.strokeWidth ?? 2,
+          strokeDasharray: serie?.stroke.strokeDasharray ?? undefined,
+        });
+      },
+      [lineChartData]
+    )
+  );
+
   const percentileSeriesSettings = useMemo(() => {
     if (!xAxis || !yAxis || !selectedScenario) {
       return null;
@@ -405,89 +433,6 @@ export default function LineChart({
       series.fills.template.setAll({
         fillOpacity: 0.3,
         visible: true,
-      });
-    })
-  );
-
-  const lineChartDataSettings = useMemo(() => {
-    if (!root || !xAxis || !yAxis || !lineChartData) {
-      return [];
-    }
-
-    return lineChartData.map((line) => ({
-      xAxis: xAxis,
-      yAxis: yAxis,
-      id: `${chartId}_${line.valueYField}`,
-      name:
-        localization.overrides && localization.overrides[line.name]
-          ? customT(localization.overrides[line.name])
-          : defaultT(line.name),
-      valueXField: 'date',
-      valueYField: String(line.valueYField),
-      connect: false,
-      // Fallback Tooltip (if HTML breaks for some reason)
-      tooltip: Tooltip.new(root, {
-        labelText: line.tooltipText,
-      }),
-      stroke: line.color,
-    }));
-  }, [lineChartData, root, xAxis, yAxis, chartId, localization, defaultT, customT]);
-
-  useLineSeriesList(
-    root,
-    chart,
-    lineChartDataSettings,
-    useConst((series) => {
-      series.strokes.template.setAll({
-        strokeWidth: 2,
-      });
-    })
-  );
-
-  const groupFilterStrokes = useMemo(() => {
-    return [
-      [2, 4], // dotted
-      [8, 4], // dashed
-      [8, 4, 2, 4], // dash-dotted
-      [8, 4, 2, 4, 2, 4], // dash-dot-dotted
-    ];
-  }, []);
-
-  const groupFilterSeriesSettings = useMemo(() => {
-    if (!root || !xAxis || !yAxis || !groupFilterList || !selectedScenario) {
-      return [];
-    }
-
-    // Loop through visible group filters
-    return Object.values(groupFilterList)
-      .filter((groupFilter) => groupFilter.isVisible)
-      .map((groupFilter) => ({
-        xAxis: xAxis,
-        yAxis: yAxis,
-        id: `${chartId}_group-filter-${groupFilter.name}`,
-        name: groupFilter.name,
-        valueXField: 'date',
-        valueYField: groupFilter.name,
-        connect: false,
-        // Fallback Tooltip (if HTML breaks for some reason)
-        // Use color of selected scenario (scenario ID is 1-based index, color list is 0-based index) loop if scenario ID exceeds length of color list; use first color of palette (main color)
-        tooltip: Tooltip.new(root, {
-          labelText: `[bold ${getScenarioPrimaryColor(selectedScenario, theme)}]${
-            groupFilter.name
-          }:[/] {${groupFilter.name}}`,
-        }),
-        stroke: color(getScenarioPrimaryColor(selectedScenario, theme)),
-      }));
-  }, [groupFilterList, root, selectedScenario, xAxis, yAxis, chartId, theme]);
-  useLineSeriesList(
-    root,
-    chart,
-    groupFilterSeriesSettings,
-    useConst((series, i) => {
-      series.strokes.template.setAll({
-        strokeWidth: 2,
-        // Loop through stroke list if group filters exceeds list length
-        strokeDasharray: groupFilterStrokes[i % groupFilterStrokes.length],
       });
     })
   );
@@ -561,10 +506,20 @@ export default function LineChart({
 
     if (lineChartData) {
       lineChartData.forEach((serie) => {
-        const id = serie.valueYField;
-        serie.values.forEach((entry) => {
-          dataMap.set(entry.day, {...dataMap.get(entry.day), [id]: entry.value});
-        });
+        const id = serie.serieId;
+        if (activeScenarios && activeScenarios.includes(Number(id))) {
+          serie.values.forEach((entry) => {
+            dataMap.set(entry.day, {...dataMap.get(entry.day), [id]: entry.value});
+          });
+        } else if (groupFilterList && typeof id === 'string' && id.startsWith('group-filter-')) {
+          const groupFilterName = serie.name;
+          Object.values(groupFilterList).forEach((groupFilter) => {
+            if (groupFilter.name === groupFilterName && groupFilter.isVisible)
+              serie.values.forEach((entry) => {
+                dataMap.set(entry.day, {...dataMap.get(entry.day), [groupFilterName]: entry.value});
+              });
+          });
+        }
       });
     }
 
@@ -580,24 +535,25 @@ export default function LineChart({
       });
     }
 
-    // Add groupFilter data of visible filters
-    if (groupFilterList && groupFilterData) {
-      Object.values(groupFilterList).forEach((groupFilter) => {
-        if (groupFilter?.isVisible) {
-          // Check if data for filter is available (else report error)
-          if (groupFilterData[groupFilter.name]) {
-            groupFilterData[groupFilter.name].forEach((entry) => {
-              dataMap.set(entry.day, {
-                ...dataMap.get(entry.day),
-                [groupFilter.name]: entry.value,
-              });
-            });
-          } else {
-            console.error(`ERROR: missing data for "${groupFilter.name}" filter`);
-          }
-        }
-      });
-    }
+    // // Add groupFilter data of visible filters
+    // if (groupFilterList && groupFilterData) {
+    //   Object.values(groupFilterList).forEach((groupFilter) => {
+    //     if (groupFilter?.isVisible) {
+    //       // Check if data for filter is available (else report error)
+    //       if (groupFilterData[groupFilter.name]) {
+    //         groupFilterData[groupFilter.name].forEach((entry) => {
+    //           console.log(groupFilter.name);
+    //           dataMap.set(entry.day, {
+    //             ...dataMap.get(entry.day),
+    //             [groupFilter.name]: entry.value,
+    //           });
+    //         });
+    //       } else {
+    //         console.error(`ERROR: missing data for "${groupFilter.name}" filter`);
+    //       }
+    //     }
+    //   });
+    // }
 
     // Sort map by date
     const dataMapSorted = new Map(Array.from(dataMap).sort(([a], [b]) => String(a).localeCompare(b)));
@@ -658,7 +614,12 @@ export default function LineChart({
                  * - valueYField
                  * - stroke
                  */
-                if (!seriesID || !series.get('name') || !series.get('valueYField') || !series.get('stroke')) {
+                if (
+                  seriesID == null ||
+                  !series.get('name') ||
+                  series.get('valueYField') == null ||
+                  !series.get('stroke')
+                ) {
                   console.error(
                     'ERROR: missing series property: ',
                     seriesID,
@@ -819,7 +780,6 @@ export default function LineChart({
     // Re-run this effect whenever the data itself changes (or any variable the effect uses)
   }, [
     percentileData,
-    groupFilterData,
     activeScenarios,
     selectedScenario,
     scenarioList,

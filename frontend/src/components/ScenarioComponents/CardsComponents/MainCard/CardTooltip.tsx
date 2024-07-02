@@ -66,7 +66,7 @@ export default function CardTooltip({
    */
   const manageScenario = (index: number) => {
     const isActive = activeScenarios?.includes(index);
-    if (isActive && activeScenarios?.length === 0) {
+    if (isActive && activeScenarios?.length === 1) {
       setActiveScenarios(null);
       setSelectedScenario(null);
     }

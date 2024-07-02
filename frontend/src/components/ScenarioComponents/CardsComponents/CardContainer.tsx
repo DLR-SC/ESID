@@ -8,7 +8,7 @@ import React from 'react';
 import {useTheme} from '@mui/material/styles';
 import Box from '@mui/material/Box/Box';
 import {Scenario} from 'store/ScenarioSlice';
-import {cardValue, filterValue} from 'types/Cardtypes';
+import {cardValue, filterValue} from 'types/card';
 import {GroupFilter} from 'types/group';
 import {Localization} from 'types/localization';
 import {getScenarioPrimaryColor} from 'util/Theme';

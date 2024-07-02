@@ -13,19 +13,19 @@ import {useTranslation} from 'react-i18next';
 import {dateToISOString} from 'util/util';
 
 interface DatePickerProps {
-  /* Start day, the one displayed with a dashed line in the line chart */
+  /** Start day, the one displayed with a dashed line in the line chart */
   startDay: string | null;
 
-  /* Function used to set the new start date */
+  /** Function used to set the new start date */
   setStartDay: Dispatch<SetStateAction<string | null>>;
 
-  /* Minimum date pickable for which some data are provided */
+  /** Minimum date pickable for which some data are provided */
   minDate: string | null;
 
-  /* Maximum date pickable for which some data are provided */
+  /** Maximum date pickable for which some data are provided */
   maxDate: string | null;
 
-  /*An object containing localization information (translation & number formattation).*/
+  /** An object containing localization information (translation & number formattation).*/
   localization?: Localization;
 }
 

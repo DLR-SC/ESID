@@ -14,16 +14,16 @@ interface GroupFilterEditorProps {
   /** The GroupFilter item to be edited. */
   groupFilter: GroupFilter;
 
-  /* A dictionary of group filters.*/
+  /** A dictionary of group filters.*/
   groupFilters: Dictionary<GroupFilter>;
 
-  /* An array of group category.*/
+  /** An array of group category.*/
   groupCategories: GroupCategory[];
 
-  /* An array of group subcategory.*/
+  /** An array of group subcategory.*/
   groupSubCategories: GroupSubcategory[];
 
-  /* A function that allows setting the groupFilter state so that if the user adds a filter, the new filter will be visible */
+  /** A function that allows setting the groupFilter state so that if the user adds a filter, the new filter will be visible */
   setGroupFilters: React.Dispatch<React.SetStateAction<Dictionary<GroupFilter>>>;
 
   /**
@@ -39,7 +39,7 @@ interface GroupFilterEditorProps {
    */
   unsavedChangesCallback: (unsavedChanges: boolean) => void;
 
-  /* An object containing localization information (translation & number formattation).*/
+  /** An object containing localization information (translation & number formattation).*/
   localization?: Localization;
 }
 

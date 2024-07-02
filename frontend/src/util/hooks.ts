@@ -102,6 +102,14 @@ export function useEffectDebugger(effectHook: {(): void}, dependencies: Array<un
   useEffect(effectHook, [effectHook, ...dependencies]);
 }
 
+/**
+ * Returns a constant value that persists across re-renders.
+ * The value is initialized only once and then stored in a ref.
+ *
+ * @template T - The type of the value.
+ * @param {T} value - The initial value.
+ * @returns {T} - The constant value.
+ */
 export function useConst<T>(value: T): T {
   const ref = useRef<T>();
 

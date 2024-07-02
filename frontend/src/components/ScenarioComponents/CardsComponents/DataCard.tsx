@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import React, {useEffect, useMemo, useState} from 'react';
 import MainCard from './MainCard/MainCard';
 import FiltersContainer from './GroupFilter/FiltersContainer';
-import {filterValue} from 'types/Cardtypes';
+import {filterValue} from 'types/card';
 import {GroupFilter} from 'types/group';
 import {Localization} from 'types/localization';
 import {Dictionary} from 'util/util';
@@ -54,7 +54,7 @@ interface DataCardProps {
   /** The number of the selected scenario.*/
   numberSelectedScenario: number | null;
 
-  /*The minimum number of compartment rows.*/
+  /** The minimum number of compartment rows.*/
   minCompartmentsRows: number;
 
   /** The maximum number of compartment rows.*/

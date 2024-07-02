@@ -6,9 +6,9 @@ import {describe, test, expect} from 'vitest';
 import {render, screen} from '@testing-library/react';
 import * as am5 from '@amcharts/amcharts5';
 import HeatMap from 'components/Sidebar/MapComponents/HeatMap';
-import {FeatureProperties} from 'types/map';
 import {ThemeProvider} from '@mui/system';
 import Theme from 'util/Theme';
+import {FeatureCollection, GeoJsonProperties} from 'geojson';
 
 const HeatMapTest = () => {
   const geoData = useMemo(() => {
@@ -75,7 +75,7 @@ const HeatMapTest = () => {
     []
   );
 
-  const [selectedArea, setSelectedArea] = useState<FeatureProperties>(defaultValue);
+  const [selectedArea, setSelectedArea] = useState<GeoJsonProperties>(defaultValue);
   const [aggregatedMax, setAggregatedMax] = useState<number>(1);
   const legend = useMemo(() => {
     return {
@@ -93,7 +93,7 @@ const HeatMapTest = () => {
   return (
     <div data-testid='map'>
       <HeatMap
-        mapData={geoData}
+        mapData={geoData as FeatureCollection}
         defaultSelectedValue={defaultValue}
         values={values}
         setSelectedArea={setSelectedArea}
@@ -102,7 +102,7 @@ const HeatMapTest = () => {
         setAggregatedMax={setAggregatedMax}
         legend={legend}
         legendRef={legendRef}
-        idValuesToMap={'RS'}
+        areaId={'RS'}
       />
     </div>
   );
