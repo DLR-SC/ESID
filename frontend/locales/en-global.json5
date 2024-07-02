@@ -7,9 +7,11 @@
   topBar: {
     'icon-alt': 'ESID application logo',
     language: 'Language',
+    org: 'Organization',
     menu: {
       label: 'Application menu',
       login: 'Login',
+      logout: 'Logout',
       imprint: 'Imprint',
       'privacy-policy': 'Privacy Policy',
       accessibility: 'Accessibility',
