@@ -126,6 +126,7 @@ export default function HeatLegend({
     )
   );
 
+  // This effect is used to expose the legend object to the parent component
   useLayoutEffect(() => {
     if (!heatLegend) {
       return;
@@ -136,6 +137,7 @@ export default function HeatLegend({
     return () => {
       exposeLegend(null);
     };
+    // This effect should only run when the legend object changes
   }, [heatLegend, legend, min, max, exposeLegend]);
 
   return <Box id={unique_id} sx={style} />;

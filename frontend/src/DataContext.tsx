@@ -104,6 +104,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
   const groupFilterList = useAppSelector((state) => state.dataSelection.groupFilters);
   const scenarioList = useAppSelector((state) => state.scenarioList);
 
+
   const startValues = useGetSimulationStartValues(selectedDistrict);
 
   const caseScenarioSimulationData = useGetCaseDataByDistrictQuery({

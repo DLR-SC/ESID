@@ -74,13 +74,16 @@ export default function MapContainer() {
 
   const legendRef = useRef<am5.HeatLegend | null>(null);
 
+  // Set selected area on first load. If language change and selected area is germany, set default value again to update the name
   useEffect(() => {
     if (selectedArea?.RS === '00000') {
       setSelectedArea(defaultValue);
     }
+    // This effect should only run when the language changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language]);
 
+  // Set selected area in store
   useEffect(() => {
     dispatch(
       selectDistrict({
@@ -89,10 +92,13 @@ export default function MapContainer() {
         type: String(selectedArea?.['BEZ']),
       })
     );
+    // This effect should only run when the selectedArea changes
   }, [selectedArea, dispatch]);
 
+  // Set legend in store
   useEffect(() => {
     dispatch(selectHeatmapLegend({legend: legend}));
+    // This effect should only run when the legend changes
   }, [legend, dispatch]);
 
   const calculateToolTip = useCallback(

@@ -179,11 +179,13 @@ export default function HeatMap({
     )
   );
 
+  // This effect is responsible for setting the selected area when the home button is clicked.
   useEffect(() => {
     if (!zoom || !root || root.isDisposed()) return;
     zoom.homeButton.events.on('click', () => {
       setSelectedArea(defaultSelectedValue);
     });
+    // This effect should only run when the zoom control is set
   }, [zoom, root, setSelectedArea, defaultSelectedValue]);
 
   const chartSettings = useMemo(() => {
@@ -253,6 +255,7 @@ export default function HeatMap({
         void legendRef.current.hideTooltip();
       }
     });
+    // This effect should only run when the polygon series is set
   }, [polygonSeries, legendRef, localization, setSelectedArea, theme.palette.primary.main]);
 
   // This effect is responsible for showing the loading indicator if the data is not ready within 1 second. This
@@ -268,6 +271,7 @@ export default function HeatMap({
       clearTimeout(longLoadTimeout);
       setLongLoad(false);
     }
+    // This effect should only re-run when the fetching state changes
     // eslint-disable-next-line
   }, [isFetching, setLongLoad, setLongLoadTimeout]); // longLoadTimeout is deliberately ignored here.
 
@@ -282,6 +286,7 @@ export default function HeatMap({
       });
       setAggregatedMax(max);
     }
+    // This effect should only re-run when the fixedLegendMaxValue or values change
   }, [fixedLegendMaxValue, setAggregatedMax, values]);
 
   // Highlight selected polygon and reset last selected polygon
@@ -314,6 +319,7 @@ export default function HeatMap({
         }
       }
     });
+    // This effect should only re-run when the selectedArea or polygonSeries change
   }, [areaId, polygonSeries, selectedArea, theme.palette.background.default, theme.palette.primary.main]);
 
   // Update fill color and tooltip of map polygons based on values
@@ -358,6 +364,7 @@ export default function HeatMap({
         });
       });
     }
+    // This effect should only re-run when the selectedScenario, isFetching, values, aggregatedMax, longLoad, or polygonSeries change
   }, [
     root,
     chart,

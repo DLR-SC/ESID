@@ -117,6 +117,8 @@ export default function HeatLegendEdit({
           }
         );
     }
+
+    // This effect should only run once when the modal is opened the first time.
   }, [setHeatmapLegends, heatmapLegends, heatLegendEditOpen, legendPresetsUrl]);
 
   // This effect builds the list of available presets from the "defaultLegends" and "heatmapLegends".
@@ -134,6 +136,7 @@ export default function HeatLegendEdit({
     }
 
     setAvailablePresets(legends);
+    // This effect should only run when the scenario changes or the legends are loaded.
   }, [selectedScenario, defaultLegends, heatmapLegends, legend]);
 
   // This effect updates the selected legend, if a default legend is selected and the scenario changes.
@@ -143,6 +146,7 @@ export default function HeatLegendEdit({
     }
 
     selectLegendByName('Default');
+    // This effect should only run when the legend is a default legend or unitialized.
   }, [legend, selectLegendByName]);
 
   return (

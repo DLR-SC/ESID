@@ -217,6 +217,7 @@ export default function LineChart({
         xAxis: xAxis,
       })
     );
+    // This effect should re-run when chart, root and xAxis are initialized
   }, [chart, root, xAxis]);
 
   // Effect to add date selector filter to chart
@@ -260,6 +261,7 @@ export default function LineChart({
 
     xAxis.set('min', new Date(minDate).setHours(0));
     xAxis.set('max', new Date(maxDate).setHours(23, 59, 59));
+    // This effect should re-run when xAxis, minDate or maxDate changes
   }, [minDate, maxDate, xAxis]);
 
   const selectedDateRangeSettings = useMemo(() => {
@@ -336,6 +338,7 @@ export default function LineChart({
     setReferenceDayBottom(docPosition);
   }, [chart, root, xAxis, referenceDay, setReferenceDayBottom]);
 
+  // Effect to update reference day position
   useLayoutEffect(() => {
     if (!root || !chart || !xAxis) {
       return;
@@ -357,6 +360,7 @@ export default function LineChart({
       maxEvent.dispose();
       seriesEvent.dispose();
     };
+    // This effect should re-run when root, chart and xAxis are initialized
   }, [root, chart, xAxis, setReferenceDayX]);
 
   const lineChartDataSettings = useMemo(() => {
@@ -534,26 +538,6 @@ export default function LineChart({
         dataMap.set(entry.day, {...dataMap.get(entry.day), percentileUp: entry.value});
       });
     }
-
-    // // Add groupFilter data of visible filters
-    // if (groupFilterList && groupFilterData) {
-    //   Object.values(groupFilterList).forEach((groupFilter) => {
-    //     if (groupFilter?.isVisible) {
-    //       // Check if data for filter is available (else report error)
-    //       if (groupFilterData[groupFilter.name]) {
-    //         groupFilterData[groupFilter.name].forEach((entry) => {
-    //           console.log(groupFilter.name);
-    //           dataMap.set(entry.day, {
-    //             ...dataMap.get(entry.day),
-    //             [groupFilter.name]: entry.value,
-    //           });
-    //         });
-    //       } else {
-    //         console.error(`ERROR: missing data for "${groupFilter.name}" filter`);
-    //       }
-    //     }
-    //   });
-    // }
 
     // Sort map by date
     const dataMapSorted = new Map(Array.from(dataMap).sort(([a], [b]) => String(a).localeCompare(b)));

@@ -43,18 +43,24 @@ export default function LineChartContainer() {
     };
   }, [selectedCompartment]);
 
+  // Set selected date in store
   useEffect(() => {
     dispatch(selectDate(selectedDate));
+    // This effect should only run when the selectedDate changes
   }, [selectedDate, dispatch]);
 
+  // Set selected date in state when it changes in store
   useEffect(() => {
     if (selectedDateInStore) {
       setSelectedDate(selectedDateInStore);
     }
+    // This effect should only run when the selectedDateInStore changes
   }, [selectedDateInStore]);
 
+  // Set reference day in store
   useEffect(() => {
     dispatch(setReferenceDayBottom(referenceDayb));
+    // This effect should only run when the referenceDay changes
   }, [referenceDayb, dispatch]);
 
   return (
