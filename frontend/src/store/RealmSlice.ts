@@ -8,7 +8,7 @@ export interface Realm {
 }
 
 const initialState: Realm = {
-  name: localStorage.getItem('realm') || '',
+  name: '',
 };
 
 export const RealmSlice = createSlice({
@@ -16,9 +16,6 @@ export const RealmSlice = createSlice({
   initialState,
   reducers: {
     setRealm(state, action: PayloadAction<string>) {
-      // store realm in local storage
-      // redirects start new the browser sessions i.e. store state will be reset
-      localStorage.setItem('realm', action.payload);
       state.name = action.payload;
     },
   },
