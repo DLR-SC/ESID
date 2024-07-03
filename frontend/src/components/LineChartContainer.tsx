@@ -15,7 +15,7 @@ export default function LineChartContainer() {
   const theme = useTheme();
   const dispatch = useAppDispatch();
 
-  const {chartPercentileData, isChartDataFetching, chartData} = useContext(DataContext);
+  const {isChartDataFetching, chartData} = useContext(DataContext);
 
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
@@ -74,7 +74,6 @@ export default function LineChartContainer() {
         setSelectedDate={setSelectedDate}
         setReferenceDayBottom={setReferenceDayb}
         lineChartData={chartData}
-        percentileData={chartPercentileData}
         minDate={minDate}
         maxDate={maxDate}
         selectedScenario={selectedScenario}

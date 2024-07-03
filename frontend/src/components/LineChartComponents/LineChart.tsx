@@ -20,7 +20,6 @@ import {useTranslation} from 'react-i18next';
 import {Dictionary} from '../../util/util';
 import React from 'react';
 import {Localization} from 'types/localization';
-import {getScenarioPrimaryColor} from 'util/Theme';
 import useRoot from 'components/shared/Root';
 import {useConst} from 'util/hooks';
 import useXYChart from 'components/shared/LineChart/Chart';
@@ -28,7 +27,7 @@ import useDateAxis from 'components/shared/LineChart/DateAxis';
 import useValueAxis from 'components/shared/LineChart/ValueAxis';
 import {useDateSelectorFilter} from 'components/shared/LineChart/Filter';
 import useDateAxisRange from 'components/shared/LineChart/AxisRange';
-import useLineSeries, {useLineSeriesList} from 'components/shared/LineChart/LineSeries';
+import {useLineSeriesList} from 'components/shared/LineChart/LineSeries';
 import {GroupFilter} from 'types/group';
 import {ScenarioList} from 'types/scenario';
 import {LineSeries} from '@amcharts/amcharts5/.internal/charts/xy/series/LineSeries';
@@ -52,12 +51,6 @@ interface LineChartProps {
    * This can be used for positioning elements in relation to the reference date.
    */
   setReferenceDayBottom?: (docPos: number) => void;
-
-  /**
-   * Optional array of arrays containing percentile data points, where each data point includes a `day` and its corresponding `value`.
-   * This data is used to plot percentile ranges on the chart.
-   */
-  percentileData?: {day: string; value: number}[][] | null;
 
   /** Optional minimum date for the chart in ISO format (YYYY-MM-DD). */
   minDate?: string | null;
@@ -106,7 +99,6 @@ export default function LineChart({
   selectedDate,
   setSelectedDate,
   setReferenceDayBottom = () => {},
-  percentileData = null,
   minDate = null,
   maxDate = null,
   selectedScenario = null,
@@ -372,18 +364,22 @@ export default function LineChart({
       xAxis: xAxis,
       yAxis: yAxis,
       id: `${chartId}_${line.serieId}`,
-      name:
-        localization.overrides && localization.overrides[line.name]
+      name: line.name
+        ? localization.overrides && localization.overrides[line.name]
           ? customT(localization.overrides[line.name])
-          : defaultT(line.name),
+          : defaultT(line.name)
+        : '',
       valueXField: 'date',
       valueYField: String(line.valueYField),
+      openValueYField: line.openValueYField ? String(line.openValueYField) : undefined,
       connect: false,
+      visible: line.visible ?? true,
       // Fallback Tooltip (if HTML breaks for some reason)
       tooltip: Tooltip.new(root, {
         labelText: line.tooltipText,
       }),
       stroke: line.stroke.color,
+      fill: line.fill ?? undefined,
     }));
   }, [lineChartData, root, xAxis, yAxis, chartId, localization, defaultT, customT]);
 
@@ -394,51 +390,20 @@ export default function LineChart({
     useCallback(
       (series: LineSeries) => {
         if (!lineChartData) return;
-        const serie = lineChartData.find((line) => line.serieId === series.get('id')?.split('_')[1]);
+        const seriesSettings = lineChartData.find((line) => line.serieId == series.get('id')?.split('_')[1]);
         series.strokes.template.setAll({
-          strokeWidth: serie?.stroke.strokeWidth ?? 2,
-          strokeDasharray: serie?.stroke.strokeDasharray ?? undefined,
+          strokeWidth: seriesSettings?.stroke.strokeWidth ?? 2,
+          strokeDasharray: seriesSettings?.stroke.strokeDasharray ?? undefined,
         });
+        if (seriesSettings?.fill) {
+          series.fills.template.setAll({
+            fillOpacity: seriesSettings.fillOpacity ?? 1,
+            visible: true,
+          });
+        }
       },
       [lineChartData]
     )
-  );
-
-  const percentileSeriesSettings = useMemo(() => {
-    if (!xAxis || !yAxis || !selectedScenario) {
-      return null;
-    }
-
-    return {
-      xAxis: xAxis,
-      yAxis: yAxis,
-      id: `${chartId}_percentiles`,
-      valueXField: 'date',
-      valueYField: 'percentileUp',
-      openValueYField: 'percentileDown',
-      connect: false,
-      // Percentiles are only visible if a scenario is selected and it is not case data
-      visible: selectedScenario !== null && selectedScenario > 0,
-      // Add fill color according to selected scenario (if selected scenario is set and it's not case data)
-      fill:
-        selectedScenario !== null && selectedScenario > 0
-          ? color(getScenarioPrimaryColor(selectedScenario, theme))
-          : undefined,
-    };
-  }, [selectedScenario, xAxis, yAxis, chartId, theme]);
-  useLineSeries(
-    root,
-    chart,
-    percentileSeriesSettings,
-    useConst((series) => {
-      series.strokes.template.setAll({
-        strokeWidth: 0,
-      });
-      series.fills.template.setAll({
-        fillOpacity: 0.3,
-        visible: true,
-      });
-    })
   );
 
   // Effect to hide disabled scenarios (and show them again if not hidden anymore)
@@ -470,7 +435,7 @@ export default function LineChart({
       });
     },
     // Re-run effect when the active scenario list changes
-    [activeScenarios, chartId, chart]
+    [activeScenarios, chart]
   );
 
   // Effect to hide deviations if no scenario is selected
@@ -480,11 +445,11 @@ export default function LineChart({
       if (!chart) return;
 
       // Find percentile series and only show it if there is a selected scenario
-      chart?.series.values
+      chart.series.values
         .filter((series) => {
           let seriesID = series.get('id');
           if (seriesID) seriesID = seriesID.split('_')[1];
-          return seriesID === 'percentiles';
+          return seriesID == 'percentiles';
         })
         .map((percentileSeries) => {
           if (selectedScenario === null || selectedScenario === 0) {
@@ -495,10 +460,10 @@ export default function LineChart({
         });
     },
     // Re-run effect when the selected scenario changes
-    [chartId, selectedScenario, chart]
+    [selectedScenario, chart]
   );
 
-  // Effect to update Simulation and case data
+  // Effect to update data in series
   useEffect(() => {
     // Skip effect if chart is not initialized yet
     if (!chart) return;
@@ -513,29 +478,25 @@ export default function LineChart({
         const id = serie.serieId;
         if (activeScenarios && activeScenarios.includes(Number(id))) {
           serie.values.forEach((entry) => {
-            dataMap.set(entry.day, {...dataMap.get(entry.day), [id]: entry.value});
+            dataMap.set(entry.day, {...dataMap.get(entry.day), [id]: entry.value as number});
           });
         } else if (groupFilterList && typeof id === 'string' && id.startsWith('group-filter-')) {
           const groupFilterName = serie.name;
           Object.values(groupFilterList).forEach((groupFilter) => {
             if (groupFilter.name === groupFilterName && groupFilter.isVisible)
               serie.values.forEach((entry) => {
-                dataMap.set(entry.day, {...dataMap.get(entry.day), [groupFilterName]: entry.value});
+                dataMap.set(entry.day, {...dataMap.get(entry.day), [groupFilterName]: entry.value as number});
               });
           });
+        } else if (serie.openValueYField) {
+          serie.values.forEach((entry) => {
+            dataMap.set(entry.day, {...dataMap.get(entry.day), [serie.valueYField]: (entry.value as number[])[1]});
+            dataMap.set(entry.day, {
+              ...dataMap.get(entry.day),
+              [String(serie.openValueYField)]: (entry.value as number[])[0],
+            });
+          });
         }
-      });
-    }
-
-    if (percentileData) {
-      // Add 25th percentile data
-      percentileData[0].forEach((entry) => {
-        dataMap.set(entry.day, {...dataMap.get(entry.day), percentileDown: entry.value});
-      });
-
-      // Add 75th percentile data
-      percentileData[1].forEach((entry) => {
-        dataMap.set(entry.day, {...dataMap.get(entry.day), percentileUp: entry.value});
       });
     }
 
@@ -763,7 +724,6 @@ export default function LineChart({
     setReferenceDayX();
     // Re-run this effect whenever the data itself changes (or any variable the effect uses)
   }, [
-    percentileData,
     activeScenarios,
     selectedScenario,
     scenarioList,

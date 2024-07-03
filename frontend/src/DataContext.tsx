@@ -18,7 +18,6 @@ import {
   GroupSubcategories,
 } from 'store/services/groupApi';
 import {
-  SelectedScenarioPercentileData,
   useGetPercentileDataQuery,
   useGetSimulationDataByDateQuery,
   useGetMultipleSimulationDataByNodeQuery,
@@ -50,7 +49,6 @@ export const DataContext = createContext<{
   areMapValuesFetching: boolean;
   searchBarData: GeoJsonProperties[] | undefined;
   chartData: LineChartData[] | undefined;
-  chartPercentileData: {day: string; value: number}[][] | undefined;
   isChartDataFetching: boolean;
   startValues: Dictionary<number> | null;
   groupCategories: GroupCategories | undefined;
@@ -68,7 +66,6 @@ export const DataContext = createContext<{
   areMapValuesFetching: false,
   searchBarData: undefined,
   chartData: undefined,
-  chartPercentileData: undefined,
   isChartDataFetching: false,
   startValues: null,
   groupCategories: undefined,
@@ -90,9 +87,6 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
   const [geoData, setGeoData] = useState<GeoJSON>();
   const [mapData, setMapData] = useState<{id: string; value: number}[] | undefined>(undefined);
   const [searchBarData, setSearchBarData] = useState<GeoJsonProperties[] | undefined>(undefined);
-  const [processedChartPercentileData, setProcessedChartPercentileData] = useState<
-    {day: string; value: number}[][] | undefined
-  >(undefined);
   const [simulationModelKey, setSimulationModelKey] = useState<string>('unset');
   const [chartData, setChartData] = useState<LineChartData[] | undefined>(undefined);
 
@@ -104,7 +98,6 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
   const groupFilterList = useAppSelector((state) => state.dataSelection.groupFilters);
   const scenarioList = useAppSelector((state) => state.scenarioList);
 
-
   const startValues = useGetSimulationStartValues(selectedDistrict);
 
   const caseScenarioSimulationData = useGetCaseDataByDistrictQuery({
@@ -114,17 +107,23 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
   });
 
   const {data: groupCategories} = useGetGroupCategoriesQuery();
+
   const {data: groupSubCategories} = useGetGroupSubcategoriesQuery();
+
   const {data: scenarioListData} = useGetSimulationsQuery();
+
   const getId = useMemo(() => {
     return scenarioListData?.results.map((simulation: SimulationMetaData) => {
       return simulation.id;
     });
   }, [scenarioListData?.results]);
+
   const {data: simulationModelsData} = useGetSimulationModelsQuery();
+
   const {data: simulationModelData} = useGetSimulationModelQuery(simulationModelKey, {
     skip: simulationModelKey === 'unset',
   });
+
   const {data: caseScenarioData} = useGetCaseDataSingleSimulationEntryQuery(
     {
       node: selectedDistrict,
@@ -375,84 +374,66 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
     // This effect should re-run whenever there is new data or the selected card or compartment changed.
   }, [mapSimulationData, selectedCompartment, mapCaseData, selectedScenario]);
 
-  // To be refactored
-  // This effect sets the chart data based on the selection.
-  useEffect(() => {
-    if (chartPercentileData && chartPercentileData.length > 0 && selectedCompartment) {
-      setProcessedChartPercentileData(
-        chartPercentileData.map((element: SelectedScenarioPercentileData) => {
-          return element.results!.map((element: {day: string; compartments: {[key: string]: number}}) => {
-            return {day: element.day, value: element.compartments[selectedCompartment]} as {day: string; value: number};
-          });
-        })
-      );
-    }
-    // This should re-run whenever the data changes, or a different compartment is selected.
-  }, [chartCaseData, chartGroupFilterData, chartPercentileData, chartSimulationData, selectedCompartment]);
-
   // This effect sets the chart case data based on the selection.
   useEffect(() => {
-    const lineChartData: LineChartData[] = [];
-    if (chartCaseData && chartCaseData.results && chartCaseData.results.length > 0 && selectedCompartment) {
-      // Process the case data for the selected compartment
-      const processedChartCaseData = chartCaseData.results.map(
-        (element: {day: string; compartments: {[key: string]: number}}) => {
-          return {day: element.day, value: element.compartments[selectedCompartment]} as {day: string; value: number};
-        }
-      );
-      // Push the processed case data into the line chart data
-      lineChartData.push({
-        values: processedChartCaseData,
-        name: 'chart.caseData',
-        valueYField: 0,
-        stroke: {color: color('#000')},
-        serieId: 0,
-      });
-    }
+    if (!chartCaseData || !chartCaseData.results || chartCaseData.results.length == 0 || !selectedCompartment) return;
+    // Process the case data for the selected compartment
+    const processedChartCaseData = chartCaseData.results.map(
+      (element: {day: string; compartments: {[key: string]: number}}) => {
+        return {day: element.day, value: element.compartments[selectedCompartment]} as {day: string; value: number};
+      }
+    );
+    // Push the processed case data into the line chart data
+    const lineChartData: LineChartData = {
+      values: processedChartCaseData,
+      name: 'chart.caseData',
+      valueYField: 0,
+      stroke: {color: color('#000')},
+      serieId: 0,
+    };
     // Update the chart data state with the new line chart data
     setChartData((prevData) => {
       if (prevData) {
         const seriesWithoutCase = prevData.filter((serie) => serie.serieId !== 0);
-        if (seriesWithoutCase.length > 0) return [...seriesWithoutCase, ...lineChartData];
+        if (seriesWithoutCase.length > 0) return [...seriesWithoutCase, lineChartData];
       }
-      return lineChartData;
+      return [lineChartData];
     });
     // This should re-run whenever the case data changes, or a different compartment is selected.
   }, [chartCaseData, selectedCompartment]);
 
   // This effect sets the chart simulation data based on the selection.
   useEffect(() => {
+    if (!chartSimulationData || chartSimulationData.length == 0 || !selectedCompartment) return;
+    // Process the simulation data for the selected compartment
+    const processedChartSimulationData = chartSimulationData.map((element: SimulationDataByNode | null) => {
+      if (element && element.results && element.results.length > 0) {
+        return element.results.map((element: {day: string; compartments: {[key: string]: number}}) => {
+          return {day: element.day, value: element.compartments[selectedCompartment]} as {day: string; value: number};
+        });
+      }
+      return [];
+    });
+    // Define the scenario names for the simulation data
+    const scenarioNames = [
+      'scenario-names.baseline',
+      'scenario-names.closed_schools',
+      'scenario-names.remote_work',
+      'scenario-names.10p_reduced_contacts',
+    ];
+    let scenarioNamesIndex = 0;
     const lineChartData: LineChartData[] = [];
-    if (chartSimulationData && chartSimulationData.length > 0 && selectedCompartment) {
-      // Process the simulation data for the selected compartment
-      const processedChartSimulationData = chartSimulationData.map((element: SimulationDataByNode | null) => {
-        if (element && element.results && element.results.length > 0) {
-          return element.results.map((element: {day: string; compartments: {[key: string]: number}}) => {
-            return {day: element.day, value: element.compartments[selectedCompartment]} as {day: string; value: number};
-          });
-        }
-        return [];
-      });
-      // Define the scenario names for the simulation data
-      const scenarioNames = [
-        'scenario-names.baseline',
-        'scenario-names.closed_schools',
-        'scenario-names.remote_work',
-        'scenario-names.10p_reduced_contacts',
-      ];
-      let scenarioNamesIndex = 0;
-      // Push the processed simulation data into the line chart data
-      for (let i = 0; i < processedChartSimulationData.length; i++) {
-        if (processedChartSimulationData[i]) {
-          lineChartData.push({
-            values: processedChartSimulationData[i],
-            name: scenarioNames[scenarioNamesIndex],
-            stroke: {color: color(getScenarioPrimaryColor(i, theme))},
-            serieId: i,
-            valueYField: i,
-            tooltipText: `[bold ${getScenarioPrimaryColor(i, theme)}]${scenarioNames[scenarioNamesIndex++]}:[/] {${i}}`,
-          });
-        }
+    // Push the processed simulation data into the line chart data
+    for (let i = 0; i < processedChartSimulationData.length; i++) {
+      if (processedChartSimulationData[i]) {
+        lineChartData.push({
+          values: processedChartSimulationData[i],
+          name: scenarioNames[scenarioNamesIndex],
+          stroke: {color: color(getScenarioPrimaryColor(i, theme))},
+          serieId: i,
+          valueYField: i,
+          tooltipText: `[bold ${getScenarioPrimaryColor(i, theme)}]${scenarioNames[scenarioNamesIndex++]}:[/] {${i}}`,
+        });
       }
     }
     // Update the chart data state with the new line chart data
@@ -470,29 +451,25 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
 
   // This effect sets the chart group filter data based on the selection.
   useEffect(() => {
+    if (!chartGroupFilterData || Object.keys(chartGroupFilterData).length == 0 || !selectedCompartment) return;
+    const processedData: Dictionary<{day: string; value: number}[]> = {};
+    // Process the group filter data for the selected compartment
+    Object.keys(chartGroupFilterData).forEach((key) => {
+      processedData[key] = chartGroupFilterData[key].results.map(
+        (element: {day: string; compartments: {[key: string]: number}}) => {
+          return {day: element.day, value: element.compartments[selectedCompartment]} as {day: string; value: number};
+        }
+      );
+    });
+    // Define stroke styles for different group filters
+    const groupFilterStrokes = [
+      [2, 4], // dotted
+      [8, 4], // dashed
+      [8, 4, 2, 4], // dash-dotted
+      [8, 4, 2, 4, 2, 4], // dash-dot-dotted
+    ];
     const lineChartData: LineChartData[] = [];
-    if (
-      chartGroupFilterData &&
-      Object.keys(chartGroupFilterData).length > 0 &&
-      selectedCompartment &&
-      selectedScenario
-    ) {
-      const processedData: Dictionary<{day: string; value: number}[]> = {};
-      // Process the group filter data for the selected compartment
-      Object.keys(chartGroupFilterData).forEach((key) => {
-        processedData[key] = chartGroupFilterData[key].results.map(
-          (element: {day: string; compartments: {[key: string]: number}}) => {
-            return {day: element.day, value: element.compartments[selectedCompartment]} as {day: string; value: number};
-          }
-        );
-      });
-      // Define stroke styles for different group filters
-      const groupFilterStrokes = [
-        [2, 4], // dotted
-        [8, 4], // dashed
-        [8, 4, 2, 4], // dash-dotted
-        [8, 4, 2, 4, 2, 4], // dash-dot-dotted
-      ];
+    if (selectedScenario) {
       // Push the processed group filter data into the line chart data
       for (let i = 0; i < Object.keys(processedData).length; i++) {
         lineChartData.push({
@@ -508,6 +485,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
         });
       }
     }
+
     // Update the chart data state with the new line chart data
     setChartData((prevData) => {
       if (prevData) {
@@ -521,6 +499,47 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
     // This should re-run whenever the group filter data changes, or a different compartment is selected.
   }, [chartGroupFilterData, selectedCompartment, selectedScenario, theme]);
 
+  // This effect sets the chart percentile data based on the selection.
+  useEffect(() => {
+    if (!chartPercentileData || chartPercentileData.length == 0 || !selectedCompartment) return;
+    const processedPercentileData: Array<{day: string; value: number[]}> = [];
+    for (let i = 0; chartPercentileData[0]?.results && i < Object.keys(chartPercentileData[0].results).length; i++) {
+      if (
+        chartPercentileData[0].results &&
+        chartPercentileData[1].results &&
+        Object.values(chartPercentileData[0].results)[i].day === Object.values(chartPercentileData[1].results)[i].day
+      )
+        processedPercentileData.push({
+          day: Object.values(chartPercentileData[0].results)[i].day,
+          value: [
+            Object.values(chartPercentileData[0].results)[i].compartments[selectedCompartment],
+            Object.values(chartPercentileData[1].results)[i].compartments[selectedCompartment],
+          ],
+        });
+    }
+    const lineChartData: LineChartData = {
+      values: processedPercentileData,
+      serieId: 'percentiles',
+      valueYField: 'percentileUp',
+      openValueYField: 'percentileDown',
+      visible: selectedScenario !== null && selectedScenario > 0,
+      fill:
+        selectedScenario !== null && selectedScenario > 0
+          ? color(getScenarioPrimaryColor(selectedScenario, theme))
+          : undefined,
+      fillOpacity: 0.3,
+      stroke: {strokeWidth: 0},
+    };
+    setChartData((prevData) => {
+      if (prevData) {
+        const seriesWithoutPercentiles = prevData.filter((serie) => serie.serieId !== 'percentiles');
+        if (seriesWithoutPercentiles.length > 0) return [...seriesWithoutPercentiles, lineChartData];
+      }
+      return [lineChartData];
+    });
+    // This should re-run whenever the data changes, or whenever a different scenario or a different compartment is selected.
+  }, [chartPercentileData, selectedCompartment, selectedScenario, theme]);
+
   return (
     <DataContext.Provider
       value={{
@@ -529,7 +548,6 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
         areMapValuesFetching: mapIsCaseDataFetching || mapIsSimulationDataFetching,
         searchBarData,
         chartData,
-        chartPercentileData: processedChartPercentileData,
         isChartDataFetching: chartCaseDataFetching || chartSimulationFetching,
         startValues,
         groupCategories,

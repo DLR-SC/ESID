@@ -4,14 +4,18 @@
 import {Color} from '@amcharts/amcharts5/.internal/core/util/Color';
 
 export interface LineChartData {
-  values: {day: string; value: number}[];
-  name: string;
+  values: {day: string; value: number | number[]}[];
+  name?: string;
   serieId: string | number;
   valueYField: string | number;
+  openValueYField?: string | number;
+  visible?: boolean;
   tooltipText?: string;
   stroke: {
-    color: Color;
+    color?: Color;
     strokeWidth?: number;
     strokeDasharray?: number[];
   };
+  fill?: Color;
+  fillOpacity?: number;
 }
