@@ -10,9 +10,6 @@ import {Localization} from 'types/localization';
 import {Dictionary, hexToRGB} from 'util/util';
 
 interface CardRowsProps {
-  /** Index of the card*/
-  index: number;
-
   /** Array of compartments */
   compartments: string[];
 
@@ -52,7 +49,6 @@ interface CardRowsProps {
  * It also supports localization.
  */
 export default function CardRows({
-  index,
   compartments,
   isFlipped = true,
   arrow = true,
@@ -74,14 +70,19 @@ export default function CardRows({
   const theme = useTheme();
   // Function to get formatted and translated values
   function GetFormattedAndTranslatedValues(filteredValues: number | null): string {
-    if (filteredValues)
+    if (filteredValues) {
       return localization.formatNumber ? localization.formatNumber(filteredValues) : filteredValues.toString();
-    else if ((!filteredValues && index === 0) || (compartmentValues && Object.keys(compartmentValues).length !== 0))
+    }
+
+    if (compartmentValues && Object.keys(compartmentValues).length !== 0) {
       return '0';
-    else
-      return localization.overrides && localization.overrides['no-data']
-        ? customT(localization.overrides['no-data'])
-        : defaultT('no-data');
+    }
+
+    const noDataText = localization.overrides?.['no-data']
+      ? customT(localization.overrides['no-data'])
+      : defaultT('no-data');
+
+    return noDataText;
   }
 
   // Function to get compartment rate

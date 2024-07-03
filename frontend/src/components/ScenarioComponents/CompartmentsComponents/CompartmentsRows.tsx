@@ -8,6 +8,7 @@ import CompartmentsRow from './CompartmentsRow';
 import React from 'react';
 import {Localization} from 'types/localization';
 import {Dictionary} from 'util/util';
+import {useTranslation} from 'react-i18next';
 
 interface CompartmentsRowsProps {
   /** Boolean to determine if the compartments are expanded */
@@ -49,10 +50,17 @@ export default function CompartmentsRows({
   compartmentValues,
   localization = {formatNumber: (value: number) => value.toString(), customLang: 'global', overrides: {}},
 }: CompartmentsRowsProps) {
+  const {t: defaultT} = useTranslation();
+  const {t: customT} = useTranslation(localization.customLang);
+
   function GetFormattedAndTranslatedValues(filteredValues: number | null): string {
-    if (filteredValues)
+    if (compartmentValues && filteredValues)
       return localization.formatNumber ? localization.formatNumber(filteredValues) : filteredValues.toString();
-    else return '0';
+    const noDataText = localization.overrides?.['no-data']
+      ? customT(localization.overrides['no-data'])
+      : defaultT('no-data');
+
+    return noDataText;
   }
   return (
     <div style={{position: 'relative'}}>

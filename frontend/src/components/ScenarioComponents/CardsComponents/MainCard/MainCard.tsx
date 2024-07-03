@@ -165,7 +165,6 @@ function MainCard({
           <CardTitle label={label} color={color} />
         </Box>
         <CardRows
-          index={index}
           compartments={compartments}
           compartmentValues={compartmentValues}
           startValues={startValues}
