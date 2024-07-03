@@ -324,64 +324,74 @@ export default function HeatMap({
 
   // Update fill color and tooltip of map polygons based on values
   useEffect(() => {
-    if (!polygonSeries) return;
-    if (selectedScenario !== null && !isFetching && values && Number.isFinite(aggregatedMax)) {
-      const map = new Map<string | number, number>();
-      values.forEach((value) => {
-        map.set(value.id, value.value);
-      });
-      polygonSeries.mapPolygons.each((polygon) => {
-        const regionData = polygon.dataItem?.dataContext as GeoJsonProperties;
-        if (!regionData) return;
-        regionData.value = map.get(regionData[areaId] as string | number) ?? Number.NaN;
-        // determine fill color
-        let fillColor = am5.color(defaultFill);
-        if (Number.isFinite(regionData.value) && typeof regionData.value === 'number') {
-          if (legend.steps[0].value == 0 && legend.steps[legend.steps.length - 1].value == 1) {
-            // if legend is normalized, also pass mix & max to color function
-            fillColor = getColorFromLegend(regionData.value, legend, {
-              min: 0,
-              max: aggregatedMax,
+    if (!polygonSeries || polygonSeries.isDisposed()) return;
+
+    const updatePolygons = () => {
+      if (selectedScenario !== null && !isFetching && values && Number.isFinite(aggregatedMax) && polygonSeries) {
+        const valueMap = new Map<string | number, number>();
+
+        values.forEach((value) => valueMap.set(value.id, value.value));
+
+        polygonSeries.mapPolygons.template.entities.forEach((polygon) => {
+          const regionData = polygon.dataItem?.dataContext as GeoJsonProperties;
+          if (regionData) {
+            regionData.value = valueMap.get(regionData[areaId]) ?? Number.NaN;
+
+            let fillColor = am5.color(defaultFill);
+            if (Number.isFinite(regionData.value) && typeof regionData.value === 'number') {
+              fillColor = getColorFromLegend(regionData.value, legend, {
+                min: 0,
+                max: aggregatedMax,
+              });
+            }
+            polygon.setAll({
+              tooltipText: tooltipText(regionData),
+              fill: fillColor,
             });
-          } else {
-            // if legend is not normalized, min & max are first and last stop of legend and don't need to be passed
-            fillColor = getColorFromLegend(regionData.value, legend);
           }
-        }
-        polygon.setAll({
-          tooltipText: tooltipText ? tooltipText(regionData) : '{id}',
-          fill: fillColor,
         });
-      });
-    } else if (longLoad || !values) {
-      polygonSeries.mapPolygons.each((polygon) => {
-        const regionData = polygon.dataItem?.dataContext as GeoJsonProperties;
-        if (!regionData) return;
-        regionData.value = Number.NaN;
-        polygon.setAll({
-          tooltipText: tooltipTextWhileFetching ? tooltipTextWhileFetching(regionData) : 'Loading...',
-          fill: am5.color(theme.palette.text.disabled),
+      } else if (longLoad || !values) {
+        polygonSeries.mapPolygons.template.entities.forEach((polygon) => {
+          const regionData = polygon.dataItem?.dataContext as GeoJsonProperties;
+          if (regionData) {
+            regionData.value = Number.NaN;
+            polygon.setAll({
+              tooltipText: tooltipTextWhileFetching(regionData),
+              fill: am5.color(theme.palette.text.disabled),
+            });
+          }
         });
-      });
-    }
-    // This effect should only re-run when the selectedScenario, isFetching, values, aggregatedMax, longLoad, or polygonSeries change
+      }
+    };
+
+    const handleDataValidated = () => {
+      if (!polygonSeries.isDisposed()) {
+        updatePolygons();
+      }
+    };
+
+    polygonSeries.events.on('datavalidated', handleDataValidated);
+    handleDataValidated();
+
+    // Cleanup event listeners on component unmount or when dependencies change
+    return () => {
+      if (!polygonSeries.isDisposed()) {
+        polygonSeries.events.off('datavalidated', handleDataValidated);
+      }
+    };
   }, [
-    root,
-    chart,
-    root,
-    chart,
+    polygonSeries,
+    selectedScenario,
+    isFetching,
+    values,
     aggregatedMax,
     defaultFill,
-    areaId,
-    isFetching,
     legend,
-    longLoad,
-    selectedScenario,
-    theme.palette.text.disabled,
     tooltipText,
+    longLoad,
     tooltipTextWhileFetching,
-    values,
-    polygonSeries,
+    theme.palette.text.disabled,
+    areaId,
   ]);
 
   return <Box id={mapId} height={mapHeight} />;
