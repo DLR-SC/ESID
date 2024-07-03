@@ -4,25 +4,24 @@
 import {useState, useEffect, useRef, useMemo, useCallback, useLayoutEffect} from 'react';
 import * as am5 from '@amcharts/amcharts5';
 import * as am5map from '@amcharts/amcharts5/map';
-import {GeoJSON} from 'geojson';
-import {FeatureCollection, FeatureProperties} from '../../../types/map';
+import {Feature, GeoJSON, GeoJsonProperties} from 'geojson';
 import svgZoomResetURL from '../../../../assets/svg/zoom_out_map_white_24dp.svg?url';
 import svgZoomInURL from '../../../../assets/svg/zoom_in_white_24dp.svg?url';
 import svgZoomOutURL from '../../../../assets/svg/zoom_out_white_24dp.svg?url';
-import {Box} from '@mui/system';
+import {Box} from '@mui/material';
 import useMapChart from 'components/shared/HeatMap/Map';
 import usePolygonSeries from 'components/shared/HeatMap/Polygon';
-import useZoomControl from 'components/shared/HeatMap/Zoom';
-import useRoot from 'components/shared/Root';
+import {HeatmapLegend} from '../../../types/heatmapLegend';
+import {useTheme} from '@mui/material/styles';
 import React from 'react';
-import {HeatmapLegend} from 'types/heatmapLegend';
 import {Localization} from 'types/localization';
+import useRoot from 'components/shared/Root';
+import useZoomControl from 'components/shared/HeatMap/Zoom';
 import {useConst} from 'util/hooks';
-import {useTheme} from '@mui/material';
 
 interface MapProps {
   /** The data to be displayed on the map, in GeoJSON format. */
-  mapData: undefined | FeatureCollection;
+  mapData: undefined | GeoJSON;
 
   /** Optional unique identifier for the map. Default is 'map'. */
   mapId?: string;
@@ -40,13 +39,13 @@ interface MapProps {
   maxZoomLevel?: number;
 
   /** Optional function to generate tooltip text for each region based on its data. Default is a function that returns the region's ID. */
-  tooltipText?: (regionData: FeatureProperties) => string;
+  tooltipText?: (regionData: GeoJsonProperties) => string;
 
   /** Optional function to generate tooltip text while data is being fetched. Default is a function that returns 'Loading...'. */
-  tooltipTextWhileFetching?: (regionData: FeatureProperties) => string;
+  tooltipTextWhileFetching?: (regionData: GeoJsonProperties) => string;
 
   /** The default selected region's data. */
-  defaultSelectedValue: FeatureProperties;
+  defaultSelectedValue: GeoJsonProperties;
 
   /** Optional currently selected scenario identifier. */
   selectedScenario?: number | null;
@@ -58,10 +57,10 @@ interface MapProps {
   values: {id: string | number; value: number}[] | undefined;
 
   /** Callback function to update the selected region's data. */
-  setSelectedArea: (area: FeatureProperties) => void;
+  setSelectedArea: (area: GeoJsonProperties) => void;
 
   /** The currently selected region's data. */
-  selectedArea: FeatureProperties;
+  selectedArea: GeoJsonProperties;
 
   /** The maximum aggregated value for the heatmap legend. */
   aggregatedMax: number;
@@ -180,11 +179,13 @@ export default function HeatMap({
     )
   );
 
+  // This effect is responsible for setting the selected area when the home button is clicked.
   useEffect(() => {
     if (!zoom || !root || root.isDisposed()) return;
     zoom.homeButton.events.on('click', () => {
       setSelectedArea(defaultSelectedValue);
     });
+    // This effect should only run when the zoom control is set
   }, [zoom, root, setSelectedArea, defaultSelectedValue]);
 
   const chartSettings = useMemo(() => {
@@ -202,7 +203,7 @@ export default function HeatMap({
   const polygonSettings = useMemo(() => {
     if (!mapData) return null;
     return {
-      geoJSON: mapData as GeoJSON,
+      geoJSON: mapData,
       tooltipPosition: 'fixed',
     } as am5map.IMapPolygonSeriesSettings;
   }, [mapData]);
@@ -235,13 +236,13 @@ export default function HeatMap({
 
     polygonTemplate.events.on('click', function (ev) {
       if (ev.target.dataItem?.dataContext) {
-        setSelectedArea(ev.target.dataItem.dataContext as FeatureProperties);
+        setSelectedArea(ev.target.dataItem.dataContext as GeoJsonProperties);
       }
     });
 
     polygonTemplate.events.on('pointerover', (e) => {
       if (legendRef && legendRef.current) {
-        const value = (e.target.dataItem?.dataContext as FeatureProperties).value as number;
+        const value = (e.target.dataItem?.dataContext as GeoJsonProperties)?.value as number;
         legendRef.current.showValue(
           value,
           localization && localization.formatNumber ? localization.formatNumber(value) : value.toString()
@@ -254,6 +255,7 @@ export default function HeatMap({
         void legendRef.current.hideTooltip();
       }
     });
+    // This effect should only run when the polygon series is set
   }, [polygonSeries, legendRef, localization, setSelectedArea, theme.palette.primary.main]);
 
   // This effect is responsible for showing the loading indicator if the data is not ready within 1 second. This
@@ -269,6 +271,7 @@ export default function HeatMap({
       clearTimeout(longLoadTimeout);
       setLongLoad(false);
     }
+    // This effect should only re-run when the fetching state changes
     // eslint-disable-next-line
   }, [isFetching, setLongLoad, setLongLoadTimeout]); // longLoadTimeout is deliberately ignored here.
 
@@ -283,6 +286,7 @@ export default function HeatMap({
       });
       setAggregatedMax(max);
     }
+    // This effect should only re-run when the fixedLegendMaxValue or values change
   }, [fixedLegendMaxValue, setAggregatedMax, values]);
 
   // Highlight selected polygon and reset last selected polygon
@@ -300,9 +304,9 @@ export default function HeatMap({
     // Highlight selected polygon
     polygonSeries.mapPolygons.each((mapPolygon) => {
       if (mapPolygon.dataItem && mapPolygon.dataItem.dataContext) {
-        const areaData = mapPolygon.dataItem.dataContext as FeatureProperties;
-        const id: string | number = areaData[areaId];
-        if (id == selectedArea[areaId]) {
+        const areaData = mapPolygon.dataItem.dataContext as Feature;
+        const id: string | number = areaData[areaId as keyof Feature] as string | number;
+        if (id == selectedArea![areaId as keyof GeoJsonProperties]) {
           mapPolygon.states.create('default', {
             stroke: am5.color(theme.palette.primary.main),
             strokeWidth: 2,
@@ -315,6 +319,7 @@ export default function HeatMap({
         }
       }
     });
+    // This effect should only re-run when the selectedArea or polygonSeries change
   }, [areaId, polygonSeries, selectedArea, theme.palette.background.default, theme.palette.primary.main]);
 
   // Update fill color and tooltip of map polygons based on values
@@ -328,29 +333,33 @@ export default function HeatMap({
         values.forEach((value) => valueMap.set(value.id, value.value));
 
         polygonSeries.mapPolygons.template.entities.forEach((polygon) => {
-          const regionData = polygon.dataItem?.dataContext as FeatureProperties;
-          regionData.value = valueMap.get(regionData[areaId]) ?? Number.NaN;
+          const regionData = polygon.dataItem?.dataContext as GeoJsonProperties;
+          if (regionData) {
+            regionData.value = valueMap.get(regionData[areaId]) ?? Number.NaN;
 
-          let fillColor = am5.color(defaultFill);
-          if (Number.isFinite(regionData.value) && typeof regionData.value === 'number') {
-            fillColor = getColorFromLegend(regionData.value, legend, {
-              min: 0,
-              max: aggregatedMax,
+            let fillColor = am5.color(defaultFill);
+            if (Number.isFinite(regionData.value) && typeof regionData.value === 'number') {
+              fillColor = getColorFromLegend(regionData.value, legend, {
+                min: 0,
+                max: aggregatedMax,
+              });
+            }
+            polygon.setAll({
+              tooltipText: tooltipText(regionData),
+              fill: fillColor,
             });
           }
-          polygon.setAll({
-            tooltipText: tooltipText(regionData),
-            fill: fillColor,
-          });
         });
       } else if (longLoad || !values) {
         polygonSeries.mapPolygons.template.entities.forEach((polygon) => {
-          const regionData = polygon.dataItem?.dataContext as FeatureProperties;
-          regionData.value = Number.NaN;
-          polygon.setAll({
-            tooltipText: tooltipTextWhileFetching(regionData),
-            fill: am5.color(theme.palette.text.disabled),
-          });
+          const regionData = polygon.dataItem?.dataContext as GeoJsonProperties;
+          if (regionData) {
+            regionData.value = Number.NaN;
+            polygon.setAll({
+              tooltipText: tooltipTextWhileFetching(regionData),
+              fill: am5.color(theme.palette.text.disabled),
+            });
+          }
         });
       }
     };

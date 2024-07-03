@@ -8,7 +8,7 @@ import i18n from '../../../util/i18nForTests';
 import {I18nextProvider} from 'react-i18next';
 import SearchBar from 'components/Sidebar/MapComponents/SearchBar';
 import userEvent from '@testing-library/user-event';
-import {FeatureProperties} from 'types/map';
+import {GeoJsonProperties} from 'geojson';
 
 const SearchBarTest = () => {
   const geoData = [
@@ -44,24 +44,24 @@ const SearchBarTest = () => {
     []
   );
 
-  const [selectedArea, setSelectedArea] = useState<FeatureProperties>(defaultValue);
+  const [selectedArea, setSelectedArea] = useState<GeoJsonProperties>(defaultValue);
 
   return (
     <SearchBar
       data={geoData}
       sortProperty={'GEN'}
-      optionLabel={(option) => `${option.GEN}${option.BEZ ? ` (BEZ.${option.BEZ})` : ''}`}
+      optionLabel={(option) => `${option!.GEN}${option!.BEZ ? ` (BEZ.${option!.BEZ})` : ''}`}
       autoCompleteValue={{
-        RS: selectedArea['RS'],
-        GEN: selectedArea['GEN'],
-        BEZ: selectedArea['BEZ'],
+        RS: selectedArea!['RS' as keyof GeoJsonProperties] as string,
+        GEN: selectedArea!['GEN' as keyof GeoJsonProperties] as string,
+        BEZ: selectedArea!['BEZ' as keyof GeoJsonProperties] as string,
       }}
       onChange={(_event, option) => {
         if (option) {
           setSelectedArea(option);
         }
       }}
-      placeholder={`${selectedArea.GEN}${selectedArea.BEZ ? ` (BEZ.${selectedArea.BEZ})` : ''}`}
+      placeholder={`${selectedArea!['GEN' as keyof GeoJsonProperties]}${selectedArea!['BEZ' as keyof GeoJsonProperties] ? ` (BEZ.${selectedArea!['BEZ' as keyof GeoJsonProperties]})` : ''}`}
       optionEqualProperty='RS'
       valueEqualProperty='RS'
     />

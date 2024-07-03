@@ -31,7 +31,7 @@ import {SimulationModel, SimulationDataByNode, Simulations} from 'types/scenario
 import {CaseDataByNode} from 'types/caseData';
 import {useAppDispatch, useAppSelector} from 'store/hooks';
 import {GroupCategories, GroupSubcategories} from 'store/services/groupApi';
-import {cardValue, filterValue} from 'types/Cardtypes';
+import {cardValue, filterValue} from 'types/card';
 
 interface ScenarioContainerProps {
   /** The minimum number of compartment rows.*/

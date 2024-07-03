@@ -12,7 +12,6 @@ import {IDateAxisSettings} from '@amcharts/amcharts5/.internal/charts/xy/axes/Da
 import {AxisRendererX} from '@amcharts/amcharts5/.internal/charts/xy/axes/AxisRendererX';
 import {AxisRendererY} from '@amcharts/amcharts5/.internal/charts/xy/axes/AxisRendererY';
 import {XYCursor} from '@amcharts/amcharts5/.internal/charts/xy/XYCursor';
-import {LineSeries} from '@amcharts/amcharts5/.internal/charts/xy/series/LineSeries';
 import am5locales_en_US from '@amcharts/amcharts5/locales/en_US';
 import am5locales_de_DE from '@amcharts/amcharts5/locales/de_DE';
 import {darken, useTheme} from '@mui/material/styles';
@@ -20,7 +19,6 @@ import Box from '@mui/material/Box';
 import {useTranslation} from 'react-i18next';
 import {Dictionary} from '../../util/util';
 import React from 'react';
-import {Scenario} from 'store/ScenarioSlice';
 import {Localization} from 'types/localization';
 import {getScenarioPrimaryColor} from 'util/Theme';
 import useRoot from 'components/shared/Root';
@@ -31,23 +29,17 @@ import useValueAxis from 'components/shared/LineChart/ValueAxis';
 import {useDateSelectorFilter} from 'components/shared/LineChart/Filter';
 import useDateAxisRange from 'components/shared/LineChart/AxisRange';
 import useLineSeries, {useLineSeriesList} from 'components/shared/LineChart/LineSeries';
-
-interface ScenarioList {
-  scenarios: {
-    [key: number]: Scenario;
-  };
-  compartments: string[];
-}
-interface GroupFilter {
-  id: string;
-  name: string;
-  isVisible: boolean;
-  groups: Dictionary<string[]>;
-}
+import {GroupFilter} from 'types/group';
+import {ScenarioList} from 'types/scenario';
+import {LineSeries} from '@amcharts/amcharts5/.internal/charts/xy/series/LineSeries';
+import {LineChartData} from 'types/lineChart';
 
 interface LineChartProps {
   /** Optional unique identifier for the chart. Defaults to 'chartdiv'. */
   chartId?: string;
+
+  /** Array of line chart data points to be plotted on the chart. */
+  lineChartData: LineChartData[] | undefined;
 
   /** The currently selected date in the chart in ISO format (YYYY-MM-DD). */
   selectedDate: string;
@@ -62,35 +54,10 @@ interface LineChartProps {
   setReferenceDayBottom?: (docPos: number) => void;
 
   /**
-   * Optional array of arrays containing simulation data points.
-   * Each sub-array corresponds to a different simulation scenario and contains objects with `day` and `value` properties.
-   * The first element in the array should be null.
-   */
-  simulationData?: ({day: string; value: number}[] | null)[] | null;
-
-  /**
-   * Optional function to determine the chart name for a given simulation scenario.
-   * This function is passed a `Scenario` object and returns a string name.
-   */
-  simulationDataChartName?: (scenario: Scenario) => string;
-
-  /**
-   * Array of data points representing case data, where each data point includes a `day` and its corresponding `value`.
-   * This data is used to plot the actual case data on the chart.
-   */
-  caseData: {day: string; value: number}[] | undefined;
-
-  /**
    * Optional array of arrays containing percentile data points, where each data point includes a `day` and its corresponding `value`.
    * This data is used to plot percentile ranges on the chart.
    */
   percentileData?: {day: string; value: number}[][] | null;
-
-  /**
-   * Optional dictionary of filtered group data points, where each entry includes a `day` and its corresponding `value`.
-   * This data is used to plot different filtered group data on the chart.
-   */
-  groupFilterData?: Dictionary<{day: string; value: number}[]> | null;
 
   /** Optional minimum date for the chart in ISO format (YYYY-MM-DD). */
   minDate?: string | null;
@@ -135,14 +102,11 @@ interface LineChartProps {
  */
 export default function LineChart({
   chartId = 'chartdiv',
+  lineChartData,
   selectedDate,
   setSelectedDate,
   setReferenceDayBottom = () => {},
-  simulationData = null,
-  caseData,
-  simulationDataChartName = () => '',
   percentileData = null,
-  groupFilterData = null,
   minDate = null,
   maxDate = null,
   selectedScenario = null,
@@ -253,6 +217,7 @@ export default function LineChart({
         xAxis: xAxis,
       })
     );
+    // This effect should re-run when chart, root and xAxis are initialized
   }, [chart, root, xAxis]);
 
   // Effect to add date selector filter to chart
@@ -296,6 +261,7 @@ export default function LineChart({
 
     xAxis.set('min', new Date(minDate).setHours(0));
     xAxis.set('max', new Date(maxDate).setHours(23, 59, 59));
+    // This effect should re-run when xAxis, minDate or maxDate changes
   }, [minDate, maxDate, xAxis]);
 
   const selectedDateRangeSettings = useMemo(() => {
@@ -372,6 +338,7 @@ export default function LineChart({
     setReferenceDayBottom(docPosition);
   }, [chart, root, xAxis, referenceDay, setReferenceDayBottom]);
 
+  // Effect to update reference day position
   useLayoutEffect(() => {
     if (!root || !chart || !xAxis) {
       return;
@@ -393,38 +360,48 @@ export default function LineChart({
       maxEvent.dispose();
       seriesEvent.dispose();
     };
+    // This effect should re-run when root, chart and xAxis are initialized
   }, [root, chart, xAxis, setReferenceDayX]);
 
-  const caseDataSeriesSettings = useMemo(() => {
-    if (!xAxis || !yAxis) {
-      return null;
+  const lineChartDataSettings = useMemo(() => {
+    if (!root || !xAxis || !yAxis || !lineChartData) {
+      return [];
     }
 
-    return {
+    return lineChartData.map((line) => ({
       xAxis: xAxis,
       yAxis: yAxis,
-      // Case Data is always scenario id 0
-      id: `${chartId}_0`,
+      id: `${chartId}_${line.serieId}`,
       name:
-        localization.overrides && localization.overrides['chart.caseData']
-          ? customT(localization.overrides['chart.caseData'])
-          : defaultT('chart.caseData'),
+        localization.overrides && localization.overrides[line.name]
+          ? customT(localization.overrides[line.name])
+          : defaultT(line.name),
       valueXField: 'date',
-      valueYField: '0',
-      // Prevent data points from connecting across gaps in the data
+      valueYField: String(line.valueYField),
       connect: false,
-      stroke: color('#000'),
-    };
-  }, [localization.overrides, xAxis, yAxis, chartId, defaultT, customT]);
-  useLineSeries(
+      // Fallback Tooltip (if HTML breaks for some reason)
+      tooltip: Tooltip.new(root, {
+        labelText: line.tooltipText,
+      }),
+      stroke: line.stroke.color,
+    }));
+  }, [lineChartData, root, xAxis, yAxis, chartId, localization, defaultT, customT]);
+
+  useLineSeriesList(
     root,
     chart,
-    caseDataSeriesSettings,
-    useConst((series) => {
-      series.strokes.template.setAll({
-        strokeWidth: 2,
-      });
-    })
+    lineChartDataSettings,
+    useCallback(
+      (series: LineSeries) => {
+        if (!lineChartData) return;
+        const serie = lineChartData.find((line) => line.serieId === series.get('id')?.split('_')[1]);
+        series.strokes.template.setAll({
+          strokeWidth: serie?.stroke.strokeWidth ?? 2,
+          strokeDasharray: serie?.stroke.strokeDasharray ?? undefined,
+        });
+      },
+      [lineChartData]
+    )
   );
 
   const percentileSeriesSettings = useMemo(() => {
@@ -460,87 +437,6 @@ export default function LineChart({
       series.fills.template.setAll({
         fillOpacity: 0.3,
         visible: true,
-      });
-    })
-  );
-
-  const scenarioSeriesSettings = useMemo(() => {
-    if (!root || !xAxis || !yAxis || !scenarioList) {
-      return [];
-    }
-
-    return Object.entries(scenarioList.scenarios).map(([scenarioId, scenario]) => ({
-      xAxis: xAxis,
-      yAxis: yAxis,
-      id: `${chartId}_${scenarioId}`,
-      name: simulationDataChartName(scenario),
-      valueXField: 'date',
-      valueYField: scenarioId,
-      // Prevent data points from connecting across gaps in the data
-      connect: false,
-      // Fallback Tooltip (if HTML breaks for some reason)
-      // For text color: loop around the theme's scenario color list if scenario IDs exceed color list length, then pick first color of sub-palette which is the main color
-      tooltip: Tooltip.new(root, {
-        labelText: `[bold ${getScenarioPrimaryColor(scenario.id, theme)}]${simulationDataChartName(scenario)}:[/] {${scenarioId}}`,
-      }),
-      stroke: color(getScenarioPrimaryColor(scenario.id, theme)),
-    }));
-  }, [scenarioList, root, simulationDataChartName, xAxis, yAxis, chartId, theme]);
-  useLineSeriesList(
-    root,
-    chart,
-    scenarioSeriesSettings,
-    useConst((series) => {
-      series.strokes.template.setAll({
-        strokeWidth: 2,
-      });
-    })
-  );
-
-  const groupFilterStrokes = useMemo(() => {
-    return [
-      [2, 4], // dotted
-      [8, 4], // dashed
-      [8, 4, 2, 4], // dash-dotted
-      [8, 4, 2, 4, 2, 4], // dash-dot-dotted
-    ];
-  }, []);
-
-  const groupFilterSeriesSettings = useMemo(() => {
-    if (!root || !xAxis || !yAxis || !groupFilterList || !selectedScenario) {
-      return [];
-    }
-
-    // Loop through visible group filters
-    return Object.values(groupFilterList)
-      .filter((groupFilter) => groupFilter.isVisible)
-      .map((groupFilter) => ({
-        xAxis: xAxis,
-        yAxis: yAxis,
-        id: `${chartId}_group-filter-${groupFilter.name}`,
-        name: groupFilter.name,
-        valueXField: 'date',
-        valueYField: groupFilter.name,
-        connect: false,
-        // Fallback Tooltip (if HTML breaks for some reason)
-        // Use color of selected scenario (scenario ID is 1-based index, color list is 0-based index) loop if scenario ID exceeds length of color list; use first color of palette (main color)
-        tooltip: Tooltip.new(root, {
-          labelText: `[bold ${getScenarioPrimaryColor(selectedScenario, theme)}]${
-            groupFilter.name
-          }:[/] {${groupFilter.name}}`,
-        }),
-        stroke: color(getScenarioPrimaryColor(selectedScenario, theme)),
-      }));
-  }, [groupFilterList, root, selectedScenario, xAxis, yAxis, chartId, theme]);
-  useLineSeriesList(
-    root,
-    chart,
-    groupFilterSeriesSettings,
-    useConst((series, i) => {
-      series.strokes.template.setAll({
-        strokeWidth: 2,
-        // Loop through stroke list if group filters exceeds list length
-        strokeDasharray: groupFilterStrokes[i % groupFilterStrokes.length],
       });
     })
   );
@@ -612,22 +508,24 @@ export default function LineChart({
     // Create empty map to match dates
     const dataMap = new Map<string, {[key: string]: number}>();
 
-    // Cycle through scenarios
-    activeScenarios?.forEach((scenarioId) => {
-      if (scenarioId) {
-        simulationData?.[scenarioId]?.forEach(({day, value}) => {
-          // Add scenario data to map (upsert date entry)
-          dataMap.set(day, {...dataMap.get(day), [scenarioId]: value});
-        });
-      }
-
-      if (scenarioId === 0) {
-        // Add case data values (upsert date entry)
-        caseData?.forEach((entry) => {
-          dataMap.set(entry.day, {...dataMap.get(entry.day), [0]: entry.value});
-        });
-      }
-    });
+    if (lineChartData) {
+      lineChartData.forEach((serie) => {
+        const id = serie.serieId;
+        if (activeScenarios && activeScenarios.includes(Number(id))) {
+          serie.values.forEach((entry) => {
+            dataMap.set(entry.day, {...dataMap.get(entry.day), [id]: entry.value});
+          });
+        } else if (groupFilterList && typeof id === 'string' && id.startsWith('group-filter-')) {
+          const groupFilterName = serie.name;
+          Object.values(groupFilterList).forEach((groupFilter) => {
+            if (groupFilter.name === groupFilterName && groupFilter.isVisible)
+              serie.values.forEach((entry) => {
+                dataMap.set(entry.day, {...dataMap.get(entry.day), [groupFilterName]: entry.value});
+              });
+          });
+        }
+      });
+    }
 
     if (percentileData) {
       // Add 25th percentile data
@@ -638,25 +536,6 @@ export default function LineChart({
       // Add 75th percentile data
       percentileData[1].forEach((entry) => {
         dataMap.set(entry.day, {...dataMap.get(entry.day), percentileUp: entry.value});
-      });
-    }
-
-    // Add groupFilter data of visible filters
-    if (groupFilterList && groupFilterData) {
-      Object.values(groupFilterList).forEach((groupFilter) => {
-        if (groupFilter?.isVisible) {
-          // Check if data for filter is available (else report error)
-          if (groupFilterData[groupFilter.name]) {
-            groupFilterData[groupFilter.name].forEach((entry) => {
-              dataMap.set(entry.day, {
-                ...dataMap.get(entry.day),
-                [groupFilter.name]: entry.value,
-              });
-            });
-          } else {
-            console.error(`ERROR: missing data for "${groupFilter.name}" filter`);
-          }
-        }
       });
     }
 
@@ -719,7 +598,12 @@ export default function LineChart({
                  * - valueYField
                  * - stroke
                  */
-                if (!seriesID || !series.get('name') || !series.get('valueYField') || !series.get('stroke')) {
+                if (
+                  seriesID == null ||
+                  !series.get('name') ||
+                  series.get('valueYField') == null ||
+                  !series.get('stroke')
+                ) {
                   console.error(
                     'ERROR: missing series property: ',
                     seriesID,
@@ -880,9 +764,6 @@ export default function LineChart({
     // Re-run this effect whenever the data itself changes (or any variable the effect uses)
   }, [
     percentileData,
-    simulationData,
-    caseData,
-    groupFilterData,
     activeScenarios,
     selectedScenario,
     scenarioList,
@@ -897,6 +778,7 @@ export default function LineChart({
     exportedFileName,
     chart,
     root,
+    lineChartData,
   ]);
 
   return (

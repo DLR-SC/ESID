@@ -6,13 +6,13 @@ import {Box, Autocomplete, useTheme} from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import {SyntheticEvent} from 'react';
 import React from 'react';
-import {FeatureProperties} from 'types/map';
+import {GeoJsonProperties} from 'geojson';
 
 interface SearchBarProps {
   /**
    * Array of data items to be used as options in the autocomplete.
    */
-  data: FeatureProperties[] | undefined;
+  data: GeoJsonProperties[] | undefined;
 
   /**
    * Property name by which the options are sorted and grouped.
@@ -24,12 +24,12 @@ interface SearchBarProps {
    * @param option - The option whose label is being determined.
    * @returns The label for the given option.
    */
-  optionLabel: (option: FeatureProperties) => string;
+  optionLabel: (option: GeoJsonProperties) => string;
 
   /**
    * The currently selected value for the autocomplete.
    */
-  autoCompleteValue: FeatureProperties;
+  autoCompleteValue: GeoJsonProperties;
 
   /**
    * Property name used to compare options for equality.
@@ -44,7 +44,7 @@ interface SearchBarProps {
   /**
    * Event handler for when the selected option changes.
    */
-  onChange: (event: SyntheticEvent<Element, Event>, value: FeatureProperties | null) => void;
+  onChange: (event: SyntheticEvent<Element, Event>, value: GeoJsonProperties) => void;
 
   /**
    * Placeholder text for the search input field.
@@ -100,7 +100,7 @@ export default function SearchBar({
           // set value to selectedDistrict contents from store
           value={autoCompleteValue}
           // function to compare value to options in list, comparing ags number and name of district
-          isOptionEqualToValue={(option, value) => option[optionEqualProperty] === value[valueEqualProperty]}
+          isOptionEqualToValue={(option, value) => option![optionEqualProperty] === value![valueEqualProperty]}
           // onChange of input dispatch new selected district or initial value (ags: 00000, name: germany) if input is cleared
           onChange={onChange}
           // enable clearing/resetting the input field with escape key
@@ -112,7 +112,7 @@ export default function SearchBar({
           // provide countyList as options for drop down
           options={data || []}
           // group dropdown contents by first letter (json array needs to be sorted alphabetically by name for this to work correctly)
-          groupBy={sortProperty ? (option) => option[sortProperty].toString()[0] : undefined}
+          groupBy={sortProperty ? (option) => (option![sortProperty] as string)[0] : undefined}
           // provide function to display options in dropdown menu
           getOptionLabel={optionLabel}
           sx={{

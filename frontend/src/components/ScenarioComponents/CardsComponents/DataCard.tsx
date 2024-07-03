@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import React, {useEffect, useMemo, useState} from 'react';
 import MainCard from './MainCard/MainCard';
 import FiltersContainer from './GroupFilter/FiltersContainer';
-import {filterValue} from 'types/Cardtypes';
+import {filterValue} from 'types/card';
 import {GroupFilter} from 'types/group';
 import {Localization} from 'types/localization';
 import {Dictionary} from 'util/util';

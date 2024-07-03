@@ -3,7 +3,7 @@
 
 import CardContainer from 'components/ScenarioComponents/CardsComponents/CardContainer';
 import React, {useState} from 'react';
-import {filterValue, cardValue} from 'types/Cardtypes';
+import {filterValue, cardValue} from 'types/card';
 import {GroupFilter} from 'types/group';
 import {Dictionary} from 'util/util';
 import {describe, test, expect} from 'vitest';
