@@ -6,35 +6,6 @@ import {Root} from '@amcharts/amcharts5/.internal/core/Root';
 import {ILineSeriesSettings, LineSeries} from '@amcharts/amcharts5/.internal/charts/xy/series/LineSeries';
 import {useLayoutEffect, useState} from 'react';
 
-export default function useLineSeries(
-  root: Root | null,
-  chart: XYChart | null,
-  settings: ILineSeriesSettings | null,
-  initializer?: (series: LineSeries) => void
-): LineSeries | null {
-  const [series, setSeries] = useState<LineSeries>();
-
-  useLayoutEffect(() => {
-    if (!root || !chart || !settings || chart.isDisposed() || root.isDisposed()) {
-      return;
-    }
-
-    const series = LineSeries.new(root, settings);
-    chart.series.push(series);
-    setSeries(series);
-
-    if (initializer) {
-      initializer(series);
-    }
-
-    return () => {
-      chart.series.removeValue(series);
-      series.dispose();
-    };
-  }, [root, initializer, chart, settings]);
-
-  return series ?? null;
-}
 export function useLineSeriesList(
   root: Root | null,
   chart: XYChart | null,
