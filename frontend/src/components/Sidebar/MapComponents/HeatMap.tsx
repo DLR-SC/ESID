@@ -335,7 +335,7 @@ export default function HeatMap({
         polygonSeries.mapPolygons.template.entities.forEach((polygon) => {
           const regionData = polygon.dataItem?.dataContext as GeoJsonProperties;
           if (regionData) {
-            regionData.value = valueMap.get(regionData[areaId]) ?? Number.NaN;
+            regionData.value = valueMap.get(regionData[areaId] as string | number) ?? Number.NaN;
 
             let fillColor = am5.color(defaultFill);
             if (Number.isFinite(regionData.value) && typeof regionData.value === 'number') {

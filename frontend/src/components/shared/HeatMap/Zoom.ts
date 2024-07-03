@@ -24,7 +24,6 @@ export default function useZoomControl(
     if (initializer) {
       initializer(newZoom);
     }
-
   }, [root, settings, initializer]);
 
   return zoom ?? null;
