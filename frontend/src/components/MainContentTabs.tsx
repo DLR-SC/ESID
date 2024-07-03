@@ -16,8 +16,9 @@ import {useTranslation} from 'react-i18next';
 import {useAppDispatch, useAppSelector} from '../store/hooks';
 import {selectTab} from '../store/UserPreferenceSlice';
 import {useTheme} from '@mui/material/styles';
-import SimulationChart from './LineChartContainer';
-import ParameterEditor from './ParameterEditor';
+
+const SimulationChart = React.lazy(() => import('./LineChartContainer'));
+const ParameterEditor = React.lazy(() => import('./ParameterEditor'));
 
 /**
  * This component manages the main content, which is a collection of tabs that the user can navigate through. By default

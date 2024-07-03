@@ -130,7 +130,6 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
   const {data: simulationModelData} = useGetSimulationModelQuery(simulationModelKey, {
     skip: simulationModelKey === 'unset',
   });
-  console.log(selectedScenario);
   const {data: caseScenarioData} = useGetCaseDataSingleSimulationEntryQuery(
     {
       node: selectedDistrict,
@@ -169,7 +168,6 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
     },
     {skip: selectedScenario == null || selectedScenario === 0 || !selectedCompartment || !selectedDate}
   );
-  console.log(mapIsSimulationDataFetching);
 
   const {currentData: mapCaseData, isFetching: mapIsCaseDataFetching} = useGetCaseDataByDateQuery(
     {
@@ -179,7 +177,6 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
     },
     {skip: selectedScenario == null || selectedScenario > 0 || !selectedCompartment || !selectedDate}
   );
-  console.log(mapIsCaseDataFetching);
 
   const {data: chartSimulationData, isFetching: chartSimulationFetching} = useGetMultipleSimulationDataByNodeQuery(
     {
