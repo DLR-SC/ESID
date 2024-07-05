@@ -376,7 +376,15 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
 
   // This effect sets the chart case data based on the selection.
   useEffect(() => {
-    if (!chartCaseData || !chartCaseData.results || chartCaseData.results.length == 0 || !selectedCompartment) return;
+    if (
+      !chartCaseData ||
+      !chartCaseData.results ||
+      chartCaseData.results.length == 0 ||
+      !selectedCompartment ||
+      !activeScenarios ||
+      !activeScenarios.includes(0)
+    )
+      return;
     // Process the case data for the selected compartment
     const processedChartCaseData = chartCaseData.results.map(
       (element: {day: string; compartments: {[key: string]: number}}) => {
@@ -400,7 +408,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
       return [lineChartData];
     });
     // This should re-run whenever the case data changes, or a different compartment is selected.
-  }, [chartCaseData, selectedCompartment]);
+  }, [chartCaseData, selectedCompartment, activeScenarios]);
 
   // This effect sets the chart simulation data based on the selection.
   useEffect(() => {
@@ -417,9 +425,9 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
     // Define the scenario names for the simulation data
     const scenarioNames = [
       'scenario-names.baseline',
-      'scenario-names.closed_schools',
-      'scenario-names.remote_work',
       'scenario-names.10p_reduced_contacts',
+      'scenario-names.remote_work',
+      'scenario-names.closed_schools',
     ];
     let scenarioNamesIndex = 0;
     const lineChartData: LineChartData[] = [];

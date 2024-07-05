@@ -88,7 +88,6 @@ interface LineChartProps {
   /** Optional localization settings for the chart, including number formatting and language overrides. */
   localization?: Localization;
 }
-
 /**
  * React Component to render the Linechart Section
  * @returns {JSX.Element} JSX Element to render the linechart container and the graphs within.
@@ -195,7 +194,7 @@ export default function LineChart({
 
   // Effect to add cursor to chart
   useLayoutEffect(() => {
-    if (!chart || !root || !xAxis) {
+    if (!chart || !root || !xAxis || chart.isDisposed() || root.isDisposed() || xAxis.isDisposed()) {
       return;
     }
 
@@ -219,7 +218,7 @@ export default function LineChart({
   useLayoutEffect(
     () => {
       // Skip if root or chart or xAxis is not initialized
-      if (!root || !chart || !xAxis) {
+      if (!root || !chart || !xAxis || chart.isDisposed() || root.isDisposed() || xAxis.isDisposed()) {
         return;
       }
 
@@ -247,7 +246,7 @@ export default function LineChart({
   // Effect to update min/max date.
   useLayoutEffect(() => {
     // Skip if root or chart or xAxis is not initialized
-    if (!xAxis || !minDate || !maxDate) {
+    if (!xAxis || !minDate || !maxDate || xAxis.isDisposed()) {
       return;
     }
 
@@ -298,13 +297,14 @@ export default function LineChart({
   useDateAxisRange(selectedDateRangeSettings, root, chart, xAxis);
 
   const referenceDateRangeSettings = useMemo(() => {
-    if (!referenceDay) {
+    if (!root || !referenceDay) {
       return {};
     }
 
     return {
       data: {
         value: new Date(referenceDay).setHours(12, 0, 0),
+        endValue: new Date(referenceDay).setHours(12, 0, 1),
         above: true,
       },
       grid: {
@@ -314,7 +314,7 @@ export default function LineChart({
         strokeDasharray: [6, 4],
       },
     };
-  }, [referenceDay, theme.palette.divider]);
+  }, [root, referenceDay, theme.palette.divider]);
   useDateAxisRange(referenceDateRangeSettings, root, chart, xAxis);
 
   const setReferenceDayX = useCallback(() => {
@@ -332,7 +332,7 @@ export default function LineChart({
 
   // Effect to update reference day position
   useLayoutEffect(() => {
-    if (!root || !chart || !xAxis) {
+    if (!root || !chart || !xAxis || chart.isDisposed() || root.isDisposed() || xAxis.isDisposed()) {
       return;
     }
 
@@ -409,7 +409,8 @@ export default function LineChart({
   // Effect to hide disabled scenarios (and show them again if not hidden anymore)
   useLayoutEffect(
     () => {
-      const allSeries = chart?.series;
+      if (!chart || chart.isDisposed()) return;
+      const allSeries = chart.series;
       // Skip effect if chart is not initialized (contains no series yet)
       if (!allSeries) return;
 
@@ -442,7 +443,7 @@ export default function LineChart({
   useEffect(
     () => {
       // Skip effect if chart is not initialized (contains no series yet)
-      if (!chart) return;
+      if (!chart || chart.isDisposed()) return;
 
       // Find percentile series and only show it if there is a selected scenario
       chart.series.values
@@ -466,7 +467,7 @@ export default function LineChart({
   // Effect to update data in series
   useEffect(() => {
     // Skip effect if chart is not initialized yet
-    if (!chart) return;
+    if (!chart || chart.isDisposed()) return;
     // Also skip if there is no scenario or compartment selected
     if (selectedScenario === null || !selectedCompartment) return;
 
