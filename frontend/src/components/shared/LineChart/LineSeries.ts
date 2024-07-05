@@ -12,49 +12,51 @@ export function useLineSeriesList(
 ) {
   const [series, setSeries] = useState<Array<LineSeries>>();
   useLayoutEffect(() => {
-    try {
-      if (
-        !root ||
-        !chart ||
-        settings.length === 0 ||
-        chart.isDisposed() ||
-        chart.series.isDisposed() ||
-        root.isDisposed()
-      ) {
+    let isCancelled = false;
+    if (
+      !root ||
+      !chart ||
+      settings.length === 0 ||
+      chart.isDisposed() ||
+      chart.series.isDisposed() ||
+      root.isDisposed()
+    ) {
+      return;
+    }
+
+    if (chart.series.length > 0 && !chart.isDisposed()) chart.series.clear();
+
+    const seriesList: Array<LineSeries> = [];
+
+    for (let i = 0; i < settings.length; i++) {
+      const setting = settings[i];
+
+      // Check if chart or root is disposed or operation is cancelled before creating the series
+      if (chart.isDisposed() || root.isDisposed() || isCancelled || setting.xAxis.isDisposed()) {
         return;
       }
-      if (chart.series.length > 0 && !chart.isDisposed()) {
-        chart.series.clear();
-        chart.series.dispose();
+
+      const newSeries = LineSeries.new(root, setting);
+      seriesList.push(newSeries);
+
+      chart.series.push(newSeries);
+
+      if (initializer) {
+        initializer(newSeries, i);
       }
-      // if (chart.series.length > 0) chart.series.removeIndex(0).dispose();
-      const seriesList: Array<LineSeries> = [];
-      for (let i = 0; i < settings.length; i++) {
-        const setting = settings[i];
-        const newSeries = LineSeries.new(root, setting);
-        seriesList.push(newSeries);
-        // chart.series.push(newSeries);
-        if (initializer) {
-          initializer(newSeries, i);
-        }
-      }
-      setSeries(seriesList);
-      chart.series.pushAll(seriesList);
-      return () => {
-        console.log(chart.series);
-        // if (chart.series.length > 0) chart.series.removeIndex(0).dispose();
-        // seriesList.forEach((series) => {
-        //   series.dispose();
-        // });
-        if (chart.series.length > 0 && !chart.isDisposed()) {
-          chart.series.clear();
-          chart.series.dispose();
-        }
-      };
-    } catch (error) {
-      console.log(root, chart, chart.series);
-      console.error('Error creating series:', error);
     }
+
+    if (!isCancelled) {
+      setSeries(seriesList);
+    }
+
+    return () => {
+      isCancelled = true;
+      if (!chart.isDisposed()) {
+        chart.series.clear();
+      }
+    };
   }, [chart, initializer, root, settings]);
+
   return series ?? null;
 }

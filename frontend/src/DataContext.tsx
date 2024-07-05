@@ -294,7 +294,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
     // This should only run once when the page loads
   }, []);
 
-  // This effect fetches the list of available districts (nodes) for the serch bar.
+  // This effect fetches the list of available districts (nodes) for the search bar.
   useEffect(() => {
     // get option list from assets
     fetch(searchbarMapData, {
@@ -412,7 +412,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
 
   // This effect sets the chart simulation data based on the selection.
   useEffect(() => {
-    if (!chartSimulationData || chartSimulationData.length == 0 || !selectedCompartment) return;
+    if (!chartSimulationData || chartSimulationData.length == 0 || !selectedCompartment || !activeScenarios) return;
     // Process the simulation data for the selected compartment
     const processedChartSimulationData = chartSimulationData.map((element: SimulationDataByNode | null) => {
       if (element && element.results && element.results.length > 0) {
@@ -423,12 +423,9 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
       return [];
     });
     // Define the scenario names for the simulation data
-    const scenarioNames = [
-      'scenario-names.baseline',
-      'scenario-names.10p_reduced_contacts',
-      'scenario-names.remote_work',
-      'scenario-names.closed_schools',
-    ];
+    const scenarioNames = Object.values(scenarioList.scenarios)
+      .filter((scenario) => activeScenarios.includes(scenario.id))
+      .map((scenario) => `scenario-names.${scenario.label}`);
     let scenarioNamesIndex = 0;
     const lineChartData: LineChartData[] = [];
     // Push the processed simulation data into the line chart data
@@ -455,7 +452,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
       return lineChartData;
     });
     // This should re-run whenever the simulation data changes, or a different compartment is selected.
-  }, [chartSimulationData, selectedCompartment, theme]);
+  }, [chartSimulationData, selectedCompartment, theme, activeScenarios]);
 
   // This effect sets the chart group filter data based on the selection.
   useEffect(() => {

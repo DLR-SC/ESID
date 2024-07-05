@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import {useCallback, useEffect, useLayoutEffect, useMemo} from 'react';
+import React, {useCallback, useEffect, useLayoutEffect, useMemo} from 'react';
 import {Root} from '@amcharts/amcharts5/.internal/core/Root';
 import {Tooltip} from '@amcharts/amcharts5/.internal/core/render/Tooltip';
 import {RoundedRectangle} from '@amcharts/amcharts5/.internal/core/render/RoundedRectangle';
@@ -18,7 +18,6 @@ import {darken, useTheme} from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import {useTranslation} from 'react-i18next';
 import {Dictionary} from '../../util/util';
-import React from 'react';
 import {Localization} from 'types/localization';
 import useRoot from 'components/shared/Root';
 import {useConst} from 'util/hooks';
@@ -214,6 +213,48 @@ export default function LineChart({
   // Effect to add date selector filter to chart
   useDateSelectorFilter(chart, xAxis, setSelectedDate);
 
+  const selectedDateRangeSettings = useMemo(() => {
+    if (!root || !selectedDate) {
+      return {};
+    }
+
+    return {
+      data: {
+        value: new Date(selectedDate).setHours(0, 0, 0),
+        endValue: new Date(selectedDate).setHours(23, 59, 59),
+        above: true,
+      },
+      grid: {
+        stroke: color(theme.palette.primary.main),
+        strokeOpacity: 1,
+        strokeWidth: 2,
+        location: 0.5,
+        visible: true,
+      },
+      axisFill: {
+        fill: color(theme.palette.primary.main),
+        fillOpacity: 0.3,
+        visible: true,
+      },
+      label: {
+        fill: color(theme.palette.primary.contrastText),
+        text: new Date(selectedDate).toLocaleDateString(i18n.language, {
+          year: 'numeric',
+          month: 'short',
+          day: '2-digit',
+        }),
+        location: 0.5,
+        background: RoundedRectangle.new(root, {
+          fill: color(theme.palette.primary.main),
+        }),
+        // Put Label to the topmost layer to make sure it is drawn on top of the axis tick labels
+        layer: Number.MAX_VALUE,
+      },
+    };
+  }, [i18n.language, root, selectedDate, theme.palette.primary.contrastText, theme.palette.primary.main]);
+
+  useDateAxisRange(selectedDateRangeSettings, root, chart, xAxis);
+
   // Effect to change localization of chart if language changes
   useLayoutEffect(
     () => {
@@ -255,47 +296,6 @@ export default function LineChart({
     // This effect should re-run when xAxis, minDate or maxDate changes
   }, [minDate, maxDate, xAxis]);
 
-  const selectedDateRangeSettings = useMemo(() => {
-    if (!root || !selectedDate) {
-      return {};
-    }
-
-    return {
-      data: {
-        value: new Date(selectedDate).setHours(0, 0, 0),
-        endValue: new Date(selectedDate).setHours(23, 59, 59),
-        above: true,
-      },
-      grid: {
-        stroke: color(theme.palette.primary.main),
-        strokeOpacity: 1,
-        strokeWidth: 2,
-        location: 0.5,
-        visible: true,
-      },
-      axisFill: {
-        fill: color(theme.palette.primary.main),
-        fillOpacity: 0.3,
-        visible: true,
-      },
-      label: {
-        fill: color(theme.palette.primary.contrastText),
-        text: new Date(selectedDate).toLocaleDateString(i18n.language, {
-          year: 'numeric',
-          month: 'short',
-          day: '2-digit',
-        }),
-        location: 0.5,
-        background: RoundedRectangle.new(root, {
-          fill: color(theme.palette.primary.main),
-        }),
-        // Put Label to the topmost layer to make sure it is drawn on top of the axis tick labels
-        layer: Number.MAX_VALUE,
-      },
-    };
-  }, [i18n.language, root, selectedDate, theme.palette.primary.contrastText, theme.palette.primary.main]);
-  useDateAxisRange(selectedDateRangeSettings, root, chart, xAxis);
-
   const referenceDateRangeSettings = useMemo(() => {
     if (!root || !referenceDay) {
       return {};
@@ -315,6 +315,7 @@ export default function LineChart({
       },
     };
   }, [root, referenceDay, theme.palette.divider]);
+
   useDateAxisRange(referenceDateRangeSettings, root, chart, xAxis);
 
   const setReferenceDayX = useCallback(() => {
@@ -360,27 +361,32 @@ export default function LineChart({
       return [];
     }
 
-    return lineChartData.map((line) => ({
-      xAxis: xAxis,
-      yAxis: yAxis,
-      id: `${chartId}_${line.serieId}`,
-      name: line.name
-        ? localization.overrides && localization.overrides[line.name]
-          ? customT(localization.overrides[line.name])
-          : defaultT(line.name)
-        : '',
-      valueXField: 'date',
-      valueYField: String(line.valueYField),
-      openValueYField: line.openValueYField ? String(line.openValueYField) : undefined,
-      connect: false,
-      visible: line.visible ?? true,
-      // Fallback Tooltip (if HTML breaks for some reason)
-      tooltip: Tooltip.new(root, {
-        labelText: line.tooltipText,
-      }),
-      stroke: line.stroke.color,
-      fill: line.fill ?? undefined,
-    }));
+    return lineChartData.map((line) => {
+      let lineName = line.name;
+      if (lineName) {
+        if (localization.overrides && localization.overrides[lineName]) {
+          lineName = customT(localization.overrides[lineName]);
+        } else {
+          lineName = defaultT(lineName);
+        }
+      }
+      return {
+        xAxis: xAxis,
+        yAxis: yAxis,
+        id: `${chartId}_${line.serieId}`,
+        name: lineName ?? '',
+        valueXField: 'date',
+        valueYField: String(line.valueYField),
+        openValueYField: line.openValueYField ? String(line.openValueYField) : undefined,
+        connect: false,
+        visible: line.visible ?? true,
+        tooltip: Tooltip.new(root, {
+          labelText: line.tooltipText,
+        }),
+        stroke: line.stroke.color,
+        fill: line.fill ?? undefined,
+      };
+    });
   }, [lineChartData, root, xAxis, yAxis, chartId, localization, defaultT, customT]);
 
   useLineSeriesList(
@@ -390,7 +396,7 @@ export default function LineChart({
     useCallback(
       (series: LineSeries) => {
         if (!lineChartData) return;
-        const seriesSettings = lineChartData.find((line) => line.serieId == series.get('id')?.split('_')[1]);
+        const seriesSettings = lineChartData.find((line) => line.serieId === series.get('id')?.split('_')[1]);
         series.strokes.template.setAll({
           strokeWidth: seriesSettings?.stroke.strokeWidth ?? 2,
           strokeDasharray: seriesSettings?.stroke.strokeDasharray ?? undefined,
@@ -477,7 +483,7 @@ export default function LineChart({
     if (lineChartData) {
       lineChartData.forEach((serie) => {
         const id = serie.serieId;
-        if (activeScenarios && activeScenarios.includes(Number(id))) {
+        if (activeScenarios?.includes(Number(id))) {
           serie.values.forEach((entry) => {
             dataMap.set(entry.day, {...dataMap.get(entry.day), [id]: entry.value as number});
           });
@@ -684,7 +690,7 @@ export default function LineChart({
     if (activeScenarios) {
       activeScenarios.forEach((scenarioId) => {
         // Skip case data (already added)
-        if (scenarioId === 0 || !scenarioId || !scenarioList || !scenarioList.scenarios[scenarioId]) {
+        if (scenarioId === 0 || !scenarioId || !scenarioList?.scenarios[scenarioId]) {
           return;
         }
 
@@ -743,19 +749,17 @@ export default function LineChart({
   ]);
 
   return (
-    <>
-      <Box
-        id={chartId}
-        sx={{
-          height: '100%',
-          margin: 0,
-          padding: 0,
-          backgroundColor: theme.palette.background.paper,
-          backgroundImage: 'radial-gradient(#E2E4E6 10%, transparent 11%)',
-          backgroundSize: '10px 10px',
-          cursor: 'crosshair',
-        }}
-      />
-    </>
+    <Box
+      id={chartId}
+      sx={{
+        height: '100%',
+        margin: 0,
+        padding: 0,
+        backgroundColor: theme.palette.background.paper,
+        backgroundImage: 'radial-gradient(#E2E4E6 10%, transparent 11%)',
+        backgroundSize: '10px 10px',
+        cursor: 'crosshair',
+      }}
+    />
   );
 }

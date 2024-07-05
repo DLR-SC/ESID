@@ -153,7 +153,7 @@ export default [
   http.get('*/api/v1/rki/00000/', () => {
     return HttpResponse.json({
       count: 1470,
-      next: 'http://hpcagainstcorona.sc.bs.dlr.de:8000/api/v1/rki/00000/?limit=100&offset=100',
+      next: 'http://localhost:8000/api/v1/rki/00000/?limit=100&offset=100',
       previous: null,
       results: [
         {
@@ -400,7 +400,7 @@ export default [
           description: 'Summer 2021 Simulation 1',
           startDay: '2021-06-06',
           numberOfDays: 90,
-          scenario: 'http://hpcagainstcorona.sc.bs.dlr.de:8000/api/v1/scenarios/1/',
+          scenario: 'http://localhost:8000/api/v1/scenarios/1/',
           percentiles: [25, 50, 75],
         },
         {
@@ -409,7 +409,7 @@ export default [
           description: 'Summer 2021 Simulation 2',
           startDay: '2021-06-06',
           numberOfDays: 90,
-          scenario: 'http://hpcagainstcorona.sc.bs.dlr.de:8000/api/v1/scenarios/1/',
+          scenario: 'http://localhost:8000/api/v1/scenarios/1/',
           percentiles: [25, 50, 75],
         },
       ],
