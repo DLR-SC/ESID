@@ -12,6 +12,7 @@ export default function useMapChart(
   initializer?: (chart: MapChart) => void
 ): MapChart | null {
   const [chart, setChart] = useState<MapChart>();
+
   useLayoutEffect(() => {
     if (!root || !settings) {
       return;

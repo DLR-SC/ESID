@@ -452,57 +452,58 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
       return lineChartData;
     });
     // This should re-run whenever the simulation data changes, or a different compartment is selected.
-  }, [chartSimulationData, selectedCompartment, theme, activeScenarios]);
+  }, [chartSimulationData, selectedCompartment, theme, activeScenarios, scenarioList]);
 
   // This effect sets the chart group filter data based on the selection.
   useEffect(() => {
-    if (!chartGroupFilterData || Object.keys(chartGroupFilterData).length == 0 || !selectedCompartment) return;
-    const processedData: Dictionary<{day: string; value: number}[]> = {};
-    // Process the group filter data for the selected compartment
-    Object.keys(chartGroupFilterData).forEach((key) => {
-      processedData[key] = chartGroupFilterData[key].results.map(
-        (element: {day: string; compartments: {[key: string]: number}}) => {
-          return {day: element.day, value: element.compartments[selectedCompartment]} as {day: string; value: number};
-        }
-      );
-    });
-    // Define stroke styles for different group filters
-    const groupFilterStrokes = [
-      [2, 4], // dotted
-      [8, 4], // dashed
-      [8, 4, 2, 4], // dash-dotted
-      [8, 4, 2, 4, 2, 4], // dash-dot-dotted
-    ];
     const lineChartData: LineChartData[] = [];
-    if (selectedScenario) {
-      // Push the processed group filter data into the line chart data
-      for (let i = 0; i < Object.keys(processedData).length; i++) {
-        lineChartData.push({
-          values: processedData[Object.keys(processedData)[i]],
-          name: Object.keys(processedData)[i],
-          stroke: {
-            color: color(getScenarioPrimaryColor(selectedScenario, theme)),
-            strokeDasharray: groupFilterStrokes[i % groupFilterStrokes.length],
-          },
-          serieId: `group-filter-${Object.keys(processedData)[i]}`,
-          valueYField: Object.keys(processedData)[i],
-          tooltipText: `[bold ${getScenarioPrimaryColor(selectedScenario, theme)}]${Object.keys(processedData)[i]}:[/] {${Object.keys(processedData)[i]}}`,
-        });
+    if (chartGroupFilterData && Object.keys(chartGroupFilterData).length > 0 && selectedCompartment) {
+      const processedData: Dictionary<{day: string; value: number}[]> = {};
+      // Process the group filter data for the selected compartment
+      Object.keys(chartGroupFilterData).forEach((key) => {
+        processedData[key] = chartGroupFilterData[key].results.map(
+          (element: {day: string; compartments: {[key: string]: number}}) => {
+            return {day: element.day, value: element.compartments[selectedCompartment]} as {day: string; value: number};
+          }
+        );
+      });
+      // Define stroke styles for different group filters
+      const groupFilterStrokes = [
+        [2, 4], // dotted
+        [8, 4], // dashed
+        [8, 4, 2, 4], // dash-dotted
+        [8, 4, 2, 4, 2, 4], // dash-dot-dotted
+      ];
+      if (selectedScenario) {
+        // Push the processed group filter data into the line chart data
+        for (let i = 0; i < Object.keys(processedData).length; i++) {
+          lineChartData.push({
+            values: processedData[Object.keys(processedData)[i]],
+            name: Object.keys(processedData)[i],
+            stroke: {
+              color: color(getScenarioPrimaryColor(selectedScenario, theme)),
+              strokeDasharray: groupFilterStrokes[i % groupFilterStrokes.length],
+            },
+            serieId: `group-filter-${Object.keys(processedData)[i]}`,
+            valueYField: Object.keys(processedData)[i],
+            tooltipText: `[bold ${getScenarioPrimaryColor(selectedScenario, theme)}]${Object.keys(processedData)[i]}:[/] {${Object.keys(processedData)[i]}}`,
+          });
+        }
       }
     }
-
     // Update the chart data state with the new line chart data
     setChartData((prevData) => {
-      if (prevData) {
+      if (prevData && prevData.length > 0) {
         const seriesWithoutGroup = prevData.filter(
           (serie) => typeof serie.serieId === 'number' || !serie.serieId.startsWith('group-filter')
         );
+        console.log(seriesWithoutGroup, lineChartData);
         if (seriesWithoutGroup.length > 0) return [...seriesWithoutGroup, ...lineChartData];
       }
       return lineChartData;
     });
     // This should re-run whenever the group filter data changes, or a different compartment is selected.
-  }, [chartGroupFilterData, selectedCompartment, selectedScenario, theme]);
+  }, [chartGroupFilterData, selectedCompartment, selectedScenario, theme, groupFilterList]);
 
   // This effect sets the chart percentile data based on the selection.
   useEffect(() => {

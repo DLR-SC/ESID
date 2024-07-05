@@ -144,7 +144,7 @@ export default function HeatMap({
     zoomSettings,
     useCallback(
       (zoom: am5map.ZoomControl) => {
-        if (!root) return;
+        if (!root || root.isDisposed()) return;
         const fixSVGPosition = {
           width: 25,
           height: 25,
@@ -181,19 +181,9 @@ export default function HeatMap({
   // This effect is responsible for setting the selected area when the home button is clicked.
   useLayoutEffect(() => {
     if (!zoom || !root || root.isDisposed() || zoom.isDisposed()) return;
-    const handleZoomLevelChanged = () => {
-      // Perform your custom actions here
+    zoom.homeButton.events.on('click', () => {
       setSelectedArea(defaultSelectedValue);
-    };
-    // Add event listener
-    zoom.homeButton.events.on('click', handleZoomLevelChanged);
-
-    return () => {
-      if (!zoom.isDisposed()) {
-        zoom.homeButton.events.off('click', handleZoomLevelChanged);
-      }
-    };
-  
+    });
     // This effect should only run when the zoom control is set
   }, [zoom, root, setSelectedArea, defaultSelectedValue]);
 
@@ -300,52 +290,34 @@ export default function HeatMap({
 
   // Highlight selected polygon and reset last selected polygon
   useEffect(() => {
-    if (!polygonSeries || polygonSeries.isDisposed()) return;
+    if (!polygonSeries) return;
     // Reset last selected polygon
-    const updatePolygons = () => {
-      if (lastSelectedPolygon.current) {
-        lastSelectedPolygon.current.states.create('default', {
-          stroke: am5.color(theme.palette.background.default),
-          strokeWidth: 1,
-          layer: 0,
-        });
-        lastSelectedPolygon.current.states.apply('default');
-      }
-      // Highlight selected polygon
-      polygonSeries.mapPolygons.each((mapPolygon) => {
-        if (mapPolygon.dataItem && mapPolygon.dataItem.dataContext) {
-          const areaData = mapPolygon.dataItem.dataContext as Feature;
-          const id: string | number = areaData[areaId as keyof Feature] as string | number;
-          if (id == selectedArea![areaId as keyof GeoJsonProperties]) {
-            mapPolygon.states.create('default', {
-              stroke: am5.color(theme.palette.primary.main),
-              strokeWidth: 2,
-              layer: 1,
-            });
-            if (!mapPolygon.isHover()) {
-              mapPolygon.states.apply('default');
-            }
-            lastSelectedPolygon.current = mapPolygon;
-          }
-        }
+    if (lastSelectedPolygon.current) {
+      lastSelectedPolygon.current.states.create('default', {
+        stroke: am5.color(theme.palette.background.default),
+        strokeWidth: 1,
+        layer: 0,
       });
-    };
-
-    const handleDataValidated = () => {
-      if (!polygonSeries.isDisposed()) {
-        updatePolygons();
+      lastSelectedPolygon.current.states.apply('default');
+    }
+    // Highlight selected polygon
+    polygonSeries.mapPolygons.each((mapPolygon) => {
+      if (mapPolygon.dataItem && mapPolygon.dataItem.dataContext) {
+        const areaData = mapPolygon.dataItem.dataContext as Feature;
+        const id: string | number = areaData[areaId as keyof Feature] as string | number;
+        if (id == selectedArea![areaId as keyof GeoJsonProperties]) {
+          mapPolygon.states.create('default', {
+            stroke: am5.color(theme.palette.primary.main),
+            strokeWidth: 2,
+            layer: 1,
+          });
+          if (!mapPolygon.isHover()) {
+            mapPolygon.states.apply('default');
+          }
+          lastSelectedPolygon.current = mapPolygon;
+        }
       }
-    };
-
-    polygonSeries.events.on('datavalidated', handleDataValidated);
-    handleDataValidated();
-
-    // Cleanup event listeners on component unmount or when dependencies change
-    return () => {
-      if (!polygonSeries.isDisposed()) {
-        polygonSeries.events.off('datavalidated', handleDataValidated);
-      }
-    };
+    });
     // This effect should only re-run when the selectedArea or polygonSeries change
   }, [areaId, polygonSeries, selectedArea, theme.palette.background.default, theme.palette.primary.main]);
 
@@ -392,12 +364,12 @@ export default function HeatMap({
     };
 
     const handleDataValidated = () => {
-      if (!polygonSeries.isDisposed()) {
-        updatePolygons();
-      }
+      updatePolygons();
     };
 
-    polygonSeries.events.on('datavalidated', handleDataValidated);
+    polygonSeries.events.on('datavalidated', () => {
+      handleDataValidated;
+    });
     handleDataValidated();
 
     // Cleanup event listeners on component unmount or when dependencies change

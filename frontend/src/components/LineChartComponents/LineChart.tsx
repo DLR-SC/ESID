@@ -17,7 +17,6 @@ import am5locales_de_DE from '@amcharts/amcharts5/locales/de_DE';
 import {darken, useTheme} from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import {useTranslation} from 'react-i18next';
-import {Dictionary} from '../../util/util';
 import {Localization} from 'types/localization';
 import useRoot from 'components/shared/Root';
 import {useConst} from 'util/hooks';
@@ -27,8 +26,6 @@ import useValueAxis from 'components/shared/LineChart/ValueAxis';
 import {useDateSelectorFilter} from 'components/shared/LineChart/Filter';
 import useDateAxisRange from 'components/shared/LineChart/AxisRange';
 import {useLineSeriesList} from 'components/shared/LineChart/LineSeries';
-import {GroupFilter} from 'types/group';
-import {ScenarioList} from 'types/scenario';
 import {LineSeries} from '@amcharts/amcharts5/.internal/charts/xy/series/LineSeries';
 import {LineChartData} from 'types/lineChart';
 
@@ -66,20 +63,8 @@ interface LineChartProps {
   /** Optional reference day for the chart in ISO format (YYYY-MM-DD). */
   referenceDay?: string | null;
 
-  /** The currently selected compartment in the chart, which represents different categories or groups in the data. */
-  selectedCompartment: string;
-
-  /**
-   * Optional list of scenarios available for selection.
-   * This list includes the details of all possible scenarios that can be plotted on the chart.
-   */
-  scenarioList?: ScenarioList | null;
-
-  /**
-   * Optional dictionary of group filter configurations.
-   * This includes settings for how different groups should be filtered and displayed on the chart.
-   */
-  groupFilterList?: Dictionary<GroupFilter> | null;
+  /** Optional label for the LineChart. Used when label needs to be changed. To use a static label overrides yAxisLabel */
+  yAxisLabel?: string;
 
   /** Optional name for the exported file when the chart data is downloaded. Defaults to 'Data'. */
   exportedFileName?: string;
@@ -102,10 +87,8 @@ export default function LineChart({
   selectedScenario = null,
   activeScenarios = null,
   referenceDay = null,
-  selectedCompartment,
-  scenarioList = null,
-  groupFilterList = null,
   exportedFileName = 'Data',
+  yAxisLabel,
   localization = {
     formatNumber: (value) => value.toLocaleString(),
     customLang: 'global',
@@ -475,7 +458,7 @@ export default function LineChart({
     // Skip effect if chart is not initialized yet
     if (!chart || chart.isDisposed()) return;
     // Also skip if there is no scenario or compartment selected
-    if (selectedScenario === null || !selectedCompartment) return;
+    if (selectedScenario === null) return;
 
     // Create empty map to match dates
     const dataMap = new Map<string, {[key: string]: number}>();
@@ -487,13 +470,9 @@ export default function LineChart({
           serie.values.forEach((entry) => {
             dataMap.set(entry.day, {...dataMap.get(entry.day), [id]: entry.value as number});
           });
-        } else if (groupFilterList && typeof id === 'string' && id.startsWith('group-filter-')) {
-          const groupFilterName = serie.name;
-          Object.values(groupFilterList).forEach((groupFilter) => {
-            if (groupFilter.name === groupFilterName && groupFilter.isVisible)
-              serie.values.forEach((entry) => {
-                dataMap.set(entry.day, {...dataMap.get(entry.day), [groupFilterName]: entry.value as number});
-              });
+        } else if (typeof id === 'string' && id.startsWith('group-filter-')) {
+          serie.values.forEach((entry) => {
+            dataMap.set(entry.day, {...dataMap.get(entry.day), [serie.name!]: entry.value as number});
           });
         } else if (serie.openValueYField) {
           serie.values.forEach((entry) => {
@@ -535,9 +514,10 @@ export default function LineChart({
             ? customT(localization.overrides['dateFormat'])
             : defaultT('dateFormat')
         }")} (${
-          localization.overrides && localization.overrides[`compartment.${selectedCompartment}`]
-            ? customT(localization.overrides[`compartment.${selectedCompartment}`])
-            : defaultT(`compartment.${selectedCompartment}`)
+          yAxisLabel ??
+          (localization.overrides && localization.overrides[`yAxisLabel`]
+            ? customT(localization.overrides[`yAxisLabel`])
+            : defaultT(`yAxisLabel`))
         })</strong>
         <table>
           ${
@@ -687,22 +667,53 @@ export default function LineChart({
     // Always put date first, case data second
     const dataFieldsOrder = ['date', 'caseData'];
     // Loop through active scenarios (if there are any)
-    if (activeScenarios) {
-      activeScenarios.forEach((scenarioId) => {
-        // Skip case data (already added)
-        if (scenarioId === 0 || !scenarioId || !scenarioList?.scenarios[scenarioId]) {
-          return;
-        }
+    // if (activeScenarios) {
+    //   activeScenarios.forEach((scenarioId) => {
+    //     // Skip case data (already added)
+    //     if (scenarioId === 0 || !scenarioList?.scenarios[scenarioId]) {
+    //       return;
+    //     }
+    //     console.log(scenarioId, scenarioList, scenarioList.scenarios[scenarioId])
 
+    //     // Add scenario label to export data field names
+    //     dataFields = {
+    //       ...dataFields,
+    //       [scenarioId]: scenarioList.scenarios[scenarioId].label,
+    //     };
+    //     // Add scenario id to export data field order (for sorted export like csv)
+    //     dataFieldsOrder.push(`${scenarioId}`);
+    //     // If this is the selected scenario also add percentiles after it
+    //     if (scenarioId == selectedScenario) {
+    //       dataFieldsOrder.push('percentileDown', 'percentileUp');
+    //     }
+    //   });
+    // }
+    if (lineChartData) {
+      lineChartData.forEach((serie) => {
+        if (
+          serie.serieId === 0 ||
+          serie.serieId === 'percentiles' ||
+          serie.serieId.toString().startsWith('group-filter-')
+        )
+          return;
+
+        let lineName = serie.name;
+        if (lineName) {
+          if (localization.overrides && localization.overrides[lineName]) {
+            lineName = customT(localization.overrides[lineName]);
+          } else {
+            lineName = defaultT(lineName);
+          }
+        }
         // Add scenario label to export data field names
         dataFields = {
           ...dataFields,
-          [scenarioId]: scenarioList.scenarios[scenarioId].label,
+          [serie.serieId]: lineName,
         };
         // Add scenario id to export data field order (for sorted export like csv)
-        dataFieldsOrder.push(`${scenarioId}`);
+        dataFieldsOrder.push(`${serie.serieId}`);
         // If this is the selected scenario also add percentiles after it
-        if (scenarioId == selectedScenario) {
+        if (serie.serieId == selectedScenario) {
           dataFieldsOrder.push('percentileDown', 'percentileUp');
         }
       });
@@ -733,10 +744,7 @@ export default function LineChart({
   }, [
     activeScenarios,
     selectedScenario,
-    scenarioList,
-    selectedCompartment,
     theme,
-    groupFilterList,
     defaultT,
     customT,
     setReferenceDayX,
@@ -746,6 +754,7 @@ export default function LineChart({
     chart,
     root,
     lineChartData,
+    yAxisLabel,
   ]);
 
   return (
