@@ -365,9 +365,7 @@ export default function HeatMap({
     };
 
     const handleDataValidated = () => {
-      if (!polygonSeries.isDisposed()) {
-        updatePolygons();
-      }
+      updatePolygons();
     };
 
     polygonSeries.events.on('datavalidated', handleDataValidated);

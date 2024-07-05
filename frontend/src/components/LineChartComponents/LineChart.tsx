@@ -295,10 +295,11 @@ export default function LineChart({
       },
     };
   }, [i18n.language, root, selectedDate, theme.palette.primary.contrastText, theme.palette.primary.main]);
+
   useDateAxisRange(selectedDateRangeSettings, root, chart, xAxis);
 
   const referenceDateRangeSettings = useMemo(() => {
-    if (!referenceDay) {
+    if (!referenceDay || !root) {
       return {};
     }
 
@@ -314,7 +315,8 @@ export default function LineChart({
         strokeDasharray: [6, 4],
       },
     };
-  }, [referenceDay, theme.palette.divider]);
+  }, [root, referenceDay, theme.palette.divider]);
+
   useDateAxisRange(referenceDateRangeSettings, root, chart, xAxis);
 
   const setReferenceDayX = useCallback(() => {
@@ -374,7 +376,6 @@ export default function LineChart({
       openValueYField: line.openValueYField ? String(line.openValueYField) : undefined,
       connect: false,
       visible: line.visible ?? true,
-      // Fallback Tooltip (if HTML breaks for some reason)
       tooltip: Tooltip.new(root, {
         labelText: line.tooltipText,
       }),
@@ -390,7 +391,7 @@ export default function LineChart({
     useCallback(
       (series: LineSeries) => {
         if (!lineChartData) return;
-        const seriesSettings = lineChartData.find((line) => line.serieId == series.get('id')?.split('_')[1]);
+        const seriesSettings = lineChartData.find((line) => line.serieId === series.get('id')?.split('_')[1]);
         series.strokes.template.setAll({
           strokeWidth: seriesSettings?.stroke.strokeWidth ?? 2,
           strokeDasharray: seriesSettings?.stroke.strokeDasharray ?? undefined,

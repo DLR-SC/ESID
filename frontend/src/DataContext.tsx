@@ -417,9 +417,9 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
     // Define the scenario names for the simulation data
     const scenarioNames = [
       'scenario-names.baseline',
-      'scenario-names.closed_schools',
-      'scenario-names.remote_work',
       'scenario-names.10p_reduced_contacts',
+      'scenario-names.remote_work',
+      'scenario-names.closed_schools',
     ];
     let scenarioNamesIndex = 0;
     const lineChartData: LineChartData[] = [];

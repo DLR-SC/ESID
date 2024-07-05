@@ -15,31 +15,51 @@ export function useLineSeriesList(
   const [series, setSeries] = useState<Array<LineSeries>>();
 
   useLayoutEffect(() => {
-    if (!root || !chart || settings.length === 0) {
+    let isCancelled = false;
+    if (
+      !root ||
+      !chart ||
+      settings.length === 0 ||
+      chart.isDisposed() ||
+      chart.series.isDisposed() ||
+      root.isDisposed()
+    ) {
       return;
     }
 
+    if (chart.series.length > 0 && !chart.isDisposed()) chart.series.clear();
+
     const seriesList: Array<LineSeries> = [];
+
     for (let i = 0; i < settings.length; i++) {
       const setting = settings[i];
+
+      // Check if chart or root is disposed or operation is cancelled before creating the series
+      if (chart.isDisposed() || root.isDisposed() || isCancelled || setting.xAxis.isDisposed()) {
+        return;
+      }
+
       const newSeries = LineSeries.new(root, setting);
       seriesList.push(newSeries);
+
+      chart.series.push(newSeries);
 
       if (initializer) {
         initializer(newSeries, i);
       }
     }
 
-    chart.series.pushAll(seriesList);
-    setSeries(seriesList);
+    if (!isCancelled) {
+      setSeries(seriesList);
+    }
 
     return () => {
-      for (const entry of seriesList) {
-        chart.series.removeValue(entry);
-        entry.dispose();
+      isCancelled = true;
+      if (!chart.isDisposed()) {
+        chart.series.clear();
       }
     };
-  }, [chart, initializer, root, settings, settings.length]);
+  }, [chart, initializer, root, settings]);
 
   return series ?? null;
 }
