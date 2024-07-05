@@ -10,8 +10,10 @@ import React from 'react';
 import {useAppDispatch, useAppSelector} from 'store/hooks';
 import {selectDate} from 'store/DataSelectionSlice';
 import {setReferenceDayBottom} from 'store/LayoutSlice';
+import {useTranslation} from 'react-i18next';
 
 export default function LineChartContainer() {
+  const {t} = useTranslation('backend');
   const theme = useTheme();
   const dispatch = useAppDispatch();
 
@@ -19,7 +21,6 @@ export default function LineChartContainer() {
 
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
-  const groupFilterList = useAppSelector((state) => state.dataSelection.groupFilters);
   const scenarioList = useAppSelector((state) => state.scenarioList);
   const activeScenarios = useAppSelector((state) => state.dataSelection.activeScenarios);
   const selectedDateInStore = useAppSelector((state) => state.dataSelection.date);
@@ -34,14 +35,17 @@ export default function LineChartContainer() {
     return {
       customLang: 'backend',
       overrides: {
-        [`compartment.${selectedCompartment}`]: `infection-states.${selectedCompartment}`,
         'scenario-names.baseline': 'scenario-names.baseline',
         'scenario-names.closed_schools': 'scenario-names.closed_schools',
         'scenario-names.remote_work': 'scenario-names.remote_work',
         'scenario-names.10p_reduced_contacts': 'scenario-names.10p_reduced_contacts',
       },
     };
-  }, [selectedCompartment]);
+  }, []);
+
+  const yAxisLabel = useMemo(() => {
+    return t(`infection-states.${selectedCompartment}`);
+  }, [selectedCompartment, t]);
 
   // Set selected date in store
   useEffect(() => {
@@ -79,8 +83,7 @@ export default function LineChartContainer() {
         selectedScenario={selectedScenario}
         activeScenarios={activeScenarios}
         referenceDay={referenceDay}
-        selectedCompartment={selectedCompartment ?? ''}
-        groupFilterList={groupFilterList}
+        yAxisLabel={yAxisLabel}
         scenarioList={scenarioList}
         localization={localization}
       />

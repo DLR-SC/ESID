@@ -99,4 +99,5 @@
     sanctus est Lorem ipsum dolor sit amet.',
   WIP: 'This functionality is still work in progress.',
   okay: 'Okay',
+  yAxisLabel: 'Value',
 }
