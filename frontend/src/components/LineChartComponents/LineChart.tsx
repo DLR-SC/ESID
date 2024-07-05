@@ -26,7 +26,6 @@ import useValueAxis from 'components/shared/LineChart/ValueAxis';
 import {useDateSelectorFilter} from 'components/shared/LineChart/Filter';
 import useDateAxisRange from 'components/shared/LineChart/AxisRange';
 import {useLineSeriesList} from 'components/shared/LineChart/LineSeries';
-import {ScenarioList} from 'types/scenario';
 import {LineSeries} from '@amcharts/amcharts5/.internal/charts/xy/series/LineSeries';
 import {LineChartData} from 'types/lineChart';
 
@@ -67,12 +66,6 @@ interface LineChartProps {
   /** Optional label for the LineChart. Used when label needs to be changed. To use a static label overrides yAxisLabel */
   yAxisLabel?: string;
 
-  /**
-   * Optional list of scenarios available for selection.
-   * This list includes the details of all possible scenarios that can be plotted on the chart.
-   */
-  scenarioList?: ScenarioList | null;
-
   /** Optional name for the exported file when the chart data is downloaded. Defaults to 'Data'. */
   exportedFileName?: string;
 
@@ -94,7 +87,6 @@ export default function LineChart({
   selectedScenario = null,
   activeScenarios = null,
   referenceDay = null,
-  scenarioList = null,
   exportedFileName = 'Data',
   yAxisLabel,
   localization = {
@@ -675,22 +667,53 @@ export default function LineChart({
     // Always put date first, case data second
     const dataFieldsOrder = ['date', 'caseData'];
     // Loop through active scenarios (if there are any)
-    if (activeScenarios) {
-      activeScenarios.forEach((scenarioId) => {
-        // Skip case data (already added)
-        if (scenarioId === 0 || !scenarioId || !scenarioList?.scenarios[scenarioId]) {
-          return;
-        }
+    // if (activeScenarios) {
+    //   activeScenarios.forEach((scenarioId) => {
+    //     // Skip case data (already added)
+    //     if (scenarioId === 0 || !scenarioList?.scenarios[scenarioId]) {
+    //       return;
+    //     }
+    //     console.log(scenarioId, scenarioList, scenarioList.scenarios[scenarioId])
 
+    //     // Add scenario label to export data field names
+    //     dataFields = {
+    //       ...dataFields,
+    //       [scenarioId]: scenarioList.scenarios[scenarioId].label,
+    //     };
+    //     // Add scenario id to export data field order (for sorted export like csv)
+    //     dataFieldsOrder.push(`${scenarioId}`);
+    //     // If this is the selected scenario also add percentiles after it
+    //     if (scenarioId == selectedScenario) {
+    //       dataFieldsOrder.push('percentileDown', 'percentileUp');
+    //     }
+    //   });
+    // }
+    if (lineChartData) {
+      lineChartData.forEach((serie) => {
+        if (
+          serie.serieId === 0 ||
+          serie.serieId === 'percentiles' ||
+          serie.serieId.toString().startsWith('group-filter-')
+        )
+          return;
+
+        let lineName = serie.name;
+        if (lineName) {
+          if (localization.overrides && localization.overrides[lineName]) {
+            lineName = customT(localization.overrides[lineName]);
+          } else {
+            lineName = defaultT(lineName);
+          }
+        }
         // Add scenario label to export data field names
         dataFields = {
           ...dataFields,
-          [scenarioId]: scenarioList.scenarios[scenarioId].label,
+          [serie.serieId]: lineName,
         };
         // Add scenario id to export data field order (for sorted export like csv)
-        dataFieldsOrder.push(`${scenarioId}`);
+        dataFieldsOrder.push(`${serie.serieId}`);
         // If this is the selected scenario also add percentiles after it
-        if (scenarioId == selectedScenario) {
+        if (serie.serieId == selectedScenario) {
           dataFieldsOrder.push('percentileDown', 'percentileUp');
         }
       });
@@ -721,7 +744,6 @@ export default function LineChart({
   }, [
     activeScenarios,
     selectedScenario,
-    scenarioList,
     theme,
     defaultT,
     customT,

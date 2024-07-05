@@ -21,7 +21,6 @@ export default function LineChartContainer() {
 
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
-  const scenarioList = useAppSelector((state) => state.scenarioList);
   const activeScenarios = useAppSelector((state) => state.dataSelection.activeScenarios);
   const selectedDateInStore = useAppSelector((state) => state.dataSelection.date);
   const referenceDay = useAppSelector((state) => state.dataSelection.simulationStart);
@@ -84,7 +83,6 @@ export default function LineChartContainer() {
         activeScenarios={activeScenarios}
         referenceDay={referenceDay}
         yAxisLabel={yAxisLabel}
-        scenarioList={scenarioList}
         localization={localization}
       />
     </LoadingContainer>
