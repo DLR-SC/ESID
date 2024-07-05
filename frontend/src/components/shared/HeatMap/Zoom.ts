@@ -11,7 +11,6 @@ export default function useZoomControl(
   initializer?: (zoom: am5map.ZoomControl) => void
 ): am5map.ZoomControl | null {
   const [zoom, setZoom] = useState<am5map.ZoomControl>();
-
   useLayoutEffect(() => {
     if (!root) {
       return;

@@ -34,7 +34,6 @@ export function useLineSeriesList(
     for (let i = 0; i < settings.length; i++) {
       const setting = settings[i];
 
-      // Check if chart or root is disposed or operation is cancelled before creating the series
       if (chart.isDisposed() || root.isDisposed() || isCancelled || setting.xAxis.isDisposed()) {
         return;
       }

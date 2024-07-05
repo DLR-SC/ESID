@@ -145,7 +145,6 @@ export default function HeatMap({
     useCallback(
       (zoom: am5map.ZoomControl) => {
         if (!root) return;
-        if (!root) return;
         const fixSVGPosition = {
           width: 25,
           height: 25,
@@ -180,11 +179,21 @@ export default function HeatMap({
   );
 
   // This effect is responsible for setting the selected area when the home button is clicked.
-  useEffect(() => {
-    if (!zoom || !root || root.isDisposed()) return;
-    zoom.homeButton.events.on('click', () => {
+  useLayoutEffect(() => {
+    if (!zoom || !root || root.isDisposed() || zoom.isDisposed()) return;
+    const handleZoomLevelChanged = () => {
+      // Perform your custom actions here
       setSelectedArea(defaultSelectedValue);
-    });
+    };
+    // Add event listener
+    zoom.homeButton.events.on('click', handleZoomLevelChanged);
+
+    return () => {
+      if (!zoom.isDisposed()) {
+        zoom.homeButton.events.off('click', handleZoomLevelChanged);
+      }
+    };
+  
     // This effect should only run when the zoom control is set
   }, [zoom, root, setSelectedArea, defaultSelectedValue]);
 
