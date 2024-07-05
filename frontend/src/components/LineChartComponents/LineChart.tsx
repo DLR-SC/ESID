@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import {useCallback, useEffect, useLayoutEffect, useMemo} from 'react';
+import React, {useCallback, useEffect, useLayoutEffect, useMemo} from 'react';
 import {Root} from '@amcharts/amcharts5/.internal/core/Root';
 import {Tooltip} from '@amcharts/amcharts5/.internal/core/render/Tooltip';
 import {RoundedRectangle} from '@amcharts/amcharts5/.internal/core/render/RoundedRectangle';
@@ -18,7 +18,6 @@ import {darken, useTheme} from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import {useTranslation} from 'react-i18next';
 import {Dictionary} from '../../util/util';
-import React from 'react';
 import {Localization} from 'types/localization';
 import useRoot from 'components/shared/Root';
 import {useConst} from 'util/hooks';
@@ -88,7 +87,6 @@ interface LineChartProps {
   /** Optional localization settings for the chart, including number formatting and language overrides. */
   localization?: Localization;
 }
-
 /**
  * React Component to render the Linechart Section
  * @returns {JSX.Element} JSX Element to render the linechart container and the graphs within.
@@ -195,7 +193,7 @@ export default function LineChart({
 
   // Effect to add cursor to chart
   useLayoutEffect(() => {
-    if (!chart || !root || !xAxis) {
+    if (!chart || !root || !xAxis || chart.isDisposed() || root.isDisposed() || xAxis.isDisposed()) {
       return;
     }
 
@@ -214,47 +212,6 @@ export default function LineChart({
 
   // Effect to add date selector filter to chart
   useDateSelectorFilter(chart, xAxis, setSelectedDate);
-
-  // Effect to change localization of chart if language changes
-  useLayoutEffect(
-    () => {
-      // Skip if root or chart or xAxis is not initialized
-      if (!root || !chart || !xAxis) {
-        return;
-      }
-
-      // Set localization
-      root.locale = i18n.language === 'de' ? am5locales_de_DE : am5locales_en_US;
-
-      xAxis.get('dateFormats', {day: ''})['day'] =
-        localization.overrides && localization.overrides['dayFormat']
-          ? customT(localization.overrides['dayFormat'])
-          : defaultT('dayFormat');
-      xAxis.get('tooltipDateFormats', {day: ''})['day'] =
-        localization.overrides && localization.overrides['dayFormat']
-          ? customT(localization.overrides['dayFormat'])
-          : defaultT('dayFormat');
-      // Fix first date of the month falling back to wrong format (also with fallback object)
-      xAxis.get('periodChangeDateFormats', {day: ''})['day'] =
-        localization.overrides && localization.overrides['dayFormat']
-          ? customT(localization.overrides['dayFormat'])
-          : defaultT('dayFormat');
-    },
-    // Re-run effect if language changes
-    [i18n.language, root, chart, xAxis, defaultT, customT, localization.overrides]
-  );
-
-  // Effect to update min/max date.
-  useLayoutEffect(() => {
-    // Skip if root or chart or xAxis is not initialized
-    if (!xAxis || !minDate || !maxDate) {
-      return;
-    }
-
-    xAxis.set('min', new Date(minDate).setHours(0));
-    xAxis.set('max', new Date(maxDate).setHours(23, 59, 59));
-    // This effect should re-run when xAxis, minDate or maxDate changes
-  }, [minDate, maxDate, xAxis]);
 
   const selectedDateRangeSettings = useMemo(() => {
     if (!root || !selectedDate) {
@@ -298,14 +255,56 @@ export default function LineChart({
 
   useDateAxisRange(selectedDateRangeSettings, root, chart, xAxis);
 
+  // Effect to change localization of chart if language changes
+  useLayoutEffect(
+    () => {
+      // Skip if root or chart or xAxis is not initialized
+      if (!root || !chart || !xAxis || chart.isDisposed() || root.isDisposed() || xAxis.isDisposed()) {
+        return;
+      }
+
+      // Set localization
+      root.locale = i18n.language === 'de' ? am5locales_de_DE : am5locales_en_US;
+
+      xAxis.get('dateFormats', {day: ''})['day'] =
+        localization.overrides && localization.overrides['dayFormat']
+          ? customT(localization.overrides['dayFormat'])
+          : defaultT('dayFormat');
+      xAxis.get('tooltipDateFormats', {day: ''})['day'] =
+        localization.overrides && localization.overrides['dayFormat']
+          ? customT(localization.overrides['dayFormat'])
+          : defaultT('dayFormat');
+      // Fix first date of the month falling back to wrong format (also with fallback object)
+      xAxis.get('periodChangeDateFormats', {day: ''})['day'] =
+        localization.overrides && localization.overrides['dayFormat']
+          ? customT(localization.overrides['dayFormat'])
+          : defaultT('dayFormat');
+    },
+    // Re-run effect if language changes
+    [i18n.language, root, chart, xAxis, defaultT, customT, localization.overrides]
+  );
+
+  // Effect to update min/max date.
+  useLayoutEffect(() => {
+    // Skip if root or chart or xAxis is not initialized
+    if (!xAxis || !minDate || !maxDate || xAxis.isDisposed()) {
+      return;
+    }
+
+    xAxis.set('min', new Date(minDate).setHours(0));
+    xAxis.set('max', new Date(maxDate).setHours(23, 59, 59));
+    // This effect should re-run when xAxis, minDate or maxDate changes
+  }, [minDate, maxDate, xAxis]);
+
   const referenceDateRangeSettings = useMemo(() => {
-    if (!referenceDay || !root) {
+    if (!root || !referenceDay) {
       return {};
     }
 
     return {
       data: {
         value: new Date(referenceDay).setHours(12, 0, 0),
+        endValue: new Date(referenceDay).setHours(12, 0, 1),
         above: true,
       },
       grid: {
@@ -334,7 +333,7 @@ export default function LineChart({
 
   // Effect to update reference day position
   useLayoutEffect(() => {
-    if (!root || !chart || !xAxis) {
+    if (!root || !chart || !xAxis || chart.isDisposed() || root.isDisposed() || xAxis.isDisposed()) {
       return;
     }
 
@@ -362,26 +361,32 @@ export default function LineChart({
       return [];
     }
 
-    return lineChartData.map((line) => ({
-      xAxis: xAxis,
-      yAxis: yAxis,
-      id: `${chartId}_${line.serieId}`,
-      name: line.name
-        ? localization.overrides && localization.overrides[line.name]
-          ? customT(localization.overrides[line.name])
-          : defaultT(line.name)
-        : '',
-      valueXField: 'date',
-      valueYField: String(line.valueYField),
-      openValueYField: line.openValueYField ? String(line.openValueYField) : undefined,
-      connect: false,
-      visible: line.visible ?? true,
-      tooltip: Tooltip.new(root, {
-        labelText: line.tooltipText,
-      }),
-      stroke: line.stroke.color,
-      fill: line.fill ?? undefined,
-    }));
+    return lineChartData.map((line) => {
+      let lineName = line.name;
+      if (lineName) {
+        if (localization.overrides && localization.overrides[lineName]) {
+          lineName = customT(localization.overrides[lineName]);
+        } else {
+          lineName = defaultT(lineName);
+        }
+      }
+      return {
+        xAxis: xAxis,
+        yAxis: yAxis,
+        id: `${chartId}_${line.serieId}`,
+        name: lineName ?? '',
+        valueXField: 'date',
+        valueYField: String(line.valueYField),
+        openValueYField: line.openValueYField ? String(line.openValueYField) : undefined,
+        connect: false,
+        visible: line.visible ?? true,
+        tooltip: Tooltip.new(root, {
+          labelText: line.tooltipText,
+        }),
+        stroke: line.stroke.color,
+        fill: line.fill ?? undefined,
+      };
+    });
   }, [lineChartData, root, xAxis, yAxis, chartId, localization, defaultT, customT]);
 
   useLineSeriesList(
@@ -410,7 +415,8 @@ export default function LineChart({
   // Effect to hide disabled scenarios (and show them again if not hidden anymore)
   useLayoutEffect(
     () => {
-      const allSeries = chart?.series;
+      if (!chart || chart.isDisposed()) return;
+      const allSeries = chart.series;
       // Skip effect if chart is not initialized (contains no series yet)
       if (!allSeries) return;
 
@@ -443,7 +449,7 @@ export default function LineChart({
   useEffect(
     () => {
       // Skip effect if chart is not initialized (contains no series yet)
-      if (!chart) return;
+      if (!chart || chart.isDisposed()) return;
 
       // Find percentile series and only show it if there is a selected scenario
       chart.series.values
@@ -467,7 +473,7 @@ export default function LineChart({
   // Effect to update data in series
   useEffect(() => {
     // Skip effect if chart is not initialized yet
-    if (!chart) return;
+    if (!chart || chart.isDisposed()) return;
     // Also skip if there is no scenario or compartment selected
     if (selectedScenario === null || !selectedCompartment) return;
 
@@ -477,7 +483,7 @@ export default function LineChart({
     if (lineChartData) {
       lineChartData.forEach((serie) => {
         const id = serie.serieId;
-        if (activeScenarios && activeScenarios.includes(Number(id))) {
+        if (activeScenarios?.includes(Number(id))) {
           serie.values.forEach((entry) => {
             dataMap.set(entry.day, {...dataMap.get(entry.day), [id]: entry.value as number});
           });
@@ -684,7 +690,7 @@ export default function LineChart({
     if (activeScenarios) {
       activeScenarios.forEach((scenarioId) => {
         // Skip case data (already added)
-        if (scenarioId === 0 || !scenarioId || !scenarioList || !scenarioList.scenarios[scenarioId]) {
+        if (scenarioId === 0 || !scenarioId || !scenarioList?.scenarios[scenarioId]) {
           return;
         }
 
@@ -743,19 +749,17 @@ export default function LineChart({
   ]);
 
   return (
-    <>
-      <Box
-        id={chartId}
-        sx={{
-          height: '100%',
-          margin: 0,
-          padding: 0,
-          backgroundColor: theme.palette.background.paper,
-          backgroundImage: 'radial-gradient(#E2E4E6 10%, transparent 11%)',
-          backgroundSize: '10px 10px',
-          cursor: 'crosshair',
-        }}
-      />
-    </>
+    <Box
+      id={chartId}
+      sx={{
+        height: '100%',
+        margin: 0,
+        padding: 0,
+        backgroundColor: theme.palette.background.paper,
+        backgroundImage: 'radial-gradient(#E2E4E6 10%, transparent 11%)',
+        backgroundSize: '10px 10px',
+        cursor: 'crosshair',
+      }}
+    />
   );
 }

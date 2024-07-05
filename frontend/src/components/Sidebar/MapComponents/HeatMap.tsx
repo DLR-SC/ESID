@@ -300,34 +300,52 @@ export default function HeatMap({
 
   // Highlight selected polygon and reset last selected polygon
   useEffect(() => {
-    if (!polygonSeries) return;
+    if (!polygonSeries || polygonSeries.isDisposed()) return;
     // Reset last selected polygon
-    if (lastSelectedPolygon.current) {
-      lastSelectedPolygon.current.states.create('default', {
-        stroke: am5.color(theme.palette.background.default),
-        strokeWidth: 1,
-        layer: 0,
-      });
-      lastSelectedPolygon.current.states.apply('default');
-    }
-    // Highlight selected polygon
-    polygonSeries.mapPolygons.each((mapPolygon) => {
-      if (mapPolygon.dataItem && mapPolygon.dataItem.dataContext) {
-        const areaData = mapPolygon.dataItem.dataContext as Feature;
-        const id: string | number = areaData[areaId as keyof Feature] as string | number;
-        if (id == selectedArea![areaId as keyof GeoJsonProperties]) {
-          mapPolygon.states.create('default', {
-            stroke: am5.color(theme.palette.primary.main),
-            strokeWidth: 2,
-            layer: 1,
-          });
-          if (!mapPolygon.isHover()) {
-            mapPolygon.states.apply('default');
-          }
-          lastSelectedPolygon.current = mapPolygon;
-        }
+    const updatePolygons = () => {
+      if (lastSelectedPolygon.current) {
+        lastSelectedPolygon.current.states.create('default', {
+          stroke: am5.color(theme.palette.background.default),
+          strokeWidth: 1,
+          layer: 0,
+        });
+        lastSelectedPolygon.current.states.apply('default');
       }
-    });
+      // Highlight selected polygon
+      polygonSeries.mapPolygons.each((mapPolygon) => {
+        if (mapPolygon.dataItem && mapPolygon.dataItem.dataContext) {
+          const areaData = mapPolygon.dataItem.dataContext as Feature;
+          const id: string | number = areaData[areaId as keyof Feature] as string | number;
+          if (id == selectedArea![areaId as keyof GeoJsonProperties]) {
+            mapPolygon.states.create('default', {
+              stroke: am5.color(theme.palette.primary.main),
+              strokeWidth: 2,
+              layer: 1,
+            });
+            if (!mapPolygon.isHover()) {
+              mapPolygon.states.apply('default');
+            }
+            lastSelectedPolygon.current = mapPolygon;
+          }
+        }
+      });
+    };
+
+    const handleDataValidated = () => {
+      if (!polygonSeries.isDisposed()) {
+        updatePolygons();
+      }
+    };
+
+    polygonSeries.events.on('datavalidated', handleDataValidated);
+    handleDataValidated();
+
+    // Cleanup event listeners on component unmount or when dependencies change
+    return () => {
+      if (!polygonSeries.isDisposed()) {
+        polygonSeries.events.off('datavalidated', handleDataValidated);
+      }
+    };
     // This effect should only re-run when the selectedArea or polygonSeries change
   }, [areaId, polygonSeries, selectedArea, theme.palette.background.default, theme.palette.primary.main]);
 
@@ -374,7 +392,9 @@ export default function HeatMap({
     };
 
     const handleDataValidated = () => {
-      updatePolygons();
+      if (!polygonSeries.isDisposed()) {
+        updatePolygons();
+      }
     };
 
     polygonSeries.events.on('datavalidated', handleDataValidated);

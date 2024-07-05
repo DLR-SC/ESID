@@ -1,11 +1,9 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
-
 import {XYChart} from '@amcharts/amcharts5/.internal/charts/xy/XYChart';
 import {Root} from '@amcharts/amcharts5/.internal/core/Root';
 import {ILineSeriesSettings, LineSeries} from '@amcharts/amcharts5/.internal/charts/xy/series/LineSeries';
 import {useLayoutEffect, useState} from 'react';
-
 export function useLineSeriesList(
   root: Root | null,
   chart: XYChart | null,
@@ -13,7 +11,6 @@ export function useLineSeriesList(
   initializer?: (series: LineSeries, i: number) => void
 ) {
   const [series, setSeries] = useState<Array<LineSeries>>();
-
   useLayoutEffect(() => {
     let isCancelled = false;
     if (
