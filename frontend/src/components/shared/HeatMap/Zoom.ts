@@ -22,13 +22,13 @@ export default function useZoomControl(
     if (initializer) {
       initializer(newZoom);
     }
-    
+
     setZoom(newZoom);
 
-    return () =>{
-      newZoom.removeAll()
-      newZoom.dispose()
-    }
+    return () => {
+      newZoom.removeAll();
+      newZoom.dispose();
+    };
   }, [root, settings, initializer]);
 
   return zoom ?? null;
