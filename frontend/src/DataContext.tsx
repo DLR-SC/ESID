@@ -433,7 +433,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
       let scenarioNamesIndex = 0;
       // Push the processed simulation data into the line chart data
       for (let i = 0; i < processedChartSimulationData.length; i++) {
-        if (processedChartSimulationData[i]) {
+        if (processedChartSimulationData[i] && scenarioNames[scenarioNamesIndex]) {
           lineChartData.push({
             values: processedChartSimulationData[i],
             name: scenarioNames[scenarioNamesIndex],

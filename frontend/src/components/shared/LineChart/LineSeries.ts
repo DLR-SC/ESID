@@ -11,8 +11,8 @@ export function useLineSeriesList(
   initializer?: (series: LineSeries, i: number) => void
 ) {
   const [series, setSeries] = useState<Array<LineSeries>>();
+
   useLayoutEffect(() => {
-    let isCancelled = false;
     if (
       !root ||
       !chart ||
@@ -31,8 +31,8 @@ export function useLineSeriesList(
     for (let i = 0; i < settings.length; i++) {
       const setting = settings[i];
 
-      if (chart.isDisposed() || root.isDisposed() || isCancelled || setting.xAxis.isDisposed()) {
-        return;
+      if (setting.xAxis.isDisposed()) {
+        continue;
       }
 
       const newSeries = LineSeries.new(root, setting);
@@ -45,12 +45,9 @@ export function useLineSeriesList(
       }
     }
 
-    if (!isCancelled) {
-      setSeries(seriesList);
-    }
+    setSeries(seriesList);
 
     return () => {
-      isCancelled = true;
       if (!chart.isDisposed()) {
         chart.series.clear();
       }
