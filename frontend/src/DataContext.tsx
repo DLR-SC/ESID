@@ -497,7 +497,6 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
         const seriesWithoutGroup = prevData.filter(
           (serie) => typeof serie.serieId === 'number' || !serie.serieId.startsWith('group-filter')
         );
-        console.log(seriesWithoutGroup, lineChartData);
         if (seriesWithoutGroup.length > 0) return [...seriesWithoutGroup, ...lineChartData];
       }
       return lineChartData;

@@ -28,7 +28,6 @@ export default function useMapChart(
     }
 
     return () => {
-      root.container.children.removeValue(newChart);
       newChart.dispose();
     };
   }, [root, settings, initializer]);
