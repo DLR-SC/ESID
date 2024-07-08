@@ -7,7 +7,7 @@ import {Provider} from 'react-redux';
 import './App.scss';
 
 import TopBar from './components/TopBar';
-import MapContainer from './components/Sidebar/SidebarContainer';
+import SidebarContainer from './components/Sidebar/SidebarContainer';
 import MainContent from './components/MainContent';
 import {Persistor, Store} from './store';
 import Box from '@mui/material/Box';
@@ -47,7 +47,7 @@ export default function App(): JSX.Element {
                         width: '100%',
                       }}
                     >
-                      <MapContainer />
+                      <SidebarContainer />
                       <MainContent />
                     </Box>
                   </Box>
