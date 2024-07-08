@@ -19,11 +19,12 @@ export default function useZoomControl(
 
     const newZoom = am5map.ZoomControl.new(root, settings);
 
-    setZoom(newZoom);
-
     if (initializer) {
       initializer(newZoom);
     }
+
+    setZoom(newZoom);
+
     return () => {
       newZoom.removeAll();
       newZoom.dispose();
