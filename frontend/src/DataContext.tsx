@@ -376,74 +376,78 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
 
   // This effect sets the chart case data based on the selection.
   useEffect(() => {
+    let lineChartData: LineChartData | null = null;
     if (
-      !chartCaseData ||
-      !chartCaseData.results ||
-      chartCaseData.results.length == 0 ||
-      !selectedCompartment ||
-      !activeScenarios ||
-      !activeScenarios.includes(0)
-    )
-      return;
-    // Process the case data for the selected compartment
-    const processedChartCaseData = chartCaseData.results.map(
-      (element: {day: string; compartments: {[key: string]: number}}) => {
-        return {day: element.day, value: element.compartments[selectedCompartment]} as {day: string; value: number};
-      }
-    );
-    // Push the processed case data into the line chart data
-    const lineChartData: LineChartData = {
-      values: processedChartCaseData,
-      name: 'chart.caseData',
-      valueYField: 0,
-      stroke: {color: color('#000')},
-      serieId: 0,
-    };
+      chartCaseData &&
+      chartCaseData.results &&
+      chartCaseData.results.length > 0 &&
+      selectedCompartment &&
+      activeScenarios &&
+      activeScenarios.includes(0)
+    ) {
+      // Process the case data for the selected compartment
+      const processedChartCaseData = chartCaseData.results.map(
+        (element: {day: string; compartments: {[key: string]: number}}) => {
+          return {day: element.day, value: element.compartments[selectedCompartment]} as {day: string; value: number};
+        }
+      );
+      // Push the processed case data into the line chart data
+      lineChartData = {
+        values: processedChartCaseData,
+        name: 'chart.caseData',
+        valueYField: 0,
+        stroke: {color: color('#000')},
+        serieId: 0,
+      };
+    }
     // Update the chart data state with the new line chart data
     setChartData((prevData) => {
-      if (prevData) {
+      if (prevData && prevData.length > 0) {
         const seriesWithoutCase = prevData.filter((serie) => serie.serieId !== 0);
-        if (seriesWithoutCase.length > 0) return [...seriesWithoutCase, lineChartData];
+        if (seriesWithoutCase.length > 0 && lineChartData) return [lineChartData, ...seriesWithoutCase];
+        else if (seriesWithoutCase.length) return [...seriesWithoutCase];
       }
-      return [lineChartData];
+      if (lineChartData) return [lineChartData];
+      return [];
     });
     // This should re-run whenever the case data changes, or a different compartment is selected.
   }, [chartCaseData, selectedCompartment, activeScenarios]);
 
   // This effect sets the chart simulation data based on the selection.
   useEffect(() => {
-    if (!chartSimulationData || chartSimulationData.length == 0 || !selectedCompartment || !activeScenarios) return;
-    // Process the simulation data for the selected compartment
-    const processedChartSimulationData = chartSimulationData.map((element: SimulationDataByNode | null) => {
-      if (element && element.results && element.results.length > 0) {
-        return element.results.map((element: {day: string; compartments: {[key: string]: number}}) => {
-          return {day: element.day, value: element.compartments[selectedCompartment]} as {day: string; value: number};
-        });
-      }
-      return [];
-    });
-    // Define the scenario names for the simulation data
-    const scenarioNames = Object.values(scenarioList.scenarios)
-      .filter((scenario) => activeScenarios.includes(scenario.id))
-      .map((scenario) => `scenario-names.${scenario.label}`);
-    let scenarioNamesIndex = 0;
     const lineChartData: LineChartData[] = [];
-    // Push the processed simulation data into the line chart data
-    for (let i = 0; i < processedChartSimulationData.length; i++) {
-      if (processedChartSimulationData[i]) {
-        lineChartData.push({
-          values: processedChartSimulationData[i],
-          name: scenarioNames[scenarioNamesIndex],
-          stroke: {color: color(getScenarioPrimaryColor(i, theme))},
-          serieId: i,
-          valueYField: i,
-          tooltipText: `[bold ${getScenarioPrimaryColor(i, theme)}]${scenarioNames[scenarioNamesIndex++]}:[/] {${i}}`,
-        });
+    if (chartSimulationData && chartSimulationData.length > 0 && selectedCompartment && activeScenarios) {
+      // Process the simulation data for the selected compartment
+      const processedChartSimulationData = chartSimulationData.map((element: SimulationDataByNode | null) => {
+        if (element && element.results && element.results.length > 0) {
+          return element.results.map((element: {day: string; compartments: {[key: string]: number}}) => {
+            return {day: element.day, value: element.compartments[selectedCompartment]} as {day: string; value: number};
+          });
+        }
+        return [];
+      });
+      // Define the scenario names for the simulation data
+      const scenarioNames = Object.values(scenarioList.scenarios)
+        .filter((scenario) => activeScenarios.includes(scenario.id))
+        .map((scenario) => `scenario-names.${scenario.label}`);
+      let scenarioNamesIndex = 0;
+      // Push the processed simulation data into the line chart data
+      for (let i = 0; i < processedChartSimulationData.length; i++) {
+        if (processedChartSimulationData[i]) {
+          lineChartData.push({
+            values: processedChartSimulationData[i],
+            name: scenarioNames[scenarioNamesIndex],
+            stroke: {color: color(getScenarioPrimaryColor(i, theme))},
+            serieId: i,
+            valueYField: i,
+            tooltipText: `[bold ${getScenarioPrimaryColor(i, theme)}]${scenarioNames[scenarioNamesIndex++]}:[/] {${i}}`,
+          });
+        }
       }
     }
     // Update the chart data state with the new line chart data
     setChartData((prevData) => {
-      if (prevData) {
+      if (prevData && prevData.length > 0) {
         const seriesWithoutScenarios = prevData.filter(
           (serie) => typeof serie.serieId === 'string' || serie.serieId === 0
         );
@@ -457,7 +461,12 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
   // This effect sets the chart group filter data based on the selection.
   useEffect(() => {
     const lineChartData: LineChartData[] = [];
-    if (chartGroupFilterData && Object.keys(chartGroupFilterData).length > 0 && selectedCompartment) {
+    if (
+      chartGroupFilterData &&
+      Object.keys(chartGroupFilterData).length > 0 &&
+      selectedCompartment &&
+      selectedScenario
+    ) {
       const processedData: Dictionary<{day: string; value: number}[]> = {};
       // Process the group filter data for the selected compartment
       Object.keys(chartGroupFilterData).forEach((key) => {
@@ -474,21 +483,20 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
         [8, 4, 2, 4], // dash-dotted
         [8, 4, 2, 4, 2, 4], // dash-dot-dotted
       ];
-      if (selectedScenario) {
-        // Push the processed group filter data into the line chart data
-        for (let i = 0; i < Object.keys(processedData).length; i++) {
-          lineChartData.push({
-            values: processedData[Object.keys(processedData)[i]],
-            name: Object.keys(processedData)[i],
-            stroke: {
-              color: color(getScenarioPrimaryColor(selectedScenario, theme)),
-              strokeDasharray: groupFilterStrokes[i % groupFilterStrokes.length],
-            },
-            serieId: `group-filter-${Object.keys(processedData)[i]}`,
-            valueYField: Object.keys(processedData)[i],
-            tooltipText: `[bold ${getScenarioPrimaryColor(selectedScenario, theme)}]${Object.keys(processedData)[i]}:[/] {${Object.keys(processedData)[i]}}`,
-          });
-        }
+      // Push the processed group filter data into the line chart data
+      for (let i = 0; i < Object.keys(processedData).length; i++) {
+        lineChartData.push({
+          values: processedData[Object.keys(processedData)[i]],
+          name: Object.keys(processedData)[i],
+          stroke: {
+            color: color(getScenarioPrimaryColor(selectedScenario, theme)),
+            strokeDasharray: groupFilterStrokes[i % groupFilterStrokes.length],
+          },
+          serieId: `group-filter-${Object.keys(processedData)[i]}`,
+          valueYField: Object.keys(processedData)[i],
+          tooltipText: `[bold ${getScenarioPrimaryColor(selectedScenario, theme)}]${Object.keys(processedData)[i]}:[/] {${Object.keys(processedData)[i]}}`,
+          parentId: selectedScenario,
+        });
       }
     }
     // Update the chart data state with the new line chart data
@@ -497,7 +505,6 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
         const seriesWithoutGroup = prevData.filter(
           (serie) => typeof serie.serieId === 'number' || !serie.serieId.startsWith('group-filter')
         );
-        console.log(seriesWithoutGroup, lineChartData);
         if (seriesWithoutGroup.length > 0) return [...seriesWithoutGroup, ...lineChartData];
       }
       return lineChartData;
@@ -507,41 +514,46 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
 
   // This effect sets the chart percentile data based on the selection.
   useEffect(() => {
-    if (!chartPercentileData || chartPercentileData.length == 0 || !selectedCompartment) return;
-    const processedPercentileData: Array<{day: string; value: number[]}> = [];
-    for (let i = 0; chartPercentileData[0]?.results && i < Object.keys(chartPercentileData[0].results).length; i++) {
-      if (
-        chartPercentileData[0].results &&
-        chartPercentileData[1].results &&
-        Object.values(chartPercentileData[0].results)[i].day === Object.values(chartPercentileData[1].results)[i].day
-      )
-        processedPercentileData.push({
-          day: Object.values(chartPercentileData[0].results)[i].day,
-          value: [
-            Object.values(chartPercentileData[0].results)[i].compartments[selectedCompartment],
-            Object.values(chartPercentileData[1].results)[i].compartments[selectedCompartment],
-          ],
-        });
-    }
-    const lineChartData: LineChartData = {
-      values: processedPercentileData,
-      serieId: 'percentiles',
-      valueYField: 'percentileUp',
-      openValueYField: 'percentileDown',
-      visible: selectedScenario !== null && selectedScenario > 0,
-      fill:
-        selectedScenario !== null && selectedScenario > 0
-          ? color(getScenarioPrimaryColor(selectedScenario, theme))
-          : undefined,
-      fillOpacity: 0.3,
-      stroke: {strokeWidth: 0},
-    };
-    setChartData((prevData) => {
-      if (prevData) {
-        const seriesWithoutPercentiles = prevData.filter((serie) => serie.serieId !== 'percentiles');
-        if (seriesWithoutPercentiles.length > 0) return [...seriesWithoutPercentiles, lineChartData];
+    let lineChartData: LineChartData | null = null;
+    if (chartPercentileData && chartPercentileData.length > 0 && selectedCompartment) {
+      const processedPercentileData: Array<{day: string; value: number[]}> = [];
+      for (let i = 0; chartPercentileData[0]?.results && i < Object.keys(chartPercentileData[0].results).length; i++) {
+        if (
+          chartPercentileData[0].results &&
+          chartPercentileData[1].results &&
+          Object.values(chartPercentileData[0].results)[i].day === Object.values(chartPercentileData[1].results)[i].day
+        )
+          processedPercentileData.push({
+            day: Object.values(chartPercentileData[0].results)[i].day,
+            value: [
+              Object.values(chartPercentileData[0].results)[i].compartments[selectedCompartment],
+              Object.values(chartPercentileData[1].results)[i].compartments[selectedCompartment],
+            ],
+          });
       }
-      return [lineChartData];
+      lineChartData = {
+        values: processedPercentileData,
+        serieId: 'percentiles',
+        valueYField: 'percentileUp',
+        openValueYField: 'percentileDown',
+        visible: selectedScenario !== null && selectedScenario > 0,
+        fill:
+          selectedScenario !== null && selectedScenario > 0
+            ? color(getScenarioPrimaryColor(selectedScenario, theme))
+            : undefined,
+        fillOpacity: 0.3,
+        stroke: {strokeWidth: 0},
+        parentId: selectedScenario !== null && selectedScenario > 0 ? selectedScenario : undefined,
+      };
+    }
+    setChartData((prevData) => {
+      if (prevData && prevData.length > 0) {
+        const seriesWithoutPercentiles = prevData.filter((serie) => serie.serieId !== 'percentiles');
+        if (seriesWithoutPercentiles.length > 0 && lineChartData) return [...seriesWithoutPercentiles, lineChartData];
+        else if (seriesWithoutPercentiles.length > 0) return [...seriesWithoutPercentiles];
+      }
+      if (lineChartData) return [lineChartData];
+      return [];
     });
     // This should re-run whenever the data changes, or whenever a different scenario or a different compartment is selected.
   }, [chartPercentileData, selectedCompartment, selectedScenario, theme]);

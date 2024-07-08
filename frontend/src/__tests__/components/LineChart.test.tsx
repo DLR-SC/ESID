@@ -2,12 +2,13 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import LineChart from 'components/LineChartComponents/LineChart';
-import React, {useCallback, useMemo} from 'react';
+import React, {useMemo} from 'react';
 import {render, screen} from '@testing-library/react';
 import {describe, test, expect, vi} from 'vitest';
 import {ResizeObserverMock} from '__tests__/mocks/resize';
 import {I18nextProvider} from 'react-i18next';
 import i18n from '../../util/i18nForTests';
+import {color} from '@amcharts/amcharts5/.internal/core/util/Color';
 
 const LineChartTest = () => {
   const localization = useMemo(() => {
@@ -18,33 +19,36 @@ const LineChartTest = () => {
       },
     };
   }, []);
-  const simulationDataChartName = useCallback(() => 'scenario-names', []);
   const caseData = useMemo(() => {
-    return [
-      {
-        day: '2021-04-01',
-        value: 3723.5826785713944,
+    return {
+      values: [
+        {
+          day: '2021-04-01',
+          value: 3723.5826785713944,
+        },
+        {
+          day: '2021-04-02',
+          value: 3688.2426285714214,
+        },
+      ],
+      serieId: 0,
+      valueYField: 0,
+      stroke: {
+        color: color('#000'),
+        strokeWidth: 2,
       },
-      {
-        day: '2021-04-02',
-        value: 3688.2426285714214,
-      },
-    ];
+    };
   }, []);
   return (
     <div data-testid='chartdiv'>
       <LineChart
         selectedDate={'2020-02-20'}
         setSelectedDate={() => {}}
-        setReferenceDayBottom={() => {}}
-        simulationDataChartName={simulationDataChartName}
         minDate={'2020-02-20'}
         maxDate={'2020-02-20'}
-        selectedScenario={0}
         referenceDay={'2020-02-20'}
-        selectedCompartment={'Infected'}
         localization={localization}
-        caseData={caseData}
+        lineChartData={[caseData]}
       />
     </div>
   );

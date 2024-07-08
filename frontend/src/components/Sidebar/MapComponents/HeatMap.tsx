@@ -180,7 +180,7 @@ export default function HeatMap({
 
   // This effect is responsible for setting the selected area when the home button is clicked.
   useEffect(() => {
-    if (!zoom || !root || root.isDisposed()) return;
+    if (!zoom || !root || root.isDisposed() || zoom.isDisposed()) return;
     zoom.homeButton.events.on('click', () => {
       setSelectedArea(defaultSelectedValue);
     });

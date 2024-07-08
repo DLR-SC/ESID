@@ -54,12 +54,6 @@ interface LineChartProps {
   /** Optional maximum date for the chart in ISO format (YYYY-MM-DD). */
   maxDate?: string | null;
 
-  /** Optional currently selected scenario identifier. */
-  selectedScenario?: number | null;
-
-  /** Optional array of active scenario identifiers. These scenarios will be displayed on the chart. */
-  activeScenarios?: number[] | null;
-
   /** Optional reference day for the chart in ISO format (YYYY-MM-DD). */
   referenceDay?: string | null;
 
@@ -84,8 +78,6 @@ export default function LineChart({
   setReferenceDayBottom = () => {},
   minDate = null,
   maxDate = null,
-  selectedScenario = null,
-  activeScenarios = null,
   referenceDay = null,
   exportedFileName = 'Data',
   yAxisLabel,
@@ -395,96 +387,36 @@ export default function LineChart({
     )
   );
 
-  // Effect to hide disabled scenarios (and show them again if not hidden anymore)
-  useLayoutEffect(
-    () => {
-      if (!chart || chart.isDisposed()) return;
-      const allSeries = chart.series;
-      // Skip effect if chart is not initialized (contains no series yet)
-      if (!allSeries) return;
-
-      // Set visibility of each series
-      allSeries.each((series) => {
-        if (!(series instanceof LineSeries)) {
-          return;
-        }
-
-        // Everything but scenario series evaluate to NaN (because scenario series have their scenario id as series id while others have names)
-        let seriesID = series.get('id');
-        if (seriesID) seriesID = seriesID.split('_')[1];
-        // Hide series if it is a scenario series (and in the scenario list) but not in the active scenarios list
-        if (seriesID === `percentiles`) {
-          return;
-        }
-
-        if (!activeScenarios?.includes(Number(seriesID))) {
-          void series.hide();
-        } else {
-          void series.show();
-        }
-      });
-    },
-    // Re-run effect when the active scenario list changes
-    [activeScenarios, chart]
-  );
-
-  // Effect to hide deviations if no scenario is selected
-  useEffect(
-    () => {
-      // Skip effect if chart is not initialized (contains no series yet)
-      if (!chart || chart.isDisposed()) return;
-
-      // Find percentile series and only show it if there is a selected scenario
-      chart.series.values
-        .filter((series) => {
-          let seriesID = series.get('id');
-          if (seriesID) seriesID = seriesID.split('_')[1];
-          return seriesID == 'percentiles';
-        })
-        .map((percentileSeries) => {
-          if (selectedScenario === null || selectedScenario === 0) {
-            void percentileSeries.hide();
-          } else {
-            void percentileSeries.show();
-          }
-        });
-    },
-    // Re-run effect when the selected scenario changes
-    [selectedScenario, chart]
-  );
-
   // Effect to update data in series
   useEffect(() => {
     // Skip effect if chart is not initialized yet
     if (!chart || chart.isDisposed()) return;
-    // Also skip if there is no scenario or compartment selected
-    if (selectedScenario === null) return;
+    // Also skip if there is no data
+    if (!lineChartData || lineChartData.length == 0) return;
 
     // Create empty map to match dates
     const dataMap = new Map<string, {[key: string]: number}>();
 
-    if (lineChartData) {
-      lineChartData.forEach((serie) => {
-        const id = serie.serieId;
-        if (activeScenarios?.includes(Number(id))) {
-          serie.values.forEach((entry) => {
-            dataMap.set(entry.day, {...dataMap.get(entry.day), [id]: entry.value as number});
+    lineChartData.forEach((serie) => {
+      const id = serie.serieId;
+      if (typeof id === 'string' && id.startsWith('group-filter-')) {
+        serie.values.forEach((entry) => {
+          dataMap.set(entry.day, {...dataMap.get(entry.day), [serie.name!]: entry.value as number});
+        });
+      } else if (serie.openValueYField) {
+        serie.values.forEach((entry) => {
+          dataMap.set(entry.day, {...dataMap.get(entry.day), [serie.valueYField]: (entry.value as number[])[1]});
+          dataMap.set(entry.day, {
+            ...dataMap.get(entry.day),
+            [String(serie.openValueYField)]: (entry.value as number[])[0],
           });
-        } else if (typeof id === 'string' && id.startsWith('group-filter-')) {
-          serie.values.forEach((entry) => {
-            dataMap.set(entry.day, {...dataMap.get(entry.day), [serie.name!]: entry.value as number});
-          });
-        } else if (serie.openValueYField) {
-          serie.values.forEach((entry) => {
-            dataMap.set(entry.day, {...dataMap.get(entry.day), [serie.valueYField]: (entry.value as number[])[1]});
-            dataMap.set(entry.day, {
-              ...dataMap.get(entry.day),
-              [String(serie.openValueYField)]: (entry.value as number[])[0],
-            });
-          });
-        }
-      });
-    }
+        });
+      } else {
+        serie.values.forEach((entry) => {
+          dataMap.set(entry.day, {...dataMap.get(entry.day), [id]: entry.value as number});
+        });
+      }
+    });
 
     // Sort map by date
     const dataMapSorted = new Map(Array.from(dataMap).sort(([a], [b]) => String(a).localeCompare(b)));
@@ -523,12 +455,6 @@ export default function LineChart({
           ${
             // Table row for each series of an active scenario
             chart.series.values
-              .filter((series) => {
-                if (!series.get('id')) return false;
-                let s = series.get('id');
-                if (s) s = s?.split('_')[1];
-                return activeScenarios?.includes(Number(s));
-              })
               .map((series): string => {
                 /* Skip if series:
                  * - is hidden
@@ -537,7 +463,7 @@ export default function LineChart({
                  */
                 let seriesID = series.get('id');
                 if (seriesID) seriesID = seriesID?.split('_')[1];
-                if (series.isHidden() || seriesID === 'percentiles' || seriesID?.startsWith('group-filter-')) {
+                if (seriesID === 'percentiles' || seriesID?.startsWith('group-filter-')) {
                   return '';
                 }
                 /* Skip with error if series does not have property:
@@ -574,25 +500,24 @@ export default function LineChart({
                   </td>
                   ${
                     // Skip percentiles if this series is not the selected scenario or case data
-                    seriesID !== selectedScenario.toString() || selectedScenario === 0
-                      ? ''
-                      : `
+                    lineChartData.find((serie) => serie.parentId == seriesID)
+                      ? `
                         <td>
                           [{percentileDown} - {percentileUp}]
                         </td>
                         `
+                      : ''
                   }
                 </tr>
                 ${
                   // Add group filters if this series is the selected scenario
-                  seriesID !== selectedScenario.toString()
-                    ? ''
-                    : // Add table row for each active group filter
+                  lineChartData.find((serie) => serie.parentId == seriesID)
+                    ? // Add table row for each active group filter
                       chart.series.values
                         .filter((series) => {
                           let seriesID = series.get('id');
                           if (seriesID) seriesID = seriesID.split('_')[1];
-                          return seriesID?.startsWith('group-filter-') && !series.isHidden();
+                          return seriesID?.startsWith('group-filter-');
                         })
                         .map((groupFilterSeries) => {
                           return `
@@ -609,6 +534,7 @@ export default function LineChart({
                             `;
                         })
                         .join('')
+                    : ''
                 }
                 `;
               })
@@ -666,28 +592,7 @@ export default function LineChart({
     };
     // Always put date first, case data second
     const dataFieldsOrder = ['date', 'caseData'];
-    // Loop through active scenarios (if there are any)
-    // if (activeScenarios) {
-    //   activeScenarios.forEach((scenarioId) => {
-    //     // Skip case data (already added)
-    //     if (scenarioId === 0 || !scenarioList?.scenarios[scenarioId]) {
-    //       return;
-    //     }
-    //     console.log(scenarioId, scenarioList, scenarioList.scenarios[scenarioId])
 
-    //     // Add scenario label to export data field names
-    //     dataFields = {
-    //       ...dataFields,
-    //       [scenarioId]: scenarioList.scenarios[scenarioId].label,
-    //     };
-    //     // Add scenario id to export data field order (for sorted export like csv)
-    //     dataFieldsOrder.push(`${scenarioId}`);
-    //     // If this is the selected scenario also add percentiles after it
-    //     if (scenarioId == selectedScenario) {
-    //       dataFieldsOrder.push('percentileDown', 'percentileUp');
-    //     }
-    //   });
-    // }
     if (lineChartData) {
       lineChartData.forEach((serie) => {
         if (
@@ -713,7 +618,7 @@ export default function LineChart({
         // Add scenario id to export data field order (for sorted export like csv)
         dataFieldsOrder.push(`${serie.serieId}`);
         // If this is the selected scenario also add percentiles after it
-        if (serie.serieId == selectedScenario) {
+        if (lineChartData.find((line) => line.openValueYField && line.parentId == serie.serieId)) {
           dataFieldsOrder.push('percentileDown', 'percentileUp');
         }
       });
@@ -742,8 +647,6 @@ export default function LineChart({
     setReferenceDayX();
     // Re-run this effect whenever the data itself changes (or any variable the effect uses)
   }, [
-    activeScenarios,
-    selectedScenario,
     theme,
     defaultT,
     customT,

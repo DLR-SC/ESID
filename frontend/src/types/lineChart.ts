@@ -18,4 +18,5 @@ export interface LineChartData {
   };
   fill?: Color;
   fillOpacity?: number;
+  parentId?: string | number;
 }

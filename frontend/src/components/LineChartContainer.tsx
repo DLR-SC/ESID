@@ -19,9 +19,7 @@ export default function LineChartContainer() {
 
   const {isChartDataFetching, chartData} = useContext(DataContext);
 
-  const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
-  const activeScenarios = useAppSelector((state) => state.dataSelection.activeScenarios);
   const selectedDateInStore = useAppSelector((state) => state.dataSelection.date);
   const referenceDay = useAppSelector((state) => state.dataSelection.simulationStart);
   const minDate = useAppSelector((state) => state.dataSelection.minDate);
@@ -79,8 +77,6 @@ export default function LineChartContainer() {
         lineChartData={chartData}
         minDate={minDate}
         maxDate={maxDate}
-        selectedScenario={selectedScenario}
-        activeScenarios={activeScenarios}
         referenceDay={referenceDay}
         yAxisLabel={yAxisLabel}
         localization={localization}
