@@ -592,16 +592,12 @@ export default function LineChart({
           : defaultT('chart.percentileDown')
       }`,
     };
-    // Always put date first, case data second
-    const dataFieldsOrder = ['date', 'caseData'];
+    // Always put date first, 0 second
+    const dataFieldsOrder = ['date', '0'];
 
     if (lineChartData) {
       lineChartData.forEach((serie) => {
-        if (
-          serie.serieId === 'percentiles' ||
-          serie.serieId.toString().startsWith('group-filter-')
-        )
-          return;
+        if (serie.serieId === 'percentiles' || serie.serieId.toString().startsWith('group-filter-')) return;
 
         let lineName = serie.name;
         if (lineName) {
@@ -614,7 +610,7 @@ export default function LineChart({
         // Add scenario label to export data field names
         dataFields = {
           ...dataFields,
-          [serie.serieId]: lineName,
+          [String(serie.serieId)]: lineName,
         };
         // Add scenario id to export data field order (for sorted export like csv)
         dataFieldsOrder.push(`${serie.serieId}`);
