@@ -581,11 +581,6 @@ export default function LineChart({
           ? customT(memoizedLocalization.overrides['chart.date'])
           : defaultT('chart.date')
       }`,
-      caseData: `${
-        memoizedLocalization.overrides && memoizedLocalization.overrides['chart.caseData']
-          ? customT(memoizedLocalization.overrides['chart.caseData'])
-          : defaultT('chart.caseData')
-      }`,
       percentileUp: `${
         memoizedLocalization.overrides && memoizedLocalization.overrides['chart.percentileUp']
           ? customT(memoizedLocalization.overrides['chart.percentileUp'])
@@ -603,7 +598,6 @@ export default function LineChart({
     if (lineChartData) {
       lineChartData.forEach((serie) => {
         if (
-          serie.serieId === 0 ||
           serie.serieId === 'percentiles' ||
           serie.serieId.toString().startsWith('group-filter-')
         )
