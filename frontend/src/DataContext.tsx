@@ -515,7 +515,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
   // This effect sets the chart percentile data based on the selection.
   useEffect(() => {
     let lineChartData: LineChartData | null = null;
-    if (chartPercentileData && chartPercentileData.length > 0 && selectedCompartment) {
+    if (chartPercentileData && chartPercentileData.length > 0 && selectedCompartment && selectedScenario) {
       const processedPercentileData: Array<{day: string; value: number[]}> = [];
       for (let i = 0; chartPercentileData[0]?.results && i < Object.keys(chartPercentileData[0].results).length; i++) {
         if (
@@ -536,14 +536,11 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
         serieId: 'percentiles',
         valueYField: 'percentileUp',
         openValueYField: 'percentileDown',
-        visible: selectedScenario !== null && selectedScenario > 0,
-        fill:
-          selectedScenario !== null && selectedScenario > 0
-            ? color(getScenarioPrimaryColor(selectedScenario, theme))
-            : undefined,
+        visible: true,
+        fill: color(getScenarioPrimaryColor(selectedScenario, theme)),
         fillOpacity: 0.3,
         stroke: {strokeWidth: 0},
-        parentId: selectedScenario !== null && selectedScenario > 0 ? selectedScenario : undefined,
+        parentId: selectedScenario,
       };
     }
     setChartData((prevData) => {
