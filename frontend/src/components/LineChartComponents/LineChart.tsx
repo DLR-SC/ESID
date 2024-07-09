@@ -420,7 +420,7 @@ export default function LineChart({
         });
       } else {
         serie.values.forEach((entry) => {
-          dataMap.set(entry.day, {...dataMap.get(entry.day), [id]: entry.value as number});
+          dataMap.set(entry.day, {...dataMap.get(entry.day), [serie.valueYField]: entry.value as number});
         });
       }
     });
