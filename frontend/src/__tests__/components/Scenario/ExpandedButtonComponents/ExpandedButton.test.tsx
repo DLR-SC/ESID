@@ -11,7 +11,7 @@ import Theme from 'util/Theme';
 
 const GeneralButtonTest = () => {
   const buttonTexts = {clicked: 'Clicked', unclicked: 'Unclicked'};
-  const isDisabled = () => true;
+  const isDisabled = true;
   const handleClick = () => {};
 
   return (

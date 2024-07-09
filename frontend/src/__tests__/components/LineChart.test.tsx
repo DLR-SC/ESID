@@ -21,6 +21,7 @@ const LineChartTest = () => {
   }, []);
   const caseData = useMemo(() => {
     return {
+      name: 'chart.caseData',
       values: [
         {
           day: '2021-04-01',

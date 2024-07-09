@@ -406,7 +406,7 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
               >
                 <GeneralButton
                   buttonTexts={{clicked: t('less'), unclicked: t('more')}}
-                  isDisabled={() => compartmentsMemo.length < minCompartmentsRows}
+                  isDisabled={compartmentsMemo.length <= minCompartmentsRows}
                   handleClick={() => {
                     if (compartments.indexOf(selectedCompartment) >= minCompartmentsRows) {
                       setSelectedCompartment('MildInfections');

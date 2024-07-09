@@ -10,8 +10,8 @@ interface GeneralButtonProps {
   /** Texts for the button in both states: clicked and unclicked */
   buttonTexts: {clicked: string; unclicked: string};
 
-  /** Function to determine if the button is disabled */
-  isDisabled: () => boolean;
+  /** boolean to determine if the button is disabled */
+  isDisabled: boolean;
 
   /** Function to handle the button click event */
   handleClick: () => void;
@@ -42,7 +42,7 @@ export default function GeneralButton({
       variant='outlined'
       color='primary'
       sx={{width: '100%'}}
-      disabled={isDisabled()}
+      disabled={isDisabled}
       aria-label={
         localization.overrides && localization.overrides['scenario.more']
           ? customT(localization.overrides['scenario.more'])
