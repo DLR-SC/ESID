@@ -413,7 +413,7 @@ export default function LineChart({
         });
       } else {
         serie.values.forEach((entry) => {
-          dataMap.set(entry.day, {...dataMap.get(entry.day), [id]: entry.value as number});
+          dataMap.set(entry.day, {...dataMap.get(entry.day), [serie.valueYField]: entry.value as number});
         });
       }
     });
@@ -574,11 +574,6 @@ export default function LineChart({
           ? customT(localization.overrides['chart.date'])
           : defaultT('chart.date')
       }`,
-      caseData: `${
-        localization.overrides && localization.overrides['chart.caseData']
-          ? customT(localization.overrides['chart.caseData'])
-          : defaultT('chart.caseData')
-      }`,
       percentileUp: `${
         localization.overrides && localization.overrides['chart.percentileUp']
           ? customT(localization.overrides['chart.percentileUp'])
@@ -590,17 +585,12 @@ export default function LineChart({
           : defaultT('chart.percentileDown')
       }`,
     };
-    // Always put date first, case data second
-    const dataFieldsOrder = ['date', 'caseData'];
+    // Always put date first, 0 second
+    const dataFieldsOrder = ['date', '0'];
 
     if (lineChartData) {
       lineChartData.forEach((serie) => {
-        if (
-          serie.serieId === 0 ||
-          serie.serieId === 'percentiles' ||
-          serie.serieId.toString().startsWith('group-filter-')
-        )
-          return;
+        if (serie.serieId === 'percentiles' || serie.serieId.toString().startsWith('group-filter-')) return;
 
         let lineName = serie.name;
         if (lineName) {
@@ -613,7 +603,7 @@ export default function LineChart({
         // Add scenario label to export data field names
         dataFields = {
           ...dataFields,
-          [serie.serieId]: lineName,
+          [String(serie.serieId)]: lineName,
         };
         // Add scenario id to export data field order (for sorted export like csv)
         dataFieldsOrder.push(`${serie.serieId}`);
