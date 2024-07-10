@@ -54,12 +54,15 @@ export default function CompartmentsRows({
   const {t: customT} = useTranslation(localization.customLang);
 
   function GetFormattedAndTranslatedValues(filteredValues: number | null): string {
-    if (compartmentValues && filteredValues)
-      return localization.formatNumber ? localization.formatNumber(filteredValues) : filteredValues.toString();
+    if ((compartmentValues && filteredValues) || (compartmentValues && !filteredValues))
+      return filteredValues
+        ? localization.formatNumber
+          ? localization.formatNumber(filteredValues)
+          : filteredValues.toString()
+        : '0';
     const noDataText = localization.overrides?.['no-data']
       ? customT(localization.overrides['no-data'])
       : defaultT('no-data');
-
     return noDataText;
   }
   return (
