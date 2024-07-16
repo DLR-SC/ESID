@@ -587,18 +587,10 @@ export default function LineChart({
       lineChartData.forEach((serie) => {
         if (serie.serieId === 'percentiles' || serie.serieId.toString().startsWith('group-filter-')) return;
 
-        let lineName = serie.name;
-        if (lineName) {
-          if (memoizedLocalization.overrides?.[lineName]) {
-            lineName = customT(memoizedLocalization.overrides[lineName]);
-          } else {
-            lineName = defaultT(lineName);
-          }
-        }
         // Add scenario label to export data field names
         dataFields = {
           ...dataFields,
-          [String(serie.serieId)]: lineName,
+          [String(serie.serieId)]: serie.name ?? '',
         };
         // Add scenario id to export data field order (for sorted export like csv)
         dataFieldsOrder.push(`${serie.serieId}`);
