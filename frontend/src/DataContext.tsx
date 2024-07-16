@@ -81,7 +81,8 @@ export const DataContext = createContext<{
 
 // Create a provider component
 export const DataProvider = ({children}: {children: React.ReactNode}) => {
-  const {t} = useTranslation();
+  const {t: defaultT} = useTranslation();
+  const {t: backendT} = useTranslation('backend');
   const theme = useTheme();
 
   const [geoData, setGeoData] = useState<GeoJSON>();
@@ -312,7 +313,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
         (jsonlist: GeoJsonProperties[]) => {
           /* [CDtemp-begin] */
           // append germany to list
-          jsonlist.push({RS: '00000', GEN: t('germany'), BEZ: ''} as unknown as District);
+          jsonlist.push({RS: '00000', GEN: defaultT('germany'), BEZ: ''} as unknown as District);
           // append city districts
           jsonlist.push(
             ...(searchbarCologneData as unknown as Array<District>).map((dist) => {
@@ -337,7 +338,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
         }
       );
     // this init should only run once on first render
-  }, [t]);
+  }, [defaultT]);
 
   // This useEffect is used in order to set the SimulationModelKey
   useEffect(() => {
@@ -394,7 +395,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
       // Push the processed case data into the line chart data
       lineChartData = {
         values: processedChartCaseData,
-        name: 'chart.caseData',
+        name: defaultT('chart.caseData'),
         valueYField: 0,
         stroke: {color: color('#000')},
         serieId: 0,
@@ -411,7 +412,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
       return [];
     });
     // This should re-run whenever the case data changes, or a different compartment is selected.
-  }, [chartCaseData, selectedCompartment, activeScenarios]);
+  }, [chartCaseData, selectedCompartment, activeScenarios, defaultT]);
 
   // This effect sets the chart simulation data based on the selection.
   useEffect(() => {
@@ -429,7 +430,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
       // Define the scenario names for the simulation data
       const scenarioNames = Object.values(scenarioList.scenarios)
         .filter((scenario) => activeScenarios.includes(scenario.id))
-        .map((scenario) => `scenario-names.${scenario.label}`);
+        .map((scenario) => backendT(`scenario-names.${scenario.label}`));
       let scenarioNamesIndex = 0;
       // Push the processed simulation data into the line chart data
       for (let i = 0; i < processedChartSimulationData.length; i++) {
@@ -456,7 +457,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
       return lineChartData;
     });
     // This should re-run whenever the simulation data changes, or a different compartment is selected.
-  }, [chartSimulationData, selectedCompartment, theme, activeScenarios, scenarioList]);
+  }, [chartSimulationData, selectedCompartment, theme, activeScenarios, scenarioList, backendT]);
 
   // This effect sets the chart group filter data based on the selection.
   useEffect(() => {

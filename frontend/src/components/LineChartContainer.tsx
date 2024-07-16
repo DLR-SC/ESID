@@ -1,12 +1,11 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import {useContext, useEffect, useMemo, useState} from 'react';
+import React, {useContext, useEffect, useMemo, useState} from 'react';
 import LineChart from './LineChartComponents/LineChart';
 import LoadingContainer from './shared/LoadingContainer';
 import {useTheme} from '@mui/material';
 import {DataContext} from '../DataContext';
-import React from 'react';
 import {useAppDispatch, useAppSelector} from 'store/hooks';
 import {selectDate} from 'store/DataSelectionSlice';
 import {setReferenceDayBottom} from 'store/LayoutSlice';
@@ -26,19 +25,7 @@ export default function LineChartContainer() {
   const maxDate = useAppSelector((state) => state.dataSelection.maxDate);
 
   const [selectedDate, setSelectedDate] = useState<string>(selectedDateInStore ?? '2024-08-07');
-  const [referenceDayb, setReferenceDayb] = useState<number>(0);
-
-  const localization = useMemo(() => {
-    return {
-      customLang: 'backend',
-      overrides: {
-        'scenario-names.baseline': 'scenario-names.baseline',
-        'scenario-names.closed_schools': 'scenario-names.closed_schools',
-        'scenario-names.remote_work': 'scenario-names.remote_work',
-        'scenario-names.10p_reduced_contacts': 'scenario-names.10p_reduced_contacts',
-      },
-    };
-  }, []);
+  const [referenceDayBottomPosition, setReferenceDayBottomPosition] = useState<number>(0);
 
   const yAxisLabel = useMemo(() => {
     return t(`infection-states.${selectedCompartment}`);
@@ -60,9 +47,9 @@ export default function LineChartContainer() {
 
   // Set reference day in store
   useEffect(() => {
-    dispatch(setReferenceDayBottom(referenceDayb));
+    dispatch(setReferenceDayBottom(referenceDayBottomPosition));
     // This effect should only run when the referenceDay changes
-  }, [referenceDayb, dispatch]);
+  }, [referenceDayBottomPosition, dispatch]);
 
   return (
     <LoadingContainer
@@ -73,13 +60,12 @@ export default function LineChartContainer() {
       <LineChart
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
-        setReferenceDayBottom={setReferenceDayb}
+        setReferenceDayBottom={setReferenceDayBottomPosition}
         lineChartData={chartData}
         minDate={minDate}
         maxDate={maxDate}
         referenceDay={referenceDay}
         yAxisLabel={yAxisLabel}
-        localization={localization}
       />
     </LoadingContainer>
   );

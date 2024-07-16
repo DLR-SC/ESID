@@ -204,6 +204,7 @@ export default function HeatMap({
     return {
       geoJSON: mapData,
       tooltipPosition: 'fixed',
+      layer: 0,
     } as am5map.IMapPolygonSeriesSettings;
   }, [mapData]);
 
