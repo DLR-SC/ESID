@@ -18,7 +18,6 @@ const CardTooltipTest = ({hovertest, scenarios, index, activeScenario}: CardTool
   const color = '#00000';
   const [activeScenarios, setActiveScenarios] = useState<number[] | null>(scenarios);
   const [numberSelectedScenario, setSelectedScenario] = useState<number | null>(index);
-  const compartmentsExpanded = false;
 
   return (
     <ThemeProvider theme={Theme}>
@@ -29,7 +28,6 @@ const CardTooltipTest = ({hovertest, scenarios, index, activeScenario}: CardTool
         activeScenario={activeScenario}
         activeScenarios={activeScenarios}
         numberSelectedScenario={numberSelectedScenario}
-        compartmentsExpanded={compartmentsExpanded}
         setActiveScenarios={setActiveScenarios}
         setSelectedScenario={setSelectedScenario}
       />
@@ -47,7 +45,7 @@ describe('CardTooltip', () => {
     render(<CardTooltipTest hovertest={false} scenarios={[1, 2]} index={1} activeScenario={true} />);
     expect(screen.queryByRole('button')).not.toBeInTheDocument();
   });
-  test('renders the tooltip label scenario.activate correctly when hover is true and the sceanrio is not active', () => {
+  test('renders the tooltip label scenario.activate correctly when hover is true and the scenario is not active', () => {
     render(<CardTooltipTest hovertest={true} scenarios={[2]} index={1} activeScenario={false} />);
     expect(screen.getByRole('button')).toBeInTheDocument();
     expect(screen.getByRole('button')).toHaveAttribute('aria-label', 'scenario.activate');

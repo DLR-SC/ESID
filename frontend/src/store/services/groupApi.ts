@@ -198,60 +198,109 @@ export const groupApi = createApi({
   }),
 });
 
+/**
+ * Represents the structure of a post filter.
+ */
 export interface PostFilter {
+  /** The unique identifier. */
   id: number;
+
+  /** The node associated. */
   node: string;
+
+  /** The group filter associated. */
   groupFilter: GroupFilter;
+
+  /** The day associated. Optional. */
   day?: string;
+
+  /** The compartment associated. Optional. */
   compartment?: string;
 }
 
+/**
+ * Represents the structure of multiple post filters.
+ */
 export interface PostFilters {
+  /** The array of unique identifiers. */
   ids: number[];
+
+  /** The node associated */
   node: string;
+
+  /** The dictionary of group filters associated */
   groupFilterList: Dictionary<GroupFilter> | undefined;
+
+  /** The day associated. Optional. */
   day?: string;
+
+  /** The compartment associated. Optional. */
   compartment?: string;
 }
 
+/**
+ * Represents the structure of a group category.
+ */
 export interface GroupCategory {
+  /** The key of the group category. */
   key: string;
+
+  /** The name of the group category. */
   name: string;
+
+  /** The description of the group category. */
   description: string;
 }
 
+/**
+ * Represents the structure of multiple group categories.
+ */
 export interface GroupCategories {
+  /** The count of group categories. */
   count: number;
+
+  /** The next group category. Null if there is no next group category. */
   next: null;
+
+  /** The previous group category. Null if there is no previous group category. */
   previous: null;
-  results:
-    | {
-        key: string;
-        name: string;
-        description: string;
-      }[]
-    | Array<GroupCategory>;
+
+  /** The array of group categories. */
+  results: Array<GroupCategory>;
 }
 
+/**
+ * Represents the structure of a group subcategory.
+ */
 export interface GroupSubcategory {
+  /** The key of the group subcategory. */
   key: string;
+
+  /** The name of the group subcategory. */
   name: string;
+
+  /** The description of the group subcategory. */
   description: string;
+
+  /** The category of the group subcategory. */
   category: string;
 }
 
+/**
+ * Represents the structure of multiple group subcategories.
+ */
 export interface GroupSubcategories {
+  /** The count of group subcategories. */
   count: number;
+
+  /** The next group subcategory. Null if there is no next group subcategory. */
   next: null;
+
+  /** The previous group subcategory. Null if there is no previous group subcategory. */
   previous: null;
-  results:
-    | {
-        key: string;
-        name: string;
-        description: string;
-        category: string;
-      }[]
-    | Array<GroupSubcategory>;
+
+  /** The array of group subcategories. */
+  results: Array<GroupSubcategory>;
 }
 
 export const {
