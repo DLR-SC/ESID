@@ -4,8 +4,7 @@
 import Container from '@mui/material/Container';
 import {Box, Autocomplete, useTheme} from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import {SyntheticEvent} from 'react';
-import React from 'react';
+import React, {SyntheticEvent} from 'react';
 import {GeoJsonProperties} from 'geojson';
 
 interface SearchBarProps {
