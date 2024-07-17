@@ -20,6 +20,7 @@ import {I18nextProvider, useTranslation} from 'react-i18next';
 import i18n from './util/i18n';
 import {MUILocalization} from './components/shared/MUILocalization';
 import {DataProvider} from 'DataContext';
+import WelcomeModal from './components/OnboardingComponents/WelcomeModal';
 
 /**
  * This is the root element of the React application. It divides the main screen area into the three main components.
@@ -35,6 +36,7 @@ export default function App(): JSX.Element {
               <MUILocalization>
                 <DataProvider>
                   <Initializer />
+                  <WelcomeModal />
                   <Box id='app' display='flex' flexDirection='column' sx={{height: '100%', width: '100%'}}>
                     <TopBar />
                     <Box
