@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
+
 import React from 'react';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
