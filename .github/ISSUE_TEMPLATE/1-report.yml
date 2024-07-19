@@ -1,0 +1,51 @@
+# SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+# SPDX-License-Identifier: CC0-1.0
+
+name: Feedback or Bug Report
+about: File a report to tell us your thoughts
+labels: ["FEEDBACK"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for your report/feedback!
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      placeholder: |
+        Tell us about your feedback or provide a description of the bug you found.
+        If necessary, add screenshots to explain the idea or problem.
+        If possible provide steps to reproduce the problem.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Outcome
+      description: Please describe what should or could happen.
+      placeholder: A clear description of what you think should happen.
+    validations:
+      required: false
+  - type: dropdown
+    id: browsers
+    attributes:
+      label: What browser(s) are you using?
+      multiple: true
+      options:
+        - Microsoft Edge
+        - Chrome
+        - Firefox
+        - Safari
+        - Opera
+        - Internet Explorer
+        - Other
+    validations:
+      required: false
+  - type: input
+    id: version
+    attributes:
+      label: Browser Version (and name if 'other' was selected)
+      placeholder: version number
+    validations:
+      required: false
