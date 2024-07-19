@@ -31,7 +31,7 @@ import {SimulationModel, SimulationDataByNode, Simulations} from 'types/scenario
 import {CaseDataByNode} from 'types/caseData';
 import {useAppDispatch, useAppSelector} from 'store/hooks';
 import {GroupCategories, GroupSubcategories} from 'store/services/groupApi';
-import {cardValue, filterValue} from 'types/card';
+import {CardValue, FilterValue} from 'types/card';
 
 interface ScenarioContainerProps {
   /** The minimum number of compartment rows.*/
@@ -45,7 +45,7 @@ interface ScenarioContainerProps {
  * Renders the ScenarioContainer component.
  */
 export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartmentsRows = 6}: ScenarioContainerProps) {
-  const {t} = useTranslation();
+  const {t} = useTranslation('backend');
   const dispatch = useAppDispatch();
   const {i18n} = useTranslation();
   const {formatNumber} = NumberFormatter(i18n.language, 1, 0);
@@ -95,8 +95,8 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
   const storeSelectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
   const storeStartDay = useAppSelector((state) => state.dataSelection.simulationStart);
 
-  const [cardValues, setCardValues] = useState<Dictionary<cardValue> | undefined>();
-  const [filterValues, setFilterValues] = useState<Dictionary<filterValue[]> | undefined>();
+  const [cardValues, setCardValues] = useState<Dictionary<CardValue> | undefined>();
+  const [filterValues, setFilterValues] = useState<Dictionary<FilterValue[]> | undefined>();
   const [groupFilters, setgroupFilters] = useState<Dictionary<GroupFilter>>(storeGroupFilters);
   const [compartmentsExpanded, setCompartmentsExpanded] = useState<boolean>(storeCompartmentsExpanded ?? false);
   const [activeScenarios, setActiveScenarios] = useState<number[] | null>(storeActiveScenarios);
@@ -106,16 +106,15 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
   const [resizeRef, resizeBoundingRect] = useBoundingclientrectRef();
 
   const scenarios: Scenario[] = useMemo(() => {
-    const aux: Scenario[] = [];
-    aux.push({
-      id: 0,
-      label: `caseData`,
-    });
+    const aux: Scenario[] = [{id: 0, label: t('scenario-names.caseData')}];
+
     for (const scenarioKey in scenariosState) {
-      aux.push(scenariosState[scenarioKey]);
+      const {id, label}: Scenario = scenariosState[scenarioKey];
+      aux.push({id, label: t(`scenario-names.${label}`)});
     }
+
     return aux;
-  }, [scenariosState]);
+  }, [scenariosState, t]);
 
   const compartmentsMemo = useMemo(() => {
     return compartments;
@@ -215,7 +214,7 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
 
   const remainingCard = useMemo(() => {
     return scenarioSimulationDataForCard?.reduce(
-      (acc: {[key: string]: cardValue}, scenarioSimulationDataCard, id) => {
+      (acc: {[key: string]: CardValue}, scenarioSimulationDataCard, id) => {
         const compartments = scenarioSimulationDataCard?.results?.[0]?.compartments;
         acc[id.toString()] = {
           compartmentValues: compartments || null,
@@ -223,7 +222,7 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
         };
         return acc;
       },
-      {} as {[key: string]: cardValue}
+      {} as {[key: string]: CardValue}
     );
   }, [scenarioSimulationDataForCard, startValues]);
 
@@ -256,7 +255,7 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
     )
       return;
 
-    const filterValuesTemp: Array<filterValue[]> =
+    const filterValuesTemp: Array<FilterValue[]> =
       scenarioSimulationDataForCardFiltersValues?.map((scenarioSimulation) => {
         return Object.values(groupFilters)
           .filter((groupFilter) => groupFilter.isVisible)
@@ -268,7 +267,7 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
             };
           });
       }) || [];
-    const temp: Dictionary<filterValue[]> = {};
+    const temp: Dictionary<FilterValue[]> = {};
     getId?.forEach((id, index) => {
       temp[id.toString()] = filterValuesTemp[index];
     });

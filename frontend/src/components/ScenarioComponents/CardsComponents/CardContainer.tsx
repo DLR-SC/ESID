@@ -2,13 +2,12 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import DataCard from './DataCard';
-import {useTranslation} from 'react-i18next';
 import {Dispatch, SetStateAction} from 'react';
-import React from 'react';
+import React, {useMemo} from 'react';
 import {useTheme} from '@mui/material/styles';
 import Box from '@mui/material/Box/Box';
 import {Scenario} from 'store/ScenarioSlice';
-import {cardValue, filterValue} from 'types/card';
+import {CardValue, FilterValue} from 'types/card';
 import {GroupFilter} from 'types/group';
 import {Localization} from 'types/localization';
 import {getScenarioPrimaryColor} from 'util/Theme';
@@ -20,11 +19,11 @@ interface CardContainerProps {
 
   /** A dictionary of card values. Each value is an object containing 'startValues', a dictionary used for rate calculation, and 'compartmentValues' for each card.
    *'startValues' help determine whether the values have increased, decreased, or remained the same. */
-  cardValues: Dictionary<cardValue> | undefined;
+  cardValues: Dictionary<CardValue> | undefined;
 
   /** A dictionary of filter values. This is an array of objects, each containing a title and a dictionary of numbers representing
    * the filtered information to be displayed, it's used a disctionary because each card has to have the same amount of filter. */
-  filterValues?: Dictionary<filterValue[]> | null;
+  filterValues?: Dictionary<FilterValue[]> | null;
 
   /** The compartment that is currently selected. */
   selectedCompartment: string;
@@ -89,8 +88,24 @@ export default function CardContainer({
   arrow = true,
 }: CardContainerProps) {
   const theme = useTheme();
-  const {t: defaultT} = useTranslation();
-  const {t: customT} = useTranslation(localization.customLang);
+  const minHeight = useMemo(() => {
+    let height;
+    if (compartmentsExpanded) {
+      if (maxCompartmentsRows > 5) {
+        height = (390 / 6) * maxCompartmentsRows;
+      } else {
+        height = (660 / 6) * maxCompartmentsRows;
+      }
+    } else {
+      if (minCompartmentsRows < 4) {
+        height = (480 / 4) * minCompartmentsRows;
+      } else {
+        height = (325 / 4) * minCompartmentsRows;
+      }
+    }
+    return `${height}px`;
+  }, [compartmentsExpanded, maxCompartmentsRows, minCompartmentsRows]);
+
   const dataCards = scenarios.map((scenario) => {
     const cardValue = cardValues ? cardValues[scenario.id.toString()] : null;
     if (!cardValue) {
@@ -101,11 +116,7 @@ export default function CardContainer({
         key={scenario.id}
         index={scenario.id}
         color={scenario.id == 0 ? '#00000' : getScenarioPrimaryColor(scenario.id, theme)}
-        label={
-          localization.overrides && localization.overrides[`scenario-names.${scenario.label}`]
-            ? customT(localization.overrides[`scenario-names.${scenario.label}`])
-            : defaultT(`scenario-names.${scenario.label}`)
-        }
+        label={scenario.label}
         compartmentsExpanded={compartmentsExpanded}
         compartments={compartments}
         compartmentValues={cardValue.compartmentValues}
@@ -133,13 +144,7 @@ export default function CardContainer({
         display: 'flex',
         flexDirection: 'row',
         gap: 4,
-        minHeight: compartmentsExpanded
-          ? maxCompartmentsRows > 5
-            ? `${(390 / 6) * maxCompartmentsRows}px`
-            : `${(660 / 6) * maxCompartmentsRows}px`
-          : minCompartmentsRows < 4
-            ? `${(480 / 4) * minCompartmentsRows}px`
-            : `${(325 / 4) * minCompartmentsRows}px`,
+        minHeight: minHeight,
         overflowX: 'auto',
         minWidth: 400,
         paddingLeft: 4,

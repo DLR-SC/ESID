@@ -1,11 +1,10 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
-import React from 'react';
+import React, {useMemo} from 'react';
 import {Box, useTheme} from '@mui/material';
 import Divider from '@mui/material/Divider';
 import FilterRows from './FilterRows';
 import CardTitle from '../MainCard/CardTitle';
-
 import {Localization} from 'types/localization';
 import {Dictionary} from 'util/util';
 
@@ -70,6 +69,25 @@ export default function FilterCard({
   },
 }: FilterCardProps) {
   const theme = useTheme();
+
+  const maxHeight = useMemo(() => {
+    let height;
+    if (compartmentsExpanded) {
+      if (maxCompartmentsRows > 5) {
+        height = (390 / 6) * maxCompartmentsRows;
+      } else {
+        height = (480 / 6) * maxCompartmentsRows;
+      }
+    } else {
+      if (minCompartmentsRows < 4) {
+        height = (365 / 4) * minCompartmentsRows;
+      } else {
+        height = (325 / 4) * minCompartmentsRows;
+      }
+    }
+    return `${height}px`;
+  }, [compartmentsExpanded, maxCompartmentsRows, minCompartmentsRows]);
+
   return (
     <Box
       id={`external-cardfilter-container-${groupFilterIndex}`}
@@ -83,13 +101,7 @@ export default function FilterCard({
         id={`cardfilter-title&cardContent-container-${groupFilterIndex}`}
         className='hide-scrollbar'
         sx={{
-          maxHeight: compartmentsExpanded
-            ? maxCompartmentsRows > 5
-              ? `${(390 / 6) * maxCompartmentsRows}px`
-              : `${(480 / 6) * maxCompartmentsRows}px`
-            : minCompartmentsRows < 4
-              ? `${(365 / 4) * minCompartmentsRows}px`
-              : `${(325 / 4) * minCompartmentsRows}px`,
+          maxHeight: maxHeight,
           minWidth: '130px',
           bgcolor: theme.palette.background.paper,
           zIndex: 0,

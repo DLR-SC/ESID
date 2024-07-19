@@ -1,18 +1,12 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import {Scenario} from 'store/ScenarioSlice';
 import {Dictionary} from 'util/util';
-
-export const initialState = {
-  scenarios: [] as Scenario[],
-  compartments: [] as string[],
-};
 
 /**
  * Represents the value of a card.
  */
-export interface cardValue {
+export interface CardValue {
   /** A dictionary of compartment values associated with the card.*/
   compartmentValues: Dictionary<number> | null;
 
@@ -23,7 +17,7 @@ export interface cardValue {
 /**
  * Represents the filter value for a card.
  */
-export interface filterValue {
+export interface FilterValue {
   /** The filter title. */
   filteredTitle: string;
 
