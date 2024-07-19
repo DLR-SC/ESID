@@ -105,9 +105,9 @@ describe('CardContainer', () => {
     render(<CardContainerTest />);
 
     // Check if filter values are rendered correctly for each compartment
-    expect(screen.getByText('scenario-names.Scenario 1')).toBeInTheDocument();
-    expect(screen.getByText('scenario-names.Scenario 2')).toBeInTheDocument();
-    expect(screen.getByText('scenario-names.Scenario 3')).toBeInTheDocument();
+    expect(screen.getByText('Scenario 1')).toBeInTheDocument();
+    expect(screen.getByText('Scenario 2')).toBeInTheDocument();
+    expect(screen.getByText('Scenario 3')).toBeInTheDocument();
   });
   const compartments: string[] = ['Compartment 1', 'Compartment 2', 'Compartment 3'];
 
