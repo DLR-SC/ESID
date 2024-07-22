@@ -7,7 +7,7 @@ projects: "DLR-SC/5"
 body:
   - type: textarea
     id: content
-    atributes:
+    attributes:
       label: Description
       description: Describe the issue.
     validations:
