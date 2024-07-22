@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: CC0-1.0
 
 name: Feedback or Bug Report
-about: File a report to tell us your thoughts
+description: File a report to tell us your thoughts
 labels: ["FEEDBACK"]
 body:
   - type: markdown
