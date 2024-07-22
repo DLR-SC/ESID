@@ -4,6 +4,7 @@
 name: Feedback or Bug Report
 description: File a report to tell us your thoughts
 labels: ["FEEDBACK"]
+projects: "DLR-SC/5"
 body:
   - type: markdown
     attributes:
