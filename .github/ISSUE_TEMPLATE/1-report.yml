@@ -1,38 +1,30 @@
 # SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 # SPDX-License-Identifier: CC0-1.0
 
-name: Bug Report
-description: File a bug report
-title: "[Bug]: "
-labels: ["class:bug"]
+name: Feedback or Bug Report
+about: File a report to tell us your thoughts
+labels: ["FEEDBACK"]
 body:
   - type: markdown
     attributes:
       value: |
-        Thank you for your report!
+        Thank you for your report/feedback!
   - type: textarea
     id: description
     attributes:
       label: Description
       placeholder: |
-        Provide a clear and concise description of the bug.
-        If necessary, add screenshots to explain the problem.
-        Provide steps to reproduce the problem.
-      value: |
-        Provide a clear and concise description of the bug.
-        If necessary, add screenshots to explain the problem.
-        
-        Steps to reproduce the problem:
-        1. Do this
-        2. Do that
+        Tell us about your feedback or provide a description of the bug you found.
+        If necessary, add screenshots to explain the idea or problem.
+        If possible provide steps to reproduce the problem.
     validations:
       required: true
   - type: textarea
     id: expected
     attributes:
-      label: Expected Behavior
-      description: Please describe what should happen instead.
-      placeholder: A clear description of what you expected to happen.
+      label: Expected Outcome
+      description: Please describe what should or could happen.
+      placeholder: A clear description of what you think should happen.
     validations:
       required: false
   - type: dropdown
@@ -49,7 +41,7 @@ body:
         - Internet Explorer
         - Other
     validations:
-      required: true
+      required: false
   - type: input
     id: version
     attributes:
