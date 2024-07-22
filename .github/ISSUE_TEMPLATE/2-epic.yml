@@ -4,6 +4,7 @@
 name: Epic
 description: Create a new epic
 title: "[EPIC]: "
+projects: "DLR-SC/5"
 labels: ["Epic"]
 body:
   - type: checkboxes
