@@ -1,0 +1,4162 @@
+[33mcommit 0fa05c8588641b48fc938a03aa1cdb83ec858659[m[33m ([m[1;36mHEAD -> [m[1;32mfeature/mapReset[m[33m, [m[1;31morigin/feature/mapReset[m[33m)[m
+Merge: 5f55f75 72bd4e1
+Author: PawanKaur <littlepawan@gmail.com>
+Date:   Fri Dec 16 17:47:50 2022 +0100
+
+    Merge branch 'develop' into feature/mapReset
+
+[33mcommit 72bd4e17efcd9ba494e100058afa9aaf0ae28c33[m[33m ([m[1;31morigin/statistics[m[33m, [m[1;32mstatistics[m[33m)[m
+Merge: 7a0a952 d159b80
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Tue Dec 6 13:01:22 2022 +0100
+
+    Merge pull request #188 from DLR-SC/fix/scenario-colors
+    
+    Fix missing color for Scenario Palette
+
+[33mcommit d159b8013f2d278fddc70bc0a551d0047bee5545[m
+Author: Moritz Zeumer <moritz.zeumer@dlr.de>
+Date:   Mon Dec 5 15:30:34 2022 +0100
+
+    Fix missing color for Scenario Palette
+
+[33mcommit 7a0a9520c181caa0a8119282935a21ac253daa91[m
+Merge: 96baac1 16808b6
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Mon Nov 21 10:15:02 2022 +0100
+
+    Merge pull request #185 from DLR-SC/fix/scenarioCardArrows
+    
+    moved scenario card arrows to function component
+
+[33mcommit 16808b6fdc47245830180f1e84e2eaea337c08d2[m
+Author: Moritz Zeumer <moritz.zeumer@dlr.de>
+Date:   Fri Nov 18 11:51:07 2022 +0100
+
+    :sparkles: formatting
+
+[33mcommit 98fbdb76e9080d26433f598b47fc3d83220c1e58[m
+Author: Moritz Zeumer <moritz.zeumer@dlr.de>
+Date:   Fri Nov 18 11:42:59 2022 +0100
+
+    update packages
+
+[33mcommit 4984698ac24187dc4fef64ff24ba50a2304a3f02[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Fri Nov 18 11:40:27 2022 +0100
+
+    Apply suggestions from code review
+    
+    Co-authored-by: Jonas Gilg <jonas.gilg@dlr.de>
+
+[33mcommit 421c839bdf2b6fcfec78564dc3ab7c1289cf9e9f[m
+Author: Moritz Zeumer <moritz.zeumer@dlr.de>
+Date:   Tue Nov 15 15:26:41 2022 +0100
+
+    :sparkles: formatting
+
+[33mcommit bcb5db834cdd766351dc78e6483b7c186fe3b074[m
+Author: Moritz Zeumer <moritz.zeumer@dlr.de>
+Date:   Tue Nov 15 15:23:10 2022 +0100
+
+    moved scenario card arrows to function
+
+[33mcommit 96baac126cc3791fdaa4aaab34744b629ce090cc[m
+Merge: c5c7345 a067a30
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Fri Oct 28 14:05:54 2022 +0200
+
+    Merge pull request #183 from DLR-SC/feature/remove-rki-mentions
+    
+    Rename RKI data to case data.
+
+[33mcommit c5c7345f5ef77deb22f8c15190b582d0d535cb2a[m
+Merge: d45a012 791e32c
+Author: PawanKaur <littlepawan@gmail.com>
+Date:   Wed Oct 26 13:01:35 2022 +0200
+
+    Merge pull request #149 from DLR-SC/feature/scenarioCardArrows
+    
+    scenario card arrows added
+
+[33mcommit 5f55f752f30a6cda70de315ebacfb37d1ce18d81[m
+Author: kauz_pa <pawandeep.kaur-betz@dlr.de>
+Date:   Mon Oct 17 16:53:59 2022 +0200
+
+    pr conflict resolved
+
+[33mcommit 791e32c9012eda03fe23d7b74eaf820f5379b7d0[m[33m ([m[1;31morigin/feature/scenarioCardArrows[m[33m, [m[1;32mfeature/scenarioCardArrows[m[33m)[m
+Author: kauz_pa <pawandeep.kaur-betz@dlr.de>
+Date:   Fri Oct 7 16:40:32 2022 +0200
+
+    pr conflict resolved
+
+[33mcommit 291382b46c353e28f53bb38fd8779b0003a459a5[m
+Merge: 71d8587 d45a012
+Author: PawanKaur <littlepawan@gmail.com>
+Date:   Fri Oct 7 15:52:05 2022 +0200
+
+    Merge branch 'develop' into feature/scenarioCardArrows
+
+[33mcommit d45a01290e07cb6dadf3c6ba91a36c8aa2cdcd4f[m
+Merge: 039d1a6 bee30b5
+Author: PawanKaur <littlepawan@gmail.com>
+Date:   Fri Oct 7 15:08:38 2022 +0200
+
+    Merge pull request #176 from DLR-SC/features/export
+    
+    Features/export
+
+[33mcommit 039d1a679a24340bdf28e2fd1cb20fd4f9a45c25[m
+Merge: e3acc97 225fb05
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Fri Oct 7 10:54:20 2022 +0200
+
+    Merge pull request #161 from DLR-SC/feature/add-play-button
+    
+    Add play feature.
+
+[33mcommit a067a309fa2cfce675cd9c4df874d5f406652422[m[33m ([m[1;31morigin/feature/remove-rki-mentions[m[33m)[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Fri Oct 7 10:52:29 2022 +0200
+
+    :sparkles: Run prettier.
+
+[33mcommit 225fb05d7af0cbf57500b3ee5d821b0b2ff6126e[m
+Merge: b321f88 e3acc97
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Fri Oct 7 10:43:42 2022 +0200
+
+    Merge branch 'develop' into feature/add-play-button
+
+[33mcommit fb64e7eb69fdc2368ab4aad0212e05678b29a95f[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Fri Oct 7 10:40:41 2022 +0200
+
+    :wrench: Rename RKI data to case data.
+
+[33mcommit e3acc97c80a4b261a46ebad0c30605966a80cc70[m
+Merge: 06c4f9c 8326c89
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Wed Oct 5 10:50:30 2022 +0200
+
+    Merge pull request #173 from DLR-SC/feature/refine_tooltip
+    
+    Refine tooltip
+
+[33mcommit bee30b50be0f74dbc1890557362f86996a08e1c1[m[33m ([m[1;31morigin/features/export[m[33m)[m
+Merge: 7cea6e1 06c4f9c
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Fri Sep 30 11:39:05 2022 +0200
+
+    Merge branch 'develop' into features/export
+
+[33mcommit 7cea6e12b2c93ab274536aaf98df2ac9e7ebed2e[m[33m ([m[1;32mfeatures/export[m[33m)[m
+Author: kauz_pa <pawandeep.kaur-betz@dlr.de>
+Date:   Fri Sep 30 11:20:58 2022 +0200
+
+    resolved other PR conflicts
+
+[33mcommit 6a66c3642351ed6a3a25ef6336736e23ac7a367d[m
+Author: kauz_pa <pawandeep.kaur-betz@dlr.de>
+Date:   Tue Sep 20 10:32:38 2022 +0200
+
+    export module on the visualizations
+
+[33mcommit 9a688deda79bfc4663b35c6b1dcf65caa259b471[m
+Author: kerklohlaurin <laurin.kerkloh@dlr.de>
+Date:   Mon Sep 19 16:15:15 2022 +0200
+
+    :wrench: move export to separate effect, so it triggers on every render
+
+[33mcommit 6bae0731cedefceb395ca03f8bb59f8f2f37bccd[m
+Author: kauz_pa <pawandeep.kaur-betz@dlr.de>
+Date:   Mon Sep 19 15:16:41 2022 +0200
+
+    added exporting feature
+
+[33mcommit e95d4a74e746740b494e30e3a06390f91cda45cc[m
+Author: kauz_pa <pawandeep.kaur-betz@dlr.de>
+Date:   Mon Sep 19 13:38:06 2022 +0200
+
+    german icon
+
+[33mcommit 0bb1019069c550c08b0f067d7f5457abc5c0b4ce[m
+Merge: 044f67a 7c91a42
+Author: kauz_pa <pawandeep.kaur-betz@dlr.de>
+Date:   Mon Sep 19 13:06:15 2022 +0200
+
+    Merge branch 'feature/germany-icon' into feature/mapReset
+
+[33mcommit 7c91a4291e4a3095fde37794e7d7f54cb9e63174[m[33m ([m[1;31morigin/feature/germany-icon[m[33m, [m[1;32mfeature/germany-icon[m[33m)[m
+Author: Moritz Zeumer <moritz.zeumer@dlr.de>
+Date:   Fri Sep 16 16:00:06 2022 +0200
+
+    add newline
+
+[33mcommit 39cf178268c2cac0740a26ef6527bc548cb40d58[m
+Author: Moritz Zeumer <moritz.zeumer@dlr.de>
+Date:   Fri Sep 16 15:59:08 2022 +0200
+
+    fix revert
+
+[33mcommit 35321e30d45516c2da5eec16281b4d6c39557d10[m
+Author: Moritz Zeumer <moritz.zeumer@dlr.de>
+Date:   Fri Sep 16 15:55:53 2022 +0200
+
+    revert IconBar changes
+
+[33mcommit 0c2e3e810d87fb9305be9fa8915e819cf244bd40[m
+Author: Moritz Zeumer <moritz.zeumer@dlr.de>
+Date:   Fri Sep 16 15:54:42 2022 +0200
+
+    set viewBox
+
+[33mcommit 1b5cb9694dfb524b59e8778e6f068b7bf4c68bdf[m
+Author: Moritz Zeumer <moritz.zeumer@dlr.de>
+Date:   Fri Sep 16 15:07:30 2022 +0200
+
+    add svg
+
+[33mcommit 06c4f9cc9306fc0e809c2ebf88b1630f768742e1[m
+Author: Martin J. Kühn <62713180+mknaranja@users.noreply.github.com>
+Date:   Fri Sep 16 14:26:04 2022 +0200
+
+    Update README.md
+    
+    change mail address
+
+[33mcommit 8326c89b3cc2ae714c11a9d8306c50986d4978fa[m[33m ([m[1;31morigin/feature/refine_tooltip[m[33m)[m
+Merge: 604b91a 83e5868
+Author: kerklohlaurin <laurin.kerkloh@dlr.de>
+Date:   Fri Sep 16 12:55:29 2022 +0200
+
+    :twisted_rightwards_arrows: Merge remote-tracking branch 'origin/develop' into feature/refine_tooltip
+
+[33mcommit 83e5868400adc5f88005fd8efdd92cde63a47f40[m
+Merge: eef182d 15c57d4
+Author: kerklohlaurin <101645686+kerklohlaurin@users.noreply.github.com>
+Date:   Fri Sep 16 12:25:58 2022 +0200
+
+    Merge pull request #169 from DLR-SC/feature/highlight_district
+    
+    :tada: Adds district highlighting
+
+[33mcommit 7ff48d5c663a23ed039245322e1aa526235f95d4[m
+Author: Moritz Zeumer <moritz.zeumer@dlr.de>
+Date:   Fri Sep 16 11:59:00 2022 +0200
+
+    add svg
+
+[33mcommit 6a7b24371bfb9f0f54d091ce0635fa22f3622943[m[33m ([m[1;32masked-for-stash-for-no-reason[m[33m)[m
+Merge: b45072f eef182d
+Author: kauz_pa <pawandeep.kaur-betz@dlr.de>
+Date:   Thu Sep 15 13:23:08 2022 +0200
+
+    Merge branch 'develop' into features/export
+
+[33mcommit 15c57d4ee521004d2fcbeba0a5c45bc777dac513[m[33m ([m[1;31morigin/feature/highlight_district[m[33m)[m
+Merge: 7d9954d eef182d
+Author: Moritz Zeumer <moritz.zeumer@dlr.de>
+Date:   Thu Sep 15 11:25:41 2022 +0200
+
+    Merge remote-tracking branch 'origin/develop' into feature/highlight_district
+
+[33mcommit 044f67a108db5d51ac2f3ae79b940b9fba39785d[m
+Author: kauz_pa <pawandeep.kaur-betz@dlr.de>
+Date:   Wed Sep 14 11:10:23 2022 +0200
+
+    changed the home icon to zoomout
+
+[33mcommit b6f92748f23e22295dc20a3ef80c47763e998601[m
+Author: kauz_pa <pawandeep.kaur-betz@dlr.de>
+Date:   Wed Sep 14 10:57:25 2022 +0200
+
+    issue 98, 92, map+zoom reset
+
+[33mcommit e9736d62226603570b0e96c6682a5a36f40f03b1[m
+Merge: 1098a5f eef182d
+Author: kauz_pa <pawandeep.kaur-betz@dlr.de>
+Date:   Tue Sep 13 16:11:50 2022 +0200
+
+    Merge branch 'develop' into feature/mapReset
+
+[33mcommit 71d8587034fbcc8add62dd67ee7a095231254d95[m
+Author: kauz_pa <pawandeep.kaur-betz@dlr.de>
+Date:   Mon Sep 12 16:23:50 2022 +0200
+
+    format done
+
+[33mcommit f5141a9895286333d2eb02b7511d8b4b96fe87c4[m
+Author: kauz_pa <pawandeep.kaur-betz@dlr.de>
+Date:   Mon Sep 12 12:39:10 2022 +0200
+
+    Applied stagnation rule + Arrows for N/A values
+
+[33mcommit eef182d74c2fd78af2bd72c0e47b0e6f0aee5b97[m
+Merge: 98057f1 ad844de
+Author: Luca Spataro <luca@spataro.de>
+Date:   Tue Sep 6 11:17:16 2022 +0200
+
+    Merge pull request #146 from DLR-SC/137-add-rest-endpoints-to-filter-simulation-data-based-on-groups
+    
+    Change api routes to accept filter request via get and post
+
+[33mcommit 7d9954d83a2d84621d2cd1f59e65f504e97d0e7b[m
+Author: kerklohlaurin <laurin.kerkloh@dlr.de>
+Date:   Mon Sep 5 11:16:44 2022 +0200
+
+    :beetle: districts will now show selection when clicked on (not only when selected through the search bar)
+
+[33mcommit 604b91a3cf5c92108f4f725efcaf2fb66fcac47d[m
+Author: kerklohlaurin <laurin.kerkloh@dlr.de>
+Date:   Mon Sep 5 11:08:18 2022 +0200
+
+    :wrench: change the way p-25/p-75 is shown in the SimulationChart tooltip
+
+[33mcommit 84fde547f82526cd85037514dca98253d557f47e[m
+Author: kauz_pa <pawandeep.kaur-betz@dlr.de>
+Date:   Fri Sep 2 17:08:29 2022 +0200
+
+    stash added
+
+[33mcommit 7394ebad490398a3719675895720db6d69f4b836[m
+Author: kerklohlaurin <laurin.kerkloh@dlr.de>
+Date:   Fri Sep 2 14:21:03 2022 +0200
+
+    :beetle: fix not showing the heatlegend tooltip
+
+[33mcommit 6a18b0cbe6f2ee924d96eadc2529fb732c1a3cb4[m
+Author: kerklohlaurin <laurin.kerkloh@dlr.de>
+Date:   Fri Sep 2 14:12:16 2022 +0200
+
+    :tada: Adds district highlighting
+
+[33mcommit 11805ef9d9798f694331436b0f8a3a066c3a6820[m
+Author: kauz_pa <pawandeep.kaur-betz@dlr.de>
+Date:   Fri Sep 2 11:20:08 2022 +0200
+
+    little change from 2.9 to 3
+
+[33mcommit 48556a938d140cfee6b4f71225b48ea5a72c36aa[m
+Author: kauz_pa <pawandeep.kaur-betz@dlr.de>
+Date:   Fri Sep 2 09:09:42 2022 +0200
+
+    stagnation condition <=3 && >=0
+
+[33mcommit 98057f19765c3c72c7512a6a08f493419ae96a79[m
+Merge: 35e66a3 348d09b
+Author: Martin J. Kühn <62713180+mknaranja@users.noreply.github.com>
+Date:   Fri Aug 26 13:09:00 2022 +0200
+
+    Merge pull request #167 from DLR-SC/Update-readme
+    
+    Update README.md
+
+[33mcommit 1098a5f06450b2140d19a5dac92837e1cda798ad[m
+Author: kauz_pa <pawandeep.kaur-betz@dlr.de>
+Date:   Wed Aug 24 13:12:05 2022 +0200
+
+    search bar reset is done
+
+[33mcommit 348d09ba2165ab40bd6d34ca78c605bcbf7739e1[m[33m ([m[1;31morigin/Update-readme[m[33m)[m
+Author: Martin J. Kühn <62713180+mknaranja@users.noreply.github.com>
+Date:   Tue Aug 23 17:58:03 2022 +0200
+
+    Update README.md
+
+[33mcommit b45072fb9f6c7988a661ed667e80b887e0b0ee20[m
+Author: kauz_pa <pawandeep.kaur-betz@dlr.de>
+Date:   Wed Aug 17 09:56:01 2022 +0200
+
+    resolve NaN on Map and Legend
+
+[33mcommit 8032e544f300a95791b39f8da55bb985cde63978[m
+Author: kauz_pa <pawandeep.kaur-betz@dlr.de>
+Date:   Tue Aug 16 14:36:11 2022 +0200
+
+    updated scenariocard arrows
+
+[33mcommit 4081f88725a97d0ecb4157f80690d23868cffa0d[m
+Author: kauz_pa <pawandeep.kaur-betz@dlr.de>
+Date:   Mon Aug 15 20:03:11 2022 +0200
+
+    updated scenariocard arrows, updated legend max value
+
+[33mcommit 27602fc1dccc39bfcb9d39a63f21a7755e71a0e1[m
+Author: kauz_pa <pawandeep.kaur-betz@dlr.de>
+Date:   Mon Aug 15 17:08:37 2022 +0200
+
+    Updated Scenario Card errows + max value of legend
+
+[33mcommit b321f8853f0c73ec47c17847ae3f278eb6ecef7f[m[33m ([m[1;31morigin/feature/add-play-button[m[33m)[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Thu Aug 4 09:07:13 2022 +0200
+
+    :wrench: Prettier and Lint now run earlier in the CI.
+
+[33mcommit 86c77211d26de368cdbcd7925ff7ef65004cb86a[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Thu Aug 4 09:05:04 2022 +0200
+
+    :sparkles: Format code.
+
+[33mcommit 3d85f6c5098235fe7ab8b6e044cc1b1d431d9eea[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Wed Aug 3 16:50:02 2022 +0200
+
+    :sparkles: Add play feature.
+
+[33mcommit 35e66a32d8f9d264451ed09c316b0fe5d1c6813a[m
+Merge: b2163b7 cedd210
+Author: kerklohlaurin <101645686+kerklohlaurin@users.noreply.github.com>
+Date:   Fri Jul 29 11:24:24 2022 +0200
+
+    Merge pull request #138 from DLR-SC/feature/save-state-locally
+    
+    :twisted_rightwards_arrows: Save state locally
+
+[33mcommit fe2fe7dc1c1b93d77708d5de1d3c621d3a8ba276[m
+Author: kauz_pa <pawandeep.kaur-betz@dlr.de>
+Date:   Wed Jul 27 11:42:34 2022 +0200
+
+    scenario card arrows added
+
+[33mcommit cedd21068e42fd64266a6f414581cec22c6ee773[m[33m ([m[1;31morigin/feature/save-state-locally[m[33m)[m
+Author: kerklohlaurin <laurin.kerkloh@dlr.de>
+Date:   Mon Jul 18 16:48:21 2022 +0200
+
+    :twisted_rightwards_arrows: merge develop into this
+
+[33mcommit ed3c063d5962297f1cb1098216771df68177146f[m
+Merge: 8b8087d b2163b7
+Author: kerklohlaurin <laurin.kerkloh@dlr.de>
+Date:   Mon Jul 18 16:45:05 2022 +0200
+
+    :beetle: fix bug persisting selected compartment and selected district
+
+[33mcommit ad844de2434958235450e7771f5baef699b52ab9[m[33m ([m[1;31morigin/137-add-rest-endpoints-to-filter-simulation-data-based-on-groups[m[33m)[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Thu Jul 14 13:52:52 2022 +0200
+
+    Remove None values from dict
+
+[33mcommit bb7a606f091f10c79e4647ab7dd4f6b5069a9cfb[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Thu Jul 14 11:46:57 2022 +0200
+
+    remove duplicated default value override for percentiles
+
+[33mcommit 2fdb405453c23a1e7b28ec907eeaabbb6497f2b1[m
+Author: Moritz Zeumer <moritz.zeumer@dlr.de>
+Date:   Tue Jul 12 16:39:16 2022 +0200
+
+    :sparkles: fix formatting
+
+[33mcommit 0714b54000fa60e57b746420fcbff699ca3d92af[m
+Author: Moritz Zeumer <moritz.zeumer@dlr.de>
+Date:   Tue Jul 12 16:31:10 2022 +0200
+
+    :wrench: add frontend changes to match the api changes
+
+[33mcommit 5b4d1882b8f645ac6cdb45508785f28d4f7511ae[m
+Author: Moritz Zeumer <moritz.zeumer@dlr.de>
+Date:   Tue Jul 12 14:33:02 2022 +0200
+
+    :memo: add comment to unclear RegEX
+
+[33mcommit 54c7555eeabff8f78508942b139c2a17e51e63ad[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Mon Jul 11 12:51:56 2022 +0200
+
+    Change api routes to accept filter request via get and post
+
+[33mcommit b2163b78d159305e7036ba1e91c0ca5d0f8f6cfd[m
+Merge: 4cac1ba 16c5967
+Author: Luca Spataro <luca@spataro.de>
+Date:   Thu Jul 7 10:59:45 2022 +0200
+
+    Merge pull request #135 from DLR-SC/134-add-rest-endpoints-to-retrive-groups
+    
+    Add api routes for group and group categories
+
+[33mcommit 16c596703aae2484b887d6039d23bf488faa4609[m[33m ([m[1;31morigin/134-add-rest-endpoints-to-retrive-groups[m[33m)[m
+Merge: f9b6afb 05c922e
+Author: Luca Spataro <luca@spataro.de>
+Date:   Thu Jul 7 10:48:56 2022 +0200
+
+    Merge branch '134-add-rest-endpoints-to-retrive-groups' of github.com:DLR-SC/ESID into 134-add-rest-endpoints-to-retrive-groups
+
+[33mcommit f9b6afb3f245e692090681a3bb1ab8bc355ab387[m
+Merge: 6da31de 4cac1ba
+Author: Luca Spataro <luca@spataro.de>
+Date:   Thu Jul 7 10:48:47 2022 +0200
+
+    Merge branch 'develop' into 134-add-rest-endpoints-to-retrive-groups
+
+[33mcommit 05c922ed6aca9bb9877400d636c37c5f88a76203[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Thu Jul 7 10:44:55 2022 +0200
+
+    Update backend/src/api/serializers.py
+    
+    Co-authored-by: Mo <25636783+NXXR@users.noreply.github.com>
+
+[33mcommit 4cac1bab1f9c8507884023ac85dc218c72f4a3f2[m
+Merge: aa928dc 2a71e4e
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Wed Jul 6 18:00:49 2022 +0200
+
+    Merge pull request #136 from DLR-SC/fix/conflicting-peer-dependency
+    
+    :arrow_up_small: :green_heart: fix conflicting peer dependency
+
+[33mcommit 8b8087d3fba17f6b08daf540ab6e56a916182f98[m
+Author: kerklohlaurin <laurin.kerkloh@dlr.de>
+Date:   Fri Jun 24 10:48:37 2022 +0200
+
+    :beetle: Fix bug with persisting the heatmaps
+
+[33mcommit ec74bb3d72a8fc37b1147b89439f410cd6461ecd[m
+Merge: 306bf3d aa928dc
+Author: kerklohlaurin <laurin.kerkloh@dlr.de>
+Date:   Tue Jun 21 13:52:44 2022 +0200
+
+    :twisted_rightwards_arrows: Merge branch 'develop' into feature/save-state-locally
+    
+    # Conflicts:
+    #       frontend/src/App.tsx
+
+[33mcommit 2a71e4e519fe44f7812a6e11859d50f57417f0ad[m[33m ([m[1;31morigin/fix/conflicting-peer-dependency[m[33m)[m
+Author: kerklohlaurin <laurin.kerkloh@dlr.de>
+Date:   Tue Jun 21 13:25:26 2022 +0200
+
+    :arrow_down_small: specifying max version for typescript to eslint supported versions
+
+[33mcommit 43e384e784337efb267c4fede1de8dadeb2751c3[m
+Author: kerklohlaurin <laurin.kerkloh@dlr.de>
+Date:   Tue Jun 21 13:06:26 2022 +0200
+
+    :arrow_up_small: :green_heart: fix conflicting peer dependency
+
+[33mcommit 6da31de097d838fd95a0e858207a51b6f6e55cf2[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Mon Jun 20 11:59:30 2022 +0200
+
+    Add api routes for group and group categories
+
+[33mcommit aa928dc51372c2b88364f6ded0610f6e71935a16[m
+Merge: 96947ca 893917f
+Author: kerklohlaurin <101645686+kerklohlaurin@users.noreply.github.com>
+Date:   Mon Jun 20 11:04:04 2022 +0200
+
+    :twisted_rightwards_arrows: Merge pull request #128 from DLR-SC/feature/disable-scenarios
+    
+    🎉 Adds the ability to disable scenarios (flip over scenario cards)
+
+[33mcommit 96947ca578708dde563e2a175c90755b3eddf8d1[m
+Merge: 80bb656 d3618cc
+Author: Luca Spataro <luca@spataro.de>
+Date:   Mon Jun 20 10:31:53 2022 +0200
+
+    Merge pull request #123 from DLR-SC/118-fix-frontend-api-calls-to-match-backend
+    
+    118 fix frontend api calls to match backend
+
+[33mcommit 80bb6562b4ba35cd1ba4bff181a0aa8c98bb83ae[m
+Merge: 9ecb656 b1ea30f
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Thu Jun 9 13:27:15 2022 +0200
+
+    Merge pull request #133 from DLR-SC/feature/refactor-theme
+    
+    Move the theme code to its own file.
+
+[33mcommit 9ecb65662cf9b12d0e0ddf71893a4d0c674297d0[m
+Merge: 8072094 a9ee04a
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Thu Jun 9 13:27:06 2022 +0200
+
+    Merge pull request #131 from DLR-SC/fix/scrollbars-always-showing
+    
+    Fix scrollbars always showing.
+
+[33mcommit b1ea30fbd4cc90df3a69e25a3c2f558e676660c9[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Thu Jun 9 10:33:18 2022 +0200
+
+    :sparkles: Formatting.
+
+[33mcommit 6974abc27d2fa6ac9708b62d361ecb405ba8aa6a[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Thu Jun 9 10:23:50 2022 +0200
+
+    :truck: Move the theme code to its own file.
+
+[33mcommit a9ee04ad2d9ea9a95326388dce16818961cdadef[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Thu Jun 9 10:11:15 2022 +0200
+
+    :beetle: Fix scrollbars always showing.
+
+[33mcommit 893917f1058f4977ce523a2b95c940e29269a34a[m[33m ([m[1;31morigin/feature/disable-scenarios[m[33m)[m
+Author: kerklohlaurin <laurin.kerkloh@dlr.de>
+Date:   Fri Jun 3 12:25:32 2022 +0200
+
+    :art: change scenario card icons
+
+[33mcommit 306bf3d5e661fe111e1d4d6448baee5e41f71c0b[m
+Author: kerklohlaurin <laurin.kerkloh@dlr.de>
+Date:   Mon May 23 15:09:34 2022 +0200
+
+    :heavy_check_mark: fix test
+
+[33mcommit 2a8eb9c9754bc8629ab1106ebf495e63e05070fb[m
+Author: kerklohlaurin <laurin.kerkloh@dlr.de>
+Date:   Mon May 23 15:04:00 2022 +0200
+
+    :tada: persist state to local storage
+
+[33mcommit 5b80897ff8c7dc6f46f631e1860a198db764cf51[m
+Merge: 9b4f850 8072094
+Author: kerklohlaurin <laurin.kerkloh@dlr.de>
+Date:   Mon May 23 10:34:45 2022 +0200
+
+    :twisted_rightwards_arrows: merge develop into this
+
+[33mcommit 9b4f850afb24a4acdf56f5550d7dc12b23696fc9[m
+Author: kerklohlaurin <laurin.kerkloh@dlr.de>
+Date:   Mon May 23 10:31:47 2022 +0200
+
+    :heavy_check_mark: add test for toggling scenario in the DataSelectionSlice
+
+[33mcommit c2ba9176e47e5ea9412e1b3df39b89216a1fca1d[m
+Author: kerklohlaurin <laurin.kerkloh@dlr.de>
+Date:   Mon May 23 10:30:34 2022 +0200
+
+    :wrench: only fetch simulation data for active scenarios
+
+[33mcommit 43a1d25b97c1f24490cad53d79da0222ddfc7d35[m
+Author: kerklohlaurin <laurin.kerkloh@dlr.de>
+Date:   Fri May 20 14:12:00 2022 +0200
+
+    :memo: typo fix
+
+[33mcommit e2e5fd80acecd2cd719e1c3a2733d307149264a6[m
+Author: kerklohlaurin <laurin.kerkloh@dlr.de>
+Date:   Mon May 16 13:39:20 2022 +0200
+
+    :tada: Add the ability to deactivate/activate (flip over) scenarios
+
+[33mcommit 8072094831f0d479c4a8ae8eabc3817b76e931de[m
+Merge: 9f5a214 50ddb82
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Fri May 13 10:05:39 2022 +0200
+
+    Merge pull request #117 from DLR-SC/fix/dependency-updates
+    
+    :arrow_up_small: apply npm audit fixes
+
+[33mcommit 9f5a214c34957300f1747aa7872e3d8b6725a48c[m
+Merge: 52f5192 deaf942
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Fri May 13 10:05:23 2022 +0200
+
+    Merge pull request #121 from DLR-SC/feature/fix-dateToISOString
+    
+    :beetle: Fix dateToISOString.
+
+[33mcommit 52f5192cfa45daacb8d776e8519871dfcb36edae[m
+Merge: 61ca46e 06df54b
+Author: kerklohlaurin <101645686+kerklohlaurin@users.noreply.github.com>
+Date:   Tue May 10 09:26:10 2022 +0200
+
+    :twisted_rightwards_arrows: Merge pull request #109 from DLR-SC/feature/heathmap-customizer
+
+[33mcommit 06df54bea59d3d7d89c2b5924aa8dff90acf5538[m[33m ([m[1;31morigin/feature/heathmap-customizer[m[33m)[m
+Merge: 843160a 61ca46e
+Author: kerklohlaurin <laurin.kerkloh@dlr.de>
+Date:   Tue May 10 09:17:07 2022 +0200
+
+    :twisted_rightwards_arrows: Merge develop into this
+
+[33mcommit 61ca46ea394ef07b53296593ab8c438ebaedf49b[m
+Merge: 443c9ad 3b392d1
+Author: Luca Spataro <luca@spataro.de>
+Date:   Wed May 4 11:24:56 2022 +0200
+
+    Merge pull request #122 from DLR-SC/fix/readme-command-patch
+    
+    :Beetle: Fix docker-compose commands
+
+[33mcommit 443c9ad784d6481b9d51e81f0f3c550d635cf37a[m
+Merge: 231205b a953ead
+Author: Luca Spataro <luca@spataro.de>
+Date:   Wed May 4 11:24:06 2022 +0200
+
+    Merge pull request #120 from DLR-SC/119-fix-backend-docker-release-build
+    
+    119 fix backend docker release build
+
+[33mcommit d3618ccd9c05d8c023ae38fc20ed43b154d0d21f[m[33m ([m[1;31morigin/118-fix-frontend-api-calls-to-match-backend[m[33m)[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Wed May 4 11:16:14 2022 +0200
+
+    Adapt rki and simulation queries to changed backend
+
+[33mcommit 50924ca60e2842bb905edc4c9b700d1db0c03bfa[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Wed May 4 09:59:49 2022 +0200
+
+    Allow multiple groups for scenario parameter and adapt import scripts
+
+[33mcommit 21863725c6f476bac2af297dd72f46693fd5bc19[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Tue May 3 09:09:29 2022 +0200
+
+    Adapt simulation model view to model change
+
+[33mcommit 3b392d120229f653a2156d0eb7996c70f33cccf4[m[33m ([m[1;31morigin/fix/readme-command-patch[m[33m)[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Mon May 2 16:45:19 2022 +0200
+
+    :Beetle: Fix docker-compose commands
+    
+    Fix docker-compose commands to load rki & simulation data
+
+[33mcommit deaf94290e5d0ed3cbac4d34539cc3910d36a4df[m[33m ([m[1;31morigin/feature/fix-dateToISOString[m[33m)[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Mon May 2 15:34:26 2022 +0200
+
+    :beetle: Fix dateToISOString.
+
+[33mcommit a953eaddebfbcbde884399b0404fc3ce894af540[m[33m ([m[1;31morigin/119-fix-backend-docker-release-build[m[33m)[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Mon May 2 15:15:56 2022 +0200
+
+    Fix wrong conditional for  debug_toolbar include
+
+[33mcommit 41ceefc0591954e4c451283a5dd576f2722dc700[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Mon May 2 15:14:16 2022 +0200
+
+    Fix wrong env variables in docker-compose
+
+[33mcommit 843160ac6be29d584b9ccd595c6ce8fb2afed7ce[m
+Author: kerklohlaurin <laurin.kerkloh@dlr.de>
+Date:   Mon May 2 14:27:10 2022 +0200
+
+    :memo: Add comments to describe the behavior of the default Heatmaps
+
+[33mcommit ba58d2beaed435feef74535291f9df71919b1840[m
+Author: kerklohlaurin <laurin.kerkloh@dlr.de>
+Date:   Mon May 2 13:24:11 2022 +0200
+
+    :sparkles: Format code
+
+[33mcommit b769b626f8ca1c1c5a4000ef5d348cfefa1105eb[m
+Author: kerklohlaurin <laurin.kerkloh@dlr.de>
+Date:   Mon May 2 11:02:17 2022 +0200
+
+    :beetle: Fix error caused by merging
+
+[33mcommit d9fafda241d803ab63141d42fea5164dc1438707[m
+Merge: 8a354db 8bb882a
+Author: kerklohlaurin <laurin.kerkloh@dlr.de>
+Date:   Mon May 2 10:38:36 2022 +0200
+
+    :twisted_rightwards_arrows: Merge develop into this branch
+
+[33mcommit 8a354db9b598333a88cc6f936287e06077090560[m
+Author: kerklohlaurin <laurin.kerkloh@dlr.de>
+Date:   Mon May 2 10:29:51 2022 +0200
+
+    :memo: Add comment to explain the scenario color array
+
+[33mcommit c67296f150714164ad3a524a47d9d20ec23fa899[m
+Author: kerklohlaurin <laurin.kerkloh@dlr.de>
+Date:   Mon May 2 10:28:10 2022 +0200
+
+    :wrench: noText -> diplayText to avoid confusion with double negation
+
+[33mcommit 7e5355608a148b2504f050730c38aac351f2c539[m
+Author: kerklohlaurin <laurin.kerkloh@dlr.de>
+Date:   Mon May 2 10:27:24 2022 +0200
+
+    :wrench: adds tooltip to heatlegend lock button and improves its layout
+
+[33mcommit a97a87c011fe31766dcf2e4ae63436e1da1db50b[m
+Author: kerklohlaurin <laurin.kerkloh@dlr.de>
+Date:   Mon May 2 10:23:39 2022 +0200
+
+    :sparkles: format
+
+[33mcommit 6a439a1c03ce48c59f34c83c4ee409c47423eaff[m
+Author: kerklohlaurin <laurin.kerkloh@dlr.de>
+Date:   Mon May 2 10:22:20 2022 +0200
+
+    :tada: Adds close button to HeatlegendEdit Dialog
+
+[33mcommit 231205b207896f7b4f00b8ca3f7d64946ce973c0[m
+Merge: a49aa99 551ef46
+Author: Luca Spataro <luca@spataro.de>
+Date:   Fri Apr 29 13:40:00 2022 +0200
+
+    Merge pull request #37 from DLR-SC/feature/backend
+    
+    Add Django backend and database model
+
+[33mcommit 551ef4643ae4cf5de0f8d8d3a66dcada1e25d65c[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Fri Apr 29 13:33:19 2022 +0200
+
+    Update entrypoint-web.sh
+
+[33mcommit 50ddb8231877dd8aab0eefefb5a09d31fae370fa[m[33m ([m[1;31morigin/fix/dependency-updates[m[33m)[m
+Author: Moritz Zeumer <moritz.zeumer@dlr.de>
+Date:   Fri Apr 29 12:55:04 2022 +0200
+
+    :arrow_up_small: apply npm audit fixes
+
+[33mcommit a49aa99517a99c149dad921deb1646d9fe4d88bf[m
+Merge: 8bb882a 1c6ec7b
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Fri Apr 29 11:48:03 2022 +0200
+
+    :twisted_rightwards_arrows: Merge pull request #116 from DLR-SC/fix/heatlegend_tooltip
+    
+    Fix heatlegend tooltip bug (closes #115 )
+
+[33mcommit 1c6ec7b6718eefd9dc86153e43d02e5ceb1f6543[m
+Author: kerklohlaurin <laurin.kerkloh@dlr.de>
+Date:   Fri Apr 29 11:35:03 2022 +0200
+
+    :beetle: fix the tooltip on the heat legend not disappearing when it should
+
+[33mcommit b5ab0a62ebeb35b9fca42eb5449835e6a3687718[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Thu Apr 28 12:40:08 2022 +0200
+
+    Update README.md
+
+[33mcommit ec4543c28a3e0dae046cee1e612b8d6f1e4a813d[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Thu Apr 28 12:20:32 2022 +0200
+
+    Fix version for django debug toolbar
+
+[33mcommit ae8cc1d81298f9a694c8ed3226a5a806ada96d2d[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Thu Apr 28 11:02:08 2022 +0200
+
+    Apply suggestions from code review
+    
+    Co-authored-by: Mo <25636783+NXXR@users.noreply.github.com>
+
+[33mcommit e48453cd990703817d5e28cde1e6ee0655ae7427[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Thu Apr 28 10:39:18 2022 +0200
+
+    Update backend/src/api/views.py
+    
+    Co-authored-by: Mo <25636783+NXXR@users.noreply.github.com>
+
+[33mcommit 13566758db2ec5f06da140fe2001da4ed10e6bbf[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Thu Apr 28 10:34:32 2022 +0200
+
+    Update backend/src/api/views.py
+    
+    Co-authored-by: Mo <25636783+NXXR@users.noreply.github.com>
+
+[33mcommit c40a8228b6bfb13615d4e789d56da94e3c46e3fe[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Thu Apr 28 10:34:20 2022 +0200
+
+    Update backend/src/api/views.py
+    
+    Co-authored-by: Mo <25636783+NXXR@users.noreply.github.com>
+
+[33mcommit 95e43237da592df269ff59c655687eeb1c887687[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Thu Apr 28 10:32:31 2022 +0200
+
+    Update backend/README.md
+    
+    Co-authored-by: Mo <25636783+NXXR@users.noreply.github.com>
+
+[33mcommit 3f90910e153b0e30a708aa04409a7a9f79e47161[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Thu Apr 28 10:31:41 2022 +0200
+
+    Update backend/README.md
+    
+    Co-authored-by: Mo <25636783+NXXR@users.noreply.github.com>
+
+[33mcommit 4b2d83372a75338077510544117f2c43cc04aa29[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Thu Apr 28 10:30:45 2022 +0200
+
+    Update backend/README.md
+    
+    Co-authored-by: Mo <25636783+NXXR@users.noreply.github.com>
+
+[33mcommit cf52ff9416d0c64b96cc6d66b69608a2c30cc2e1[m
+Author: kerklohlaurin <laurin.kerkloh@dlr.de>
+Date:   Mon Apr 25 16:10:30 2022 +0200
+
+    :wrench: adds aria-labels to the heatlegend edit
+
+[33mcommit 6e5f8bdbce36b5d2f05abfe73488282f0de4fab3[m
+Author: kerklohlaurin <laurin.kerkloh@dlr.de>
+Date:   Mon Apr 25 16:08:31 2022 +0200
+
+    :tada: add a button to lock the current heatlegend max value
+
+[33mcommit 47ae9ea95e5debbf71076fbba674e98fbbef9a86[m
+Author: kerklohlaurin <laurin.kerkloh@dlr.de>
+Date:   Fri Apr 22 13:42:19 2022 +0200
+
+    :wrench: adds padding to the heatmap legend and its edit button
+
+[33mcommit 825c5ffe1783656beb81ffc8bc3d4f805371f3db[m
+Author: kerklohlaurin <laurin.kerkloh@dlr.de>
+Date:   Fri Apr 22 13:18:27 2022 +0200
+
+    :green_heart: remove test which is trying to test a component containing amcharts
+
+[33mcommit 17a9b4a158278b28739a94a1b9d48dcb0c19bd24[m
+Author: kerklohlaurin <laurin.kerkloh@dlr.de>
+Date:   Fri Apr 22 13:05:14 2022 +0200
+
+    :memo: adds some comments
+
+[33mcommit a184170e23d9f7a1dd9318a5132ab93a7d1a7ffc[m
+Author: kerklohlaurin <laurin.kerkloh@dlr.de>
+Date:   Fri Apr 22 13:04:42 2022 +0200
+
+    :tada: guarantee unique id for duplicates
+
+[33mcommit 7abf486f0fe9b5045689b2226bd6135037d0a52f[m
+Author: kerklohlaurin <laurin.kerkloh@dlr.de>
+Date:   Fri Apr 22 13:01:31 2022 +0200
+
+    :tada: heatmapLegends now selectable through a dropdown menu
+
+[33mcommit a678cde325e79029869ba682480ef7d86506bb37[m
+Author: kerklohlaurin <laurin.kerkloh@dlr.de>
+Date:   Fri Apr 22 12:57:31 2022 +0200
+
+    :art: adds a lot of heatmapLegends
+
+[33mcommit cdf42c9fb06cc8e31ded6e596aeb77bfadab73cf[m
+Author: kerklohlaurin <laurin.kerkloh@dlr.de>
+Date:   Mon Apr 11 15:10:10 2022 +0200
+
+    :sparkles:
+
+[33mcommit 64b813f77baaf87956096f69f2eaa43ced4e3887[m
+Author: kerklohlaurin <laurin.kerkloh@dlr.de>
+Date:   Mon Apr 11 14:44:25 2022 +0200
+
+    :tada: Default Heatmap Legend is now in the Scenario Colors
+
+[33mcommit 4d832962e2f2ddc54b2f52d39963bbaea99f5d3b[m
+Author: kerklohlaurin <laurin.kerkloh@dlr.de>
+Date:   Mon Apr 11 14:42:58 2022 +0200
+
+    :art: Add color steps for each scenario
+
+[33mcommit d3e10a4fce747e1f413f1ccaa411a8f71b71d775[m[33m ([m[1;31morigin/feature/backend[m[33m)[m
+Author: Luca Spataro <luca.spataro@dlr.de>
+Date:   Fri Apr 8 15:48:12 2022 +0200
+
+    Update database diagramm
+
+[33mcommit e97668e3fc02a0a052dfbf2fd698ea89dacaea38[m
+Author: Luca Spataro <luca.spataro@dlr.de>
+Date:   Fri Apr 8 15:47:55 2022 +0200
+
+    Update readme
+
+[33mcommit 3437cee89f6aa2874d90a821eee0aef75d8cf801[m
+Author: Luca Spataro <luca.spataro@dlr.de>
+Date:   Fri Apr 8 15:47:47 2022 +0200
+
+    Update docker setup
+
+[33mcommit 1d2d99accc636b3385ddc0f92b70614fadc449e8[m
+Author: kerklohlaurin <laurin.kerkloh@dlr.de>
+Date:   Fri Apr 8 09:52:09 2022 +0200
+
+    :sparkles:
+
+[33mcommit 46fec0cc6bb9bd0e6623fc34735ba25826c17010[m
+Author: Luca Spataro <luca.spataro@dlr.de>
+Date:   Thu Apr 7 11:19:17 2022 +0200
+
+    Adapt import scripts to changed data models
+
+[33mcommit e78d77361e49ec6ecd56b6c5e0493b95fb9fbd8c[m
+Author: Luca Spataro <luca.spataro@dlr.de>
+Date:   Mon Apr 4 15:57:31 2022 +0200
+
+    Update data model
+
+[33mcommit d3b5c8b11d398a99c4aaac689429f0617eb9c955[m
+Author: Luca Spataro <luca.spataro@dlr.de>
+Date:   Mon Apr 4 14:52:12 2022 +0200
+
+    Correct escaping for django key in docker compose dev setup
+
+[33mcommit abd9704ae3933fb1452a2e6b603fead2bd451e7b[m
+Author: Luca Spataro <luca.spataro@dlr.de>
+Date:   Mon Apr 4 14:51:02 2022 +0200
+
+    Combine migrations into one
+
+[33mcommit 42e889c7375b7288900442e5e76c8b69b86e6f75[m
+Author: Luca Spataro <luca.spataro@dlr.de>
+Date:   Mon Apr 4 14:50:06 2022 +0200
+
+    Make group - data entry relation many to many
+
+[33mcommit cbb036011b14d38aa17ad17e883f8b675a0ab3a2[m
+Author: kerklohlaurin <laurin.kerkloh@dlr.de>
+Date:   Mon Apr 4 13:49:30 2022 +0200
+
+    :heavy_check_mark: Add tests for UserPreferenceSlice
+
+[33mcommit 8021e56fdbafd15503328bb797af9b8d9f3a452f[m
+Author: kerklohlaurin <laurin.kerkloh@dlr.de>
+Date:   Mon Apr 4 13:46:22 2022 +0200
+
+    :tada: Add functionality to select different heatmap legends
+
+[33mcommit 8bb882a452e066a912b1cbd61eaa255e61b48f22[m[33m ([m[1;31morigin/fea[m[33m, [m[1;32mmain[m[33m, [m[1;32mfeaturs[m[33m, [m[1;32mfea[m[33m)[m
+Merge: bf266f3 216a392
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Mon Apr 4 11:02:13 2022 +0200
+
+    :twisted_rightwards_arrows: Merge pull request #99 from DLR-SC:feature/loading-indicators
+    
+    Add Loading Indicators
+
+[33mcommit bf266f392f483b7c0ceec32aeadceab11941d973[m
+Merge: 2d1c2c2 ec51d9d
+Author: KeremBalci111 <79858890+KeremBalci111@users.noreply.github.com>
+Date:   Fri Apr 1 11:03:16 2022 +0200
+
+    Merge pull request #100 from DLR-SC/feature/percentiles
+    
+    :tada: add percentiles
+
+[33mcommit ec51d9da37b8ca734648f3dc2994af8dc13a5838[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Thu Mar 31 11:08:03 2022 +0200
+
+    :green_heart: Restart pipeline.
+
+[33mcommit 980b9de96f742b897e2eb595251eface40bcd4d9[m
+Author: Kerem Balci <kerem.balci@dlr.de>
+Date:   Thu Mar 31 10:52:42 2022 +0200
+
+    :sparkles: format code
+
+[33mcommit 36d4db1c78a43ef60c98d51ee76d8d7229e7dffe[m
+Author: Kerem Balci <kerem.balci@dlr.de>
+Date:   Wed Mar 30 16:14:26 2022 +0200
+
+    :sparkles: format code and fix color error
+
+[33mcommit 02bc4ff8c1730a8335966e3d533763e0438708a7[m
+Author: Kerem Balci <kerem.balci@dlr.de>
+Date:   Wed Mar 30 12:36:38 2022 +0200
+
+    :sparkles: format code
+
+[33mcommit 338961cda082a7c589a68741b9fd4165bcafb9ac[m
+Author: Kerem Balci <kerem.balci@dlr.de>
+Date:   Wed Mar 30 12:31:44 2022 +0200
+
+    :beetle: fix tooltip colors
+
+[33mcommit 48ad11eefbd7537ae3e1e0a6c86f95c884d0178a[m
+Author: Kerem Balci <kerem.balci@dlr.de>
+Date:   Tue Mar 29 16:17:49 2022 +0200
+
+    :tada: add percentiles
+
+[33mcommit ffb8b93fbc33b8c92fade6ff2410d1f04b8e79cb[m
+Author: Luca Spataro <luca.spataro@dlr.de>
+Date:   Mon Mar 28 16:06:13 2022 +0200
+
+    Add database views for sim + rki data and refactor for it
+
+[33mcommit de816b9e09b6abadabafff865e77463d0c002696[m
+Author: Luca Spataro <luca.spataro@dlr.de>
+Date:   Mon Mar 28 15:56:08 2022 +0200
+
+    add custom json renderer
+
+[33mcommit 216a392838532bc357cf544855449b2363efe7c1[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Mon Mar 28 14:48:43 2022 +0200
+
+    :wrench: Better naming.
+
+[33mcommit cf5c8e8639dcd17ec7693748977ec49ff39a17af[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Mon Mar 28 14:42:04 2022 +0200
+
+    :memo: Add documentation.
+
+[33mcommit f845e92d20ddf6a317bd7b90959efb3e397b2ff5[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Mon Mar 28 14:38:44 2022 +0200
+
+    :tada: Add a loading wrapper component.
+
+[33mcommit 8f1452b3742435bd06c4fbeb6e31920f1a23d896[m
+Merge: 14abc9b 2d1c2c2
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Mon Mar 28 13:54:53 2022 +0200
+
+    Merge remote-tracking branch 'origin/develop' into feature/loading-indicators
+    
+    # Conflicts:
+    #       frontend/src/components/Sidebar/DistrictMap.tsx
+
+[33mcommit 2d1c2c261c3e9cb75eb9c499f455ea6301d4beb4[m
+Merge: 96f2f9e 46f99d2
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Fri Mar 18 10:11:20 2022 +0100
+
+    Merge pull request #95 from DLR-SC/fix/districtPolygonStrokeColor
+    
+    Fix stroke color from divider to background
+
+[33mcommit 46f99d247e2464f1e663db2062fa503a87ec403e[m
+Author: Moritz Zeumer <moritz.zeumer@dlr.de>
+Date:   Fri Mar 18 09:49:03 2022 +0100
+
+    :beetle: apply color fix
+
+[33mcommit 96f2f9e5fa9d98f88f2a23eb04fe75e95502892f[m
+Merge: cd22b2d 6a7528e
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Thu Mar 17 13:06:12 2022 +0100
+
+    Merge pull request #94 from DLR-SC/feature/progress-output
+    
+    Add progress output to build and start scripts.
+
+[33mcommit 6a7528e4ae928d3401f96c430848e23a402cf2c9[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Wed Mar 16 14:02:23 2022 +0100
+
+    :wrench: Add progress output to build and start scripts.
+
+[33mcommit cd22b2db9e4208ada4ecdee244ff425d5c2ac509[m
+Merge: 142c5eb fad9661
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Wed Mar 16 09:57:37 2022 +0100
+
+    Merge pull request #91 from DLR-SC/feature/amCharts5-upgrade-DistrictMap
+    
+    :arrow_up_small: upgrade amCharts to 5.1.8, fixes #90
+
+[33mcommit fad9661cac3da667e0b5e617c580467e82164482[m
+Author: Moritz Zeumer <moritz.zeumer@dlr.de>
+Date:   Mon Mar 14 17:57:14 2022 +0100
+
+    :arrow_up_small: upgrade amCharts to 5.1.8, fixes #90
+
+[33mcommit 142c5ebb6ddb63a2603eb8723616d51d9d5bf2e5[m
+Merge: 985a8ab 42cfb96
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Tue Mar 8 17:29:40 2022 +0100
+
+    Merge pull request #89 from DLR-SC/feature/amCharts5-upgrade-DistrictMap
+    
+    Upgrade district map to amCharts 5
+
+[33mcommit 42cfb96c8700682ed44ee6771014afcee5d8c7f4[m
+Author: Moritz Zeumer <moritz.zeumer@dlr.de>
+Date:   Thu Mar 3 13:43:04 2022 +0100
+
+    :wrench: change color function parameter to object add maxPan to chart (atm broken)
+
+[33mcommit cb30f7c8892e192a4e9761d0a7b6ca02a674e31d[m
+Author: Moritz Zeumer <moritz.zeumer@dlr.de>
+Date:   Thu Mar 3 11:51:26 2022 +0100
+
+    :wrench: add numberFormatter to tooltips and Legend
+
+[33mcommit cb84ec4020ccc1b6b6750e77c44552020a21540e[m
+Author: Moritz Zeumer <moritz.zeumer@dlr.de>
+Date:   Wed Mar 2 17:44:51 2022 +0100
+
+    :wrench: change getColor function to use an optional list item for min & max, add basic error handling to function
+
+[33mcommit ed705d7893aca215b175b08f8bf422ed64ed7974[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Wed Mar 2 17:08:03 2022 +0100
+
+    :wrench: use max function as suggested in code review
+    
+    Co-authored-by: Jonas Gilg <jonas.gilg@dlr.de>
+
+[33mcommit c365dfedafdf449b9497da6dfb9b3b38f19e5fe8[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Wed Mar 2 17:03:46 2022 +0100
+
+    :wrench: remove log messages
+    
+    Co-authored-by: Jonas Gilg <jonas.gilg@dlr.de>
+
+[33mcommit fe2a2edc6cba4016d3c3a6db782f823e43760850[m
+Author: Moritz Zeumer <moritz.zeumer@dlr.de>
+Date:   Tue Mar 1 16:29:54 2022 +0100
+
+    :wrench: commit to fix coveralls action
+
+[33mcommit 8a9ec9ef2c373db736e2612ed11040f7eca1f9e8[m
+Merge: 7d2c298 985a8ab
+Author: Moritz Zeumer <moritz.zeumer@dlr.de>
+Date:   Tue Mar 1 16:07:55 2022 +0100
+
+    :twisted_rightwards_arrows: Merge branch 'develop' into feature/amCharts5-upgrade-DistrictMap and fix some errors (add memoize for aggregated max
+
+[33mcommit 14abc9bc8760e97d47213459a9ce9d10df9a5bec[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Tue Mar 1 15:26:42 2022 +0100
+
+    :wrench: Extract the loading overlay into its own component.
+
+[33mcommit e611ec249f052fbbe30e46ac1225cf297b1272bf[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Tue Mar 1 15:05:57 2022 +0100
+
+    :wrench: Add transparent overlay between components and loading indicators.
+
+[33mcommit 7d2c29846b9a1bf734aa52d395d7381cf4424e70[m
+Author: Moritz Zeumer <moritz.zeumer@dlr.de>
+Date:   Fri Feb 25 12:02:54 2022 +0100
+
+    :wrench: remove old legenddiv
+
+[33mcommit 6c306b3dff70aa51fc19253aa11efc84fdb40982[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Mon Feb 21 15:48:18 2022 +0100
+
+    :tada: Add a loading indicator to the SimulationChart.
+
+[33mcommit 77260001aa3bf188fe26c9cede6d9fcf16eb480b[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Mon Feb 21 15:39:10 2022 +0100
+
+    :tada: Add a loading indicator to the DistrictMap.
+
+[33mcommit 21a26bb559cedbb51aa2677e2d63e3248b98fe85[m
+Author: Moritz Zeumer <moritz.zeumer@dlr.de>
+Date:   Thu Feb 17 13:37:09 2022 +0100
+
+    :wrench: add tooltip to heat legend
+
+[33mcommit fab04c729288c21cf507a4f0ed49243488fed54e[m
+Author: Moritz Zeumer <moritz.zeumer@dlr.de>
+Date:   Thu Feb 17 13:36:14 2022 +0100
+
+    :wrench: remove amcharts4 code
+
+[33mcommit 1d5b8d0884d9ad8546d200db16d42001271e8675[m
+Author: Moritz Zeumer <moritz.zeumer@dlr.de>
+Date:   Wed Feb 16 17:50:26 2022 +0100
+
+    :wrench: expose legend element for tooltip on event
+
+[33mcommit 8115c50718c80b263f0d01922dde5014784f59c2[m
+Author: Moritz Zeumer <moritz.zeumer@dlr.de>
+Date:   Wed Feb 16 16:33:36 2022 +0100
+
+    :memo: add info to stoplist items
+
+[33mcommit bbb98c215aa85617c5142b15bf9a17ac731160ab[m
+Author: Moritz Zeumer <moritz.zeumer@dlr.de>
+Date:   Wed Feb 16 16:11:44 2022 +0100
+
+    :wrench: add gradient override
+
+[33mcommit 308522c57cd569f71e7f8fd09653e9a628bb4ec3[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Wed Feb 16 10:02:42 2022 +0100
+
+    :wrench: init Heat Legend
+
+[33mcommit bd3d5eb84be46498fccc07b31c84980c1b420416[m
+Author: Luca Spataro <luca.spataro@dlr.de>
+Date:   Tue Feb 15 10:02:57 2022 +0100
+
+    Add docker compose for full project
+
+[33mcommit baf9147edf7cf572ff623463123e61c31b1ba351[m
+Author: Luca Spataro <luca.spataro@dlr.de>
+Date:   Tue Feb 15 10:02:03 2022 +0100
+
+    Update frontend nginx config
+
+[33mcommit bf2da20de514cb429ee0e5b8d37b8eaa8e9dca2b[m
+Author: Luca Spataro <luca.spataro@dlr.de>
+Date:   Tue Feb 15 10:01:18 2022 +0100
+
+    Update backend docker setup
+
+[33mcommit f63c40c7d8fe0edf747f20300a3f43824bdac34e[m
+Merge: 3c40413 985a8ab
+Author: Luca Spataro <luca.spataro@dlr.de>
+Date:   Tue Feb 1 14:09:31 2022 +0100
+
+    Merge branch 'develop' into feature/backend
+
+[33mcommit 985a8ab3b6866040aca93a720a55ec51c7406d26[m
+Merge: 6aa38d5 e4977d8
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Mon Jan 31 15:52:26 2022 +0100
+
+    Merge pull request #78 from DLR-SC/feature/minor-release-changes
+    
+    Feature/minor release changes
+
+[33mcommit e4977d8850dcc22b48927cf4036026c50e9fcd7b[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Mon Jan 31 15:33:36 2022 +0100
+
+    :wrench: change hover to outline instead of fill & adjust tooltip fill to selected scenario
+
+[33mcommit ab5978f7250ab626f137794b9da0e2297dc011d9[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Mon Jan 31 15:08:15 2022 +0100
+
+    :wrench: increase stroke width & remove tension/smoothing
+
+[33mcommit 3c40413988824a8f91fbfa36bda673c79a78eb2e[m
+Author: Luca Spataro <luca.spataro@dlr.de>
+Date:   Fri Jan 28 15:57:05 2022 +0100
+
+    Add django debug toolbar to dev setup
+
+[33mcommit 68f3718479cf35b5ae8a0e3064e22f14e870c56b[m
+Author: Luca Spataro <luca.spataro@dlr.de>
+Date:   Fri Jan 28 15:55:20 2022 +0100
+
+    Add frontend docker setup
+
+[33mcommit b8a184411fb9a95c57a2f94f19bd080dbccdaaa6[m
+Merge: e682187 6aa38d5
+Author: Luca Spataro <luca.spataro@dlr.de>
+Date:   Thu Jan 27 17:02:20 2022 +0100
+
+    Merge branch 'develop' into feature/backend
+
+[33mcommit eee0207bb559d7a606fee291700379d38c2d7108[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Thu Jan 27 16:53:36 2022 +0100
+
+    :wrench: rewrite color interpolation and heatlegend dummy
+
+[33mcommit 6aa38d55d1de16de17bedfbbc9bb6412bae275bd[m
+Merge: 34f37ab 66dd48b
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Thu Jan 27 11:00:14 2022 +0100
+
+    Merge pull request #77 from DLR-SC/feature/chart-improvements
+    
+    Feature/chart improvements
+
+[33mcommit 66dd48b5021df8cd56113926c2c0801e95b16132[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Thu Jan 27 09:47:38 2022 +0100
+
+    :wrench: Some minor temporary improvements to the chart and heat legend, until the transition to amCharts 5 is completed.
+
+[33mcommit 3b5681a0b0161d3ed685d0763c48816a2866d320[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Wed Jan 26 19:39:35 2022 +0100
+
+    :wrench: Some minor temporary improvements to the chart and heat legend, until the transition to amCharts 5 is completed.
+
+[33mcommit 4dd328d9134c5f79654bd2ded348726dc87cb1aa[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Wed Jan 26 18:08:56 2022 +0100
+
+    :hammer: update to amcharts5 & some improvements
+
+[33mcommit 34f37ab25bbfcc49c088950715a0839ca873eab8[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Wed Jan 26 17:42:33 2022 +0100
+
+    Revert "Revert ":wrench: The compartments are now ordered by preference and the expanded compartment list is now smaller and scrollable.""
+    
+    This reverts commit e33d4efc6fa4c8d555b3d92516588f3a7427f928.
+
+[33mcommit e33d4efc6fa4c8d555b3d92516588f3a7427f928[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Wed Jan 26 17:38:04 2022 +0100
+
+    Revert ":wrench: The compartments are now ordered by preference and the expanded compartment list is now smaller and scrollable."
+    
+    This reverts commit e9d3777df44d5677160790a16f3253a19ee62f17.
+
+[33mcommit e9d3777df44d5677160790a16f3253a19ee62f17[m[33m ([m[1;31morigin/feature/compartment-list-improvements[m[33m)[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Wed Jan 26 17:33:56 2022 +0100
+
+    :wrench: The compartments are now ordered by preference and the expanded compartment list is now smaller and scrollable.
+
+[33mcommit fabb1c97e5b66a0deac089dc2c64a46a99edac9c[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Wed Jan 26 14:53:21 2022 +0100
+
+    :arrow_up_small: add @amcharts/amcharts5 & @types/geojson
+
+[33mcommit 4565880eef025455f00cefd6c2c29e3a3a0247fc[m
+Merge: 7b7e22e 8bd7ef3
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Wed Jan 26 13:43:33 2022 +0100
+
+    Merge pull request #76 from DLR-SC/feature/time-controls
+    
+    Time Controls
+
+[33mcommit 7b7e22e83c5739de6c0d728b8b3a8737c6a970df[m
+Merge: 58534e0 7d63465
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Wed Jan 26 13:43:12 2022 +0100
+
+    Merge pull request #75 from DLR-SC/feature/history-placeholder
+    
+    Add the DLR-Logo as a placeholder for the history component
+
+[33mcommit 58534e0fc25f4ee2658bb8b4fce2d526e91b17e7[m
+Merge: 1fdf76b 5712563
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Wed Jan 26 13:42:00 2022 +0100
+
+    Merge pull request #74 from DLR-SC/feature/conditional-queries
+    
+    Conditional Queries
+
+[33mcommit 8bd7ef3241a59661308f2684575adc56c98aee7f[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Tue Jan 25 16:24:06 2022 +0100
+
+    :wrench: Changed the icon bar buttons.
+
+[33mcommit 7d634654095072baeaab59d4b2d843d9a1bd0ec6[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Tue Jan 25 10:55:08 2022 +0100
+
+    :wrench: Add the DLR-Logo as a placeholder for the history component.
+
+[33mcommit 57125634fead30bdaba2fb5e979ab5f2b8acb8fb[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Mon Jan 24 18:09:55 2022 +0100
+
+    :wrench: Remove unnecessary warnings.
+
+[33mcommit f09f790081d75f0007f1b0cd08905d94476032f4[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Mon Jan 24 18:08:47 2022 +0100
+
+    :beetle: Fix SearchBar warnings at startup.
+
+[33mcommit 9f69aa405e4deffc5b9737f2a30cdc3ebda5df25[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Mon Jan 24 18:08:17 2022 +0100
+
+    :beetle: Fix failing test.
+
+[33mcommit b0bc3e3caf7830003a649fbbbc654a89c3dcaeaf[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Mon Jan 24 17:52:25 2022 +0100
+
+    :wrench: Queries now only go out, if all required data is already available.
+
+[33mcommit e682187eefbb32f4ba58cf7a0d6a9ec5b65caa72[m
+Merge: 8e6f8e9 1fdf76b
+Author: Luca Spataro <luca.spataro@dlr.de>
+Date:   Mon Jan 24 15:24:28 2022 +0100
+
+    Merge branch 'develop' into feature/backend
+
+[33mcommit 1fdf76bdb0ff57ad3e1b80d7ac4e7d559a250af7[m
+Merge: 6ffd13a 40d0049
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Mon Jan 24 12:36:57 2022 +0100
+
+    Merge pull request #72 from DLR-SC/feature/update-rest-api
+    
+    Update the frontend to use the newest REST-Api
+
+[33mcommit 8e6f8e9179f50d0262a032c5f9ae180f10337aa3[m
+Author: Luca Spataro <luca.spataro@dlr.de>
+Date:   Fri Jan 21 10:44:29 2022 +0100
+
+    Update docker setup
+
+[33mcommit 40d004977894d334d7d360e5d4e6cccf38d31297[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Fri Jan 21 09:55:53 2022 +0100
+
+    :wrench: Add tests for the NumberFormatter.
+
+[33mcommit 545359c06763ac0824bca498f97a6b63acc9f71b[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Thu Jan 20 18:35:43 2022 +0100
+
+    :wrench: Merge develop.
+
+[33mcommit dff26ec57f9a5ca1e0fb25ea4ef0923cc1e15291[m
+Merge: a9bb07e 6ffd13a
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Thu Jan 20 18:23:34 2022 +0100
+
+    Merge remote-tracking branch 'origin/develop' into feature/update-rest-api
+    
+    # Conflicts:
+    #       frontend/src/util/hooks.ts
+
+[33mcommit a9bb07ee210a486b8a11118b88ba19a1d6374ecf[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Thu Jan 20 18:23:12 2022 +0100
+
+    :wrench: Start adding tests.
+
+[33mcommit 6ffd13adb913ff57c76dbfaa406aaf42f7bdfde2[m
+Merge: a5901c5 19574de
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Thu Jan 20 18:19:10 2022 +0100
+
+    Merge pull request #73 from DLR-SC/color_simulationChart
+    
+    Add Color to simulation chart
+
+[33mcommit 19574de87fb8b2a110407fafa3fb2e523a060488[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Thu Jan 20 17:22:45 2022 +0100
+
+    :wrench: add color :tada:
+
+[33mcommit a5901c59776af2ce2d0839b46df4e4e73d7605a5[m
+Merge: d884b4f 29bcee8
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Thu Jan 20 16:57:37 2022 +0100
+
+    Merge pull request #70 from DLR-SC/feature/SimulationChart-ApiUpdate
+    
+    Fix tooltip coloring
+
+[33mcommit 29bcee861d22a303ae7b8dfe6ccc72afc2a6f5a3[m
+Merge: e9cb3f7 d884b4f
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Thu Jan 20 16:51:36 2022 +0100
+
+    :twisted_rightwards_arrows: Merge branch 'develop' into feature/SimulationChart-ApiUpdate
+
+[33mcommit 3df28792b91f9164a952c8f59c0dae9464284e2b[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Thu Jan 20 15:24:15 2022 +0100
+
+    :memo: Documentation of the NumberFormatter hook.
+
+[33mcommit e9cb3f7e42d07a7884591e951afa1c2145830eb0[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Thu Jan 20 15:09:43 2022 +0100
+
+    :wrench: add number and date formatting, add fallback tooltips
+
+[33mcommit c399062904c053ad703c3555b50a108006d151d2[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Thu Jan 20 14:31:06 2022 +0100
+
+    :wrench: add number formatting custom hook
+
+[33mcommit 7a703b25930526993d0b002dfd1bd2aa8220e4e1[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Thu Jan 20 13:39:23 2022 +0100
+
+    :wrench: change tooltip to HTML element
+
+[33mcommit 4b870fbde8b86c332456067201a031ed406962b6[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Thu Jan 20 12:35:39 2022 +0100
+
+    :wrench: Better number formatting.
+
+[33mcommit 568abcd472dbb5a8deb849c0e9649ac51e0c44ec[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Thu Jan 20 10:37:57 2022 +0100
+
+    :wrench: remove template strings for sting values
+
+[33mcommit 654600c58a8943b767229530fb34bc73fc4761e7[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Wed Jan 19 15:28:04 2022 +0100
+
+    :wrench: Give a little bit more space to the rate in the scenario cards.
+
+[33mcommit 212399d0d7df939d3aedad8bef17308bac65d7d3[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Wed Jan 19 15:13:33 2022 +0100
+
+    :sparkles: Formatting.
+
+[33mcommit f0490af373fedadb3cd1bc7fcdd28f4f78018779[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Wed Jan 19 15:09:28 2022 +0100
+
+    :wrench: remove string templates
+    
+    Co-authored-by: Jonas Gilg <jonas.gilg@dlr.de>
+
+[33mcommit 937712ad395e43ccbe46d03f987f1b9a8081364c[m
+Merge: 7fdac0a d884b4f
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Wed Jan 19 15:02:46 2022 +0100
+
+    Merge remote-tracking branch 'origin/develop' into feature/update-rest-api
+    
+    # Conflicts:
+    #       frontend/src/components/Scenario.tsx
+    #       frontend/src/components/ScenarioCard.tsx
+
+[33mcommit d884b4fb08e77bb20debe2ebbc0c6a2649519ac3[m
+Merge: 16b8df3 a6d527b
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Wed Jan 19 14:37:51 2022 +0100
+
+    Merge pull request #69 from DLR-SC:feature/scenario-card-data
+    
+    Feature/scenario card data
+
+[33mcommit a6d527b51a13694a99c789d08ae99bc906d0dc2e[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Wed Jan 19 14:25:24 2022 +0100
+
+    :beetle: The day in the scenario header is now formatted to the same locale as the rest of the site.
+
+[33mcommit 2f43dc50833468e987a439237266390020b6f7b1[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Wed Jan 19 14:08:14 2022 +0100
+
+    :sparkles: Formatting.
+
+[33mcommit 302f104018dba3af569ddbe28de333d19c49a9c3[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Wed Jan 19 14:02:55 2022 +0100
+
+    :wrench: Numbers in the scenarios are now formatted language specific and more readable.
+
+[33mcommit 7fdac0a2666301a44205c3f0dc258b340987bd23[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Wed Jan 19 11:37:08 2022 +0100
+
+    :wrench: Update data structures to match the new backend.
+
+[33mcommit f6d88467879a11b9e7641050a662dff49235ab7a[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Wed Jan 19 11:31:52 2022 +0100
+
+    :wrench: fix tooltip coloring
+
+[33mcommit 79b6da68ec872dbae8003e62786497de932f9011[m
+Merge: 16b8df3 6ee13bb
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Wed Jan 19 11:07:45 2022 +0100
+
+    Merge branch 'feature/scenario-card-data' into feature/update-rest-api
+
+[33mcommit 6ee13bb55606ad9dfa5a181be18a9d931ad3689c[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Tue Jan 18 15:51:04 2022 +0100
+
+    :sparkles: Formatting.
+
+[33mcommit 52278cd7be197d036b9748881f0694d255795720[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Tue Jan 18 15:36:08 2022 +0100
+
+    :beetle: Fix tests.
+
+[33mcommit f1bb9f47a06eed13ec6400cd08fca01e3064e0a1[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Tue Jan 18 15:33:20 2022 +0100
+
+    Fix typo
+
+[33mcommit 90ca6c91bd09b6f468b65969382fa7fa6dd0385e[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Tue Jan 18 15:24:59 2022 +0100
+
+    :sparkles: Formatting.
+
+[33mcommit 80b77b900fc9151278464a9159f93687f1d74b35[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Tue Jan 18 15:16:29 2022 +0100
+
+    :tada: Implemented all scenario card features.
+
+[33mcommit 16b8df3146a6f9f4dd2b17055f859b5bfd4d59a7[m
+Merge: 8f9ace4 6c097ff
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Tue Jan 18 14:51:13 2022 +0100
+
+    Merge pull request #67 from DLR-SC/feature/SimulationChart-ApiUpdate
+    
+    Feature/simulation chart api update
+
+[33mcommit f2142956a40070e2de390a1ac5bcbf05c22a910e[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Tue Jan 18 14:21:38 2022 +0100
+
+    Remove userid from production so django collectstatic works
+
+[33mcommit 9ba7fe3fb5855213e5b25d0fd90bfa31d0cbde4f[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Tue Jan 18 14:21:06 2022 +0100
+
+    Update docker build to only copy what is needed
+
+[33mcommit 8a626969e72e831ea00847e31c00eed8218e4047[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Tue Jan 18 14:19:49 2022 +0100
+
+    Rename 'values' key to 'compartments' and make data responses consistent
+
+[33mcommit b82f23c686b81dbc7edc8ffe0e3f8dc7cb98fe2a[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Tue Jan 18 14:08:27 2022 +0100
+
+    Add .gitignore for tar files
+
+[33mcommit cd615e572e89c742fa85897f3af62c68989ec2f2[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Tue Jan 18 14:07:23 2022 +0100
+
+    Correct wrong path lookup for .env file
+
+[33mcommit 45ff308246a8b74a9cceaca2f9b2c24c6964b595[m
+Merge: bd9ae18 6c097ff
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Tue Jan 18 13:29:44 2022 +0100
+
+    Merge remote-tracking branch 'origin/feature/SimulationChart-ApiUpdate' into feature/scenario-card-data
+    
+    # Conflicts:
+    #       frontend/src/store/services/scenarioApi.ts
+
+[33mcommit 6c097ff8015fc189ac35027a68a9fe1103d796e6[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Mon Jan 17 16:33:20 2022 +0100
+
+    :wrench: fix chart redraw on changed compartment
+
+[33mcommit d1216d31c578481aff1b44cb6382673f1099b89a[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Mon Jan 17 16:17:46 2022 +0100
+
+    :wrench: clarify api parameters
+
+[33mcommit b0a020e05408715ef07631ce7ea30a0826b26ee5[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Mon Jan 17 16:13:22 2022 +0100
+
+    :wrench: fix date formatting and locale
+
+[33mcommit b60e8718c17db0ea3d2880e11f540408fcb34809[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Mon Jan 17 12:05:27 2022 +0100
+
+    :wrench: resolve suggestion, shorten cleanup
+    
+    Co-authored-by: Jonas Gilg <jonas.gilg@dlr.de>
+
+[33mcommit e4fa2425ba457f0a01414372d7482dd27feebd31[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Fri Jan 14 12:56:30 2022 +0100
+
+    :wrench: fix date selection
+
+[33mcommit f13498108029ae6305e2394e382cb882a9b7a6cd[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Wed Jan 12 16:32:45 2022 +0100
+
+    :wrench: add simulation data to chart
+
+[33mcommit bd9ae1839a6b0f21a0e0a982f1aa29e87bfa410f[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Wed Jan 12 15:34:34 2022 +0100
+
+    :wrench: Remove some unnecessary spacings.
+
+[33mcommit 4bbae422f18a4846531097d9314197d9fb8dc73b[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Wed Jan 12 15:31:08 2022 +0100
+
+    :wrench: Fix a small alignment issue.
+
+[33mcommit 8edda47e9f9c88a064feee790333065cefcb5061[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Wed Jan 12 15:27:56 2022 +0100
+
+    :wrench: More styling in the scenario and scenario card components.
+
+[33mcommit bcea9261ffd9da264ff753b73f08e7ac02235844[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Wed Jan 12 15:07:24 2022 +0100
+
+    :wrench: More styling in the scenario and scenario card components.
+
+[33mcommit 7136dec9dafa8cc4fd0007a72990676432e57e5b[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Wed Jan 12 10:48:03 2022 +0100
+
+    :wrench: More styling in the scenario and scenario card components.
+
+[33mcommit 4d6a4c87bf99d57bf25e9d77883264b56e34d884[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Wed Jan 12 10:22:06 2022 +0100
+
+    :wrench: Some styling of the scenario cards.
+
+[33mcommit 5b3c595b8675fd6b717db08af02dc55c0fc67fea[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Wed Jan 12 09:48:09 2022 +0100
+
+    :beetle: Rows in the Scenario Cards are now aligned properly.
+
+[33mcommit 261742587ea75006cc1a1ed25d923ba9e3e629b7[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Tue Jan 11 17:10:59 2022 +0100
+
+    :wrench: remove debug outputs fix return for getRkiByDate
+
+[33mcommit b5b94af0f9010534311cbbec63aa9e2ba283949d[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Fri Jan 7 18:59:26 2022 +0100
+
+    :wrench: fix RKI api to display real values
+
+[33mcommit f6d7ba86b6aafa5221a594cfe56695c17459c888[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Fri Jan 7 16:49:44 2022 +0100
+
+    :tada: Scenario cards are now displaying the data of the selected day.
+
+[33mcommit e8ce1eb052208eaffa2abf00e64146e523e6253f[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Fri Jan 7 15:39:11 2022 +0100
+
+    :wrench: Scenario cards are now being colored again.
+
+[33mcommit e56eecac6fb0e4f92bd5f26d8228c8824aa7c69a[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Fri Jan 7 14:56:13 2022 +0100
+
+    :wrench: update lockfile after pull from develop
+
+[33mcommit 8f9ace4c8a76d11091d1a79ecc7f3eeaa5efd31c[m
+Merge: fa307bc 90a983a
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Fri Jan 7 14:46:20 2022 +0100
+
+    Merge pull request #66 from DLR-SC/feature/map-simulation-data
+    
+    Feature/map simulation data
+
+[33mcommit 90a983a49cfb02d666c7601a00360d4061a3be64[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Fri Jan 7 12:34:14 2022 +0100
+
+    :beetle: The Rest-Api now queries all districts, instead of the first 100.
+
+[33mcommit 91a00bf16d020c427f9f5ba0d0ded544681bc0e5[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Fri Jan 7 11:26:17 2022 +0100
+
+    :wrench: The day is now stored as an ISO-String.
+
+[33mcommit 856b88f7655bec59d76fed9dabaf7e732261829e[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Fri Jan 7 11:08:22 2022 +0100
+
+    :tada: Scenario card selection, compartment selection and map tooltips are now working.
+
+[33mcommit aeb18ad6f2c54b7d862901ef16d77b6b88945065[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Fri Jan 7 10:46:43 2022 +0100
+
+    :wrench: Disable axe accessibility checking by default, since it is soooooo slow.
+
+[33mcommit bf765b15e529b025c1cb199950fc336e8862afe3[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Fri Jan 7 10:45:17 2022 +0100
+
+    :wrench: Disable axe accessibility checking by default, since it is soooooo slow.
+
+[33mcommit 8a31a81851272025d5d5db401e9428fe9e9f6a43[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Thu Jan 6 17:44:58 2022 +0100
+
+    :tada: Basic loading of simulation map data from the backend.
+
+[33mcommit fa307bcbd41fe1f447f4268f5f5321f174142d50[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Thu Jan 6 15:21:14 2022 +0100
+
+    :beetle: Fix wrong type.
+
+[33mcommit 9bcb05223e6e6f4906eefa8563bd73617f538c5e[m
+Merge: 6cd5c00 ed23dc4
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Thu Jan 6 13:52:51 2022 +0100
+
+    Merge pull request #64 from DLR-SC/feature/load-scenarios
+    
+    Feature/load scenarios
+
+[33mcommit ed23dc4089c3414ee3918aebc3e142fcaf3528c2[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Thu Jan 6 12:14:05 2022 +0100
+
+    :sparkles: Formatting.
+
+[33mcommit ec5a98b652304964a41042def4f07423f0327801[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Thu Jan 6 12:03:34 2022 +0100
+
+    :beetle: Fix time zone stuff in failing test.
+
+[33mcommit 1a6a1ea10c11c7cfa03befe9b3a721396484b336[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Thu Jan 6 11:54:47 2022 +0100
+
+    :sparkles: Formatting.
+
+[33mcommit e9d16949ecb26e1865f01c6a5de34b51f88f1dec[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Thu Jan 6 11:50:32 2022 +0100
+
+    :beetle: Fix a bug in dateToISOString, that resulted in wrong results, depending on the timezone.
+
+[33mcommit b8c22d83cf02370170c3f3016f79aca6c9d7c067[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Wed Jan 5 17:46:44 2022 +0100
+
+    Allow for multiple percentile data on one simulation
+
+[33mcommit de8f354c6e44b8e045874ab55ed76d7d1d3d3127[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Wed Jan 5 15:55:13 2022 +0100
+
+    :beetle: Fix a bug where the wrong object was iterated over.
+
+[33mcommit 031baa75d04e62b10894d6923c354754c177ced9[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Wed Jan 5 15:42:28 2022 +0100
+
+    :tada: Scenarios and compartments are now loaded via the Rest-API.
+
+[33mcommit d038f6573270c7a4154415e3438bd65d8b0203fe[m
+Merge: 93986d5 6cd5c00
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Wed Jan 5 14:33:00 2022 +0100
+
+    Merge remote-tracking branch 'origin/develop' into feature/load-scenarios
+
+[33mcommit 069ab229f2655668127d901a556dcdce553c3783[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Wed Jan 5 14:29:25 2022 +0100
+
+    Change production db container to restart always
+
+[33mcommit 06421addd3ffd2f4d4edb71d87e64f41680506b6[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Wed Jan 5 14:25:38 2022 +0100
+
+    Fix wrong prod / dev installed apps
+
+[33mcommit 2bcf09f7aaa8e4de8c1b7286b97a173f9a22daad[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Wed Jan 5 14:21:03 2022 +0100
+
+    Add production docker compose file
+
+[33mcommit fb8d20f8680197b6182fbedd0d24afac133297e1[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Wed Jan 5 13:46:50 2022 +0100
+
+    Add localdata path to web container, update pgadmin image
+
+[33mcommit 93986d57841f75aa88cbce56fecc2bff21b28efa[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Wed Jan 5 12:32:36 2022 +0100
+
+    :tada: Add Rest interface for fetching scenario data.
+
+[33mcommit 6cd5c00f85807b25e7f09375463fa1ee333c03ad[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Wed Jan 5 11:13:14 2022 +0100
+
+    :wrench: fix sx prop typography
+
+[33mcommit 7ab366373b386eb00fe20218e870526d22175022[m
+Merge: fc8740b 4cb2141
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Wed Jan 5 11:12:37 2022 +0100
+
+    :twisted_rightwards_arrows: Merge branch 'main' into develop
+
+[33mcommit 4624918aa842e8195d4ec3e88fa9db2e0bd1301f[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Wed Jan 5 10:06:35 2022 +0100
+
+    :beetle: Set the DB to always restart.
+
+[33mcommit ae8c1c3b658b60b4a5800439f7c9c55751bae053[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Tue Jan 4 17:47:05 2022 +0100
+
+    Fix wrong queryset passed to filter method
+
+[33mcommit 4cb214102d6c0baa15e21b95ebd33ae923e42c06[m[33m ([m[1;31morigin/main[m[33m)[m
+Merge: 28e731e 791abf3
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Tue Jan 4 09:24:04 2022 +0100
+
+    Merge pull request #62 from DLR-SC/feature/globalTheming
+    
+    🎉 Add feature/global theming
+
+[33mcommit db11357e9614f4b048e75d7ded6efb711abc6e36[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Mon Jan 3 18:27:02 2022 +0100
+
+    Add simulation id to serializer
+
+[33mcommit 00b1d89a128835179ebea1cce011cd4156308069[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Mon Jan 3 10:02:46 2022 +0100
+
+    Add import scripts
+
+[33mcommit 8ab3cf256c22c8c2b954224c7bddb84f5cb610ef[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Mon Jan 3 10:02:23 2022 +0100
+
+    Add simulation und rki data endpoint
+
+[33mcommit e9e036577a2dde3ff29ec3352be32196ef70618a[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Mon Jan 3 10:01:34 2022 +0100
+
+    Update data model
+
+[33mcommit 791abf3aa1f2cae8c031bd8d670485c98cd94b92[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Mon Dec 20 09:54:17 2021 +0100
+
+    :memo: add text for theme.spacing(); add code example
+
+[33mcommit 9898f0ba7aa5fd6124f49ad4f0d0f8b03215c697[m
+Merge: 9136afa 28e731e
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Fri Dec 17 14:16:52 2021 +0100
+
+    Merge branch 'main' into feature/globalTheming
+
+[33mcommit 9136afafe1a46059ebf6a961828c86b96c5ac75c[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Fri Dec 17 14:10:07 2021 +0100
+
+    :memo: Add comments for sx-shorthands
+
+[33mcommit 0c4c7c705a7fc53ab64cca0ced2bf095fd6705b5[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Fri Dec 17 14:09:04 2021 +0100
+
+    :wrench: remove unnecessary variant (divider width set by border)
+
+[33mcommit a8f327713f4a2c8f76771634631b4f3ce3163e73[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Fri Dec 17 14:07:43 2021 +0100
+
+    :wrench: move height into sx
+
+[33mcommit b140a708b194da247005f26295dd204ef00c4caa[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Fri Dec 17 13:58:28 2021 +0100
+
+    :sparkles: Apply formatting
+
+[33mcommit 063c21bdf9db1cb69b3ff9d892fd2c3d9253cf6b[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Fri Dec 17 13:49:06 2021 +0100
+
+    :wrench: Add theming to DistrictMap Component
+
+[33mcommit e9d6c521cb818cee621cd1c18bf376bc0936cd71[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Fri Dec 17 13:48:26 2021 +0100
+
+    :beetle: fix typo
+
+[33mcommit 6d7a7fe1f6d73a516a5fc3459ae5f0d3e545e92b[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Fri Dec 17 13:39:46 2021 +0100
+
+    :wrench: Add theming to index.tsx; Remove unnecessary widths
+
+[33mcommit ca6bf1e7622315596a343c51e025bbd4a7c9203a[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Fri Dec 17 13:19:41 2021 +0100
+
+    :wrench: Add Theming to Search bar and rework layout
+
+[33mcommit 753e02b4585ff7ed679f8e5ddc9b120cd9e9e4eb[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Thu Dec 16 17:07:48 2021 +0100
+
+    :wrench: Add theming to SidebarTabs Component
+
+[33mcommit 9715927551ca7426019c105c48f3d1db8b76d7bd[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Thu Dec 16 17:02:44 2021 +0100
+
+    :wrench: Add theming to AccessibilityDialog Component
+
+[33mcommit 2b7d95d294c996445e162423c49808c2d2b5834c[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Thu Dec 16 17:02:12 2021 +0100
+
+    :wrench: Add theming to AttributionDialog Component
+
+[33mcommit 5279471bac313960010234895d9d70e9d0daef2e[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Thu Dec 16 16:33:26 2021 +0100
+
+    :wrench: Add Theming to ImprintDialog Component
+
+[33mcommit aab3206f556bb3f7302435759dd7f4427302ef33[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Thu Dec 16 15:28:17 2021 +0100
+
+    :wrench: Add theming to privacyPolicyDialog Component
+
+[33mcommit 5c235e8057b22b49b09cfb757aa724f1df29950e[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Thu Dec 16 15:03:25 2021 +0100
+
+    :wrench: Add theming to index component
+
+[33mcommit f5592c243ae597a4c49821f10049cea1f3b6eaa2[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Thu Dec 16 14:16:15 2021 +0100
+
+    :wrench: Format styling in IconBar Component
+
+[33mcommit 66a166a01b122c3ab72f3416f43a06a98129dae3[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Thu Dec 16 13:53:21 2021 +0100
+
+    :wrench: Add theme to MainContent Component
+
+[33mcommit d86bcae91a193498d4230d2b912f070c218135bb[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Thu Dec 16 12:58:27 2021 +0100
+
+    :wrench: Add theme to SimulationChart Component
+
+[33mcommit fc8740bb4591dbb9e91a369fd74517fa8e39a634[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Wed Dec 15 13:29:40 2021 +0100
+
+    :tada: Load RKI data into the simulation chart.
+
+[33mcommit 28e731e4466603c6010f12ea1f00694175f61bfc[m
+Merge: c0a83d9 de0adff
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Wed Dec 15 11:04:21 2021 +0100
+
+    Merge pull request #59 from DLR-SC/feature/searchbar
+    
+    Update Searchbar Component
+
+[33mcommit de0adff521b9b590092954ccd16304891de80b79[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Tue Dec 14 18:36:59 2021 +0100
+
+    :wrench: fix searchbar clearing and tests
+
+[33mcommit f33d1fd4898f84c6cdb4631874177fd4dc99994c[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Tue Dec 14 17:15:27 2021 +0100
+
+    :wrench: The selected Date is now visible in the chart with a vertical line. There is now 600 day of dummy data for now.
+
+[33mcommit c701162ebdb89e47644c9c36705d61a9338e5582[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Tue Dec 14 14:30:14 2021 +0100
+
+    :beetle: Fix an error in the ESLint configuration.
+
+[33mcommit 70f519361e0754a2197064db392931a7efe1483e[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Tue Dec 14 14:29:47 2021 +0100
+
+    :tada: The map now displays values fetched from the backend it uses the time selected in the chart by clicking.
+
+[33mcommit 3993b94d211dcb5d1e7df5568dea240e7ed6f977[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Tue Dec 14 14:29:01 2021 +0100
+
+    :tada: Added the rest interface via RTK Query.
+
+[33mcommit f1e4d5b51442bd5cd71a4f51312f88a4bfa69d00[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Tue Dec 14 13:20:51 2021 +0100
+
+    :heavy_check_mark: Fix failing searchbar test
+
+[33mcommit f0f700211cbf74b889c95263c90d2ffe279ab6b6[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Tue Dec 14 13:05:26 2021 +0100
+
+    :wrench: add germany to search options
+
+[33mcommit a9d4d544fcdf084b44db4b236168876767b4b6d6[m
+Merge: 90d3478 c0a83d9
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Tue Dec 14 12:31:31 2021 +0100
+
+    Merge branch 'main' into feature/rest-queries
+    
+    # Conflicts:
+    #       frontend/package-lock.json
+
+[33mcommit 90d347861ccb99ed3a29b1bd533e59e4ce8121ab[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Tue Dec 14 11:39:55 2021 +0100
+
+    :tada: Add support for environment variables with .env.
+
+[33mcommit 3290b1959b0089e85fdebecf1f778303f1becb9d[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Tue Dec 14 09:35:00 2021 +0100
+
+    :memo: change JSDoc format
+
+[33mcommit 589a3cad81b9d7ca281ee33e6a8918a239220a93[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Fri Dec 10 18:04:41 2021 +0100
+
+    :memo: Change wording
+
+[33mcommit 1d78e2ca028fcfdd7bb8dc0676f78ea2be6d54e1[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Fri Dec 10 18:03:11 2021 +0100
+
+    :memo: Fix formatting
+
+[33mcommit 3b8023fd46a03ab782bdd08cab37b07aceab7cc9[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Fri Dec 10 18:01:43 2021 +0100
+
+    :memo: Add text for alternative text colors
+
+[33mcommit bfa322eae13d779092803de8a2b292f26a2ec6c0[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Fri Dec 10 17:57:32 2021 +0100
+
+    :memo: Add Theming code example and usage
+
+[33mcommit 54ebfb36bba01d568ec1417ed2e2f606429ea222[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Fri Dec 10 17:46:23 2021 +0100
+
+    :memo: Add Design Guidelines and Theming
+
+[33mcommit 5a5ade7945d38ad55d443e29f5c346bebd7e75cd[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Fri Dec 10 17:20:52 2021 +0100
+
+    :sparkles: Format hex color-codes
+
+[33mcommit 9eeaf6e865b3788e9fb3941492a8604c391b34be[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Fri Dec 10 17:20:20 2021 +0100
+
+    :memo: Add Theme Guidelines
+
+[33mcommit 856f20b7a520c7b0bf340a991f433761b183cc12[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Fri Dec 10 14:36:31 2021 +0100
+
+    :wrench: add List Element typography and add to compartment numbers
+
+[33mcommit 0dbc17675f8225e15de63b006a70c718b9f1716a[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Fri Dec 10 11:34:30 2021 +0100
+
+    :wrench: exchange styling with global theming and use Material Components for base html tags
+
+[33mcommit 71e9409588a5b084d7d5cc1cb76302cff5990298[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Fri Dec 10 11:33:00 2021 +0100
+
+    :wrench: use mui/material Box, rename theme variable, replace span with Typography
+
+[33mcommit ce15fada80d2a6acbfb1449bef64cade5d8d3eca[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Thu Dec 9 17:40:32 2021 +0100
+
+    :memo: fix empty comment
+
+[33mcommit 9045988388723ee4883803fa79d23c0826440435[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Thu Dec 9 14:07:56 2021 +0100
+
+    :wrench: add overline to theme to add list item typography
+
+[33mcommit dd2a078af086ac1239dd67bdb227cfec56f6598a[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Wed Dec 8 12:46:08 2021 +0100
+
+    :heavy_check_mark: add check for datastore integrity
+
+[33mcommit abaabdf8df7ff95b8f1e1f21c658f16cc70c48cc[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Wed Dec 8 12:35:24 2021 +0100
+
+    :wrench: add handling for packages where package.json cannot be found
+
+[33mcommit ead9ece8598df9343d4fae7e4d35dc19a1af34bf[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Wed Dec 8 11:38:25 2021 +0100
+
+    :sparkles: apply format & lint
+
+[33mcommit 6ab03a14d19b0301fc1b4f220cededa099116605[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Wed Dec 8 11:33:18 2021 +0100
+
+    Revert ":wrench: reduce option equality to test RS value; QoL Autocomplete options added"
+    
+    This reverts commit 1b8a45752d0aa96894a5db0a71ad8fe49728f730.
+
+[33mcommit 13487f3c1ed411b23cefe472a3821752f19567f7[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Wed Dec 8 11:33:08 2021 +0100
+
+    Revert ":heavy_check_mark: add user events testing library; add searchbar tests (fixes #60)"
+    
+    This reverts commit 479aec12cdc4de3051e54ba102d804adeea49745.
+
+[33mcommit 0ea047b54c35c427b18271f695408089199fbbdb[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Wed Dec 8 11:32:54 2021 +0100
+
+    Revert ":sparkles: run formatter"
+    
+    This reverts commit b65ad78d78875fb656e16fff7b78721b650a46e2.
+
+[33mcommit 6d20552e6a4ba4e243bfd7eed64ca4844c76d66a[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Wed Dec 8 11:29:18 2021 +0100
+
+    :heavy_check_mark: add user events testing library; add searchbar tests (fixes #60)
+
+[33mcommit 24a5f3c627ec947736b55bb63784d5ee32b9c2ca[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Wed Dec 8 11:28:16 2021 +0100
+
+    :wrench: reduce option equality to test RS value; QoL Autocomplete options added
+
+[33mcommit b65ad78d78875fb656e16fff7b78721b650a46e2[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Wed Dec 8 10:57:48 2021 +0100
+
+    :sparkles: run formatter
+
+[33mcommit 479aec12cdc4de3051e54ba102d804adeea49745[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Wed Dec 8 10:52:22 2021 +0100
+
+    :heavy_check_mark: add user events testing library; add searchbar tests (fixes #60)
+
+[33mcommit 1b8a45752d0aa96894a5db0a71ad8fe49728f730[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Wed Dec 8 10:41:11 2021 +0100
+
+    :wrench: reduce option equality to test RS value; QoL Autocomplete options added
+
+[33mcommit e20d68d8245be1381a37c509fb7b151af3aaded6[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Mon Dec 6 13:29:41 2021 +0100
+
+    change scenario serializers
+
+[33mcommit 769a92c8e7d45691372e8fc0a9603dd328c912ad[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Mon Dec 6 13:28:56 2021 +0100
+
+    adapt scenario importer
+
+[33mcommit 63aa4e40eb67b88c5687373a9a392deb5f74a80c[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Mon Dec 6 13:28:34 2021 +0100
+
+    change scenario node db model slightly
+
+[33mcommit 3c2927434cd8398056f75b28acf873d8f5398a40[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Fri Dec 3 16:01:52 2021 +0100
+
+    add admin command for importing and deleting a scenario
+
+[33mcommit 15cce97c72b6469ea7c3c43bf8a8d2188da3e625[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Fri Dec 3 16:00:29 2021 +0100
+
+    change data model
+
+[33mcommit 5afa8902952f79eaaeef0b40333c1df6b77584b5[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Thu Dec 2 16:37:46 2021 +0100
+
+    :wrench: apply global theming and use material components
+
+[33mcommit 5962638e944b1bd1ed55b6cd2723554b270ce136[m
+Merge: 9bf549f 46158c5
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Thu Dec 2 16:37:15 2021 +0100
+
+    :wrench: update theme fonts and spacing
+
+[33mcommit 9bf549fd5c54d22b5ca555264d186ef92a2af95f[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Thu Dec 2 09:49:56 2021 +0100
+
+    :arrow_up_small: add mui/system
+
+[33mcommit a846757407105458f2d0d755660534cb3da7119d[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Thu Dec 2 12:44:05 2021 +0100
+
+    fix serializers and add documentation
+
+[33mcommit 46158c515cd04c4f60f3ac77ccda041f523bb7fd[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Thu Dec 2 09:49:56 2021 +0100
+
+    :arrow_up_small: add mui/system
+
+[33mcommit 1f062b0e3c699e389dc0049caadba312910050dd[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Wed Dec 1 18:10:02 2021 +0100
+
+    :wrench: init theme to app
+
+[33mcommit 890a7bb3066db47491ea2ffa52c4cee108b1b8f7[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Wed Dec 1 10:49:53 2021 +0100
+
+    :heavy_check_mark: add fetch mock to serchbar test
+
+[33mcommit 91d8c293e5053b6b0181bbaf7d25244a4a18d387[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Tue Nov 30 17:53:43 2021 +0100
+
+    :hammer: rewrite search bar component; closes #39
+
+[33mcommit 4b3e8ae1d8b84eb3a4f0b6526825e2fcd4da1f77[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Tue Nov 30 17:51:39 2021 +0100
+
+    :wrench: add translation for search
+
+[33mcommit 763493a5b906e4e8c881bf86284cee451e8e4a56[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Mon Nov 29 17:17:48 2021 +0100
+
+    :wrench: init mvp
+
+[33mcommit c0a83d905bc75dce679ee418100b831807ab0d21[m
+Merge: 6242c4f 9785ba0
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Mon Nov 29 15:58:20 2021 +0100
+
+    Merge pull request #48 from DLR-SC/feature/new_Components
+    
+    Feature/new components
+
+[33mcommit 9785ba0e6402ceed3bdc17a0e092217a36b8fc8e[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Mon Nov 29 15:36:30 2021 +0100
+
+    :memo: apply doc suggestions and rename packing function
+
+[33mcommit f92ed02ad55232eaca6d6e2a147b095b6a101988[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Mon Nov 29 15:05:11 2021 +0100
+
+    :wrench: change map size
+
+[33mcommit 403d55e8fe00ac7136a4fbe5ce6ad019b5f62e4d[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Mon Nov 29 14:56:17 2021 +0100
+
+    Apply suggestions from code review
+    
+    Rename theme variable from background_accent to backgroundAccent
+    
+    Co-authored-by: Jonas Gilg <jonas.gilg@dlr.de>
+
+[33mcommit 08e43ec872676be98fb26f4bfa13b1dd9fc557e1[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Fri Nov 26 12:30:52 2021 +0100
+
+    :beetle: set background of add scenario button to background color
+
+[33mcommit 97123d9a52ba1fe993e19244376645d9019636a2[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Fri Nov 26 10:49:01 2021 +0100
+
+    :wrench: change props scenario list to store list
+
+[33mcommit 5bfde9c4cfb06deb8931b0f922d197cc41649f7c[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Thu Nov 25 15:13:46 2021 +0100
+
+    :wrench: change props scenario list to store list
+
+[33mcommit b55e807c182460f58f7273c9db355c0e73290b01[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Thu Nov 25 14:15:54 2021 +0100
+
+    :beetle: fix tests crashing because of commit 67b15cc
+
+[33mcommit 1a8d5c38980814eced953ddaa9ffb9e682d448df[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Thu Nov 25 12:58:23 2021 +0100
+
+    :hammer: merge changes from pull request #52, add modular tooltip and add scenario list slice integration
+
+[33mcommit 67b15cc9c94cc260e8c1f8789005aedefb9df938[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Thu Nov 25 12:55:58 2021 +0100
+
+    :wrench: remove initially selected compartment
+
+[33mcommit 54c0f9438d87f324e7a474163962feac49c8bb22[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Thu Nov 25 12:55:27 2021 +0100
+
+    :tada: add slice for scenario list to store
+
+[33mcommit 4b89317c6187cff13e6040c9155f159afff867fa[m
+Merge: 8ae4bc2 6242c4f
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Tue Nov 23 16:43:34 2021 +0100
+
+    :twisted_rightwards_arrows: Merge branch 'main' into feature/new_Components
+
+[33mcommit 8ae4bc212891280830ee8be2654dc69475ea94cf[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Tue Nov 23 16:14:23 2021 +0100
+
+    :memo: add/format JSDoc comments
+
+[33mcommit 805e70a1cf61236bb4521905d0e022f90988c248[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Tue Nov 23 16:04:46 2021 +0100
+
+    :wrench: improve/format css code
+
+[33mcommit a27a75779711740d8bb45f3a18702c36e4eaaf74[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Tue Nov 23 16:03:39 2021 +0100
+
+    :truck: moved ScenarioCard component into its own file
+
+[33mcommit 1d16caef4c60ad246729923a99707efa98f83a34[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Tue Nov 23 13:29:14 2021 +0100
+
+    :wrench: add selectValue to DataSelection store
+
+[33mcommit 495177183ed8d282061d63fe80da2f06e07e778c[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Tue Nov 23 12:41:46 2021 +0100
+
+    :memo: add JSDoc comments
+
+[33mcommit 10ccd1ee60bd98e730a4aaa3887dc6e7b72fa8f6[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Tue Nov 23 12:39:51 2021 +0100
+
+    :memo: clarify comment
+
+[33mcommit 140398ce249560d3ea2dabfec528a216662fd1d5[m
+Merge: 5703500 2ccf5c0
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Mon Nov 22 16:54:02 2021 +0100
+
+    :twisted_rightwards_arrows: Merge branch 'feature/new_Components' of https://github.com/DLR-SC/ESID into feature/new_Components
+
+[33mcommit 57035005b31b8d5510771f598bc773b4d13bb73f[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Mon Nov 22 16:52:31 2021 +0100
+
+    :wrench: remove residue disables
+
+[33mcommit 2ccf5c018f5715af0415171f75d0610d3b4890f0[m
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Mon Nov 22 16:29:34 2021 +0100
+
+    Apply suggestions from code review
+    
+    smaller changes, removed comments, typos
+    
+    Co-authored-by: Jonas Gilg <jonas.gilg@dlr.de>
+
+[33mcommit e00198a9fc6d6cf1381519d2b5cd947c7e7af20d[m
+Author: Mo Zeumer <m_zeumer@gmx.de>
+Date:   Mon Nov 22 10:24:11 2021 +0100
+
+    :sparkles: remove notes and run format & lint
+
+[33mcommit 9d3023a787e6061d6699f2df0b08f3bc7a6e4161[m
+Author: Mo Zeumer <m_zeumer@gmx.de>
+Date:   Fri Nov 19 17:23:13 2021 +0100
+
+    :wrench: add initial test to draw deviations
+
+[33mcommit fa0633fd651777ab07e93c14c52451c5240931ca[m
+Author: Mo Zeumer <m_zeumer@gmx.de>
+Date:   Thu Nov 18 17:31:43 2021 +0100
+
+    :wrench: improve chart drawing and use scenario list
+
+[33mcommit 74914e0032e1f77c5322d403469ae960b7913d3b[m
+Author: Mo Zeumer <m_zeumer@gmx.de>
+Date:   Thu Nov 18 17:30:44 2021 +0100
+
+    :wrench: move scenario list up into MainContent.tsx
+
+[33mcommit 47b2a568550446c97d7898873b5816cbcb62c9a4[m
+Author: Mo Zeumer <m_zeumer@gmx.de>
+Date:   Tue Nov 16 13:26:40 2021 +0100
+
+    :beetle: fix properties requiring id not index to access value
+
+[33mcommit 826eca2e89ac8879b661c28478cf4419374369a4[m
+Author: Mo Zeumer <m_zeumer@gmx.de>
+Date:   Mon Nov 15 14:33:21 2021 +0100
+
+    :hammer: Refactor Scenario Cards
+
+[33mcommit f16f5fc45a1598c2f7e8b806a6daba83071c60f9[m
+Author: Mo Zeumer <m_zeumer@gmx.de>
+Date:   Mon Nov 1 10:06:15 2021 +0100
+
+    :wrench: Merge Eisenach int Wartburgkreis #54
+
+[33mcommit ecb6cef6997cd1464ecb41d73f24e06d35ec77a5[m
+Author: Mo Zeumer <m_zeumer@gmx.de>
+Date:   Mon Nov 1 09:37:08 2021 +0100
+
+    :beetle: remove animated theme, fixes #53
+
+[33mcommit 6242c4fc6b1cef3a516d1f39e7148a12356f51db[m
+Merge: b9f61ed 6fd8569
+Author: Mo <25636783+NXXR@users.noreply.github.com>
+Date:   Fri Oct 29 15:28:29 2021 +0200
+
+    Merge pull request #52 from DLR-SC/feature/heatLegend
+    
+    Feature/heat legend
+
+[33mcommit 6fd8569a93340eddcdb9579e37edd02812174d17[m
+Author: Mo Zeumer <m_zeumer@gmx.de>
+Date:   Fri Oct 29 15:14:21 2021 +0200
+
+    :sparkles: run format and lint
+
+[33mcommit 348f270eb691d8427d77bb9867fd7c029956f0a8[m
+Author: Mo Zeumer <m_zeumer@gmx.de>
+Date:   Fri Oct 29 15:07:35 2021 +0200
+
+    :beetle: add tooltip maxwidth to fix overflow (messy)
+
+[33mcommit 999a35344173ac40578344ce6d09181eef7af338[m
+Author: Mo Zeumer <m_zeumer@gmx.de>
+Date:   Fri Oct 29 14:41:07 2021 +0200
+
+    :wrench: add value to tooltip
+
+[33mcommit 8fb2a666ff79e36832b899f0a9319af1a590d0d4[m
+Author: Mo Zeumer <m_zeumer@gmx.de>
+Date:   Wed Oct 27 17:49:45 2021 +0200
+
+    :sparkles: run lint & format
+
+[33mcommit 5b541779130ec529fe7943f3685b3ecdb2da05fa[m
+Author: Mo Zeumer <m_zeumer@gmx.de>
+Date:   Wed Oct 27 17:46:41 2021 +0200
+
+    :beetle: Lower random value for region to 0..210 (from 0..300 to make map less purple)
+
+[33mcommit afa1a2ed521f00ad04ea56580acd913e2c448fe4[m
+Author: Mo Zeumer <m_zeumer@gmx.de>
+Date:   Wed Oct 27 17:42:27 2021 +0200
+
+    :tada: Switch County Map color scheme to dummyProps
+
+[33mcommit 741990fd7c404642c028712bbccc53766fb7b123[m
+Author: Mo Zeumer <m_zeumer@gmx.de>
+Date:   Wed Oct 27 16:21:39 2021 +0200
+
+    :tada: add heat legend
+
+[33mcommit a968a138e992a899f7ff3df50c0668fd5611aa47[m
+Author: Mo Zeumer <m_zeumer@gmx.de>
+Date:   Wed Oct 27 16:19:51 2021 +0200
+
+    :tada: add heat legend
+
+[33mcommit bcbf199ab5b8e097abe5e31ef7e176c50a72dcb7[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Mon Oct 25 15:57:54 2021 +0200
+
+    :sparkles: Formatting.
+
+[33mcommit dd1b623d2e7bc8e7ee2f7b2d10b4390310fa84ed[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Mon Oct 25 15:40:39 2021 +0200
+
+    :wrench: Simplify the icon bar.
+
+[33mcommit d687e0233d1476cb7917999d4f5348426bc3605a[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Mon Oct 18 18:13:56 2021 +0200
+
+    :beetle: Fix some bugs.
+
+[33mcommit 272c6b2a6f132e71185af7e934c39e9d276c3169[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Mon Oct 18 17:50:16 2021 +0200
+
+    :wrench: Better layout of the sidebar.
+
+[33mcommit 06cff9a679f4acf6630e1fd22d5a8a1cabb260bb[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Mon Oct 18 15:38:55 2021 +0200
+
+    :sparkles: Format.
+
+[33mcommit 68cf0cbde540c4e8795712b02ee23cbb91b5c195[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Mon Oct 18 15:29:18 2021 +0200
+
+    :arrow_up_small: Update from material-ui to mui.
+
+[33mcommit 2b5b1d50777aa591c8cf487c226a477a82403a27[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Fri Oct 15 18:09:33 2021 +0200
+
+    :sparkles: Run prettier.
+
+[33mcommit e1b265d2d3ad750a0aa5fe460e62a6006d967c62[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Fri Oct 15 18:05:00 2021 +0200
+
+    :beetle: Fix another version related error with jest.
+
+[33mcommit 15a640597005733e1b2ea134a842b1b5d5174454[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Fri Oct 15 18:01:46 2021 +0200
+
+    :beetle: Fix version related error with jest.
+
+[33mcommit fc588bc4488b149c9b4a33d31f0ccf600fb9a16d[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Fri Oct 15 17:53:27 2021 +0200
+
+    :beetle: Add package-lock.json back to please the CI.
+
+[33mcommit 1fbaf456612b35fd808ef33588a0279f96a2c082[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Fri Oct 15 17:49:46 2021 +0200
+
+    :beetle: Fix duplicate key.
+
+[33mcommit fb180a71aec8582539445db06b6e4af36bd51260[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Fri Oct 15 17:49:32 2021 +0200
+
+    :beetle: Fix API break.
+
+[33mcommit 316166bbbb2d5ff99247878776dc4666e3950b49[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Fri Oct 15 17:49:01 2021 +0200
+
+    :wrench: Add empty translation files, because somehow the i18n library tries to open them, even though they are not needed.
+
+[33mcommit a8973109e57475ea21b1d442624491795141afc1[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Fri Oct 15 17:33:31 2021 +0200
+
+    :tada: The fullscreen button now works.
+
+[33mcommit 59d9556bb248a12b04116ae1ed1e92b3c8f9f3db[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Fri Oct 15 16:39:35 2021 +0200
+
+    :wrench: Fix all warnings.
+
+[33mcommit 3227db414e1790e81ae4875c1d8f4daf5d3a4e97[m
+Merge: 8c2e9cf b9f61ed
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Fri Oct 15 16:15:26 2021 +0200
+
+    Merge remote-tracking branch 'origin/main' into feature/new_Components
+    
+    # Conflicts:
+    #       frontend/package-lock.json
+    #       frontend/src/components/MainContent.tsx
+
+[33mcommit b9f61ed1befeaae215e7b0cf3ae1227e3ab39f3e[m
+Merge: 3b419a0 1a62f82
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Wed Sep 29 21:30:25 2021 +0200
+
+    Merge pull request #51 from DLR-SC/feature/a11y
+    
+    Feature/a11y
+
+[33mcommit 3b419a038070d2a9a172f1dedc47b8d3254468c3[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Tue Sep 21 09:53:41 2021 +0200
+
+    Update README.md
+
+[33mcommit 9a2a34992fcae572773b5361aa829a5f3258fcb2[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Tue Sep 21 09:51:56 2021 +0200
+
+    Update README.md
+
+[33mcommit 1a62f828b2fa865348786cf0fe30f483c50fdaa4[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Mon Aug 30 16:10:09 2021 +0200
+
+    :sparkles: Run prettier.
+
+[33mcommit 21fcf8e33dca71c060446fc1eeb63bca16b6a40a[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Mon Aug 30 16:02:07 2021 +0200
+
+    :memo: Add documentation for a11y and improve PR template.
+
+[33mcommit 43de1328d1123bfefc9e6e0a217449a37159c376[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Mon Aug 30 15:40:46 2021 +0200
+
+    :beetle: Fix some deprecation notices.
+
+[33mcommit 211a4a0ad4c727662e6630121eace79d91da591c[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Tue Aug 24 17:04:01 2021 +0200
+
+    :green_heart: Remove axe-cli check from CI.
+
+[33mcommit f39658e2ac0774392e4223e2ddbc4dee398d4786[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Tue Aug 24 16:49:20 2021 +0200
+
+    :green_heart: Try axe with firefox.
+
+[33mcommit ad11195115feb3c75099278d5e74675892d76e52[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Tue Aug 24 16:36:57 2021 +0200
+
+    :green_heart: Try axe with firefox.
+
+[33mcommit 8913e99d596f3749991a98b8b0984047dcacc2fa[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Tue Aug 24 12:04:31 2021 +0200
+
+    :green_heart: Show axe errors.
+
+[33mcommit f70487f5b168e9d3d4224942ddd2fa76e1efd8f2[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Tue Aug 24 11:56:41 2021 +0200
+
+    :sparkles: Run formatting.
+
+[33mcommit ab290916c7b20bea479454fc5f2cacd30a809ba0[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Tue Aug 24 11:52:01 2021 +0200
+
+    :green_heart: Try axe for a11y testing.
+
+[33mcommit 7331be37524b32ef614bfbdf0c27ccee12ec1699[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Tue Aug 24 11:50:34 2021 +0200
+
+    :green_heart: Try axe for a11y testing.
+
+[33mcommit 8fec81a7ff6b4c251db27d619f68ee0eccb45bbf[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Tue Aug 24 11:49:28 2021 +0200
+
+    :green_heart: Try axe for a11y testing.
+
+[33mcommit 7cfc086158564f3a5ce5203fa6adc49dab7834c6[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Mon Aug 23 15:56:47 2021 +0200
+
+    :green_heart: Improve a11y testing.
+
+[33mcommit b8e35f3491fb379ebf2a66cffd7cdd71a98c5dcf[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Mon Aug 23 15:45:53 2021 +0200
+
+    :green_heart: Add a11y check to CI.
+
+[33mcommit 1e1463bfa77088e382664f802e689150b9aa7555[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Mon Aug 23 15:44:10 2021 +0200
+
+    :tada: Add automatic accessibility check.
+
+[33mcommit 5ec50cd5d97ab6489a1c5feb0ec287e17d043e4f[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Wed Aug 18 11:20:58 2021 +0200
+
+    :tada: Add license.
+
+[33mcommit 8c2e9cf93dcc06a50eaacbb7c59c15d1d47b39eb[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Fri Aug 13 11:52:02 2021 +0200
+
+    :wrench: Fix overflow.
+
+[33mcommit 03c3978dac3eebe875c3bcebe041062af38ba4aa[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Fri Aug 13 11:49:17 2021 +0200
+
+    :art: Add margin to cards.
+
+[33mcommit 516e134ac341d8be91a064c1c25f56f52e99d20a[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Fri Aug 13 10:43:30 2021 +0200
+
+    :art: Smooth shadow.
+
+[33mcommit f631d3f91011b12713744cbc32413e87370b7a00[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Mon Aug 9 11:16:00 2021 +0200
+
+    :art: Full width.
+
+[33mcommit 6db621db1432633c1e5699957c92cfbd5fee9470[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Mon Aug 9 08:57:14 2021 +0200
+
+    :art: Remove extra code.
+
+[33mcommit 07e4502e805c5dd99042ea8a41373c9a9d4b7c80[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Mon Aug 9 08:56:07 2021 +0200
+
+    :art: Add scrollbar.
+
+[33mcommit ba38d6ac44a79e61f6cabe3ab444f4d961a6d7ab[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Mon Aug 9 07:58:21 2021 +0200
+
+    :art: Make the icone width dynamic.
+
+[33mcommit 4d7107df514e33a26b5569ffed1543560ef8bde2[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Mon Aug 9 07:54:28 2021 +0200
+
+    :art: Make the Tab content responsive.
+
+[33mcommit 8874607b81fb9a14307a7b42be7cff2dcd6564c2[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Fri Aug 6 16:13:11 2021 +0200
+
+    :art: Correct naming.
+
+[33mcommit d265c95095581c853d8625ae815f168678241130[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Fri Aug 6 16:07:36 2021 +0200
+
+    :art: Correct naming.
+
+[33mcommit d1ee3ec6583130fd6a78225e0bb7aa7582823577[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Fri Aug 6 16:06:57 2021 +0200
+
+    :art: Correct naming
+
+[33mcommit 0d5a7545624ed8b0360bfb8a7e05f0ad045185d6[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Fri Aug 6 14:19:05 2021 +0200
+
+    :art: Change divider color.
+
+[33mcommit 03ef9c89bada11dbc942f618486b7634d0ad1a14[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Fri Aug 6 11:50:15 2021 +0200
+
+    :art: dotted background.
+
+[33mcommit 0413e1a98fef0970ab3757449d13bae3188f8fd6[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Fri Aug 6 10:24:44 2021 +0200
+
+    :art: Change Background Color.
+
+[33mcommit 9750c9cd6ade2a9a06bd3bf815dfd9c903d90980[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Fri Aug 6 10:23:38 2021 +0200
+
+    :art: Add divider .
+
+[33mcommit 9427be13d24805f325790c07c5854eed503304f5[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Fri Aug 6 08:40:28 2021 +0200
+
+    :wrench:
+
+[33mcommit d73c51cf51a11c7f3d9debdff0b41594b7d16f4e[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Fri Aug 6 08:31:35 2021 +0200
+
+    :wrench:
+
+[33mcommit f543a1f78903b2d0e88c868ca77ff3321d3f4f34[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Fri Aug 6 08:03:18 2021 +0200
+
+    :wrench: Change simplebar version.
+
+[33mcommit b29ee13f19ee612569f2d6de3c9b0e37725e3ef3[m
+Merge: 0e09bcf 7f2b5c1
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Thu Aug 5 23:18:45 2021 +0200
+
+    Merge pull request #50 from DLR-SC/feature/more-ci-checks
+    
+    More CI checks
+
+[33mcommit 96a19c9e252e71e962b52bd226f5dd9594198ed3[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Thu Aug 5 11:54:15 2021 +0200
+
+    :wrench: Add day and year to period.
+
+[33mcommit a15f4d6ed9c4983ae552e2d6dae648fe639b6786[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Thu Aug 5 11:11:02 2021 +0200
+
+    :art: Improve scrollbar design.
+
+[33mcommit 15201d11cec49075582294278aab8f139f9fc656[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Thu Aug 5 11:09:53 2021 +0200
+
+    :art: improve scrollbar design.
+
+[33mcommit a1cbb58b0f306fbba592e22e95d00eebbc7923f3[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Thu Aug 5 08:59:04 2021 +0200
+
+    :wrench: Remove unused code.
+
+[33mcommit ee4b5da0e7c9bd5c2846ceaf3a308d10b9373b2a[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Thu Aug 5 08:57:27 2021 +0200
+
+    :wrench: Fix header values.
+
+[33mcommit 1d11283063f8bcfafd263473e78192ece6f435ba[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Wed Aug 4 17:01:16 2021 +0200
+
+    :wrench: Display the chart in full height.
+
+[33mcommit 9669c986ac6139f3cacb4c7d4b2db1594f311b24[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Wed Aug 4 16:59:44 2021 +0200
+
+    :wrench: Full screen height.
+
+[33mcommit ce787e43701c5ff2fba7707f51b6813f2361ce3e[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Wed Aug 4 13:34:54 2021 +0200
+
+    :wrench: Disable Icones.
+
+[33mcommit 3f6608dd76e65c949203fe5e5e2fe335e7fa3810[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Wed Aug 4 10:51:04 2021 +0200
+
+    :wrench: Add break.
+
+[33mcommit ffe80362b0de129f7eff933af6bfbebc733f04ed[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Wed Aug 4 10:42:47 2021 +0200
+
+    :wrench: Display Scenario name.
+
+[33mcommit dd7b3c9fe81db14fc7894249651a6cba246f19a6[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Wed Aug 4 10:41:03 2021 +0200
+
+    :wrench: Change scenario name d
+
+[33mcommit ceafb6eb836ee757cb599b704df7574a8b7ba7e7[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Wed Aug 4 10:20:41 2021 +0200
+
+    :wrench: Imporve rate display.
+
+[33mcommit 6ebd438d00747e3df61b945a9b373c6e5a219f68[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Tue Aug 3 17:37:57 2021 +0200
+
+    :wrench: Fix data sample.
+
+[33mcommit 40460aca416e1c1d776a8098d975f25826f61a1d[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Tue Aug 3 17:24:51 2021 +0200
+
+    :wrench: Update test.
+
+[33mcommit cd1797e46065872f65ce63c38add8206c9fac470[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Tue Aug 3 17:24:01 2021 +0200
+
+    :tada: Share scenario data with map.
+
+[33mcommit a16d8a37368c2629efa70df1598589cd1ad2484d[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Tue Aug 3 17:23:01 2021 +0200
+
+    :tada: Share scenario data with map.
+
+[33mcommit 13424e52e3c1a068dfb624404a229deb6c128d65[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Tue Aug 3 17:22:02 2021 +0200
+
+    :tada: Share scenario data with map.
+
+[33mcommit c33b5d010c4843040474143699511a2b3edd59b8[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Tue Aug 3 16:32:01 2021 +0200
+
+    :art: Improve shadow behavior.
+
+[33mcommit 109b5827cb07adf2a25269af26a217f70f7495b1[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Tue Aug 3 16:16:20 2021 +0200
+
+    :art: Improve shadow behavior.
+
+[33mcommit 96e8f7e65bf62ef7257dd4b451a876a87c000c96[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Tue Aug 3 16:09:36 2021 +0200
+
+    :art: Improve shadow behavior.
+
+[33mcommit 8cb7bc763f1d014fb856c1ee74c3008a8cf16743[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Tue Aug 3 13:57:46 2021 +0200
+
+    :wrench: Persist shadow on Cards .
+
+[33mcommit e33990a4b0ce2bddfdc22a5935e151f9df857bd6[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Mon Aug 2 14:54:46 2021 +0200
+
+    :wrench: Change rowcolor on Select.
+
+[33mcommit 96d2a24bfb58cd5f6a32031a2b8091f703a80635[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Mon Aug 2 09:37:42 2021 +0200
+
+    :wrench: Remove simplebar dependency.
+
+[33mcommit aacdab0609b20e3891d6125e60d8324aa6d2abb5[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Mon Aug 2 08:09:21 2021 +0200
+
+    :wrench: Remove simplebar dependency.
+
+[33mcommit f118477f334134e578582385b6b3504ca4bfe421[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Fri Jul 30 16:41:06 2021 +0200
+
+    :wrench: Borders.
+
+[33mcommit 0e09bcfe443efbe72c80b2bd54aec1ce09e8304f[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Fri Jul 30 16:12:38 2021 +0200
+
+    :wrench: Try fixing the PR template.
+
+[33mcommit bfb7580c2255abbfb427b636fbf68b66935323ff[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Fri Jul 30 15:37:31 2021 +0200
+
+    add route for rki county data for one day
+
+[33mcommit cdbd00f022aa81a4e8efac26ca1aa108f4c55a83[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Fri Jul 30 15:12:38 2021 +0200
+
+    :wrench: Make Tab take fullwidth.
+
+[33mcommit c1ccaf2649d182922b6590de853f0f077475f8f8[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Fri Jul 30 15:01:13 2021 +0200
+
+    :wrench:  Change Tab Indicator default color.
+
+[33mcommit 7f2b5c1b49f9ad239d74be388d784b0cb51a6672[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Fri Jul 30 14:34:31 2021 +0200
+
+    :wrench: Resolve or suppress linting errors.
+
+[33mcommit 294acfefb24e3ceb8d2cbb4742bd6725901c785b[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Fri Jul 30 14:07:26 2021 +0200
+
+    :wrench: Render the map only once.
+
+[33mcommit f35e177d6d0c64b187810e0d8a5f74b6319d27a0[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Fri Jul 30 13:54:35 2021 +0200
+
+    :wrench: Fix scenario card spacing.
+
+[33mcommit 34e1a40e6d50f6eeefcfd646e29cd67c75e1dabc[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Fri Jul 30 13:26:57 2021 +0200
+
+    update README
+
+[33mcommit 769bd1a1a601715c7f7948b79633059ebebe95ff[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Fri Jul 30 13:26:47 2021 +0200
+
+    add rki data importer
+
+[33mcommit 561e915f7a0ef9241a94877b2bc472e2c14b95ae[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Fri Jul 30 13:26:29 2021 +0200
+
+    update configurations
+
+[33mcommit 945b7840a8546154cf34e0bce66c73759306b981[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Fri Jul 30 13:25:39 2021 +0200
+
+    add RKI models and views
+
+[33mcommit 259c2577c94e6eed03bb5b42ac7f0048e941fa4f[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Fri Jul 30 12:10:15 2021 +0200
+
+    :wrench: Remove json asset files from formatting checks.
+
+[33mcommit 51c66e2a07276fd1121ff9f3441379ff2b77d1eb[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Fri Jul 30 12:03:41 2021 +0200
+
+    :wrench: Remove json asset files from formatting checks.
+
+[33mcommit 9c8727fa0cfc0a761271c1f07c6eae56076029eb[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Fri Jul 30 11:57:18 2021 +0200
+
+    :sparkles: Fix formatting.
+
+[33mcommit ff179c2e8dd552e9a9dd0327c72d9b2be9fa9482[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Fri Jul 30 11:53:28 2021 +0200
+
+    :green_heart: Add format and lint checks to the CI pipeline.
+
+[33mcommit 25dd203c2ffdba4682b042e5cd0cc1d55dcafc54[m
+Merge: d35c0ea f87c189
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Mon Jul 26 16:04:17 2021 +0200
+
+    Merge pull request #47 from DLR-SC/feature/pr-template
+    
+    Add a PR template
+
+[33mcommit ad4e313c894405172a11369eab70c9f8d175a13e[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Mon Jul 26 11:02:09 2021 +0200
+
+    :wrench: Remove unused code.
+
+[33mcommit d7f561204028128f6e0a0b12e1750a0b096751a5[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Mon Jul 26 10:52:11 2021 +0200
+
+    :wrench: Remove unused code.
+
+[33mcommit 9d077fb229b54fe6f5100690a6889925ce68c98d[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Mon Jul 26 09:13:20 2021 +0200
+
+    :tada: Add main content components.
+
+[33mcommit 075bccb7b724113ab0f02034099c6c1a384a82a4[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Mon Jul 26 09:12:04 2021 +0200
+
+    :tada: Icones list.
+
+[33mcommit dcbc3fb67b85071e68d80fba1b354f95bcf33bb6[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Mon Jul 26 09:09:39 2021 +0200
+
+    :tada: Include Icone and scenario.
+
+[33mcommit c976ff3fdc5b74aaf312d66662e9bb925a498c3c[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Mon Jul 26 09:07:49 2021 +0200
+
+    :tada: Get scenario state.
+
+[33mcommit b94002533faf86864a2201191e84f42c28630ca7[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Mon Jul 26 08:55:42 2021 +0200
+
+    :wrench: Fix spacing.
+
+[33mcommit 692f469c4624fafb858a36f40a377d0db31ca2ae[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Mon Jul 26 08:31:28 2021 +0200
+
+    :wrench: Fix height
+
+[33mcommit d11ec490287ed8d99589a6e92d49da41b2b779c4[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Fri Jul 23 13:18:44 2021 +0200
+
+    :wrench: Fix Warning.
+
+[33mcommit 76239a7dc4fad1e8bc4d240b08dcca2b6ff6ab56[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Fri Jul 23 12:56:12 2021 +0200
+
+    :tada: Add test History.
+
+[33mcommit f87c18932fcf4b125f310adefcd1b29d177dc676[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Thu Jul 22 11:20:56 2021 +0200
+
+    :memo: Remove comma before "that".
+
+[33mcommit 0d28a82308aae0429c7323cb3f89bbcc5ca37b9e[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Thu Jul 22 11:16:34 2021 +0200
+
+    :memo: Add a PR template.
+
+[33mcommit 347a4072466bcdf675a0ce50dba6c64f88c07097[m
+Author: Spataro <spat_lu@sc-050021l.intra.dlr.de>
+Date:   Tue Jul 20 15:55:21 2021 +0200
+
+    modify docker setup
+
+[33mcommit 5be90da555a9febf9466494af543870815b97183[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Tue Jul 20 15:51:42 2021 +0200
+
+    Delete sqlite database
+
+[33mcommit e10acc0ff6414aca715e9a771e155bf471e00a6d[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Tue Jul 20 15:50:23 2021 +0200
+
+    Add initial data
+
+[33mcommit 50ef88346c04a21b6f618557a655f61dbdebe374[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Tue Jul 20 15:47:22 2021 +0200
+
+    Update database models
+
+[33mcommit f3c67239a6dcc531ef66bf0506ba829863fd4034[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Tue Jul 20 15:04:04 2021 +0200
+
+    :tada: Add history.
+
+[33mcommit 58887b2ac5674570e637c41e5106a096fafd0c44[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Mon Jul 19 16:56:11 2021 +0200
+
+    :tada: Add history.
+
+[33mcommit 511c8d06e0a409b9077bcd6daf0a6a304c047d61[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Mon Jul 19 16:39:54 2021 +0200
+
+    :wrench: Details placeholder.
+
+[33mcommit 6c74f38ad3afe78d39a5d333b9da66b32d6ab69a[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Mon Jul 19 16:38:04 2021 +0200
+
+    :tada: Add history.
+
+[33mcommit d35c0ea3f68d6020f93410871d4068103c52be2a[m
+Merge: 99f0c2a f2a7fa8
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Fri Jul 16 14:46:50 2021 +0200
+
+    Merge pull request #44 from DLR-SC/feature/redux
+    
+    Feature/redux
+
+[33mcommit f2a7fa8ef49f9c8bae9c9a4a3e26cefb031a52fe[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Thu Jul 15 09:41:38 2021 +0200
+
+    :wrench: Remove commented out import.
+
+[33mcommit b1e7c7315524531fc3c7660e4ce0a4b9cde548c5[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Wed Jul 14 15:12:23 2021 +0200
+
+    :wrench: Update Tests.
+
+[33mcommit a441d6ca300064081dd2009425d533f65947ee0a[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Wed Jul 14 14:51:04 2021 +0200
+
+    :memo: Write documentation about how to use Redux in the frontend.
+
+[33mcommit 1adb3e37a8b154c903a83b6baf99f64f5ed87f2b[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Wed Jul 14 14:42:06 2021 +0200
+
+    :heavy_check_mark: Add tests for the new redux store.
+
+[33mcommit 6b40a37ba27867e6a9fc55b752339bc601a957c0[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Wed Jul 14 12:05:09 2021 +0200
+
+    :tada: Add redux store.
+
+[33mcommit 99f0c2a8d3d6faea65a5c380f90157b6dbe28875[m
+Merge: 1035c45 a4b947c
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Mon Jul 12 16:49:38 2021 +0200
+
+    Merge pull request #41 from DLR-SC/feature/improve-3rd-party-attributions
+    
+    Improve 3rd party attributions
+
+[33mcommit a4b947cb4e3bdf3e0e778996d2a91df254723e51[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Fri Jul 9 11:51:28 2021 +0200
+
+    :wrench: Simplify code.
+
+[33mcommit 58f62d3dbe02ecde93162d2e167a92a3173757c1[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Fri Jul 9 10:58:24 2021 +0200
+
+    :beetle: Fix spelling error in German translation.
+
+[33mcommit fcf5a7f129a67ee885f5972ce43799f3ab43d1df[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Fri Jul 9 10:44:28 2021 +0200
+
+    :beetle: Fix tests.
+
+[33mcommit 1035c455673efc83f5c13987e685129ee4ace207[m
+Merge: 0b46442 6a0cbfc
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Fri Jul 9 10:35:04 2021 +0200
+
+    Merge pull request #34 from DLR-SC/feature/sidebar
+    
+    Feature/sidebar
+
+[33mcommit 92f99984922ff40356052b479f658a9b8e77fba5[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Fri Jul 9 10:15:35 2021 +0200
+
+    :wrench: Single attribution items are now loaded lazily.
+
+[33mcommit 6a0cbfcdcecdd4c66d52cafe85ed84bc252af2a3[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Thu Jul 8 09:48:51 2021 +0200
+
+    :wrench: Add German translations.
+
+[33mcommit 83d9e066a0452e10a82e0a5febe102a7f504179e[m
+Merge: b92184d 0b46442
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Thu Jul 8 09:30:27 2021 +0200
+
+    Merge remote-tracking branch 'origin/main' into feature/sidebar
+    
+    # Conflicts:
+    #       frontend/public/locales/en/global.json5
+
+[33mcommit b92184dc00706c97b29c0ef38755749b003582e5[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Mon Jul 5 16:15:12 2021 +0200
+
+    :wrench: Update Json file.
+    
+    Co-authored-by: Jonas Gilg <jonas.gilg@dlr.de>
+
+[33mcommit f4d27185672b8653b69759b2fb64d13c645b98e9[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Mon Jul 5 16:14:05 2021 +0200
+
+    :wrench: Update tooltipText.
+
+[33mcommit c28c3241390ff154e696c9e71407d0f2ad6d65ca[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Mon Jul 5 16:06:30 2021 +0200
+
+    :truck: Update MapCountry.tsx.
+    
+    Co-authored-by: Jonas Gilg <jonas.gilg@dlr.de>
+
+[33mcommit bd7b8b56f7219bab45c394e2d62504d06cfcbc71[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Fri Jul 2 08:41:38 2021 +0200
+
+    :wrench: Change BEZ options.
+
+[33mcommit c9e0a16edcbe94c6da49a5aad74f51a69ebea2bc[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Fri Jul 2 08:39:14 2021 +0200
+
+    :wrench: Add more BEZ options.
+
+[33mcommit 2154ef77266aa55f74fa648f20dfba1d90d3d3f2[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Thu Jul 1 17:10:42 2021 +0200
+
+    :beetle: Fix import.
+
+[33mcommit 16b83886063d62870f370ffd42ee386bf47f766b[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Thu Jul 1 17:03:12 2021 +0200
+
+    :wrench: Change draggable propertie.
+
+[33mcommit 38b4e26f03a1afa17e0c088643a40b5224a6ba84[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Thu Jul 1 17:00:36 2021 +0200
+
+    :wrench: Add  internationalisation.
+
+[33mcommit 904d0f23efa7a22835051bacd4b49641253e5945[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Thu Jul 1 16:57:34 2021 +0200
+
+    :wrench: Add BEZ.
+
+[33mcommit ab7c2886b0053c2227836bb341c1b156ebf01d5c[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Thu Jul 1 16:54:16 2021 +0200
+
+    :wrench:  Add Internationalisation prefix BEZ.
+
+[33mcommit 25724447ad4da52c4df9e3c906ec6a39eb238928[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Wed Jun 30 15:27:49 2021 +0200
+
+    :beetle: Fix Interface Issue.
+
+[33mcommit 571bf43659ac3fab998072e239858cd6878fd762[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Wed Jun 30 15:19:24 2021 +0200
+
+    :wrench: Add new placeholders.
+
+[33mcommit 0b464427c8004639ab6289c756675713066c3dad[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Wed Jun 30 15:03:41 2021 +0200
+
+    :wrench: Add country placeholder.
+
+[33mcommit 38936c2672b63c0e90a7046831f8d39748a37189[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Wed Jun 30 14:49:19 2021 +0200
+
+    :wrench:Rename Historie.tsx to History.tsx
+
+[33mcommit cb557900a763c8c2d2aef3c236abeb20301b762f[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Wed Jun 30 14:44:28 2021 +0200
+
+    :beetle: Fix export default function.
+    
+    Co-authored-by: Jonas Gilg <jonas.gilg@dlr.de>
+
+[33mcommit 45a59d83b858eb2ac0f7a3762a1c31790fd652d8[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Wed Jun 30 14:39:58 2021 +0200
+
+    :wrench: Correct naming.
+    
+    Co-authored-by: Jonas Gilg <jonas.gilg@dlr.de>
+
+[33mcommit 64d04b12ef182efeca934a3baa60a50059e3f661[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Wed Jun 30 14:39:11 2021 +0200
+
+    :wrench: Correct naming.
+    
+    Co-authored-by: Jonas Gilg <jonas.gilg@dlr.de>
+
+[33mcommit 8cd77487250221812ecf426a94eb64f73a801eef[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Wed Jun 30 14:38:46 2021 +0200
+
+    :wrench: Correct naming.
+    
+    Co-authored-by: Jonas Gilg <jonas.gilg@dlr.de>
+
+[33mcommit a252030e604cb44baf729425a5cee6201fb4ff60[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Wed Jun 30 14:37:48 2021 +0200
+
+    :wrench: Correct component name.
+    
+    Co-authored-by: Jonas Gilg <jonas.gilg@dlr.de>
+
+[33mcommit 28a492048a2f88704f86ee497544b0ae742bd227[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Wed Jun 30 14:36:29 2021 +0200
+
+    :wrench: Correct interface name.
+    
+    Co-authored-by: Jonas Gilg <jonas.gilg@dlr.de>
+
+[33mcommit e407aed0766b2f13ed998d31bd792be7ebd03661[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Wed Jun 30 14:34:26 2021 +0200
+
+    :wrench: Correct component name.
+    
+    Co-authored-by: Jonas Gilg <jonas.gilg@dlr.de>
+
+[33mcommit d86410e1e9b7e4514374056e70a80942ed952f15[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Wed Jun 30 14:34:03 2021 +0200
+
+    :wrench: Correct component name.
+    
+    Co-authored-by: Jonas Gilg <jonas.gilg@dlr.de>
+
+[33mcommit 98969b73bf509aa98d8aeba99eff0efbb99a445f[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Wed Jun 30 14:33:34 2021 +0200
+
+    :wrench: Correct component name.
+    
+    Co-authored-by: Jonas Gilg <jonas.gilg@dlr.de>
+
+[33mcommit 884da8c6cecd49b27f0cc4163c6836da74053666[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Wed Jun 30 14:33:02 2021 +0200
+
+    :wrench: Correct component name.
+    
+    Co-authored-by: Jonas Gilg <jonas.gilg@dlr.de>
+
+[33mcommit f6413a16cd3020b850b5f44b07a5dbcdb9ca2ce1[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Wed Jun 30 14:32:21 2021 +0200
+
+    :wrench: Correct component name.
+    
+    Co-authored-by: Jonas Gilg <jonas.gilg@dlr.de>
+
+[33mcommit 1534faa3585aaa36545f1ccf5611c8922935833c[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Wed Jun 30 14:30:02 2021 +0200
+
+    :wrench: Correct spelling
+    
+    Co-authored-by: Jonas Gilg <jonas.gilg@dlr.de>
+
+[33mcommit 6f72fa0386db4f15409314cc7778eadda4c4b5d8[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Mon Jun 28 15:57:48 2021 +0200
+
+    :beetle: Update test files
+
+[33mcommit 65264dd3cb1d8ceee08d7d92bf505dfeb68bf84e[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Mon Jun 28 15:52:07 2021 +0200
+
+    :tada: Add Map geodata
+
+[33mcommit af0753f5775024b8e99334b41da508450cd22182[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Mon Jun 28 15:49:55 2021 +0200
+
+    :tada: Add new sidebar components
+
+[33mcommit 8181cacbf3f8731f356b891e43751f98a0e44b35[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Mon Jun 28 15:47:45 2021 +0200
+
+    :tada: Add map components and missing placeholders
+
+[33mcommit 789732051086349784fd0534ab62c48227b227b3[m
+Merge: 41d3931 9249f5f
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Fri Jun 25 14:08:41 2021 +0200
+
+    Merge pull request #31 from DLR-SC/feature/accessibility
+    
+    Add the accessibility dialog.
+
+[33mcommit 9249f5f3d0b8af50d78e1444cc0e14e7487df09a[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Fri Jun 25 14:06:08 2021 +0200
+
+    :beetle: Fix bad merge.
+
+[33mcommit 7901cd964a102ca6832387d10ac8617341fb96b2[m
+Merge: 4ee3912 41d3931
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Fri Jun 25 13:59:09 2021 +0200
+
+    Merge branch 'main' into feature/accessibility
+
+[33mcommit 41d393128ef6439e8b1a2c2c0611911d6b4b809e[m
+Merge: f75eea6 57a6a04
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Fri Jun 25 13:57:50 2021 +0200
+
+    Merge pull request #32 from DLR-SC/feature/3rd-party-attribution
+    
+    Feature/3rd party attribution
+
+[33mcommit d2307c37b2af311baf4b4c4a0fb20b750c55fb4b[m
+Author: Luca Spataro <luca@spataro.de>
+Date:   Fri Jun 25 10:54:11 2021 +0200
+
+    Add Django backend and database model
+
+[33mcommit 4ee39129b3461a9e8c9944d9777fda80a032a1aa[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Tue Jun 22 09:25:39 2021 +0200
+
+    :wrench: Dialogs are now loaded lazily.
+
+[33mcommit 57a6a04dbc3463c8fe448c82389f7f5ecc6d0630[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Mon Jun 21 17:02:21 2021 +0200
+
+    :wrench: Dialogs are now loaded lazily.
+
+[33mcommit 7a4c399f5a0a63762f89d117de28fafb4e6b2e88[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Mon Jun 21 16:25:57 2021 +0200
+
+    :heavy_check_mark: Add test for the attribution dialog.
+
+[33mcommit b610636f1dfe448e771faf0f74597a63dfb14da6[m
+Merge: 1b6444f f75eea6
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Mon Jun 21 13:05:39 2021 +0200
+
+    Merge remote-tracking branch 'origin/main' into feature/3rd-party-attribution
+
+[33mcommit 1b6444ff08e255f16eb3f63897fdbb8aa118b985[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Mon Jun 21 13:05:12 2021 +0200
+
+    :wrench: Improve the attribution dialogs performance and visuals.
+
+[33mcommit c67c695366a518226292fcc9c9f6dc4645c45a19[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Mon Jun 21 09:27:36 2021 +0200
+
+    :tada: Add the attribution dialog.
+
+[33mcommit f75eea6484c29c668ef545fc229afd2a9e995b9e[m
+Merge: abbb62c b9b0c9c
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Fri Jun 18 12:59:49 2021 +0200
+
+    Merge pull request #30 from DLR-SC/feature/privacy-policy
+    
+    Feature/privacy policy
+
+[33mcommit 8fd9f87be0c40137fb289f236406f47200078e21[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Wed Jun 16 15:55:30 2021 +0200
+
+    :tada: Add the accessibility dialog.
+
+[33mcommit b9b0c9c9d9bf6468e27684e139cb52cb401cb3b0[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Wed Jun 16 11:17:57 2021 +0200
+
+    :tada: Add the privacy policy dialog.
+
+[33mcommit 9d0e5c5ba17416cb8d7e86ef75e31a9bde6f4132[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Mon Jun 14 16:33:23 2021 +0200
+
+    :tada: Add English privacy policy text.
+
+[33mcommit 1d64daa8d51ef91e8710881c5f7c7b25d00f7303[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Mon Jun 14 15:18:53 2021 +0200
+
+    :tada: Add german privacy policy text.
+
+[33mcommit abbb62c9e362f4995872d635f989543bf048e8ad[m
+Merge: 24fee11 c90fdf6
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Thu Jun 10 16:25:41 2021 +0200
+
+    Merge pull request #23 from DLR-SC/feature/better-pages
+    
+    Feature/better pages
+
+[33mcommit c90fdf63ac7544757c14960ccb6fa8cd8a48216c[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Thu Jun 10 16:20:14 2021 +0200
+
+    :wrench: Add key to ci cache.
+
+[33mcommit 0e52c8135ef4c6b7910d5faeb314a63b408b73c6[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Thu Jun 10 16:11:39 2021 +0200
+
+    :beetle: Try fixing locales.
+
+[33mcommit 525ac2f1924afeec27b036d9c0ca488da622fea4[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Thu Jun 10 16:03:13 2021 +0200
+
+    :beetle: Fix folder stuff again.
+
+[33mcommit 90e0b5b18d133ae073f73eb9fa921d76658b2d83[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Thu Jun 10 16:01:51 2021 +0200
+
+    :wrench: Ensure that only the branch folder gets updated accordingly.
+
+[33mcommit 36328086fbe284d6d53fc4a0d12e01cfa751d1b5[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Thu Jun 10 15:54:45 2021 +0200
+
+    :beetle: Docker image needs to be non-interactive.
+
+[33mcommit 6ba0751efd3308ac9d61c516c888b32677a8cd6b[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Thu Jun 10 15:51:18 2021 +0200
+
+    :beetle: Fix wrong index.html location for pages.
+
+[33mcommit 235750981be8360b844684761331884b212ff6ae[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Thu Jun 10 15:50:35 2021 +0200
+
+    :wrench: Improve pages, to list all available pages from the root.
+
+[33mcommit 8bf5cff6edf59b625f404575ad7bce95ca720b03[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Thu Jun 10 15:24:29 2021 +0200
+
+    :beetle: Fix gitlab-ci config file name.
+
+[33mcommit 24fee1128f1b033582ba023327fa2b35dd2c89eb[m
+Merge: 1404218 0a90f22
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Thu Jun 10 14:13:17 2021 +0200
+
+    Merge pull request #21 from DLR-SC/feature/imprint
+    
+    Add Imprint
+
+[33mcommit 0a90f22bfa63a5dac3185a9a229334fc503c2fb1[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Thu Jun 10 14:10:03 2021 +0200
+
+    :wrench: Rename TopBar file to index.
+
+[33mcommit c89415a967deaebf326832beb726751846250cfb[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Thu Jun 10 12:07:30 2021 +0200
+
+    :beetle: Fix @material-ui/lab dependency.
+
+[33mcommit 6aec6ac589bd3e205bf1b7191b14456858967c98[m
+Merge: aa975f7 1404218
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Thu Jun 10 11:59:54 2021 +0200
+
+    Merge remote-tracking branch 'origin/main' into feature/imprint
+
+[33mcommit aa975f7c1dd787aada2a254db8d2f7185b09460f[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Thu Jun 10 11:58:45 2021 +0200
+
+    :tada: Add imprint dialog.
+
+[33mcommit 140421868f9737416b3799ace6b3b76174b55f47[m
+Merge: dbbb973 1118058
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Thu Jun 10 11:02:14 2021 +0200
+
+    Merge pull request #19 from DLR-SC/docker/ci
+    
+    Add docker file
+
+[33mcommit dbbb97335b8be7c9196c78c1b870bde4a85fd7c6[m
+Merge: b504b7b a409978
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Thu Jun 10 11:02:03 2021 +0200
+
+    Merge pull request #20 from DLR-SC/ci
+    
+    Add ci
+
+[33mcommit a40997850188139b559b67c4809d3681707dfe21[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Thu Jun 10 11:01:23 2021 +0200
+
+    Update gitlab-ci.yml
+
+[33mcommit 9422650cd4b8b3d9338d34ef883fae97aac3dfef[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Thu Jun 10 11:01:07 2021 +0200
+
+    Update gitlab-ci.yml
+
+[33mcommit c9eeb45d3038c4876f774423f443b44271842232[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Thu Jun 10 10:09:12 2021 +0200
+
+    Remove echo .
+    
+    Co-authored-by: Jonas Gilg <jonas.gilg@dlr.de>
+
+[33mcommit 70be95e9ee7ae778259f5fdfc4ff8e6fc7c0523e[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Thu Jun 10 10:08:37 2021 +0200
+
+    Remove comment .
+    
+    Co-authored-by: Jonas Gilg <jonas.gilg@dlr.de>
+
+[33mcommit 5bdc1eb6417419b014ee1b544e06888771811944[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Thu Jun 10 10:05:19 2021 +0200
+
+    Add pipeline description .
+
+[33mcommit 24d38ed6852e705447fa60b9ddd5e2246256987c[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Thu Jun 10 09:54:51 2021 +0200
+
+    Update gitlab-ci.yml
+
+[33mcommit d7af0221d5f5ba6617e59bcc1440754551093210[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Thu Jun 10 09:47:26 2021 +0200
+
+    Update gitlab-ci.yml
+    
+    Co-authored-by: Jonas Gilg <jonas.gilg@dlr.de>
+
+[33mcommit 00c867be4ac1ddf948a170c844535d030a9177d6[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Thu Jun 10 09:47:14 2021 +0200
+
+    Update gitlab-ci.yml
+    
+    Co-authored-by: Jonas Gilg <jonas.gilg@dlr.de>
+
+[33mcommit 892370b77cc07e12b423747dc030a9c722b97baa[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Wed Jun 9 16:36:43 2021 +0200
+
+    Add ci
+
+[33mcommit 11180585a9c69618e57321bb169ea6265893ee27[m
+Author: SelmaDM <84981083+SelmaDM@users.noreply.github.com>
+Date:   Wed Jun 9 16:34:04 2021 +0200
+
+    Add docker
+
+[33mcommit b504b7b52ec0cda671f2031098f14b97903a9932[m
+Merge: 77c1fa9 31f8a9b
+Author: Luca Spataro <luca@spataro.de>
+Date:   Mon May 31 09:07:22 2021 +0200
+
+    Merge pull request #12 from DLR-SC/feature/ci
+    
+    Feature/ci
+
+[33mcommit 77c1fa99e49440e0c18edbc1a5befacb8eab3c8c[m
+Merge: baf1220 15078ad
+Author: Luca Spataro <luca@spataro.de>
+Date:   Mon May 31 09:06:48 2021 +0200
+
+    Merge pull request #11 from DLR-SC/feature/i18n
+    
+    :tada: Add i18n support.
+
+[33mcommit 31f8a9b3cf3dbcefe61f34dbd729e6c673112149[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Mon May 17 16:20:12 2021 +0200
+
+    :green_heart: Test CI.
+
+[33mcommit 11714b5a81a2a2925f336d2e77dd9dc3c8fce199[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Mon May 17 16:03:17 2021 +0200
+
+    :green_heart: Test CI.
+
+[33mcommit 0c63cfcd704029c4ba9879ed004e4861d94dc89b[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Mon May 17 15:55:55 2021 +0200
+
+    :green_heart: Test CI.
+
+[33mcommit 9e8ec7bc059601fea63949ecff0721438f81917a[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Mon May 17 15:34:51 2021 +0200
+
+    :green_heart: Test CI.
+
+[33mcommit de6b5a528804bae2c290a558a4aeab8350ca905d[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Mon May 17 15:30:38 2021 +0200
+
+    :green_heart: Test CI.
+
+[33mcommit b8232365898e83e21a75cb3ace0c5f0e541dc230[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Mon May 17 15:24:02 2021 +0200
+
+    :green_heart: Test CI.
+
+[33mcommit 2a9f35fb875846117cbb2dd33ada45a5c9b55c35[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Mon May 17 15:22:02 2021 +0200
+
+    :green_heart: Test CI.
+
+[33mcommit a6efb2215a822c5d96c77157eaf6746e66b3c4c4[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Mon May 17 15:19:51 2021 +0200
+
+    :green_heart: Test CI.
+
+[33mcommit 15078adf4f4c266585ad8b84af45a8c79019069e[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Mon May 17 14:51:46 2021 +0200
+
+    :tada: Add i18n support.
+
+[33mcommit baf1220f5d67c8d2739b57989e496ffec2245587[m
+Merge: 4c8c4c0 4eaf8cc
+Author: Luca Spataro <luca@spataro.de>
+Date:   Thu May 6 16:21:42 2021 +0200
+
+    Merge pull request #9 from DLR-SC/feature/docs
+    
+    Feature/docs
+
+[33mcommit 4eaf8cc3c83945e5d54c5a7f1f82cf1e537d702b[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Mon May 3 14:24:06 2021 +0200
+
+    :memo: More documentation.
+
+[33mcommit b735840a541ea466ef9efef0b518ee580e0f06d5[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Mon May 3 13:33:34 2021 +0200
+
+    :beetle: Fix layout.
+
+[33mcommit d00baec67768e1d4e6b2fb2416718ed475c561bc[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Fri Apr 30 17:08:52 2021 +0200
+
+    :memo: More documentation and changes to code to reflect the documentation.
+
+[33mcommit 28a651026325c44d5e4cd166c9616384b7217526[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Wed Apr 14 16:31:28 2021 +0200
+
+    :memo: Start writing docs.
+
+[33mcommit 4c8c4c0137ebf750e1c6413bcb6935ffe0c9ea4c[m
+Merge: f740800 5345c89
+Author: Luca Spataro <luca@spataro.de>
+Date:   Fri Apr 9 15:40:26 2021 +0200
+
+    Merge pull request #8 from DLR-SC/feature/project-setup
+    
+    Feature/project setup
+
+[33mcommit 5345c89cec5bdf93afdd95f1e03943cf79f0e80c[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Thu Apr 8 12:18:49 2021 +0200
+
+    :tada: Create the initial setup for the project.
+
+[33mcommit bdf16d941abf28d1ece302747454e4933b746989[m
+Author: Jonas Gilg <jonas.gilg@dlr.de>
+Date:   Tue Mar 23 17:33:31 2021 +0100
+
+    :hammer: Start project setup.
+
+[33mcommit f74080089053d39c2a0b920e7d0cb1f39508be66[m
+Author: mknaranja <62713180+mknaranja@users.noreply.github.com>
+Date:   Thu Feb 25 16:21:45 2021 +0100
+
+    Update README.md
+
+[33mcommit c7f953a358ebb6bda1f22e0f26348acbc6f80bfd[m
+Author: mknaranja <62713180+mknaranja@users.noreply.github.com>
+Date:   Thu Feb 25 16:20:42 2021 +0100
+
+    Initial commit

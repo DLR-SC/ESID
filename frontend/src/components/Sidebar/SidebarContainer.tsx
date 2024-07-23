@@ -145,6 +145,9 @@ export default function MapContainer() {
         background: theme.palette.background.default,
       }}
     >
+       <Container disableGutters sx={{flexGrow: 1}}>
+        <SidebarTabs />
+      </Container>
       <Box id='sidebar-map-search-bar-wrapper'>
         <SearchBar
           data={searchBarData}
@@ -225,9 +228,7 @@ export default function MapContainer() {
           </Grid>
         </LoadingContainer>
       </Box>
-      <Container disableGutters sx={{flexGrow: 1}}>
-        <SidebarTabs />
-      </Container>
+     
     </Stack>
   );
 }
