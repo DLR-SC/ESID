@@ -1,0 +1,51 @@
+# SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+# SPDX-License-Identifier: CC0-1.0
+
+name: Epic
+description: Create a new epic
+title: "[EPIC]: "
+projects: "DLR-SC/5"
+labels: ["Epic"]
+body:
+  - type: checkboxes
+    id: pre-steps
+    attributes:
+      label: Things to do durng epic creation
+      options:
+        - label: Create a Label with a short name for this epic (`Epic:ShortName`) with the color `#4660F9` and add the label to this issue
+          required: true
+        - label: Add this Issue to the "ESID-Frontend" Project board
+          required: true
+        - label: Crate a branch for this epic (`feature/short-name`) and add it in the development field
+          required: true
+  - type: textarea
+    id: subtasks
+    attributes:
+      label: Related Issues/Tasks
+      value: |
+        <!--
+        Add a checkbox list (- [ ]) with the tasks needed for the Epic.
+        replace them with issue links (#<issue number>) when the issues are created.
+        i.e.:
+        - [ ] Do thing for epic
+        - [ ] #110
+        -->
+        ---
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: Details
+      value: |
+        <!-- Detailed description of the Epic, its requirements, and goals -->
+        
+        ---
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+      value: |
+        <!-- Notes on things that are out of scope of the Epic but may spawn new issues at a later date -->

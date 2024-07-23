@@ -21,6 +21,7 @@ import i18n from './util/i18n';
 import {MUILocalization} from './components/shared/MUILocalization';
 import {DataProvider} from 'DataContext';
 
+import AuthProvider from './components/AuthProvider';
 /**
  * This is the root element of the React application. It divides the main screen area into the three main components.
  * The top bar, the sidebar and the main content area.
@@ -29,33 +30,35 @@ export default function App(): JSX.Element {
   return (
     <Suspense fallback='loading'>
       <Provider store={Store}>
-        <ThemeProvider theme={Theme}>
-          <PersistGate loading={null} persistor={Persistor}>
-            <I18nextProvider i18n={i18n}>
-              <MUILocalization>
-                <DataProvider>
-                  <Initializer />
-                  <Box id='app' display='flex' flexDirection='column' sx={{height: '100%', width: '100%'}}>
-                    <TopBar />
-                    <Box
-                      id='app-content'
-                      sx={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        flexGrow: 1,
-                        alignItems: 'stretch',
-                        width: '100%',
-                      }}
-                    >
-                      <SidebarContainer />
-                      <MainContent />
+        <AuthProvider>
+          <ThemeProvider theme={Theme}>
+            <PersistGate loading={null} persistor={Persistor}>
+              <I18nextProvider i18n={i18n}>
+                <MUILocalization>
+                  <DataProvider>
+                    <Initializer />
+                    <Box id='app' display='flex' flexDirection='column' sx={{height: '100%', width: '100%'}}>
+                      <TopBar />
+                      <Box
+                        id='app-content'
+                        sx={{
+                          display: 'flex',
+                          flexDirection: 'row',
+                          flexGrow: 1,
+                          alignItems: 'stretch',
+                          width: '100%',
+                        }}
+                      >
+                        <SidebarContainer />
+                        <MainContent />
+                      </Box>
                     </Box>
-                  </Box>
-                </DataProvider>
-              </MUILocalization>
-            </I18nextProvider>
-          </PersistGate>
-        </ThemeProvider>
+                  </DataProvider>
+                </MUILocalization>
+              </I18nextProvider>
+            </PersistGate>
+          </ThemeProvider>
+        </AuthProvider>
       </Provider>
     </Suspense>
   );
