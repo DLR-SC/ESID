@@ -29,12 +29,12 @@ import {
 import {CaseDataByNode} from 'types/caseData';
 import {Simulations, SimulationModel, SimulationDataByNode, SimulationMetaData} from 'types/scenario';
 import {Dictionary} from 'util/util';
-import data from '../assets/lk_germany_reduced.geojson?url';
+import data from '../../assets/lk_germany_reduced.geojson?url';
 import {GeoJSON, GeoJsonProperties} from 'geojson';
-import cologneDistricts from '../assets/stadtteile_cologne.geojson?url';
+import cologneDistricts from '../../assets/stadtteile_cologne.geojson?url';
 import {District} from 'types/cologneDistricts';
-import searchbarMapData from '../assets/lk_germany_reduced_list.json?url';
-import searchbarCologneData from '../assets/stadtteile_cologne_list.json';
+import searchbarMapData from '../../assets/lk_germany_reduced_list.json?url';
+import searchbarCologneData from '../../assets/stadtteile_cologne_list.json';
 import {useTranslation} from 'react-i18next';
 import {GroupResponse} from 'types/group';
 import {color} from '@amcharts/amcharts5/.internal/core/util/Color';

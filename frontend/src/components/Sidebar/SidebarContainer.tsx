@@ -15,7 +15,7 @@ import LoadingContainer from '../shared/LoadingContainer';
 import {NumberFormatter} from 'util/hooks';
 import HeatMap from './MapComponents/HeatMap';
 import HeatLegend from './MapComponents/HeatLegend';
-import {DataContext} from 'DataContext';
+import {DataContext} from 'data_sockets/DataContext';
 import SidebarTabs from './SidebarTabs';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
@@ -145,9 +145,6 @@ export default function MapContainer() {
         background: theme.palette.background.default,
       }}
     >
-       <Container disableGutters sx={{flexGrow: 1}}>
-        <SidebarTabs />
-      </Container>
       <Box id='sidebar-map-search-bar-wrapper'>
         <SearchBar
           data={searchBarData}
@@ -228,7 +225,9 @@ export default function MapContainer() {
           </Grid>
         </LoadingContainer>
       </Box>
-     
+      <Container disableGutters sx={{flexGrow: 1}}>
+        <SidebarTabs />
+      </Container>
     </Stack>
   );
 }
