@@ -15,7 +15,7 @@ import LoadingContainer from '../shared/LoadingContainer';
 import {NumberFormatter} from 'util/hooks';
 import HeatMap from './MapComponents/HeatMap';
 import HeatLegend from './MapComponents/HeatLegend';
-import {DataContext} from 'DataContext';
+import {DataContext} from 'data_sockets/DataContext';
 import SidebarTabs from './SidebarTabs';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
