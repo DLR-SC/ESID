@@ -86,4 +86,5 @@
   'no-data': 'Keine Daten',
   'loki-logo': 'LOKI-Logo',
   okay: 'Okay',
+  yAxisLabel: 'Wert',
 }

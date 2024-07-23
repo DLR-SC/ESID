@@ -4,8 +4,7 @@
 import React from 'react';
 import {describe, expect, it, vi} from 'vitest';
 import {render, fireEvent, screen} from '@testing-library/react';
-
-import ConfirmDialog from '../../../components/shared/ConfirmDialog';
+import ConfirmDialog from 'components/shared/ConfirmDialog';
 
 describe('ConfirmDialog', () => {
   it('renders the correct title and text', () => {

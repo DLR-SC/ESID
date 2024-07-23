@@ -13,7 +13,6 @@ import Box from '@mui/system/Box';
 import {useAppSelector} from 'store/hooks';
 import {AuthContext, IAuthContext} from 'react-oauth2-code-pkce';
 
-// Let's import pop-ups only once they are opened.
 const ChangelogDialog = React.lazy(() => import('./PopUps/ChangelogDialog'));
 const ImprintDialog = React.lazy(() => import('./PopUps/ImprintDialog'));
 const PrivacyPolicyDialog = React.lazy(() => import('./PopUps/PrivacyPolicyDialog'));
