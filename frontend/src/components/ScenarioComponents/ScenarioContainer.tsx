@@ -15,7 +15,7 @@ import {
   toggleCompartmentExpansion,
 } from 'store/DataSelectionSlice';
 import {Dictionary, dateToISOString} from 'util/util';
-import {DataContext} from 'DataContext';
+import {DataContext} from 'data_sockets/DataContext';
 import {ScrollSync} from 'react-scroll-sync';
 import {Scenario, setCompartments, setScenarios} from 'store/ScenarioSlice';
 import {useBoundingclientrectRef} from 'rooks';
