@@ -11,6 +11,7 @@ export interface PandemosFilter {
   activities?: number[];
   originTypes?: number[];
   destinationTypes?: number[];
+  infectionStates?: number[];
 }
 
 const initialState: PandemosFilter = {};
@@ -100,6 +101,20 @@ export const PandemosFilterSlice = createSlice({
         state.destinationTypes = undefined;
       }
     },
+    /**
+     * Set selected infection state(s).
+     * Accepts single number or a list of numbers.
+     * No parameters to reset selection.
+     */
+    selectInfectionStates(state, action: PayloadAction<{infectionStates?: number | number[]}>) {
+      if (action.payload.infectionStates) {
+        state.infectionStates = [];
+        state.infectionStates.concat(action.payload.infectionStates);
+      } else {
+        // reset filter if parameter is undefined
+        state.infectionStates = undefined;
+      }
+    },
   },
 });
 
@@ -110,5 +125,6 @@ export const {
   selectActivities,
   selectOriginTypes,
   selectDestinationTypes,
+  selectInfectionStates,
 } = PandemosFilterSlice.actions;
 export default PandemosFilterSlice.reducer;
