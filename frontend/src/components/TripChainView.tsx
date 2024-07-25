@@ -12,25 +12,25 @@ import {
 } from '../data_sockets/PandemosContext';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import {Card, Chip, List, ListItem, ListItemText} from '@mui/material';
+import {Card, Chip, List, ListItem} from '@mui/material';
 import Divider from '@mui/material/Divider';
 
 function TripChainTransport(props: {modeOfTransport: string}): JSX.Element {
-  return <Chip label={<Typography sx={{fontSize: '14pt'}}>{props.modeOfTransport}</Typography>} variant='outlined' />;
+  return <Chip label={<Typography sx={{fontSize: '14px'}}>{props.modeOfTransport}</Typography>} variant='outlined' />;
 }
 
 function SimpleTripChain(props: {tripChain: Array<Trip>}): JSX.Element {
   return (
-    <Box display='flex' flexDirection='row' alignItems='center' margin='6px'>
-      <Card sx={{padding: '6px'}}>
-        <Typography sx={{fontSize: '20pt'}}>{locationNames[0]}</Typography>
+    <Box display='flex' flexDirection='row' alignItems='center' margin='4px'>
+      <Card sx={{padding: '4px'}}>
+        <Typography sx={{fontSize: '20px'}}>{locationNames[0]}</Typography>
       </Card>
       {props.tripChain.map((trip) => {
         return (
           <>
             <Box key={trip.trip_id} display='flex' flexDirection='row' alignItems='center'>
               <Box alignSelf='flex-start' display='flex' flexDirection='column' alignItems='center'>
-                <Typography sx={{marginX: '6px'}}>{infectionStateNames[trip.infection_state]}</Typography>
+                <Typography sx={{marginX: '4px'}}>{infectionStateNames[trip.infection_state]}</Typography>
                 <Divider orientation='horizontal' sx={{width: '100%'}} />
                 <Typography sx={{visibility: 'hidden'}}>{infectionStateNames[trip.infection_state]}</Typography>
               </Box>
@@ -40,13 +40,13 @@ function SimpleTripChain(props: {tripChain: Array<Trip>}): JSX.Element {
                   {activityNames[trip.activity]}
                 </Typography>
                 <Divider orientation='horizontal' sx={{width: '100%'}} />
-                <Typography sx={{marginX: '6px'}} variant='caption'>
+                <Typography sx={{marginX: '4px'}} variant='caption'>
                   {activityNames[trip.activity]}
                 </Typography>
               </Box>
             </Box>
-            <Card sx={{margin: '0px', padding: '6px'}}>
-              <Typography sx={{fontSize: '20pt'}}>{locationNames[0]}</Typography>
+            <Card sx={{margin: '0px', padding: '4px'}}>
+              <Typography sx={{fontSize: '20px'}}>{locationNames[0]}</Typography>
             </Card>
           </>
         );
@@ -55,41 +55,6 @@ function SimpleTripChain(props: {tripChain: Array<Trip>}): JSX.Element {
   );
 }
 
-/*
-function TripChain(props: {tripChain: Array<Trip>; showTime?: boolean}): JSX.Element {
-  const showTime = props.showTime ?? false;
-
-  return (
-    <Timeline>
-      {props.tripChain.map((trip) => {
-        return (
-          <TimelineItem key={trip.trip_id}>
-            <TimelineOppositeContent sx={{m: 'auto 0'}} align='right' variant='body2' color='text.secondary'>
-              <Typography>{transportNames[trip.transport_mode]}</Typography>
-              {showTime
-                ? (() => {
-                  const date = new Date();
-                  date.setSeconds(trip.end_time);
-                  return date.toLocaleTimeString();
-                })()
-                : null}
-            </TimelineOppositeContent>
-            <TimelineSeparator>
-              <TimelineConnector />
-              <TimelineDot>{infectionStateNames[trip.infection_state]}</TimelineDot>
-              <TimelineConnector />
-            </TimelineSeparator>
-            <TimelineContent sx={{m: 'auto 0'}}>
-              <Typography>{activityNames[trip.activity]}</Typography>
-            </TimelineContent>
-          </TimelineItem>
-        );
-      })}
-    </Timeline>
-  );
-}
-*/
-
 export default function TripChainView(): JSX.Element {
   const context = useContext(PandemosContext);
 
@@ -97,11 +62,11 @@ export default function TripChainView(): JSX.Element {
     <List>
       {context.tripChainsByOccurrence?.map((tc) => {
         return (
-          <ListItem key={tc[0]} divider disablePadding>
-            <Typography fontWeight='bold' sx={{width: '70px', textAlign: 'right'}}>
+          <ListItem key={tc[0]} divider dense>
+            <Typography fontWeight='bold' sx={{minWidth: '70px', textAlign: 'right'}}>
               {tc.length}x
             </Typography>
-            <Divider sx={{margin: '6px'}} orientation='vertical' flexItem />
+            <Divider sx={{margin: '4px'}} orientation='vertical' flexItem />
             <SimpleTripChain tripChain={context.tripChains?.get(tc[0]) ?? []} />
           </ListItem>
         );

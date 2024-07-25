@@ -38,8 +38,7 @@ export default function App(): JSX.Element {
                 <DataProvider>
                   <PandemosProvider>
                     <Initializer />
-                    <TripChainView />
-                    {/*<Box id='app' display='flex' flexDirection='column' sx={{height: '100%', width: '100%'}}>
+                    <Box id='app' display='flex' flexDirection='column' sx={{height: '100vh', width: '100vw'}}>
                       <TopBar />
                       <Box
                         id='app-content'
@@ -54,7 +53,7 @@ export default function App(): JSX.Element {
                         <SidebarContainer />
                         <MainContent />
                       </Box>
-                    </Box>*/}
+                    </Box>
                   </PandemosProvider>
                 </DataProvider>
               </MUILocalization>
