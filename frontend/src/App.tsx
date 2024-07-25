@@ -21,6 +21,7 @@ import i18n from './util/i18n';
 import {MUILocalization} from './components/shared/MUILocalization';
 import {DataProvider} from 'data_sockets/DataContext';
 import {PandemosProvider} from 'data_sockets/PandemosContext';
+import TripChainView from './components/TripChainView';
 
 /**
  * This is the root element of the React application. It divides the main screen area into the three main components.
@@ -37,7 +38,8 @@ export default function App(): JSX.Element {
                 <DataProvider>
                   <PandemosProvider>
                     <Initializer />
-                    <Box id='app' display='flex' flexDirection='column' sx={{height: '100%', width: '100%'}}>
+                    <TripChainView />
+                    {/*<Box id='app' display='flex' flexDirection='column' sx={{height: '100%', width: '100%'}}>
                       <TopBar />
                       <Box
                         id='app-content'
@@ -52,7 +54,7 @@ export default function App(): JSX.Element {
                         <SidebarContainer />
                         <MainContent />
                       </Box>
-                    </Box>
+                    </Box>*/}
                   </PandemosProvider>
                 </DataProvider>
               </MUILocalization>

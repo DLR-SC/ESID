@@ -173,14 +173,6 @@ export const PandemosProvider = ({children}: {children: React.ReactNode}) => {
 
     const sortedTrips = [...tripMap.values()].sort((a, b) => b.length - a.length);
     setTripChainsByOccurrence(sortedTrips);
-
-    // TODO: Just print out the top 10 trip chains.
-    for (const chains of sortedTrips.slice(0, 10)) {
-      if (locations && chains.length > 0) {
-        console.log(chains.length);
-        printTripChain(tripChains.get(chains[0])!, locations.all());
-      }
-    }
   }, [getLocation, locations, trips]);
 
   return (
@@ -198,31 +190,31 @@ export const PandemosProvider = ({children}: {children: React.ReactNode}) => {
   );
 };
 
-const locationNames: Record<number, string> = {
+export const locationNames: Record<number, string> = {
   0: '🏡', // Home
   1: '🏫', // School
   2: '🏭/🏢', // Work
-  3: '💃', // Social Event
-  4: '🛒', // Shopping
-  5: '🏥🤒', // Hospital
-  6: '🏥🤮', // ICU
+  3: '🏟', // Social Event
+  4: '🏪', // Shopping
+  5: '🏥❗', // Hospital
+  6: '🏥‼', // ICU
   7: '🚘', // Car
   8: '⛲', // Public
   9: '🚍', // Transport
   10: '⚰', // Cemetery
 };
 
-const transportNames: Record<number, string> = {
+export const transportNames: Record<number, string> = {
   0: '🚴‍♀️', // Bike
-  1: '🚘D', // Car (Driver)
-  2: 'P🚘', // Car (Passenger)
+  1: '🚘👤', // Car (Driver)
+  2: '🚘👥', // Car (Passenger)
   3: '🚍', // Bus
   4: '🚶‍♀️', // Walking
-  5: 'Other', // Other
+  5: '🛸', // Other
   6: '❓', // Unknown
 };
 
-const activityNames: Record<number, string> = {
+export const activityNames: Record<number, string> = {
   0: 'Workplace',
   1: 'Education',
   2: 'Shopping',
@@ -233,20 +225,13 @@ const activityNames: Record<number, string> = {
   7: 'Unknown',
 };
 
-function printTripChain(tripChain: Array<Trip>, locations: Readonly<Array<Location>>) {
-  const getLocation = (id: number) => {
-    return locationNames[locations.find((location) => location.location_id === id)?.location_type ?? -1] ?? 'unknown';
-  };
-
-  console.log(`Agent: ${tripChain[0].agent_id}, Trips: ${tripChain.length}`);
-  const chainString = tripChain.reduce((previousValue: string, trip: Trip) => {
-    return (
-      previousValue +
-      ` —(${transportNames[trip.transport_mode]})⇾ ` +
-      getLocation(trip.end_location) +
-      ` [${activityNames[trip.activity]}]`
-    );
-  }, getLocation(tripChain[0].start_location));
-
-  console.log(chainString);
-}
+export const infectionStateNames: Record<number, string> = {
+  0: '🙂', // Susceptible
+  1: '🤔', // Infected with no symptoms
+  2: '🤧', // Infected with symptoms
+  3: '🤒', // Infected with severe symptoms
+  4: '🤮', // Infected with critical symptoms
+  5: '😀', // Recovered
+  6: '💀', // Dead
+  7: '❓', // Unknown
+};
