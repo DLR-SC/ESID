@@ -6,7 +6,10 @@ import {TourType} from '../types/tours';
 
 export interface UserOnboarding {
   tours: Record<TourType, boolean | null>;
+  toursToShow: TourType | null;
   showTooltip: boolean;
+  showModal: boolean;
+  showPopover: boolean;
 }
 
 const initialState: UserOnboarding = {
@@ -16,7 +19,10 @@ const initialState: UserOnboarding = {
     lineChart: null,
     filter: null,
   },
+  toursToShow: null,
   showTooltip: false,
+  showModal: true,
+  showPopover: false,
 };
 
 /**
@@ -30,12 +36,22 @@ export const userOnboardingSlice = createSlice({
     setTourCompleted(state, action: PayloadAction<{tour: TourType; completed: boolean}>) {
       state.tours[action.payload.tour] = action.payload.completed;
     },
+    setToursToShow(state, action: PayloadAction<TourType | null>) {
+      state.toursToShow = action.payload;
+    },
     setShowTooltip(state, action: PayloadAction<boolean>) {
       state.showTooltip = action.payload;
+    },
+    setModalTour(state, action: PayloadAction<boolean>) {
+      state.showModal = action.payload;
+    },
+    setShowPopover(state, action: PayloadAction<boolean>) {
+      state.showPopover = action.payload;
     },
   },
 });
 
-export const {setTourCompleted, setShowTooltip} = userOnboardingSlice.actions;
+export const {setTourCompleted, setToursToShow, setShowTooltip, setModalTour, setShowPopover} =
+  userOnboardingSlice.actions;
 
 export default userOnboardingSlice.reducer;
