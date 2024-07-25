@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+//SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
 import React, {useState, useEffect, useRef, useCallback, useMemo, useContext} from 'react';
@@ -145,89 +145,11 @@ export default function MapContainer() {
         background: theme.palette.background.default,
       }}
     >
-      <Box id='sidebar-map-search-bar-wrapper'>
-        <SearchBar
-          data={searchBarData}
-          sortProperty={'GEN'}
-          optionLabel={optionLabel}
-          autoCompleteValue={{
-            RS: selectedArea?.RS as string,
-            GEN: selectedArea?.GEN as string,
-            BEZ: selectedArea?.BEZ as string,
-            id: selectedArea?.id as number,
-          }}
-          onChange={(_event, option) => {
-            if (option) {
-              if (option.RS && option.GEN && option.BEZ) setSelectedArea(option);
-              else setSelectedArea(defaultValue);
-            }
-          }}
-          placeholder={`${selectedArea?.GEN}${selectedArea?.BEZ ? ` (${t(`BEZ.${selectedArea?.BEZ}`)})` : ''}`}
-          optionEqualProperty='RS'
-          valueEqualProperty='RS'
-        />
-      </Box>
-      <Box id='sidebar-map-wrapper'>
-        <LoadingContainer show={areMapValuesFetching || longLoad} overlayColor={theme.palette.background.default}>
-          <HeatMap
-            selectedArea={selectedArea}
-            setSelectedArea={setSelectedArea}
-            aggregatedMax={aggregatedMax}
-            setAggregatedMax={setAggregatedMax}
-            legend={legend}
-            legendRef={legendRef}
-            fixedLegendMaxValue={fixedLegendMaxValue}
-            mapData={geoData}
-            tooltipText={calculateToolTip}
-            tooltipTextWhileFetching={calculateToolTipFetching}
-            defaultSelectedValue={defaultValue}
-            values={mapData}
-            isDataFetching={areMapValuesFetching}
-            longLoad={longLoad}
-            setLongLoad={setLongLoad}
-            selectedScenario={selectedScenario}
-            areaId={'RS'}
-            localization={localization}
-            maxZoomLevel={32}
-          />
-          <Grid container px={1}>
-            <Grid item container xs={11} alignItems='flex-end'>
-              <HeatLegend
-                legend={legend}
-                exposeLegend={useCallback((legend: am5.HeatLegend | null) => {
-                  // move exposed legend item (or null if disposed) into ref
-                  legendRef.current = legend;
-                }, [])}
-                min={0}
-                // use math.round to convert the numbers to integers
-                max={
-                  legend.isNormalized
-                    ? Math.round(aggregatedMax)
-                    : Math.round(legend.steps[legend.steps.length - 1].value)
-                }
-                displayText={true}
-                localization={localization}
-              />
-            </Grid>
-            <Grid item container justifyContent='center' direction={'column'} xs={1}>
-              <LockMaxValue
-                fixedLegendMaxValue={fixedLegendMaxValue}
-                setFixedLegendMaxValue={setFixedLegendMaxValue}
-                aggregatedMax={aggregatedMax}
-              />
-              <HeatLegendEdit
-                legend={legend}
-                setLegend={setLegend}
-                selectedScenario={selectedScenario}
-                legendPresetsUrl={legendPresets}
-              />
-            </Grid>
-          </Grid>
-        </LoadingContainer>
-      </Box>
-      <Container disableGutters sx={{flexGrow: 1}}>
+        <Container disableGutters sx={{flexGrow: 1}}>
         <SidebarTabs />
-      </Container>
+      </Container> 
+   
+     
     </Stack>
   );
 }
