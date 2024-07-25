@@ -7,6 +7,7 @@ import {useTranslation} from 'react-i18next';
 import ApplicationMenu from './ApplicationMenu';
 import Box from '@mui/material/Box';
 import LanguagePicker from './LanguagePicker';
+import RealmSelect from './RealmSelect';
 import esidLogo from '../../../assets/logo/logo-200x66.svg';
 
 /**
@@ -43,6 +44,7 @@ export default function TopBar(): JSX.Element {
       </Box>
       <Box sx={{flexGrow: 1}} />
       <LanguagePicker />
+      <RealmSelect />
       <ApplicationMenu />
     </Box>
   );
