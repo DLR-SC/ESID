@@ -1,7 +1,10 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
+
 import React, {useState, useEffect} from 'react';
 import Joyride, {CallBackProps, Step, STATUS} from 'react-joyride';
 import {useAppDispatch, useAppSelector} from '../../../store/hooks';
-import {setTourCompleted, setToursToShow} from '../../../store/UserOnboardingSlice';
+import {setShowPopover, setTourCompleted, setToursToShow} from '../../../store/UserOnboardingSlice';
 import {TourStep} from 'types/tourStep';
 import tourStepsData from '../../../../assets/tourSteps.json';
 
@@ -16,26 +19,18 @@ export default function TourSteps(): JSX.Element {
   const showModal = useAppSelector((state) => state.userOnboarding.showModal);
 
   useEffect(() => {
-    if (toursToShow && !showPopover && !showModal) {
-      console.log('show popover is: ', showPopover);
+    if (toursToShow && !showPopover && !showModal && !run) {
       console.log('Tour to show:', toursToShow);
       const selectedTourSteps = tourSteps[toursToShow];
       if (selectedTourSteps) {
-        console.log('Selected tour steps:', selectedTourSteps);
         setSteps(selectedTourSteps);
-        console.log('Setting run to true');
         setRun(true);
       }
     }
-  }, [toursToShow, showPopover, tourSteps, showModal]);
+  }, [toursToShow, showPopover, showModal, run, tourSteps]);
 
   const handleJoyrideCallback = (data: CallBackProps) => {
-    const {action, index, type, status, lifecycle} = data;
-    console.log('Joyride callback type:', type);
-    console.log('Joyride callback action:', action);
-    console.log('Joyride callback data:', data);
-    console.log('Joyride callback status:', status);
-    console.log('Joyride callback lifecycle:', lifecycle);
+    const {index, status} = data;
     console.log('Joyride callback index:', index);
 
     if (status === STATUS.FINISHED || status === STATUS.SKIPPED) {
@@ -44,7 +39,9 @@ export default function TourSteps(): JSX.Element {
       }
       dispatch(setToursToShow(null));
       setRun(false);
+      setSteps([]);
       console.log('Tour completed:', toursToShow);
+      dispatch(setShowPopover(true)); // this is to open the popover again after the tour is completed
     }
   };
 
@@ -58,6 +55,7 @@ export default function TourSteps(): JSX.Element {
         callback={handleJoyrideCallback}
         debug={true}
         scrollToFirstStep={false}
+        disableScrolling={true}
       />
     </div>
   );

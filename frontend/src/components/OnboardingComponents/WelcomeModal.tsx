@@ -64,7 +64,6 @@ export default function WelcomeModal(): JSX.Element {
     Object.keys(tours).forEach((tourKey) => {
       console.log('handle close of welcome modal');
       if (tours[tourKey as keyof typeof tours] === null) {
-        //       console.log('in close function of welcome modal we are setting: ', tourKey as keyof typeof tours);
         dispatch(setTourCompleted({tour: tourKey as keyof typeof tours, completed: false}));
         console.log('is tour completed: ', tours[tourKey as keyof typeof tours]);
         console.log('tour name: ', tourKey);

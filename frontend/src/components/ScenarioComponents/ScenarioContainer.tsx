@@ -333,7 +333,7 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
 
   return (
     <ScrollSync>
-      <div style={{height: '100%'}}>
+      <div style={{height: '100%'}} id='scenario-container'>
         <Box
           sx={{
             display: 'flex',

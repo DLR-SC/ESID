@@ -10,6 +10,7 @@ export interface UserOnboarding {
   showTooltip: boolean;
   showModal: boolean;
   showPopover: boolean;
+  allToursCompleted?: boolean;
 }
 
 const initialState: UserOnboarding = {
@@ -23,6 +24,7 @@ const initialState: UserOnboarding = {
   showTooltip: false,
   showModal: true,
   showPopover: false,
+  allToursCompleted: false,
 };
 
 /**
@@ -35,6 +37,7 @@ export const userOnboardingSlice = createSlice({
   reducers: {
     setTourCompleted(state, action: PayloadAction<{tour: TourType; completed: boolean}>) {
       state.tours[action.payload.tour] = action.payload.completed;
+      state.allToursCompleted = Object.values(state.tours).every((completed) => completed === true);
     },
     setToursToShow(state, action: PayloadAction<TourType | null>) {
       state.toursToShow = action.payload;

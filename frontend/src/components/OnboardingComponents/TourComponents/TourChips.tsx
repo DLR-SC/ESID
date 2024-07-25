@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
+
 import React, {useCallback} from 'react';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
@@ -19,6 +22,7 @@ export default function TourChips(): JSX.Element {
   const tours = useAppSelector((state) => state.userOnboarding.tours);
   const dispatch = useAppDispatch();
 
+  // this callback function is called when a chip is clicked, it says the current tour and closes modals and popovers if they are open
   const onTourClick = useCallback(
     (tour: TourType) => {
       console.log('Tour clicked:', tour);
@@ -42,28 +46,28 @@ export default function TourChips(): JSX.Element {
       >
         <Chip
           icon={<MapIcon />}
-          color={tours.districtMap ? 'success' : 'primary'}
+          color={tours.districtMap ? 'default' : 'primary'}
           label='District map'
           variant='outlined'
           onClick={() => onTourClick('districtMap')}
         />
         <Chip
           icon={<DashboardIcon />}
-          color={tours.scenario ? 'success' : 'primary'}
+          color={tours.scenario ? 'default' : 'primary'}
           label='Scenario'
           variant='outlined'
           onClick={() => onTourClick('scenario')}
         />
         <Chip
           icon={<ShowChartIcon />}
-          color={tours.lineChart ? 'success' : 'primary'}
+          color={tours.lineChart ? 'default' : 'primary'}
           label='Line chart'
           variant='outlined'
           onClick={() => onTourClick('lineChart')}
         />
         <Chip
           icon={<FilterListIcon />}
-          color={tours.filter ? 'success' : 'primary'}
+          color={tours.filter ? 'default' : 'primary'}
           label='Filter'
           variant='outlined'
           onClick={() => onTourClick('filter')}

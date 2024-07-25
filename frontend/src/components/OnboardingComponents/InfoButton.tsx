@@ -20,9 +20,10 @@ export default function InfoButton(): JSX.Element {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const showTooltip = useAppSelector((state) => state.userOnboarding.showTooltip);
   const showPopover = useAppSelector((state) => state.userOnboarding.showPopover);
+  const allToursCompleted = useAppSelector((state) => state.userOnboarding.allToursCompleted);
+
   const dispatch = useAppDispatch();
 
-  // these function handle the opening and closing of the popover
   const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
     dispatch(setShowPopover(true));
@@ -31,10 +32,8 @@ export default function InfoButton(): JSX.Element {
   const handlePopoverClose = () => {
     setAnchorEl(null);
     dispatch(setShowPopover(false));
-    console.log('popover is now closed');
   };
 
-  // when the tooltip is closed, we dispatch setShowTooltip with false so the tooltip won't be shown every time
   const handleTooltipClose = () => {
     dispatch(setShowTooltip(false));
   };
@@ -78,20 +77,30 @@ export default function InfoButton(): JSX.Element {
           onClose={handlePopoverClose}
           anchorOrigin={{
             vertical: 'top',
-            horizontal: 'center',
-          }}
-          transformOrigin={{
-            vertical: 'bottom',
-            horizontal: 'center',
+            horizontal: 'right',
           }}
         >
           <Box position='relative' p={4}>
-            <Typography variant='h2' align='center' gutterBottom>
-              Lets get started
-            </Typography>
-            <Typography variant='body1' align='center' gutterBottom>
-              Click on any of the tours below to learn more about each feature.
-            </Typography>
+            {allToursCompleted ? (
+              <>
+                <Typography variant='h2' align='center' gutterBottom>
+                  Congratulations!
+                </Typography>
+                <Typography variant='body1' align='center' gutterBottom>
+                  You have completed all the tours.
+                </Typography>
+              </>
+            ) : (
+              <>
+                <Typography variant='h2' align='center' gutterBottom>
+                  Lets get started
+                </Typography>
+                <Typography variant='body1' align='center' gutterBottom>
+                  Click on any of the tours below to learn more about each feature.
+                </Typography>
+              </>
+            )}
+
             <IconButton
               aria-label='close-info-button'
               onClick={handlePopoverClose}
@@ -107,11 +116,6 @@ export default function InfoButton(): JSX.Element {
             <Box mt={4}></Box>
           </Box>
         </Popover>
-      )}
-      {!showPopover && (
-        <Box sx={{display: 'none'}}>
-          <TourChips />
-        </Box>
       )}
     </>
   );

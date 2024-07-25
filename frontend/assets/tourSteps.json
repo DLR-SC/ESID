@@ -1,7 +1,7 @@
 {
   "districtMap": [
     {
-      "target": "#sidebar-map-wrapper",
+      "target": "#sidebar-root",
       "title": "Step 1",
       "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam consequat arcu a neque suscipit, non tristique justo dignissim.",
       "disableBeacon": true, 
@@ -31,7 +31,7 @@
       "showProgress": true
     },
     {
-      "target": "#sidebar-map-wrapper",
+      "target": "#sidebar-root",
       "title": "Step 2",
       "disableBeacon": true,
       "spotlightClicks": true,
@@ -59,7 +59,7 @@
       "showProgress": true
     },
     {
-      "target": "#sidebar-map-wrapper",
+      "target": "#sidebar-root",
       "title": "Step 3",
       "disableBeacon": true,
       "spotlightClicks": true,
@@ -87,7 +87,7 @@
       "showProgress": true
     },
     {
-      "target": "#sidebar-map-wrapper",
+      "target": "#sidebar-root",
       "title": "Step 4",
       "disableBeacon": true,
       "spotlightClicks": true,
@@ -117,7 +117,7 @@
   ],
   "scenario": [
     {
-      "target": "#card-container",
+      "target": "#scenario-container",
       "title": "Step 1",
       "content": "TLorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam consequat arcu a neque suscipit, non tristique justo dignissim.",
       "disableBeacon": true,
