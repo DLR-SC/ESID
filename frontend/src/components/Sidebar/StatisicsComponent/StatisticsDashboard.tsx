@@ -5,12 +5,15 @@ import { Crossfilter } from 'crossfilter2';
 import { Box, FormControl, Grid, Radio, Typography } from "@mui/material";
 import  { curveLinear, scaleLinear, scaleOrdinal, scaleBand, curveStepBefore} from 'd3';
 import { TabContext, TabPanel } from "@mui/lab";
-import { useAppSelector } from "store/hooks";
+import { useAppDispatch, useAppSelector } from "store/hooks";
+import { selectActivities } from "store/PandemosFilterSlice";
 
 export default function StatisticsDashboard(props: any):JSX.Element {
     const context = useContext(PandemosContext);
    // const [chart,updateChart] = React.useState(null);
     const [selectedValue, setSelectedValue] = React.useState('o');
+    const dispatch = useAppDispatch();
+
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSelectedValue(event.target.value);
@@ -104,6 +107,11 @@ export default function StatisticsDashboard(props: any):JSX.Element {
    const activityChart = (dc.pieChart("#activity") as any)
     activityChart.dimension(activityDimension).group(activityGroup)
     . on('filtered', function(_chart: any, filter: any) {
+        dispatch(
+            selectActivities({
+                activities: filter // TODO: make sure this is the activity type number
+            })
+    );
         console.log('Filter values:', filter);
     });  
 
