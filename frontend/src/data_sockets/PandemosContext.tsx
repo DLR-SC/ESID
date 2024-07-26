@@ -32,8 +32,6 @@ export const PandemosProvider = ({children}: {children: React.ReactNode}) => {
   const [locations, setLocations] = useState<Array<Location>>();
   const [trips, setTrips] = useState<Array<Trip>>();
 
-  const [tripChains, setTripChains] = useState<Array<TripChain>>();
-
   // Effect to fetch the data
   useEffect(() => {
     Promise.all([
@@ -85,7 +83,7 @@ export const PandemosProvider = ({children}: {children: React.ReactNode}) => {
     // TODO: Lazy load when the pandemos tab is selected?
   }, []);
 
-  // Preprocess data to provide a single crossfilter with information of agents & locations included
+  // Preprocess a single crossfilter with information of agents & locations included in the trips
   const expandedTrips = useMemo<crossfilter.Crossfilter<TripExpanded>>(() => {
     return crossfilter(
       trips?.map((trip) => {
@@ -99,47 +97,27 @@ export const PandemosProvider = ({children}: {children: React.ReactNode}) => {
     );
   }, [agents, locations, trips]);
 
-
-  /*
-  useEffect(() => {
-    const tripMap = new Map<string, Array<number>>();
-    const agentTrips = new Map<number, Array<Trip>>();
-
-    for (const trip of trips ?? []) {
-      agentTrips.set(trip.agent_id, [...(agentTrips.get(trip.agent_id) ?? []), trip]);
-    }
-
-    let tripId = 0;
-    const tripChains = new Map<number, Array<Trip>>();
-    for (const tripChain of agentTrips.values()) {
-      let start = 0;
-      tripChain.forEach((trip, index) => {
-        if (getLocation(trip.start_location)?.location_type === 0) start = index;
-        if (getLocation(trip.end_location)?.location_type === 0)
-          tripChains.set(tripId++, tripChain.slice(start, index + 1));
-      });
-    }
-
-    setTripChains(tripChains);
-
-    for (const [id, tripChain] of tripChains) {
-      const hashed: string = hash(
-        tripChain.map((trip) => ({
-          activity: trip.activity,
-          transportMode: trip.transport_mode,
-          start: getLocation(trip.start_location)?.location_type,
-          end: getLocation(trip.end_location)?.location_type,
-        }))
-      );
-
-      tripMap.set(hashed, [...(tripMap.get(hashed) ?? []), id]);
-    }
-
-    const sortedTrips = [...tripMap.values()].sort((a, b) => b.length - a.length);
-    setTripChainsByOccurrence(sortedTrips);
-
-  }, [getLocation, locations, trips]);
-  */
+  // Preprocess trip chains
+  const tripChains = useMemo<Array<TripChain>>(() => {
+    const chains: Array<TripChain> = [];
+    // TODO process trips
+    //
+    // go thru each trip
+    //  if start location is home
+    //    create new chain with agent & new chain id (icr id)
+    //    add trip to chain
+    //    in active chains array put chain id at agent id idx
+    //  if any other trip
+    //    add trip to chain with id from active chains array at agent id idx
+    //  if end location is home (activity going home?)
+    //    add trip to chain
+    //    clear agent id idx in active chains array
+    //  Errors/Validation:
+    //    notify any open chains at the end
+    //    validate start & end locations of trips match?
+    //
+    return chains;
+  }, [agents, locations, trips])
 
   return (
     <PandemosContext.Provider
