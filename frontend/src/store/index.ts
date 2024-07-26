@@ -11,11 +11,13 @@ import {persistReducer, persistStore} from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import {groupApi} from './services/groupApi';
 import LayoutReducer from './LayoutSlice';
+import RealmReducer from './RealmSlice';
+import PandemosFilterReducer from './PandemosFilterSlice';
 
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['dataSelection', 'userPreference'],
+  whitelist: ['dataSelection', 'userPreference', 'realm', 'pandemosFilter'],
 };
 
 const rootReducer = combineReducers({
@@ -23,6 +25,8 @@ const rootReducer = combineReducers({
   scenarioList: ScenarioReducer,
   userPreference: UserPreferenceReducer,
   layoutSlice: LayoutReducer,
+  realm: RealmReducer,
+  pandemosFilter: PandemosFilterReducer,
   [caseDataApi.reducerPath]: caseDataApi.reducer,
   [scenarioApi.reducerPath]: scenarioApi.reducer,
   [groupApi.reducerPath]: groupApi.reducer,
