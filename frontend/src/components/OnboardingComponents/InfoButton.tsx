@@ -12,15 +12,17 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import TourChips from './TourComponents/TourChips';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
+import {useTranslation} from 'react-i18next';
 
 /**
  * this component is an information button in the top bar that opens a popover, which contains the onboarding tours which the user can take
  */
-export default function InfoButton(): JSX.Element {
+export default function InfoButton() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const showTooltip = useAppSelector((state) => state.userOnboarding.showTooltip);
   const showPopover = useAppSelector((state) => state.userOnboarding.showPopover);
   const allToursCompleted = useAppSelector((state) => state.userOnboarding.allToursCompleted);
+  const {t: tOnboarding} = useTranslation('onboarding');
 
   const dispatch = useAppDispatch();
 
@@ -41,7 +43,7 @@ export default function InfoButton(): JSX.Element {
   return (
     <>
       <Tooltip
-        title='This is the floating button for help.'
+        title={tOnboarding(`toolTipText`)}
         aria-label='tooltip-info-button'
         onClose={handleTooltipClose}
         arrow
@@ -84,19 +86,19 @@ export default function InfoButton(): JSX.Element {
             {allToursCompleted ? (
               <>
                 <Typography variant='h2' align='center' gutterBottom>
-                  Congratulations!
+                  {tOnboarding(`congrats`)}
                 </Typography>
                 <Typography variant='body1' align='center' gutterBottom>
-                  You have completed all the tours.
+                  {tOnboarding(`congratsContent`)}
                 </Typography>
               </>
             ) : (
               <>
                 <Typography variant='h2' align='center' gutterBottom>
-                  Lets get started
+                  {tOnboarding(`getStarted`)}
                 </Typography>
                 <Typography variant='body1' align='center' gutterBottom>
-                  Click on any of the tours below to learn more about each feature.
+                  {tOnboarding(`getStartedContent`)}
                 </Typography>
               </>
             )}

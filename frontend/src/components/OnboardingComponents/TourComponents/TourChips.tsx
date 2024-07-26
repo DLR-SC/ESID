@@ -13,6 +13,7 @@ import {useTheme} from '@mui/material/styles';
 import {TourType} from '../../../types/tours';
 import TourSteps from './TourSteps';
 import {setModalTour, setShowPopover, setToursToShow} from '../../../store/UserOnboardingSlice';
+import {useTranslation} from 'react-i18next';
 
 /**
  * This component is a row of chips that represent the tours that the user can take
@@ -21,6 +22,7 @@ export default function TourChips(): JSX.Element {
   const theme = useTheme();
   const tours = useAppSelector((state) => state.userOnboarding.tours);
   const dispatch = useAppDispatch();
+  const {t: tOnboarding} = useTranslation('onboarding');
 
   // this callback function is called when a chip is clicked, it says the current tour and closes modals and popovers if they are open
   const onTourClick = useCallback(
@@ -47,28 +49,28 @@ export default function TourChips(): JSX.Element {
         <Chip
           icon={<MapIcon />}
           color={tours.districtMap ? 'default' : 'primary'}
-          label='District map'
+          label={tOnboarding(`tours.districtMap`)}
           variant='outlined'
           onClick={() => onTourClick('districtMap')}
         />
         <Chip
           icon={<DashboardIcon />}
           color={tours.scenario ? 'default' : 'primary'}
-          label='Scenario'
+          label={tOnboarding(`tours.scenario`)}
           variant='outlined'
           onClick={() => onTourClick('scenario')}
         />
         <Chip
           icon={<ShowChartIcon />}
           color={tours.lineChart ? 'default' : 'primary'}
-          label='Line chart'
+          label={tOnboarding(`tours.lineChart`)}
           variant='outlined'
           onClick={() => onTourClick('lineChart')}
         />
         <Chip
           icon={<FilterListIcon />}
           color={tours.filter ? 'default' : 'primary'}
-          label='Filter'
+          label={tOnboarding(`tours.filter`)}
           variant='outlined'
           onClick={() => onTourClick('filter')}
         />

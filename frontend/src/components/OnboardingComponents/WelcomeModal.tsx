@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {useTheme} from '@mui/material/styles';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -18,8 +18,7 @@ import TourChips from './TourComponents/TourChips';
 import {Trans} from 'react-i18next/TransWithoutContext';
 import {useAppSelector, useAppDispatch} from '../../store/hooks';
 import {setTourCompleted, setShowTooltip, setModalTour} from '../../store/UserOnboardingSlice';
-import slidesData from '../../../assets/welcomeModalSlides.json';
-import {Slide} from '../../types/slide';
+import {useTranslation} from 'react-i18next';
 
 /**
  * This component is a welcome modal that is shown to the user when they first open the application.
@@ -30,17 +29,15 @@ import {Slide} from '../../types/slide';
 export default function WelcomeModal(): JSX.Element {
   const theme = useTheme();
   const [step, setStep] = useState(0);
-  const [onboardingSlides, setOnboardingSlides] = useState<Slide[]>([]);
   const showModal = useAppSelector((state) => state.userOnboarding.showModal);
 
   const dispatch = useAppDispatch();
   const tours = useAppSelector((state) => state.userOnboarding.tours);
-  const slides: Slide[] = slidesData as unknown as Slide[];
+  const {t: tOnboarding} = useTranslation('onboarding');
 
-  useEffect(() => {
-    // this effect initializes slides from the JSON file
-    setOnboardingSlides(slides);
-  }, [slides]);
+  // this useMemo hook gets the keys of the slides to calculate the number of slides
+  const slideKeys = useMemo(() => Object.keys(tOnboarding('welcomeModalSlides', {returnObjects: true})), [tOnboarding]);
+  const numberOfSlides = slideKeys.length;
 
   useEffect(() => {
     // this effect checks if the user has already taken at least one tour, if not, the welcome modal is shown
@@ -118,7 +115,7 @@ export default function WelcomeModal(): JSX.Element {
               minHeight: '50px',
             }}
           >
-            <Typography variant='h1'>{onboardingSlides[step]?.title} </Typography>
+            <Typography variant='h1'>{tOnboarding(`welcomeModalSlides.slide${step + 1}.title`)} </Typography>
           </Box>
         </DialogTitle>
         <DialogContent
@@ -132,10 +129,10 @@ export default function WelcomeModal(): JSX.Element {
           }}
         >
           <Typography variant='body1' paragraph>
-            <Trans> {onboardingSlides[step]?.content}</Trans>
+            <Trans> {tOnboarding(`welcomeModalSlides.slide${step + 1}.content`)}</Trans>
           </Typography>
         </DialogContent>
-        {step === onboardingSlides.length - 1 && (
+        {step === numberOfSlides - 1 && (
           <>
             <DialogActions
               sx={{
@@ -153,7 +150,7 @@ export default function WelcomeModal(): JSX.Element {
                 padding: theme.spacing(2),
               }}
             >
-              Choose a tour
+              {tOnboarding(`chooseTour`)}
             </Typography>
             <TourChips />
             <Button
@@ -163,7 +160,7 @@ export default function WelcomeModal(): JSX.Element {
               variant='text'
               color='secondary'
             >
-              Maybe Later
+              {tOnboarding(`maybeLater`)}
             </Button>
           </>
         )}
@@ -171,7 +168,7 @@ export default function WelcomeModal(): JSX.Element {
         <Box sx={{display: 'flex', justifyContent: 'center', padding: theme.spacing(2)}}>
           <MobileStepper
             variant='dots'
-            steps={onboardingSlides.length}
+            steps={numberOfSlides}
             position='static'
             activeStep={step}
             sx={{
@@ -180,7 +177,7 @@ export default function WelcomeModal(): JSX.Element {
               backgroundColor: 'transparent',
             }}
             nextButton={
-              step < onboardingSlides.length - 1 ? (
+              step < numberOfSlides - 1 ? (
                 <Button onClick={handleNext} data-testid='arrow-forward-button'>
                   <ArrowForwardIos />
                 </Button>

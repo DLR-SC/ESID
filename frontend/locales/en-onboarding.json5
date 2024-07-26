@@ -1,0 +1,40 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: CC0-1.0
+
+{
+  welcomeModalSlides: {
+    slide1: {
+      title: 'Welcome!',
+      content: '\n Thank you for using EDIS. <br/><br/> EDIS is a platform designed to support you in your infection control tasks.<br/><br/>\n ✓ Complete first task<br/>\n ✓ Understand next steps\n ',
+    },
+    slide2: {
+      title: 'ESID can support you',
+      content: '✓\tWhen monitoring the (local) infection incidence. <br/><br/> ✓In assessing how an infection dynamic is likely to change in the future. <br/><br/> ✓ in planning effective (local) intervention strategies to contain an infectious disease. ',
+    },
+    slide3: {
+      title: 'How does ESID help you with surveillance?',
+      content: '✓You can easily identify centres of infection on a map of Germany. <br/><br/>✓\tYou can track the change in case numbers over time in a clear diagram',
+    },
+    slide4: {
+      title: 'How does ESID help you with assessment?',
+      content: '✓\tYou can view the expected future development of case numbers through various scenarios',
+    },
+    slide5: {
+      title: 'How does ESID help you with planning?',
+      content: '✓\tYou can compare the expected future development of case numbers in the future by looking at different scenarios, for example with or without mandatory masks. <br/><br/> ✓\tYou can derive an effective containment strategy from this comparison. ',
+    },
+  },
+  chooseTour: 'Choose a tour',
+  maybeLater: 'Maybe later',
+  toolTipText: 'This is the floating button for help.',
+  congrats: 'Congratulations!',
+  congratsContent: 'You have completed the onboarding process. You can now start using the application.',
+  getStarted: 'Get started',
+  getStartedContent: 'Click on any of the tours below to learn more about each feature.',
+  tours: {
+    districtMap: 'District Map',
+    scenario: 'Scenario',
+    lineChart: 'Line Chart',
+    filter: 'Filter',
+  },
+}

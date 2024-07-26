@@ -1,0 +1,40 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: CC0-1.0
+
+{
+  welcomeModalSlides: {
+    slide1: {
+      title: 'Willkommen!',
+      content: '\n      Schön, dass Sie EDIS nutzen. <br/><br/> EDIS ist eine Plattform, die Sie bei Ihren Aufgaben im Infektionsschutz unterstützen soll.<br/><br/>\n      ✓ Erste Aufgabe erledigen<br/>\n      ✓ Nächste Schritte verstehen\n    ',
+    },
+    slide2: {
+      title: 'ESID kann Sie unterstützen',
+      content: '✓\tBei der Überwachung des (lokalen) Infektionsgeschehens. <br/><br/> ✓ bei der Bewertung, wie sich eine Infektionsdynamik in der Zukunft voraussichtlich verändern wird. <br/><br/> ✓ bei der Planung von effektiven (lokalen) Interventionsstrategien zur Eindämmung einer Infektionskrankheit. ',
+    },
+    slide3: {
+      title: 'Wie unterstützt Sie ESID bei der Überwachung?',
+      content: '✓Sie können Infektionsherde auf einer Deutschlandkarte leicht identifizieren. <br/><br/>✓\tSie können die Veränderung von Fallzahlen im Laufe der Zeit in einem anschaulichen Diagramm verfolgen.',
+    },
+    slide4: {
+      title: 'Wie unterstützt Sie ESID bei der Bewertung?',
+      content: '✓\tSie können sich die voraussichtliche, zukünftige Entwicklung der Fallzahlen durch verschiedene Szenarien anzeigen lassen.',
+    },
+    slide5: {
+      title: 'Wie unterstützt Sie ESID bei der Planung?',
+      content: '✓\tSie können die voraussichtliche, zukünftige Entwicklung der Fallzahlen in der Zukunft vergleichen, indem Sie verschiedene Szenarien betrachten, zum Beispiel mit oder ohne Maskenpflicht. <br/><br/> ✓\tAus diesem Vergleich können Sie eine effektive Eindämmungsstrategie ableiten. ',
+    },
+  },
+  chooseTour: 'Wählen Sie eine Tour',
+  maybeLater: 'Vielleicht später',
+  toolTipText: 'Dies ist die schwebende Schaltfläche für Hilfe.',
+  congrats: 'Herzlichen Glückwunsch!',
+  congratsContent: 'Sie haben den Einführungsprozess abgeschlossen. Sie können jetzt mit der Anwendung beginnen.',
+  getStarted: 'Beginnen Sie',
+  getStartedContent: 'Klicken Sie auf eine der untenstehenden Touren, um mehr über die einzelnen Funktionen zu erfahren.',
+  tours: {
+    districtMap: 'Bezirkskarte',
+    scenario: 'Szenario',
+    lineChart: 'Liniendiagramm',
+    filter: 'Filter',
+  },
+}
