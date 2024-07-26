@@ -2,15 +2,42 @@ import React, {useContext, useEffect, useLayoutEffect, useRef, useState} from "r
 import * as dc from "dc";
 import {  Trip, PandemosContext } from 'data_sockets/PandemosContext';
 import { Crossfilter } from 'crossfilter2';
-import { Box, Typography } from "@mui/material";
+import { Box, FormControl, Grid, Radio, Typography } from "@mui/material";
 import  { curveLinear, scaleLinear, scaleOrdinal, scaleBand, curveStepBefore} from 'd3';
+import { TabContext, TabPanel } from "@mui/lab";
+import { useAppSelector } from "store/hooks";
 
 export default function StatisticsDashboard(props: any):JSX.Element {
     const context = useContext(PandemosContext);
-    const [chart,updateChart] = React.useState(null);
+   // const [chart,updateChart] = React.useState(null);
+    const [selectedValue, setSelectedValue] = React.useState('o');
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSelectedValue(event.target.value);
+      };
+
 
     useLayoutEffect(() => {
     if (context.trips){
+
+        const odInfectionDimension = context.trips.dimension(function(d){
+        return [d.start_location, d.end_location]; })
+ 
+   // const odInfectionGroup = odInfectionDimension.group().reduceCount//reduceSum(function(d) { return d.infection_state });;
+    const odInfectionGroup = odInfectionDimension.group();
+    console.log("d.odInfectionGroup",odInfectionDimension?.top(Infinity));
+
+    if (!odInfectionDimension || !odInfectionGroup) {
+        console.error("Origin destionation infection dimension or group is not defined");
+        return; 
+    }
+
+   // console.log("d.odInfectionGroup",odInfectionDimension?.top(Infinity));
+    
+    const odInfectionChart = (dc.heatMap("#odInfection") as any)
+    odInfectionChart.dimension(odInfectionDimension).group(odInfectionGroup) 
+    odInfectionChart.render();
+   
     const transportModeDimension = context.trips?.dimension(function(d){
         const mode = Number(d.transport_mode);
         if (mode == 1)
@@ -36,7 +63,9 @@ export default function StatisticsDashboard(props: any):JSX.Element {
 }
     const transportModeChart = (dc.pieChart("#transportMode") as any)
 
-     transportModeChart.dimension(transportModeDimension).group(transportModeGroup)
+     transportModeChart.dimension(transportModeDimension).group(transportModeGroup).on('filtered', function(_chart: any, filter: any) {
+        console.log('Filter values:', filter);
+    });  
     transportModeChart.render()
    
   //  transportModeChart.render()
@@ -73,7 +102,12 @@ export default function StatisticsDashboard(props: any):JSX.Element {
     return;
 }
    const activityChart = (dc.pieChart("#activity") as any)
-    activityChart.dimension(activityDimension).group(activityGroup);
+    activityChart.dimension(activityDimension).group(activityGroup)
+    . on('filtered', function(_chart: any, filter: any) {
+        console.log('Filter values:', filter);
+    });  
+
+
     activityChart.render();
 
    // activityChart.render();
@@ -81,13 +115,11 @@ export default function StatisticsDashboard(props: any):JSX.Element {
     const tripDurationDimension = context?.trips.dimension(function(d) {
         const endTime = Math.floor(Math.random() * 3600);
         const startTime = Math.floor(Math.random() * 2600)  
-        console.log(d)
         //return Math.floor((d.end_time-d.start_time)/60)  Only when new data with correct start and end time is available for Pandemos
         return Math.floor((endTime-startTime)/60)
     
     });
     const tripDurationGroup = tripDurationDimension?.group().reduceCount();
-    console.log("d.tripDuration",tripDurationGroup?.top(Infinity));
     
     if (!tripDurationDimension || !tripDurationGroup) {
         console.error("Trip duration dimension or group is not defined");
@@ -106,21 +138,9 @@ export default function StatisticsDashboard(props: any):JSX.Element {
         tripdurationChart.render();
 
 
-    const odInfectionDimension = context.trips.dimension(function(d){
-        return [d.start_location, d.end_location]; })
-
-    const odInfectionGroup = odInfectionDimension.group().reduceCount();
-    
-    if (!odInfectionDimension || !odInfectionGroup) {
-        console.error("Origin destionation infection dimension or group is not defined");
-        return; 
-    }
-
-    const odInfectionChart = (dc.heatMap("#odInfection") as any)
-    odInfectionChart.dimension(odInfectionDimension).group(odInfectionGroup).render();
 
 }
-}, []);
+}, [context.trips]);
  
 
 
@@ -133,10 +153,31 @@ return(
         top: '10',
         alignItems: 'center',
       }}>
+  <Box > OD infection matrix will come here</Box>     
+
+<Grid id="sidebar-tabs"item sx={{display: 'flex', flexGrow: 1, flexDirection: 'row'}}>
+<Radio
+  checked={selectedValue === 'o'} 
+  onChange={handleChange}
+  value="a"
+  name="radio-buttons"
+  aria-label="Origin"
+  inputProps={{ 'aria-label': 'A' }}
+/>
+<Radio
+  checked={selectedValue === 'destination'}
+  onChange={handleChange}
+  value="b"
+  name="radio-buttons"
+ aria-label="Destination"
+  inputProps={{ 'aria-label': 'B' }}
+/>
+   
+    </Grid>
 <Box  id="transportMode"></Box>
 <Box  id="activity" ></Box>
 <Box  id="tripDuration" ></Box>   
-<Box  id="odInfection" ></Box>   
+
 </Box>
 
 
