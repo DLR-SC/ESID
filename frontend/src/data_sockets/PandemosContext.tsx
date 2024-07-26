@@ -6,7 +6,6 @@ import crossfilter, {Crossfilter} from 'crossfilter2';
 import agentList from '../../assets/pandemos/agents_lookup.json?url';
 import locationList from '../../assets/pandemos/locations_lookup.json?url';
 import trajectories from '../../assets/pandemos/trajectories.json?url';
-import hash from 'object-hash';
 
 export interface Agent {
   /** ID of the agent (same as index) */
@@ -60,14 +59,12 @@ export const PandemosContext = createContext<{
   locations: Crossfilter<Location> | undefined;
   trips: Crossfilter<Trip> | undefined;
   tripChains: Map<number, Array<Trip>> | undefined;
-  tripChainsByOccurrence: number[][] | undefined;
 }>({
   // default values should be undefined or null
   agents: undefined,
   locations: undefined,
   trips: undefined,
   tripChains: undefined,
-  tripChainsByOccurrence: undefined,
 });
 
 // Create provider component
@@ -77,7 +74,6 @@ export const PandemosProvider = ({children}: {children: React.ReactNode}) => {
   const [trips, setTrips] = useState<Crossfilter<Trip>>();
 
   const [tripChains, setTripChains] = useState<Map<number, Array<Trip>>>();
-  const [tripChainsByOccurrence, setTripChainsByOccurrence] = useState<Array<number[]>>();
 
   // Effect to fetch the data
   useEffect(() => {
@@ -138,7 +134,6 @@ export const PandemosProvider = ({children}: {children: React.ReactNode}) => {
   );
 
   useEffect(() => {
-    const tripMap = new Map<string, Array<number>>();
     const agentTrips = new Map<number, Array<Trip>>();
 
     for (const trip of trips?.all() ?? []) {
@@ -157,22 +152,6 @@ export const PandemosProvider = ({children}: {children: React.ReactNode}) => {
     }
 
     setTripChains(tripChains);
-
-    for (const [id, tripChain] of tripChains) {
-      const hashed: string = hash(
-        tripChain.map((trip) => ({
-          activity: trip.activity,
-          transportMode: trip.transport_mode,
-          start: getLocation(trip.start_location)?.location_type,
-          end: getLocation(trip.end_location)?.location_type,
-        }))
-      );
-
-      tripMap.set(hashed, [...(tripMap.get(hashed) ?? []), id]);
-    }
-
-    const sortedTrips = [...tripMap.values()].sort((a, b) => b.length - a.length);
-    setTripChainsByOccurrence(sortedTrips);
   }, [getLocation, locations, trips]);
 
   return (
@@ -182,7 +161,6 @@ export const PandemosProvider = ({children}: {children: React.ReactNode}) => {
         locations,
         trips,
         tripChains,
-        tripChainsByOccurrence: tripChainsByOccurrence,
       }}
     >
       {children}

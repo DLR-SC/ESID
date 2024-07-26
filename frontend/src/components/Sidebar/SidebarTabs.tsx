@@ -133,7 +133,16 @@ export default function SidebarTabs(): JSX.Element {
   }, [formatNumber]);
 
   return (
-    <Box id='sidebar-tabs' sx={{flexGrow: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden'}}>
+    <Box id='sidebar-tabs' sx={{
+      // Self
+      height: '100%',
+      width: '100%',
+
+      // Child layout
+      display: 'flex',
+      flexDirection: 'column',
+      overflow: 'hidden',
+    }}>
       <TabContext value={selectedTab}>
         <Box sx={{flexGrow: 0, borderBottom: 1, borderColor: 'divider', width: '100%'}}>
           <TabList
@@ -261,10 +270,8 @@ export default function SidebarTabs(): JSX.Element {
             </Box>
           </Box>
         </TabPanel>
-        <TabPanel value='3' sx={{flexGrow: 1, padding: 0, overflow: 'auto'}}>
-          <Box width='fit-content' height='fit-content'>
-            <TripChainView />
-          </Box>
+        <TabPanel value='3' sx={{flexGrow: 1, padding: 0, overflowY: 'auto'}}>
+          <TripChainView />
         </TabPanel>
       </TabContext>
     </Box>

@@ -21,7 +21,6 @@ import i18n from './util/i18n';
 import {MUILocalization} from './components/shared/MUILocalization';
 import {DataProvider} from 'data_sockets/DataContext';
 import {PandemosProvider} from 'data_sockets/PandemosContext';
-import TripChainView from './components/TripChainView';
 
 /**
  * This is the root element of the React application. It divides the main screen area into the three main components.
@@ -43,11 +42,15 @@ export default function App(): JSX.Element {
                       <Box
                         id='app-content'
                         sx={{
+                          // Self
+                          flexGrow: 1,
+                          width: '100%',
+
+                          // Child Layout
                           display: 'flex',
                           flexDirection: 'row',
-                          flexGrow: 1,
                           alignItems: 'stretch',
-                          width: '100%',
+                          overflow: 'hidden',
                         }}
                       >
                         <SidebarContainer />

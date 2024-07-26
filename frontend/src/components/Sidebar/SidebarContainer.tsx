@@ -67,11 +67,11 @@ export default function MapContainer() {
     <Box
       id='sidebar-root'
       sx={{
+        // Self
         width: '422px',
+        height: '100%',
         borderRight: `1px solid ${theme.palette.divider}`,
         background: theme.palette.background.default,
-        direction: 'column',
-        display: 'flex'
       }}
     >
       <SidebarTabs />

@@ -39,6 +39,7 @@
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.15.0",
     "@mui/lab": "^5.0.0-alpha.170",
+    "@mui/base": "^5.0.0-beta.40",
     "@mui/material": "^5.15.0",
     "@mui/system": "^5.15.0",
     "@mui/x-date-pickers": "^6.20.0",
