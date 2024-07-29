@@ -32,9 +32,97 @@
   getStarted: 'Get started',
   getStartedContent: 'Click on any of the tours below to learn more about each feature.',
   tours: {
-    districtMap: 'District Map',
-    scenario: 'Scenario',
-    lineChart: 'Line Chart',
-    filter: 'Filter',
+    districtMap: {
+      title: 'District Map',
+      steps: {
+        step1: {
+          target: '#sidebar-root',
+          title: 'Step 1',
+          content: 'This is the first step in the district map tour.',
+          disableBeacon: true,
+          spotlightClicks: true,
+          showProgress: true,
+        },
+        step2: {
+          target: '#sidebar-root',
+          title: 'Step 2',
+          content: 'This is the second step in the district map tour.',
+          disableBeacon: true,
+          spotlightClicks: true,
+          showProgress: true,
+        },
+      },
+    },
+    scenario: {
+      title: 'Scenario',
+      steps: {
+        step1: {
+          target: '#scenario-container',
+          title: 'Step 1',
+          content: 'This is the first step in the scenario tour.',
+          disableBeacon: true,
+          spotlightClicks: true,
+          showProgress: true,
+        },
+        step2: {
+          target: '#card-container',
+          title: 'Step 2',
+          content: 'This is the second step in the scenario tour.',
+          disableBeacon: true,
+          spotlightClicks: true,
+          showProgress: true,
+        },
+        step3: {
+          target: '#data-card-0',
+          title: 'Step 3',
+          content: 'This is the third step in the scenario tour.',
+          disableBeacon: true,
+          spotlightClicks: true,
+          showProgress: true,
+        },
+      },
+    },
+    lineChart: {
+      title: 'Line Chart',
+      steps: {
+        step1: {
+          target: '#chartdiv',
+          title: 'Step 1',
+          content: 'This is the first step in the line chart tour.',
+          disableBeacon: true,
+          spotlightClicks: true,
+          showProgress: true,
+        },
+        step2: {
+          target: '#chartdiv',
+          title: 'Step 2',
+          content: 'This is the second step in the line chart tour.',
+          disableBeacon: true,
+          spotlightClicks: true,
+          showProgress: true,
+        },
+      },
+    },
+    filter: {
+      title: 'Filter',
+      steps: {
+        step1: {
+          target: '#scenario-footer-container',
+          title: 'Step 1',
+          content: 'This is the first step in the filter tour.',
+          disableBeacon: true,
+          spotlightClicks: true,
+          showProgress: true,
+        },
+        step2: {
+          target: '#scenario-footer-container',
+          title: 'Step 2',
+          content: 'This is the second step in the filter tour.',
+          disableBeacon: true,
+          spotlightClicks: true,
+          showProgress: true,
+        },
+      },
+    },
   },
 }

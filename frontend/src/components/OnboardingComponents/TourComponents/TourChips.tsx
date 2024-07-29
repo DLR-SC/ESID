@@ -49,28 +49,28 @@ export default function TourChips(): JSX.Element {
         <Chip
           icon={<MapIcon />}
           color={tours.districtMap ? 'default' : 'primary'}
-          label={tOnboarding(`tours.districtMap`)}
+          label={tOnboarding(`tours.districtMap.title`)}
           variant='outlined'
           onClick={() => onTourClick('districtMap')}
         />
         <Chip
           icon={<DashboardIcon />}
           color={tours.scenario ? 'default' : 'primary'}
-          label={tOnboarding(`tours.scenario`)}
+          label={tOnboarding(`tours.scenario.title`)}
           variant='outlined'
           onClick={() => onTourClick('scenario')}
         />
         <Chip
           icon={<ShowChartIcon />}
           color={tours.lineChart ? 'default' : 'primary'}
-          label={tOnboarding(`tours.lineChart`)}
+          label={tOnboarding(`tours.lineChart.title`)}
           variant='outlined'
           onClick={() => onTourClick('lineChart')}
         />
         <Chip
           icon={<FilterListIcon />}
           color={tours.filter ? 'default' : 'primary'}
-          label={tOnboarding(`tours.filter`)}
+          label={tOnboarding(`tours.filter.title`)}
           variant='outlined'
           onClick={() => onTourClick('filter')}
         />

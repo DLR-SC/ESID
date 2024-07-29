@@ -32,9 +32,97 @@
   getStarted: 'Beginnen Sie',
   getStartedContent: 'Klicken Sie auf eine der untenstehenden Touren, um mehr über die einzelnen Funktionen zu erfahren.',
   tours: {
-    districtMap: 'Bezirkskarte',
-    scenario: 'Szenario',
-    lineChart: 'Liniendiagramm',
-    filter: 'Filter',
+    districtMap: {
+      title: 'Bezirkskarte',
+      steps: {
+        step1: {
+          target: '#sidebar-root',
+          title: 'Schritt 1',
+          content: 'Dies ist der erste Schritt in der Bezirkskarten-Tour.',
+          disableBeacon: true,
+          spotlightClicks: true,
+          showProgress: true,
+        },
+        step2: {
+          target: '#sidebar-root',
+          title: 'Schritt 2',
+          content: 'Dies ist der zweite Schritt in der Bezirkskarten-Tour.',
+          disableBeacon: true,
+          spotlightClicks: true,
+          showProgress: true,
+        },
+      },
+    },
+    scenario: {
+      title: 'Szenario',
+      steps: {
+        step1: {
+          target: '#scenario-container',
+          title: 'Schritt 1',
+          content: 'Dies ist der erste Schritt in der Szenario-Tour.',
+          disableBeacon: true,
+          spotlightClicks: true,
+          showProgress: true,
+        },
+        step2: {
+          target: '#card-container',
+          title: 'Schritt 2',
+          content: 'Dies ist der zweite Schritt in der Szenario-Tour.',
+          disableBeacon: true,
+          spotlightClicks: true,
+          showProgress: true,
+        },
+        step3: {
+          target: '#data-card-0',
+          title: 'Schritt 3',
+          content: 'Dies ist der dritte Schritt in der Szenario-Tour.',
+          disableBeacon: true,
+          spotlightClicks: true,
+          showProgress: true,
+        },
+      },
+    },
+    lineChart: {
+      title: 'Liniendiagramm',
+      steps: {
+        step1: {
+          target: '#chartdiv',
+          title: 'Schritt 1',
+          content: 'Dies ist der erste Schritt in der Liniendiagramm-Tour.',
+          disableBeacon: true,
+          spotlightClicks: true,
+          showProgress: true,
+        },
+        step2: {
+          target: '#chartdiv',
+          title: 'Schritt 2',
+          content: 'Dies ist der zweite Schritt in der Liniendiagramm-Tour.',
+          disableBeacon: true,
+          spotlightClicks: true,
+          showProgress: true,
+        },
+      },
+    },
+    filter: {
+      title: 'Filter',
+      steps: {
+        step1: {
+          target: '#scenario-footer-container',
+          title: 'Schritt 1',
+          content: 'Dies ist der erste Schritt in der Filter-Tour.',
+          disableBeacon: true,
+          spotlightClicks: true,
+          showProgress: true,
+        },
+        step2: {
+          target: '#scenario-footer-container',
+          title: 'Schritt 2',
+          content: 'Dies ist der zweite Schritt in der Filter-Tour.',
+          disableBeacon: true,
+          spotlightClicks: true,
+          showProgress: true,
+        },
+      },
+    },
   },
 }
