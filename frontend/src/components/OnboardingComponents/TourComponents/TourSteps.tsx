@@ -43,13 +43,13 @@ export default function TourSteps(): JSX.Element {
     console.log('Joyride callback index:', index);
 
     if (status === STATUS.FINISHED || status === STATUS.SKIPPED) {
-      if (toursToShow) {
+      if (toursToShow && status === STATUS.FINISHED) {
         dispatch(setTourCompleted({tour: toursToShow, completed: true}));
       }
       dispatch(setToursToShow(null));
       setRun(false);
       setSteps([]);
-      console.log('Tour completed:', toursToShow);
+      console.log(`Tour ${status === STATUS.FINISHED ? 'completed' : 'skipped'}:`, toursToShow);
       dispatch(setShowPopover(true)); // this is to open the popover again after the tour is completed
     }
   };
