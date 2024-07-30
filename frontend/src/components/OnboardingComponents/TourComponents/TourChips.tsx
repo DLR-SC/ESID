@@ -12,7 +12,7 @@ import {useAppSelector, useAppDispatch} from '../../../store/hooks';
 import {useTheme} from '@mui/material/styles';
 import {TourType} from '../../../types/tours';
 import TourSteps from './TourSteps';
-import {setModalTour, setShowPopover, setToursToShow} from '../../../store/UserOnboardingSlice';
+import {setShowWelcomeModal, setShowPopover, setActiveTour} from '../../../store/UserOnboardingSlice';
 import {useTranslation} from 'react-i18next';
 
 /**
@@ -24,13 +24,13 @@ export default function TourChips(): JSX.Element {
   const dispatch = useAppDispatch();
   const {t: tOnboarding} = useTranslation('onboarding');
 
-  // this callback function is called when a chip is clicked, it says the current tour and closes modals and popovers if they are open
+  // this callback function is called when a chip is clicked, it sets the current tour and closes modals and popovers if they are open
   const onTourClick = useCallback(
     (tour: TourType) => {
       console.log('Tour clicked:', tour);
-      dispatch(setModalTour(false));
+      dispatch(setShowWelcomeModal(false));
       dispatch(setShowPopover(false));
-      dispatch(setToursToShow(tour));
+      dispatch(setActiveTour(tour));
     },
     [dispatch]
   );

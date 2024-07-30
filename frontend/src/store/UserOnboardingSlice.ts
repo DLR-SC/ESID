@@ -6,11 +6,12 @@ import {TourType} from '../types/tours';
 
 export interface UserOnboarding {
   tours: Record<TourType, boolean | null>;
-  toursToShow: TourType | null;
-  showTooltip: boolean;
-  showModal: boolean;
-  showPopover: boolean;
+  activeTour: TourType | null;
   allToursCompleted?: boolean;
+  showTooltip: boolean;
+  showWelcomeModal: boolean;
+  showPopover: boolean;
+  isFilterDialogOpen?: boolean;
 }
 
 const initialState: UserOnboarding = {
@@ -20,17 +21,18 @@ const initialState: UserOnboarding = {
     lineChart: null,
     filter: null,
   },
-  toursToShow: null,
-  showTooltip: false,
-  showModal: true,
-  showPopover: false,
+  activeTour: null,
   allToursCompleted: false,
+  showTooltip: false,
+  showWelcomeModal: true,
+  showPopover: false,
+  isFilterDialogOpen: false,
 };
 
 /**
- * This slice is used to determine if the user has completed a tour or not, therefore determine if they are a first time visitor,
- * and to show the tooltip over the information button in the top-bar.
+ * This slice manages the state of the user onboarding tours, tooltips, and modals.
  */
+
 export const userOnboardingSlice = createSlice({
   name: 'UserOnboarding',
   initialState,
@@ -39,22 +41,31 @@ export const userOnboardingSlice = createSlice({
       state.tours[action.payload.tour] = action.payload.completed;
       state.allToursCompleted = Object.values(state.tours).every((completed) => completed === true);
     },
-    setToursToShow(state, action: PayloadAction<TourType | null>) {
-      state.toursToShow = action.payload;
+    setActiveTour(state, action: PayloadAction<TourType | null>) {
+      state.activeTour = action.payload;
     },
     setShowTooltip(state, action: PayloadAction<boolean>) {
       state.showTooltip = action.payload;
     },
-    setModalTour(state, action: PayloadAction<boolean>) {
-      state.showModal = action.payload;
+    setShowWelcomeModal(state, action: PayloadAction<boolean>) {
+      state.showWelcomeModal = action.payload;
     },
     setShowPopover(state, action: PayloadAction<boolean>) {
       state.showPopover = action.payload;
     },
+    setIsFilterDialogOpen(state, action: PayloadAction<boolean>) {
+      state.isFilterDialogOpen = action.payload;
+    },
   },
 });
 
-export const {setTourCompleted, setToursToShow, setShowTooltip, setModalTour, setShowPopover} =
-  userOnboardingSlice.actions;
+export const {
+  setTourCompleted,
+  setActiveTour,
+  setShowTooltip,
+  setShowWelcomeModal,
+  setShowPopover,
+  setIsFilterDialogOpen,
+} = userOnboardingSlice.actions;
 
 export default userOnboardingSlice.reducer;

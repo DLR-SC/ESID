@@ -17,7 +17,7 @@ import esidLogo from '../../../assets/logo/logo-200x66.svg';
 import TourChips from './TourComponents/TourChips';
 import {Trans} from 'react-i18next/TransWithoutContext';
 import {useAppSelector, useAppDispatch} from '../../store/hooks';
-import {setTourCompleted, setShowTooltip, setModalTour} from '../../store/UserOnboardingSlice';
+import {setTourCompleted, setShowTooltip, setShowWelcomeModal} from '../../store/UserOnboardingSlice';
 import {useTranslation} from 'react-i18next';
 
 /**
@@ -29,7 +29,7 @@ import {useTranslation} from 'react-i18next';
 export default function WelcomeModal(): JSX.Element {
   const theme = useTheme();
   const [step, setStep] = useState(0);
-  const showModal = useAppSelector((state) => state.userOnboarding.showModal);
+  const showWelcomeModal = useAppSelector((state) => state.userOnboarding.showWelcomeModal);
 
   const dispatch = useAppDispatch();
   const tours = useAppSelector((state) => state.userOnboarding.tours);
@@ -43,7 +43,7 @@ export default function WelcomeModal(): JSX.Element {
     // this effect checks if the user has already taken at least one tour, if not, the welcome modal is shown
     const isUserFirstTime = Object.values(tours).every((tour) => tour === null);
     if (isUserFirstTime) {
-      dispatch(setModalTour(true));
+      dispatch(setShowWelcomeModal(true));
     }
   }, [dispatch, tours]);
 
@@ -54,25 +54,22 @@ export default function WelcomeModal(): JSX.Element {
 
   // this function handles the closing of the modal and after shows the tooltip over the information button
   const handleClose = () => {
-    dispatch(setModalTour(false));
+    dispatch(setShowWelcomeModal(false));
     dispatch(setShowTooltip(true));
 
     // when the modal is closed and the user didn't choose to do any tour, we set the tour states to false to prevent the modal from showing again
     Object.keys(tours).forEach((tourKey) => {
-      console.log('handle close of welcome modal');
       if (tours[tourKey as keyof typeof tours] === null) {
         dispatch(setTourCompleted({tour: tourKey as keyof typeof tours, completed: false}));
-        console.log('is tour completed: ', tours[tourKey as keyof typeof tours]);
-        console.log('tour name: ', tourKey);
       }
     });
   };
 
-  if (showModal) {
+  if (showWelcomeModal) {
     return (
       <Dialog
         aria-label='welcome-modal'
-        open={showModal}
+        open={showWelcomeModal}
         onClose={() => handleClose()}
         maxWidth='sm'
         fullWidth={false}
