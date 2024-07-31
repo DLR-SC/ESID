@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import {useState, useEffect, useRef, useMemo, useCallback, useLayoutEffect} from 'react';
+import React, {useState, useEffect, useRef, useMemo, useCallback, useLayoutEffect} from 'react';
 import * as am5 from '@amcharts/amcharts5';
 import * as am5map from '@amcharts/amcharts5/map';
 import {Feature, GeoJSON, GeoJsonProperties} from 'geojson';
@@ -13,7 +13,6 @@ import useMapChart from 'components/shared/HeatMap/Map';
 import usePolygonSeries from 'components/shared/HeatMap/Polygon';
 import {HeatmapLegend} from '../../../types/heatmapLegend';
 import {useTheme} from '@mui/material/styles';
-import React from 'react';
 import {Localization} from 'types/localization';
 import useRoot from 'components/shared/Root';
 import useZoomControl from 'components/shared/HeatMap/Zoom';
@@ -204,6 +203,7 @@ export default function HeatMap({
     return {
       geoJSON: mapData,
       tooltipPosition: 'fixed',
+      layer: 0,
     } as am5map.IMapPolygonSeriesSettings;
   }, [mapData]);
 
@@ -244,7 +244,7 @@ export default function HeatMap({
         const value = (e.target.dataItem?.dataContext as GeoJsonProperties)?.value as number;
         legendRef.current.showValue(
           value,
-          localization && localization.formatNumber ? localization.formatNumber(value) : value.toString()
+          localization?.formatNumber ? localization.formatNumber(value) : value.toString()
         );
       }
     });

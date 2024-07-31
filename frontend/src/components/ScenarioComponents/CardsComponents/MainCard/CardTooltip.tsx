@@ -102,12 +102,12 @@ export default function CardTooltip({
       <Tooltip
         title={
           activeScenarios?.includes(index)
-            ? localization.overrides && localization.overrides['scenario.deactivate'.toString()]
-              ? customT(localization.overrides['scenario.deactivate'.toString()])
-              : defaultT('scenario.deactivate'.toString())
-            : localization.overrides && localization.overrides['scenario.activate'.toString()]
-              ? customT(localization.overrides['scenario.activate'.toString()])
-              : defaultT('scenario.activate'.toString())
+            ? localization.overrides && localization.overrides['scenario.deactivate']
+              ? customT(localization.overrides['scenario.deactivate'])
+              : defaultT('scenario.deactivate')
+            : localization.overrides && localization.overrides['scenario.activate']
+              ? customT(localization.overrides['scenario.activate'])
+              : defaultT('scenario.activate')
         }
         arrow={true}
       >
@@ -119,12 +119,12 @@ export default function CardTooltip({
           }}
           aria-label={
             activeScenario
-              ? localization.overrides && localization.overrides['scenario.deactivate'.toString()]
-                ? customT(localization.overrides['scenario.deactivate'.toString()])
-                : defaultT('scenario.deactivate'.toString())
-              : localization.overrides && localization.overrides['scenario.activate'.toString()]
-                ? customT(localization.overrides['scenario.activate'.toString()])
-                : defaultT('scenario.activate'.toString())
+              ? localization.overrides && localization.overrides['scenario.deactivate']
+                ? customT(localization.overrides['scenario.deactivate'])
+                : defaultT('scenario.deactivate')
+              : localization.overrides && localization.overrides['scenario.activate']
+                ? customT(localization.overrides['scenario.activate'])
+                : defaultT('scenario.activate')
           }
         >
           {activeScenario ? <CheckBox /> : <CheckBoxOutlineBlank />}

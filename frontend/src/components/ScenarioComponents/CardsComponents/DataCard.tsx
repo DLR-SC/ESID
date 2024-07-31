@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import React, {useEffect, useMemo, useState} from 'react';
 import MainCard from './MainCard/MainCard';
 import FiltersContainer from './GroupFilter/FiltersContainer';
-import {filterValue} from 'types/card';
+import {FilterValue} from 'types/card';
 import {GroupFilter} from 'types/group';
 import {Localization} from 'types/localization';
 import {Dictionary} from 'util/util';
@@ -43,7 +43,7 @@ interface DataCardProps {
 
   /** A dictionary of filter values. This is an array of objects, each containing a title and a dictionary of numbers representing
    * the filtered information to be displayed, it's used a disctionary because each card has to have the same amount of filter. */
-  filterValues?: Dictionary<filterValue[]> | null;
+  filterValues?: Dictionary<FilterValue[]> | null;
 
   /** A function to set the selected scenario.*/
   setSelectedScenario: React.Dispatch<React.SetStateAction<number | null>>;
@@ -106,14 +106,14 @@ export default function DataCard({
 
   const filteredTitles: string[] = useMemo(() => {
     if (activeScenarios?.includes(index) && filterValues?.[index.toString()]) {
-      return filterValues[index.toString()].map((filterValue: filterValue) => filterValue.filteredTitle);
+      return filterValues[index.toString()].map((filterValue: FilterValue) => filterValue.filteredTitle);
     }
     return [];
   }, [activeScenarios, filterValues, index]);
 
   const filteredValues: Array<Dictionary<number> | null> = useMemo(() => {
     if (activeScenarios?.includes(index) && filterValues?.[index.toString()]) {
-      return filterValues[index.toString()].map((filterValue: filterValue) => filterValue.filteredValues);
+      return filterValues[index.toString()].map((filterValue: FilterValue) => filterValue.filteredValues);
     }
     return [];
   }, [activeScenarios, filterValues, index]);

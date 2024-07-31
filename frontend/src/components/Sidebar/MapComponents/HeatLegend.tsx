@@ -1,10 +1,9 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import {useCallback, useLayoutEffect, useMemo} from 'react';
+import React, {useCallback, useLayoutEffect, useMemo} from 'react';
 import * as am5 from '@amcharts/amcharts5';
 import {Box} from '@mui/material';
-import React from 'react';
 import {HeatmapLegend} from 'types/heatmapLegend';
 import {useTheme} from '@mui/material/styles';
 import {Localization} from 'types/localization';
@@ -79,30 +78,28 @@ export default function HeatLegend({
 
   const root = useRoot(unique_id);
 
-  // Memoize the default localization object to avoid infinite re-renders
-  const defaultLocalization = useMemo(() => {
-    return {
-      formatNumber: (value: number) => value.toString(),
-      customLang: 'global',
-      overrides: {},
-    };
-  }, []);
-
-  // Use the provided localization or default to the memoized one
-  const localizationToUse = localization || defaultLocalization;
+  const memoizedLocalization = useMemo(() => {
+    return (
+      localization || {
+        formatNumber: (value) => value.toLocaleString(),
+        customLang: 'global',
+        overrides: {},
+      }
+    );
+  }, [localization]);
 
   const heatLegendSettings = useMemo(() => {
     return {
       orientation: 'horizontal' as 'horizontal' | 'vertical',
       startValue: min,
-      startText: displayText ? localizationToUse.formatNumber!(min) : ' ',
+      startText: displayText ? memoizedLocalization.formatNumber!(min) : ' ',
       endValue: max,
-      endText: displayText ? localizationToUse.formatNumber!(max) : ' ',
+      endText: displayText ? memoizedLocalization.formatNumber!(max) : ' ',
       // set start & end color to paper background as gradient is overwritten later and this sets the tooltip background color
       startColor: am5.color(theme.palette.background.paper),
       endColor: am5.color(theme.palette.background.paper),
     };
-  }, [min, displayText, localizationToUse.formatNumber, max, theme.palette.background.paper]);
+  }, [min, displayText, memoizedLocalization.formatNumber, max, theme.palette.background.paper]);
 
   const stoplist = useMemo(() => {
     return legend.steps.map((item) => ({

@@ -3,7 +3,7 @@
 
 import CardContainer from 'components/ScenarioComponents/CardsComponents/CardContainer';
 import React, {useState} from 'react';
-import {filterValue, cardValue} from 'types/card';
+import {FilterValue, CardValue} from 'types/card';
 import {GroupFilter} from 'types/group';
 import {Dictionary} from 'util/util';
 import {describe, test, expect} from 'vitest';
@@ -19,7 +19,7 @@ const CardContainerTest = () => {
   const compartments = ['Compartment 1', 'Compartment 2', 'Compartment 3'];
   const minCompartmentsRows = 1;
   const maxCompartmentsRows = 3;
-  const filterValues: Dictionary<filterValue[]> = {
+  const filterValues: Dictionary<FilterValue[]> = {
     'Compartment 1': [
       {filteredTitle: 'Title 1', filteredValues: {'Compartment 1': 10, 'Compartment 2': 20, 'Compartment 3': 30}},
     ],
@@ -35,7 +35,7 @@ const CardContainerTest = () => {
     {id: 1, label: 'Scenario 2'},
     {id: 2, label: 'Scenario 3'},
   ];
-  const cardValues: Dictionary<cardValue> = {
+  const cardValues: Dictionary<CardValue> = {
     '0': {
       compartmentValues: {'Compartment 1': 10, 'Compartment 2': 20, 'Compartment 3': 30},
       startValues: {'Compartment 1': 100, 'Compartment 2': 200, 'Compartment 3': 307},
@@ -105,13 +105,13 @@ describe('CardContainer', () => {
     render(<CardContainerTest />);
 
     // Check if filter values are rendered correctly for each compartment
-    expect(screen.getByText('scenario-names.Scenario 1')).toBeInTheDocument();
-    expect(screen.getByText('scenario-names.Scenario 2')).toBeInTheDocument();
-    expect(screen.getByText('scenario-names.Scenario 3')).toBeInTheDocument();
+    expect(screen.getByText('Scenario 1')).toBeInTheDocument();
+    expect(screen.getByText('Scenario 2')).toBeInTheDocument();
+    expect(screen.getByText('Scenario 3')).toBeInTheDocument();
   });
   const compartments: string[] = ['Compartment 1', 'Compartment 2', 'Compartment 3'];
 
-  const filterValues: Dictionary<filterValue[]> = {
+  const filterValues: Dictionary<FilterValue[]> = {
     'Compartment 1': [
       {filteredTitle: 'Title 1', filteredValues: {'Compartment 1': 10, 'Compartment 2': 20, 'Compartment 3': 30}},
     ],

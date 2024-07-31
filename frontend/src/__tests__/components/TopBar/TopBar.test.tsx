@@ -9,17 +9,17 @@ import i18n from '../../../util/i18nForTests';
 
 import TopBar from '../../../components/TopBar';
 import {I18nextProvider} from 'react-i18next';
-import {Store} from '../../../store';
 import {Provider} from 'react-redux';
+import {Store} from '../../../store';
 
 describe('TopBar', () => {
   test('icon', () => {
     render(
-      <Provider store={Store}>
-        <I18nextProvider i18n={i18n}>
+      <I18nextProvider i18n={i18n}>
+        <Provider store={Store}>
           <TopBar />
-        </I18nextProvider>
-      </Provider>
+        </Provider>
+      </I18nextProvider>
     );
     screen.getByAltText('topBar.icon-alt');
     screen.getByLabelText('topBar.language');

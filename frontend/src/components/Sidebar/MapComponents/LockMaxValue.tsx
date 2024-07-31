@@ -1,12 +1,10 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import {Tooltip} from '@mui/material';
-import {LockOpen} from '@mui/icons-material';
-import {IconButton} from '@mui/material';
-import LockIcon from '@mui/icons-material/Lock';
+import {Tooltip, IconButton} from '@mui/material';
+import {LockOpen, Lock} from '@mui/icons-material';
 import {useTheme} from '@mui/material';
-import React from 'react';
+import React, {useMemo} from 'react';
 import {Localization} from 'types/localization';
 import {useTranslation} from 'react-i18next';
 
@@ -40,16 +38,27 @@ export default function LockMaxValue({
   setFixedLegendMaxValue,
   fixedLegendMaxValue,
   aggregatedMax,
-  localization = {formatNumber: (value: number) => value.toString(), customLang: 'global', overrides: {}},
+  localization,
 }: LockMaxValueProps): JSX.Element {
   const theme = useTheme();
   const {t: defaultT} = useTranslation();
-  const {t: customT} = useTranslation(localization.customLang);
+
+  const memoizedLocalization = useMemo(() => {
+    return (
+      localization || {
+        formatNumber: (value) => value.toLocaleString(),
+        customLang: 'global',
+        overrides: {},
+      }
+    );
+  }, [localization]);
+
+  const {t: customT} = useTranslation(memoizedLocalization.customLang);
   return (
     <Tooltip
       title={
-        localization.overrides && localization.overrides['heatlegend.lock']
-          ? customT(localization.overrides['heatlegend.lock'])
+        memoizedLocalization.overrides?.['heatlegend.lock']
+          ? customT(memoizedLocalization.overrides['heatlegend.lock'])
           : defaultT('heatlegend.lock')
       }
       placement='right'
@@ -58,15 +67,15 @@ export default function LockMaxValue({
       <IconButton
         color={'primary'}
         aria-label={
-          localization.overrides && localization.overrides['heatlegend.lock']
-            ? customT(localization.overrides['heatlegend.lock'])
+          memoizedLocalization.overrides && memoizedLocalization.overrides['heatlegend.lock']
+            ? customT(memoizedLocalization.overrides['heatlegend.lock'])
             : defaultT('heatlegend.lock')
         }
         onClick={() => setFixedLegendMaxValue(fixedLegendMaxValue ? null : aggregatedMax)}
         size='small'
         sx={{padding: theme.spacing(0)}}
       >
-        {fixedLegendMaxValue ? <LockIcon /> : <LockOpen />}
+        {fixedLegendMaxValue ? <Lock /> : <LockOpen />}
       </IconButton>
     </Tooltip>
   );

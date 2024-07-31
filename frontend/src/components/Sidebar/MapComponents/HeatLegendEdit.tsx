@@ -1,19 +1,21 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, {useCallback, useEffect, useLayoutEffect, useRef, useState} from 'react';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import FormControl from '@mui/material/FormControl';
-import Grid from '@mui/material/Grid';
-import IconButton from '@mui/material/IconButton';
-import MenuItem from '@mui/material/MenuItem';
+import React, {useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState} from 'react';
 import Select, {SelectChangeEvent} from '@mui/material/Select';
-import Tooltip from '@mui/material/Tooltip';
-import Typography from '@mui/material/Typography';
 import EditIcon from '@mui/icons-material/Edit';
-import {useTheme} from '@mui/material';
+import {
+  useTheme,
+  Typography,
+  IconButton,
+  MenuItem,
+  FormControl,
+  Dialog,
+  Button,
+  Box,
+  Grid,
+  Tooltip,
+} from '@mui/material';
 import {HeatmapLegend} from 'types/heatmapLegend';
 import {Localization} from 'types/localization';
 import {useTranslation} from 'react-i18next';
@@ -54,16 +56,23 @@ export default function HeatLegendEdit({
   setLegend,
   legend,
   selectedScenario = null,
-  localization = {
-    formatNumber: (value) => value.toLocaleString(),
-    customLang: 'global',
-    overrides: {},
-  },
+  localization,
   legendPresetsUrl = null,
 }: HeatLegendEditProps): JSX.Element {
   const theme = useTheme();
   const {t: defaultT} = useTranslation();
-  const {t: customT} = useTranslation(localization.customLang);
+
+  const memoizedLocalization = useMemo(() => {
+    return (
+      localization || {
+        formatNumber: (value) => value.toLocaleString(),
+        customLang: 'global',
+        overrides: {},
+      }
+    );
+  }, [localization]);
+
+  const {t: customT} = useTranslation(memoizedLocalization.customLang);
 
   // This contains all legends using the default colors.
   const defaultLegends = useDefaultLegends();
@@ -153,8 +162,8 @@ export default function HeatLegendEdit({
     <>
       <Tooltip
         title={
-          localization.overrides && localization.overrides['heatlegend.edit']
-            ? customT(localization.overrides['heatlegend.edit'])
+          memoizedLocalization.overrides?.['heatlegend.edit']
+            ? customT(memoizedLocalization.overrides['heatlegend.edit'])
             : defaultT('heatlegend.edit')
         }
         placement='right'
@@ -164,8 +173,8 @@ export default function HeatLegendEdit({
           color={'primary'}
           onClick={() => setHeatLegendEditOpen(true)}
           aria-label={
-            localization.overrides && localization.overrides['heatlegend.edit']
-              ? customT(localization.overrides['heatlegend.edit'])
+            memoizedLocalization.overrides?.['heatlegend.edit']
+              ? customT(memoizedLocalization.overrides['heatlegend.edit'])
               : defaultT('heatlegend.edit')
           }
           size='small'
@@ -185,8 +194,8 @@ export default function HeatLegendEdit({
             <Select
               id='heatmap-select'
               aria-label={
-                localization.overrides && localization.overrides['heatlegend.edit']
-                  ? customT(localization.overrides['heatlegend.edit'])
+                memoizedLocalization.overrides?.['heatlegend.edit']
+                  ? customT(memoizedLocalization.overrides['heatlegend.edit'])
                   : defaultT('heatlegend.edit')
               }
               value={legend.name}
@@ -208,8 +217,8 @@ export default function HeatLegendEdit({
           </FormControl>
           <Grid container item justifyContent={'flex-end'}>
             <Button variant='contained' onClick={() => setHeatLegendEditOpen(false)}>
-              {localization.overrides && localization.overrides['okay']
-                ? customT(localization.overrides['okay'])
+              {memoizedLocalization.overrides?.['okay']
+                ? customT(memoizedLocalization.overrides['okay'])
                 : defaultT('okay')}
             </Button>
           </Grid>

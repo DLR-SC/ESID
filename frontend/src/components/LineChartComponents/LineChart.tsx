@@ -248,19 +248,16 @@ export default function LineChart({
       // Set localization
       root.locale = i18n.language === 'de' ? am5locales_de_DE : am5locales_en_US;
 
-      xAxis.get('dateFormats', {day: ''})['day'] =
-        memoizedLocalization.overrides && memoizedLocalization.overrides['dayFormat']
-          ? customT(memoizedLocalization.overrides['dayFormat'])
-          : defaultT('dayFormat');
-      xAxis.get('tooltipDateFormats', {day: ''})['day'] =
-        memoizedLocalization.overrides && memoizedLocalization.overrides['dayFormat']
-          ? customT(memoizedLocalization.overrides['dayFormat'])
-          : defaultT('dayFormat');
+      xAxis.get('dateFormats', {day: ''})['day'] = memoizedLocalization.overrides?.['dayFormat']
+        ? customT(memoizedLocalization.overrides['dayFormat'])
+        : defaultT('dayFormat');
+      xAxis.get('tooltipDateFormats', {day: ''})['day'] = memoizedLocalization.overrides?.['dayFormat']
+        ? customT(memoizedLocalization.overrides['dayFormat'])
+        : defaultT('dayFormat');
       // Fix first date of the month falling back to wrong format (also with fallback object)
-      xAxis.get('periodChangeDateFormats', {day: ''})['day'] =
-        memoizedLocalization.overrides && memoizedLocalization.overrides['dayFormat']
-          ? customT(memoizedLocalization.overrides['dayFormat'])
-          : defaultT('dayFormat');
+      xAxis.get('periodChangeDateFormats', {day: ''})['day'] = memoizedLocalization.overrides?.['dayFormat']
+        ? customT(memoizedLocalization.overrides['dayFormat'])
+        : defaultT('dayFormat');
     },
     // Re-run effect if language changes
     [i18n.language, root, chart, xAxis, defaultT, customT, memoizedLocalization.overrides]
@@ -342,21 +339,12 @@ export default function LineChart({
     if (!root || !xAxis || !yAxis || !lineChartData) {
       return [];
     }
-
     return lineChartData.map((line) => {
-      let lineName = line.name;
-      if (lineName) {
-        if (memoizedLocalization.overrides && memoizedLocalization.overrides[lineName]) {
-          lineName = customT(memoizedLocalization.overrides[lineName]);
-        } else {
-          lineName = defaultT(lineName);
-        }
-      }
       return {
         xAxis: xAxis,
         yAxis: yAxis,
         id: `${chartId}_${line.serieId}`,
-        name: lineName ?? '',
+        name: line.name ?? '',
         valueXField: 'date',
         valueYField: String(line.valueYField),
         openValueYField: line.openValueYField ? String(line.openValueYField) : undefined,
@@ -369,7 +357,7 @@ export default function LineChart({
         fill: line.fill ?? undefined,
       };
     });
-  }, [lineChartData, root, xAxis, yAxis, chartId, defaultT, customT, memoizedLocalization.overrides]);
+  }, [lineChartData, root, xAxis, yAxis, chartId]);
 
   useLineSeriesList(
     root,
@@ -449,12 +437,12 @@ export default function LineChart({
     const tooltipHTML = `
         ${'' /* Current Date and selected compartment name */}
         <strong>{date.formatDate("${
-          memoizedLocalization.overrides && memoizedLocalization.overrides['dateFormat']
+          memoizedLocalization.overrides?.['dateFormat']
             ? customT(memoizedLocalization.overrides['dateFormat'])
             : defaultT('dateFormat')
         }")} (${
           yAxisLabel ??
-          (memoizedLocalization.overrides && memoizedLocalization.overrides[`yAxisLabel`]
+          (memoizedLocalization.overrides?.[`yAxisLabel`]
             ? customT(memoizedLocalization.overrides[`yAxisLabel`])
             : defaultT(`yAxisLabel`))
         })</strong>
@@ -577,50 +565,32 @@ export default function LineChart({
     // Always export date and case data (and percentiles of selected scenario)
     let dataFields = {
       date: `${
-        memoizedLocalization.overrides && memoizedLocalization.overrides['chart.date']
+        memoizedLocalization.overrides?.['chart.date']
           ? customT(memoizedLocalization.overrides['chart.date'])
           : defaultT('chart.date')
       }`,
-      caseData: `${
-        memoizedLocalization.overrides && memoizedLocalization.overrides['chart.caseData']
-          ? customT(memoizedLocalization.overrides['chart.caseData'])
-          : defaultT('chart.caseData')
-      }`,
       percentileUp: `${
-        memoizedLocalization.overrides && memoizedLocalization.overrides['chart.percentileUp']
+        memoizedLocalization.overrides?.['chart.percentileUp']
           ? customT(memoizedLocalization.overrides['chart.percentileUp'])
           : defaultT('chart.percentileUp')
       }`,
       percentileDown: `${
-        memoizedLocalization.overrides && memoizedLocalization.overrides['chart.percentileDown']
+        memoizedLocalization.overrides?.['chart.percentileDown']
           ? customT(memoizedLocalization.overrides['chart.percentileDown'])
           : defaultT('chart.percentileDown')
       }`,
     };
-    // Always put date first, case data second
-    const dataFieldsOrder = ['date', 'caseData'];
+    // Always put date first, 0 second
+    const dataFieldsOrder = ['date', '0'];
 
     if (lineChartData) {
       lineChartData.forEach((serie) => {
-        if (
-          serie.serieId === 0 ||
-          serie.serieId === 'percentiles' ||
-          serie.serieId.toString().startsWith('group-filter-')
-        )
-          return;
+        if (serie.serieId === 'percentiles' || serie.serieId.toString().startsWith('group-filter-')) return;
 
-        let lineName = serie.name;
-        if (lineName) {
-          if (memoizedLocalization.overrides && memoizedLocalization.overrides[lineName]) {
-            lineName = customT(memoizedLocalization.overrides[lineName]);
-          } else {
-            lineName = defaultT(lineName);
-          }
-        }
         // Add scenario label to export data field names
         dataFields = {
           ...dataFields,
-          [serie.serieId]: lineName,
+          [String(serie.serieId)]: serie.name ?? '',
         };
         // Add scenario id to export data field order (for sorted export like csv)
         dataFieldsOrder.push(`${serie.serieId}`);
@@ -641,7 +611,7 @@ export default function LineChart({
           dataSource: data,
           dateFields: ['date'],
           dateFormat: `${
-            memoizedLocalization.overrides && memoizedLocalization.overrides['dateFormat']
+            memoizedLocalization.overrides?.['dateFormat']
               ? customT(memoizedLocalization.overrides['dateFormat'])
               : defaultT('dateFormat')
           }`,
