@@ -165,7 +165,6 @@
           disableOverlayClose: true,
           hideCloseButton: true,
           hideFooter: true,
-          placement: 'center',
           placement: 'left-start',
         },
         step2: {
@@ -183,11 +182,10 @@
           title: 'Step 3',
           content: 'Click here to add a new age group filter card. ',
           disableBeacon: true,
-          spotlightClicks: true,
           showProgress: true,
           disableOverlayClose: true,
+          spotlightClicks: false,
         },
-        // TODO: Add more content
       },
     },
   },

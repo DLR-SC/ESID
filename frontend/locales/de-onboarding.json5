@@ -182,11 +182,10 @@
           title: 'Schritt 3',
           content: 'Klicken Sie hier, um eine neue Altersgruppenfilterkarte hinzuzufügen. ',
           disableBeacon: true,
-          spotlightClicks: true,
           showProgress: true,
           disableOverlayClose: true,
+          spotlightClicks: false,
         },
-        // TODO: Add more content
       },
     },
   },

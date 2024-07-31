@@ -52,16 +52,30 @@ export default function TourSteps(): JSX.Element {
     }
   }, [activeTour, showPopover, showWelcomeModal, run, localizedTourSteps]);
 
-  // this effect checks if the filter modal is open in order to handle the execution of the joyride controlled tour
+  /**
+   * this effect manages the execution of the tour when the filter dialog is open
+   * since the filter tour is a joyride controlled tour, manual control with step index is required to make sure the tour is executed correctly
+   */
   useEffect(() => {
-    if (isFilterDialogOpen && run) {
+    if (isFilterDialogOpen && activeTour === 'filter' && run) {
       setState((prevState) => ({
         ...prevState,
         run: stepIndex === 0 ? false : run,
         stepIndex: stepIndex === 0 ? 1 : stepIndex,
       }));
     }
-  }, [isFilterDialogOpen, run, stepIndex]);
+  }, [activeTour, isFilterDialogOpen, run, stepIndex]);
+
+  /**
+   * this effect ensures that the tour is no longer active if the user closes the filter dialog during the execution of the tour
+   * because the tour is intended to be completed in the filter dialog
+   */
+  useEffect(() => {
+    if (activeTour === 'filter' && !isFilterDialogOpen && run && stepIndex > 0) {
+      setState({run: false, steps: [], stepIndex: 0});
+      dispatch(setActiveTour(null));
+    }
+  }, [isFilterDialogOpen, activeTour, run, stepIndex, dispatch]);
 
   const handleJoyrideCallback = (data: CallBackProps) => {
     const {action, index, status, type} = data;
@@ -96,6 +110,7 @@ export default function TourSteps(): JSX.Element {
         debug
         scrollToFirstStep
         spotlightClicks
+        disableOverlayClose
         locale={{
           next: tOnboarding('next'),
           skip: tOnboarding('skip'),
