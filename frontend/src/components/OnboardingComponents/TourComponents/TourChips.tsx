@@ -61,18 +61,18 @@ export default function TourChips(): JSX.Element {
           onClick={() => onTourClick('scenario')}
         />
         <Chip
-          icon={<ShowChartIcon />}
-          color={tours.lineChart ? 'default' : 'primary'}
-          label={tOnboarding(`tours.lineChart.title`)}
-          variant='outlined'
-          onClick={() => onTourClick('lineChart')}
-        />
-        <Chip
           icon={<FilterListIcon />}
           color={tours.filter ? 'default' : 'primary'}
           label={tOnboarding(`tours.filter.title`)}
           variant='outlined'
           onClick={() => onTourClick('filter')}
+        />
+        <Chip
+          icon={<ShowChartIcon />}
+          color={tours.lineChart ? 'default' : 'primary'}
+          label={tOnboarding(`tours.lineChart.title`)}
+          variant='outlined'
+          onClick={() => onTourClick('lineChart')}
         />
       </Stack>
       <TourSteps />

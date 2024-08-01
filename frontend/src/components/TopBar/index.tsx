@@ -45,10 +45,10 @@ export default function TopBar(): JSX.Element {
       </Box>
       <Box sx={{flexGrow: 1}} />
       <LanguagePicker />
+      <RealmSelect />
       <Box sx={{alignItems: 'center'}}>
         <InfoButton />
       </Box>
-      <RealmSelect />
       <ApplicationMenu />
     </Box>
   );

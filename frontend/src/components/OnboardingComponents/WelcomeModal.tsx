@@ -6,7 +6,6 @@ import {useTheme} from '@mui/material/styles';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
@@ -72,35 +71,34 @@ export default function WelcomeModal(): JSX.Element {
         open={showWelcomeModal}
         onClose={() => handleClose()}
         maxWidth='sm'
-        fullWidth={false}
+        fullWidth
         sx={{
           '& .MuiDialog-paper': {
-            width: '600px',
-            height: '650px',
+            height: '600px',
+            display: 'flex',
+            flexDirection: 'column',
           },
         }}
       >
+        <Box
+          sx={{
+            flex: '1 1 50%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <img
+            src={esidLogo}
+            alt='Illustration'
+            style={{
+              maxWidth: '100%',
+              maxHeight: '100%',
+              objectFit: 'cover',
+            }}
+          />
+        </Box>
         <DialogTitle>
-          <Box
-            sx={{
-              width: '100%',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              padding: theme.spacing(3),
-            }}
-          ></Box>
-          <Box
-            sx={{
-              width: '100%',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              padding: theme.spacing(3),
-            }}
-          >
-            <img src={esidLogo} alt='Illustration' />
-          </Box>
           <Box
             sx={{
               display: 'flex',
@@ -131,24 +129,6 @@ export default function WelcomeModal(): JSX.Element {
         </DialogContent>
         {step === numberOfSlides - 1 && (
           <>
-            <DialogActions
-              sx={{
-                display: 'flex',
-                justifyContent: 'center',
-                padding: theme.spacing(2),
-              }}
-            ></DialogActions>
-            <Typography
-              variant='body1'
-              paragraph
-              sx={{
-                display: 'flex',
-                justifyContent: 'center',
-                padding: theme.spacing(2),
-              }}
-            >
-              {tOnboarding(`chooseTour`)}
-            </Typography>
             <TourChips />
             <Button
               data-testid='maybe-later-button'
@@ -169,8 +149,6 @@ export default function WelcomeModal(): JSX.Element {
             position='static'
             activeStep={step}
             sx={{
-              flexGrow: 1,
-              maxWidth: '100%',
               backgroundColor: 'transparent',
             }}
             nextButton={
