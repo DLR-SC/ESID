@@ -6,6 +6,7 @@ import Joyride, {CallBackProps, Step, STATUS, ACTIONS, EVENTS} from 'react-joyri
 import {useAppDispatch, useAppSelector} from '../../../store/hooks';
 import {setShowPopover, setTourCompleted, setActiveTour} from '../../../store/UserOnboardingSlice';
 import {useTranslation} from 'react-i18next';
+import AlertDialog from '../../shared/AlertDialog';
 
 interface State {
   run: boolean;
@@ -20,27 +21,32 @@ export default function TourSteps(): JSX.Element {
     stepIndex: 0,
   });
   const {run, steps, stepIndex} = state;
+  const [alertDialogOpen, setAlertDialogOpen] = useState(false);
 
   const dispatch = useAppDispatch();
   const activeTour = useAppSelector((state) => state.userOnboarding.activeTour);
   const showPopover = useAppSelector((state) => state.userOnboarding.showPopover);
   const showWelcomeModal = useAppSelector((state) => state.userOnboarding.showWelcomeModal);
   const isFilterDialogOpen = useAppSelector((state) => state.userOnboarding.isFilterDialogOpen);
+  const isParametersTabClicked = useAppSelector((state) => state.userOnboarding.isParametersTabClicked);
   const {t: tOnboarding} = useTranslation('onboarding');
 
-  // this useMemo gets the localized tour steps and returns them as an array of step objects to use in the Joyride component below
+  /**
+   * this useMemo gets the localized tour steps and returns them as an array of step objects to use in the Joyride component
+   */
   const localizedTourSteps: Step[] = useMemo(() => {
     if (activeTour) {
       const tourSteps = tOnboarding(`tours.${activeTour}.steps`, {returnObjects: true});
       if (tourSteps) {
-        console.log('the tour steps are', tourSteps);
         return Object.values(tourSteps) as Step[];
       }
     }
     return [];
   }, [activeTour, tOnboarding]);
 
-  // this effect sets the steps to the localized tour steps when a tour is clicked and checks if the popover or modal is open
+  /**
+   * this effect sets the steps to the localized tour steps when a tour is clicked and checks if the popover or modal is open
+   */
   useEffect(() => {
     if (activeTour && !showPopover && !showWelcomeModal && !run) {
       setState((prevState) => ({
@@ -77,6 +83,33 @@ export default function TourSteps(): JSX.Element {
     }
   }, [isFilterDialogOpen, activeTour, run, stepIndex, dispatch]);
 
+  /**
+   * this effect is to prevent the user from starting the line chart tour while the parameters tab is open
+   * and also stops the tour when the user switches to the parameters tab at the last step of the tour
+   */
+  useEffect(() => {
+    // checks if active tour is line chart and the tour is currently running
+    if (activeTour === 'lineChart' && run) {
+      // if the parameter tab is opened and the user tries to run the line chart tour, the tour is stopped
+      if (isParametersTabClicked && stepIndex < steps.length - 1) {
+        setState({run: false, steps: [], stepIndex: 0});
+        dispatch(setActiveTour(null)); // we must reset the active tour state, so when the user navigates back to the line chart tab, the tour doesn't start automatically
+        setAlertDialogOpen(true);
+      }
+      // when the parameters tab is clicked at the last step of the tour, the tour is then finished and closed
+      else if (isParametersTabClicked && stepIndex === steps.length - 1) {
+        setState({run: false, steps: [], stepIndex: 0});
+      }
+    }
+  }, [activeTour, run, stepIndex, steps.length, isParametersTabClicked, dispatch]);
+
+  const handleDialogAnswer = () => {
+    setAlertDialogOpen(false);
+  };
+
+  /**
+   * this function handles the callback events from the Joyride component
+   */
   const handleJoyrideCallback = (data: CallBackProps) => {
     const {action, index, status, type} = data;
     if (status === STATUS.FINISHED || status === STATUS.SKIPPED) {
@@ -138,6 +171,13 @@ export default function TourSteps(): JSX.Element {
             fontSize: '0.875rem',
           },
         }}
+      />
+      <AlertDialog
+        open={alertDialogOpen}
+        title={tOnboarding('tourAccessAlertTitle')}
+        text={tOnboarding('lineChartTourAlertMessage')}
+        onAnswer={handleDialogAnswer}
+        confirmButtonText='OK'
       />
     </div>
   );

@@ -12,6 +12,7 @@ export interface UserOnboarding {
   showWelcomeModal: boolean;
   showPopover: boolean;
   isFilterDialogOpen?: boolean;
+  isParametersTabClicked?: boolean;
 }
 
 const initialState: UserOnboarding = {
@@ -27,6 +28,7 @@ const initialState: UserOnboarding = {
   showWelcomeModal: true,
   showPopover: false,
   isFilterDialogOpen: false,
+  isParametersTabClicked: false,
 };
 
 /**
@@ -56,6 +58,9 @@ export const userOnboardingSlice = createSlice({
     setIsFilterDialogOpen(state, action: PayloadAction<boolean>) {
       state.isFilterDialogOpen = action.payload;
     },
+    setIsParametersTabClicked(state, action: PayloadAction<boolean>) {
+      state.isParametersTabClicked = action.payload;
+    },
   },
 });
 
@@ -66,6 +71,7 @@ export const {
   setShowWelcomeModal,
   setShowPopover,
   setIsFilterDialogOpen,
+  setIsParametersTabClicked,
 } = userOnboardingSlice.actions;
 
 export default userOnboardingSlice.reducer;

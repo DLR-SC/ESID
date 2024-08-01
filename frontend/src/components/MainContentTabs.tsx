@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import Grid from '@mui/material/Grid';
-import React, {useCallback, useMemo} from 'react';
+import React, {useCallback, useMemo, useState} from 'react';
 import TabContext from '@mui/lab/TabContext';
 import TabPanel from '@mui/lab/TabPanel';
 import Tab, {tabClasses} from '@mui/material/Tab';
@@ -16,6 +16,7 @@ import {useTranslation} from 'react-i18next';
 import {useAppDispatch, useAppSelector} from '../store/hooks';
 import {selectTab} from '../store/UserPreferenceSlice';
 import {useTheme} from '@mui/material/styles';
+import {setIsParametersTabClicked} from 'store/UserOnboardingSlice';
 
 const SimulationChart = React.lazy(() => import('./LineChartContainer'));
 const ParameterEditor = React.lazy(() => import('./ParameterEditor'));
@@ -29,6 +30,7 @@ export default function MainContentTabs() {
   const selectedTab = useAppSelector((state) => state.userPreference.selectedTab ?? '1');
   const dispatch = useAppDispatch();
   const theme = useTheme();
+  const [previousTab, setPreviousTab] = useState<string>(selectedTab);
 
   const tabStyle = useMemo(
     () => ({
@@ -49,9 +51,17 @@ export default function MainContentTabs() {
 
   const handleChange = useCallback(
     (_: unknown, newValue: string) => {
-      return dispatch(selectTab(newValue));
+      // this check is for the onboarding tour of the line chart, if the user switches the tabs, we dispatch an action and update the setIsParametersTabClicked state accordingly
+      if (previousTab === '2' && newValue !== '2') {
+        dispatch(setIsParametersTabClicked(false));
+      }
+      if (newValue === '2') {
+        dispatch(setIsParametersTabClicked(true));
+      }
+      dispatch(selectTab(newValue));
+      setPreviousTab(newValue);
     },
-    [dispatch]
+    [previousTab, dispatch]
   );
 
   return (
@@ -69,7 +79,7 @@ export default function MainContentTabs() {
             </Box>
           </Box>
         </TabPanel>
-        <Box sx={{flexGrow: 0, borderTop: 1, borderColor: 'divider', width: '100%'}}>
+        <Box sx={{flexGrow: 0, borderTop: 1, borderColor: 'divider', width: '100%'}} id='tab-parameter-editor'>
           <TabList
             onChange={handleChange}
             centered
