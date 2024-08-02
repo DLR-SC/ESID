@@ -32,7 +32,7 @@
   maybeLater: 'Vielleicht später',
   toolTipText: 'Dies ist die schwebende Schaltfläche für Hilfe.',
   congrats: 'Herzlichen Glückwunsch!',
-  congratsContent: 'Sie haben die Touren erfolgreich abgeschlossen. Sie haben die Touren erfolgreich abgeschlossen. Sie können eine Tour jederzeit wiederholen, indem Sie auf die Chips unten klicken.',
+  congratsContent: 'Sie haben die Touren erfolgreich abgeschlossen. Sie können eine Tour jederzeit wiederholen, indem Sie auf die Chips unten klicken.',
   getStarted: 'Starten Sie mit ESID',
   getStartedContent: 'Wählen Sie eine der untenstehenden Touren aus, um jede Funktion im Detail zu erkunden und zu verstehen.',
   next: 'Weiter',
@@ -41,6 +41,7 @@
   last: 'Letzter',
   tourAccessAlertTitle: 'Tour-Hinweis',
   lineChartTourAlertMessage: 'Sie müssen auf der Registerkarte Liniendiagramm sein, um diese Tour zu starten.',
+  parameterTourAlertMessage: 'Sie müssen auf der Registerkarte Parameter sein, um diese Tour zu starten.',
   tours: {
     districtMap: {
       title: 'Bezirkskarte',
@@ -201,15 +202,26 @@
           spotlightClicks: true,
           showProgress: true,
         },
-        step4: {
+      },
+    },
+    parameters: {
+      title: 'Parameter',
+      steps: {
+        step1: {
           target: '#tab-parameter-editor',
-          title: 'Schritt 4',
-          content: 'Das Liniendiagramm verfügt auch über einen Parameter-Editor, mit dem Sie Parameter für verschiedene Szenarien anzeigen können. Versuchen Sie es mit einem Klick auf die Registerkarte Paramter!',
+          title: 'Schritt 1',
+          content: 'Mit dem Parameter-Editor können Sie die Parameter für das ausgewählte Szenario anzeigen und bearbeiten.',
           disableBeacon: true,
           spotlightClicks: true,
-          disableOverlayClose: true,
-          hideBackButton: true,
-          hideFooter: true,
+          showProgress: true,
+        },
+        step2: {
+          target: '#tab-parameter-editor',
+          title: 'Schritt 2',
+          content: 'Sie können die Parameter für das ausgewählte Szenario im Parameter-Editor anzeigen.',
+          disableBeacon: true,
+          spotlightClicks: true,
+          showProgress: true,
         },
       },
     },

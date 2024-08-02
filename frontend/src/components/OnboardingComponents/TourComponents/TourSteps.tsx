@@ -13,6 +13,11 @@ interface State {
   steps: Step[];
   stepIndex: number;
 }
+enum AlertType {
+  None,
+  LineChart,
+  Parameter,
+}
 
 export default function TourSteps(): JSX.Element {
   const [state, setState] = useState<State>({
@@ -21,7 +26,7 @@ export default function TourSteps(): JSX.Element {
     stepIndex: 0,
   });
   const {run, steps, stepIndex} = state;
-  const [alertDialogOpen, setAlertDialogOpen] = useState(false);
+  const [alertType, setAlertType] = useState<AlertType>(AlertType.None);
 
   const dispatch = useAppDispatch();
   const activeTour = useAppSelector((state) => state.userOnboarding.activeTour);
@@ -84,27 +89,29 @@ export default function TourSteps(): JSX.Element {
   }, [isFilterDialogOpen, activeTour, run, stepIndex, dispatch]);
 
   /**
-   * this effect is to prevent the user from starting the line chart tour while the parameters tab is open
-   * and also stops the tour when the user switches to the parameters tab at the last step of the tour
+   * This effect monitors the active tour and ensures that the user is on the correct tab.
+   * If the user tries to start the lineChart tour while on the parameters tab, or the parameters tour while not on the parameters tab,
+   * it stops the tour and displays an alert.
    */
   useEffect(() => {
-    // checks if active tour is line chart and the tour is currently running
-    if (activeTour === 'lineChart' && run) {
-      // if the parameter tab is opened and the user tries to run the line chart tour, the tour is stopped
-      if (isParametersTabClicked && stepIndex < steps.length - 1) {
+    // first we check if there is no active alert
+    if (alertType === AlertType.None) {
+      // if the active tour is lineChart, the tour is running and the parameters tab is clicked we stop the tour and display an alert
+      if (activeTour === 'lineChart' && run && isParametersTabClicked) {
         setState({run: false, steps: [], stepIndex: 0});
         dispatch(setActiveTour(null)); // we must reset the active tour state, so when the user navigates back to the line chart tab, the tour doesn't start automatically
-        setAlertDialogOpen(true);
-      }
-      // when the parameters tab is clicked at the last step of the tour, the tour is then finished and closed
-      else if (isParametersTabClicked && stepIndex === steps.length - 1) {
+        setAlertType(AlertType.LineChart);
+        // similarly, if the active tour is parameters, the tour is running and the parameters tab is not clicked we stop the tour and display an alert
+      } else if (activeTour === 'parameters' && run && !isParametersTabClicked) {
         setState({run: false, steps: [], stepIndex: 0});
+        dispatch(setActiveTour(null));
+        setAlertType(AlertType.Parameter);
       }
     }
-  }, [activeTour, run, stepIndex, steps.length, isParametersTabClicked, dispatch]);
+  }, [activeTour, run, stepIndex, steps.length, isParametersTabClicked, alertType, dispatch]);
 
   const handleDialogAnswer = () => {
-    setAlertDialogOpen(false);
+    setAlertType(AlertType.None);
   };
 
   /**
@@ -172,13 +179,21 @@ export default function TourSteps(): JSX.Element {
           },
         }}
       />
-      <AlertDialog
-        open={alertDialogOpen}
-        title={tOnboarding('tourAccessAlertTitle')}
-        text={tOnboarding('lineChartTourAlertMessage')}
-        onAnswer={handleDialogAnswer}
-        confirmButtonText='OK'
-      />
+      {(alertType === AlertType.LineChart || alertType === AlertType.Parameter) && ( // we only show the alert dialog if the alert type is set to prevent multiple alerts from showing on re-renders
+        <AlertDialog
+          open={alertType === AlertType.LineChart || alertType === AlertType.Parameter}
+          title={tOnboarding('tourAccessAlertTitle')}
+          text={
+            alertType === AlertType.LineChart
+              ? tOnboarding('lineChartTourAlertMessage')
+              : alertType === AlertType.Parameter
+                ? tOnboarding('parameterTourAlertMessage')
+                : ''
+          }
+          onAnswer={handleDialogAnswer}
+          confirmButtonText='OK'
+        />
+      )}
     </div>
   );
 }

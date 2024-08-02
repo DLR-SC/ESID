@@ -8,6 +8,7 @@ import MapIcon from '@mui/icons-material/Map';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import ShowChartIcon from '@mui/icons-material/ShowChart';
 import FilterListIcon from '@mui/icons-material/FilterList';
+import Coronavirus from '@mui/icons-material/Coronavirus';
 import {useAppSelector, useAppDispatch} from '../../../store/hooks';
 import {useTheme} from '@mui/material/styles';
 import {TourType} from '../../../types/tours';
@@ -73,6 +74,13 @@ export default function TourChips(): JSX.Element {
           label={tOnboarding(`tours.lineChart.title`)}
           variant='outlined'
           onClick={() => onTourClick('lineChart')}
+        />
+        <Chip
+          icon={<Coronavirus />}
+          color={tours.parameters ? 'default' : 'primary'}
+          label={tOnboarding(`tours.parameters.title`)}
+          variant='outlined'
+          onClick={() => onTourClick('parameters')}
         />
       </Stack>
       <TourSteps />

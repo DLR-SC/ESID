@@ -32,7 +32,7 @@
   maybeLater: 'Maybe later',
   toolTipText: 'This is the floating button for help.',
   congrats: 'Congratulations!',
-  congratsContent: 'You have successfully completed the tours. You have successfully completed the tours. You can retake a tour anytime by clicking on the chips below.',
+  congratsContent: 'You have successfully completed the tours. You can retake a tour anytime by clicking on the chips below.',
   getStarted: 'Get started with ESID',
   getStartedContent: 'Select any tour below to explore and understand each feature in detail.',
   next: 'Next',
@@ -41,6 +41,7 @@
   last: 'Last',
   tourAccessAlertTitle: 'Tour Notice',
   lineChartTourAlertMessage: 'You need to be on the Line Chart tab to start this tour.',
+  parameterTourAlertMessage: 'You need to be on the Parameters tab to start this tour.',
   tours: {
     districtMap: {
       title: 'District Map',
@@ -203,15 +204,26 @@
           spotlightClicks: true,
           showProgress: true,
         },
-        step4: {
+      },
+    },
+    parameters: {
+      title: 'Parameters',
+      steps: {
+        step1: {
           target: '#tab-parameter-editor',
-          title: 'Step 4',
-          content: 'The line chart also has a parameter editor that allows you to view parameters for different scenarios. Try clicking on the paraemters tab!',
+          title: 'Step 1',
+          content: 'The parameter editor allows you to view and edit the parameters for the selected scenario. ',
           disableBeacon: true,
           spotlightClicks: true,
-          disableOverlayClose: true,
-          hideBackButton: true,
-          hideFooter: true,
+          showProgress: true,
+        },
+        step2: {
+          target: '#tab-parameter-editor',
+          title: 'Step 2',
+          content: 'You can view the parameters for the selected scenario in the parameter tab. ',
+          disableBeacon: true,
+          spotlightClicks: true,
+          showProgress: true,
         },
       },
     },

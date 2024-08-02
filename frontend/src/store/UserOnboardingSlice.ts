@@ -21,6 +21,7 @@ const initialState: UserOnboarding = {
     scenario: null,
     lineChart: null,
     filter: null,
+    parameters: null,
   },
   activeTour: null,
   allToursCompleted: false,
