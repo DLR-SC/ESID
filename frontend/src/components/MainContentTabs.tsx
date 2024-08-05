@@ -79,7 +79,7 @@ export default function MainContentTabs() {
             </Box>
           </Box>
         </TabPanel>
-        <Box sx={{flexGrow: 0, borderTop: 1, borderColor: 'divider', width: '100%'}} id='tab-parameter-editor'>
+        <Box sx={{flexGrow: 0, borderTop: 1, borderColor: 'divider', width: '100%'}} id='tab-list'>
           <TabList
             onChange={handleChange}
             centered

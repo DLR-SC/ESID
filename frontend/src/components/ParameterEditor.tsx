@@ -71,7 +71,10 @@ export default function ParameterEditor() {
   }
 
   return (
-    <Box sx={{background: theme.palette.background.paper, display: 'flex', flexDirection: 'column', height: '100%'}}>
+    <Box
+      sx={{background: theme.palette.background.paper, display: 'flex', flexDirection: 'column', height: '100%'}}
+      id='table-container'
+    >
       <TableContainer>
         <Table stickyHeader size='small' sx={{position: 'relative'}}>
           <TableHeader />
