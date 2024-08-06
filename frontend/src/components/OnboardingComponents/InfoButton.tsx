@@ -1,30 +1,36 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, {useState} from 'react';
-import Popover from '@mui/material/Popover';
+import React, {useMemo, useState} from 'react';
 import Tooltip from '@mui/material/Tooltip';
-import Box from '@mui/material/Box';
 import {useAppSelector, useAppDispatch} from '../../store/hooks';
 import {setShowTooltip, setShowPopover} from '../../store/UserOnboardingSlice';
 import IconButton from '@mui/material/IconButton';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import TourChips from './TourComponents/TourChips';
-import CloseIcon from '@mui/icons-material/Close';
-import Typography from '@mui/material/Typography';
 import {useTranslation} from 'react-i18next';
+import TopBarPopover from './TopBarPopover';
 
 /**
  * this component is an information button in the top bar that opens a popover, which contains the onboarding tours which the user can take
  */
 export default function InfoButton() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const dispatch = useAppDispatch();
+  const {t: tOnboarding} = useTranslation('onboarding');
+
   const showTooltip = useAppSelector((state) => state.userOnboarding.showTooltip);
   const showPopover = useAppSelector((state) => state.userOnboarding.showPopover);
   const allToursCompleted = useAppSelector((state) => state.userOnboarding.allToursCompleted);
-  const {t: tOnboarding} = useTranslation('onboarding');
+  const tours = useAppSelector((state) => state.userOnboarding.tours);
 
-  const dispatch = useAppDispatch();
+  /**
+   * this use memo is to calculate the total number of tours and the number of completed tours for the popover progress bar
+   **/
+  const [totalTours, completedTours] = useMemo(() => {
+    const total = Object.keys(tours).length;
+    const completed = Object.values(tours).filter(Boolean).length;
+    return [total, completed];
+  }, [tours]);
 
   const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -71,53 +77,14 @@ export default function InfoButton() {
         </IconButton>
       </Tooltip>
       {showPopover && (
-        <Popover
-          aria-label='popover'
-          data-testid='popover-testid'
-          open={true}
+        <TopBarPopover
           anchorEl={anchorEl}
+          open={showPopover}
           onClose={handlePopoverClose}
-          anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-          }}
-        >
-          <Box position='relative' p={4}>
-            {allToursCompleted ? (
-              <>
-                <Typography variant='h2' align='center' gutterBottom>
-                  {tOnboarding(`congrats`)}
-                </Typography>
-                <Typography variant='body1' align='center' gutterBottom>
-                  {tOnboarding(`congratsContent`)}
-                </Typography>
-              </>
-            ) : (
-              <>
-                <Typography variant='h2' align='center' gutterBottom>
-                  {tOnboarding(`getStarted`)}
-                </Typography>
-                <Typography variant='body1' align='center' gutterBottom>
-                  {tOnboarding(`getStartedContent`)}
-                </Typography>
-              </>
-            )}
-
-            <IconButton
-              aria-label='close-info-button'
-              onClick={handlePopoverClose}
-              sx={{
-                position: 'absolute',
-                right: 8,
-                top: 8,
-              }}
-            >
-              <CloseIcon />
-            </IconButton>
-            <TourChips />
-            <Box mt={4}></Box>
-          </Box>
-        </Popover>
+          allToursCompleted={allToursCompleted || false}
+          completedTours={completedTours}
+          totalTours={totalTours}
+        />
       )}
     </>
   );

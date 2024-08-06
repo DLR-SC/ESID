@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {useTheme} from '@mui/material/styles';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -13,10 +13,10 @@ import MobileStepper from '@mui/material/MobileStepper';
 import ArrowBackIos from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIos from '@mui/icons-material/ArrowForwardIos';
 import esidLogo from '../../../assets/logo/logo-200x66.svg';
-import TourChips from './TourComponents/TourChips';
+import TourChips from './TourComponents/TourChipsList';
 import {Trans} from 'react-i18next/TransWithoutContext';
 import {useAppSelector, useAppDispatch} from '../../store/hooks';
-import {setTourCompleted, setShowTooltip, setShowWelcomeModal} from '../../store/UserOnboardingSlice';
+import {setTourCompleted, setShowTooltip, setShowWelcomeDialog} from '../../store/UserOnboardingSlice';
 import {useTranslation} from 'react-i18next';
 
 /**
@@ -25,56 +25,62 @@ import {useTranslation} from 'react-i18next';
  * at the last slide, the user can choose a tour to start or skip it altogether.
  */
 
-export default function WelcomeModal(): JSX.Element {
+export default function WelcomeDialog(): JSX.Element {
   const theme = useTheme();
   const [step, setStep] = useState(0);
-  const showWelcomeModal = useAppSelector((state) => state.userOnboarding.showWelcomeModal);
+  const showWelcomeDialog = useAppSelector((state) => state.userOnboarding.showWelcomeDialog);
 
   const dispatch = useAppDispatch();
   const tours = useAppSelector((state) => state.userOnboarding.tours);
   const {t: tOnboarding} = useTranslation('onboarding');
 
-  // this useMemo hook gets the keys of the slides to calculate the number of slides
+  /**
+   * this useMemo hook gets the keys of the slides to calculate the number of slides
+   */
   const slideKeys = useMemo(() => Object.keys(tOnboarding('welcomeModalSlides', {returnObjects: true})), [tOnboarding]);
   const numberOfSlides = slideKeys.length;
 
+  /**
+   * this effect checks if the user has already taken at least one tour, if not, the welcome modal is shown
+   */
   useEffect(() => {
-    // this effect checks if the user has already taken at least one tour, if not, the welcome modal is shown
     const isUserFirstTime = Object.values(tours).every((tour) => tour === null);
     if (isUserFirstTime) {
-      dispatch(setShowWelcomeModal(true));
+      dispatch(setShowWelcomeDialog(true));
     }
   }, [dispatch, tours]);
 
-  // these functions handle next and previous buttons in the modal
+  /**
+   * this function handles the next button of the modal
+   */
   const handleNext = () => setStep((prev) => prev + 1);
-
   const handlePrev = () => setStep((prev) => prev - 1);
 
-  // this function handles the closing of the modal and after shows the tooltip over the information button
-  const handleClose = () => {
-    dispatch(setShowWelcomeModal(false));
+  /**
+   * this function handles the closing of the modal and after shows the tooltip over the information button
+   */
+  const handleClose = useCallback(() => {
+    dispatch(setShowWelcomeDialog(false));
     dispatch(setShowTooltip(true));
-
-    // when the modal is closed and the user didn't choose to do any tour, we set the tour states to false to prevent the modal from showing again
     Object.keys(tours).forEach((tourKey) => {
       if (tours[tourKey as keyof typeof tours] === null) {
         dispatch(setTourCompleted({tour: tourKey as keyof typeof tours, completed: false}));
       }
     });
-  };
+  }, [dispatch, tours]);
 
-  if (showWelcomeModal) {
+  if (showWelcomeDialog) {
     return (
       <Dialog
         aria-label='welcome-modal'
-        open={showWelcomeModal}
+        open={showWelcomeDialog}
         onClose={() => handleClose()}
         maxWidth='sm'
         fullWidth
         sx={{
           '& .MuiDialog-paper': {
             height: '600px',
+            padding: theme.spacing(4),
             display: 'flex',
             flexDirection: 'column',
           },
@@ -126,22 +132,24 @@ export default function WelcomeModal(): JSX.Element {
           <Typography variant='body1' paragraph>
             <Trans> {tOnboarding(`welcomeModalSlides.slide${step + 1}.content`)}</Trans>
           </Typography>
-        </DialogContent>
-        {step === numberOfSlides - 1 && (
-          <>
-            <TourChips />
-            <Button
-              data-testid='maybe-later-button'
-              onClick={() => handleClose()}
-              sx={{mr: theme.spacing(2)}}
-              variant='text'
-              color='secondary'
-            >
-              {tOnboarding(`maybeLater`)}
-            </Button>
-          </>
-        )}
 
+          {step === numberOfSlides - 1 && (
+            <>
+              <Box sx={{display: 'flex', justifyContent: 'center', padding: theme.spacing(2)}}>
+                <TourChips />
+              </Box>
+              <Button
+                data-testid='maybe-later-button'
+                onClick={() => handleClose()}
+                sx={{mr: theme.spacing(2)}}
+                variant='text'
+                color='secondary'
+              >
+                {tOnboarding(`maybeLater`)}
+              </Button>
+            </>
+          )}
+        </DialogContent>
         <Box sx={{display: 'flex', justifyContent: 'center', padding: theme.spacing(2)}}>
           <MobileStepper
             variant='dots'

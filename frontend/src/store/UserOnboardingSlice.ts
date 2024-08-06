@@ -9,7 +9,7 @@ export interface UserOnboarding {
   activeTour: TourType | null;
   allToursCompleted?: boolean;
   showTooltip: boolean;
-  showWelcomeModal: boolean;
+  showWelcomeDialog: boolean;
   showPopover: boolean;
   isFilterDialogOpen?: boolean;
   isParametersTabClicked?: boolean;
@@ -26,7 +26,7 @@ const initialState: UserOnboarding = {
   activeTour: null,
   allToursCompleted: false,
   showTooltip: false,
-  showWelcomeModal: true,
+  showWelcomeDialog: true,
   showPopover: false,
   isFilterDialogOpen: false,
   isParametersTabClicked: false,
@@ -50,8 +50,8 @@ export const userOnboardingSlice = createSlice({
     setShowTooltip(state, action: PayloadAction<boolean>) {
       state.showTooltip = action.payload;
     },
-    setShowWelcomeModal(state, action: PayloadAction<boolean>) {
-      state.showWelcomeModal = action.payload;
+    setShowWelcomeDialog(state, action: PayloadAction<boolean>) {
+      state.showWelcomeDialog = action.payload;
     },
     setShowPopover(state, action: PayloadAction<boolean>) {
       state.showPopover = action.payload;
@@ -69,7 +69,7 @@ export const {
   setTourCompleted,
   setActiveTour,
   setShowTooltip,
-  setShowWelcomeModal,
+  setShowWelcomeDialog,
   setShowPopover,
   setIsFilterDialogOpen,
   setIsParametersTabClicked,

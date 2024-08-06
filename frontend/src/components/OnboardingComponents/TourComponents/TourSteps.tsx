@@ -31,7 +31,7 @@ export default function TourSteps(): JSX.Element {
   const dispatch = useAppDispatch();
   const activeTour = useAppSelector((state) => state.userOnboarding.activeTour);
   const showPopover = useAppSelector((state) => state.userOnboarding.showPopover);
-  const showWelcomeModal = useAppSelector((state) => state.userOnboarding.showWelcomeModal);
+  const showWelcomeDialog = useAppSelector((state) => state.userOnboarding.showWelcomeDialog);
   const isFilterDialogOpen = useAppSelector((state) => state.userOnboarding.isFilterDialogOpen);
   const isParametersTabClicked = useAppSelector((state) => state.userOnboarding.isParametersTabClicked);
   const {t: tOnboarding} = useTranslation('onboarding');
@@ -53,7 +53,7 @@ export default function TourSteps(): JSX.Element {
    * this effect sets the steps to the localized tour steps when a tour is clicked and checks if the popover or modal is open
    */
   useEffect(() => {
-    if (activeTour && !showPopover && !showWelcomeModal && !run) {
+    if (activeTour && !showPopover && !showWelcomeDialog && !run) {
       setState((prevState) => ({
         ...prevState,
         run: true,
@@ -61,7 +61,7 @@ export default function TourSteps(): JSX.Element {
         stepIndex: 0,
       }));
     }
-  }, [activeTour, showPopover, showWelcomeModal, run, localizedTourSteps]);
+  }, [activeTour, showPopover, showWelcomeDialog, run, localizedTourSteps]);
 
   /**
    * this effect manages the execution of the tour when the filter dialog is open

@@ -8,15 +8,15 @@ import {I18nextProvider} from 'react-i18next';
 import i18n from '../../../util/i18nForTests';
 import {Provider} from 'react-redux';
 import React from 'react';
-import WelcomeModal from '../../../components/OnboardingComponents/WelcomeModal';
+import WelcomeDialog from '../../../components/OnboardingComponents/WelcomeDialog';
 import {setTourCompleted} from '../../../store/UserOnboardingSlice';
 
-describe('WelcomeModal', () => {
+describe('WelcomeDialog', () => {
   const renderComponent = () => {
     render(
       <Provider store={Store}>
         <I18nextProvider i18n={i18n}>
-          <WelcomeModal />
+          <WelcomeDialog />
         </I18nextProvider>
       </Provider>
     );

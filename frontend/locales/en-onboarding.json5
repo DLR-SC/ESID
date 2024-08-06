@@ -33,8 +33,9 @@
   toolTipText: 'This is the floating button for help.',
   congrats: 'Congratulations!',
   congratsContent: 'You have successfully completed the tours. You can retake a tour anytime by clicking on the chips below.',
-  getStarted: 'Get started with ESID',
-  getStartedContent: 'Select any tour below to explore and understand each feature in detail.',
+  getStarted: 'Welcome to ESID',
+  getStartedContent: "To help you get familiar with ESID, we've prepared several onboarding tours. Select a tour to explore key features and functionalities at your own pace.",
+  completed: 'completed',
   next: 'Next',
   back: 'Back',
   skip: 'Skip',
@@ -151,7 +152,7 @@
       },
     },
     filter: {
-      title: 'Filter',
+      title: 'Filters',
       steps: {
         step1: {
           target: '#manage-filters-button',

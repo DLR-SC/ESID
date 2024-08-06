@@ -8,7 +8,7 @@ import {Provider} from 'react-redux';
 import {Store} from '../../../store';
 import {I18nextProvider} from 'react-i18next';
 import i18n from '../../../util/i18nForTests';
-import TourChips from '../../../components/OnboardingComponents/TourComponents/TourChips';
+import TourChips from '../../../components/OnboardingComponents/TourComponents/TourChipsList';
 import {TourType} from 'types/tours';
 
 describe('TourChips', () => {

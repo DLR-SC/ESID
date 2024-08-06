@@ -20,7 +20,7 @@ import {I18nextProvider, useTranslation} from 'react-i18next';
 import i18n from './util/i18n';
 import {MUILocalization} from './components/shared/MUILocalization';
 import {DataProvider} from 'DataContext';
-import WelcomeModal from './components/OnboardingComponents/WelcomeModal';
+import WelcomeDialog from './components/OnboardingComponents/WelcomeDialog';
 
 import AuthProvider from './components/AuthProvider';
 /**
@@ -38,7 +38,7 @@ export default function App(): JSX.Element {
                 <MUILocalization>
                   <DataProvider>
                     <Initializer />
-                    <WelcomeModal />
+                    <WelcomeDialog />
                     <Box id='app' display='flex' flexDirection='column' sx={{height: '100%', width: '100%'}}>
                       <TopBar />
                       <Box
