@@ -5,23 +5,23 @@
   welcomeModalSlides: {
     slide1: {
       title: 'Willkommen!',
-      content: '\nSchön, dass Sie ESID nutzen. <br/><br/> ESID ist eine Plattform, die Sie bei Ihren Aufgaben im Infektionsschutz unterstützen soll.<br/><br/> ✓ Erste Aufgabe erledigen<br/> ✓ Nächste Schritte verstehen\n    ',
+      content: '\nSchön, dass Sie ESID nutzen. <br/><br/>  ESID ist eine Plattform, die Sie bei Ihren Aufgaben im Infektionsschutz unterstützen soll.<br/><br/> ✓ Erste Aufgabe erledigen<br/> ✓ Nächste Schritte verstehen\n    ',
     },
     slide2: {
       title: 'ESID kann Sie unterstützen',
-      content: '✓bei der Überwachung des (lokalen) Infektionsgeschehens. <br/><br/> ✓ bei der Bewertung, wie sich eine Infektionsdynamik in der Zukunft voraussichtlich verändern wird. <br/><br/> ✓ bei der Planung von effektiven (lokalen) Interventionsstrategien zur Eindämmung einer Infektionskrankheit. ',
+      content: '✓ bei der Überwachung des (lokalen) Infektionsgeschehens. <br/> ✓ bei der Bewertung, wie sich eine Infektionsdynamik in der Zukunft voraussichtlich verändern wird. <br/> ✓ bei der Planung von effektiven (lokalen) Interventionsstrategien zur Eindämmung einer Infektionskrankheit. ',
     },
     slide3: {
       title: 'Wie unterstützt Sie ESID bei der Überwachung?',
-      content: '✓Sie können Infektionsherde auf einer Deutschlandkarte leicht identifizieren. <br/><br/>✓\tSie können die Veränderung von Fallzahlen im Laufe der Zeit in einem anschaulichen Diagramm verfolgen.',
+      content: '✓ Sie können Infektionsherde auf einer Deutschlandkarte leicht identifizieren. <br/>✓ Sie können die Veränderung von Fallzahlen im Laufe der Zeit in einem anschaulichen Diagramm verfolgen.',
     },
     slide4: {
       title: 'Wie unterstützt Sie ESID bei der Bewertung?',
-      content: '✓\tSie können sich die voraussichtliche, zukünftige Entwicklung der Fallzahlen durch verschiedene Szenarien anzeigen lassen.',
+      content: '✓ Sie können sich die voraussichtliche, zukünftige Entwicklung der Fallzahlen durch verschiedene Szenarien anzeigen lassen.',
     },
     slide5: {
       title: 'Wie unterstützt Sie ESID bei der Planung?',
-      content: '✓\tSie können die voraussichtliche, zukünftige Entwicklung der Fallzahlen in der Zukunft vergleichen, indem Sie verschiedene Szenarien betrachten, zum Beispiel mit oder ohne Maskenpflicht. <br/><br/> ✓\tAus diesem Vergleich können Sie eine effektive Eindämmungsstrategie ableiten. ',
+      content: '✓ Sie können die voraussichtliche, zukünftige Entwicklung der Fallzahlen in der Zukunft vergleichen, indem Sie verschiedene Szenarien betrachten, zum Beispiel mit oder ohne Maskenpflicht. <br/> ✓ Aus diesem Vergleich können Sie eine effektive Eindämmungsstrategie ableiten. ',
     },
     slide6: {
       title: 'Machen Sie eine Onboarding-Tour! ',
@@ -31,10 +31,10 @@
   chooseTour: 'Wählen Sie eine Tour',
   maybeLater: 'Vielleicht später',
   toolTipText: 'Dies ist die schwebende Schaltfläche für Hilfe.',
-  congrats: 'Herzlichen Glückwunsch!',
-  congratsContent: 'Sie haben die Touren erfolgreich abgeschlossen. Sie können eine Tour jederzeit wiederholen, indem Sie auf die Chips unten klicken.',
-  getStarted: 'Starten Sie mit ESID',
-  getStartedContent: 'Um Ihnen zu helfen, sich mit ESID vertraut zu machen, haben wir mehrere Onboarding-Touren vorbereitet. Wählen Sie eine Tour aus, um die wichtigsten Merkmale und Funktionen in Ihrem eigenen Tempo zu erkunden. ',
+  completedTours: 'Sie haben alle Onboarding-Touren abgeschlossen.',
+  completedToursContent: 'Sie können eine Tour jederzeit wiederholen, indem Sie auf die unten stehenden Optionen klicken.',
+  getStarted: 'Erkunden Sie ESID durch unsere Einführungsveranstaltungen',
+  getStartedContent: 'Damit Sie sich mit ESID vertraut machen können, haben wir mehrere Einführungsrundgänge vorbereitet. Klicken Sie unten auf eine Tour, um die wichtigsten Funktionen in Ihrem eigenen Tempo zu erkunden.',
   completed: 'abgeschlossen',
   next: 'Weiter',
   back: 'Zurück',
@@ -175,6 +175,7 @@
           showProgress: true,
           disableOverlayClose: true,
           hideBackButton: true,
+          placement: 'bottom',
         },
         step3: {
           target: '#group-filter-add-card',

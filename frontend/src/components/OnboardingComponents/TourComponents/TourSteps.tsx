@@ -7,6 +7,7 @@ import {useAppDispatch, useAppSelector} from '../../../store/hooks';
 import {setShowPopover, setTourCompleted, setActiveTour} from '../../../store/UserOnboardingSlice';
 import {useTranslation} from 'react-i18next';
 import AlertDialog from '../../shared/AlertDialog';
+import {useTheme} from '@mui/material/styles';
 
 interface State {
   run: boolean;
@@ -29,6 +30,7 @@ export default function TourSteps(): JSX.Element {
   const [alertType, setAlertType] = useState<AlertType>(AlertType.None);
 
   const dispatch = useAppDispatch();
+  const theme = useTheme();
   const activeTour = useAppSelector((state) => state.userOnboarding.activeTour);
   const showPopover = useAppSelector((state) => state.userOnboarding.showPopover);
   const showWelcomeDialog = useAppSelector((state) => state.userOnboarding.showWelcomeDialog);
@@ -161,9 +163,9 @@ export default function TourSteps(): JSX.Element {
           options: {
             zIndex: 10000,
             backgroundColor: '#fff',
-            textColor: '#000',
-            primaryColor: '#1976d2',
-            width: '300px',
+            textColor: theme.palette.text.primary,
+            primaryColor: theme.palette.primary.main,
+            width: '350px',
             arrowColor: '#fff',
           },
           tooltipContainer: {
@@ -175,7 +177,7 @@ export default function TourSteps(): JSX.Element {
             marginBottom: '8px',
           },
           tooltipContent: {
-            fontSize: '0.875rem',
+            fontSize: theme.typography.body1.fontSize,
           },
         }}
       />

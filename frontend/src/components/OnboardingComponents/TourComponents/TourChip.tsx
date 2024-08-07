@@ -10,22 +10,23 @@ interface TourChipProps {
   icon: React.ReactElement;
   tourType: TourType;
   label: string;
-  color: 'default' | 'primary';
+  isCompleted: boolean;
   onClick: (tour: TourType) => void;
 }
 
 /**
  * This component is a chip that represents a tour that the user can take
  */
-const TourChip: React.FC<TourChipProps> = ({icon, tourType, label, color, onClick}) => {
+export default function TourChip(props: TourChipProps): JSX.Element {
   const theme = useTheme();
+  const chipColor = props.isCompleted ? theme.palette.text.disabled : theme.palette.primary.main;
+
   return (
     <Chip
-      icon={icon}
-      label={label}
+      icon={props.icon}
+      label={props.label}
       variant='outlined'
-      color={color}
-      onClick={() => onClick(tourType)}
+      onClick={() => props.onClick(props.tourType)}
       sx={{
         fontSize: theme.typography.listElement.fontSize,
         overflow: 'hidden',
@@ -33,12 +34,16 @@ const TourChip: React.FC<TourChipProps> = ({icon, tourType, label, color, onClic
         whiteSpace: 'nowrap',
         justifyContent: 'left',
         padding: '0 8px',
+        borderColor: chipColor,
+        color: chipColor,
         '& .MuiChip-label': {
           padding: '0 8px',
+          color: chipColor,
+        },
+        '& .MuiChip-icon': {
+          color: chipColor,
         },
       }}
     />
   );
-};
-
-export default TourChip;
+}

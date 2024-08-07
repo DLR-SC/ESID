@@ -23,30 +23,23 @@ interface TopBarPopoverProps {
 /**
  * This component is a popover that contains the onboarding tours which the user can take, it is rendered when the user clicks the information button in the top bar
  */
-const TopBarPopover: React.FC<TopBarPopoverProps> = ({
-  anchorEl,
-  open,
-  onClose,
-  allToursCompleted,
-  completedTours,
-  totalTours,
-}) => {
+export default function TopBarPopover(props: TopBarPopoverProps): JSX.Element {
   const {t: tOnboarding} = useTranslation('onboarding');
 
   /**
    * this use memo is to calculate the completion percentage of the tours for the progress bar
    */
   const completionPercentage = useMemo(() => {
-    return totalTours > 0 ? (completedTours / totalTours) * 100 : 0;
-  }, [completedTours, totalTours]);
+    return props.totalTours > 0 ? (props.completedTours / props.totalTours) * 100 : 0;
+  }, [props.completedTours, props.totalTours]);
 
   return (
     <Popover
       aria-label='popover'
       data-testid='popover-testid'
-      open={open}
-      anchorEl={anchorEl}
-      onClose={onClose}
+      open={props.open}
+      anchorEl={props.anchorEl}
+      onClose={props.onClose}
       anchorOrigin={{
         vertical: 'top',
         horizontal: 'right',
@@ -54,24 +47,24 @@ const TopBarPopover: React.FC<TopBarPopoverProps> = ({
       sx={{
         '& .MuiPopover-paper': {
           width: 600,
-          height: 370,
+          height: 350,
         },
       }}
     >
       <Box position='relative' p={4}>
         <Box>
           <Typography variant='h2' align='left' gutterBottom>
-            {allToursCompleted ? tOnboarding('congrats') : tOnboarding('getStarted')}
+            {props.allToursCompleted ? tOnboarding('completedTours') : tOnboarding('getStarted')}
           </Typography>
         </Box>
         <Box mt={2}>
           <Typography variant='body1' align='left' gutterBottom sx={{color: 'GrayText'}}>
-            {allToursCompleted ? tOnboarding('congratsContent') : tOnboarding('getStartedContent')}
+            {props.allToursCompleted ? tOnboarding('completedToursContent') : tOnboarding('getStartedContent')}
           </Typography>
         </Box>
         <IconButton
           aria-label='close-info-button'
-          onClick={onClose}
+          onClick={props.onClose}
           sx={{
             position: 'absolute',
             right: 8,
@@ -104,6 +97,4 @@ const TopBarPopover: React.FC<TopBarPopoverProps> = ({
       </Box>
     </Popover>
   );
-};
-
-export default TopBarPopover;
+}
