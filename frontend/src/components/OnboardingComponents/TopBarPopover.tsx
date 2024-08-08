@@ -64,6 +64,7 @@ export default function TopBarPopover(props: TopBarPopoverProps): JSX.Element {
         </Box>
         <IconButton
           aria-label='close-info-button'
+          test-id='close-info-button'
           onClick={props.onClose}
           sx={{
             position: 'absolute',
@@ -71,7 +72,7 @@ export default function TopBarPopover(props: TopBarPopoverProps): JSX.Element {
             top: 8,
           }}
         >
-          <CloseIcon />
+          <CloseIcon test-id='close-info-button' />
         </IconButton>
         <Box mt={4}>
           <TourChips />

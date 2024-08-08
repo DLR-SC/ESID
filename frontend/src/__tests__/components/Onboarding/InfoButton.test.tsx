@@ -8,13 +8,17 @@ import {Provider} from 'react-redux';
 import React from 'react';
 import InfoButton from '../../../components/OnboardingComponents/InfoButton';
 import {setShowTooltip} from '../../../store/UserOnboardingSlice';
+import {ThemeProvider} from '@mui/system';
+import Theme from 'util/Theme';
 
 describe('InfoButton', () => {
   const renderComponent = () => {
     render(
-      <Provider store={Store}>
-        <InfoButton />
-      </Provider>
+      <ThemeProvider theme={Theme}>
+        <Provider store={Store}>
+          <InfoButton />
+        </Provider>
+      </ThemeProvider>
     );
   };
 
@@ -29,15 +33,15 @@ describe('InfoButton', () => {
     await waitFor(() => expect(screen.getByLabelText('tooltip-info-button')).toBeInTheDocument());
   });
 
+  test('popover is not open if not clicked', () => {
+    renderComponent();
+    expect(screen.queryByLabelText('popover')).not.toBeInTheDocument();
+  });
+
   test('opens popover when the info button is clicked', () => {
     renderComponent();
     fireEvent.click(screen.getByLabelText('tooltip-info-button'));
     expect(screen.getByLabelText('popover')).toBeInTheDocument();
-  });
-
-  test('popover is not open if not clicked', () => {
-    renderComponent();
-    expect(screen.queryByLabelText('popover')).not.toBeInTheDocument();
   });
 
   test('closes popover when close button is clicked', async () => {

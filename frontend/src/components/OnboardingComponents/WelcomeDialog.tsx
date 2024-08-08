@@ -113,6 +113,7 @@ export default function WelcomeDialog(): JSX.Element {
         }}
       >
         <Button
+          test-id='close-button'
           onClick={() => handleClose()}
           sx={{
             position: 'absolute',
@@ -188,7 +189,11 @@ export default function WelcomeDialog(): JSX.Element {
           >
             <Trans> {tOnboarding(`welcomeModalSlides.slide${step + 1}.content`)}</Trans>
           </Typography>
-
+          {/* <Box>
+            <div data-testid='number-of-slides-debug'>
+              {Object.keys(tOnboarding('welcomeModalSlides', {returnObjects: true}))}
+            </div>
+          </Box> */}
           {step === numberOfSlides - 1 && (
             <>
               <Box sx={{display: 'flex', justifyContent: 'center', padding: theme.spacing(1)}}>
