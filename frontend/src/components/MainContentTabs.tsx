@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import Grid from '@mui/material/Grid';
-import React, {useCallback, useMemo, useState} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import TabContext from '@mui/lab/TabContext';
 import TabPanel from '@mui/lab/TabPanel';
 import Tab, {tabClasses} from '@mui/material/Tab';
@@ -16,10 +16,13 @@ import {useTranslation} from 'react-i18next';
 import {useAppDispatch, useAppSelector} from '../store/hooks';
 import {selectTab} from '../store/UserPreferenceSlice';
 import {useTheme} from '@mui/material/styles';
-import {setIsParametersTabClicked} from 'store/UserOnboardingSlice';
 
-const SimulationChart = React.lazy(() => import('./LineChartContainer'));
-const ParameterEditor = React.lazy(() => import('./ParameterEditor'));
+/*
+ * Import the SimulationChart and ParameterEditor components to be displayed in the tabs
+ * lazy loading is not needed here, as the performance benefits are minimal
+ */
+import SimulationChart from './LineChartContainer';
+import ParameterEditor from './ParameterEditor';
 
 /**
  * This component manages the main content, which is a collection of tabs that the user can navigate through. By default
@@ -30,7 +33,6 @@ export default function MainContentTabs() {
   const selectedTab = useAppSelector((state) => state.userPreference.selectedTab ?? '1');
   const dispatch = useAppDispatch();
   const theme = useTheme();
-  const [previousTab, setPreviousTab] = useState<string>(selectedTab);
 
   const tabStyle = useMemo(
     () => ({
@@ -51,17 +53,9 @@ export default function MainContentTabs() {
 
   const handleChange = useCallback(
     (_: unknown, newValue: string) => {
-      // this check is for the onboarding tour of the line chart, if the user switches the tabs, we dispatch an action and update the setIsParametersTabClicked state accordingly
-      if (previousTab === '2' && newValue !== '2') {
-        dispatch(setIsParametersTabClicked(false));
-      }
-      if (newValue === '2') {
-        dispatch(setIsParametersTabClicked(true));
-      }
-      dispatch(selectTab(newValue));
-      setPreviousTab(newValue);
+      return dispatch(selectTab(newValue));
     },
-    [previousTab, dispatch]
+    [dispatch]
   );
 
   return (

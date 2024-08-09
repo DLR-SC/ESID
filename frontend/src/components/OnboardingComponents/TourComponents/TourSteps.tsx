@@ -5,19 +5,14 @@ import React, {useState, useEffect, useMemo} from 'react';
 import Joyride, {CallBackProps, Step, STATUS, ACTIONS, EVENTS} from 'react-joyride';
 import {useAppDispatch, useAppSelector} from '../../../store/hooks';
 import {setShowPopover, setTourCompleted, setActiveTour} from '../../../store/UserOnboardingSlice';
+import {selectTab} from '../../../store/UserPreferenceSlice';
 import {useTranslation} from 'react-i18next';
-import AlertDialog from '../../shared/AlertDialog';
 import {useTheme} from '@mui/material/styles';
 
 interface State {
   run: boolean;
   steps: Step[];
   stepIndex: number;
-}
-enum AlertType {
-  None,
-  LineChart,
-  Parameter,
 }
 
 export default function TourSteps(): JSX.Element {
@@ -27,7 +22,6 @@ export default function TourSteps(): JSX.Element {
     stepIndex: 0,
   });
   const {run, steps, stepIndex} = state;
-  const [alertType, setAlertType] = useState<AlertType>(AlertType.None);
 
   const dispatch = useAppDispatch();
   const theme = useTheme();
@@ -35,7 +29,7 @@ export default function TourSteps(): JSX.Element {
   const showPopover = useAppSelector((state) => state.userOnboarding.showPopover);
   const showWelcomeDialog = useAppSelector((state) => state.userOnboarding.showWelcomeDialog);
   const isFilterDialogOpen = useAppSelector((state) => state.userOnboarding.isFilterDialogOpen);
-  const isParametersTabClicked = useAppSelector((state) => state.userOnboarding.isParametersTabClicked);
+  const selectedTab = useAppSelector((state) => state.userPreference.selectedTab);
   const {t: tOnboarding} = useTranslation('onboarding');
 
   /**
@@ -91,30 +85,17 @@ export default function TourSteps(): JSX.Element {
   }, [isFilterDialogOpen, activeTour, run, stepIndex, dispatch]);
 
   /**
-   * This effect monitors the active tour and ensures that the user is on the correct tab.
-   * If the user tries to start the lineChart tour while on the parameters tab, or the parameters tour while not on the parameters tab,
-   * it stops the tour and displays an alert.
+   * this effect ensures that the correct tab is selected when the user clicks on a tour
    */
   useEffect(() => {
-    // first we check if there is no active alert
-    if (alertType === AlertType.None) {
-      // if the active tour is lineChart, the tour is running and the parameters tab is clicked we stop the tour and display an alert
-      if (activeTour === 'lineChart' && run && isParametersTabClicked) {
-        setState({run: false, steps: [], stepIndex: 0});
-        dispatch(setActiveTour(null)); // we must reset the active tour state, so when the user navigates back to the line chart tab, the tour doesn't start automatically
-        setAlertType(AlertType.LineChart);
-        // similarly, if the active tour is parameters, the tour is running and the parameters tab is not clicked we stop the tour and display an alert
-      } else if (activeTour === 'parameters' && run && !isParametersTabClicked) {
-        setState({run: false, steps: [], stepIndex: 0});
-        dispatch(setActiveTour(null));
-        setAlertType(AlertType.Parameter);
+    if (activeTour) {
+      if (activeTour === 'lineChart' && selectedTab !== '1') {
+        dispatch(selectTab('1'));
+      } else if (activeTour === 'parameters' && selectedTab !== '2') {
+        dispatch(selectTab('2'));
       }
     }
-  }, [activeTour, run, stepIndex, steps.length, isParametersTabClicked, alertType, dispatch]);
-
-  const handleDialogAnswer = () => {
-    setAlertType(AlertType.None);
-  };
+  }, [activeTour, selectedTab, dispatch]);
 
   /**
    * this function handles the callback events from the Joyride component
@@ -181,21 +162,6 @@ export default function TourSteps(): JSX.Element {
           },
         }}
       />
-      {(alertType === AlertType.LineChart || alertType === AlertType.Parameter) && ( // we only show the alert dialog if the alert type is set to prevent multiple alerts from showing on re-renders
-        <AlertDialog
-          open={alertType === AlertType.LineChart || alertType === AlertType.Parameter}
-          title={tOnboarding('tourAccessAlertTitle')}
-          text={
-            alertType === AlertType.LineChart
-              ? tOnboarding('lineChartTourAlertMessage')
-              : alertType === AlertType.Parameter
-                ? tOnboarding('parameterTourAlertMessage')
-                : ''
-          }
-          onAnswer={handleDialogAnswer}
-          confirmButtonText='OK'
-        />
-      )}
     </div>
   );
 }
