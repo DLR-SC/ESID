@@ -140,16 +140,38 @@ export default function SidebarTabs(): JSX.Element {
 
   return (
     <Grid id="sidebar-tabs"item sx={{display: 'flex', flexGrow: 1, flexDirection: 'column'}}>
+
     <TabContext value={selectedTab}>   
+    <Box sx={{flexGrow: 0, borderTop: 1, borderColor: 'divider', width: '100%'}}>
+          <TabList
+            onChange={handleChange}
+            centered
+            sx={{
+              minHeight: '0',
+            }}
+          >
+            <Tab
+              label={<Typography>Map</Typography>}
+              value='1'
+              sx={tabStyle}
+            />
+            <Tab
+               label={<Typography>Statistics</Typography>}
+              value='2'
+              sx={tabStyle}
+            />
+          </TabList>
+        </Box> 
       <TabPanel value='1' sx={{flexGrow: 1, padding: 0}}>
           <Box id='sidebartabs-main-content'
             sx={{
               display: 'flex',
               flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: '422px',
-              height: '100%',
+         //     alignItems: 'center',
+         //     justifyContent: 'center',
+             // width: '422px',
+             width: '100%',
+              height: '100%'
             }}
           >
                <Box id='sidebar-map-search-bar-wrapper'>
@@ -232,15 +254,15 @@ export default function SidebarTabs(): JSX.Element {
           </Grid>
         </LoadingContainer>
       </Box>
-        {/* Hidden because of alignment issue of sidebartabs on sidebar container at the top -- Pawan*/}
-       {/*      <a
+       
+           <a
               href={`https://www.helmholtz.de/loki-pandemics/${i18n.language.includes('de') ? '' : 'en/'}`}
               target='_blank'
               rel='noopener noreferrer'
               style={{width: '40%'}}
             >
               <img src={logo} alt={t('loki-logo')} width='100%' />
-            </a> */}
+            </a> 
           </Box>
         </TabPanel>
         <TabPanel value='2' sx={{flexGrow: 1, padding: 0}}>
@@ -250,26 +272,7 @@ export default function SidebarTabs(): JSX.Element {
             </Box>
           </Box>
         </TabPanel> 
-      <Box sx={{flexGrow: 0, borderTop: 1, borderColor: 'divider', width: '100%'}}>
-          <TabList
-            onChange={handleChange}
-            centered
-            sx={{
-              minHeight: '0',
-            }}
-          >
-            <Tab
-              label={<Typography>Map</Typography>}
-              value='1'
-              sx={tabStyle}
-            />
-            <Tab
-               label={<Typography>Statistics</Typography>}
-              value='2'
-              sx={tabStyle}
-            />
-          </TabList>
-        </Box> 
+     
      </TabContext> 
     </Grid>
   );

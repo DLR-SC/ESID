@@ -85,16 +85,20 @@ export const PandemosProvider = ({children}: {children: React.ReactNode}) => {
 
   // Preprocess a single crossfilter with information of agents & locations included in the trips
   const expandedTrips = useMemo<crossfilter.Crossfilter<TripExpanded>>(() => {
-    return crossfilter(
-      trips?.map((trip) => {
-        return {
-          ...trip,
-          agent_age_group: agents![trip.agent_id].age_group,
-          start_location_type: locations![trip.start_location].location_type,
-          end_location_type: locations![trip.end_location].location_type,
-        } as TripExpanded;
-      })
-    );
+    if (trips && agents && locations) {
+      return crossfilter(
+        trips?.map((trip) => {
+          return {
+            ...trip,
+            agent_age_group: agents[trip.agent_id].age_group,
+            start_location_type: locations[trip.start_location].location_type,
+            end_location_type: locations[trip.end_location].location_type,
+          } as TripExpanded ?? {};
+        })
+      );
+    } else {
+      return crossfilter([]);
+    }
   }, [agents, locations, trips]);
 
   // Preprocess trip chains

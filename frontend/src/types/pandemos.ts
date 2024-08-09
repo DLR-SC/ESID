@@ -18,6 +18,21 @@ export namespace KeyInfo {
     /**     Cemetery */ 10: '⚰',
   };
 
+  /** Location types returning string and not icons. -Pawan */
+  export const location_type_string: Record<number, string> = {
+    /**         Home */ 0: 'Home',
+    /**       School */ 1: 'School',
+    /**         Work */ 2: 'Work',
+    /** Social Event */ 3: 'Social Event',
+    /**     Shopping */ 4: 'Shopping',
+    /**     Hospital */ 5: 'Hospital',
+    /**          ICU */ 6: 'ICU',
+    /**          Car */ 7: 'Car',
+    /**       Public */ 8: 'Public',
+    /**    Transport */ 9: 'Transport',
+    /**     Cemetery */ 10: 'Cemetery',
+  };
+   /** Location types returning string and not icons. -Pawan */
   export const transport_mode: Record<number, string> = {
     /**            Bike */ 0: '🚴‍♀️',
     /**    Car (Driver) */ 1: '🚘👤',
@@ -26,6 +41,16 @@ export namespace KeyInfo {
     /**         Walking */ 4: '🚶‍♀️',
     /**           Other */ 5: '🛸',
     /**         Unknown */ 6: '❓',
+  };
+
+  export const transport_mode_string: Record<number, string> = {
+    /**            Bike */ 0: 'Bike',
+    /**    Car (Driver) */ 1: 'Car_Driver',
+    /** Car (Passenger) */ 2: 'Car_Passenger',
+    /**             Bus */ 3: 'Bus',
+    /**         Walking */ 4: 'Walking',
+    /**           Other */ 5: 'Other',
+    /**         Unknown */ 6: 'Unknown',
   };
   
   export const activity: Record<number, string> = {
@@ -48,6 +73,16 @@ export namespace KeyInfo {
     /**                            Dead */ 6: '💀',
     /**                         Unknown */ 7: '❓',
   }; 
+
+  export const age: Record<number, string> = {
+     0: '0-4',
+    1: '5-14',
+    2: '15-34',
+    3: '35-39',
+    4: '60-79',
+    5: '80+'
+  };
+
 }
 
 export interface Agent {
@@ -64,6 +99,8 @@ export interface Location {
   location_id: number;
   /** Enum of the location's type (refer to key_info.md for more info) */
   location_type: number;
+  /** Enum of the location's type (refer to key_info.md for more info) */
+  location_type_string: string;
   /** Latitude of the location */
   lat: number;
   /** Longitude of the location */
