@@ -223,6 +223,14 @@
           spotlightClicks: true,
           showProgress: true,
         },
+        step5: {
+          target: '#tab-list',
+          title: 'Schritt 5',
+          content: 'Über diese Registerkarten können Sie zwischen verschiedenen Bereichen navigieren.',
+          disableBeacon: true,
+          spotlightClicks: true,
+          showProgress: true,
+        },
       },
     },
     parameters: {

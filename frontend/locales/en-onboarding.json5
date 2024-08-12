@@ -223,6 +223,14 @@
           spotlightClicks: true,
           showProgress: true,
         },
+        step5: {
+          target: '#tab-list',
+          title: 'Step 5',
+          content: 'You can navigate between different areas using these tabs.',
+          disableBeacon: true,
+          spotlightClicks: true,
+          showProgress: true,
+        },
       },
     },
     parameters: {

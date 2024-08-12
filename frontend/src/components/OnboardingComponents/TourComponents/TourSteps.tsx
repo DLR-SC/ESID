@@ -134,6 +134,7 @@ export default function TourSteps(): JSX.Element {
         scrollToFirstStep
         spotlightClicks
         disableOverlayClose
+        disableScrollParentFix
         locale={{
           next: tOnboarding('next'),
           skip: tOnboarding('skip'),
@@ -142,23 +143,23 @@ export default function TourSteps(): JSX.Element {
         }}
         styles={{
           options: {
-            zIndex: 10000,
-            backgroundColor: '#fff',
+            backgroundColor: theme.palette.background.paper,
             textColor: theme.palette.text.primary,
             primaryColor: theme.palette.primary.main,
             width: '350px',
-            arrowColor: '#fff',
+            arrowColor: theme.palette.background.paper,
           },
           tooltipContainer: {
             textAlign: 'left',
           },
           tooltipTitle: {
-            fontSize: '1.5rem',
-            fontWeight: 'bold',
+            fontSize: theme.typography.h1.fontSize,
+            fontWeight: theme.typography.caption.fontWeight,
             marginBottom: '8px',
           },
           tooltipContent: {
             fontSize: theme.typography.body1.fontSize,
+            fontWeight: theme.typography.body1.fontWeight,
           },
         }}
       />
