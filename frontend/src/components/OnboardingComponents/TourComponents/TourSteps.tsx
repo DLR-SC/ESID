@@ -143,6 +143,7 @@ export default function TourSteps(): JSX.Element {
         }}
         styles={{
           options: {
+            zIndex: 10000,
             backgroundColor: theme.palette.background.paper,
             textColor: theme.palette.text.primary,
             primaryColor: theme.palette.primary.main,
