@@ -32,6 +32,7 @@ import {CaseDataByNode} from 'types/caseData';
 import {useAppDispatch, useAppSelector} from 'store/hooks';
 import {GroupCategories, GroupSubcategories} from 'store/services/groupApi';
 import {CardValue, FilterValue} from 'types/card';
+import {setInitialVisit} from 'store/UserPreferenceSlice';
 
 interface ScenarioContainerProps {
   /** The minimum number of compartment rows.*/
@@ -94,6 +95,7 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
   const compartments = useAppSelector((state) => state.scenarioList.compartments);
   const storeSelectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
   const storeStartDay = useAppSelector((state) => state.dataSelection.simulationStart);
+  const isInitialUserVisit = useAppSelector((state) => state.userPreference.isInitialVisit);
 
   const [cardValues, setCardValues] = useState<Dictionary<CardValue> | undefined>();
   const [filterValues, setFilterValues] = useState<Dictionary<FilterValue[]> | undefined>();
@@ -297,6 +299,12 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
         minDate = dateToISOString(startDay);
         maxDate = dateToISOString(endDay);
       }
+
+      if (isInitialUserVisit && scenarios.length > 0) {
+        const baselineScenarioId = scenarios[0].id;
+        setActiveScenarios((prevScenarios) => [...(prevScenarios ?? []), baselineScenarioId]);
+        setSelectedScenario(baselineScenarioId);
+      }
     }
     if (caseScenarioSimulationData) {
       const entries = caseScenarioSimulationData.results.map((entry) => entry.day).sort((a, b) => a.localeCompare(b));
@@ -318,7 +326,12 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
     if (minDate && maxDate) {
       dispatch(setMinMaxDates({minDate, maxDate}));
     }
-  }, [activeScenarios, scenarioListData, dispatch, caseScenarioSimulationData]);
+
+    // Setting the initial user visit to the data and
+    if (isInitialUserVisit && scenarioListData !== undefined) {
+      dispatch(setInitialVisit(false));
+    }
+  }, [activeScenarios, scenarioListData, dispatch, caseScenarioSimulationData, isInitialUserVisit]);
 
   /*
    * This useEffect hook is utilized to enable the connection between the dashed border line of the box

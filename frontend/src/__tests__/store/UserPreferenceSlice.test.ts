@@ -3,7 +3,12 @@
 
 import {describe, test, expect} from 'vitest';
 
-import reducer, {selectHeatmapLegend, selectTab, UserPreference} from '../../store/UserPreferenceSlice';
+import reducer, {
+  selectHeatmapLegend,
+  selectTab,
+  setInitialVisit,
+  UserPreference,
+} from '../../store/UserPreferenceSlice';
 import {HeatmapLegend} from '../../types/heatmapLegend';
 
 describe('DataSelectionSlice', () => {
@@ -17,6 +22,7 @@ describe('DataSelectionSlice', () => {
       ],
     },
     selectedTab: '1',
+    isInitialVisit: true,
   };
 
   test('Initial State', () => {
@@ -35,6 +41,7 @@ describe('DataSelectionSlice', () => {
     expect(reducer(initialState, selectHeatmapLegend({legend: legend}))).toEqual({
       selectedHeatmap: legend,
       selectedTab: '1',
+      isInitialVisit: true,
     });
   });
 
@@ -49,6 +56,37 @@ describe('DataSelectionSlice', () => {
         ],
       },
       selectedTab: '2',
+      isInitialVisit: true,
+    });
+  });
+
+  test('Set initialVisit to true', () => {
+    expect(reducer(initialState, setInitialVisit(true))).toEqual({
+      selectedHeatmap: {
+        name: 'uninitialized',
+        isNormalized: true,
+        steps: [
+          {color: 'rgb(255,255,255)', value: 0},
+          {color: 'rgb(255,255,255)', value: 1},
+        ],
+      },
+      selectedTab: '1',
+      isInitialVisit: true,
+    });
+  });
+
+  test('Set initialVisit to false', () => {
+    expect(reducer(initialState, setInitialVisit(false))).toEqual({
+      selectedHeatmap: {
+        name: 'uninitialized',
+        isNormalized: true,
+        steps: [
+          {color: 'rgb(255,255,255)', value: 0},
+          {color: 'rgb(255,255,255)', value: 1},
+        ],
+      },
+      selectedTab: '1',
+      isInitialVisit: false,
     });
   });
 });
