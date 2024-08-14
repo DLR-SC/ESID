@@ -12,6 +12,8 @@ import {selectDistrict} from 'store/DataSelectionSlice';
 import {selectHeatmapLegend} from 'store/UserPreferenceSlice';
 import {GeoJsonProperties} from 'geojson';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import ToggleButton from '@mui/material/ToggleButton';
 
 export default function MapContainer() {
   const {t} = useTranslation();
@@ -32,7 +34,7 @@ export default function MapContainer() {
   const [selectedArea, setSelectedArea] = useState<GeoJsonProperties>(
     storeSelectedArea.name != ''
       ? {RS: storeSelectedArea.ags, GEN: storeSelectedArea.name, BEZ: storeSelectedArea.type}
-      : defaultValue,
+      : defaultValue
   );
   const [legend] = useState<HeatmapLegend>(storeHeatLegend);
 
@@ -52,7 +54,7 @@ export default function MapContainer() {
         ags: String(selectedArea?.['RS']),
         name: String(selectedArea?.['GEN']),
         type: String(selectedArea?.['BEZ']),
-      }),
+      })
     );
     // This effect should only run when the selectedArea changes
   }, [selectedArea, dispatch]);
@@ -63,18 +65,30 @@ export default function MapContainer() {
     // This effect should only run when the legend changes
   }, [legend, dispatch]);
 
+  const [expanded, setExpanded] = useState(false);
+
   return (
     <Box
       id='sidebar-root'
       sx={{
         // Self
-        width: '422px',
+        width: expanded ? '1200px' : '422px',
         height: '100%',
         borderRight: `1px solid ${theme.palette.divider}`,
         background: theme.palette.background.default,
+        display: 'flex',
       }}
     >
       <SidebarTabs />
+      <ToggleButton
+        color='primary'
+        selected={expanded}
+        onChange={() => setExpanded(!expanded)}
+        sx={{height: '100%', minWidth: 0, padding: 0}}
+        value=''
+      >
+        {expanded ? '◀' : '▶'}
+      </ToggleButton>
     </Box>
   );
 }

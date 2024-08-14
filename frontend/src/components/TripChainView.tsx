@@ -133,7 +133,7 @@ export default function TripChainView(): JSX.Element {
           <ToggleButton value='all'>All</ToggleButton>
         </ToggleButtonGroup>
       </Box>
-      <List sx={{width: '100%', flexGrow: 1, overflow: 'auto'}}>
+      <List sx={{minWidth: '100%', flexGrow: 1, overflow: 'auto'}}>
         {tripChainsByOccurrence?.slice(0, maxDisplayed > 0 ? maxDisplayed : -1).map((tc) => {
           return (
             <ListItem key={tc[0]} divider disablePadding>

@@ -146,7 +146,7 @@ export const PandemosProvider = ({children}: {children: React.ReactNode}) => {
       let start = 0;
       tripChain.forEach((trip, index) => {
         if (getLocation(trip.start_location)?.location_type === 0) start = index;
-        if (getLocation(trip.end_location)?.location_type === 0)
+        if (getLocation(trip.end_location)?.location_type === 0 || getLocation(trip.end_location)?.location_type === 10)
           tripChains.set(tripId++, tripChain.slice(start, index + 1));
       });
     }
