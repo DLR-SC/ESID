@@ -1,13 +1,14 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, {useState, useEffect, useMemo} from 'react';
+import React, {useState, useEffect, useMemo, useRef} from 'react';
 import Joyride, {CallBackProps, Step, STATUS, ACTIONS, EVENTS} from 'react-joyride';
 import {useAppDispatch, useAppSelector} from '../../../store/hooks';
 import {setShowPopover, setTourCompleted, setActiveTour} from '../../../store/UserOnboardingSlice';
 import {selectTab} from '../../../store/UserPreferenceSlice';
 import {useTranslation} from 'react-i18next';
 import {useTheme} from '@mui/material/styles';
+import {DataSelection, selectDate} from '../../../store/DataSelectionSlice';
 
 interface State {
   run: boolean;
@@ -22,15 +23,22 @@ export default function TourSteps(): JSX.Element {
     stepIndex: 0,
   });
   const {run, steps, stepIndex} = state;
+  const [arePreferencesSaved, setArePreferencesSaved] = useState(false);
 
   const dispatch = useAppDispatch();
   const theme = useTheme();
+  const {t: tOnboarding} = useTranslation('onboarding');
+
   const activeTour = useAppSelector((state) => state.userOnboarding.activeTour);
   const showPopover = useAppSelector((state) => state.userOnboarding.showPopover);
   const showWelcomeDialog = useAppSelector((state) => state.userOnboarding.showWelcomeDialog);
   const isFilterDialogOpen = useAppSelector((state) => state.userOnboarding.isFilterDialogOpen);
   const selectedTab = useAppSelector((state) => state.userPreference.selectedTab);
-  const {t: tOnboarding} = useTranslation('onboarding');
+  const simulationStart = useAppSelector((state) => state.dataSelection.simulationStart);
+  const dataSelection = useAppSelector((state) => state.dataSelection);
+
+  const previousSimulationStart = useRef(simulationStart);
+  const savedPreferences = useRef<null | DataSelection>(null);
 
   /**
    * this useMemo gets the localized tour steps and returns them as an array of step objects to use in the Joyride component
@@ -46,36 +54,43 @@ export default function TourSteps(): JSX.Element {
   }, [activeTour, tOnboarding]);
 
   /**
-   * this effect sets the steps to the localized tour steps when a tour is clicked and checks if the popover or modal is open
+   * this effect saves the current data selection before starting the tour
+   * sets the simulation start date, and starts the tour once preferences are saved
    */
+
   useEffect(() => {
     if (activeTour && !showPopover && !showWelcomeDialog && !run) {
-      setState((prevState) => ({
-        ...prevState,
-        run: true,
-        steps: localizedTourSteps,
-        stepIndex: 0,
-      }));
-    }
-  }, [activeTour, showPopover, showWelcomeDialog, run, localizedTourSteps]);
+      // Save the original data selection if it hasn't been saved already
+      if (!savedPreferences.current) {
+        savedPreferences.current = dataSelection; // save the current data selection of the user
+        dispatch(selectDate('2023-08-08')); // set the simulation start date (purple line) to the specified value
+        setArePreferencesSaved(true); // flag to indicate that the preferences are saved
+      }
 
-  /**
-   * this effect manages the execution of the tour when the filter dialog is open
-   * since the filter tour is a joyride controlled tour, manual control with step index is required to make sure the tour is executed correctly
-   */
-  useEffect(() => {
-    if (isFilterDialogOpen && activeTour === 'filter' && run) {
-      setState((prevState) => ({
-        ...prevState,
-        run: stepIndex === 0 ? false : run,
-        stepIndex: stepIndex === 0 ? 1 : stepIndex,
-      }));
+      // start the tour only after preferences are saved
+      if (arePreferencesSaved) {
+        setState((prevState) => ({
+          ...prevState,
+          run: true,
+          steps: localizedTourSteps,
+          stepIndex: 0,
+        }));
+        setArePreferencesSaved(false); // reset the flag after the tour starts to prevent re-triggering
+      }
     }
-  }, [activeTour, isFilterDialogOpen, run, stepIndex]);
+  }, [
+    activeTour,
+    showPopover,
+    showWelcomeDialog,
+    run,
+    dataSelection,
+    dispatch,
+    arePreferencesSaved,
+    localizedTourSteps,
+  ]);
 
   /**
    * this effect ensures that the tour is no longer active if the user closes the filter dialog during the execution of the tour
-   * because the tour is intended to be completed in the filter dialog
    */
   useEffect(() => {
     if (activeTour === 'filter' && !isFilterDialogOpen && run && stepIndex > 0) {
@@ -98,22 +113,65 @@ export default function TourSteps(): JSX.Element {
   }, [activeTour, selectedTab, dispatch]);
 
   /**
+   * this effect manages the controlled tour of the filter dialog,
+   * for joyride controlled tours, manual control with step index is required to make sure the tour is executed correctly
+   */
+  useEffect(() => {
+    if (activeTour === 'filter' && isFilterDialogOpen && stepIndex === 0) {
+      setState((prevState) => ({
+        ...prevState,
+        stepIndex: 1,
+      }));
+    }
+  }, [activeTour, isFilterDialogOpen, stepIndex]);
+
+  /**
+   * this effect manages the 3rd step of the controlled scenario tour, which is to set the simulation start date to a specific date
+   * when the simulation start date is chosen, the tour should proceed to the next step
+   */
+  useEffect(() => {
+    if (activeTour === 'scenario' && stepIndex === 2) {
+      if (simulationStart !== previousSimulationStart.current) {
+        previousSimulationStart.current = simulationStart;
+        setState((prevState) => ({
+          ...prevState,
+          stepIndex: 3,
+        }));
+      }
+    }
+  }, [simulationStart, activeTour, stepIndex]);
+
+  /**
    * this function handles the callback events from the Joyride component
    */
   const handleJoyrideCallback = (data: CallBackProps) => {
     const {action, index, status, type} = data;
-    if (status === STATUS.FINISHED || status === STATUS.SKIPPED) {
-      if (activeTour && status === STATUS.FINISHED) {
+
+    // if the tour is finished or skipped
+    if (([STATUS.FINISHED, STATUS.SKIPPED] as string[]).includes(status)) {
+      // restore the original date in the data selection
+      dispatch(selectDate(savedPreferences.current?.date || '2024-07-08'));
+      savedPreferences.current = null;
+
+      // if the tour was finished and not skipped, mark as completed
+      if (status === STATUS.FINISHED && activeTour) {
         dispatch(setTourCompleted({tour: activeTour, completed: true}));
       }
+
+      // we reset the tour state so we can restart the tour if the user clicks again
       dispatch(setActiveTour(null));
       setState({run: false, steps: [], stepIndex: 0});
-      console.log('the tour is completed: ' + activeTour);
-      if (activeTour != 'filter') {
-        dispatch(setShowPopover(true)); // this is to close the popover after the filter tour is completed
+
+      // this is to close the popover after the filter tour is completed
+      if (activeTour !== 'filter') {
+        dispatch(setShowPopover(true));
       }
-    } else if (([EVENTS.STEP_AFTER, EVENTS.TARGET_NOT_FOUND] as string[]).includes(type)) {
-      const nextStepIndex = index + (action === ACTIONS.PREV ? -1 : 1);
+
+      return;
+    }
+    // when next or back button is clicked
+    if (type === EVENTS.STEP_AFTER || type === EVENTS.TARGET_NOT_FOUND) {
+      const nextStepIndex = action === ACTIONS.PREV ? index - 1 : index + 1;
       setState((prevState) => ({
         ...prevState,
         stepIndex: nextStepIndex,

@@ -59,7 +59,7 @@ export default function ParameterEditor() {
 
   if (scenarioId !== null) {
     return (
-      <TableContainer sx={{background: theme.palette.background.paper, height: '100%'}}>
+      <TableContainer sx={{background: theme.palette.background.paper, height: '100%'}} id='table-container'>
         <Table stickyHeader size='small' sx={{position: 'relative'}}>
           <TableHeader />
           <TableBody>
