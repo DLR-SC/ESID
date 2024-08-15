@@ -4,18 +4,27 @@
 import React, {useState, useEffect, useMemo, useRef} from 'react';
 import Joyride, {CallBackProps, Step, STATUS, ACTIONS, EVENTS} from 'react-joyride';
 import {useAppDispatch, useAppSelector} from '../../../store/hooks';
-import {setShowPopover, setTourCompleted, setActiveTour} from '../../../store/UserOnboardingSlice';
-import {selectTab} from '../../../store/UserPreferenceSlice';
 import {useTranslation} from 'react-i18next';
 import {useTheme} from '@mui/material/styles';
+import {setShowPopover, setTourCompleted, setActiveTour} from '../../../store/UserOnboardingSlice';
+import {selectTab} from '../../../store/UserPreferenceSlice';
 import {DataSelection, selectDate} from '../../../store/DataSelectionSlice';
 
+/**
+ * Interface for the state of the tour steps
+ */
 interface State {
+  /**a flag to run or stop the tour */
   run: boolean;
+  /**array of Step objects for the tour */
   steps: Step[];
+  /**the current step index of the tour, keeping state of this value is necessary for joyride controlled (interactive) tours */
   stepIndex: number;
 }
 
+/**
+ * This component manages the joyride onboarding tour steps.
+ */
 export default function TourSteps(): JSX.Element {
   const [state, setState] = useState<State>({
     run: false,
@@ -23,7 +32,7 @@ export default function TourSteps(): JSX.Element {
     stepIndex: 0,
   });
   const {run, steps, stepIndex} = state;
-  const [arePreferencesSaved, setArePreferencesSaved] = useState(false);
+  const [arePreferencesSaved, setArePreferencesSaved] = useState(false); // flag to indicate that the preferences are saved
 
   const dispatch = useAppDispatch();
   const theme = useTheme();
@@ -37,8 +46,8 @@ export default function TourSteps(): JSX.Element {
   const simulationStart = useAppSelector((state) => state.dataSelection.simulationStart);
   const dataSelection = useAppSelector((state) => state.dataSelection);
 
-  const previousSimulationStart = useRef(simulationStart);
-  const savedPreferences = useRef<null | DataSelection>(null);
+  const previousSimulationStart = useRef(simulationStart); // to keep track of the previous simulation start date for the scenario controlled tour
+  const savedPreferences = useRef<null | DataSelection>(null); // to keep track of the original data selection before starting the tour
 
   /**
    * this useMemo gets the localized tour steps and returns them as an array of step objects to use in the Joyride component
@@ -57,7 +66,6 @@ export default function TourSteps(): JSX.Element {
    * this effect saves the current data selection before starting the tour
    * sets the simulation start date, and starts the tour once preferences are saved
    */
-
   useEffect(() => {
     if (activeTour && !showPopover && !showWelcomeDialog && !run) {
       // Save the original data selection if it hasn't been saved already
