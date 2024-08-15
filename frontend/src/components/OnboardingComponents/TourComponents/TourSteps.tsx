@@ -8,7 +8,7 @@ import {useTranslation} from 'react-i18next';
 import {useTheme} from '@mui/material/styles';
 import {setShowPopover, setTourCompleted, setActiveTour} from '../../../store/UserOnboardingSlice';
 import {selectTab} from '../../../store/UserPreferenceSlice';
-import {DataSelection, selectDate} from '../../../store/DataSelectionSlice';
+import {DataSelection, selectDate, selectScenario} from '../../../store/DataSelectionSlice';
 
 /**
  * Interface for the state of the tour steps
@@ -72,6 +72,7 @@ export default function TourSteps(): JSX.Element {
       if (!savedPreferences.current) {
         savedPreferences.current = dataSelection; // save the current data selection of the user
         dispatch(selectDate('2023-08-08')); // set the simulation start date (purple line) to the specified value
+        dispatch(selectScenario(72)); // select the first (base) scenario
         setArePreferencesSaved(true); // flag to indicate that the preferences are saved
       }
 
@@ -159,6 +160,8 @@ export default function TourSteps(): JSX.Element {
     if (([STATUS.FINISHED, STATUS.SKIPPED] as string[]).includes(status)) {
       // restore the original date in the data selection
       dispatch(selectDate(savedPreferences.current?.date || '2024-07-08'));
+      // restore the original selected scenario in the data selection
+      dispatch(selectScenario(savedPreferences.current?.scenario || 1));
       savedPreferences.current = null;
 
       // if the tour was finished and not skipped, mark as completed
