@@ -7,10 +7,19 @@ import {useTheme} from '@mui/material/styles';
 import {TourType} from '../../../types/tours';
 
 interface TourChipProps {
+  /** icon that is displayed on the left side of the chip */
   icon: React.ReactElement;
+
+  /** type of the tour that the chip represents */
   tourType: TourType;
+
+  /** label of the chip */
   label: string;
+
+  /** whether the tour is completed or not */
   isCompleted: boolean;
+
+  /** function that is called when the chip is clicked */
   onClick: (tour: TourType) => void;
 }
 

@@ -16,6 +16,7 @@ import Box from '@mui/material/Box';
 import TourChip from './TourChip';
 
 interface TourChipsProps {
+  /** the alignment of the chips, which varies between the components where they are rendered (welcome dialog and top bar popover). */
   align?: 'center' | 'left';
 }
 
