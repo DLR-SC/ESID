@@ -45,6 +45,7 @@ export default function TourSteps(): JSX.Element {
   const selectedTab = useAppSelector((state) => state.userPreference.selectedTab);
   const simulationStart = useAppSelector((state) => state.dataSelection.simulationStart);
   const dataSelection = useAppSelector((state) => state.dataSelection);
+  const scenarioList = useAppSelector((state) => state.scenarioList.scenarios);
 
   const previousSimulationStart = useRef(simulationStart); // to keep track of the previous simulation start date for the scenario controlled tour
   const savedPreferences = useRef<null | DataSelection>(null); // to keep track of the original data selection before starting the tour
@@ -68,16 +69,18 @@ export default function TourSteps(): JSX.Element {
    */
   useEffect(() => {
     if (activeTour && !showPopover && !showWelcomeDialog && !run) {
-      // Save the original data selection if it hasn't been saved already
       if (!savedPreferences.current) {
-        savedPreferences.current = dataSelection; // save the current data selection of the user
-        dispatch(selectDate('2023-08-08')); // set the simulation start date (purple line) to the specified value
-        dispatch(selectScenario(72)); // select the first (base) scenario
-        setArePreferencesSaved(true); // flag to indicate that the preferences are saved
-      }
+        savedPreferences.current = dataSelection; // save the current data selection of the user so we can override it with different values during the tour
 
-      // start the tour only after preferences are saved
-      if (arePreferencesSaved) {
+        const maxDate = dataSelection.maxDate || '2024-07-08'; // get the maximum date from the data selection
+        dispatch(selectDate(maxDate)); // set the simulation start date (purple line) to the maximum date
+
+        const firstScenarioId = Number(Object.keys(scenarioList)[0]); // we get the first scenario id (base scenario) from scenarioList
+        dispatch(selectScenario(firstScenarioId)); // dispatch the selectScenario action with the base scenario
+
+        setArePreferencesSaved(true); // flag to indicate that the preferences are saved
+      } else if (arePreferencesSaved) {
+        // starting the tour only after preferences are saved
         setState((prevState) => ({
           ...prevState,
           run: true,
@@ -96,6 +99,7 @@ export default function TourSteps(): JSX.Element {
     dispatch,
     arePreferencesSaved,
     localizedTourSteps,
+    scenarioList,
   ]);
 
   /**
@@ -158,18 +162,16 @@ export default function TourSteps(): JSX.Element {
 
     // if the tour is finished or skipped
     if (([STATUS.FINISHED, STATUS.SKIPPED] as string[]).includes(status)) {
-      // restore the original date in the data selection
-      dispatch(selectDate(savedPreferences.current?.date || '2024-07-08'));
-      // restore the original selected scenario in the data selection
-      dispatch(selectScenario(savedPreferences.current?.scenario || 1));
-      savedPreferences.current = null;
+      dispatch(selectDate(savedPreferences.current?.date || '2024-07-08')); // restore the original date in the data selection
+      dispatch(selectScenario(savedPreferences.current?.scenario || 1)); // restore the original selected scenario in the data selection
+      savedPreferences.current = null; // reset the saved preferences after the tour is completed
 
       // if the tour was finished and not skipped, mark as completed
       if (status === STATUS.FINISHED && activeTour) {
         dispatch(setTourCompleted({tour: activeTour, completed: true}));
       }
 
-      // we reset the tour state so we can restart the tour if the user clicks again
+      // we reset the tour state so we can restart the tour again if the user clicks again
       dispatch(setActiveTour(null));
       setState({run: false, steps: [], stepIndex: 0});
 
