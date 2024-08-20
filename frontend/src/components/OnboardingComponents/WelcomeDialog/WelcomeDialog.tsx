@@ -96,19 +96,21 @@ export default function WelcomeDialog({
         <Slide step={step} title={title} content={content} imageSrc={images[step]} />
         <>
           {showTourChips && (
-            <Box sx={{display: 'flex', justifyContent: 'center', padding: theme.spacing(1)}}>
-              <TourChips align='center' />
-            </Box>
+            <>
+              <Box sx={{display: 'flex', justifyContent: 'center', padding: theme.spacing(1)}}>
+                <TourChips align='center' />
+              </Box>
+              <Button
+                data-testid='maybe-later-button'
+                sx={{marginTop: theme.spacing(2)}}
+                onClick={onClose}
+                variant='text'
+                color='secondary'
+              >
+                {maybeLaterText}
+              </Button>
+            </>
           )}
-          <Button
-            data-testid='maybe-later-button'
-            sx={{marginTop: theme.spacing(2)}}
-            onClick={onClose}
-            variant='text'
-            color='secondary'
-          >
-            {maybeLaterText}
-          </Button>
         </>
         <Box sx={{display: 'flex', justifyContent: 'center', padding: theme.spacing(1)}}>
           <MobileStepper

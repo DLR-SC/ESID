@@ -7,9 +7,11 @@ import {useAppSelector, useAppDispatch} from '../../../store/hooks';
 import {setShowWelcomeDialog, setTourCompleted, setShowTooltip} from '../../../store/UserOnboardingSlice';
 import WelcomeDialog from './WelcomeDialog';
 import esidLogo from '../../../../assets/logo/logo-200x66.png';
-import welcomeSlidesIllustration1 from '../../../../assets/logo/welcome-slides-1.png';
-import welcomeSlidesIllustration2 from '../../../../assets/logo/welcome-slides-2.png';
-import welcomeSlidesIllustration3 from '../../../../assets/logo/welcome-slides-3.png';
+import welcomeSlidesIllustration1 from '../../../../assets/logo/illustration-1.png';
+import welcomeSlidesIllustration2 from '../../../../assets/logo/illustration-2.svg';
+import welcomeSlidesIllustration3 from '../../../../assets/logo/illustration-3.svg';
+import welcomeSlidesIllustration4 from '../../../../assets/logo/illustration-4.png';
+import welcomeSlidesIllustration5 from '../../../../assets/logo/illustration-5.svg';
 
 /**
  * this component wraps the WelcomeDialog component and handles its state
@@ -63,7 +65,6 @@ export default function WelcomeDialogWrapper(): JSX.Element {
 
   /**
    * this useMemo hook memoizes the images to be shown in the welcome modal
-   * TODO: the images are temporary for now and should be replaced with the final ones
    */
   const memoizedImages: {[key: number]: string} = useMemo(
     () => ({
@@ -71,8 +72,8 @@ export default function WelcomeDialogWrapper(): JSX.Element {
       1: welcomeSlidesIllustration1,
       2: welcomeSlidesIllustration2,
       3: welcomeSlidesIllustration3,
-      4: welcomeSlidesIllustration1,
-      5: welcomeSlidesIllustration2,
+      4: welcomeSlidesIllustration4,
+      5: welcomeSlidesIllustration5,
     }),
     []
   );
