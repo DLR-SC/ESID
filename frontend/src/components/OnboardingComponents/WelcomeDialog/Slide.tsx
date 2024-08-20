@@ -78,7 +78,7 @@ export default function Slide({step, title, content, imageSrc}: SlideProps): JSX
           alignItems: 'center',
           justifyContent: 'center',
           textAlign: 'center',
-          maxWidth: '500px',
+          maxWidth: '450px',
           margin: '0 auto',
         }}
       >

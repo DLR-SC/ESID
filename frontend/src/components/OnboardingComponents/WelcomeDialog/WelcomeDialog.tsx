@@ -97,18 +97,20 @@ export default function WelcomeDialog({
         <>
           {showTourChips && (
             <>
-              <Box sx={{display: 'flex', justifyContent: 'center', padding: theme.spacing(1)}}>
+              <Box sx={{display: 'flex', justifyContent: 'center'}}>
                 <TourChips align='center' />
               </Box>
-              <Button
-                data-testid='maybe-later-button'
-                sx={{marginTop: theme.spacing(2)}}
-                onClick={onClose}
-                variant='text'
-                color='secondary'
-              >
-                {maybeLaterText}
-              </Button>
+              <Box sx={{display: 'flex', justifyContent: 'center'}}>
+                <Button
+                  data-testid='maybe-later-button'
+                  sx={{marginTop: theme.spacing(2)}}
+                  onClick={onClose}
+                  variant='text'
+                  color='secondary'
+                >
+                  {maybeLaterText}
+                </Button>
+              </Box>
             </>
           )}
         </>
