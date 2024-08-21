@@ -89,7 +89,7 @@
         step1: {
           target: '#scenario-container',
           title: 'Schritt 1',
-          content: 'In diesem Abschnitt werden die verschiedenen Szenariokarten dargestellt. Szenarien zeigen ein zusammenhängendes Bild der möglichen Entwicklung eines Infektionsereignisses.',
+          content: 'In diesem Abschnitt werden die verschiedenen Szenariokarten dargestellt. Die Szenarien zeigen ein zusammenhängendes Bild der möglichen Entwicklung eines Infektionsereignisses.',
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,
@@ -114,6 +114,7 @@
           placement: 'left-start',
           hideCloseButton: true,
           hideFooter: true,
+          spotlightPadding: 50,
         },
         step4: {
           target: '#compartments-list',
@@ -131,7 +132,8 @@
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,
-          placement: 'right-start',
+          placement: 'bottom-start',
+          disableOverlay: true,
         },
         step6: {
           target: '#card-container',
@@ -158,16 +160,17 @@
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,
-          placement: 'bottom',
+          placement: 'left-start',
+          disableOverlay: true,
         },
         step9: {
-          target: '#card-container',
+          target: '#scenario-container',
           title: 'Schritt 9',
           content: 'In der Szenario-Box werden verschiedene Werte für den Infektionsstatus angezeigt. Diese Werte geben die Anzahl der Personen mit einem bestimmten Infektionsstatus innerhalb eines bestimmten Szenarios an. Sie können sie in dem Liniendiagramm unten und auf der Karte sehen.',
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,
-          placement: 'bottom',
+          placement: 'bottom-start',
         },
         step10: {
           target: '#card-container',
@@ -176,7 +179,8 @@
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,
-          placement: 'bottom-start',
+          placement: 'left-start',
+          disableOverlay: true,
         },
         step11: {
           target: '#scenario-add-button',
@@ -195,7 +199,7 @@
         step1: {
           target: '#manage-filters-button',
           title: 'Schritt 1',
-          content: 'Filter bieten konfigurierbare Optionen für altersgruppenbasierte Filterung. Damit können Sie die Daten auf der Grundlage von Altersgruppen filtern. Klicken Sie hier, um die Filteroptionen zu erkunden',
+          content: 'Filter bieten konfigurierbare Optionen, um die Daten nach Altersgruppen zu filtern. Klicken Sie hier, um altersbasierte Filter zu entdecken und anzuwenden.',
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,
@@ -218,7 +222,7 @@
         step3: {
           target: '#group-filter-add-card',
           title: 'Schritt 3',
-          content: 'Sie können einen neuen Filter hinzufügen, indem Sie auf diese Schaltfläche klicken. Nach der Auswahl eines Filters werden die gefilterten Werte im Szenariokasten angezeigt. Klicken Sie dazu auf den Pfeil neben dem Szenariokasten, um die Szenariowerte mit dem angewendeten Filter zu sehen',
+          content: 'Um einen neuen Filter hinzuzufügen, klicken Sie auf diese Schaltfläche. Sobald ein Filter ausgewählt ist, werden die gefilterten Werte im Szenariokasten angezeigt. Sie können diese Werte ansehen, indem Sie auf den Pfeil neben dem Szenariokasten klicken, der die Szenariowerte mit dem angewendeten Filter anzeigt.',
           disableBeacon: true,
           showProgress: true,
           disableOverlayClose: true,
@@ -249,11 +253,12 @@
         step3: {
           target: '#chartdiv',
           title: 'Schritt 3',
-          content: 'Das Diagramm wird dynamisch aktualisiert, wenn Sie das Szenario, den Infektionsstatus oder den Bezirk ändern.',
+          content: 'Das Diagramm wird dynamisch aktualisiert, wenn Sie das Szenario, den Infektionsstatus oder den Bezirk ändern.  Versuchen Sie, einen anderen Bezirk oder Infektionsstatus auszuwählen, um zu sehen, wie das Diagramm in Echtzeit aktualisiert wird.',
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,
-          placement: 'top-start',
+          placement: 'top-end',
+          disableOverlay: true,
         },
         step4: {
           target: '#chartdiv',
@@ -262,7 +267,7 @@
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,
-          placement: 'top',
+          placement: 'left',
         },
         step5: {
           target: '#chartdiv',
@@ -272,6 +277,7 @@
           spotlightClicks: true,
           showProgress: true,
           placement: 'top-end',
+          disableOverlay: true,
         },
         step6: {
           target: '#chartdiv',
@@ -288,13 +294,14 @@
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,
+          placement: 'top-end',
         },
         step8: {
           target: '#tab-list',
           title: 'Schritt 8',
           content: 'Über diese Registerkarten können Sie zwischen verschiedenen Bereichen navigieren.',
           disableBeacon: true,
-          spotlightClicks: true,
+          spotlightClicks: false,
           showProgress: true,
         },
       },

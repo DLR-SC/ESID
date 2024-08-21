@@ -89,7 +89,7 @@
         step1: {
           target: '#scenario-container',
           title: 'Step 1',
-          content: 'This section represents the different scenario cards. 📊 Scenarios show a coherent picture of the possible development of an infection event. ',
+          content: 'This section represents the different scenario cards. Scenarios show a coherent picture of the possible development of an infection event. ',
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,
@@ -114,6 +114,7 @@
           placement: 'left-start',
           hideCloseButton: true,
           hideFooter: true,
+          spotlightPadding: 50,
         },
         step4: {
           target: '#compartments-list',
@@ -131,7 +132,8 @@
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,
-          placement: 'right-start',
+          placement: 'bottom-start',
+          disableOverlay: true,
         },
         step6: {
           target: '#card-container',
@@ -158,16 +160,17 @@
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,
-          placement: 'bottom',
+          placement: 'left-start',
+          disableOverlay: true,
         },
         step9: {
-          target: '#card-container',
+          target: '#scenario-container',
           title: 'Step 9',
           content: 'Different values of the infection status are shown in the scenario box. Those values indicate the number of people with a specific infection status within a specific scenario. You can see them visualized in the line diagram below and on the map. ',
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,
-          placement: 'bottom',
+          placement: 'bottom-start',
         },
         step10: {
           target: '#card-container',
@@ -176,7 +179,8 @@
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,
-          placement: 'bottom-start',
+          placement: 'left-start',
+          disableOverlay: true,
         },
         step11: {
           target: '#scenario-add-button',
@@ -195,7 +199,7 @@
         step1: {
           target: '#manage-filters-button',
           title: 'Step 1',
-          content: 'Filters provide configurable options for age group-based filtering. It allows you to filter the data based on age groups. Click here to explore the filter options. ',
+          content: 'Filters offer configurable options to tailor the data by age group. Click here to explore and apply age-based filters.',
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,
@@ -218,7 +222,7 @@
         step3: {
           target: '#group-filter-add-card',
           title: 'Step 3',
-          content: 'A new filter can be added by clicking on this button. After selecting a filter, the filtered values are displayed in the scenario box, which can be seen by clicking the arrow next to the scenario box to display the scenario values with the filter applied. ',
+          content: 'To add a new filter, click on this button. Once a filter is selected, the filtered values will be displayed in the scenario box. You can view these values by clicking the arrow next to the scenario box, which will show the scenario values with the filter applied.',
           disableBeacon: true,
           showProgress: true,
           disableOverlayClose: true,
@@ -249,11 +253,12 @@
         step3: {
           target: '#chartdiv',
           title: 'Step 3',
-          content: 'The chart dynamically updates when you change the scenario, infection status, or district.',
+          content: 'The chart dynamically updates when you change the scenario, infection status, or district.  Try selecting a different district or infection status to see how the chart updates in real-time.',
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,
-          placement: 'top-start',
+          placement: 'top-end',
+          disableOverlay: true,
         },
         step4: {
           target: '#chartdiv',
@@ -262,7 +267,7 @@
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,
-          placement: 'top',
+          placement: 'left',
         },
         step5: {
           target: '#chartdiv',
@@ -272,6 +277,7 @@
           spotlightClicks: true,
           showProgress: true,
           placement: 'top-end',
+          disableOverlay: true,
         },
         step6: {
           target: '#chartdiv',
@@ -288,6 +294,7 @@
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,
+          placement: 'top-end',
         },
         step8: {
           target: '#tab-list',
@@ -296,6 +303,7 @@
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,
+          spotlightClicks: false,
         },
       },
     },
