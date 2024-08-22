@@ -47,7 +47,6 @@ export default function TopBarPopover(props: TopBarPopoverProps): JSX.Element {
       sx={{
         '& .MuiPopover-paper': {
           width: 600,
-          height: 350,
         },
       }}
     >
