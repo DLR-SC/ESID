@@ -40,13 +40,17 @@ export default function Slide({step, title, content, imageSrc}: SlideProps): JSX
           src={imageSrc}
           alt={`Illustration ${step + 1}`}
           style={{
-            maxWidth: '100%',
-            maxHeight: '100%',
+            maxWidth: '80%',
+            maxHeight: '80%',
             objectFit: 'cover',
           }}
         />
       </Box>
-      <DialogTitle>
+      <DialogTitle
+        sx={{
+          paddingBottom: 1,
+        }}
+      >
         <Box
           sx={{
             display: 'flex',
@@ -55,7 +59,7 @@ export default function Slide({step, title, content, imageSrc}: SlideProps): JSX
             justifyContent: 'center',
             textAlign: 'center',
             height: '100%',
-            minHeight: '50px',
+            minHeight: '70px',
           }}
         >
           <Typography
@@ -79,6 +83,7 @@ export default function Slide({step, title, content, imageSrc}: SlideProps): JSX
           justifyContent: 'center',
           textAlign: 'center',
           maxWidth: '450px',
+          maxHeight: '200px',
           margin: '0 auto',
         }}
       >
