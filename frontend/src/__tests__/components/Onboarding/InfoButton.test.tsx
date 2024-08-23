@@ -38,18 +38,21 @@ describe('InfoButton', () => {
     expect(screen.queryByLabelText('popover')).not.toBeInTheDocument();
   });
 
-  test('opens popover when the info button is clicked', () => {
+  test('opens popover when the info button is clicked', async () => {
     renderComponent();
-    fireEvent.click(screen.getByLabelText('tooltip-info-button'));
-    expect(screen.getByLabelText('popover')).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId('info-button'));
+    await waitFor(() => {
+      expect(screen.getByTestId('popover-testid')).toBeInTheDocument();
+    });
   });
 
   test('closes popover when close button is clicked', async () => {
     renderComponent();
-
-    fireEvent.click(screen.getByLabelText('tooltip-info-button'));
-    expect(screen.getByLabelText('popover')).toBeInTheDocument();
-    fireEvent.click(screen.getByLabelText('close-info-button'));
+    fireEvent.click(screen.getByTestId('info-button'));
+    await waitFor(() => {
+      expect(screen.getByTestId('popover-testid')).toBeInTheDocument();
+    });
+    fireEvent.click(screen.getByTestId('close-info-button'));
     await waitFor(() => {
       expect(screen.queryByTestId('popover-testid')).not.toBeInTheDocument();
     });
