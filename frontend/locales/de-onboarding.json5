@@ -272,7 +272,7 @@
         step5: {
           target: '#chartdiv',
           title: 'Schritt 5',
-          content: 'Versuchen Sie, die lila Linie auf ein anderes Datum zu verschieben. Beobachten Sie, wie sich die Werte in den Szenariokarten und auf der Karte entsprechend ändern. Diese Werte spiegeln immer das ausgewählte Datum wider.',
+          content: 'Klicken Sie auf die Karte, um die lila Linie auf ein anderes Datum zu verschieben. Beobachten Sie, wie sich die Werte in den Szenariokarten und auf der Karte entsprechend ändern. Diese Werte spiegeln immer das ausgewählte Datum wider.',
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,

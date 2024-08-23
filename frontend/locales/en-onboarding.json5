@@ -272,7 +272,7 @@
         step5: {
           target: '#chartdiv',
           title: 'Step 5',
-          content: 'Try moving the purple line to a different date. Observe how the values in the scenario cards and on the map change accordingly. These values always reflect the selected date. ',
+          content: 'Try clicking on the map to move the purple line to a different date. Observe how the values in the scenario cards and on the map change accordingly. These values always reflect the selected date. ',
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,

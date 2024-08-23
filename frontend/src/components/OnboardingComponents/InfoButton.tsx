@@ -3,11 +3,12 @@
 
 import React, {useMemo, useState} from 'react';
 import Tooltip from '@mui/material/Tooltip';
-import {useAppSelector, useAppDispatch} from '../../store/hooks';
-import {setShowTooltip, setShowPopover} from '../../store/UserOnboardingSlice';
 import IconButton from '@mui/material/IconButton';
+import Badge from '@mui/material/Badge';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import {useTranslation} from 'react-i18next';
+import {useAppSelector, useAppDispatch} from '../../store/hooks';
+import {setShowTooltip, setShowPopover} from '../../store/UserOnboardingSlice';
 import TopBarPopover from './TopBarPopover';
 
 /**
@@ -67,14 +68,26 @@ export default function InfoButton() {
           },
         }}
       >
-        <IconButton
+        <Badge
+          badgeContent={showPopover ? 0 : totalTours - completedTours}
           color='primary'
-          sx={{textDecoration: 'overline'}}
-          onClick={handlePopoverOpen}
-          data-testid='info-button'
+          sx={{
+            '& .MuiBadge-badge': {
+              top: '9px',
+              right: '9px',
+              display: showPopover ? 'none' : 'inline-flex',
+            },
+          }}
         >
-          <InfoOutlinedIcon />
-        </IconButton>
+          <IconButton
+            color='primary'
+            sx={{textDecoration: 'overline'}}
+            onClick={handlePopoverOpen}
+            data-testid='info-button'
+          >
+            <InfoOutlinedIcon sx={{fontSize: '1.6rem'}} />
+          </IconButton>
+        </Badge>
       </Tooltip>
       {showPopover && (
         <TopBarPopover
