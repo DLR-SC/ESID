@@ -13,7 +13,7 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       PGDATA: /data/postgres
     volumes:
-      - postgres-data:/data/postgres
+      - ${VOLUME_DIR}/postgres-data:/data/postgres
 
   backend:
     image: esid/backend:latest
@@ -35,7 +35,7 @@ services:
     ports:
       - 8000:8000
     volumes:
-      - django-data:/localdata
+      - ${VOLUME_DIR}/django-data:/localdata
     depends_on:
       - db
 
@@ -48,7 +48,7 @@ services:
     ports:
       - '5050:80'
     volumes:
-      - pgadmin-data:/var/lib/pgadmin
+      - ${VOLUME_DIR}/pgadmin-data:/var/lib/pgadmin
     depends_on:
       - db
 
