@@ -7,8 +7,8 @@ export function getGrid(bounds: [[number, number], [number, number]], level: num
     const scalingFactorLong = 2 * latitudeSpacing[level] / 3600; // BS is in Zone 2
 
     const latMin: number = bounds[0][0];
-    const latMax: number = bounds[1][0];
     const lonMin: number = bounds[0][1];
+    const latMax: number = bounds[1][0];
     const lonMax: number = bounds[1][1];
 
     const latMinNew: number = latMin - latMin % scalingFactorLat;
@@ -22,11 +22,14 @@ export function getGrid(bounds: [[number, number], [number, number]], level: num
     };
 }
 
+
 function latitudeCoordinates(latMin: number, latMax: number, lonMin: number, lonMax: number, level: number) {
     const linesLat = [];
-    const latSpacing = latitudeSpacing[level] / 3600;
 
-    for (let lat = latMin; lat <= (latMax + latSpacing); lat += latSpacing) {
+    for (let lat = latMin; lat <= (latMax + latitudeSpacing[level] / 3600); lat += latitudeSpacing[level] / 3600) {
+        const { factor } = getLongitudinalFactorAndZone(lat);
+        const latSpacing = (factor * latitudeSpacing[level]) / 3600;
+
         const latLine: Array<[number, number]> = [];
         const lonRange = range(lonMin, lonMax, latSpacing);
 
@@ -41,16 +44,15 @@ function latitudeCoordinates(latMin: number, latMax: number, lonMin: number, lon
 
 function longitudeCoordinates(latMin: number, latMax: number, lonMin: number, lonMax: number, level: number) {
     const linesLong = [];
+    const lonSpacing = (latitudeSpacing[level]) / 3600;
 
-    for (let lat = latMin; lat <= latMax + latitudeSpacing[level] / 3600; lat += latitudeSpacing[level] / 3600) {
-        const { factor } = getLongitudinalFactorAndZone(lat);
-        const lonIncrement = (factor * latitudeSpacing[level]) / 3600;
+    for (let lat = latMin; lat <= latMax + lonSpacing; lat += lonSpacing) {    
 
-        const lonRange = range(lonMin, lonMax, lonIncrement);
+        const lonRange = range(lonMin, lonMax, lonSpacing);
         for (let lon of lonRange) {
             linesLong.push([
                 [lon, lat],
-                [lon, lat + lonIncrement],
+                [lon, lat + lonSpacing],
             ]);
         }
     }
@@ -124,18 +126,4 @@ export function cellBoundsFromId(cellIdentifier: string): Array<Array<number>> |
     return null;
 }
 
-function getResolutionFromZoom(input: number): number {
-    const inputStart = 14;  
-    const inputEnd = 18;  
-    const outputStart = 10; 
-    const outputEnd = 14;  
-
-    if (input < inputStart || input > inputEnd) {
-        throw new Error("Input value out of range");
-    }
-
-
-    const output = Math.round(outputStart + ((input - inputStart) * (outputEnd - outputStart)) / (inputEnd - inputStart));
-    return output;
-}
 
