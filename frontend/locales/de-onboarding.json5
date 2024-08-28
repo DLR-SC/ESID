@@ -5,10 +5,10 @@
   welcomeModalSlides: {
     slide1: {
       title: 'Willkommen!',
-      content: '\nSchön, dass Sie ESID nutzen. <br/><br/>  ESID ist eine Plattform, die Sie bei Ihren Aufgaben im Infektionsschutz unterstützen soll.<br/><br/> ✓ Erste Aufgabe erledigen<br/> ✓ Nächste Schritte verstehen\n    ',
+      content: '\nSchön, dass Sie ESID nutzen. <br/><br/>  ESID ist eine Plattform, die Sie bei Ihren Aufgaben im Infektionsschutz unterstützen soll.<br/><br/> ✓ Erste Aufgabe erledigen. <br/> ✓ Nächste Schritte verstehen. \n    ',
     },
     slide2: {
-      title: 'ESID kann Sie unterstützen',
+      title: 'ESID kann Sie unterstützen: ',
       content: '✓ bei der Überwachung des (lokalen) Infektionsgeschehens. <br/> ✓ bei der Bewertung, wie sich eine Infektionsdynamik in der Zukunft voraussichtlich verändern wird. <br/> ✓ bei der Planung von effektiven (lokalen) Interventionsstrategien zur Eindämmung einer Infektionskrankheit. ',
     },
     slide3: {
@@ -21,7 +21,7 @@
     },
     slide5: {
       title: 'Wie unterstützt Sie ESID bei der Planung?',
-      content: '✓ Sie können die voraussichtliche, zukünftige Entwicklung der Fallzahlen in der Zukunft vergleichen, indem Sie verschiedene Szenarien betrachten, zum Beispiel mit oder ohne Maskenpflicht. <br/> ✓ Aus diesem Vergleich können Sie eine effektive Eindämmungsstrategie ableiten. ',
+      content: '✓ Sie können verschiedene Szenarien, zum Beispiel mit oder ohne Maskenpflicht, betrachten und damit die voraussichtliche, zukünftige Entwicklung von Fallzahlen im Rahmen dieser Szenarien vergleichen. <br/> ✓ Aus diesem Vergleich können Sie eine effektive Eindämmungsstrategie ableiten. ',
     },
     slide6: {
       title: 'Machen Sie eine Onboarding-Tour! ',
@@ -30,7 +30,7 @@
   },
   chooseTour: 'Wählen Sie eine Tour',
   maybeLater: 'Vielleicht später',
-  toolTipText: 'Dies ist die schwebende Schaltfläche für Hilfe.',
+  toolTipText: 'Klicken Sie hier für weitere Informationen.',
   completedTours: 'Sie haben alle Onboarding-Touren abgeschlossen.',
   completedToursContent: 'Sie können eine Tour jederzeit wiederholen, indem Sie auf die unten stehenden Optionen klicken.',
   getStarted: 'Erkunden Sie ESID durch unsere Einführungsveranstaltungen',
@@ -50,7 +50,7 @@
         step1: {
           target: '#sidebar-root',
           title: 'Schritt 1',
-          content: 'Die Kreiskarte zeigt eine Karte von Deutschland. Sie dient als Choropleth-Karte für geographisch verteilte Daten nach Landkreisen. Sie können einen anderen Bezirk auswählen, um Daten in anderen Komponenten zu filtern ',
+          content: 'Die Karte zeigt eine Übersicht aller Land- und Stadtkreise von Deutschland.  Durch Anklicken können Sie einen anderen Bezirk auswählen und sich Falldaten für bestimmte Regionen anzeigen lassen. ',
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,
@@ -59,7 +59,7 @@
         step2: {
           target: '#sidebar-root',
           title: 'Schritt 2',
-          content: 'Um einen detaillierteren Überblick zu erhalten, können Sie die Karte mit dem Plus- oder Minus-Symbol oder dem Mausrad vergrößern oder verkleinern. Mit der Schaltfläche Zurücksetzen können Sie die Karte auf ihre Standardansicht zurücksetzen',
+          content: 'Um einen detaillierteren Überblick zu erhalten, können Sie die Karte mit dem Plus- oder Minus-Symbol oder dem Mausrad vergrößern oder verkleinern. Mit dem Button „Zurücksetzen“ können Sie die Karte auf ihre Standardansicht zurücksetzen.',
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,
@@ -68,7 +68,7 @@
         step3: {
           target: '#side-bar-heat-legend',
           title: 'Schritt 3',
-          content: 'Die Bezirkskarte verfügt außerdem über eine anpassbare Wärmelegende, mit der Sie verschiedene Farbschemata auswählen können',
+          content: 'Die Karte verfügt außerdem über eine anpassbare Farblegende.  Sie können hier zwischen unterschiedlichen Farbschemata auswählen. Die Farblegende zeigt, in welchen Regionen Fallzahlen sehr hoch, moderat oder niedrig sind. Die Fallzahlen in der Karte beziehen sich immer auf einen bestimmten Infektionsstatus, welcher rechts neben der Karte gewählt werden, sowie ein bestimmtes Datum, welches im Liniendiagramm mit Hilfe der blau-lila Linie ausgewählt werden kann.',
           disableBeacon: true,
           showProgress: true,
           placement: 'right',
@@ -76,7 +76,7 @@
         step4: {
           target: '#sidebar-map-search-bar-wrapper',
           title: 'Schritt 4',
-          content: 'Es gibt auch eine Suchleiste mit einer Autovervollständigungsfunktion, die Ihnen hilft, den Bezirk ohne geografische Kenntnisse zu finden',
+          content: 'Die Suchleiste mit automatischer Vervollständigung hilft Ihnen dabei, ganz einfach den von Ihnen gewünschten Land- oder Stadtkreis zu finden. ',
           disableBeacon: true,
           showProgress: true,
           placement: 'right-start',
@@ -89,7 +89,7 @@
         step1: {
           target: '#scenario-container',
           title: 'Schritt 1',
-          content: 'In diesem Abschnitt werden die verschiedenen Szenariokarten dargestellt. Die Szenarien zeigen ein zusammenhängendes Bild der möglichen Entwicklung eines Infektionsereignisses.',
+          content: 'In diesem Bereich werden die verschiedenen Szenariokarten dargestellt. Die Szenarien zeigen, wie sich ein Infektionsgeschehen in der Zukunft entwickeln könnte.',
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,
@@ -98,7 +98,7 @@
         step2: {
           target: '#scenario-view-compartment-list-date',
           title: 'Schritt 2',
-          content: 'Das Referenzdatum wird verwendet, um Veränderungen in der Inzidenz von Infektionen im Laufe der Zeit zu visualisieren. Das Referenzdatum bildet den Bezug zu dem ausgewählten Tag im Liniendiagramm (dargestellt durch die lila Linie). Das Referenzdatum wird auch durch eine gestrichelte Linie dargestellt, die zum Liniendiagramm führt.',
+          content: 'Das Referenzdatum bildet den Startpunkt des Zeitraums, ab dem Veränderungen in den Fallzahlen im Liniendiagramm betrachtet werden können. Es ist Bezugspunkt zu einem Endpunkt, welcher durch die blau-lila Linie im Liniendiagramm dargestellt wird. Das Referenzdatum wird durch eine gestrichelte Linie dargestellt, die zum Liniendiagramm führt. ',
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,
@@ -119,7 +119,7 @@
         step4: {
           target: '#compartments-list',
           title: 'Schritt 4',
-          content: 'Unterhalb des Referenztages befindet sich eine Liste von Infektionsstatus, wie z.B. infiziert, hospitalisiert und tot. Der Wert rechts neben dem Infektionsstatus gibt die Anzahl der Menschen mit dem entsprechenden Infektionsstatus in einer bestimmten Stadt oder einem bestimmten Bezirk an. ',
+          content: 'Unterhalb des Referenztages befindet sich eine Liste von Infektionsstatus, wie z.B. milde Infektion, hospitalisiert oder verstorben. Der Wert rechts neben jedem Infektionsstatus gibt die Anzahl an Personen mit dem entsprechenden Infektionsstatus am Referenztag und in einem ausgewählten Stadt- oder Landkreis an. ',
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,
@@ -128,7 +128,7 @@
         step5: {
           target: '#compartments-list',
           title: 'Schritt 5',
-          content: 'Versuchen Sie, auf den jeweiligen Infektionsstatus zu klicken, um zu sehen, wie sich die Karte auf der linken Seite und das Liniendiagramm darunter verändern und an die numerischen Werte für den ausgewählten Infektionsstatus anpassen.',
+          content: 'Versuchen Sie, auf den jeweiligen Infektionsstatus zu klicken, um zu sehen, wie sich die Karte auf der linken Seite und das Liniendiagramm darunter verändern und an die numerischen Werte für den ausgewählten Infektionsstatus anpassen. ',
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,
@@ -138,7 +138,7 @@
         step6: {
           target: '#card-container',
           title: 'Schritt 6',
-          content: 'Die Szenariokarten zeigen die Daten für ein ausgewähltes Szenario über alle Fächer, zu einem bestimmten Datum und für einen bestimmten Bezirk. Das Basisszenario (blau) stellt den Infektionsprozess ohne Maßnahmen dar.Die Szenariokarten zeigen die Daten für ein ausgewähltes Szenario über alle Fächer, zu einem bestimmten Datum und für einen bestimmten Bezirk. Das Basisszenario (blau) stellt den Infektionsprozess ohne Maßnahmen dar.',
+          content: 'Jede Szenariokarte zeigt Falldaten für die verschiedenen Infektionsstatus. Alle Werte beziehen sich auf ein bestimmtes Datum und einen bestimmten Stadt- oder Landkreis. Das Basisszenario stellt den Infektionsverlauf ohne Maßnahmen dar.',
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,
@@ -147,7 +147,7 @@
         step7: {
           target: '#main-card-external-container-0',
           title: 'Schritt 7',
-          content: 'Die Karte mit den geschätzten Fällen zeigt Daten für ein ausgewähltes Fach zu einem bestimmten Datum und für einen bestimmten Bezirk an, ohne szenariospezifische Daten. Sie ermöglicht es Ihnen, ein Fach auszuwählen, auf das Sie sich konzentrieren möchten. Die Daten für das Szenario "Geschätzte Fälle" zeigen Daten bis zum heutigen Tag an.',
+          content: 'Die Szenariokarte „Geschätzte Fälle“ zeigt die Fallzahlen für verschiedene Infektionsstatus für ein bestimmtes Datum und einen bestimmten Land- oder Stadtkreis. Diese Daten sind unabhängig von jeglichen Simulationsszenarien und spiegeln die aktuelle Situation bis heute wider. Sie können einen Infektionsstatus auswählen, um dessen Details anzusehen.',
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,
@@ -166,7 +166,7 @@
         step9: {
           target: '#scenario-container',
           title: 'Schritt 9',
-          content: 'In der Szenario-Box werden verschiedene Werte für den Infektionsstatus angezeigt. Diese Werte geben die Anzahl der Personen mit einem bestimmten Infektionsstatus innerhalb eines bestimmten Szenarios an. Sie können sie in dem Liniendiagramm unten und auf der Karte sehen.',
+          content: 'Die Falldaten oder Szenariowerte geben die Anzahl der Personen mit einem bestimmten Infektionsstatus innerhalb eines bestimmten Szenarios an. Zudem beziehen sich alle Werte auf einen ausgewählten Land- oder Stadtkreis und ein gewähltes Datum. Die Werte der Szenarien werden im Liniendiagramm und auf der Karte visualisiert.',
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,
@@ -175,7 +175,7 @@
         step10: {
           target: '#card-container',
           title: 'Schritt 10',
-          content: 'Jedes Szenario hat einen Anfang und ein Ende. Das Szenario der geschätzten Fälle (in schwarz) beginnt ein Jahr früher und endet am aktuellen Tag. Das Basisszenario (in blau) beginnt am aktuellen Tag und endet nach 28 Tagen. Der Zeitraum wird im Liniendiagramm durch eine Linie in der Farbe des jeweiligen Szenarios dargestellt',
+          content: 'Jedes Szenario hat einen Anfang und ein Ende. Das Szenario der geschätzten Fälle (in schwarz) beginnt ein Jahr früher und endet am aktuellen Tag. Das Basisszenario beginnt am aktuellen Tag und endet nach 28 Tagen. Der Zeitraum wird im Liniendiagramm durch eine Linie in der Farbe des jeweiligen Szenarios dargestellt. ',
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,
@@ -185,7 +185,7 @@
         step11: {
           target: '#scenario-add-button',
           title: 'Schritt 11',
-          content: 'Mit der Schaltfläche Hinzufügen können Sie eine neue Szenariokarte zum Szenariocontainer hinzufügen.Mit der Schaltfläche Hinzufügen können Sie eine neue Szenariokarte zum Szenariocontainer hinzufügen.',
+          content: 'Über den Button “Hinzufügen“ können Sie eine neue Szenariokarte hinzufügen. ',
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,
@@ -199,7 +199,7 @@
         step1: {
           target: '#manage-filters-button',
           title: 'Schritt 1',
-          content: 'Filter bieten konfigurierbare Optionen, um die Daten nach Altersgruppen zu filtern. Klicken Sie hier, um altersbasierte Filter zu entdecken und anzuwenden.',
+          content: 'Mit Hilfe des Filters kann nach unterschiedlichen Altersgruppen gefiltert werden. Klicken Sie hier, um die Filteroptionen zu erkunden.',
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,
@@ -222,7 +222,7 @@
         step3: {
           target: '#group-filter-add-card',
           title: 'Schritt 3',
-          content: 'Um einen neuen Filter hinzuzufügen, klicken Sie auf diese Schaltfläche. Sobald ein Filter ausgewählt ist, werden die gefilterten Werte im Szenariokasten angezeigt. Sie können diese Werte ansehen, indem Sie auf den Pfeil neben dem Szenariokasten klicken, der die Szenariowerte mit dem angewendeten Filter anzeigt.',
+          content: 'Sie können einen neuen Filter hinzufügen, indem Sie auf diesen Button klicken. Nach der Auswahl eines Filters werden die gefilterten Werte im Szenariokasten angezeigt. Klicken Sie dazu auf den Pfeil neben dem Szenariokasten, um die Szenariowerte mit dem angewendeten Filter zu sehen.',
           disableBeacon: true,
           showProgress: true,
           disableOverlayClose: true,
@@ -282,19 +282,19 @@
         step6: {
           target: '#chartdiv',
           title: 'Schritt 6',
-          content: 'Die Unsicherheiten in den Vorhersagen werden als schattierte Bereiche angezeigt. Zoomen Sie in diesen Bereich hinein, um die Quantifizierungen der Unsicherheiten genauer zu betrachten. Hinweis: Ein Szenario muss aktiviert und ausgewählt sein, um die Unsicherheiten zu sehen.',
-          disableBeacon: true,
-          spotlightClicks: true,
-          showProgress: true,
-        },
-        step7: {
-          target: '#chartdiv',
-          title: 'Schritt 7',
           content: 'Zoomen Sie mit der Maus hinein oder heraus und erkunden Sie verschiedene Bereiche des Liniendiagramms im Detail. Sie können auch klicken und ziehen, um einen bestimmten Bereich auszuwählen und ihn zu vergrößern. Um das Diagramm auf seine Standardansicht zurückzusetzen, klicken Sie auf das Minus-Symbol.',
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,
           placement: 'top-end',
+        },
+        step7: {
+          target: '#chartdiv',
+          title: 'Schritt 7',
+          content: 'Die Unsicherheiten in den Vorhersagen werden als schattierte Bereiche angezeigt. Zoomen Sie in diesen Bereich hinein, um die Quantifizierungen der Unsicherheiten genauer zu betrachten. Hinweis: Ein Szenario muss aktiviert und ausgewählt sein, um die Unsicherheiten zu sehen.',
+          disableBeacon: true,
+          spotlightClicks: true,
+          showProgress: true,
         },
         step8: {
           target: '#tab-list',
@@ -312,7 +312,7 @@
         step1: {
           target: '#table-container',
           title: 'Schritt 1',
-          content: 'In dieser Ansicht "Parameter" ist anstelle des Diagramms eine Tabelle mit Modellparametern sichtbar. Die aufgeführten Parameter werden für die Modellierung und damit für die Simulation der Szenarien verwendet',
+          content: 'Auf dieser Registerkarte "Parameter" sehen Sie anstelle des Diagramms eine Tabelle mit Modellparametern. Die aufgeführten Parameter werden für die Modellierung und damit für die Simulation der Szenarien verwendet. ',
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,
@@ -320,7 +320,7 @@
         step2: {
           target: '#table-container',
           title: 'Schritt 2',
-          content: 'Die Parameter dienen als Basisinformationen für Spezialisten mit spezifischen epidemiologischen Kenntnissen. Sie können nur eingesehen, aber nicht verändert warden. ',
+          content: 'Die Parameter dienen als Basisinformationen für Experten mit spezifischen epidemiologischen Kenntnissen. Sie können nur eingesehen, aber nicht verändert werden. ',
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,

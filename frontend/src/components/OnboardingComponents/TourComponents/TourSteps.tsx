@@ -160,8 +160,12 @@ export default function TourSteps(): JSX.Element {
   const handleJoyrideCallback = (data: CallBackProps) => {
     const {action, index, status, type} = data;
 
-    // if the tour is finished or skipped
-    if (([STATUS.FINISHED, STATUS.SKIPPED] as string[]).includes(status)) {
+    // if the tour is finished, skipped or closed
+    if (
+      ([STATUS.FINISHED, STATUS.SKIPPED] as string[]).includes(status) ||
+      action === ACTIONS.CLOSE ||
+      action === ACTIONS.STOP
+    ) {
       dispatch(selectDate(savedPreferences.current?.date || '2024-07-08')); // restore the original date in the data selection
       dispatch(selectScenario(savedPreferences.current?.scenario || 1)); // restore the original selected scenario in the data selection
       savedPreferences.current = null; // reset the saved preferences after the tour is completed

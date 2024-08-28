@@ -5,23 +5,23 @@
   welcomeModalSlides: {
     slide1: {
       title: 'Welcome!',
-      content: '\n Thank you for using ESID. <br/>\n ESID is a platform designed to support you in your infection control tasks.<br/><br/>\n ✓ Complete first task<br/>\n ✓ Understand next steps\n ',
+      content: '\n Thank you for using ESID. <br/>\n ESID is a platform designed to support you in your infection control tasks.<br/><br/>\n ✓ Complete first task. <br/>\n ✓ Understand next steps. \n ',
     },
     slide2: {
       title: 'ESID can support you: ',
-      content: '✓ When monitoring the (local) infection incidence. <br/> ✓ In assessing how an infection dynamic is likely to change in the future. <br/> ✓ in planning effective (local) intervention strategies to contain an infectious disease. ',
+      content: '✓ When monitoring the (local) infection incidence. <br/> ✓ In assessing how an infection dynamic is likely to change in the future. <br/> ✓ In planning effective (local) intervention strategies to contain an infectious disease. ',
     },
     slide3: {
       title: 'How does ESID help you with surveillance?',
-      content: '✓ You can easily identify centres of infection on a map of Germany. <br/>✓ You can track the change in case numbers over time in a clear diagram',
+      content: '✓ You can easily identify centres of infection on a map of Germany. <br/>✓ You can track the change in case numbers over time in a clear diagram. ',
     },
     slide4: {
       title: 'How does ESID help you with assessment?',
-      content: '✓ You can view the expected future development of case numbers through various scenarios',
+      content: '✓ You can view the expected future development of case numbers through various scenarios. ',
     },
     slide5: {
       title: 'How does ESID help you with planning?',
-      content: '✓ You can compare the expected future development of case numbers in the future by looking at different scenarios, for example with or without mandatory masks. <br/> ✓ You can derive an effective containment strategy from this comparison. ',
+      content: '✓ You can consider different scenarios, for example with or without mandatory masking, and thus compare the likely future development of case numbers within these scenarios. <br/> ✓ You can derive an effective containment strategy from this comparison. ',
     },
     slide6: {
       title: 'Take an onboarding tour!',
@@ -30,7 +30,7 @@
   },
   chooseTour: 'Choose a tour',
   maybeLater: 'Maybe later',
-  toolTipText: 'This is the floating button for help.',
+  toolTipText: 'Click here for additional information.',
   completedTours: 'You have completed all the onboarding tours.',
   completedToursContent: 'You can retake a tour anytime by clicking on the options below.',
   getStarted: 'Explore ESID through our onboarding tours',
@@ -50,7 +50,7 @@
         step1: {
           target: '#sidebar-root',
           title: 'Step 1',
-          content: 'The district map shows a map of Germany. It serves as a choropleth map for geo-spatially distributed data by district. You can select a different district to filter data in other components. ',
+          content: 'The map shows an overview of all rural and urban districts in Germany.  You can select a different district by clicking on it and display case data for specific regions.  ',
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,
@@ -59,7 +59,7 @@
         step2: {
           target: '#sidebar-root',
           title: 'Step 2',
-          content: 'To get a more detailed overview, the map can be zoomed in or out using the plus or minus symbol or the mouse wheel. The reset button allows you to return the map to its default view.',
+          content: 'To get a more detailed overview, you can zoom in or out of the map using the plus or minus symbol or the mouse wheel. You can reset the map to its default view using the "Reset" button.',
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,
@@ -68,7 +68,7 @@
         step3: {
           target: '#side-bar-heat-legend',
           title: 'Step 3',
-          content: 'The district map also has a customizable heat legend, which allows you to select different color schemes. ',
+          content: 'The map also has a customisable colour legend.  You can choose between different colour schemes here. The colour legend shows in which regions case numbers are very high, moderate or low. The case numbers in the map always refer to a specific infection status, which can be selected to the right of the map, as well as a specific date, which can be selected in the line chart using the blue-purple line. ',
           disableBeacon: true,
           showProgress: true,
           placement: 'right',
@@ -76,7 +76,7 @@
         step4: {
           target: '#sidebar-map-search-bar-wrapper',
           title: 'Step 4',
-          content: 'There is also a search bar with an auto-complete function which helps you to find the county without geographical knowledge. ',
+          content: 'The auto-complete search bar will help you to easily find the country or city district you are looking for. ',
           disableBeacon: true,
           showProgress: true,
           placement: 'right-start',
@@ -89,7 +89,7 @@
         step1: {
           target: '#scenario-container',
           title: 'Step 1',
-          content: 'This section represents the different scenario cards. Scenarios show a coherent picture of the possible development of an infection event. ',
+          content: 'The various scenario cards are displayed in this area. The scenarios show how an infection could develop in the future.  ',
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,
@@ -98,7 +98,7 @@
         step2: {
           target: '#scenario-view-compartment-list-date',
           title: 'Step 2',
-          content: 'The reference date is used to visualize changes in the incidence of infection over time. The reference date forms the reference to the selected day in the line chart (illustrated by the purple line). The reference date is also shown with a dashed line leading up to the line chart. ',
+          content: 'The reference date is the starting point of the period from which changes in the number of cases can be viewed in the line chart. It is the reference point for an end point, which is represented by the blue-purple line in the line chart. The reference date is represented by a dashed line that leads to the line chart. ',
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,
@@ -112,14 +112,12 @@
           spotlightClicks: true,
           showProgress: true,
           placement: 'left-start',
-          hideCloseButton: true,
-          hideFooter: true,
           spotlightPadding: 50,
         },
         step4: {
           target: '#compartments-list',
           title: 'Step 4',
-          content: 'Below the reference day there is a list of infection states, like infected, hospitalized, and dead. The value to the right of the infection status indicates the number of people with a corresponding infection status in a specific city or district. ',
+          content: 'Below the reference day there is a list of infection states, like infected, hospitalized, and dead. The value to the right of the infection status indicates the number of people with a corresponding infection status in a specific city or district on the reference day. ',
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,
@@ -128,7 +126,7 @@
         step5: {
           target: '#compartments-list',
           title: 'Step 5',
-          content: 'Try clicking on the respective infection status to see how the map on the left and the line chart below change and adapt to the numerical values for the selected infection status. ',
+          content: 'Try clicking on the respective infection status to see how the map on the left and the line chart below change and adapt to the numerical values for the selected infection status.  ',
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,
@@ -138,7 +136,7 @@
         step6: {
           target: '#card-container',
           title: 'Step 6',
-          content: 'The scenario cards display the data for a chosen scenario across all compartments, on a specific date, and for a specific district. The baseline scenario (blue) depicts the infection process without measures. ',
+          content: 'Each scenario cards shows case data for the various infection statuses. All values relate to a specific date and a specific urban or rural district. The baseline scenario shows the course of infection without measures. ',
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,
@@ -147,7 +145,7 @@
         step7: {
           target: '#main-card-external-container-0',
           title: 'Step 7',
-          content: 'The estimated cases card displays data for a chosen compartment, on a specific date, and for a specific district, without any scenario-specific data. It allows you to select a compartment to focus on. The data for the estimated cases scenario shows data up to the present day.',
+          content: 'The "Estimated cases" scenario card shows the case numbers for various infection statuses for a specific date and a specific rural or urban district. This data is independent of any simulation scenarios and reflects the current situation to date. You can select an infection status to view its details.',
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,
@@ -166,7 +164,7 @@
         step9: {
           target: '#scenario-container',
           title: 'Step 9',
-          content: 'Different values of the infection status are shown in the scenario box. Those values indicate the number of people with a specific infection status within a specific scenario. You can see them visualized in the line diagram below and on the map. ',
+          content: 'The case data or scenario values indicate the number of people with a specific infection status within a specific scenario. In addition, all values relate to a selected rural or urban district and a selected date. The values of the scenarios are visualized in the line diagram and on the map. ',
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,
@@ -175,7 +173,7 @@
         step10: {
           target: '#card-container',
           title: 'Step 10',
-          content: 'Each scenario has a start and end. The estimated cases scenario (in black) starts one year earlier and ends on the current day. The base scenario (in blue) starts on the current day and ends after 28 days. The time period is illustrated by a line in the respective scenario color in the line chart',
+          content: 'Each scenario has a beginning and an end. The scenario of estimated cases (in black) starts one year earlier and ends on the current day. The base scenario starts on the current day and ends after 28 days. The period is represented in the line chart by a line in the color of the respective scenario. ',
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,
@@ -185,7 +183,7 @@
         step11: {
           target: '#scenario-add-button',
           title: 'Step 11',
-          content: 'The add button allows you to add a new scenario card to the scenario container. ',
+          content: 'You can add a new scenario card using the "Add" button. ',
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,
@@ -199,7 +197,7 @@
         step1: {
           target: '#manage-filters-button',
           title: 'Step 1',
-          content: 'Filters offer configurable options to tailor the data by age group. Click here to explore and apply age-based filters.',
+          content: 'The filter can be used to filter by different age groups. Click here to explore the filter options. ',
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,
@@ -222,7 +220,7 @@
         step3: {
           target: '#group-filter-add-card',
           title: 'Step 3',
-          content: 'To add a new filter, click on this button. Once a filter is selected, the filtered values will be displayed in the scenario box. You can view these values by clicking the arrow next to the scenario box, which will show the scenario values with the filter applied.',
+          content: 'You can add a new filter by clicking on this button. After selecting a filter, the filtered values are displayed in the scenario box. To do this, click on the arrow next to the scenario box to see the scenario values with the filter applied.',
           disableBeacon: true,
           showProgress: true,
           disableOverlayClose: true,
@@ -282,19 +280,19 @@
         step6: {
           target: '#chartdiv',
           title: 'Step 6',
-          content: 'Uncertainties in predictions are shown as shaded areas. Zoom in on this area to explore the uncertainty quantifications in more detail. Note: a scenario must be activated and selected to see the uncertainties. ',
-          disableBeacon: true,
-          spotlightClicks: true,
-          showProgress: true,
-        },
-        step7: {
-          target: '#chartdiv',
-          title: 'Step 7',
           content: 'Use your mouse to zoom in or out and explore different sections of the line chart in detail. You can also click and drag to select a specific area and zoom into it. To reset the chart to its default view, click the minus symbol.',
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,
           placement: 'top-end',
+        },
+        step7: {
+          target: '#chartdiv',
+          title: 'Step 7',
+          content: 'Uncertainties in predictions are shown as shaded areas. Zoom in on this area to explore the uncertainty quantifications in more detail. Note: a scenario must be activated and selected to see the uncertainties. ',
+          disableBeacon: true,
+          spotlightClicks: true,
+          showProgress: true,
         },
         step8: {
           target: '#tab-list',
@@ -313,7 +311,7 @@
         step1: {
           target: '#table-container',
           title: 'Step 1',
-          content: 'In this "Parameters" view, a table with model parameters is visible instead of the diagram. The listed parameters are used for modelling and thus for simulating the scenarios ',
+          content: 'In this "Parameters" tab, you can see a table with model parameters instead of the diagram. The listed parameters are used for modelling and thus for simulating the scenarios. ',
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,
@@ -321,7 +319,7 @@
         step2: {
           target: '#table-container',
           title: 'Step 2',
-          content: 'The parameters serve as basic information for specialists with specific epidemiological knowledge. They can only be viewed, but not changed. ',
+          content: 'The parameters serve as basic information for experts with specific epidemiological knowledge. They can only be viewed, but not changed. ',
           disableBeacon: true,
           spotlightClicks: true,
           showProgress: true,
