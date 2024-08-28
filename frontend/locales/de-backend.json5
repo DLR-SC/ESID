@@ -276,7 +276,7 @@
     },
   },
   'scenario-names': {
-    'Baseline Scenario': 'Basisszenario',
+    caseData: 'Geschätzte Fälle',
     baseline: 'Basisszenario',
     closed_schools: 'Geschlossene Schulen',
     remote_work: 'Homeoffice',

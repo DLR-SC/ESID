@@ -9,14 +9,13 @@ import reducer, {
   selectDate,
   selectDistrict,
   selectScenario,
-  toggleScenario,
 } from '../../store/DataSelectionSlice';
 
 describe('DataSelectionSlice', () => {
   const initialState = {
     district: {ags: '00000', name: '', type: ''},
     date: null,
-    scenario: null,
+    scenario: 0,
     compartment: null,
     compartmentsExpanded: null,
     activeScenarios: [0],
@@ -52,19 +51,6 @@ describe('DataSelectionSlice', () => {
     expect(reducer(initialState, selectCompartment(compartment))).toEqual(
       Object.assign(initialState, {compartment: compartment})
     );
-  });
-
-  test('Toggle Scenario', () => {
-    const scenario = 2;
-    expect(reducer(initialState, toggleScenario(scenario))).toEqual(
-      Object.assign(initialState, {activeScenarios: [0, 2]})
-    );
-
-    const state = Object.assign(initialState, {
-      activeScenarios: [0, 1, 2, 4],
-    });
-
-    expect(reducer(state, toggleScenario(2))).toEqual(Object.assign(initialState, {activeScenarios: [0, 1, 4]}));
   });
 
   test('Add Group Filter', () => {

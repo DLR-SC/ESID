@@ -17,9 +17,9 @@ import {useAppDispatch, useAppSelector} from '../store/hooks';
 import {selectTab} from '../store/UserPreferenceSlice';
 import {useTheme} from '@mui/material/styles';
 
-// Lazily load the tab contents to enable code splitting.
+const SimulationChart = React.lazy(() => import('./LineChartContainer'));
 const ParameterEditor = React.lazy(() => import('./ParameterEditor'));
-const SimulationChart = React.lazy(() => import('./SimulationChart'));
+const InspireGrid = React.lazy(() => import('./InspireGridContainer'));
 
 /**
  * This component manages the main content, which is a collection of tabs that the user can navigate through. By default
@@ -70,6 +70,13 @@ export default function MainContentTabs() {
             </Box>
           </Box>
         </TabPanel>
+        <TabPanel value='3' sx={{flexGrow: 1, padding: 0}}>
+          <Box id='main-content-inspire-grid-wrapper' sx={{height: '100%', position: 'relative', flexGrow: 1}}>
+            <Box sx={{position: 'absolute', top: 0, right: 0, bottom: 0, left: 0}}>
+              <InspireGrid />
+            </Box>
+          </Box>
+        </TabPanel>
         <Box sx={{flexGrow: 0, borderTop: 1, borderColor: 'divider', width: '100%'}}>
           <TabList
             onChange={handleChange}
@@ -90,6 +97,13 @@ export default function MainContentTabs() {
               icon={<Coronavirus />}
               iconPosition='start'
               value='2'
+              sx={tabStyle}
+            />
+            <Tab
+              label={<Typography variant='body1'>{t('bottomTabs.pandemos')}</Typography>}
+              icon={<Grid />}
+              iconPosition='start'
+              value='3'
               sx={tabStyle}
             />
           </TabList>

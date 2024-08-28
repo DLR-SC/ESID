@@ -27,8 +27,26 @@ export function dateToISOString(date: Date | number): string {
 }
 
 /**
+ * Converts a hexadecimal color code to an RGB color code.
+ * @param hex - The hexadecimal color code to convert.
+ * @param alpha - The alpha value for the RGB color code (optional).
+ * @returns The RGB color code.
+ */
+export function hexToRGB(hex: string, alpha: number): string {
+  const r = parseInt(hex.slice(1, 3), 16),
+    g = parseInt(hex.slice(3, 5), 16),
+    b = parseInt(hex.slice(5, 7), 16);
+
+  if (alpha) {
+    return 'rgba(' + r.toString() + ', ' + g.toString() + ', ' + b.toString() + ', ' + alpha.toString() + ')';
+  } else {
+    return 'rgb(' + r.toString() + ', ' + g.toString() + ', ' + b.toString() + ')';
+  }
+}
+
+/**
  * This is a type that can be used to describe object maps with a clear key/value structure. E.g:
- * const ages: Dictionary<number> = {:
+ * const ages: Dictionary<number> = {
  *   Aragorn: 87,
  *   Arwen: 2901,
  *   Bilbo: 129,

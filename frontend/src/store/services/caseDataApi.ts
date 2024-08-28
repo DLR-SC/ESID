@@ -6,8 +6,8 @@ import {CaseDataByDate, CaseDataByNode} from '../../types/caseData';
 import {SimulationDataByNode} from '../../types/scenario';
 /* [CDtemp-begin] */
 import cologneData from '../../../assets/stadtteile_cologne_list.json';
-import {District} from 'types/cologneDisticts';
 import {deepCopy} from '../../util/util';
+import {District} from 'types/cologneDistricts';
 /* [CDtemp-end] */
 
 export const caseDataApi = createApi({
@@ -144,7 +144,6 @@ export const caseDataApi = createApi({
         // return error if any occurs
         if (queryResult.error) return {error: queryResult.error};
         const result = queryResult.data as SimulationDataByNode;
-
         // if node was cologne district apply weight
         if (cologneDistrict) {
           const distWeight = (cologneData as unknown as Array<District>).find(

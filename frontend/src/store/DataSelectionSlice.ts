@@ -19,28 +19,30 @@ export type AGS = string;
  * IMPORTANT: ALL NEW ADDITIONS MUST BE NULLABLE TO ENSURE EXISTING CACHES DOESN'T BREAK ON UPDATES!
  */
 export interface DataSelection {
-  district: {ags: AGS; name: string; type: string};
+  district: {
+    ags: AGS;
+    name: string;
+    type: string;
+  };
   /** The current date in the store. Must be an ISO 8601 date cutoff at time (YYYY-MM-DD) */
   date: string | null;
   scenario: number | null;
   compartment: string | null;
   compartmentsExpanded: boolean | null;
   activeScenarios: number[] | null;
-
   simulationStart: string | null;
   minDate: string | null;
   maxDate: string | null;
-  groupFilters: Dictionary<GroupFilter> | null;
+  groupFilters: Dictionary<GroupFilter>;
 }
 
 const initialState: DataSelection = {
   district: {ags: '00000', name: '', type: ''},
   date: null,
-  scenario: null,
+  scenario: 0,
   compartment: null,
   compartmentsExpanded: null,
   activeScenarios: [0],
-
   simulationStart: null,
   minDate: null,
   maxDate: null,
@@ -54,6 +56,13 @@ export const DataSelectionSlice = createSlice({
   name: 'DataSelection',
   initialState,
   reducers: {
+    setActiveScenario(state, action: PayloadAction<number[] | null>) {
+      if (action.payload) state.activeScenarios = action.payload;
+      else state.activeScenarios = null;
+    },
+    setGroupFilters(state, action: PayloadAction<Dictionary<GroupFilter>>) {
+      state.groupFilters = action.payload;
+    },
     selectDistrict(state, action: PayloadAction<{ags: AGS; name: string; type: string}>) {
       state.district = action.payload;
     },
@@ -96,17 +105,6 @@ export const DataSelectionSlice = createSlice({
     selectScenario(state, action: PayloadAction<number | null>) {
       state.scenario = action.payload;
     },
-    toggleScenario(state, action: PayloadAction<number>) {
-      if (!state.activeScenarios) {
-        state.activeScenarios = [0];
-      }
-      const index = state.activeScenarios.indexOf(action.payload);
-      if (index == -1) {
-        state.activeScenarios.push(action.payload);
-      } else {
-        state.activeScenarios.splice(index, 1);
-      }
-    },
     selectCompartment(state, action: PayloadAction<string>) {
       state.compartment = action.payload;
     },
@@ -141,6 +139,8 @@ export const DataSelectionSlice = createSlice({
 
 export const {
   selectDistrict,
+  setActiveScenario,
+  setGroupFilters,
   selectDate,
   previousDay,
   nextDay,
@@ -152,7 +152,6 @@ export const {
   setGroupFilter,
   deleteGroupFilter,
   toggleGroupFilter,
-  toggleScenario,
 } = DataSelectionSlice.actions;
 
 export default DataSelectionSlice.reducer;
