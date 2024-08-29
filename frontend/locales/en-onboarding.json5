@@ -68,7 +68,7 @@
         step3: {
           target: '#side-bar-heat-legend',
           title: 'Step 3',
-          content: 'The map also has a customisable colour legend.  You can choose between different colour schemes here. The colour legend shows in which regions case numbers are very high, moderate or low. The case numbers in the map always refer to a specific infection status, which can be selected to the right of the map, as well as a specific date, which can be selected in the line chart using the blue-purple line. ',
+          content: 'The map also has a customisable colour legend. You can choose between different colour schemes here. The colour legend shows in which regions case numbers are very high, moderate or low. You can also lock the maximum value of the legend by clicking the lock sign. The case numbers in the map always refer to a specific infection status, which can be selected to the right of the map, as well as a specific date, which can be selected in the line chart using the blue-purple line.',
           disableBeacon: true,
           showProgress: true,
           placement: 'right',

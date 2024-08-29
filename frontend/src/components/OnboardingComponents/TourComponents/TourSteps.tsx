@@ -48,7 +48,7 @@ export default function TourSteps(): JSX.Element {
   const scenarioList = useAppSelector((state) => state.scenarioList.scenarios);
 
   const previousSimulationStart = useRef(simulationStart); // to keep track of the previous simulation start date for the scenario controlled tour
-  const savedPreferences = useRef<null | DataSelection>(null); // to keep track of the original data selection before starting the tour
+  const savedUserDataSelection = useRef<null | DataSelection>(null); // to keep track of the original data selection before starting the tour
 
   /**
    * this useMemo gets the localized tour steps and returns them as an array of step objects to use in the Joyride component
@@ -69,8 +69,8 @@ export default function TourSteps(): JSX.Element {
    */
   useEffect(() => {
     if (activeTour && !showPopover && !showWelcomeDialog && !run) {
-      if (!savedPreferences.current) {
-        savedPreferences.current = dataSelection; // save the current data selection of the user so we can override it with different values during the tour
+      if (!savedUserDataSelection.current) {
+        savedUserDataSelection.current = dataSelection; // save the current data selection of the user so we can override it with different values during the tour
 
         const maxDate = dataSelection.maxDate || '2024-07-08'; // get the maximum date from the data selection
         dispatch(selectDate(maxDate)); // set the simulation start date (purple line) to the maximum date
@@ -166,9 +166,9 @@ export default function TourSteps(): JSX.Element {
       action === ACTIONS.CLOSE ||
       action === ACTIONS.STOP
     ) {
-      dispatch(selectDate(savedPreferences.current?.date || '2024-07-08')); // restore the original date in the data selection
-      dispatch(selectScenario(savedPreferences.current?.scenario || 1)); // restore the original selected scenario in the data selection
-      savedPreferences.current = null; // reset the saved preferences after the tour is completed
+      dispatch(selectDate(savedUserDataSelection.current?.date || '2024-07-08')); // restore the original date in the data selection
+      dispatch(selectScenario(savedUserDataSelection.current?.scenario || 0)); // restore the original selected scenario in the data selection
+      savedUserDataSelection.current = null; // reset the saved preferences after the tour is completed
 
       // if the tour was finished and not skipped, mark as completed
       if (status === STATUS.FINISHED && activeTour) {

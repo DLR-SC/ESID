@@ -68,7 +68,7 @@
         step3: {
           target: '#side-bar-heat-legend',
           title: 'Schritt 3',
-          content: 'Die Karte verfügt außerdem über eine anpassbare Farblegende.  Sie können hier zwischen unterschiedlichen Farbschemata auswählen. Die Farblegende zeigt, in welchen Regionen Fallzahlen sehr hoch, moderat oder niedrig sind. Die Fallzahlen in der Karte beziehen sich immer auf einen bestimmten Infektionsstatus, welcher rechts neben der Karte gewählt werden, sowie ein bestimmtes Datum, welches im Liniendiagramm mit Hilfe der blau-lila Linie ausgewählt werden kann.',
+          content: 'Die Karte verfügt außerdem über eine anpassbare Farblegende.  Sie können hier zwischen unterschiedlichen Farbschemata auswählen. Die Farblegende zeigt, in welchen Regionen Fallzahlen sehr hoch, moderat oder niedrig sind. Sie können den Maximalwert der Legende auch sperren, indem Sie auf das Schlosszeichen klicken. Die Fallzahlen in der Karte beziehen sich immer auf einen bestimmten Infektionsstatus, welcher rechts neben der Karte gewählt werden, sowie ein bestimmtes Datum, welches im Liniendiagramm mit Hilfe der blau-lila Linie ausgewählt werden kann.',
           disableBeacon: true,
           showProgress: true,
           placement: 'right',
