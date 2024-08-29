@@ -10,7 +10,6 @@ import userOnboardingReducer, {
   setShowWelcomeDialog,
   setShowPopover,
   setIsFilterDialogOpen,
-  setIsParametersTabClicked,
 } from '../../store/UserOnboardingSlice';
 import {TourType} from 'types/tours';
 
@@ -29,7 +28,6 @@ describe('userOnboardingSlice', () => {
     showWelcomeDialog: true,
     showPopover: false,
     isFilterDialogOpen: false,
-    isParametersTabClicked: false,
   };
 
   test('initial state', () => {
@@ -87,10 +85,5 @@ describe('userOnboardingSlice', () => {
   test('set isFilterDialogOpen to true', () => {
     const newState = userOnboardingReducer(initialState, setIsFilterDialogOpen(true));
     expect(newState.isFilterDialogOpen).toEqual(true);
-  });
-
-  test('set isParametersTabClicked to true', () => {
-    const newState = userOnboardingReducer(initialState, setIsParametersTabClicked(true));
-    expect(newState.isParametersTabClicked).toEqual(true);
   });
 });
