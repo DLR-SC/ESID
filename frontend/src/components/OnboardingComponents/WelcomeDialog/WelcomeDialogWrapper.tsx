@@ -81,12 +81,13 @@ export default function WelcomeDialogWrapper(): JSX.Element {
   /**
    * this useMemo gets the slide title, content, maybe later text and if the tour chips should be shown on the last slide
    */
-  const {slideTitle, slideContent, maybeLaterText, showTourChips} = useMemo(() => {
+  const {slideTitle, slideContent, maybeLaterText, showTourChips, showLanguagePicker} = useMemo(() => {
     const slideTitle = tOnboarding(`welcomeModalSlides.slide${step + 1}.title`);
     const slideContent = tOnboarding(`welcomeModalSlides.slide${step + 1}.content`);
     const maybeLaterText = tOnboarding('maybeLater');
     const showTourChips = step === numberOfSlides - 1;
-    return {slideTitle, slideContent, maybeLaterText, showTourChips};
+    const showLanguagePicker = step === 0;
+    return {slideTitle, slideContent, maybeLaterText, showTourChips, showLanguagePicker};
   }, [step, numberOfSlides, tOnboarding]);
 
   return (
@@ -101,6 +102,7 @@ export default function WelcomeDialogWrapper(): JSX.Element {
       title={slideTitle}
       content={slideContent}
       showTourChips={showTourChips}
+      showLanguagePicker={showLanguagePicker}
       maybeLaterText={maybeLaterText}
     />
   );

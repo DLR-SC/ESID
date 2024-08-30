@@ -7,6 +7,7 @@ import {ArrowBackIos, ArrowForwardIos, Close as CloseIcon} from '@mui/icons-mate
 import {useTheme} from '@mui/material/styles';
 import Slide from './Slide';
 import TourChips from '../TourComponents/TourChipsList';
+import LanguagePicker from 'components/TopBar/LanguagePicker';
 
 interface WelcomeDialogProps {
   /** determines if the dialog is open or not */
@@ -39,6 +40,9 @@ interface WelcomeDialogProps {
   /** determines if the tour chips should be shown */
   showTourChips: boolean;
 
+  /** determines if the language picker should be shown */
+  showLanguagePicker: boolean;
+
   /** the text for the maybe later button */
   maybeLaterText: string;
 }
@@ -59,6 +63,7 @@ export default function WelcomeDialog({
   title,
   content,
   showTourChips,
+  showLanguagePicker,
   maybeLaterText,
 }: WelcomeDialogProps): JSX.Element {
   const theme = useTheme();
@@ -73,7 +78,7 @@ export default function WelcomeDialog({
         fullWidth
         sx={{
           '& .MuiDialog-paper': {
-            height: '600px',
+            height: '610px',
             padding: theme.spacing(4),
             display: 'flex',
             flexDirection: 'column',
@@ -93,6 +98,9 @@ export default function WelcomeDialog({
         >
           <CloseIcon />
         </Button>
+        <Box sx={{display: 'flex', justifyContent: 'center', minHeight: '40px'}}>
+          {showLanguagePicker && <LanguagePicker />}
+        </Box>
         <Slide step={step} title={title} content={content} imageSrc={images[step]} />
         <>
           {showTourChips && (
