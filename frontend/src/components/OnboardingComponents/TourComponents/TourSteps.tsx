@@ -24,6 +24,7 @@ interface State {
 
 /**
  * This component manages the joyride onboarding tour steps.
+ * To see debug messages in the console, set the debug flag to true in the joyride component below
  */
 export default function TourSteps(): JSX.Element {
   const [state, setState] = useState<State>({
@@ -205,7 +206,6 @@ export default function TourSteps(): JSX.Element {
         callback={handleJoyrideCallback}
         continuous
         showSkipButton
-        debug
         scrollToFirstStep
         spotlightClicks
         disableOverlayClose

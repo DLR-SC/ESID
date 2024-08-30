@@ -45,7 +45,7 @@
   parameterTourAlertMessage: 'Um diese Tour zu starten, müssen Sie sich auf der Registerkarte Parameter befinden.',
   tours: {
     districtMap: {
-      title: 'Bezirkskarte',
+      title: 'Karte',
       steps: {
         step1: {
           target: '#sidebar-root',

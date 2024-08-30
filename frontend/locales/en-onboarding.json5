@@ -45,7 +45,7 @@
   parameterTourAlertMessage: 'You need to be on the Parameters tab to start this tour',
   tours: {
     districtMap: {
-      title: 'District Map',
+      title: 'Map',
       steps: {
         step1: {
           target: '#sidebar-root',

@@ -33,6 +33,7 @@ const WelcomeDialogTest = ({step = 1}: {step?: number}) => (
         title='Test Title'
         content='Test Content'
         showTourChips={true}
+        showLanguagePicker={true}
         maybeLaterText='Maybe Later'
       />
     </Provider>

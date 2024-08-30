@@ -55,7 +55,15 @@ export default function TourChips({align = 'left'}: TourChipsProps): JSX.Element
   );
   return (
     <>
-      <Box display='flex' flexWrap='wrap' justifyContent={align === 'center' ? 'center' : 'flex-start'} gap={2}>
+      <Box
+        display='flex'
+        flexWrap='wrap'
+        justifyContent={align === 'center' ? 'center' : 'flex-start'}
+        gap={2}
+        sx={{
+          maxWidth: '90%',
+        }}
+      >
         {tourData.map(({type, icon, title}) => (
           <Box key={type} mb={2}>
             <TourChip
