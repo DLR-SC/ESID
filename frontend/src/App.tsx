@@ -9,6 +9,7 @@ import './App.scss';
 import TopBar from './components/TopBar';
 import SidebarContainer from './components/Sidebar/SidebarContainer';
 import MainContent from './components/MainContent';
+import WelcomeDialogWrapper from './components/OnboardingComponents/WelcomeDialog/WelcomeDialogWrapper';
 import {Persistor, Store} from './store';
 import Box from '@mui/material/Box';
 import {ThemeProvider} from '@mui/material/styles';
@@ -22,6 +23,7 @@ import {MUILocalization} from './components/shared/MUILocalization';
 import {DataProvider} from 'data_sockets/DataContext';
 import {PandemosProvider} from 'data_sockets/PandemosContext';
 
+import AuthProvider from './components/AuthProvider';
 /**
  * This is the root element of the React application. It divides the main screen area into the three main components.
  * The top bar, the sidebar and the main content area.
@@ -30,14 +32,16 @@ export default function App(): JSX.Element {
   return (
     <Suspense fallback='loading'>
       <Provider store={Store}>
-        <ThemeProvider theme={Theme}>
-          <PersistGate loading={null} persistor={Persistor}>
-            <I18nextProvider i18n={i18n}>
-              <MUILocalization>
-                <DataProvider>
+        <AuthProvider>
+          <ThemeProvider theme={Theme}>
+            <PersistGate loading={null} persistor={Persistor}>
+              <I18nextProvider i18n={i18n}>
+                <MUILocalization>
+                  <DataProvider>
                   <PandemosProvider>
                     <Initializer />
-                    <Box id='app' display='flex' flexDirection='column' sx={{height: '100vh', width: '100vw'}}>
+                    <WelcomeDialogWrapper />
+                    <Box id='app' display='flex' flexDirection='column' sx={{height: '100%', width: '100%'}}>
                       <TopBar />
                       <Box
                         id='app-content'
@@ -58,11 +62,12 @@ export default function App(): JSX.Element {
                       </Box>
                     </Box>
                   </PandemosProvider>
-                </DataProvider>
-              </MUILocalization>
-            </I18nextProvider>
-          </PersistGate>
-        </ThemeProvider>
+                  </DataProvider>
+                </MUILocalization>
+              </I18nextProvider>
+            </PersistGate>
+          </ThemeProvider>
+        </AuthProvider>
       </Provider>
     </Suspense>
   );

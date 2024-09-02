@@ -16,10 +16,12 @@ const translationFiles = [
   new URL('../../locales/en-legal.json5', import.meta.url).href,
   new URL('../../locales/en-global.json5', import.meta.url).href,
   new URL('../../locales/en-translation.json5', import.meta.url).href,
+  new URL('../../locales/en-onboarding.json5', import.meta.url).href,
   new URL('../../locales/de-backend.json5', import.meta.url).href,
   new URL('../../locales/de-legal.json5', import.meta.url).href,
   new URL('../../locales/de-global.json5', import.meta.url).href,
   new URL('../../locales/de-translation.json5', import.meta.url).href,
+  new URL('../../locales/de-onboarding.json5', import.meta.url).href,
 ] as Array<string>;
 
 void i18n

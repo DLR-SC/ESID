@@ -148,6 +148,7 @@ export default function ManageGroupDialog({
             />
           ))}
           <Card
+            id='group-filter-add-card'
             variant='outlined'
             sx={{
               display: 'flex',

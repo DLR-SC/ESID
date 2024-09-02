@@ -17,8 +17,12 @@ import {useAppDispatch, useAppSelector} from '../store/hooks';
 import {selectTab} from '../store/UserPreferenceSlice';
 import {useTheme} from '@mui/material/styles';
 
-const SimulationChart = React.lazy(() => import('./LineChartContainer'));
-const ParameterEditor = React.lazy(() => import('./ParameterEditor'));
+/*
+ * Import the SimulationChart and ParameterEditor components to be displayed in the tabs
+ * lazy loading is not needed here, as the performance benefits are minimal
+ */
+import SimulationChart from './LineChartContainer';
+import ParameterEditor from './ParameterEditor';
 
 /**
  * This component manages the main content, which is a collection of tabs that the user can navigate through. By default
@@ -69,7 +73,7 @@ export default function MainContentTabs() {
             </Box>
           </Box>
         </TabPanel>
-        <Box sx={{flexGrow: 0, borderTop: 1, borderColor: 'divider', width: '100%'}}>
+        <Box sx={{flexGrow: 0, borderTop: 1, borderColor: 'divider', width: '100%'}} id='tab-list'>
           <TabList
             onChange={handleChange}
             centered
