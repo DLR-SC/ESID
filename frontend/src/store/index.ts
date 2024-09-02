@@ -13,6 +13,7 @@ import {groupApi} from './services/groupApi';
 import LayoutReducer from './LayoutSlice';
 import RealmReducer from './RealmSlice';
 import UserOnboardingReducer from './UserOnboardingSlice';
+import InspireReducer from './inspireGridSlice';
 
 const persistConfig = {
   key: 'root',
@@ -26,6 +27,7 @@ const rootReducer = combineReducers({
   userPreference: UserPreferenceReducer,
   layoutSlice: LayoutReducer,
   userOnboarding: UserOnboardingReducer,
+  inspireGrid: InspireReducer,
   realm: RealmReducer,
   [caseDataApi.reducerPath]: caseDataApi.reducer,
   [scenarioApi.reducerPath]: scenarioApi.reducer,

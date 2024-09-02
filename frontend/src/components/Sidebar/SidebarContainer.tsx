@@ -1,25 +1,59 @@
-//SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, {useState, useEffect, useMemo} from 'react';
+import React, {useState, useEffect, useRef, useCallback, useMemo, useContext} from 'react';
 import {useTranslation} from 'react-i18next';
-import {useTheme} from '@mui/material';
+import {Grid, Stack, useTheme} from '@mui/material';
+import * as am5 from '@amcharts/amcharts5';
 import {useAppDispatch, useAppSelector} from 'store/hooks';
 import {HeatmapLegend} from 'types/heatmapLegend';
 import i18n from 'util/i18n';
+import LockMaxValue from './MapComponents/LockMaxValue';
+import HeatLegendEdit from './MapComponents/HeatLegendEdit';
+import SearchBar from './MapComponents/SearchBar';
+import LoadingContainer from '../shared/LoadingContainer';
+import {NumberFormatter} from 'util/hooks';
+import HeatMap from './MapComponents/HeatMap';
+import HeatLegend from './MapComponents/HeatLegend';
+import {DataContext} from 'DataContext';
 import SidebarTabs from './SidebarTabs';
+import Container from '@mui/material/Container';
+import Box from '@mui/material/Box';
 import {selectDistrict} from 'store/DataSelectionSlice';
+import legendPresets from '../../../assets/heatmap_legend_presets.json?url';
 import {selectHeatmapLegend} from 'store/UserPreferenceSlice';
 import {GeoJsonProperties} from 'geojson';
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import ToggleButton from '@mui/material/ToggleButton';
+import {GeoJSON, GeoJsonProperties} from 'geojson';
 
 export default function MapContainer() {
   const {t} = useTranslation();
+  const {formatNumber} = NumberFormatter(i18n.language, 1, 0);
+  const {t: tBackend} = useTranslation('backend');
   const theme = useTheme();
   const dispatch = useAppDispatch();
+
+  const {
+    geoData,
+    mapData,
+    areMapValuesFetching,
+    searchBarData,
+  }: {
+    geoData: GeoJSON | undefined;
+    mapData: {id: string; value: number}[] | undefined;
+    areMapValuesFetching: boolean;
+    searchBarData: GeoJsonProperties[] | undefined;
+  } = useContext(DataContext) || {
+    geoData: {type: 'FeatureCollection', features: []},
+    mapData: [],
+    areMapValuesFetching: false,
+    searchBarData: [],
+  };
+
   const storeSelectedArea = useAppSelector((state) => state.dataSelection.district);
+  const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
+  const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
   const storeHeatLegend = useAppSelector((state) => state.userPreference.selectedHeatmap);
 
   const defaultValue = useMemo(() => {
@@ -36,7 +70,12 @@ export default function MapContainer() {
       ? {RS: storeSelectedArea.ags, GEN: storeSelectedArea.name, BEZ: storeSelectedArea.type}
       : defaultValue
   );
-  const [legend] = useState<HeatmapLegend>(storeHeatLegend);
+  const [aggregatedMax, setAggregatedMax] = useState<number>(1);
+  const [legend, setLegend] = useState<HeatmapLegend>(storeHeatLegend);
+  const [longLoad, setLongLoad] = useState(false);
+  const [fixedLegendMaxValue, setFixedLegendMaxValue] = useState<number | null>(null);
+
+  const legendRef = useRef<am5.HeatLegend | null>(null);
 
   // Set selected area on first load. If language change and selected area is germany, set default value again to update the name
   useEffect(() => {
@@ -65,15 +104,51 @@ export default function MapContainer() {
     // This effect should only run when the legend changes
   }, [legend, dispatch]);
 
+  const calculateToolTip = useCallback(
+    (regionData: GeoJsonProperties) => {
+      const bez = t(`BEZ.${regionData?.BEZ}`);
+      const compartmentName = tBackend(`infection-states.${selectedCompartment}`);
+      return selectedScenario !== null && selectedCompartment
+        ? `${bez} {GEN}\n${compartmentName}: ${formatNumber(Number(regionData?.value))}`
+        : `${bez} {GEN}`;
+    },
+    [formatNumber, selectedCompartment, selectedScenario, t, tBackend]
+  );
+
+  const calculateToolTipFetching = useCallback(
+    (regionData: GeoJsonProperties) => {
+      const bez = t(`BEZ.${regionData?.BEZ}`);
+      return `${bez} {GEN}`;
+    },
+    [t]
+  );
+
+  const localization = useMemo(() => {
+    return {
+      formatNumber: formatNumber,
+    };
+  }, [formatNumber]);
+
+  const optionLabel = useCallback(
+    (option: GeoJsonProperties) => {
+      return `${option?.GEN}${option?.BEZ ? ` (${t(`BEZ.${option?.BEZ}`)})` : ''}`;
+    },
+    [t]
+  );
   const [expanded, setExpanded] = useState(false);
 
   return (
     <Box
+    <Stack
       id='sidebar-root'
+      direction='column'
+      alignItems='stretch'
+      justifyContent='flex-start'
       sx={{
         // Self
         width: expanded ? '1200px' : '422px',
         height: '100%',
+        width: '422px',
         borderRight: `1px solid ${theme.palette.divider}`,
         background: theme.palette.background.default,
         display: 'flex',
@@ -135,6 +210,7 @@ export default function MapContainer() {
             maxZoomLevel={32}
           />
           <Grid container px={1} id='side-bar-heat-legend'>
+          <Grid container px={1}>
             <Grid item container xs={11} alignItems='flex-end'>
               <HeatLegend
                 legend={legend}
@@ -168,6 +244,10 @@ export default function MapContainer() {
             </Grid>
           </Grid>
         </LoadingContainer>
-    </Box>
+      </Box>
+      <Container disableGutters sx={{flexGrow: 1}}>
+        <SidebarTabs />
+      </Container>
+    </Stack>
   );
 }

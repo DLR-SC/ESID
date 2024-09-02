@@ -23,7 +23,6 @@ import {MUILocalization} from './components/shared/MUILocalization';
 import {DataProvider} from 'data_sockets/DataContext';
 import {PandemosProvider} from 'data_sockets/PandemosContext';
 
-import AuthProvider from './components/AuthProvider';
 /**
  * This is the root element of the React application. It divides the main screen area into the three main components.
  * The top bar, the sidebar and the main content area.
@@ -32,12 +31,11 @@ export default function App(): JSX.Element {
   return (
     <Suspense fallback='loading'>
       <Provider store={Store}>
-        <AuthProvider>
-          <ThemeProvider theme={Theme}>
-            <PersistGate loading={null} persistor={Persistor}>
-              <I18nextProvider i18n={i18n}>
-                <MUILocalization>
-                  <DataProvider>
+        <ThemeProvider theme={Theme}>
+          <PersistGate loading={null} persistor={Persistor}>
+            <I18nextProvider i18n={i18n}>
+              <MUILocalization>
+                <DataProvider>
                   <PandemosProvider>
                     <Initializer />
                     <WelcomeDialogWrapper />
@@ -62,12 +60,11 @@ export default function App(): JSX.Element {
                       </Box>
                     </Box>
                   </PandemosProvider>
-                  </DataProvider>
-                </MUILocalization>
-              </I18nextProvider>
-            </PersistGate>
-          </ThemeProvider>
-        </AuthProvider>
+                </DataProvider>
+              </MUILocalization>
+            </I18nextProvider>
+          </PersistGate>
+        </ThemeProvider>
       </Provider>
     </Suspense>
   );
