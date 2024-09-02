@@ -69,6 +69,7 @@ export default function MapContainer() {
 
   return (
     <Box
+      id='sidebar-root'
       sx={{
         // Self
         width: expanded ? '1200px' : '422px',
