@@ -12,10 +12,12 @@ import {selectDistrict} from 'store/DataSelectionSlice';
 import {selectHeatmapLegend} from 'store/UserPreferenceSlice';
 import ToggleButton from '@mui/material/ToggleButton';
 import {GeoJsonProperties} from 'geojson';
+import {useTheme} from '@mui/material/styles';
 
 export default function MapContainer() {
   const {t} = useTranslation();
   const dispatch = useAppDispatch();
+  const theme = useTheme();
 
   const storeSelectedArea = useAppSelector((state) => state.dataSelection.district);
   const storeHeatLegend = useAppSelector((state) => state.userPreference.selectedHeatmap);
@@ -66,7 +68,15 @@ export default function MapContainer() {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <Box>
+    <Box
+      sx={{
+        // Self
+        width: expanded ? '1200px' : '422px',
+        height: '100%',
+        borderRight: `1px solid ${theme.palette.divider}`,
+        background: theme.palette.background.default,
+        display: 'flex',
+      }}>
       <SidebarTabs />
       <ToggleButton
         color='primary'
