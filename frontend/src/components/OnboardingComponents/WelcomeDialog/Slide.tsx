@@ -2,7 +2,10 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React from 'react';
-import {Box, DialogContent, DialogTitle, Typography} from '@mui/material';
+import Box from '@mui/material/Box';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Typography from '@mui/material/Typography';
 import {useTheme} from '@mui/material/styles';
 import {Trans} from 'react-i18next/TransWithoutContext';
 

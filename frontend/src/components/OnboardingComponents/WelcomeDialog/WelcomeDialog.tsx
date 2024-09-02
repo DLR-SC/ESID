@@ -2,8 +2,13 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React from 'react';
-import {Box, Button, Dialog, MobileStepper} from '@mui/material';
-import {ArrowBackIos, ArrowForwardIos, Close as CloseIcon} from '@mui/icons-material';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import MobileStepper from '@mui/material/MobileStepper';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import CloseIcon from '@mui/icons-material/Close';
 import {useTheme} from '@mui/material/styles';
 import Slide from './Slide';
 import TourChips from '../TourComponents/TourChipsList';
@@ -134,22 +139,22 @@ export default function WelcomeDialog({
             nextButton={
               step < numberOfSlides - 1 ? (
                 <Button onClick={onNext} data-testid='arrow-forward-button'>
-                  <ArrowForwardIos />
+                  <ArrowForwardIosIcon />
                 </Button>
               ) : (
                 <Button disabled data-testid='arrow-forward-button'>
-                  <ArrowForwardIos />
+                  <ArrowForwardIosIcon />
                 </Button>
               )
             }
             backButton={
               step > 0 ? (
                 <Button onClick={onPrev} data-testid='arrow-backward-button'>
-                  <ArrowBackIos />
+                  <ArrowBackIosIcon />
                 </Button>
               ) : (
                 <Button disabled data-testid='arrow-backward-button'>
-                  <ArrowBackIos />
+                  <ArrowBackIosIcon />
                 </Button>
               )
             }
