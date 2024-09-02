@@ -12,6 +12,9 @@ SPDX-License-Identifier: CC-BY-4.0
 ### New Features
 
 - The data for cologne is now displayed on a city district level
+- Onboarding System for ESID. It consists of:
+  - Welcome modal, which displays an overview of ESID through slides and illustrations on the user's first visit
+  - Onboarding tours, built using the React Joyride library, which can be accessed via clicking on the different tour chips in the information button in the top bar or from the last slide of the welcome modal
 
 ### Improvements
 
