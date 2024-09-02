@@ -49,6 +49,11 @@ export default function FilterDialogContainer({
   const theme = useTheme();
   const dispatch = useAppDispatch();
 
+  /**
+   * This function handles the closing of the filter dialog.
+   * If there are unsaved changes, the user will be prompted to confirm before closing.
+   * The dispatched action setIsFilterDialogOpen is needed for the onboarding tour of the filter.
+   */
   const handleClose = () => {
     if (groupEditorUnsavedChanges) {
       setCloseDialogOpen(true);

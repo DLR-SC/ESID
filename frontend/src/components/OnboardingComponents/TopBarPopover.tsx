@@ -12,11 +12,22 @@ import TourChips from './TourComponents/TourChipsList';
 import LinearProgress from '@mui/material/LinearProgress';
 
 interface TopBarPopoverProps {
+  /** The anchor element for the popover */
   anchorEl: HTMLElement | null;
+
+  /** Determines if the popover is open or not */
   open: boolean;
+
+  /** Function to close the popover */
   onClose: () => void;
+
+  /** Determines if all tours are completed */
   allToursCompleted: boolean;
+
+  /** The number of completed tours */
   completedTours: number;
+
+  /** The total number of tours */
   totalTours: number;
 }
 

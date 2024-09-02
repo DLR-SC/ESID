@@ -45,7 +45,7 @@ export default function WelcomeDialogWrapper(): JSX.Element {
   }, [dispatch, tours]);
 
   /**
-   * this function handles the next button of the modal
+   * those functions handle the next and previous button of the modal
    */
   const handleNext = () => setStep((prev) => prev + 1);
   const handlePrev = () => setStep((prev) => prev - 1);
