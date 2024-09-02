@@ -7,6 +7,7 @@ import {HeatmapLegend} from '../types/heatmapLegend';
 export interface UserPreference {
   selectedHeatmap: HeatmapLegend;
   selectedTab?: string;
+  selectedSidebarTab?: string;
   isInitialVisit: boolean;
 }
 
@@ -21,6 +22,7 @@ const initialState: UserPreference = {
     ],
   },
   selectedTab: '1',
+  selectedSidebarTab: '1',
   isInitialVisit: true,
 };
 
@@ -38,6 +40,9 @@ export const UserPreferenceSlice = createSlice({
     selectTab(state, action: PayloadAction<string>) {
       state.selectedTab = action.payload;
     },
+    selectSidebarTab(state, action: PayloadAction<string>) {
+      state.selectedSidebarTab = action.payload;
+    },
     /** Set users initial visit to the application */
     setInitialVisit(state, action: PayloadAction<boolean>) {
       state.isInitialVisit = action.payload;
@@ -45,5 +50,5 @@ export const UserPreferenceSlice = createSlice({
   },
 });
 
-export const {selectHeatmapLegend, selectTab, setInitialVisit} = UserPreferenceSlice.actions;
+export const {selectHeatmapLegend, selectTab, selectSidebarTab, setInitialVisit} = UserPreferenceSlice.actions;
 export default UserPreferenceSlice.reducer;

@@ -73,6 +73,7 @@
   bottomTabs: {
     timeSeries: 'Zeitreihe',
     parameters: 'Parameter',
+    pandemos: 'PANDEMOS'
   },
   parameters: {
     'no-parameters': 'Für das ausgewählte Szenario existieren keine Parameter.',

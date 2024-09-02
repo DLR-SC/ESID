@@ -9,7 +9,7 @@ import TabContext from '@mui/lab/TabContext';
 import TabPanel from '@mui/lab/TabPanel';
 import {useAppDispatch, useAppSelector} from 'store/hooks';
 import TabList from '@mui/lab/TabList';
-import {selectTab} from 'store/UserPreferenceSlice';
+import {selectSidebarTab} from 'store/UserPreferenceSlice';
 import Tab, {tabClasses} from '@mui/material/Tab';
 import {useTheme} from '@mui/material/styles';
 import {buttonBaseClasses} from '@mui/material/ButtonBase';
@@ -29,7 +29,7 @@ import TripChainView from '../TripChainView';
 
 export default function SidebarTabs(): JSX.Element {
   const {t, i18n} = useTranslation('global');
-  const selectedTab = useAppSelector((state) => state.userPreference.selectedTab ?? '1');
+  const selectedTab = useAppSelector((state) => state.userPreference.selectedSidebarTab ?? '1');
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const storeSelectedArea = useAppSelector((state) => state.dataSelection.district);
@@ -52,14 +52,14 @@ export default function SidebarTabs(): JSX.Element {
         background: theme.palette.background.paper,
       },
     }),
-    [theme],
+    [theme]
   );
 
   const handleChange = useCallback(
     (_: unknown, newValue: string) => {
-      return dispatch(selectTab(newValue));
+      return dispatch(selectSidebarTab(newValue));
     },
-    [dispatch],
+    [dispatch]
   );
 
   const {
@@ -79,12 +79,11 @@ export default function SidebarTabs(): JSX.Element {
     searchBarData: [],
   };
 
-
   const optionLabel = useCallback(
     (option: GeoJsonProperties) => {
       return `${option?.GEN}${option?.BEZ ? ` (${t(`BEZ.${option?.BEZ}`)})` : ''}`;
     },
-    [t],
+    [t]
   );
 
   const defaultValue = useMemo(() => {
@@ -99,7 +98,7 @@ export default function SidebarTabs(): JSX.Element {
   const [selectedArea, setSelectedArea] = useState<GeoJsonProperties>(
     storeSelectedArea.name != ''
       ? {RS: storeSelectedArea.ags, GEN: storeSelectedArea.name, BEZ: storeSelectedArea.type}
-      : defaultValue,
+      : defaultValue
   );
   const [aggregatedMax, setAggregatedMax] = useState<number>(1);
   const [legend, setLegend] = useState<HeatmapLegend>(storeHeatLegend);
@@ -115,7 +114,7 @@ export default function SidebarTabs(): JSX.Element {
         ? `${bez} {GEN}\n${compartmentName}: ${formatNumber(Number(regionData?.value))}`
         : `${bez} {GEN}`;
     },
-    [formatNumber, selectedCompartment, selectedScenario, t, tBackend],
+    [formatNumber, selectedCompartment, selectedScenario, t, tBackend]
   );
 
   const calculateToolTipFetching = useCallback(
@@ -123,7 +122,7 @@ export default function SidebarTabs(): JSX.Element {
       const bez = t(`BEZ.${regionData?.BEZ}`);
       return `${bez} {GEN}`;
     },
-    [t],
+    [t]
   );
 
   const localization = useMemo(() => {
@@ -133,16 +132,19 @@ export default function SidebarTabs(): JSX.Element {
   }, [formatNumber]);
 
   return (
-    <Box id='sidebar-tabs' sx={{
-      // Self
-      height: '100%',
-      width: '100%',
+    <Box
+      id='sidebar-tabs'
+      sx={{
+        // Self
+        height: '100%',
+        width: '100%',
 
-      // Child layout
-      display: 'flex',
-      flexDirection: 'column',
-      overflow: 'hidden',
-    }}>
+        // Child layout
+        display: 'flex',
+        flexDirection: 'column',
+        overflow: 'hidden',
+      }}
+    >
       <TabContext value={selectedTab}>
         <Box sx={{flexGrow: 0, borderBottom: 1, borderColor: 'divider', width: '100%'}}>
           <TabList
@@ -153,33 +155,22 @@ export default function SidebarTabs(): JSX.Element {
               minHeight: '0',
             }}
           >
-            <Tab
-              label={<Typography>Map</Typography>}
-              value='1'
-              sx={tabStyle}
-            />
-            <Tab
-              label={<Typography>Statistics</Typography>}
-              value='2'
-              sx={tabStyle}
-            />
-            <Tab
-              label={<Typography>Trip Chains</Typography>}
-              value='3'
-              sx={tabStyle}
-            />
+            <Tab label={<Typography>Map</Typography>} value='1' sx={tabStyle} />
+            <Tab label={<Typography>Statistics</Typography>} value='2' sx={tabStyle} />
+            <Tab label={<Typography>Trip Chains</Typography>} value='3' sx={tabStyle} />
           </TabList>
         </Box>
         <TabPanel value='1' sx={{flexGrow: 1, padding: 0}}>
-          <Box id='sidebartabs-main-content'
-               sx={{
-                 display: 'flex',
-                 flexDirection: 'column',
-                 alignItems: 'center',
-                 justifyContent: 'center',
-                 width: '422px',
-                 height: '100%',
-               }}
+          <Box
+            id='sidebartabs-main-content'
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '422px',
+              height: '100%',
+            }}
           >
             <Box id='sidebar-map-search-bar-wrapper' sx={{width: '100%'}}>
               <SearchBar
@@ -226,7 +217,7 @@ export default function SidebarTabs(): JSX.Element {
                   localization={localization}
                   maxZoomLevel={32}
                 />
-                <Grid container px={1}>
+                <Grid container px={1} id='side-bar-heat-legend'>
                   <Grid item container xs={11} alignItems='flex-end'>
                     <HeatLegend
                       legend={legend}
@@ -265,9 +256,7 @@ export default function SidebarTabs(): JSX.Element {
         </TabPanel>
         <TabPanel value='2' sx={{flexGrow: 1, padding: 0}}>
           <Box sx={{height: '100%', position: 'relative'}}>
-            <Box sx={{position: 'absolute', top: 20, right: 0, bottom: 0, left: 0}}>
-              {/*<StatisticsDashboard />*/}
-            </Box>
+            <Box sx={{position: 'absolute', top: 20, right: 0, bottom: 0, left: 0}}>{/*<StatisticsDashboard />*/}</Box>
           </Box>
         </TabPanel>
         <TabPanel value='3' sx={{flexGrow: 1, padding: 0, overflowY: 'auto'}}>

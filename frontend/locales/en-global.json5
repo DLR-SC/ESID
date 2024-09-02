@@ -82,6 +82,7 @@
   bottomTabs: {
     timeSeries: 'Time Series',
     parameters: 'Parameters',
+    pandemos: 'PANDEMOS'
   },
   parameters: {
     'no-parameters': 'No parameters available for the selected scenario.',
