@@ -26,6 +26,7 @@ import {DataContext} from 'data_sockets/DataContext';
 import legendPresets from '../../../assets/heatmap_legend_presets.json?url';
 import {GeoJSON, GeoJsonProperties} from 'geojson';
 import TripChainView from '../TripChainView';
+import StatisticsDashboard from './StatisicsComponent/StatisticsDashboard';
 
 export default function SidebarTabs(): JSX.Element {
   const {t, i18n} = useTranslation('global');
@@ -256,7 +257,7 @@ export default function SidebarTabs(): JSX.Element {
         </TabPanel>
         <TabPanel value='2' sx={{flexGrow: 1, padding: 0}}>
           <Box sx={{height: '100%', position: 'relative'}}>
-            <Box sx={{position: 'absolute', top: 20, right: 0, bottom: 0, left: 0}}>{/*<StatisticsDashboard />*/}</Box>
+            <Box sx={{position: 'absolute', top: 20, right: 0, bottom: 0, left: 0}}>{<StatisticsDashboard />}</Box>
           </Box>
         </TabPanel>
         <TabPanel value='3' sx={{flexGrow: 1, padding: 0, overflowY: 'auto'}}>
