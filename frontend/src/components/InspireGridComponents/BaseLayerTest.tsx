@@ -1,8 +1,9 @@
-import React, {useEffect} from 'react';
+import React, {useCallback, useContext, useEffect, useMemo} from 'react';
 import {LayerGroup, LayersControl, MapContainer, TileLayer, useMap, Polyline} from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import {getGrid, getCellFromPosition} from './inspire';
 import {LatLngExpression} from 'leaflet';
+import {PandemosContext} from '../../data_sockets/PandemosContext';
 
 type MapBounds = [[number, number], [number, number]];
 type MapCenter = [number, number];
@@ -54,7 +55,7 @@ function MapEventsHandler({setMapZoom, setMapBounds, setMapCenter}: BaseLayerPro
     const handleMouseClick = (position: any) => {
       const clickedPosition = position.latlng;
       console.log(
-        getCellFromPosition([clickedPosition.lat, clickedPosition.lng], getResolutionFromZoom(map.getZoom()))
+        getCellFromPosition([clickedPosition.lat, clickedPosition.lng], getResolutionFromZoom(map.getZoom())),
       ); // change level to include level
     };
 
@@ -87,26 +88,76 @@ function getResolutionFromZoom(input: number): number {
 }
 
 export default function BaseLayer({
-  mapZoom = 14,
-  mapBounds = [
-    [52.248, 10.477],
-    [52.273, 10.572],
-  ],
-  mapCenter = [52.26, 10.525],
-  inspireGrid = true,
-  inspireGridLevel = 10,
-  setMapZoom,
-  setMapBounds,
-  setMapCenter,
-}: BaseLayerProps): JSX.Element {
+                                    mapZoom = 14,
+                                    mapBounds = [
+                                      [52.248, 10.477],
+                                      [52.273, 10.572],
+                                    ],
+                                    mapCenter = [52.26, 10.525],
+                                    inspireGrid = true,
+                                    inspireGridLevel = 10,
+                                    setMapZoom,
+                                    setMapBounds,
+                                    setMapCenter,
+                                  }: BaseLayerProps): JSX.Element {
   let multiPolyline: LatLngExpression[][] = [];
   inspireGridLevel = getResolutionFromZoom(mapZoom);
+  const context = useContext(PandemosContext);
+
+  const getLocationPos = useCallback(
+    (location: number) => {
+      const result = context.locations?.all().find((loc) => loc.location_id === location);
+      return result ? [result.lat, result.lon] : undefined;
+    },
+    [context.locations],
+  );
+
+  const trips = useMemo(() => {
+    const trips: {pos: [number, number]; color: string}[] = [];
+    context.filteredTripChains?.forEach((tripChains) => {
+      tripChains.forEach((tripChainId) => {
+        if (context.tripChains) {
+          const tripChain = context.tripChains.get(tripChainId);
+          tripChain?.forEach((trip) => {
+            let color: string;
+            switch (trip.transport_mode) {
+              case 0:
+                color = '#F004'; // Bike
+                break;
+              case 1:
+                color = '#0F04'; // Car (Driver)
+                break;
+              case 2:
+                color = '#00F4'; // Car (Passenger)
+                break;
+              case 3:
+                color = '#FF04'; // Bus
+                break;
+              case 4:
+                color = '#0FF4'; // Walking
+                break;
+              case 5:
+                color = '#FFF4'; // Other
+                break;
+              default:
+                color = '#0004'; // Unknown
+            }
+            trips.push({
+              pos: [getLocationPos(trip.start_location), getLocationPos(trip.end_location)],
+              color: color,
+            });
+          });
+        }
+      });
+    });
+    return trips;
+  }, [context.filteredTripChains, context.tripChains, getLocationPos]);
 
   if (inspireGrid) {
     const gridData = getGrid(mapBounds, inspireGridLevel);
     const latitudes = gridData.latitudes.map((line) => line.map((coord) => [coord[1], coord[0]]) as LatLngExpression[]);
     const longitudes = gridData.longitudes.map(
-      (line) => line.map((coord) => [coord[1], coord[0]]) as LatLngExpression[]
+      (line) => line.map((coord) => [coord[1], coord[0]]) as LatLngExpression[],
     );
 
     multiPolyline = [...latitudes, ...longitudes];
@@ -138,9 +189,16 @@ export default function BaseLayer({
             ))}
           </LayerGroup>
         </LayersControl.Overlay>
+        <LayersControl.Overlay checked name='InspireGridOverlay'>
+          <LayerGroup>
+            {trips.map((line, index) => (
+              <Polyline key={index} pathOptions={{weight: 1, color: line.color}} positions={line.pos} />
+            ))}
+          </LayerGroup>
+        </LayersControl.Overlay>
       </LayersControl>
 
       <MapEventsHandler setMapZoom={setMapZoom} setMapBounds={setMapBounds} setMapCenter={setMapCenter} />
     </MapContainer>
   );
-}
+};

@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, {useCallback, useContext, useMemo, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useMemo, useState} from 'react';
 import {
   infectionStateNames,
   Location,
@@ -101,6 +101,12 @@ export default function TripChainView(): JSX.Element {
 
     return [...tripMap.values()].sort((a, b) => b.length - a.length);
   }, [context.tripChains, filterInfections, filterLocations, filterTransports, getLocation]);
+
+  useEffect(() => {
+    if (context.setFilteredTripChains) {
+      context.setFilteredTripChains(tripChainsByOccurrence);
+    }
+  }, [tripChainsByOccurrence, context.setFilteredTripChains, context]);
 
   const [maxDisplayed, setMaxDisplayed] = useState(0);
 

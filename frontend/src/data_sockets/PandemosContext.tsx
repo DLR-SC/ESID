@@ -59,12 +59,16 @@ export const PandemosContext = createContext<{
   locations: Crossfilter<Location> | undefined;
   trips: Crossfilter<Trip> | undefined;
   tripChains: Map<number, Array<Trip>> | undefined;
+  filteredTripChains: number[][] | undefined;
+  setFilteredTripChains: ((value: number[][]) => void) | undefined;
 }>({
   // default values should be undefined or null
   agents: undefined,
   locations: undefined,
   trips: undefined,
   tripChains: undefined,
+  filteredTripChains: undefined,
+  setFilteredTripChains: undefined,
 });
 
 // Create provider component
@@ -74,6 +78,7 @@ export const PandemosProvider = ({children}: {children: React.ReactNode}) => {
   const [trips, setTrips] = useState<Crossfilter<Trip>>();
 
   const [tripChains, setTripChains] = useState<Map<number, Array<Trip>>>();
+  const [filteredTripChains, setFilteredTripChains] = useState<number[][]>([]);
 
   // Effect to fetch the data
   useEffect(() => {
@@ -161,6 +166,8 @@ export const PandemosProvider = ({children}: {children: React.ReactNode}) => {
         locations,
         trips,
         tripChains,
+        filteredTripChains,
+        setFilteredTripChains,
       }}
     >
       {children}
