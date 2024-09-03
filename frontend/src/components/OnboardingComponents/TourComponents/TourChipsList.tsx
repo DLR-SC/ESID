@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, {useCallback, useMemo} from 'react';
+import React, {lazy, Suspense, useCallback, useMemo} from 'react';
 import MapIcon from '@mui/icons-material/Map';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import ShowChartIcon from '@mui/icons-material/ShowChart';
@@ -9,11 +9,13 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import Coronavirus from '@mui/icons-material/Coronavirus';
 import {useAppDispatch, useAppSelector} from '../../../store/hooks';
 import {TourType} from '../../../types/tours';
-import TourSteps from './TourSteps';
 import {setShowWelcomeDialog, setShowPopover, setActiveTour} from '../../../store/UserOnboardingSlice';
 import {useTranslation} from 'react-i18next';
 import Box from '@mui/material/Box';
 import TourChip from './TourChip';
+
+/** Lazy loading the tour steps */
+const TourSteps = lazy(() => import('./TourSteps'));
 
 interface TourChipsProps {
   /** the alignment of the chips, which varies between the components where they are rendered (welcome dialog and top bar popover). */
@@ -76,7 +78,9 @@ export default function TourChips({align = 'left'}: TourChipsProps): JSX.Element
           </Box>
         ))}
       </Box>
-      <TourSteps />
+      <Suspense fallback={<div>Loading...</div>}>
+        <TourSteps />
+      </Suspense>
     </>
   );
 }
