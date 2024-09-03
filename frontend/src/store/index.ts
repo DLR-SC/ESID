@@ -14,11 +14,12 @@ import LayoutReducer from './LayoutSlice';
 import RealmReducer from './RealmSlice';
 import UserOnboardingReducer from './UserOnboardingSlice';
 import InspireReducer from './inspireGridSlice';
+import PandemosFilterReducer from './PandemosFilterSlice';
 
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['dataSelection', 'userPreference', 'userOnboarding', 'realm'],
+  whitelist: ['dataSelection', 'userPreference', 'userOnboarding', 'realm', 'pandemosFilter'],
 };
 
 const rootReducer = combineReducers({
@@ -29,6 +30,7 @@ const rootReducer = combineReducers({
   userOnboarding: UserOnboardingReducer,
   inspireGrid: InspireReducer,
   realm: RealmReducer,
+  pandemosFilter: PandemosFilterReducer,
   [caseDataApi.reducerPath]: caseDataApi.reducer,
   [scenarioApi.reducerPath]: scenarioApi.reducer,
   [groupApi.reducerPath]: groupApi.reducer,
