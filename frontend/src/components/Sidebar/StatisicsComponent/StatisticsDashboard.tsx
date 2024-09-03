@@ -87,7 +87,7 @@ export default function StatisticsDashboard(props: any):JSX.Element {
   
     const odInfectionChart = (dc.heatMap("#odInfection") as any)
     chartRefs.current['odInfection'] = odInfectionChart;
-    const odInfectionChartLegend = (dc.htmlLegend() as any).container("#odInfectionChart-legend").horizontal(false).highlightSelected(true);
+   // const odInfectionChartLegend = (dc.htmlLegend() as any).container("#odInfectionChart-legend").horizontal(false).highlightSelected(true);
     odInfectionChart
    .width(400).height(200)
    . dimension(odInfectionDimension).group(odInfectionGroup)
@@ -107,7 +107,7 @@ export default function StatisticsDashboard(props: any):JSX.Element {
                    "\nInfection Count: " + d.value.count;
         })
         .colors(d3.scaleSequential(d3.interpolateViridis))
-    .calculateColorDomain().legend(odInfectionChartLegend);
+       .calculateColorDomain();//.legend(odInfectionChartLegend);
     odInfectionChart.renderlet((d:any) => {
         d.selectAll('.axis text')
           .style('font-size', '10px')
@@ -161,7 +161,7 @@ export default function StatisticsDashboard(props: any):JSX.Element {
     
     transportModeChart.on('pretransition', (d: any)=> {
         d.selectAll('text.pie-slice').each(function() {
-            d3.select(this).style('font-size', '12px'); // Adjust the font size as needed
+            d3.select(this).style('font-size', '10px'); // Adjust the font size as needed
         });
     });
     transportModeChart.render()
@@ -199,7 +199,7 @@ export default function StatisticsDashboard(props: any):JSX.Element {
             
     activityChart.on('pretransition', (d: any)=> {
         d.selectAll('text.pie-slice').each(function() {
-            d3.select(this).style('font-size', '12px'); // Adjust the font size as needed
+            d3.select(this).style('font-size', '10px'); // Adjust the font size as needed
         });
     });
 
@@ -320,7 +320,7 @@ return(
          <Box id="odInfection"></Box>   
    
 </Grid>  
-  <Box id="odInfectionChart-legend" sx={{ display: "inline-block", marginRight:"10px", cursor:"pointer" }} ></Box> 
+   <Box id="odInfection" sx={{ display: "inline-block", marginRight:"10px", cursor:"pointer" }} ></Box>  
   <Grid id="sidebar-tabs"item sx={{display: 'flex', flexGrow: 1, flexDirection: 'row'}}> 
  
   <RestartAltIcon  onClick={() => resetChart('tripDuration')}/> <Box  id="tripDuration" ></Box>    
