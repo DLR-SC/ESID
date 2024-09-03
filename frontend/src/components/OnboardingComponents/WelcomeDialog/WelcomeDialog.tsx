@@ -92,6 +92,7 @@ export default function WelcomeDialog({
         }}
       >
         <Button
+          aria-label='close-button'
           data-testid='close-button'
           onClick={onClose}
           sx={{
@@ -115,6 +116,7 @@ export default function WelcomeDialog({
               </Box>
               <Box sx={{display: 'flex', justifyContent: 'center'}}>
                 <Button
+                  aria-label='maybe-later-button'
                   data-testid='maybe-later-button'
                   sx={{marginTop: theme.spacing(2)}}
                   onClick={onClose}
@@ -138,22 +140,22 @@ export default function WelcomeDialog({
             }}
             nextButton={
               step < numberOfSlides - 1 ? (
-                <Button onClick={onNext} data-testid='arrow-forward-button'>
+                <Button onClick={onNext} aria-label='arrow-forward-button' data-testid='arrow-forward-button'>
                   <ArrowForwardIosIcon />
                 </Button>
               ) : (
-                <Button disabled data-testid='arrow-forward-button'>
+                <Button disabled aria-label='arrow-forward-button' data-testid='arrow-forward-button'>
                   <ArrowForwardIosIcon />
                 </Button>
               )
             }
             backButton={
               step > 0 ? (
-                <Button onClick={onPrev} data-testid='arrow-backward-button'>
+                <Button onClick={onPrev} aria-label='arrow-back-button' data-testid='arrow-backward-button'>
                   <ArrowBackIosIcon />
                 </Button>
               ) : (
-                <Button disabled data-testid='arrow-backward-button'>
+                <Button disabled aria-label='arrow-back-button' data-testid='arrow-backward-button'>
                   <ArrowBackIosIcon />
                 </Button>
               )

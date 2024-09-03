@@ -46,7 +46,7 @@ export default function TopBarPopover(props: TopBarPopoverProps): JSX.Element {
 
   return (
     <Popover
-      aria-label='popover'
+      aria-label='top-bar-popover'
       data-testid='popover-testid'
       open={props.open}
       anchorEl={props.anchorEl}
@@ -62,18 +62,14 @@ export default function TopBarPopover(props: TopBarPopoverProps): JSX.Element {
       }}
     >
       <Box position='relative' p={4}>
-        <Box>
-          <Typography variant='h2' align='left' gutterBottom>
-            {props.allToursCompleted ? tOnboarding('completedTours') : tOnboarding('getStarted')}
-          </Typography>
-        </Box>
-        <Box mt={2}>
-          <Typography variant='body1' align='left' gutterBottom sx={{color: 'GrayText'}}>
-            {props.allToursCompleted ? tOnboarding('completedToursContent') : tOnboarding('getStartedContent')}
-          </Typography>
-        </Box>
+        <Typography variant='h2' align='left' gutterBottom>
+          {props.allToursCompleted ? tOnboarding('completedTours') : tOnboarding('getStarted')}
+        </Typography>
+        <Typography variant='body1' align='left' gutterBottom sx={{color: 'GrayText'}}>
+          {props.allToursCompleted ? tOnboarding('completedToursContent') : tOnboarding('getStartedContent')}
+        </Typography>
         <IconButton
-          aria-label='close-info-button'
+          aria-label='close'
           test-id='close-info-button'
           onClick={props.onClose}
           sx={{
@@ -89,6 +85,7 @@ export default function TopBarPopover(props: TopBarPopoverProps): JSX.Element {
         </Box>
         <Box mt={4}>
           <LinearProgress
+            aria-label='onboarding-completion-progress'
             variant='determinate'
             value={completionPercentage}
             sx={{

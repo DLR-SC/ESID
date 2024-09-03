@@ -80,6 +80,7 @@ export default function InfoButton() {
           }}
         >
           <IconButton
+            aria-label='top-bar-info-button'
             color='primary'
             sx={{textDecoration: 'overline'}}
             onClick={handlePopoverOpen}
