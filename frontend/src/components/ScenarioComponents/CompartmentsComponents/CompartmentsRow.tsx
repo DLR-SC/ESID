@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import {ListItemButton, ListItemText, ListItemIcon, ClickAwayListener, Tooltip, useTheme} from '@mui/material';
-import {InfoOutlined} from '@mui/icons-material';
+import InfoOutlined from '@mui/icons-material/InfoOutlined';
 import {Dispatch, SetStateAction, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import React from 'react';
