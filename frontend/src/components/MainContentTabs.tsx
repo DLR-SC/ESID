@@ -18,11 +18,10 @@ import {selectTab} from '../store/UserPreferenceSlice';
 import {useTheme} from '@mui/material/styles';
 
 /*
- * Import the SimulationChart and ParameterEditor components to be displayed in the tabs
- * lazy loading is not needed here, as the performance benefits are minimal
+ * Lazy loading the components to improve the performance
  */
-import SimulationChart from './LineChartContainer';
-import ParameterEditor from './ParameterEditor';
+const SimulationChart = React.lazy(() => import('./LineChartContainer'));
+const ParameterEditor = React.lazy(() => import('./ParameterEditor'));
 
 /**
  * This component manages the main content, which is a collection of tabs that the user can navigate through. By default
