@@ -6,56 +6,55 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import MobileStepper from '@mui/material/MobileStepper';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import CloseIcon from '@mui/icons-material/Close';
 import {useTheme} from '@mui/material/styles';
 import Slide from './Slide';
 import TourChips from '../TourComponents/TourChipsList';
 import LanguagePicker from 'components/TopBar/LanguagePicker';
+import StepButton from './StepButton';
 
 interface WelcomeDialogProps {
-  /** determines if the dialog is open or not */
+  /** Determines if the dialog is open or not */
   open: boolean;
 
-  /** the current step of the dialog */
+  /** The current step of the dialog */
   step: number;
 
-  /** function to close the dialog */
+  /** Function to close the dialog */
   onClose: () => void;
 
-  /** function to go to the next step */
+  /** Function to go to the next step */
   onNext: () => void;
 
-  /** function to go to the previous step */
+  /** Function to go to the previous step */
   onPrev: () => void;
 
-  /** the total number of slides in the dialog */
+  /** The total number of slides in the dialog */
   numberOfSlides: number;
 
-  /** an object containing the image sources for each slide */
+  /** An object containing the image sources for each slide */
   images: {[key: number]: string};
 
-  /** the title of the current slide */
+  /** The title of the current slide */
   title: string;
 
-  /** the content of the current slide */
+  /** The content of the current slide */
   content: string;
 
-  /** determines if the tour chips should be shown */
+  /** Determines if the tour chips should be shown */
   showTourChips: boolean;
 
-  /** determines if the language picker should be shown */
+  /** Determines if the language picker should be shown */
   showLanguagePicker: boolean;
 
-  /** the text for the maybe later button */
+  /** The text for the maybe later button */
   maybeLaterText: string;
 }
 
 /**
  * This component is a welcome modal that is shown to the user when they first open the application.
  * It contains a series of slides that explain the basic functionality of the application.
- * at the last slide, the user can choose a tour to start or skip it altogether.
+ * At the last slide, the user can choose a tour to start or skip it altogether.
  */
 export default function WelcomeDialog({
   open,
@@ -138,28 +137,8 @@ export default function WelcomeDialog({
             sx={{
               backgroundColor: 'transparent',
             }}
-            nextButton={
-              step < numberOfSlides - 1 ? (
-                <Button onClick={onNext} aria-label='arrow-forward-button' data-testid='arrow-forward-button'>
-                  <ArrowForwardIosIcon />
-                </Button>
-              ) : (
-                <Button disabled aria-label='arrow-forward-button' data-testid='arrow-forward-button'>
-                  <ArrowForwardIosIcon />
-                </Button>
-              )
-            }
-            backButton={
-              step > 0 ? (
-                <Button onClick={onPrev} aria-label='arrow-back-button' data-testid='arrow-backward-button'>
-                  <ArrowBackIosIcon />
-                </Button>
-              ) : (
-                <Button disabled aria-label='arrow-back-button' data-testid='arrow-backward-button'>
-                  <ArrowBackIosIcon />
-                </Button>
-              )
-            }
+            nextButton={<StepButton direction='next' onClick={onNext} disabled={step >= numberOfSlides - 1} />}
+            backButton={<StepButton direction='back' onClick={onPrev} disabled={step <= 0} />}
           />
         </Box>
       </Dialog>

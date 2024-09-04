@@ -12,7 +12,7 @@ import {setShowTooltip, setShowPopover} from '../../store/UserOnboardingSlice';
 import TopBarPopover from './TopBarPopover';
 
 /**
- * this component is an information button in the top bar that opens a popover, which contains the onboarding tours which the user can take
+ * This component is an information button in the top bar that opens a popover, which contains the onboarding tours which the user can take.
  */
 export default function InfoButton() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -25,7 +25,7 @@ export default function InfoButton() {
   const tours = useAppSelector((state) => state.userOnboarding.tours);
 
   /**
-   * this use memo is to calculate the total number of tours and the number of completed tours for the popover progress bar
+   * This use memo is to calculate the total number of tours and the number of completed tours for the popover progress bar.
    **/
   const [totalTours, completedTours] = useMemo(() => {
     const total = Object.keys(tours).length;

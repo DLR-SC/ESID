@@ -120,8 +120,6 @@
           spotlightClicks: true,
           showProgress: true,
           placement: 'left-start',
-          hideCloseButton: true,
-          hideFooter: true,
           spotlightPadding: 50,
         },
         step4: {

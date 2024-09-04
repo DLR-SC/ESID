@@ -18,7 +18,7 @@ import TourChip from './TourChip';
 const TourSteps = lazy(() => import('./TourSteps'));
 
 interface TourChipsProps {
-  /** the alignment of the chips, which varies between the components where they are rendered (welcome dialog and top bar popover). */
+  /** The alignment of the chips, which varies between the components where they are rendered (welcome dialog and top bar popover). */
   align?: 'center' | 'left';
 }
 
@@ -31,7 +31,7 @@ export default function TourChips({align = 'left'}: TourChipsProps): JSX.Element
   const tours = useAppSelector((state) => state.userOnboarding.tours);
 
   /**
-   * this is the memoized data for the tours that the user can take
+   * This is the memoized data for the tours that the user can take.
    */
   const tourData = useMemo(
     () => [
@@ -45,7 +45,7 @@ export default function TourChips({align = 'left'}: TourChipsProps): JSX.Element
   );
 
   /**
-   * this function is called when a tour is clicked and sets the current active tour
+   * This function is called when a tour is clicked and sets the current active tour.
    */
   const onTourClick = useCallback(
     (tour: TourType) => {

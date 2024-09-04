@@ -7,14 +7,14 @@ import {useAppSelector, useAppDispatch} from '../../../store/hooks';
 import {setShowWelcomeDialog, setTourCompleted, setShowTooltip} from '../../../store/UserOnboardingSlice';
 import WelcomeDialog from './WelcomeDialog';
 import esidLogo from '../../../../assets/logo/logo-200x66.png';
-import welcomeSlidesIllustration1 from '../../../../assets/logo/illustration-1.png';
-import welcomeSlidesIllustration2 from '../../../../assets/logo/illustration-2.svg';
-import welcomeSlidesIllustration3 from '../../../../assets/logo/illustration-3.svg';
-import welcomeSlidesIllustration4 from '../../../../assets/logo/illustration-4.png';
-import welcomeSlidesIllustration5 from '../../../../assets/logo/illustration-5.svg';
+import welcomeSlidesIllustration1 from '../../../../assets/illustrations/illustration-1.png';
+import welcomeSlidesIllustration2 from '../../../../assets/illustrations/illustration-2.svg';
+import welcomeSlidesIllustration3 from '../../../../assets/illustrations/illustration-3.svg';
+import welcomeSlidesIllustration4 from '../../../../assets/illustrations/illustration-4.png';
+import welcomeSlidesIllustration5 from '../../../../assets/illustrations/illustration-5.svg';
 
 /**
- * this component wraps the WelcomeDialog component and handles its state
+ * This component wraps the WelcomeDialog component and handles its state.
  */
 export default function WelcomeDialogWrapper(): JSX.Element {
   const {t: tOnboarding} = useTranslation('onboarding');
@@ -24,7 +24,7 @@ export default function WelcomeDialogWrapper(): JSX.Element {
   const tours = useAppSelector((state) => state.userOnboarding.tours);
 
   /**
-   * this useMemo hook gets the number of slides from the translation
+   * This useMemo hook gets the number of slides from the translation.
    */
   const {numberOfSlides} = useMemo(() => {
     const slideKeys = Object.keys(tOnboarding('welcomeModalSlides', {returnObjects: true}));
@@ -35,7 +35,7 @@ export default function WelcomeDialogWrapper(): JSX.Element {
   }, [tOnboarding]);
 
   /**
-   * this effect checks if the user has already taken at least one tour, if not, the welcome modal is shown
+   * This effect checks if the user has already taken at least one tour, if not, the welcome modal is shown.
    */
   useEffect(() => {
     const isUserFirstTime = Object.values(tours).every((tour) => tour === null);
@@ -45,13 +45,13 @@ export default function WelcomeDialogWrapper(): JSX.Element {
   }, [dispatch, tours]);
 
   /**
-   * those functions handle the next and previous button of the modal
+   * Those functions handle the next and previous button of the modal.
    */
   const handleNext = () => setStep((prev) => prev + 1);
   const handlePrev = () => setStep((prev) => prev - 1);
 
   /**
-   * this function handles the closing of the modal and after shows the tooltip over the information button
+   * This function handles the closing of the modal and after shows the tooltip over the information button.
    */
   const handleClose = useCallback(() => {
     dispatch(setShowWelcomeDialog(false));
@@ -64,7 +64,7 @@ export default function WelcomeDialogWrapper(): JSX.Element {
   }, [dispatch, tours]);
 
   /**
-   * this useMemo hook memoizes the images to be shown in the welcome modal
+   * This useMemo hook memoizes the images to be shown in the welcome modal.
    */
   const memoizedImages: {[key: number]: string} = useMemo(
     () => ({
@@ -79,7 +79,7 @@ export default function WelcomeDialogWrapper(): JSX.Element {
   );
 
   /**
-   * this useMemo gets the slide title, content, maybe later text and if the tour chips should be shown on the last slide
+   * This useMemo gets the slide title, content, maybe later text and if the tour chips should be shown on the last slide.
    */
   const {slideTitle, slideContent, maybeLaterText, showTourChips, showLanguagePicker} = useMemo(() => {
     const slideTitle = tOnboarding(`welcomeModalSlides.slide${step + 1}.title`);

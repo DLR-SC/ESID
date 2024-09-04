@@ -18,7 +18,7 @@ import {selectTab} from '../store/UserPreferenceSlice';
 import {useTheme} from '@mui/material/styles';
 
 /*
- * Lazy loading the components to improve the performance
+ * Lazy loading the components to improve the performance.
  */
 const SimulationChart = React.lazy(() => import('./LineChartContainer'));
 const ParameterEditor = React.lazy(() => import('./ParameterEditor'));

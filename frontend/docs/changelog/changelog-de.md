@@ -13,7 +13,7 @@ SPDX-License-Identifier: CC-BY-4.0
 
 - Die Daten von Köln werden nun mit einer Auflösung in Stadtteilen angezeigt
 - Onboarding-System für ESID. Es besteht aus:
-  - Willkommensmodal, das dem Benutzer beim ersten Besuch einen Überblick über die ESID anhand von Folien und Illustrationen zeigt
+  - Willkommensmodal, das dem Benutzer beim ersten Besuch einen Überblick über ESID anhand von Folien und Illustrationen zeigt
   - Onboarding-Touren, die mit der React Joyride-Bibliothek erstellt wurden und auf die man durch Klicken auf die verschiedenen Tour-Chips in der Informationsschaltfläche in der oberen Leiste oder von der letzten Folie des Willkommensmodals aus zugreifen kann
 
 ### Verbesserungen

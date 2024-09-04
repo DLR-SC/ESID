@@ -10,21 +10,21 @@ import {useTheme} from '@mui/material/styles';
 import {Trans} from 'react-i18next/TransWithoutContext';
 
 interface SlideProps {
-  /** the current step of the dialog */
+  /** The current step of the dialog */
   step: number;
 
-  /** the title of the slide */
+  /** The title of the slide */
   title: string;
 
-  /** the content of the slide */
+  /** The content of the slide */
   content: string;
 
-  /** the image source for the slide */
+  /** The image source for the slide */
   imageSrc: string;
 }
 
 /**
- * This component represents a slide in the welcome modal
+ * This component represents a slide in the welcome modal.
  */
 export default function Slide({step, title, content, imageSrc}: SlideProps): JSX.Element {
   const theme = useTheme();

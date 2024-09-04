@@ -32,13 +32,13 @@ interface TopBarPopoverProps {
 }
 
 /**
- * This component is a popover that contains the onboarding tours which the user can take, it is rendered when the user clicks the information button in the top bar
+ * This component is a popover that contains the onboarding tours which the user can take, it is rendered when the user clicks the information button in the top bar.
  */
 export default function TopBarPopover(props: TopBarPopoverProps): JSX.Element {
   const {t: tOnboarding} = useTranslation('onboarding');
 
   /**
-   * this use memo is to calculate the completion percentage of the tours for the progress bar
+   * This use memo is to calculate the completion percentage of the tours for the progress bar.
    */
   const completionPercentage = useMemo(() => {
     return props.totalTours > 0 ? (props.completedTours / props.totalTours) * 100 : 0;

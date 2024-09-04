@@ -14,17 +14,17 @@ import {DataSelection, selectDate, selectScenario} from '../../../store/DataSele
  * Interface for the state of the tour steps
  */
 interface State {
-  /**a flag to run or stop the tour */
+  /** A flag to run or stop the tour. */
   run: boolean;
-  /**array of Step objects for the tour */
+  /** Array of Step objects for the tour. */
   steps: Step[];
-  /**the current step index of the tour, keeping state of this value is necessary for joyride controlled (interactive) tours */
+  /** The current step index of the tour, keeping state of this value is necessary for joyride controlled (interactive) tours. */
   stepIndex: number;
 }
 
 /**
  * This component manages the joyride onboarding tour steps.
- * To see debug messages in the console, set the debug flag to true in the joyride component below
+ * To see debug messages in the console, set the debug flag to true in the joyride component below.
  */
 export default function TourSteps(): JSX.Element {
   const [state, setState] = useState<State>({
@@ -33,7 +33,7 @@ export default function TourSteps(): JSX.Element {
     stepIndex: 0,
   });
   const {run, steps, stepIndex} = state;
-  const [arePreferencesSaved, setArePreferencesSaved] = useState(false); // flag to indicate that the preferences are saved
+  const [arePreferencesSaved, setArePreferencesSaved] = useState(false); // Flag to indicate that the preferences are saved
 
   const dispatch = useAppDispatch();
   const theme = useTheme();
@@ -48,11 +48,11 @@ export default function TourSteps(): JSX.Element {
   const dataSelection = useAppSelector((state) => state.dataSelection);
   const scenarioList = useAppSelector((state) => state.scenarioList.scenarios);
 
-  const previousSimulationStart = useRef(simulationStart); // to keep track of the previous simulation start date for the scenario controlled tour
-  const savedUserDataSelection = useRef<null | DataSelection>(null); // to keep track of the original data selection before starting the tour
+  const previousSimulationStart = useRef(simulationStart); // To keep track of the previous simulation start date for the scenario controlled tour.
+  const savedUserDataSelection = useRef<null | DataSelection>(null); // To keep track of the original data selection before starting the tour.
 
   /**
-   * this useMemo gets the localized tour steps and returns them as an array of step objects to use in the Joyride component
+   * This useMemo gets the localized tour steps and returns them as an array of step objects to use in the Joyride component.
    */
   const localizedTourSteps: Step[] = useMemo(() => {
     if (activeTour) {
@@ -65,30 +65,30 @@ export default function TourSteps(): JSX.Element {
   }, [activeTour, tOnboarding]);
 
   /**
-   * this effect saves the current data selection before starting the tour
-   * sets the simulation start date, and starts the tour once preferences are saved
+   * This effect saves the current data selection before starting the tour,
+   * sets the simulation start date, and starts the tour once preferences are saved.
    */
   useEffect(() => {
     if (activeTour && !showPopover && !showWelcomeDialog && !run) {
       if (!savedUserDataSelection.current) {
-        savedUserDataSelection.current = dataSelection; // save the current data selection of the user so we can override it with different values during the tour
+        savedUserDataSelection.current = dataSelection; // Save the current data selection of the user so we can override it with different values during the tour
 
-        const maxDate = dataSelection.maxDate || '2024-07-08'; // get the maximum date from the data selection
-        dispatch(selectDate(maxDate)); // set the simulation start date (purple line) to the maximum date
+        const maxDate = dataSelection.maxDate || '2024-07-08'; // Get the maximum date from the data selection
+        dispatch(selectDate(maxDate)); // Set the simulation start date (purple line) to the maximum date
 
-        const firstScenarioId = Number(Object.keys(scenarioList)[0]); // we get the first scenario id (base scenario) from scenarioList
-        dispatch(selectScenario(firstScenarioId)); // dispatch the selectScenario action with the base scenario
+        const firstScenarioId = Number(Object.keys(scenarioList)[0]); // We get the first scenario id (base scenario) from scenarioList
+        dispatch(selectScenario(firstScenarioId)); // Dispatch the selectScenario action with the base scenario
 
-        setArePreferencesSaved(true); // flag to indicate that the preferences are saved
+        setArePreferencesSaved(true); // Flag to indicate that the preferences are saved
       } else if (arePreferencesSaved) {
-        // starting the tour only after preferences are saved
+        // Starting the tour only after preferences are saved
         setState((prevState) => ({
           ...prevState,
           run: true,
           steps: localizedTourSteps,
           stepIndex: 0,
         }));
-        setArePreferencesSaved(false); // reset the flag after the tour starts to prevent re-triggering
+        setArePreferencesSaved(false); // Reset the flag after the tour starts to prevent re-triggering
       }
     }
   }, [
@@ -104,7 +104,7 @@ export default function TourSteps(): JSX.Element {
   ]);
 
   /**
-   * this effect ensures that the tour is no longer active if the user closes the filter dialog during the execution of the tour
+   * This effect ensures that the tour is no longer active if the user closes the filter dialog during the execution of the tour.
    */
   useEffect(() => {
     if (activeTour === 'filter' && !isFilterDialogOpen && run && stepIndex > 0) {
@@ -114,7 +114,7 @@ export default function TourSteps(): JSX.Element {
   }, [isFilterDialogOpen, activeTour, run, stepIndex, dispatch]);
 
   /**
-   * this effect ensures that the correct tab is selected when the user clicks on a tour
+   * This effect ensures that the correct tab is selected when the user clicks on a tour.
    */
   useEffect(() => {
     if (activeTour) {
@@ -127,8 +127,8 @@ export default function TourSteps(): JSX.Element {
   }, [activeTour, selectedTab, dispatch]);
 
   /**
-   * this effect manages the controlled tour of the filter dialog,
-   * for joyride controlled tours, manual control with step index is required to make sure the tour is executed correctly
+   * This effect manages the controlled tour of the filter dialog.
+   * For joyride controlled tours, manual control with step index is required to make sure the tour is executed correctly.
    */
   useEffect(() => {
     if (activeTour === 'filter' && isFilterDialogOpen && stepIndex === 0) {
@@ -140,8 +140,8 @@ export default function TourSteps(): JSX.Element {
   }, [activeTour, isFilterDialogOpen, stepIndex]);
 
   /**
-   * this effect manages the 3rd step of the controlled scenario tour, which is to set the simulation start date to a specific date
-   * when the simulation start date is chosen, the tour should proceed to the next step
+   * This effect manages the 3rd step of the controlled scenario tour, which is to set the simulation start date to a specific date.
+   * When the simulation start date is chosen, the tour should proceed to the next step.
    */
   useEffect(() => {
     if (activeTour === 'scenario' && stepIndex === 2) {
@@ -156,38 +156,38 @@ export default function TourSteps(): JSX.Element {
   }, [simulationStart, activeTour, stepIndex]);
 
   /**
-   * this function handles the callback events from the Joyride component
+   * This function handles the callback events from the Joyride component.
    */
   const handleJoyrideCallback = (data: CallBackProps) => {
     const {action, index, status, type} = data;
 
-    // if the tour is finished, skipped or closed
+    // If the tour is finished, skipped or closed
     if (
       ([STATUS.FINISHED, STATUS.SKIPPED] as string[]).includes(status) ||
       action === ACTIONS.CLOSE ||
       action === ACTIONS.STOP
     ) {
-      dispatch(selectDate(savedUserDataSelection.current?.date || '2024-07-08')); // restore the original date in the data selection
-      dispatch(selectScenario(savedUserDataSelection.current?.scenario || 0)); // restore the original selected scenario in the data selection
-      savedUserDataSelection.current = null; // reset the saved preferences after the tour is completed
+      dispatch(selectDate(savedUserDataSelection.current?.date || '2024-07-08')); // Restore the original date in the data selection
+      dispatch(selectScenario(savedUserDataSelection.current?.scenario || 0)); // Restore the original selected scenario in the data selection
+      savedUserDataSelection.current = null; // Reset the saved preferences after the tour is completed
 
-      // if the tour was finished and not skipped, mark as completed
+      // If the tour was finished and not skipped, mark as completed
       if (status === STATUS.FINISHED && activeTour) {
         dispatch(setTourCompleted({tour: activeTour, completed: true}));
       }
 
-      // we reset the tour state so we can restart the tour again if the user clicks again
+      // We reset the tour state so we can restart the tour again if the user clicks again
       dispatch(setActiveTour(null));
       setState({run: false, steps: [], stepIndex: 0});
 
-      // this is to close the popover after the filter tour is completed
+      // This is to close the popover after the filter tour is completed
       if (activeTour !== 'filter') {
         dispatch(setShowPopover(true));
       }
 
       return;
     }
-    // when next or back button is clicked
+    // When next or back button is clicked
     if (type === EVENTS.STEP_AFTER || type === EVENTS.TARGET_NOT_FOUND) {
       const nextStepIndex = action === ACTIONS.PREV ? index - 1 : index + 1;
       setState((prevState) => ({
