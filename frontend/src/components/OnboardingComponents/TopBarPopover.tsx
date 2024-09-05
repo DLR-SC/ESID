@@ -8,7 +8,7 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import {useTranslation} from 'react-i18next';
-import TourChips from './TourComponents/TourChipsList';
+import TourChipsList from './TourComponents/TourChipsList';
 import LinearProgress from '@mui/material/LinearProgress';
 
 interface TopBarPopoverProps {
@@ -81,7 +81,7 @@ export default function TopBarPopover(props: TopBarPopoverProps): JSX.Element {
           <CloseIcon data-testid='close-info-button' />
         </IconButton>
         <Box mt={4}>
-          <TourChips />
+          <TourChipsList />
         </Box>
         <Box mt={4}>
           <LinearProgress

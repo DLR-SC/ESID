@@ -23,8 +23,8 @@ interface State {
 }
 
 /**
- * This component manages the joyride onboarding tour steps.
- * To see debug messages in the console, set the debug flag to true in the joyride component below.
+ * This component contains the core logic for managing tour steps and executing tours using the Joyride library.
+ * To see debug messages in the console, set the debug flag to true in the joyride component props below.
  */
 export default function TourSteps(): JSX.Element {
   const [state, setState] = useState<State>({
@@ -49,7 +49,7 @@ export default function TourSteps(): JSX.Element {
   const scenarioList = useAppSelector((state) => state.scenarioList.scenarios);
 
   const previousSimulationStart = useRef(simulationStart); // To keep track of the previous simulation start date for the scenario controlled tour.
-  const savedUserDataSelection = useRef<null | DataSelection>(null); // To keep track of the original data selection before starting the tour.
+  const savedUserDataSelection = useRef<null | DataSelection>(null); // To keep track of the original data selection before starting any tour.
 
   /**
    * This useMemo gets the localized tour steps and returns them as an array of step objects to use in the Joyride component.
@@ -167,7 +167,7 @@ export default function TourSteps(): JSX.Element {
       dispatch(selectScenario(savedUserDataSelection.current?.scenario || 0)); // Restore the original selected scenario in the data selection
       savedUserDataSelection.current = null; // Reset the saved preferences after the tour is completed
 
-      // If the tour was finished and not skipped, mark as completed
+      // If the tour was finished and not skipped or closed, mark as completed
       if (status === STATUS.FINISHED && activeTour) {
         dispatch(setTourCompleted({tour: activeTour, completed: true}));
       }
