@@ -197,6 +197,48 @@ export default function TourSteps(): JSX.Element {
     }
   };
 
+  /**
+   * Memoized locale for the Joyride component.
+   */
+  const joyrideLocale = useMemo(
+    () => ({
+      next: tOnboarding('next'),
+      skip: tOnboarding('skip'),
+      back: tOnboarding('back'),
+      last: tOnboarding('last'),
+    }),
+    [tOnboarding]
+  );
+
+  /**
+   * Memoized styles for the Joyride component.
+   */
+  const joyrideStyles = useMemo(
+    () => ({
+      options: {
+        zIndex: 10000,
+        backgroundColor: theme.palette.background.paper,
+        textColor: theme.palette.text.primary,
+        primaryColor: theme.palette.primary.main,
+        width: '350px',
+        arrowColor: theme.palette.background.paper,
+      },
+      tooltipContainer: {
+        textAlign: 'left' as const,
+      },
+      tooltipTitle: {
+        fontSize: theme.typography.h1.fontSize,
+        fontWeight: theme.typography.caption.fontWeight,
+        marginBottom: '8px',
+      },
+      tooltipContent: {
+        fontSize: theme.typography.body1.fontSize,
+        fontWeight: theme.typography.body1.fontWeight,
+      },
+    }),
+    [theme]
+  );
+
   return (
     <div>
       <Joyride
@@ -210,34 +252,8 @@ export default function TourSteps(): JSX.Element {
         spotlightClicks
         disableOverlayClose
         disableScrollParentFix
-        locale={{
-          next: tOnboarding('next'),
-          skip: tOnboarding('skip'),
-          back: tOnboarding('back'),
-          last: tOnboarding('last'),
-        }}
-        styles={{
-          options: {
-            zIndex: 10000,
-            backgroundColor: theme.palette.background.paper,
-            textColor: theme.palette.text.primary,
-            primaryColor: theme.palette.primary.main,
-            width: '350px',
-            arrowColor: theme.palette.background.paper,
-          },
-          tooltipContainer: {
-            textAlign: 'left',
-          },
-          tooltipTitle: {
-            fontSize: theme.typography.h1.fontSize,
-            fontWeight: theme.typography.caption.fontWeight,
-            marginBottom: '8px',
-          },
-          tooltipContent: {
-            fontSize: theme.typography.body1.fontSize,
-            fontWeight: theme.typography.body1.fontWeight,
-          },
-        }}
+        locale={joyrideLocale}
+        styles={joyrideStyles}
       />
     </div>
   );
