@@ -162,11 +162,7 @@ export default function TourSteps(): JSX.Element {
     const {action, index, status, type} = data;
 
     // If the tour is finished, skipped or closed
-    if (
-      ([STATUS.FINISHED, STATUS.SKIPPED] as string[]).includes(status) ||
-      action === ACTIONS.CLOSE ||
-      action === ACTIONS.STOP
-    ) {
+    if (([STATUS.FINISHED, STATUS.SKIPPED] as string[]).includes(status) || action === ACTIONS.CLOSE) {
       dispatch(selectDate(savedUserDataSelection.current?.date || '2024-07-08')); // Restore the original date in the data selection
       dispatch(selectScenario(savedUserDataSelection.current?.scenario || 0)); // Restore the original selected scenario in the data selection
       savedUserDataSelection.current = null; // Reset the saved preferences after the tour is completed
