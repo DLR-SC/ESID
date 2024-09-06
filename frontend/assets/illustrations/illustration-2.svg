@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 46.65 41.72">
+  <defs>
+    <style>
+      .cls-1 {
+        stroke: #00abeb;
+      }
+
+      .cls-1, .cls-2 {
+        fill: none;
+        stroke-miterlimit: 10;
+        stroke-width: .5px;
+      }
+
+      .cls-3 {
+        fill: #00abeb;
+      }
+
+      .cls-2 {
+        stroke: #17aeed;
+      }
+    </style>
+  </defs>
+  <rect class="cls-1" x=".25" y="38.13" width="46.15" height="3.34" rx="1.15" ry="1.15"/>
+  <rect class="cls-1" x="4.55" y="21.2" width="7.07" height="16.93"/>
+  <circle class="cls-2" cx="18.32" cy="7.89" r="1.55"/>
+  <circle class="cls-2" cx="28.53" cy="16.08" r="1.55"/>
+  <circle class="cls-2" cx="38.35" cy="1.8" r="1.55"/>
+  <circle class="cls-2" cx="8.08" cy="16.08" r="1.55"/>
+  <path class="cls-3" d="M9.52,15.36l7.75-6.27c.25-.2-.11-.55-.35-.35-2.58,2.09-5.16,4.18-7.75,6.27-.25.2.11.55.35.35h0Z"/>
+  <path class="cls-3" d="M19.69,9.08c2.47,2.09,4.94,4.18,7.41,6.27.24.21.6-.15.35-.35-2.47-2.09-4.94-4.18-7.41-6.27-.24-.21-.6.15-.35.35h0Z"/>
+  <path class="cls-3" d="M37.24,2.94c-2.62,3.93-5.25,7.87-7.87,11.8-.18.27.25.52.43.25,2.62-3.93,5.25-7.87,7.87-11.8.18-.27-.25-.52-.43-.25h0Z"/>
+  <rect class="cls-1" x="14.67" y="14.86" width="7.07" height="23.27"/>
+  <rect class="cls-1" x="24.75" y="21.2" width="7.07" height="16.93"/>
+  <rect class="cls-1" x="34.82" y="9.95" width="7.07" height="28.18"/>
+</svg>

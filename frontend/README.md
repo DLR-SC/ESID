@@ -132,6 +132,7 @@ libraries. Also try to learn and keep up with their best practices and guideline
 - **React**: Efficient and robust user interface management.
 - **Redux**: Efficient and robust state management.
 - **Material UI**: Good looking user interface design and responsive layout.
+- **React Joyride**: For the Onboarding tours. For a detailed documentation of the Onboarding system of ESID, refer to the [Onboarding documentation](docs/onboarding-tours-documentation.md)
 
 ## Guidelines
 

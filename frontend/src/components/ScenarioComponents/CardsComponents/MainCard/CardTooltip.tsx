@@ -2,7 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import {Box, Tooltip, IconButton} from '@mui/material';
-import {CheckBox, CheckBoxOutlineBlank} from '@mui/icons-material';
+import CheckBox from '@mui/icons-material/CheckBox';
+import CheckBoxOutlineBlank from '@mui/icons-material/CheckBoxOutlineBlank';
 import {useTranslation} from 'react-i18next';
 import React from 'react';
 import {Localization} from 'types/localization';

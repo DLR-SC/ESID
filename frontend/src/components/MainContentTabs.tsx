@@ -17,6 +17,9 @@ import {useAppDispatch, useAppSelector} from '../store/hooks';
 import {selectTab} from '../store/UserPreferenceSlice';
 import {useTheme} from '@mui/material/styles';
 
+/*
+ * Lazy loading the components to improve the performance.
+ */
 const SimulationChart = React.lazy(() => import('./LineChartContainer'));
 const ParameterEditor = React.lazy(() => import('./ParameterEditor'));
 
@@ -69,7 +72,7 @@ export default function MainContentTabs() {
             </Box>
           </Box>
         </TabPanel>
-        <Box sx={{flexGrow: 0, borderTop: 1, borderColor: 'divider', width: '100%'}}>
+        <Box sx={{flexGrow: 0, borderTop: 1, borderColor: 'divider', width: '100%'}} id='tab-list'>
           <TabList
             onChange={handleChange}
             centered

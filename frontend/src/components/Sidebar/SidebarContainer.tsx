@@ -190,7 +190,7 @@ export default function MapContainer() {
             localization={localization}
             maxZoomLevel={32}
           />
-          <Grid container px={1}>
+          <Grid container px={1} id='side-bar-heat-legend'>
             <Grid item container xs={11} alignItems='flex-end'>
               <HeatLegend
                 legend={legend}

@@ -1,7 +1,8 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import {Close, GroupAdd} from '@mui/icons-material';
+import Close from '@mui/icons-material/Close';
+import GroupAdd from '@mui/icons-material/GroupAdd';
 import {Box, Typography, IconButton, Divider, Card, CardActionArea, CardContent, Button, useTheme} from '@mui/material';
 import {useState, useEffect} from 'react';
 import ConfirmDialog from '../../shared/ConfirmDialog';
@@ -148,6 +149,7 @@ export default function ManageGroupDialog({
             />
           ))}
           <Card
+            id='group-filter-add-card'
             variant='outlined'
             sx={{
               display: 'flex',

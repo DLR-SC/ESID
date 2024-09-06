@@ -11,6 +11,8 @@ import {GroupCategory, GroupSubcategory} from 'store/services/groupApi';
 import {GroupFilter} from 'types/group';
 import {Dictionary} from 'util/util';
 import {Localization} from 'types/localization';
+import {useAppDispatch} from '../../../store/hooks';
+import {setIsFilterDialogOpen} from '../../../store/UserOnboardingSlice';
 
 export interface FilterDialogContainerProps {
   /** A dictionary of group filters.*/
@@ -45,6 +47,22 @@ export default function FilterDialogContainer({
   const {t: defaultT} = useTranslation();
   const {t: customT} = useTranslation(localization.customLang);
   const theme = useTheme();
+  const dispatch = useAppDispatch();
+
+  /**
+   * This function handles the closing of the filter dialog.
+   * If there are unsaved changes, the user will be prompted to confirm before closing.
+   * The dispatched action setIsFilterDialogOpen is needed for the onboarding tour of the filter.
+   */
+  const handleClose = () => {
+    if (groupEditorUnsavedChanges) {
+      setCloseDialogOpen(true);
+    } else {
+      setOpen(false);
+      dispatch(setIsFilterDialogOpen(false));
+    }
+  };
+
   return (
     <>
       <Box
@@ -95,6 +113,7 @@ export default function FilterDialogContainer({
           }}
           onClick={() => {
             setOpen(true);
+            dispatch(setIsFilterDialogOpen(true));
           }}
           aria-label={
             localization.overrides && localization.overrides['group-filters.title']
@@ -107,31 +126,13 @@ export default function FilterDialogContainer({
             : defaultT('scenario.manage-groups')}
         </Button>
       </Box>
-      <Dialog
-        id='manage-filters-dialog'
-        maxWidth='lg'
-        fullWidth={true}
-        open={open}
-        onClose={() => {
-          if (groupEditorUnsavedChanges) {
-            setCloseDialogOpen(true);
-          } else {
-            setOpen(false);
-          }
-        }}
-      >
+      <Dialog id='manage-filters-dialog' maxWidth='lg' fullWidth={true} open={open} onClose={handleClose}>
         <ManageGroupDialog
           groupFilters={groupFilters}
           setGroupFilters={setGroupFilters}
           groupCategories={groupCategories}
           groupSubCategories={groupSubCategories}
-          onCloseRequest={() => {
-            if (groupEditorUnsavedChanges) {
-              setCloseDialogOpen(true);
-            } else {
-              setOpen(false);
-            }
-          }}
+          onCloseRequest={handleClose}
           unsavedChangesCallback={(unsavedChanges) => setGroupEditorUnsavedChanges(unsavedChanges)}
           localization={localization}
         />

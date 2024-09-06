@@ -9,6 +9,7 @@ import './App.scss';
 import TopBar from './components/TopBar';
 import SidebarContainer from './components/Sidebar/SidebarContainer';
 import MainContent from './components/MainContent';
+import WelcomeDialogWrapper from './components/OnboardingComponents/WelcomeDialog/WelcomeDialogWrapper';
 import {Persistor, Store} from './store';
 import Box from '@mui/material/Box';
 import {ThemeProvider} from '@mui/material/styles';
@@ -37,6 +38,7 @@ export default function App(): JSX.Element {
                 <MUILocalization>
                   <DataProvider>
                     <Initializer />
+                    <WelcomeDialogWrapper />
                     <Box id='app' display='flex' flexDirection='column' sx={{height: '100%', width: '100%'}}>
                       <TopBar />
                       <Box

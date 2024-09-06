@@ -345,7 +345,7 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
 
   return (
     <ScrollSync>
-      <div style={{height: '100%'}}>
+      <div style={{height: '100%'}} id='scenario-container'>
         <Box
           sx={{
             display: 'flex',
@@ -372,6 +372,7 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
             <Box
               ref={resizeRef}
               className='datepicker-paddingTop'
+              id='scenario-datepicker-box'
               sx={{
                 borderRight: `2px dashed ${darken(theme.palette.divider, 0.25)}`,
                 flexDirection: 'column',

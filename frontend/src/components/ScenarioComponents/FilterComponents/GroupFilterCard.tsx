@@ -1,7 +1,9 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import {Visibility, VisibilityOffOutlined, DeleteForever} from '@mui/icons-material';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOffOutlined from '@mui/icons-material/VisibilityOffOutlined';
+import DeleteForever from '@mui/icons-material/DeleteForever';
 import {
   Card,
   CardActionArea,

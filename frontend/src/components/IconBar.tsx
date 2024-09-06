@@ -71,17 +71,27 @@ export default function IconBar(): JSX.Element {
     >
       <Tooltip title={t('icon-bar.previous-day-tooltip')}>
         <span>
-          <Button disabled={selectedDay === minDate || isPlaying} onClick={() => dispatch(previousDay())}>
+          <Button
+            aria-label='previous-day-button'
+            disabled={selectedDay === minDate || isPlaying}
+            onClick={() => dispatch(previousDay())}
+          >
             <SkipPreviousRounded />
           </Button>
         </span>
       </Tooltip>
       <Tooltip title={t('icon-bar.play-pause-tooltip')}>
-        <Button onClick={() => setIsPlaying(!isPlaying)}>{isPlaying ? <PauseRounded /> : <PlayArrowRounded />}</Button>
+        <Button aria-label='play-pause-button' onClick={() => setIsPlaying(!isPlaying)}>
+          {isPlaying ? <PauseRounded /> : <PlayArrowRounded />}
+        </Button>
       </Tooltip>
       <Tooltip title={t('icon-bar.next-day-tooltip')}>
         <span>
-          <Button disabled={selectedDay === maxDate || isPlaying} onClick={() => dispatch(nextDay())}>
+          <Button
+            aria-label='next-day-button'
+            disabled={selectedDay === maxDate || isPlaying}
+            onClick={() => dispatch(nextDay())}
+          >
             <SkipNextRounded />
           </Button>
         </span>
