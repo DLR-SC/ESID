@@ -52,7 +52,7 @@ interface WelcomeDialogProps {
 }
 
 /**
- * This component is a welcome modal that is shown to the user when they first open the application.
+ * This component is a welcome dialog that is shown to the user when they first open the application.
  * It contains a series of slides that explain the basic functionality of the application.
  * At the last slide, the user can choose a tour to start or skip it altogether.
  */

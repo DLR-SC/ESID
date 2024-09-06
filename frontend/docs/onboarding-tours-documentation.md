@@ -21,8 +21,8 @@ This documentation explains the structure of the Onboarding system and provides 
 
 The onboarding system consists of the following components:
 
-- **Welcome Modal**: displays an overview of ESID through slides and illustrations on the user's first visit.
-- **Onboarding Tours**: built using the React Joyride library. These tours can be accessed by clicking on the different tour chips in the information button in the top bar or from the last slide of the welcome modal. Currently, the onboarding system includes the following tours:
+- **Welcome Dialog**: displays an overview of ESID through slides and illustrations on the user's first visit.
+- **Onboarding Tours**: built using the React Joyride library. These tours can be accessed by clicking on the different tour chips in the information button in the top bar or from the last slide of the welcome dialog. Currently, the onboarding system includes the following tours:
   - District map
   - Scenario
   - Line chart

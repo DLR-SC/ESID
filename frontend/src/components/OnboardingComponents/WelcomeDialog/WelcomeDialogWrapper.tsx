@@ -35,7 +35,7 @@ export default function WelcomeDialogWrapper(): JSX.Element {
   }, [tOnboarding]);
 
   /**
-   * This effect checks if the user has already taken at least one tour, if not, the welcome modal is shown.
+   * This effect checks if the user has already taken at least one tour, if not, the welcome dialog is shown.
    */
   useEffect(() => {
     const isUserFirstTime = Object.values(tours).every((tour) => tour === null);
@@ -45,13 +45,13 @@ export default function WelcomeDialogWrapper(): JSX.Element {
   }, [dispatch, tours]);
 
   /**
-   * Those functions handle the next and previous button of the modal.
+   * Those functions handle the next and previous button of the dialog.
    */
   const handleNext = () => setStep((prev) => prev + 1);
   const handlePrev = () => setStep((prev) => prev - 1);
 
   /**
-   * This function handles the closing of the modal and after shows the tooltip over the information button.
+   * This function handles the closing of the dialog and after shows the tooltip over the information button.
    */
   const handleClose = useCallback(() => {
     dispatch(setShowWelcomeDialog(false));
@@ -64,7 +64,7 @@ export default function WelcomeDialogWrapper(): JSX.Element {
   }, [dispatch, tours]);
 
   /**
-   * This useMemo hook memoizes the images to be shown in the welcome modal.
+   * This useMemo hook memoizes the images to be shown in the welcome dialog.
    */
   const memoizedImages: {[key: number]: string} = useMemo(
     () => ({

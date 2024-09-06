@@ -24,7 +24,7 @@ interface SlideProps {
 }
 
 /**
- * This component represents a slide in the welcome modal.
+ * This component represents a slide in the welcome dialog.
  */
 export default function Slide({step, title, content, imageSrc}: SlideProps): JSX.Element {
   const theme = useTheme();
