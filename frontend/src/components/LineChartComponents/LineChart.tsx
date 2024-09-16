@@ -25,6 +25,7 @@ import useDateAxis from 'components/shared/LineChart/DateAxis';
 import useValueAxis from 'components/shared/LineChart/ValueAxis';
 import {useDateSelectorFilter} from 'components/shared/LineChart/Filter';
 import useDateAxisRange from 'components/shared/LineChart/AxisRange';
+import useValueAxisRange from 'components/shared/LineChart/ValueAxisRange';
 import {useLineSeriesList} from 'components/shared/LineChart/LineSeries';
 import {LineSeries} from '@amcharts/amcharts5/.internal/charts/xy/series/LineSeries';
 import {LineChartData} from 'types/lineChart';
@@ -65,6 +66,9 @@ interface LineChartProps {
 
   /** Optional localization settings for the chart, including number formatting and language overrides. */
   localization?: Localization;
+
+  /** Optional horizontal limit for the Y-axis. Defaults to 0. */
+  horizontalYLimit?: number;
 }
 /**
  * React Component to render the Linechart Section
@@ -82,6 +86,7 @@ export default function LineChart({
   exportedFileName = 'Data',
   yAxisLabel,
   localization,
+  horizontalYLimit = 50000,
 }: LineChartProps): JSX.Element {
   const {t: defaultT, i18n} = useTranslation();
 
@@ -236,6 +241,48 @@ export default function LineChart({
   }, [i18n.language, root, selectedDate, theme.palette.primary.contrastText, theme.palette.primary.main]);
 
   useDateAxisRange(selectedDateRangeSettings, root, chart, xAxis);
+
+  // a horizontal line to limit the y-axis
+  const targetLineSettings = useMemo(() => {
+    if (!root || (!horizontalYLimit || horizontalYLimit === 0)) {
+      return {};
+    }
+
+    // TODO: how to get the max value of the y-axis?
+    return {
+      data: {
+        value: horizontalYLimit,
+        endValue: 110000, // max value of the y-axis
+      },
+      grid: {
+        stroke: color(theme.palette.error.main),
+        strokeOpacity: 1,
+        strokeWidth: 2,
+        visible: true,
+        location: 0,
+      },
+      axisFill: {
+        fill: color(theme.palette.error.main),
+        fillOpacity: 0.3,
+        visible: true,
+      },
+      label: {
+        fill: color(theme.palette.divider),
+        text: `Target: ${horizontalYLimit}`,
+        location: 0,
+        background: RoundedRectangle.new(root, {
+          fill: color(theme.palette.secondary.main),
+        }),
+
+        // Put Label to the topmost layer to make sure it is drawn on top of the axis tick labels
+        layer: Number.MAX_VALUE,
+      }
+    }
+
+  }, [root, horizontalYLimit, theme.palette.divider]);
+
+  // Effect to add horizontal line to chart
+  useValueAxisRange(targetLineSettings, root, chart, yAxis);
 
   // Effect to change localization of chart if language changes
   useLayoutEffect(
