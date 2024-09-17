@@ -9,6 +9,7 @@ export interface UserPreference {
   selectedTab?: string;
   isInitialVisit: boolean;
   scenarioColors: Record<string, string[]>;
+  horizontalYAxisThreshold?: number;
 }
 
 const initialState: UserPreference = {
@@ -24,6 +25,7 @@ const initialState: UserPreference = {
   selectedTab: '1',
   isInitialVisit: true,
   scenarioColors: {},
+  horizontalYAxisThreshold: undefined,
 };
 
 /**
@@ -51,8 +53,14 @@ export const UserPreferenceSlice = createSlice({
       }
       state.scenarioColors[action.payload.scenarioId] = action.payload.colors;
     },
+
+    /** Set the horizontal Y-Axis Threshold */
+    setHorizontalYAxisThreshold(state, action: PayloadAction<number>) {
+      state.horizontalYAxisThreshold = action.payload;
+    },
   },
 });
 
-export const {selectHeatmapLegend, selectTab, setInitialVisit, setScenarioColors} = UserPreferenceSlice.actions;
+export const {selectHeatmapLegend, selectTab, setInitialVisit, setScenarioColors, setHorizontalYAxisThreshold} =
+  UserPreferenceSlice.actions;
 export default UserPreferenceSlice.reducer;
