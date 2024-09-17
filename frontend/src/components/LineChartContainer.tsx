@@ -10,6 +10,7 @@ import {useAppDispatch, useAppSelector} from 'store/hooks';
 import {selectDate} from 'store/DataSelectionSlice';
 import {setReferenceDayBottom} from 'store/LayoutSlice';
 import {useTranslation} from 'react-i18next';
+import {LineChartSettings} from './LineChartComponents/LineChartSettings';
 
 export default function LineChartContainer() {
   const {t} = useTranslation('backend');
@@ -20,6 +21,7 @@ export default function LineChartContainer() {
 
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
   const selectedDateInStore = useAppSelector((state) => state.dataSelection.date);
+  const horizontalYAxisThreshold = useAppSelector((state) => state.userPreference.horizontalYAxisThreshold);
   const referenceDay = useAppSelector((state) => state.dataSelection.simulationStart);
   const minDate = useAppSelector((state) => state.dataSelection.minDate);
   const maxDate = useAppSelector((state) => state.dataSelection.maxDate);
@@ -66,7 +68,9 @@ export default function LineChartContainer() {
         maxDate={maxDate}
         referenceDay={referenceDay}
         yAxisLabel={yAxisLabel}
+        horizontalYAxisThreshold={horizontalYAxisThreshold}
       />
+      <LineChartSettings />
     </LoadingContainer>
   );
 }
