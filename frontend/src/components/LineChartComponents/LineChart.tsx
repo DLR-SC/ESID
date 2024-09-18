@@ -26,9 +26,8 @@ import useValueAxis from 'components/shared/LineChart/ValueAxis';
 import {useDateSelectorFilter} from 'components/shared/LineChart/Filter';
 import useDateAxisRange from 'components/shared/LineChart/AxisRange';
 import useValueAxisRange from 'components/shared/LineChart/ValueAxisRange';
-import {useLineSeriesList} from 'components/shared/LineChart/LineSeries';
-import {LineSeries} from '@amcharts/amcharts5/.internal/charts/xy/series/LineSeries';
 import {LineChartData} from 'types/lineChart';
+import {useSeriesRange} from 'components/shared/LineChart/SeriesRange';
 
 interface LineChartProps {
   /** Optional unique identifier for the chart. Defaults to 'chartdiv'. */
@@ -86,7 +85,7 @@ export default function LineChart({
   exportedFileName = 'Data',
   yAxisLabel,
   localization,
-  horizontalYAxisThreshold = 0,
+  horizontalYAxisThreshold = undefined,
 }: LineChartProps): JSX.Element {
   const {t: defaultT, i18n} = useTranslation();
 
@@ -364,28 +363,46 @@ export default function LineChart({
     });
   }, [lineChartData, root, xAxis, yAxis, chartId]);
 
-  useLineSeriesList(
-    root,
-    chart,
-    lineChartDataSettings,
-    useCallback(
-      (series: LineSeries) => {
-        if (!lineChartData) return;
-        const seriesSettings = lineChartData.find((line) => line.serieId === series.get('id')?.split('_')[1]);
-        series.strokes.template.setAll({
-          strokeWidth: seriesSettings?.stroke.strokeWidth ?? 2,
-          strokeDasharray: seriesSettings?.stroke.strokeDasharray ?? undefined,
-        });
-        if (seriesSettings?.fill) {
-          series.fills.template.setAll({
-            fillOpacity: seriesSettings.fillOpacity ?? 1,
-            visible: true,
-          });
-        }
-      },
-      [lineChartData]
-    )
-  );
+  // useLineSeriesList(
+  //   root,
+  //   chart,
+  //   lineChartDataSettings,
+  //   useCallback(
+  //     (series: LineSeries) => {
+  //       if (!lineChartData) return;
+
+  //       const seriesSettings = lineChartData.find((line) => line.serieId === series.get('id')?.split('_')[1]);
+
+  //       series.strokes.template.setAll({
+  //         strokeWidth: seriesSettings?.stroke.strokeWidth ?? 2,
+  //         strokeDasharray: seriesSettings?.stroke.strokeDasharray ?? undefined,
+  //       });
+  //       if (seriesSettings?.fill) {
+  //         series.fills.template.setAll({
+  //           fillOpacity: seriesSettings.fillOpacity ?? 1,
+  //           visible: true,
+  //         });
+  //       }
+  //     },
+  //     [lineChartData]
+  //   )
+  // );
+
+  // Effect to add series range above threshold to chart
+  useSeriesRange(root, chart, lineChartDataSettings, yAxis, {
+    threshold: horizontalYAxisThreshold ?? 0,
+    fills: {
+      fill: color(theme.palette.error.main),
+      fillOpacity: 0.3,
+      visible: true,
+    },
+    strokes: {
+      stroke: color(theme.palette.error.main),
+      strokeWidth: 2,
+      strokeOpacity: 1,
+      visible: true,
+    },
+  });
 
   // a horizontal line to limit the y-axis
   const targetLineSettings = useMemo(() => {
@@ -405,11 +422,6 @@ export default function LineChart({
         strokeWidth: 2,
         visible: true,
         location: 0,
-      },
-      axisFill: {
-        fill: color(theme.palette.error.main), // Use dynamic fill color based on the threshold
-        fillOpacity: 0.5,
-        visible: true,
       },
       label: {
         fill: color(theme.palette.divider),
