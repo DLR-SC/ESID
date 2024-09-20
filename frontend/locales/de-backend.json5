@@ -34,7 +34,7 @@
     SusceptibleV2: 'Empfänglich (💉💉)',
     tooltip: 'Die hier angezeigten Zahlen zu Infizierten und Hospitalisierten basieren auf Annahmen zur Immunität,\
               Dauer und Schweregrad einer Infektion mit Sars-CoV-2. Sie berechnen sich über ein komplexes mehrstufiges\
-              Verfahren aus den berichteten Fallzahlen und eine einfach Formel kann nicht angegeben werden. Ein\
+              Verfahren aus den berichteten Fallzahlen und eine einfache Formel kann nicht angegeben werden. Ein\
               Anstieg/Rückgang der Fallzahlen bedeutet einen Anstieg/Rückgang der Anzahl Infizierter, sodass in\
               Relation zu den Werten der vergangenen Tagen bewertet werden kann, ob die Situation sich verbessert oder\
               verschlimmert. Sofern verfügbar, kommen die Zahlen zu den Intensivpatient:innen aus dem DIVI\
