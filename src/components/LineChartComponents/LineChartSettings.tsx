@@ -37,11 +37,13 @@ export function LineChartSettings() {
     const newThreshold = Number(event.target.value);
 
     // update redux state
-    dispatch(setHorizontalYAxisThreshold({
-      district: selectedDistrict,
-      compartment: selectedCompartment ?? '',
-      threshold: newThreshold,
-    }));
+    dispatch(
+      setHorizontalYAxisThreshold({
+        district: selectedDistrict,
+        compartment: selectedCompartment ?? '',
+        threshold: newThreshold,
+      })
+    );
   };
 
   return (
