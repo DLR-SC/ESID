@@ -3,12 +3,14 @@
 
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {HeatmapLegend} from '../types/heatmapLegend';
+import {HorizontalThreshold} from 'types/horizontalThreshold';
+import {Dictionary} from 'util/util';
 
 export interface UserPreference {
   selectedHeatmap: HeatmapLegend;
   selectedTab?: string;
   isInitialVisit: boolean;
-  horizontalYAxisThreshold?: number;
+  horizontalYAxisThresholds?: Dictionary<HorizontalThreshold>;
 }
 
 const initialState: UserPreference = {
@@ -23,7 +25,7 @@ const initialState: UserPreference = {
   },
   selectedTab: '1',
   isInitialVisit: true,
-  horizontalYAxisThreshold: undefined,
+  horizontalYAxisThresholds: {},
 };
 
 /**
@@ -45,9 +47,13 @@ export const UserPreferenceSlice = createSlice({
       state.isInitialVisit = action.payload;
     },
 
-    /** Set the horizontal Y-Axis Threshold */
-    setHorizontalYAxisThreshold(state, action: PayloadAction<number>) {
-      state.horizontalYAxisThreshold = action.payload;
+    /** Set the horizontal Y-Axis Threshold for a specific district and compartment */
+    setHorizontalYAxisThreshold(state, action: PayloadAction<HorizontalThreshold>) {
+      if (!state.horizontalYAxisThresholds) {
+        state.horizontalYAxisThresholds = {};
+      }
+
+      state.horizontalYAxisThresholds[`${action.payload.district}-${action.payload.compartment}`] = action.payload;
     },
   },
 });

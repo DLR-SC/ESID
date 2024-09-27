@@ -17,7 +17,11 @@ export function LineChartSettings() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [showPopover, setShowPopover] = useState<boolean>(false);
 
-  const horizontalYAxisThreshold = useAppSelector((state) => state.userPreference.horizontalYAxisThreshold);
+  const selectedDistrict = useAppSelector((state) => state.dataSelection.district.ags);
+  const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
+  const horizontalYAxisThreshold = useAppSelector(
+    (state) => state.userPreference.horizontalYAxisThresholds?.[`${selectedDistrict}-${selectedCompartment}`]?.threshold
+  );
 
   const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -33,7 +37,11 @@ export function LineChartSettings() {
     const newThreshold = Number(event.target.value);
 
     // update redux state
-    dispatch(setHorizontalYAxisThreshold(newThreshold));
+    dispatch(setHorizontalYAxisThreshold({
+      district: selectedDistrict,
+      compartment: selectedCompartment ?? '',
+      threshold: newThreshold,
+    }));
   };
 
   return (
