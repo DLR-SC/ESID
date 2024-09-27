@@ -389,20 +389,29 @@ export default function LineChart({
   // );
 
   // Effect to add series range above threshold to chart
-  useSeriesRange(root, chart, lineChartDataSettings, yAxis, {
-    threshold: horizontalYAxisThreshold ?? 0,
-    fills: {
-      fill: color(theme.palette.error.main),
-      fillOpacity: 0.3,
-      visible: true,
-    },
-    strokes: {
-      stroke: color(theme.palette.error.main),
-      strokeWidth: 2,
-      strokeOpacity: 1,
-      visible: true,
-    },
-  });
+
+  const seriesRangeSettings = useMemo(() => {
+    if (!root || !horizontalYAxisThreshold || horizontalYAxisThreshold === 0) {
+      return {};
+    }
+
+    return {
+      threshold: horizontalYAxisThreshold,
+      fills: {
+        fill: color(theme.palette.error.main),
+        fillOpacity: 0.3,
+        visible: true,
+      },
+      strokes: {
+        stroke: color(theme.palette.error.main),
+        strokeWidth: 2,
+        strokeOpacity: 1,
+        visible: true,
+      },
+    };
+  }, [root, horizontalYAxisThreshold, theme.palette.error.main]);
+
+  useSeriesRange(root, chart, lineChartDataSettings, yAxis, seriesRangeSettings);
 
   // a horizontal line to limit the y-axis
   const targetLineSettings = useMemo(() => {
