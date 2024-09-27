@@ -13,9 +13,9 @@ export function useSeriesRange(
   settings: Array<ILineSeriesSettings>,
   yAxis: ValueAxis<AxisRenderer> | null, // The yAxis for creating range
   rangeSettings: {
-    threshold: number; // The threshold for the series range
-    fills: Partial<IGraphicsSettings>; // Fill color for the range
-    strokes: Partial<IGraphicsSettings>; // Stroke color for the range
+    threshold?: number; // The threshold for the series range
+    fills?: Partial<IGraphicsSettings>; // Fill color for the range
+    strokes?: Partial<IGraphicsSettings>; // Stroke color for the range
   },
   initializer?: (series: LineSeries, i: number) => void
 ) {
