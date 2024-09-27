@@ -27,6 +27,7 @@ import {useDateSelectorFilter} from 'components/shared/LineChart/Filter';
 import useDateAxisRange from 'components/shared/LineChart/AxisRange';
 import useValueAxisRange from 'components/shared/LineChart/ValueAxisRange';
 import {LineChartData} from 'types/lineChart';
+import {LineSeries} from '@amcharts/amcharts5/xy';
 import {useSeriesRange} from 'components/shared/LineChart/SeriesRange';
 
 interface LineChartProps {
@@ -363,33 +364,7 @@ export default function LineChart({
     });
   }, [lineChartData, root, xAxis, yAxis, chartId]);
 
-  // useLineSeriesList(
-  //   root,
-  //   chart,
-  //   lineChartDataSettings,
-  //   useCallback(
-  //     (series: LineSeries) => {
-  //       if (!lineChartData) return;
-
-  //       const seriesSettings = lineChartData.find((line) => line.serieId === series.get('id')?.split('_')[1]);
-
-  //       series.strokes.template.setAll({
-  //         strokeWidth: seriesSettings?.stroke.strokeWidth ?? 2,
-  //         strokeDasharray: seriesSettings?.stroke.strokeDasharray ?? undefined,
-  //       });
-  //       if (seriesSettings?.fill) {
-  //         series.fills.template.setAll({
-  //           fillOpacity: seriesSettings.fillOpacity ?? 1,
-  //           visible: true,
-  //         });
-  //       }
-  //     },
-  //     [lineChartData]
-  //   )
-  // );
-
   // Effect to add series range above threshold to chart
-
   const seriesRangeSettings = useMemo(() => {
     if (!root || !horizontalYAxisThreshold || horizontalYAxisThreshold === 0) {
       return {};
@@ -406,12 +381,38 @@ export default function LineChart({
         stroke: color(theme.palette.error.main),
         strokeWidth: 2,
         strokeOpacity: 1,
+        strokeDasharray: [6, 4],
         visible: true,
       },
     };
   }, [root, horizontalYAxisThreshold, theme.palette.error.main]);
 
-  useSeriesRange(root, chart, lineChartDataSettings, yAxis, seriesRangeSettings);
+  useSeriesRange(
+    root,
+    chart,
+    lineChartDataSettings,
+    yAxis,
+    seriesRangeSettings,
+    useCallback(
+      (series: LineSeries) => {
+        if (!lineChartData) return;
+
+        const seriesSettings = lineChartData.find((line) => line.serieId === series.get('id')?.split('_')[1]);
+        console.log(seriesSettings);
+        series.strokes.template.setAll({
+          strokeWidth: seriesSettings?.stroke.strokeWidth ?? 2,
+          strokeDasharray: seriesSettings?.stroke.strokeDasharray ?? undefined,
+        });
+        if (seriesSettings?.fill) {
+          series.fills.template.setAll({
+            fillOpacity: seriesSettings.fillOpacity ?? 1,
+            visible: true,
+          });
+        }
+      },
+      [lineChartData]
+    )
+  );
 
   // a horizontal line to limit the y-axis
   const targetLineSettings = useMemo(() => {
