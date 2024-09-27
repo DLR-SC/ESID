@@ -22,7 +22,9 @@ export default function LineChartContainer() {
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
   const selectedDistrict = useAppSelector((state) => state.dataSelection.district.ags);
   const selectedDateInStore = useAppSelector((state) => state.dataSelection.date);
-  const horizontalYAxisThreshold = useAppSelector((state) => state.userPreference.horizontalYAxisThresholds?.[`${selectedDistrict}-${selectedCompartment}`]?.threshold);
+  const horizontalYAxisThreshold = useAppSelector(
+    (state) => state.userPreference.horizontalYAxisThresholds?.[`${selectedDistrict}-${selectedCompartment}`]?.threshold
+  );
   const referenceDay = useAppSelector((state) => state.dataSelection.simulationStart);
   const minDate = useAppSelector((state) => state.dataSelection.minDate);
   const maxDate = useAppSelector((state) => state.dataSelection.maxDate);
