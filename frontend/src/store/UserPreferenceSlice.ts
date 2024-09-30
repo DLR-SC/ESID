@@ -10,7 +10,7 @@ export interface UserPreference {
   selectedHeatmap: HeatmapLegend;
   selectedTab?: string;
   isInitialVisit: boolean;
-  horizontalYAxisThresholds?: Dictionary<HorizontalThreshold>;
+  horizontalYAxisThresholds: Dictionary<HorizontalThreshold>;
 }
 
 const initialState: UserPreference = {
@@ -47,17 +47,26 @@ export const UserPreferenceSlice = createSlice({
       state.isInitialVisit = action.payload;
     },
 
+    setHorizontalYAxisThresholds(state, action: PayloadAction<Dictionary<HorizontalThreshold>>) {
+      state.horizontalYAxisThresholds = action.payload;
+    },
+
     /** Set the horizontal Y-Axis Threshold for a specific district and compartment */
     setHorizontalYAxisThreshold(state, action: PayloadAction<HorizontalThreshold>) {
       if (!state.horizontalYAxisThresholds) {
         state.horizontalYAxisThresholds = {};
       }
 
-      state.horizontalYAxisThresholds[`${action.payload.district}-${action.payload.compartment}`] = action.payload;
+      state.horizontalYAxisThresholds[`${action.payload.district.ags}-${action.payload.compartment}`] = action.payload;
     },
   },
 });
 
-export const {selectHeatmapLegend, selectTab, setInitialVisit, setHorizontalYAxisThreshold} =
-  UserPreferenceSlice.actions;
+export const {
+  selectHeatmapLegend,
+  selectTab,
+  setInitialVisit,
+  setHorizontalYAxisThresholds,
+  setHorizontalYAxisThreshold,
+} = UserPreferenceSlice.actions;
 export default UserPreferenceSlice.reducer;
