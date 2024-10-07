@@ -1,4 +1,7 @@
-import React, {useState} from 'react';
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: CC0-1.0
+
+import React, {useState, useEffect} from 'react';
 import {Grid, Box, IconButton, TextField, Typography, Divider} from '@mui/material';
 import {useTheme} from '@mui/material/styles';
 import AddBoxIcon from '@mui/icons-material/AddBox';
@@ -29,16 +32,44 @@ export function HorizontalThresholdSettings({
   horizontalThresholds,
   setHorizontalThresholds,
 }: HorizontalThresholdSettingsProps) {
-  const [localYAxisThreshold, setLocalYAxisThreshold] = useState<number | null>(0);
+  const [localYAxisThreshold, setLocalYAxisThreshold] = useState<number | null>(null);
   const [editingThresholdKey, setEditingThresholdKey] = useState<string | null>(null);
   const [isAddingThreshold, setIsAddingThreshold] = useState<boolean>(false);
+  const [isValid, setIsValid] = useState<boolean>(localYAxisThreshold !== null && localYAxisThreshold >= 0);
+  const [ableToAddThreshold, setAbleToAddThreshold] = useState<boolean>(false);
+
+  // Checks if the user has entered a valid threshold value
+  useEffect(() => {
+    setIsValid(localYAxisThreshold !== null && localYAxisThreshold >= 0);
+  }, [localYAxisThreshold]);
+
+  // Checks if the user is able to add a threshold
+  useEffect(() => {
+    const key = `${selectedDistrict.ags}-${selectedCompartment}`;
+    const existingThreshold = horizontalThresholds[key];
+    if (existingThreshold) {
+      setAbleToAddThreshold(false);
+      return;
+    }
+    setAbleToAddThreshold(true);
+  }, [selectedDistrict, selectedCompartment, horizontalThresholds]);
 
   const theme = useTheme();
+
+  const handleIsAddingThreshold = (value: boolean) => {
+    const key = `${selectedDistrict.ags}-${selectedCompartment}`;
+    const existingThreshold = horizontalThresholds[key];
+
+    if (existingThreshold) {
+      // handle error here, maybe show modal
+      return;
+    }
+    setIsAddingThreshold(value);
+  };
 
   // function to handle adding a new threshold
   const handleAddThreshold = () => {
     if (localYAxisThreshold === null || localYAxisThreshold < 0) {
-      // TODO: Show error message
       return;
     }
 
@@ -143,6 +174,7 @@ export function HorizontalThresholdSettings({
               }}
               size='small'
               value={localYAxisThreshold ?? 0}
+              error={!isValid}
               onChange={(e) => setLocalYAxisThreshold(Number(e.target.value))}
             />
             <Box
@@ -155,6 +187,7 @@ export function HorizontalThresholdSettings({
               <IconButton
                 aria-label='add Horizontal Y-threshold to selected compartment and district'
                 onClick={handleAddThreshold}
+                disabled={!isValid}
                 sx={{
                   color: theme.palette.success.main,
                 }}
@@ -183,13 +216,14 @@ export function HorizontalThresholdSettings({
               backgroundColor: theme.palette.action.hover,
             },
           }}
-          onClick={() => setIsAddingThreshold(true)}
+          onClick={() => handleIsAddingThreshold(true)}
         >
           <IconButton
             aria-label='add Horizontal Y-threshold'
             sx={{
               color: theme.palette.primary.main,
             }}
+            disabled={!ableToAddThreshold}
           >
             <AddBoxIcon fontSize='large' />
           </IconButton>

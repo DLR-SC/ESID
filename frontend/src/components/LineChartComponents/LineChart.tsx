@@ -446,14 +446,7 @@ export default function LineChart({
         layer: Number.MAX_VALUE,
       },
     };
-  }, [
-    root,
-    yAxis,
-    horizontalYAxisThreshold,
-    theme.palette.divider,
-    theme.palette.error.main,
-    theme.palette.primary.main,
-  ]);
+  }, [root, yAxis, horizontalYAxisThreshold, theme.palette.error.main, theme.palette.primary.contrastText]);
 
   // Add horizontal line to limit the y-axis
   useValueAxisRange(targetLineSettings, root, chart, yAxis);
