@@ -20,7 +20,7 @@ import {useTheme} from '@mui/material/styles';
 /*
  * Lazy loading the components to improve the performance.
  */
-const SimulationChart = React.lazy(() => import('./LineChartContainer'));
+const SimulationChart = React.lazy(() => import('./LineChartComponents/LineChartContainer'));
 const ParameterEditor = React.lazy(() => import('./ParameterEditor'));
 
 /**
