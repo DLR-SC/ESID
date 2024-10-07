@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: CC0-1.0
+
 import React, {useState} from 'react';
 import {Grid, IconButton, TextField, Typography, Divider, Box} from '@mui/material';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';

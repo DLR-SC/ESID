@@ -24,9 +24,13 @@ type SettingsView = 'settingsMenu' | 'horizontalThresholdSettings' | 'filters';
 /**
  * The settings menu for the line chart. Each item in the menu has a label, a view, and an icon.
  */
-const SETTINGS_MENU = [
-  {label: 'Horizontal Threshold Settings', view: 'horizontalThresholdSettings', icon: <HorizontalRuleIcon />},
-];
+const SETTINGS_MENU = {
+  HORIZONTAL_THRESHOLD: {
+    label: 'Horizontal Threshold Settings',
+    view: 'horizontalThresholdSettings',
+    icon: <HorizontalRuleIcon />,
+  },
+};
 
 export interface LineChartSettingsProps {
   /** The district to which the settings apply. */
@@ -117,24 +121,25 @@ export function LineChartSettings({
             {renderHeader('Line Chart Settings')}
             <Divider sx={{marginY: 2}} />
             <Box>
-              {SETTINGS_MENU.map((item) => (
-                <Button key={item.label} onClick={() => handleNavigate(item.view as SettingsView)}>
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      padding: 2,
-                      borderRadius: 1,
-                      gap: 2,
-                    }}
-                  >
-                    {item.icon}
+              <Button
+                key={SETTINGS_MENU.HORIZONTAL_THRESHOLD.label}
+                onClick={() => handleNavigate(SETTINGS_MENU.HORIZONTAL_THRESHOLD.view as SettingsView)}
+              >
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    padding: 2,
+                    borderRadius: 1,
+                    gap: 2,
+                  }}
+                >
+                  {SETTINGS_MENU.HORIZONTAL_THRESHOLD.icon}
 
-                    <Typography variant='h2'>{item.label}</Typography>
-                  </Box>
-                </Button>
-              ))}
+                  <Typography variant='h2'>{SETTINGS_MENU.HORIZONTAL_THRESHOLD.label}</Typography>
+                </Box>
+              </Button>
             </Box>
           </Box>
         )}
@@ -142,6 +147,7 @@ export function LineChartSettings({
           <Box p={4}>
             {renderHeader('Horizontal Threshold Settings')}
             <Divider sx={{marginY: 2}} />
+
             <HorizontalThresholdSettings
               selectedDistrict={selectedDistrict}
               selectedCompartment={selectedCompartment}
