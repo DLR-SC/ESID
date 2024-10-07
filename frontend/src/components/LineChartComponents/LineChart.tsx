@@ -428,19 +428,21 @@ export default function LineChart({
       },
       grid: {
         stroke: color(theme.palette.error.main), // Use dynamic stroke color based on the threshold
-        strokeOpacity: 1,
-        strokeWidth: 2,
+        strokeOpacity: 0.8,
+        strokeWidth: 1.5,
         visible: true,
         location: 0,
       },
       label: {
-        fill: color(theme.palette.divider),
+        fill: color(theme.palette.primary.contrastText),
         text: `Threshold: ${horizontalYAxisThreshold}`,
         location: 0,
+        centerY: -3,
+        centerX: 0,
+        inside: true,
         background: RoundedRectangle.new(root, {
-          fill: color(theme.palette.primary.main), // Apply dynamic background color for the label
+          fill: color(theme.palette.error.main),
         }),
-        centerY: 1,
         layer: Number.MAX_VALUE,
       },
     };
