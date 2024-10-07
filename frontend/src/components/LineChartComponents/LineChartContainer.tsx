@@ -13,6 +13,7 @@ import {useTranslation} from 'react-i18next';
 import {LineChartSettings} from './LineChartSettingsComponents/LineChartSettings';
 import {Dictionary} from 'util/util';
 import {HorizontalThreshold} from 'types/horizontalThreshold';
+import {setHorizontalYAxisThresholds} from 'store/UserPreferenceSlice';
 
 export default function LineChartContainer() {
   const {t} = useTranslation('backend');
@@ -37,6 +38,11 @@ export default function LineChartContainer() {
   const yAxisLabel = useMemo(() => {
     return t(`infection-states.${selectedCompartment}`);
   }, [selectedCompartment, t]);
+
+  // Set horizontal thresholds in store
+  useEffect(() => {
+    dispatch(setHorizontalYAxisThresholds(horizontalThresholds));
+  }, [horizontalThresholds, dispatch]);
 
   // Set selected date in store
   useEffect(() => {
