@@ -32,7 +32,7 @@ export default function LineChartContainer() {
 
   const [selectedDate, setSelectedDate] = useState<string>(selectedDateInStore ?? '2024-08-07');
   const [referenceDayBottomPosition, setReferenceDayBottomPosition] = useState<number>(0);
-  const [horizontalThresholds, setHhorizontalThresholds] =
+  const [horizontalThresholds, sethorizontalThresholds] =
     useState<Dictionary<HorizontalThreshold>>(storeHorizontalThresholds);
 
   const yAxisLabel = useMemo(() => {
@@ -85,7 +85,7 @@ export default function LineChartContainer() {
         selectedDistrict={selectedDistrict}
         selectedCompartment={selectedCompartment ?? ''}
         horizontalThresholds={horizontalThresholds}
-        setHorizontalThresholds={setHhorizontalThresholds}
+        setHorizontalThresholds={sethorizontalThresholds}
       />
     </LoadingContainer>
   );
