@@ -13,7 +13,7 @@ import {Dictionary} from 'util/util';
 import type {HorizontalThreshold} from 'types/horizontalThreshold';
 import type {District} from 'types/district';
 
-import {HorizontalThresholdSettings} from './HorizontalThresholdSettings/HorizontalThresholdSettings';
+import HorizontalThresholdSettings from './HorizontalThresholdSettings/HorizontalThresholdSettings';
 
 /**
  * The different views that can be displayed in the settings popover.
@@ -112,7 +112,7 @@ export function LineChartSettings({
         }}
         slotProps={{
           paper: {
-            sx: {width: '30%'},
+            sx: {minWidth: '30%'},
           },
         }}
       >

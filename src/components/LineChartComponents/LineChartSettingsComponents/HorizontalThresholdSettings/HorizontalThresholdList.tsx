@@ -6,7 +6,7 @@ import {Box, Typography} from '@mui/material';
 import {Dictionary} from 'util/util';
 import {HorizontalThreshold} from 'types/horizontalThreshold';
 import type {District} from 'types/district';
-import {HorizontalThresholdItem} from './HorizontalThresholdItem';
+import HorizontalThresholdItem from './HorizontalThresholdItem';
 
 export interface HorizontalThresholdListProps {
   /** The list of horizontal thresholds to display */
@@ -17,6 +17,9 @@ export interface HorizontalThresholdListProps {
 
   /** Callback to handle changes to an existing threshold value */
   handleUpdateThreshold: (key: string, value: number) => void;
+
+  /** Callback to handle selection of thresholds */
+  handleSelectThreshold: (threshold: HorizontalThreshold) => void;
 
   /** A boolean state to see whether a threshold is currently being added */
   isAddingThreshold: boolean;
@@ -29,19 +32,16 @@ export interface HorizontalThresholdListProps {
 
   /** The currently selected threshold key */
   selectedThresholdKey: string | null;
-
-  /** Callback to set the currently selected threshold key */
-  setSelectedThresholdKey: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export const HorizontalThresholdList = ({
+export default function HorizontalThresholdList({
   horizontalThresholds,
   handleDeleteThreshold,
   handleUpdateThreshold,
+  handleSelectThreshold,
   isAddingThreshold,
   selectedThresholdKey,
-  setSelectedThresholdKey,
-}: HorizontalThresholdListProps) => {
+}: HorizontalThresholdListProps) {
   const [editingThresholdKey, setEditingThresholdKey] = useState<string | null>(null);
 
   return (
@@ -68,11 +68,11 @@ export const HorizontalThresholdList = ({
               editingThresholdKey={editingThresholdKey}
               setEditingThresholdKey={setEditingThresholdKey}
               selected={selectedThresholdKey === key}
-              setSelectedThresholdKey={setSelectedThresholdKey}
+              handleSelectThreshold={handleSelectThreshold}
             />
           );
         })
       )}
     </Box>
   );
-};
+}
