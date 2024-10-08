@@ -104,7 +104,7 @@ export default function MapContainer() {
         BEZ: storeSelectedArea.type,
       });
     }
-  }, [storeSelectedArea]);
+  }, [storeSelectedArea, selectedArea]);
 
   // Set legend in store
   useEffect(() => {
