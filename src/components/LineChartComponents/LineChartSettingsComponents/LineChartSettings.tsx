@@ -24,8 +24,8 @@ type SettingsView = 'settingsMenu' | 'horizontalThresholdSettings' | 'filters';
 /**
  * The settings menu for the line chart. Each item in the menu has a label, a view, and an icon.
  */
-const SETTINGS_MENU = {
-  HORIZONTAL_THRESHOLD: {
+const settingsMenu = {
+  horizontalThreshold: {
     label: 'Horizontal Threshold Settings',
     view: 'horizontalThresholdSettings',
     icon: <HorizontalRuleIcon />,
@@ -122,8 +122,8 @@ export function LineChartSettings({
             <Divider sx={{marginY: 2}} />
             <Box>
               <Button
-                key={SETTINGS_MENU.HORIZONTAL_THRESHOLD.label}
-                onClick={() => handleNavigate(SETTINGS_MENU.HORIZONTAL_THRESHOLD.view as SettingsView)}
+                key={settingsMenu.horizontalThreshold.label}
+                onClick={() => handleNavigate(settingsMenu.horizontalThreshold.view as SettingsView)}
               >
                 <Box
                   sx={{
@@ -135,9 +135,9 @@ export function LineChartSettings({
                     gap: 2,
                   }}
                 >
-                  {SETTINGS_MENU.HORIZONTAL_THRESHOLD.icon}
+                  {settingsMenu.horizontalThreshold.icon}
 
-                  <Typography variant='h2'>{SETTINGS_MENU.HORIZONTAL_THRESHOLD.label}</Typography>
+                  <Typography variant='h2'>{settingsMenu.horizontalThreshold.label}</Typography>
                 </Box>
               </Button>
             </Box>
