@@ -91,9 +91,9 @@ export default function MapContainer() {
     // This effect should only run when the selectedArea changes
   }, [selectedArea, dispatch, nodes]);
 
-  // set the selected area when the district in the store changes
+  // Set selected area in state when it changes in store
   useEffect(() => {
-    if (storeSelectedArea.name != '') {
+    if (storeSelectedArea.name !== '' && selectedArea?.RS !== storeSelectedArea.ags) {
       setSelectedArea({
         RS: storeSelectedArea.ags,
         GEN: storeSelectedArea.name,
