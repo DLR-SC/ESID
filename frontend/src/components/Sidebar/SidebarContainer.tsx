@@ -95,6 +95,17 @@ export default function MapContainer() {
     // This effect should only run when the selectedArea changes
   }, [selectedArea, dispatch]);
 
+  // set the selected area when the district in the store changes
+  useEffect(() => {
+    if (storeSelectedArea.name != '') {
+      setSelectedArea({
+        RS: storeSelectedArea.ags,
+        GEN: storeSelectedArea.name,
+        BEZ: storeSelectedArea.type,
+      });
+    }
+  }, [storeSelectedArea]);
+
   // Set legend in store
   useEffect(() => {
     dispatch(selectHeatmapLegend({legend: legend}));
