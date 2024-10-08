@@ -33,14 +33,14 @@ export function HorizontalThresholdSettings({
   setHorizontalThresholds,
 }: HorizontalThresholdSettingsProps) {
   const [localYAxisThreshold, setLocalYAxisThreshold] = useState<number | null>(null);
-  const [editingThresholdKey, setEditingThresholdKey] = useState<string | null>(null);
+  const [selectedThresholdKey, setSelectedThresholdKey] = useState<string>(`${selectedDistrict.ags}-${selectedCompartment}`);
   const [isAddingThreshold, setIsAddingThreshold] = useState<boolean>(false);
-  const [isValid, setIsValid] = useState<boolean>(localYAxisThreshold !== null && localYAxisThreshold >= 0);
+  const [isValid, setIsValid] = useState<boolean>(localYAxisThreshold !== null && localYAxisThreshold > 0);
   const [ableToAddThreshold, setAbleToAddThreshold] = useState<boolean>(false);
 
   // Checks if the user has entered a valid threshold value
   useEffect(() => {
-    setIsValid(localYAxisThreshold !== null && localYAxisThreshold >= 0);
+    setIsValid(localYAxisThreshold !== null && localYAxisThreshold > 0);
   }, [localYAxisThreshold]);
 
   // Checks if the user is able to add a threshold
@@ -93,6 +93,7 @@ export function HorizontalThresholdSettings({
     const newThresholds = {...horizontalThresholds, [key]: newThreshold};
 
     setHorizontalThresholds(newThresholds);
+    setSelectedThresholdKey(key);
     setLocalYAxisThreshold(null);
     setIsAddingThreshold(false);
   };
@@ -134,9 +135,11 @@ export function HorizontalThresholdSettings({
         horizontalThresholds={horizontalThresholds}
         handleDeleteThreshold={handleDeleteThreshold}
         handleUpdateThreshold={handleUpdateThreshold}
-        editingThresholdKey={editingThresholdKey}
-        setEditingThresholdKey={setEditingThresholdKey}
         isAddingThreshold={isAddingThreshold}
+        selectedDistrict={selectedDistrict}
+        selectedCompartment={selectedCompartment}
+        selectedThresholdKey={selectedThresholdKey}
+        setSelectedThresholdKey={setSelectedThresholdKey}
       />
       {isAddingThreshold ? (
         <Grid
@@ -173,9 +176,12 @@ export function HorizontalThresholdSettings({
                 shrink: true,
               }}
               size='small'
-              value={localYAxisThreshold ?? 0}
+              value={localYAxisThreshold !== null ? localYAxisThreshold : ''}
               error={!isValid}
-              onChange={(e) => setLocalYAxisThreshold(Number(e.target.value))}
+              onChange={(e) => {
+                const value = e.target.value === '' ? null : Number(e.target.value);
+                setLocalYAxisThreshold(value);
+              }}
             />
             <Box
               sx={{
