@@ -106,7 +106,7 @@ export default function BaseLayer({
 
   const getLocationPos = useCallback(
     (location: number) => {
-      const result = context.locations?.all().find((loc) => loc.location_id === location);
+      const result = context.locations.find((loc) => loc.location_id === location);
       return result ? [result.lat, result.lon] : undefined;
     },
     [context.locations],
@@ -122,25 +122,25 @@ export default function BaseLayer({
             let color: string;
             switch (trip.transport_mode) {
               case 0:
-                color = '#F004'; // Bike
+                color = 'green'; // Bike
                 break;
               case 1:
-                color = '#0F04'; // Car (Driver)
+                color = 'brown'; // Car (Driver)
                 break;
               case 2:
-                color = '#00F4'; // Car (Passenger)
+                color = 'brown'; // Car (Passenger)
                 break;
               case 3:
-                color = '#FF04'; // Bus
+                color = 'blue'; // Bus
                 break;
               case 4:
-                color = '#0FF4'; // Walking
+                color = 'white'; // Walking
                 break;
               case 5:
-                color = '#FFF4'; // Other
+                color = 'grey'; // Other
                 break;
               default:
-                color = '#0004'; // Unknown
+                color = 'red'; // Unknown
             }
             trips.push({
               pos: [getLocationPos(trip.start_location), getLocationPos(trip.end_location)],

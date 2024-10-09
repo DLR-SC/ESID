@@ -4,11 +4,9 @@
 import React, {useCallback, useContext, useEffect, useMemo, useState} from 'react';
 import {
   infectionStateNames,
-  Location,
   locationNames,
   PandemosContext,
   transportNames,
-  Trip,
 } from '../data_sockets/PandemosContext';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
@@ -17,6 +15,7 @@ import Divider from '@mui/material/Divider';
 import hash from 'object-hash';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import ToggleButton from '@mui/material/ToggleButton';
+import {Trip} from '../types/pandemos';
 
 function TripChainTransport(props: {modeOfTransport: string}): JSX.Element {
   return <Chip label={<Typography sx={{fontSize: '14px'}}>{props.modeOfTransport}</Typography>} variant='outlined' />;
@@ -68,7 +67,7 @@ export default function TripChainView(): JSX.Element {
 
   const getLocation = useCallback(
     (id: number) => {
-      return context.locations?.all().find((location) => location.location_id === id);
+      return context.locations.find((location) => location.location_id === id);
     },
     [context.locations]
   );
@@ -102,13 +101,13 @@ export default function TripChainView(): JSX.Element {
     return [...tripMap.values()].sort((a, b) => b.length - a.length);
   }, [context.tripChains, filterInfections, filterLocations, filterTransports, getLocation]);
 
+  const [maxDisplayed, setMaxDisplayed] = useState(0);
+
   useEffect(() => {
     if (context.setFilteredTripChains) {
-      context.setFilteredTripChains(tripChainsByOccurrence);
+      context.setFilteredTripChains(tripChainsByOccurrence.slice(0, maxDisplayed > 0 ? maxDisplayed : -1));
     }
-  }, [tripChainsByOccurrence, context.setFilteredTripChains, context]);
-
-  const [maxDisplayed, setMaxDisplayed] = useState(0);
+  }, [tripChainsByOccurrence, context.setFilteredTripChains, context, maxDisplayed]);
 
   return (
     <Box width='100%' height='100%' overflow='hidden' display='flex' flexDirection='column'>

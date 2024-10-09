@@ -11,8 +11,6 @@ export function getGrid(bounds: [[number, number], [number, number]], level: num
   const latMax: number = bounds[1][0];
   const lonMax: number = bounds[1][1];
 
-  console.log(bounds);
-
   const latMinNew: number = latMin - (latMin % scalingFactorLat);
   const latMaxNew: number = latMax - (latMax % scalingFactorLat);
   const lonMinNew: number = lonMin - (lonMin % scalingFactorLong);
