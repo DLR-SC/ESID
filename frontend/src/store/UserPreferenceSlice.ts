@@ -3,6 +3,7 @@
 
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {HeatmapLegend} from '../types/heatmapLegend';
+import {logUserAction} from 'store/DataSelectionSlice';
 
 export interface UserPreference {
   selectedHeatmap: HeatmapLegend;
@@ -37,6 +38,9 @@ export const UserPreferenceSlice = createSlice({
     },
     selectTab(state, action: PayloadAction<string>) {
       state.selectedTab = action.payload;
+      logUserAction('select_tab', 'LineChart', {
+        tab: action.payload,
+      });
     },
     /** Set users initial visit to the application */
     setInitialVisit(state, action: PayloadAction<boolean>) {

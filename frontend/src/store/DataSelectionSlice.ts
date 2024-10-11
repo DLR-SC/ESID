@@ -13,6 +13,49 @@ import {GroupFilter} from 'types/group';
  */
 export type AGS = string;
 
+function getOrSessionUserId() {
+  let sessionId = sessionStorage.getItem('sessionId');
+  
+  // If no userId exists in sessionStorage, generate one
+  if (!sessionId) {
+    sessionId = 'session_' + Math.random().toString(36).substr(2, 9);
+    sessionStorage.setItem('sessionId', sessionId);
+  }
+
+  return sessionId;
+}
+
+const sessionId = getOrSessionUserId();
+
+
+export function logUserAction(action: any, component: any, property: any) {
+  const timestamp = new Date().toISOString();
+
+  const logData = {
+    SessionId: sessionId,
+    Timestamp: timestamp,
+    Action: action,
+    Component: component,
+    Property: property,
+  };
+
+  // TODO: Change address
+  fetch('http://localhost:3000/log-user-action', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(logData),
+  })
+    .then(response => {
+      if (!response.ok) {
+        console.error('Error logging user action');
+      }
+    })
+    .catch(err => console.error('Network error:', err));
+}
+
+
 /**
  * This contains all the state, that the user can configure directly.
  *
@@ -65,6 +108,11 @@ export const DataSelectionSlice = createSlice({
     },
     selectDistrict(state, action: PayloadAction<{ags: AGS; name: string; type: string}>) {
       state.district = action.payload;
+      logUserAction('select_district', 'Map', {
+        district: action.payload.name,
+        ags: action.payload.ags,
+        type: action.payload.type,
+      });
     },
     selectDate(state, action: PayloadAction<string>) {
       const newDate = action.payload;
@@ -74,6 +122,9 @@ export const DataSelectionSlice = createSlice({
         state.date = state.minDate;
       } else {
         state.date = action.payload;
+        logUserAction('select_date', 'LineChart', {
+          date: action.payload,
+        });
       }
     },
     previousDay(state) {
@@ -104,9 +155,15 @@ export const DataSelectionSlice = createSlice({
     },
     selectScenario(state, action: PayloadAction<number | null>) {
       state.scenario = action.payload;
+      logUserAction('select_scenario', 'ScenarioCard', {
+        scenario: action.payload
+      });
     },
     selectCompartment(state, action: PayloadAction<string>) {
       state.compartment = action.payload;
+      logUserAction('select_compartment', 'ScenarioCard', {
+        compartment: action.payload
+      });
     },
     toggleCompartmentExpansion(state) {
       state.compartmentsExpanded = !state.compartmentsExpanded;
