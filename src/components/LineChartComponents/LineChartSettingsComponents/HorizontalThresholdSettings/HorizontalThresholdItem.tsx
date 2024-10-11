@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React, {useState} from 'react';
-import {IconButton, Typography, Divider, Box} from '@mui/material';
+import {IconButton, Typography, Box, TableCell, TableRow} from '@mui/material';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
 import {useTheme} from '@mui/material/styles';
@@ -62,50 +62,39 @@ export default function HorizontalThresholdItem({
   };
 
   return (
-    <React.Fragment>
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          gap: 4,
-          paddingY: 3,
-          paddingX: 3,
-          borderLeft: `2px ${selected ? theme.palette.primary.main : 'transparent'} solid`,
-          borderTop: `2px ${selected ? theme.palette.background.paper : 'transparent'} solid`,
-          borderBottom: `2px ${selected ? theme.palette.background.paper : 'transparent'} solid`,
-          ':hover': {
-            backgroundColor: theme.palette.action.hover,
-          },
-        }}
-        onClick={() => handleSelectThreshold(threshold)}
-      >
-        <Box
+    <TableRow
+      sx={{
+        borderLeft: `2px ${selected ? theme.palette.primary.main : 'transparent'} solid`,
+        transition: 'background-color 0.2s',
+        ':hover': {
+          backgroundColor: theme.palette.action.hover,
+        },
+      }}
+      onClick={() => handleSelectThreshold(threshold)}
+    >
+      <TableCell align='left'>
+        <Typography
+          variant='body1'
           sx={{
-            flexGrow: 1,
-            minWidth: '150px',
+            fontSize: theme.typography.listElement.fontSize,
           }}
         >
-          <Typography
-            variant='h2'
-            sx={{
-              color: selected ? theme.palette.text.primary : theme.palette.text.disabled,
-            }}
-          >
-            {threshold.district.name}
-          </Typography>
-          <Typography
-            variant='subtitle1'
-            sx={{
-              color: selected ? theme.palette.text.primary : theme.palette.text.disabled,
-            }}
-          >
-            {threshold.compartment}
-          </Typography>
-        </Box>
+          {threshold.district.name}
+        </Typography>
+      </TableCell>
+      <TableCell align='left'>
+        <Typography
+          variant='body1'
+          sx={{
+            fontSize: theme.typography.listElement.fontSize,
+          }}
+        >
+          {threshold.compartment}
+        </Typography>
+      </TableCell>
 
-        {editingThresholdKey === thresholdKey ? (
+      {editingThresholdKey === thresholdKey ? (
+        <TableCell>
           <ThresholdInput
             id='horizontal-y-threshold-input'
             value={localThreshold}
@@ -115,59 +104,60 @@ export default function HorizontalThresholdItem({
             onCancel={() => setEditingThresholdKey(null)}
             isSaveDisabled={!isValid}
           />
-        ) : (
-          <Box
+        </TableCell>
+      ) : (
+        <>
+          <TableCell
+            align='left'
             sx={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              gap: 4,
+              minWidth: '250px',
             }}
           >
-            <Divider orientation='vertical' flexItem />
-            <Box
-              sx={{
-                minWidth: '100px',
-              }}
-            >
-              <Typography
-                variant='h2'
-                sx={{
-                  color: selected ? theme.palette.text.primary : theme.palette.text.disabled,
-                }}
-              >
-                {threshold.threshold}
-              </Typography>
-            </Box>
-
             <Box
               sx={{
                 display: 'flex',
                 flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
                 gap: 2,
               }}
             >
-              <IconButton
-                aria-label='edit horizontal threshold for given district and compartment'
-                onClick={() => handleEditThreshold(thresholdKey, threshold.threshold)}
+              <Typography
+                variant='body1'
+                sx={{
+                  fontSize: theme.typography.listElement.fontSize,
+                }}
               >
-                <EditIcon />
-              </IconButton>
-              <IconButton
-                aria-label='delete Horizontal Y-threshold'
-                onClick={() => handleDeleteThreshold(threshold.district, threshold.compartment)}
+                {threshold.threshold}
+              </Typography>
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  gap: 2,
+                }}
               >
-                <DeleteForeverIcon />
-              </IconButton>
+                <IconButton
+                  aria-label='edit horizontal threshold for given district and compartment'
+                  onClick={() => handleEditThreshold(thresholdKey, threshold.threshold)}
+                >
+                  <EditIcon
+                    sx={{
+                      color: theme.palette.primary.main,
+                    }}
+                  />
+                </IconButton>
+                <IconButton
+                  aria-label='delete Horizontal Y-threshold'
+                  onClick={() => handleDeleteThreshold(threshold.district, threshold.compartment)}
+                >
+                  <DeleteForeverIcon />
+                </IconButton>
+              </Box>
             </Box>
-          </Box>
-        )}
-      </Box>
-      <Divider
-        sx={{
-          marginY: 2,
-        }}
-      />
-    </React.Fragment>
+          </TableCell>
+        </>
+      )}
+    </TableRow>
   );
 }
