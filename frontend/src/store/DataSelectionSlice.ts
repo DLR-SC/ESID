@@ -4,14 +4,7 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {dateToISOString, Dictionary} from '../util/util';
 import {GroupFilter} from 'types/group';
-
-/**
- * AGS is the abbreviation for "Amtlicher Gemeindeschlüssel" in German, which are IDs of areas in Germany. The AGS have
- * a structure to them that describes a hierarchy from a state level to a district level (and even smaller). Since we
- * are only interested in districts, our AGS are always of length 5. We dedicate the AGS of '00000' to the whole of
- * Germany, in case no AGS is selected.
- */
-export type AGS = string;
+import {AGS, District} from 'types/district';
 
 /**
  * This contains all the state, that the user can configure directly.
@@ -19,11 +12,7 @@ export type AGS = string;
  * IMPORTANT: ALL NEW ADDITIONS MUST BE NULLABLE TO ENSURE EXISTING CACHES DOESN'T BREAK ON UPDATES!
  */
 export interface DataSelection {
-  district: {
-    ags: AGS;
-    name: string;
-    type: string;
-  };
+  district: District;
   /** The current date in the store. Must be an ISO 8601 date cutoff at time (YYYY-MM-DD) */
   date: string | null;
   scenario: number | null;

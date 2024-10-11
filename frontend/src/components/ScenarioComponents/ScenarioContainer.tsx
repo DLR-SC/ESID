@@ -209,6 +209,11 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
     dispatch(selectCompartment(selectedCompartment));
   }, [dispatch, selectedCompartment]);
 
+  // updates the selected compartment in the state when the compartment in the store changes for use with LineChartSettings
+  useEffect(() => {
+    setSelectedCompartment(storeSelectedCompartment ?? 'MildInfections'); // Sync the local state with the store's selected compartment
+  }, [storeSelectedCompartment]);
+
   // This effect updates the start date in the state whenever the reference day changes.
   useEffect(() => {
     dispatch(setStartDate(startDay!));
