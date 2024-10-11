@@ -2,14 +2,11 @@
 // SPDX-License-Identifier: CC0-1.0
 
 import React, {useState, useEffect} from 'react';
-import {Grid, Box, IconButton, Typography} from '@mui/material';
-import {useTheme} from '@mui/material/styles';
-import AddBoxIcon from '@mui/icons-material/AddBox';
+import {Box} from '@mui/material';
 import {Dictionary} from 'util/util';
 import type {District} from 'types/district';
 import type {HorizontalThreshold} from 'types/horizontalThreshold';
 import HorizontalThresholdList from './HorizontalThresholdList';
-import ThresholdInput from './ThresholdInput';
 import {selectDistrict, selectCompartment} from 'store/DataSelectionSlice';
 import {useAppDispatch} from 'store/hooks';
 
@@ -34,7 +31,6 @@ export default function HorizontalThresholdSettings({
   setHorizontalThresholds,
 }: HorizontalThresholdSettingsProps) {
   const dispatch = useAppDispatch();
-  const theme = useTheme();
 
   const [localThreshold, setLocalThreshold] = useState<number | null>(null);
   const [selectedThresholdKey, setSelectedThresholdKey] = useState<string>(
@@ -42,8 +38,6 @@ export default function HorizontalThresholdSettings({
   );
   const [isAddingThreshold, setIsAddingThreshold] = useState<boolean>(false);
   const [ableToAddThreshold, setAbleToAddThreshold] = useState<boolean>(false);
-
-  const isValid = localThreshold !== null && localThreshold > 0;
 
   // Checks if the user is able to add a threshold
   useEffect(() => {
@@ -145,71 +139,17 @@ export default function HorizontalThresholdSettings({
         handleDeleteThreshold={handleDeleteThreshold}
         handleUpdateThreshold={handleUpdateThreshold}
         handleSelectThreshold={handleSelectThreshold}
+        handleAddThreshold={handleAddThreshold}
+        handleIsAddingThreshold={handleIsAddingThreshold}
+        ableToAddThreshold={ableToAddThreshold}
         isAddingThreshold={isAddingThreshold}
+        localThreshold={localThreshold}
+        setIsAddingThreshold={setIsAddingThreshold}
+        setLocalThreshold={setLocalThreshold}
         selectedDistrict={selectedDistrict}
         selectedCompartment={selectedCompartment}
         selectedThresholdKey={selectedThresholdKey}
       />
-      {isAddingThreshold ? (
-        <Grid
-          sx={{
-            width: '100%',
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            gap: 4,
-            paddingY: 1,
-            paddingX: 3,
-          }}
-        >
-          <Box>
-            <Typography variant='h2'>{selectedDistrict.name}</Typography>
-            <Typography variant='subtitle1'>{selectedCompartment}</Typography>
-          </Box>
-
-          <ThresholdInput
-            id='horizontal-y-threshold-input'
-            value={localThreshold}
-            error={!isValid}
-            onChange={(e) => {
-              const value = e.target.value === '' ? null : Number(e.target.value);
-              setLocalThreshold(value);
-            }}
-            onSave={handleAddThreshold}
-            onCancel={() => setIsAddingThreshold(false)}
-            isSaveDisabled={!isValid}
-          />
-        </Grid>
-      ) : (
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-            width: '100%',
-            padding: 2,
-            gap: 1,
-
-            ':hover': {
-              cursor: 'pointer',
-              backgroundColor: theme.palette.action.hover,
-            },
-          }}
-          onClick={() => handleIsAddingThreshold(true)}
-        >
-          <IconButton
-            aria-label='add Horizontal Y-threshold'
-            sx={{
-              color: theme.palette.primary.main,
-            }}
-            disabled={!ableToAddThreshold}
-          >
-            <AddBoxIcon fontSize='large' />
-          </IconButton>
-        </Box>
-      )}
     </Box>
   );
 }
