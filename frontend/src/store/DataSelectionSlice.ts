@@ -13,7 +13,7 @@ import {GroupFilter} from 'types/group';
  */
 export type AGS = string;
 
-function getOrSessionUserId() {
+function getOrCreateSessionId() {
   let sessionId = sessionStorage.getItem('sessionId');
   
   // If no userId exists in sessionStorage, generate one
@@ -25,7 +25,7 @@ function getOrSessionUserId() {
   return sessionId;
 }
 
-const sessionId = getOrSessionUserId();
+const sessionId = getOrCreateSessionId();
 
 
 export function logUserAction(action: any, component: any, property: any) {
