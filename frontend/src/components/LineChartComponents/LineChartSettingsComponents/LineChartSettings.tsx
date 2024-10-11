@@ -80,7 +80,7 @@ export function LineChartSettings({
   };
 
   const renderHeader = (title: string) => (
-    <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+    <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginY: '1rem'}}>
       <IconButton onClick={() => handleBackButton()} disabled={currentView === 'settingsMenu'}>
         <ArrowBackIosNewIcon fontSize='small' />
       </IconButton>
@@ -146,7 +146,6 @@ export function LineChartSettings({
         {currentView === 'horizontalThresholdSettings' && (
           <Box p={4}>
             {renderHeader('Horizontal Threshold Settings')}
-            <Divider sx={{marginY: 2}} />
 
             <HorizontalThresholdSettings
               selectedDistrict={selectedDistrict}
