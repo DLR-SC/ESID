@@ -82,10 +82,10 @@ export function LineChartSettings({
   const renderHeader = (title: string) => (
     <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginY: '1rem'}}>
       <IconButton onClick={() => handleBackButton()} disabled={currentView === 'settingsMenu'}>
-        <ArrowBackIosNewIcon fontSize='small' />
+        <ArrowBackIosNewIcon fontSize='small' data-testid='settings-back-button' />
       </IconButton>
       <Typography variant='h1'>{title}</Typography>
-      <IconButton onClick={handlePopoverClose}>
+      <IconButton onClick={handlePopoverClose} data-testid='settings-close-button'>
         <CloseIcon />
       </IconButton>
     </Box>
@@ -98,11 +98,16 @@ export function LineChartSettings({
         zIndex: 1000,
       }}
     >
-      <Button onClick={handlePopoverOpen}>
+      <Button
+        onClick={handlePopoverOpen}
+        aria-label='settings-popover-button'
+        data-testid='settings-popover-button-testid'
+      >
         <SettingsIcon />
       </Button>
       <Popover
         aria-label='line-chart-settings'
+        data-testid='line-chart-settings-popover-testid'
         anchorEl={anchorEl}
         open={showPopover}
         onClose={handlePopoverClose}

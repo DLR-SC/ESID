@@ -39,6 +39,7 @@ export default function ThresholdInput({
       <TextField
         id={id}
         label='Horizontal Threshold'
+        data-testid='threshold-input-testid'
         type='number'
         variant='outlined'
         value={value ?? ''}
@@ -56,13 +57,19 @@ export default function ThresholdInput({
       >
         <IconButton
           aria-label='add or edit Horizontal Threshold onto selected compartment and district'
+          data-testid='save-threshold'
           onClick={onSave}
           disabled={isSaveDisabled}
           sx={{color: theme.palette.success.main}}
         >
           <CheckIcon />
         </IconButton>
-        <IconButton aria-label='cancel editing threshold' onClick={onCancel} sx={{color: theme.palette.error.main}}>
+        <IconButton
+          aria-label='cancel editing threshold'
+          data-testid='cancel-threshold'
+          onClick={onCancel}
+          sx={{color: theme.palette.error.main}}
+        >
           <CancelIcon />
         </IconButton>
       </Box>
