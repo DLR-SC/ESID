@@ -10,7 +10,7 @@ export interface UserPreference {
   selectedHeatmap: HeatmapLegend;
   selectedTab?: string;
   isInitialVisit: boolean;
-  horizontalYAxisThresholds: Dictionary<HorizontalThreshold>;
+  horizontalYAxisThresholds?: Dictionary<HorizontalThreshold>;
 }
 
 const initialState: UserPreference = {

@@ -34,6 +34,11 @@ export interface HorizontalThresholdItemProps {
 
   /** The to determine whether threshold is selected */
   selected: boolean;
+
+  /**
+   * testId for testing
+   */
+  testId?: string;
 }
 
 export default function HorizontalThresholdItem({
@@ -45,6 +50,7 @@ export default function HorizontalThresholdItem({
   editingThresholdKey,
   setEditingThresholdKey,
   selected,
+  testId,
 }: HorizontalThresholdItemProps) {
   const [localThreshold, setLocalThreshold] = useState<number>(threshold.threshold);
   const theme = useTheme();
@@ -71,6 +77,7 @@ export default function HorizontalThresholdItem({
         },
       }}
       onClick={() => handleSelectThreshold(threshold)}
+      data-testid={testId}
     >
       <TableCell align='left'>
         <Typography
