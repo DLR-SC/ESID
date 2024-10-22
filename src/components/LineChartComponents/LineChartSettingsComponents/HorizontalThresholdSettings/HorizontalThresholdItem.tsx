@@ -26,7 +26,7 @@ export interface HorizontalThresholdItemProps {
   /** Callback to handle selection of a threshold */
   handleSelectThreshold: (threshold: HorizontalThreshold) => void;
 
-  /** Current edited key of the threshold */
+  /** The current edited key of the threshold */
   editingThresholdKey: string | null;
 
   /** Callback to set the current edited key of the threshold */
@@ -35,9 +35,13 @@ export interface HorizontalThresholdItemProps {
   /** The to determine whether threshold is selected */
   selected: boolean;
 
-  /**
-   * testId for testing
-   */
+  /** Boolean to determine if the threshold is being edited */
+  isEditingThreshold: boolean;
+
+  /** Boolean to determine if the threshold is being added */
+  isAddingThreshold: boolean;
+
+  /** testId for testing */
   testId?: string;
 }
 
@@ -50,14 +54,16 @@ export default function HorizontalThresholdItem({
   editingThresholdKey,
   setEditingThresholdKey,
   selected,
+  isEditingThreshold,
+  isAddingThreshold,
   testId,
 }: HorizontalThresholdItemProps) {
-  const [localThreshold, setLocalThreshold] = useState<number>(threshold.threshold);
+  const [localThreshold, setLocalThreshold] = useState<number | null>(threshold.threshold);
   const theme = useTheme();
   const isValid = localThreshold !== null && localThreshold > 0;
 
   const updateThreshold = () => {
-    if (localThreshold < 0) return;
+    if (localThreshold === null || localThreshold < 0) return;
     handleUpdateThreshold(thresholdKey, localThreshold);
     setEditingThresholdKey(null);
   };
@@ -67,16 +73,24 @@ export default function HorizontalThresholdItem({
     setLocalThreshold(threshold);
   };
 
+  const isDisabled = (isEditingThreshold && editingThresholdKey !== thresholdKey) || isAddingThreshold;
+
   return (
     <TableRow
+      className={selected ? 'selected-threshold' : ''}
       sx={{
         borderLeft: `2px ${selected ? theme.palette.primary.main : 'transparent'} solid`,
         transition: 'background-color 0.2s',
         ':hover': {
           backgroundColor: theme.palette.action.hover,
         },
+        cursor: isDisabled ? 'not-allowed' : 'pointer',
       }}
-      onClick={() => handleSelectThreshold(threshold)}
+      onClick={() => {
+        if (!isDisabled) {
+          handleSelectThreshold(threshold);
+        }
+      }}
       data-testid={testId}
     >
       <TableCell align='left'>
@@ -84,6 +98,7 @@ export default function HorizontalThresholdItem({
           variant='body1'
           sx={{
             fontSize: theme.typography.listElement.fontSize,
+            color: isDisabled ? theme.palette.text.disabled : theme.palette.text.primary,
           }}
         >
           {threshold.district.name}
@@ -94,6 +109,7 @@ export default function HorizontalThresholdItem({
           variant='body1'
           sx={{
             fontSize: theme.typography.listElement.fontSize,
+            color: isDisabled ? theme.palette.text.disabled : theme.palette.text.primary,
           }}
         >
           {threshold.compartment}
@@ -106,7 +122,10 @@ export default function HorizontalThresholdItem({
             id='horizontal-y-threshold-input'
             value={localThreshold}
             error={!isValid}
-            onChange={(e) => setLocalThreshold(Number(e.target.value))}
+            onChange={(e) => {
+              const value = e.target.value === '' ? null : Number(e.target.value);
+              setLocalThreshold(value);
+            }}
             onSave={updateThreshold}
             onCancel={() => setEditingThresholdKey(null)}
             isSaveDisabled={!isValid}
@@ -133,6 +152,7 @@ export default function HorizontalThresholdItem({
                 variant='body1'
                 sx={{
                   fontSize: theme.typography.listElement.fontSize,
+                  color: isDisabled ? theme.palette.text.disabled : theme.palette.text.primary,
                 }}
               >
                 {threshold.threshold}
@@ -146,6 +166,7 @@ export default function HorizontalThresholdItem({
               >
                 <IconButton
                   aria-label='edit horizontal threshold for given district and compartment'
+                  data-testid={`edit-threshold-button-${thresholdKey}`}
                   onClick={() => handleEditThreshold(thresholdKey, threshold.threshold)}
                 >
                   <EditIcon
@@ -156,6 +177,7 @@ export default function HorizontalThresholdItem({
                 </IconButton>
                 <IconButton
                   aria-label='delete Horizontal Y-threshold'
+                  data-testid={`delete-threshold-button-${thresholdKey}`}
                   onClick={() => handleDeleteThreshold(threshold.district, threshold.compartment)}
                 >
                   <DeleteForeverIcon />
