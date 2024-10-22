@@ -137,4 +137,33 @@ describe('DataSelectionSlice', () => {
       },
     });
   });
+
+  test('Add Horizontal Threshold when horizontalYAxisThresholds is undefined', () => {
+    const stateWithUndefinedThresholds = {
+      ...initialState,
+      horizontalYAxisThresholds: undefined,
+    };
+
+    const newThreshold = {
+      district: {ags: '11111', name: 'district1', type: 'type1'} as District,
+      compartment: 'compartment1',
+      threshold: 10,
+    };
+
+    expect(reducer(stateWithUndefinedThresholds, setHorizontalYAxisThreshold(newThreshold))).toEqual({
+      selectedHeatmap: {
+        name: 'uninitialized',
+        isNormalized: true,
+        steps: [
+          {color: 'rgb(255,255,255)', value: 0},
+          {color: 'rgb(255,255,255)', value: 1},
+        ],
+      },
+      selectedTab: '1',
+      isInitialVisit: true,
+      horizontalYAxisThresholds: {
+        '11111-compartment1': newThreshold,
+      },
+    });
+  });
 });
