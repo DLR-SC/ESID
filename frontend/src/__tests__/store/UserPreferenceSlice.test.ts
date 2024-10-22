@@ -6,10 +6,14 @@ import {describe, test, expect} from 'vitest';
 import reducer, {
   selectHeatmapLegend,
   selectTab,
+  setHorizontalYAxisThreshold,
+  setHorizontalYAxisThresholds,
   setInitialVisit,
   UserPreference,
 } from '../../store/UserPreferenceSlice';
 import {HeatmapLegend} from '../../types/heatmapLegend';
+import {District} from 'types/district';
+import {HorizontalThreshold} from 'types/horizontalThreshold';
 
 describe('DataSelectionSlice', () => {
   const initialState: UserPreference = {
@@ -23,6 +27,7 @@ describe('DataSelectionSlice', () => {
     },
     selectedTab: '1',
     isInitialVisit: true,
+    horizontalYAxisThresholds: {},
   };
 
   test('Initial State', () => {
@@ -42,6 +47,7 @@ describe('DataSelectionSlice', () => {
       selectedHeatmap: legend,
       selectedTab: '1',
       isInitialVisit: true,
+      horizontalYAxisThresholds: {},
     });
   });
 
@@ -57,6 +63,7 @@ describe('DataSelectionSlice', () => {
       },
       selectedTab: '2',
       isInitialVisit: true,
+      horizontalYAxisThresholds: {},
     });
   });
 
@@ -72,6 +79,7 @@ describe('DataSelectionSlice', () => {
       },
       selectedTab: '1',
       isInitialVisit: true,
+      horizontalYAxisThresholds: {},
     });
   });
 
@@ -87,6 +95,75 @@ describe('DataSelectionSlice', () => {
       },
       selectedTab: '1',
       isInitialVisit: false,
+      horizontalYAxisThresholds: {},
+    });
+  });
+
+  test('Set horizontal thresholds', () => {
+    const thresholds: Record<string, HorizontalThreshold> = {
+      '11000-compartment1': {
+        district: {ags: '12345', name: 'Test District', type: 'Test Type'} as District,
+        compartment: 'compartment1',
+        threshold: 50,
+      },
+    };
+
+    expect(reducer(initialState, setHorizontalYAxisThresholds(thresholds))).toEqual({
+      ...initialState,
+      horizontalYAxisThresholds: thresholds,
+    });
+  });
+
+  test('Add Horizontal Threshold', () => {
+    const newThreshold = {
+      district: {ags: '11111', name: 'district1', type: 'type1'} as District,
+      compartment: 'compartment1',
+      threshold: 10,
+    };
+
+    expect(reducer(initialState, setHorizontalYAxisThreshold(newThreshold))).toEqual({
+      selectedHeatmap: {
+        name: 'uninitialized',
+        isNormalized: true,
+        steps: [
+          {color: 'rgb(255,255,255)', value: 0},
+          {color: 'rgb(255,255,255)', value: 1},
+        ],
+      },
+      selectedTab: '1',
+      isInitialVisit: true,
+      horizontalYAxisThresholds: {
+        '11111-compartment1': newThreshold,
+      },
+    });
+  });
+
+  test('Add Horizontal Threshold when horizontalYAxisThresholds is undefined', () => {
+    const stateWithUndefinedThresholds = {
+      ...initialState,
+      horizontalYAxisThresholds: undefined,
+    };
+
+    const newThreshold = {
+      district: {ags: '11111', name: 'district1', type: 'type1'} as District,
+      compartment: 'compartment1',
+      threshold: 10,
+    };
+
+    expect(reducer(stateWithUndefinedThresholds, setHorizontalYAxisThreshold(newThreshold))).toEqual({
+      selectedHeatmap: {
+        name: 'uninitialized',
+        isNormalized: true,
+        steps: [
+          {color: 'rgb(255,255,255)', value: 0},
+          {color: 'rgb(255,255,255)', value: 1},
+        ],
+      },
+      selectedTab: '1',
+      isInitialVisit: true,
+      horizontalYAxisThresholds: {
+        '11111-compartment1': newThreshold,
+      },
     });
   });
 });

@@ -73,6 +73,7 @@ export default function MapContainer() {
   const [fixedLegendMaxValue, setFixedLegendMaxValue] = useState<number | null>(null);
 
   const legendRef = useRef<am5.HeatLegend | null>(null);
+  const selectedAreaRef = useRef<GeoJsonProperties | null>(null);
 
   // Set selected area on first load. If language change and selected area is germany, set default value again to update the name
   useEffect(() => {
@@ -94,6 +95,25 @@ export default function MapContainer() {
     );
     // This effect should only run when the selectedArea changes
   }, [selectedArea, dispatch]);
+
+  // Set selected area in state when it changes in store
+  useEffect(() => {
+    // Only update `selectedArea` if `storeSelectedArea` has changed meaningfully
+    if (storeSelectedArea.name !== '' && selectedAreaRef.current?.RS !== storeSelectedArea.ags) {
+      setSelectedArea({
+        RS: storeSelectedArea.ags,
+        GEN: storeSelectedArea.name,
+        BEZ: storeSelectedArea.type,
+      });
+
+      // update the ref with the new selectedArea
+      selectedAreaRef.current = {
+        RS: storeSelectedArea.ags,
+        GEN: storeSelectedArea.name,
+        BEZ: storeSelectedArea.type,
+      };
+    }
+  }, [storeSelectedArea]);
 
   // Set legend in store
   useEffect(() => {
