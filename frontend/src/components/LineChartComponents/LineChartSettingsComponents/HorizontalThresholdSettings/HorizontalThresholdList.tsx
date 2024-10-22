@@ -110,7 +110,7 @@ export default function HorizontalThresholdList({
   };
 
   const handleSelectThreshold = (threshold: HorizontalThreshold) => {
-    if (isAddingThreshold) {
+    if (isAddingThreshold || editingThresholdKey !== null) {
       return;
     }
     setSelectedThresholdKey(threshold.district.ags + '-' + threshold.compartment);
@@ -183,6 +183,8 @@ export default function HorizontalThresholdList({
                   editingThresholdKey={editingThresholdKey}
                   setEditingThresholdKey={setEditingThresholdKey}
                   selected={selectedThresholdKey === key}
+                  isEditingThreshold={editingThresholdKey !== null}
+                  isAddingThreshold={isAddingThreshold}
                   testId={`threshold-item-${key}`}
                 />
               );
@@ -191,7 +193,12 @@ export default function HorizontalThresholdList({
         )}
         <TableFooter>
           {isAddingThreshold ? (
-            <TableRow data-testid='add-threshold-table-row-testid'>
+            <TableRow
+              sx={{
+                borderLeft: `2px ${theme.palette.primary.main} solid`,
+              }}
+              data-testid='add-threshold-table-row-testid'
+            >
               <StyledTableCell align='left'>
                 <Typography
                   variant='body1'
