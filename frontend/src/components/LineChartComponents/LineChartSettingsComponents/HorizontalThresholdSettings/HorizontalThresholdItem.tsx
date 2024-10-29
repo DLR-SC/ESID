@@ -9,6 +9,8 @@ import {useTheme} from '@mui/material/styles';
 import {HorizontalThreshold} from 'types/horizontalThreshold';
 import ThresholdInput from './ThresholdInput';
 import type {District} from 'types/district';
+import type {Localization} from 'types/localization';
+import {useTranslation} from 'react-i18next';
 
 export interface HorizontalThresholdItemProps {
   /** The threshold item to display */
@@ -43,6 +45,9 @@ export interface HorizontalThresholdItemProps {
 
   /** testId for testing */
   testId?: string;
+
+  /** An object containing localization information (translation & number formattation). */
+  localization?: Localization;
 }
 
 export default function HorizontalThresholdItem({
@@ -57,9 +62,25 @@ export default function HorizontalThresholdItem({
   isEditingThreshold,
   isAddingThreshold,
   testId,
+  localization = {formatNumber: (value: number) => value.toString(), customLang: 'global', overrides: {}},
 }: HorizontalThresholdItemProps) {
-  const [localThreshold, setLocalThreshold] = useState<number | null>(threshold.threshold);
   const theme = useTheme();
+  const {t: defaultT} = useTranslation();
+  const {t: customT} = useTranslation(localization.customLang);
+
+  // Get the translated compartment name
+  const getTranslatedCompartmentName = (compartment: string): string => {
+    const overrideKey = `compartments.${compartment}`;
+    // Check if the translation exists in the overrides
+    if (localization.overrides?.[overrideKey]) {
+      return customT(localization.overrides[overrideKey]); // Translate using the custom namespace
+    } else {
+      return defaultT(compartment); // Fallback to the default compartment name if no translation is found
+    }
+  };
+
+  const [localThreshold, setLocalThreshold] = useState<number | null>(threshold.threshold);
+
   const isValid = localThreshold !== null && localThreshold > 0;
 
   const updateThreshold = () => {
@@ -112,7 +133,7 @@ export default function HorizontalThresholdItem({
             color: isDisabled ? theme.palette.text.disabled : theme.palette.text.primary,
           }}
         >
-          {threshold.compartment}
+          {getTranslatedCompartmentName(threshold.compartment)}
         </Typography>
       </TableCell>
 

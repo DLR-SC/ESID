@@ -12,7 +12,8 @@ import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
 import {Dictionary} from 'util/util';
 import type {HorizontalThreshold} from 'types/horizontalThreshold';
 import type {District} from 'types/district';
-
+import type {Localization} from 'types/localization';
+import {useTranslation} from 'react-i18next';
 import HorizontalThresholdSettings from './HorizontalThresholdSettings/HorizontalThresholdSettings';
 
 /**
@@ -21,17 +22,13 @@ import HorizontalThresholdSettings from './HorizontalThresholdSettings/Horizonta
  */
 type SettingsView = 'settingsMenu' | 'horizontalThresholdSettings' | 'filters';
 
-/**
- * The settings menu for the line chart. Each item in the menu has a label, a view, and an icon.
- */
-const settingsMenu = {
-  horizontalThreshold: {
-    label: 'Horizontal Threshold Settings',
-    view: 'horizontalThresholdSettings',
-    icon: <HorizontalRuleIcon />,
-  },
+type SettingsMenu = {
+  [key: string]: {
+    label: string;
+    view: string;
+    icon: JSX.Element;
+  };
 };
-
 export interface LineChartSettingsProps {
   /** The district to which the settings apply. */
   selectedDistrict: District;
@@ -44,6 +41,9 @@ export interface LineChartSettingsProps {
 
   /** A function that sets the horizontal thresholds for the y-axis. */
   setHorizontalThresholds: React.Dispatch<React.SetStateAction<Dictionary<HorizontalThreshold>>>;
+
+  /** An object containing localization information (translation & number formattation). */
+  localization?: Localization;
 }
 
 /**
@@ -56,7 +56,27 @@ export function LineChartSettings({
   selectedCompartment,
   horizontalThresholds,
   setHorizontalThresholds,
+  localization,
 }: LineChartSettingsProps) {
+  const {t: tSettings} = useTranslation('settings');
+
+  /**
+   * The settings menu for the line chart. Each item in the menu has a label, a view, and an icon.
+   */
+
+  const settingsMenu: SettingsMenu = {
+    horizontalThreshold: {
+      label: tSettings('manageThreshold'),
+      view: 'horizontalThresholdSettings',
+      icon: <HorizontalRuleIcon />,
+    },
+    // filters: {
+    //   label: tSettings('manageGroups'),
+    //   view: 'filters',
+    //   icon: <HorizontalRuleIcon />,
+    // },
+  };
+
   const [currentView, setCurrentView] = useState<SettingsView>('settingsMenu');
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [showPopover, setShowPopover] = useState<boolean>(false);
@@ -123,40 +143,42 @@ export function LineChartSettings({
       >
         {currentView === 'settingsMenu' && (
           <Box p={4}>
-            {renderHeader('Line Chart Settings')}
-            <Divider sx={{marginY: 2}} />
-            <Box>
-              <Button
-                key={settingsMenu.horizontalThreshold.label}
-                onClick={() => handleNavigate(settingsMenu.horizontalThreshold.view as SettingsView)}
-              >
-                <Box
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    padding: 2,
-                    borderRadius: 1,
-                    gap: 2,
-                  }}
-                >
-                  {settingsMenu.horizontalThreshold.icon}
+            {renderHeader(tSettings('title'))}
+            {Object.entries(settingsMenu).map(([key, item]) => (
+              <>
+                <Divider sx={{marginY: 2}} />
+                <Box>
+                  <Button key={key} onClick={() => handleNavigate(item.view as SettingsView)}>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        padding: 2,
+                        borderRadius: 1,
+                        gap: 2,
+                      }}
+                    >
+                      {item.icon}
 
-                  <Typography variant='h2'>{settingsMenu.horizontalThreshold.label}</Typography>
+                      <Typography variant='h2'>{item.label}</Typography>
+                    </Box>
+                  </Button>
                 </Box>
-              </Button>
-            </Box>
+              </>
+            ))}
           </Box>
         )}
         {currentView === 'horizontalThresholdSettings' && (
           <Box p={4}>
-            {renderHeader('Horizontal Threshold Settings')}
+            {renderHeader(tSettings('horizontalThresholds.title'))}
 
             <HorizontalThresholdSettings
               selectedDistrict={selectedDistrict}
               selectedCompartment={selectedCompartment}
               horizontalThresholds={horizontalThresholds}
               setHorizontalThresholds={setHorizontalThresholds}
+              localization={localization}
             />
           </Box>
         )}

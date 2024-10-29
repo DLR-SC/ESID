@@ -1,0 +1,29 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: CC0-1.0
+
+{
+  title: 'Liniendiagramm Einstellungen',
+  manageGroups: 'Filter',
+  manageThreshold: 'Threshold',
+  horizontalThresholds: {
+    title: 'Schwellen Verwalten',
+    district: 'Bezirk',
+    compartment: 'Infektionsstatus',
+    threshold: 'Schwelle',
+    noThresholds: 'Keine Schwellenwerte festgelegt.',
+  },
+  'group-filters': {
+    title: 'Gruppen Verwalten',
+    'nothing-selected': 'Wählen Sie eine Gruppe aus um diese zu bearbeiten oder erstellen Sie eine neue Gruppe.',
+    'add-group': 'Neue Gruppe Erstellen',
+    name: 'Name',
+    close: 'Abbrechen',
+    apply: 'Anwenden',
+    'confirm-deletion-title': 'Gruppe Löschen',
+    'confirm-deletion-text': 'Sind Sie sicher, dass Sie die Gruppe "{{groupName}}" wirklich löschen wollen?',
+    'confirm-discard-title': 'Änderungen Verwerfen',
+    'confirm-discard-text': 'Sie haben ungespeicherte Änderungen. Wollen sie diese verwerfen?',
+    discard: 'Verwerfen',
+    delete: 'Löschen',
+  },
+}
