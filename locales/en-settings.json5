@@ -1,0 +1,29 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: CC0-1.0
+
+{
+  title: 'Line Chart Settings',
+  manageGroups: 'Filters',
+  manageThreshold: 'Thresholds',
+  horizontalThresholds: {
+    title: 'Manage Threshold',
+    district: 'District',
+    compartment: 'Compartment',
+    threshold: 'Threshold',
+    noThresholds: 'No thresholds set.',
+  },
+  'group-filters': {
+    title: 'Manage Groups',
+    'nothing-selected': 'Select a group to edit or create a new one.',
+    'add-group': 'Add new group',
+    name: 'Name',
+    close: 'Cancel',
+    apply: 'Apply',
+    'confirm-deletion-title': 'Delete Group',
+    'confirm-deletion-text': 'Are you sure you want to delete the "{{groupName}}" group?',
+    'confirm-discard-title': 'Discard Changes',
+    'confirm-discard-text': 'You have unsaved changes. Do you want to discard them?',
+    discard: 'Discard',
+    delete: 'Delete',
+  },
+}

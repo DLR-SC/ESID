@@ -4,6 +4,7 @@
 import React from 'react';
 import {Dictionary} from 'util/util';
 import type {District} from 'types/district';
+import type {Localization} from 'types/localization';
 import type {HorizontalThreshold} from 'types/horizontalThreshold';
 import HorizontalThresholdList from './HorizontalThresholdList';
 
@@ -19,6 +20,9 @@ export interface HorizontalThresholdSettingsProps {
 
   /** A function that sets the horizontal thresholds for the y-axis. */
   setHorizontalThresholds: React.Dispatch<React.SetStateAction<Dictionary<HorizontalThreshold>>>;
+
+  /** An object containing localization information (translation & number formattation). */
+  localization?: Localization;
 }
 
 export default function HorizontalThresholdSettings({
@@ -26,6 +30,7 @@ export default function HorizontalThresholdSettings({
   selectedCompartment,
   horizontalThresholds,
   setHorizontalThresholds,
+  localization,
 }: HorizontalThresholdSettingsProps) {
   return (
     <HorizontalThresholdList
@@ -33,6 +38,7 @@ export default function HorizontalThresholdSettings({
       setHorizontalThresholds={setHorizontalThresholds}
       selectedDistrict={selectedDistrict}
       selectedCompartment={selectedCompartment}
+      localization={localization}
     />
   );
 }
