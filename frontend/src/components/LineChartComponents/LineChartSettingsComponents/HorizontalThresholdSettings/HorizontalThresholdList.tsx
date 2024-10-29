@@ -24,8 +24,10 @@ import {tableCellClasses} from '@mui/material/TableCell';
 import {Dictionary} from 'util/util';
 import {HorizontalThreshold} from 'types/horizontalThreshold';
 import type {District} from 'types/district';
+import type {Localization} from 'types/localization';
 import HorizontalThresholdItem from './HorizontalThresholdItem';
 import ThresholdInput from './ThresholdInput';
+import {useTranslation} from 'react-i18next';
 
 export interface HorizontalThresholdListProps {
   /** The list of horizontal thresholds to display */
@@ -39,6 +41,9 @@ export interface HorizontalThresholdListProps {
 
   /** The selected compartment */
   selectedCompartment: string;
+
+  /** An object containing localization information (translation & number formattation). */
+  localization?: Localization;
 }
 
 const StyledTableCell = styled(TableCell)(({theme}) => ({
@@ -54,7 +59,9 @@ export default function HorizontalThresholdList({
   setHorizontalThresholds,
   selectedDistrict,
   selectedCompartment,
+  localization,
 }: HorizontalThresholdListProps) {
+  const {t: tSettings} = useTranslation('settings');
   const theme = useTheme();
   const dispatch = useAppDispatch();
 
@@ -141,7 +148,7 @@ export default function HorizontalThresholdList({
         <TableHead>
           <TableRow>
             <StyledTableCell align='left'>
-              <Typography variant='h2'>District</Typography>
+              <Typography variant='h2'>{tSettings('horizontalThresholds.district')}</Typography>
             </StyledTableCell>
             <StyledTableCell
               sx={{
@@ -149,7 +156,7 @@ export default function HorizontalThresholdList({
               }}
               align='left'
             >
-              <Typography variant='h2'>Compartment</Typography>
+              <Typography variant='h2'>{tSettings('horizontalThresholds.compartment')}</Typography>
             </StyledTableCell>
             <StyledTableCell
               sx={{
@@ -157,7 +164,7 @@ export default function HorizontalThresholdList({
               }}
               align='left'
             >
-              <Typography variant='h2'>Threshold</Typography>
+              <Typography variant='h2'>{tSettings('horizontalThresholds.threshold')}</Typography>
             </StyledTableCell>
           </TableRow>
         </TableHead>
@@ -165,7 +172,7 @@ export default function HorizontalThresholdList({
           <TableBody>
             <TableRow>
               <StyledTableCell colSpan={3} align='center'>
-                <Typography variant='h2'>No thresholds set</Typography>
+                <Typography variant='h2'>{tSettings('horizontalThresholds.noThresholds')}</Typography>
               </StyledTableCell>
             </TableRow>
           </TableBody>
@@ -186,6 +193,7 @@ export default function HorizontalThresholdList({
                   isEditingThreshold={editingThresholdKey !== null}
                   isAddingThreshold={isAddingThreshold}
                   testId={`threshold-item-${key}`}
+                  localization={localization}
                 />
               );
             })}

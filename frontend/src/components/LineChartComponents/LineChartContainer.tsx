@@ -14,6 +14,7 @@ import {LineChartSettings} from './LineChartSettingsComponents/LineChartSettings
 import {Dictionary} from 'util/util';
 import {HorizontalThreshold} from 'types/horizontalThreshold';
 import {setHorizontalYAxisThresholds} from 'store/UserPreferenceSlice';
+import {useCompartmentLocalization} from 'util/localization';
 
 export default function LineChartContainer() {
   const {t} = useTranslation('backend');
@@ -86,6 +87,7 @@ export default function LineChartContainer() {
         selectedCompartment={selectedCompartment ?? ''}
         horizontalThresholds={horizontalThresholds}
         setHorizontalThresholds={sethorizontalThresholds}
+        localization={useCompartmentLocalization()}
       />
     </LoadingContainer>
   );
