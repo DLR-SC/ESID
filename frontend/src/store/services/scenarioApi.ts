@@ -220,62 +220,60 @@ export const scenarioApi = createApi({
 
     getPercentileData: builder.query<SelectedScenarioPercentileData[], SelectedScenario>({
       async queryFn(arg, _queryApi, _extraOptions, fetchWithBQ) {
-        const groups = arg.groups && arg.groups.length > 0 ? `&groups=${arg.groups.join(',')}` : '&groups=total';
+        const groups = arg.groups && arg.groups.length > 0 
+          ? `&groups=${arg.groups.join(',')}` 
+          : '&groups=total';
         const compartments = arg.compartment ? `&compartments=${arg.compartment}` : '';
-
+    
         /* [CDtemp-begin] */
-        const {node, cologneDistrict} = validateDistrictNode(arg.node);
+        const { node, cologneDistrict } = validateDistrictNode(arg.node);
         /* [CDtemp-end] */
-
-        const url = (percentile: number) =>
-          `simulation/${arg.id}/${
-            // [CDtemp] arg.node
-            node
-          }/?all&percentile=${percentile}${compartments}${groups}`;
-
+    
+        const url = (percentile: number) => 
+          `simulation/${arg.id}/${node}/?all&percentile=${percentile}${compartments}${groups}`;
+    
+        // Percentiles to fetch
+        const percentiles = [5, 15, 25, 75, 85, 95];
         const result: SelectedScenarioPercentileData[] = [];
-
-        const percentile25 = await fetchWithBQ(url(25));
-        //return if errors occur
-        if (percentile25.error) return {error: percentile25.error};
-        result[0] = percentile25.data as SelectedScenarioPercentileData;
-
-        const percentile75 = await fetchWithBQ(url(75));
-        //return if errors occur
-        if (percentile75.error) return {error: percentile75.error};
-        result[1] = percentile75.data as SelectedScenarioPercentileData;
-
+    
+        // Fetch percentile data
+        for (const percentile of percentiles) {
+          const response = await fetchWithBQ(url(percentile));
+          if (response.error) return { error: response.error };
+          result.push(response.data as SelectedScenarioPercentileData);
+        }
+    
         /* [CDtemp-begin] */
         if (cologneDistrict) {
-          // get weight for city district
+          // Get weight for city district
           const weight = (cologneData as unknown as Array<District>).find(
             (dist) => dist.Stadtteil_ID === cologneDistrict
           )!.Population_rel;
-
-          // loop through both results to adjust city district results
+    
+          // Adjust city district results
           return {
             data: result.map((percData) => {
-              // skip if results are null
+              // Skip if results are null
               if (percData.results === null) return percData;
-
-              // loop thru days in data to replace compartment data
-              percData.results = percData.results.map(({day, compartments}) => {
-                // loop through compartments and apply weight
+    
+              // Loop through days in data to replace compartment data
+              percData.results = percData.results.map(({ day, compartments }) => {
+                // Loop through compartments and apply weight
                 Object.keys(compartments).forEach((compName) => {
                   compartments[compName] *= weight;
                 });
-                return {day, compartments};
+                return { day, compartments };
               });
-              // return omdified data
               return percData;
             }),
           };
         }
         /* [CDtemp-end] */
-
-        return {data: result};
+    
+        return { data: result };
       },
     }),
+    
 
     getScenarioParameters: builder.query<Array<ParameterData> | null, number | null>({
       queryFn: async function (arg: number | null, _queryApi, _extraOptions, fetchWithBQ) {

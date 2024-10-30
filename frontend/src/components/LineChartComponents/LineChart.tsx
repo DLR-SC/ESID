@@ -14,6 +14,8 @@ import {AxisRendererY} from '@amcharts/amcharts5/.internal/charts/xy/axes/AxisRe
 import {XYCursor} from '@amcharts/amcharts5/.internal/charts/xy/XYCursor';
 import am5locales_en_US from '@amcharts/amcharts5/locales/en_US';
 import am5locales_de_DE from '@amcharts/amcharts5/locales/de_DE';
+import {Label} from '@amcharts/amcharts5';
+import { Button as AmchartsButton } from '@amcharts/amcharts5';
 import {darken, useTheme} from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import {useTranslation} from 'react-i18next';
@@ -39,8 +41,12 @@ interface LineChartProps {
   /** The currently selected date in the chart in ISO format (YYYY-MM-DD). */
   selectedDate: string;
 
+  toggleButton?: Boolean;
+
   /** Callback function to update the selected date in the chart. */
   setSelectedDate: (date: string) => void;
+
+  setToggleButton: (toggleButton: Boolean) => void;
 
   /**
    * Optional callback function to get the x-coordinate position of the reference date in the chart.
@@ -65,6 +71,7 @@ interface LineChartProps {
 
   /** Optional localization settings for the chart, including number formatting and language overrides. */
   localization?: Localization;
+
 }
 /**
  * React Component to render the Linechart Section
@@ -82,8 +89,11 @@ export default function LineChart({
   exportedFileName = 'Data',
   yAxisLabel,
   localization,
+  toggleButton,
+  setToggleButton,
 }: LineChartProps): JSX.Element {
   const {t: defaultT, i18n} = useTranslation();
+  
 
   const memoizedLocalization = useMemo(() => {
     return (
@@ -162,16 +172,46 @@ export default function LineChart({
     if (!root || !chart) {
       return null;
     }
+  
+    // Create the button and add it to the chart
+    let button = chart.plotContainer.children.push(
+      AmchartsButton.new(root, {
+        dx: 10, // Horizontal offset
+        dy: 10, // Vertical offset
+        layer: 40, // Button layer
+        width: 300, // Set width
+        height: 50, // Set height
+        label: Label.new(root, {
+          text: "Toggle Uncertainty Representation"
+        })
+      })
+    );
+  
+    // Add event listener or logic for button click (if needed)
+    button.events.on("click", () => {
+      if(toggleButton == true){
+        toggleButton = false;
+        setToggleButton(false)
+      }
+      else{
+        toggleButton = true;
+        setToggleButton(true)
+      }
+
+      console.log(toggleButton)
+    });
+  
     return {
       renderer: AxisRendererY.new(root, {}),
-      // Fix lower end to 0
       min: 0,
-      // Add tooltip instance so cursor can display value
       tooltip: Tooltip.new(root, {}),
     };
   }, [root, chart]);
-
+  
   const yAxis = useValueAxis(root, chart, yAxisSettings);
+  
+
+  
 
   // Effect to add cursor to chart
   useLayoutEffect(() => {
@@ -191,6 +231,8 @@ export default function LineChart({
     );
     // This effect should re-run when chart, root and xAxis are initialized
   }, [chart, root, xAxis]);
+
+  
 
   // Effect to add date selector filter to chart
   useDateSelectorFilter(chart, xAxis, setSelectedDate);
@@ -334,7 +376,6 @@ export default function LineChart({
     };
     // This effect should re-run when root, chart and xAxis are initialized
   }, [root, chart, xAxis, setReferenceDayX]);
-
   const lineChartDataSettings = useMemo(() => {
     if (!root || !xAxis || !yAxis || !lineChartData) {
       return [];
@@ -398,7 +439,15 @@ export default function LineChart({
         serie.values.forEach((entry) => {
           dataMap.set(entry.day, {...dataMap.get(entry.day), [serie.name!]: entry.value as number});
         });
-      } else if (serie.openValueYField) {
+      }if((typeof id === 'string' && id.startsWith('percentile')) && toggleButton == true) {
+            serie.values.forEach((entry) => {
+              dataMap.set(entry.day, {...dataMap.get(entry.day), [serie.valueYField]: (entry.value as number[])[1]});
+              dataMap.set(entry.day, {
+                ...dataMap.get(entry.day),
+                [String(serie.openValueYField)]: (entry.value as number[])[0],
+              });
+            });
+      }else if((typeof id === 'string' && id.startsWith('percentiles50')) && toggleButton == false) {
         serie.values.forEach((entry) => {
           dataMap.set(entry.day, {...dataMap.get(entry.day), [serie.valueYField]: (entry.value as number[])[1]});
           dataMap.set(entry.day, {
@@ -458,7 +507,7 @@ export default function LineChart({
                  */
                 let seriesID = series.get('id');
                 if (seriesID) seriesID = seriesID?.split('_')[1];
-                if (seriesID === 'percentiles' || seriesID?.startsWith('group-filter-')) {
+                if (seriesID?.startsWith('percentiles') || seriesID?.startsWith('group-filter-')) {
                   return '';
                 }
                 /* Skip with error if series does not have property:
@@ -504,6 +553,7 @@ export default function LineChart({
                       : ''
                   }
                 </tr>
+                
                 ${
                   // Add group filters if this series is the selected scenario
                   lineChartData.find((serie) => serie.parentId == seriesID)
@@ -584,8 +634,9 @@ export default function LineChart({
     const dataFieldsOrder = ['date', '0'];
 
     if (lineChartData) {
+      let i = 1
       lineChartData.forEach((serie) => {
-        if (serie.serieId === 'percentiles' || serie.serieId.toString().startsWith('group-filter-')) return;
+        if (serie.serieId.toString().startsWith('percentile') || serie.serieId.toString().startsWith('group-filter-')) return;
 
         // Add scenario label to export data field names
         dataFields = {
@@ -594,9 +645,11 @@ export default function LineChart({
         };
         // Add scenario id to export data field order (for sorted export like csv)
         dataFieldsOrder.push(`${serie.serieId}`);
+
         // If this is the selected scenario also add percentiles after it
         if (lineChartData.find((line) => line.openValueYField && line.parentId == serie.serieId)) {
-          dataFieldsOrder.push('percentileDown', 'percentileUp');
+          dataFieldsOrder.push('percentileDown'+i.toString, 'percentileUp'+i.toString);
+          i++;
         }
       });
     }
@@ -635,6 +688,7 @@ export default function LineChart({
     root,
     lineChartData,
     yAxisLabel,
+    toggleButton
   ]);
 
   return (

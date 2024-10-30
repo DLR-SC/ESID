@@ -215,6 +215,8 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
     }
   );
 
+ 
+
   const {data: chartGroupFilterData} = useGetMultipleGroupFilterDataLineChartQuery(
     groupFilterList && selectedScenario && selectedDistrict && selectedCompartment
       ? Object.values(groupFilterList)
@@ -459,6 +461,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
     // This should re-run whenever the simulation data changes, or a different compartment is selected.
   }, [chartSimulationData, selectedCompartment, theme, activeScenarios, scenarioList, backendT]);
 
+  
   // This effect sets the chart group filter data based on the selection.
   useEffect(() => {
     const lineChartData: LineChartData[] = [];
@@ -513,48 +516,77 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
     // This should re-run whenever the group filter data changes, or a different compartment is selected.
   }, [chartGroupFilterData, selectedCompartment, selectedScenario, theme, groupFilterList]);
 
-  // This effect sets the chart percentile data based on the selection.
+  
+
+  // This effect sets the chart percentile data based on the selection.  
   useEffect(() => {
-    let lineChartData: LineChartData | null = null;
-    if (chartPercentileData && chartPercentileData.length > 0 && selectedCompartment && selectedScenario) {
-      const processedPercentileData: Array<{day: string; value: number[]}> = [];
+    const lineChartData: LineChartData[] = [];
+    
+    if (chartPercentileData?.length != undefined && chartPercentileData?.length > 0 && selectedCompartment && selectedScenario) {
+      // Array to hold processed data arrays for each percentile range
+      const processedDataArrays = [[], [], [], [], []] as Array<{ day: string; value: number[] }[]>;
+  
+      const indexPairs = [
+        [0, 1], [1, 2], [2, 3], [3, 4], [4, 5]
+      ]; // Pairs of indexes to compare days and process percentile data
+  
       for (let i = 0; chartPercentileData[0]?.results && i < Object.keys(chartPercentileData[0].results).length; i++) {
-        if (
-          chartPercentileData[0].results &&
-          chartPercentileData[1].results &&
-          Object.values(chartPercentileData[0].results)[i].day === Object.values(chartPercentileData[1].results)[i].day
-        )
-          processedPercentileData.push({
-            day: Object.values(chartPercentileData[0].results)[i].day,
-            value: [
-              Object.values(chartPercentileData[0].results)[i].compartments[selectedCompartment],
-              Object.values(chartPercentileData[1].results)[i].compartments[selectedCompartment],
-            ],
-          });
+        indexPairs.forEach(([lowIndex, highIndex], dataIdx) => {
+          const lowResult = Object.values(chartPercentileData[lowIndex]?.results || [])[i];
+          const highResult = Object.values(chartPercentileData[highIndex]?.results || [])[i];
+          
+          if (lowResult?.day === highResult?.day) {
+            processedDataArrays[dataIdx].push({
+              day: lowResult.day,
+              value: [
+                lowResult.compartments[selectedCompartment],
+                highResult.compartments[selectedCompartment],
+              ],
+            });
+          }
+        });
       }
-      lineChartData = {
-        values: processedPercentileData,
-        serieId: 'percentiles',
-        valueYField: 'percentileUp',
-        openValueYField: 'percentileDown',
-        visible: true,
-        fill: color(getScenarioPrimaryColor(selectedScenario, theme)),
-        fillOpacity: 0.3,
-        stroke: {strokeWidth: 0},
-        parentId: selectedScenario,
-      };
+  
+      // Define the chart series with respective fill opacities
+      const seriesConfigs = [
+        { dataIdx: 0, fillOpacity: 0.2, serieId: 'percentiles90Lower', valueYField: 'percentileUp15', openValueYField: 'percentileDown5' },
+        { dataIdx: 1, fillOpacity: 0.3, serieId: 'percentiles70Lower', valueYField: 'percentileUp25', openValueYField: 'percentileDown15' },
+        { dataIdx: 2, fillOpacity: 0.4, serieId: 'percentiles50', valueYField: 'percentileUp75', openValueYField: 'percentileDown25' },
+        { dataIdx: 3, fillOpacity: 0.3, serieId: 'percentiles70Upper', valueYField: 'percentileUp85', openValueYField: 'percentileDown75' },
+        { dataIdx: 4, fillOpacity: 0.2, serieId: 'percentiles90Upper', valueYField: 'percentileUp95', openValueYField: 'percentileDown85' },
+      ];
+  
+      seriesConfigs.forEach(({ dataIdx, fillOpacity, serieId, valueYField, openValueYField }) => {
+        if (processedDataArrays[dataIdx].length > 0) {
+          lineChartData.push({
+            values: processedDataArrays[dataIdx],
+            serieId,
+            valueYField,
+            openValueYField,
+            visible: true,
+            fill: color(getScenarioPrimaryColor(selectedScenario, theme)),
+            fillOpacity,
+            stroke: { strokeWidth: 0 },
+            parentId: selectedScenario,
+          });
+        }
+      });
     }
+  
     setChartData((prevData) => {
       if (prevData && prevData.length > 0) {
-        const seriesWithoutPercentiles = prevData.filter((serie) => serie.serieId !== 'percentiles');
-        if (seriesWithoutPercentiles.length > 0 && lineChartData) return [...seriesWithoutPercentiles, lineChartData];
-        else if (seriesWithoutPercentiles.length > 0) return [...seriesWithoutPercentiles];
+        const seriesWithoutPercentiles = prevData.filter(
+          (serie) => typeof serie.serieId === 'number' || !serie.serieId.startsWith('percentile')
+        );
+        if (seriesWithoutPercentiles.length > 0 && lineChartData.length > 0) {
+          return [...seriesWithoutPercentiles, ...lineChartData];
+        }
+        return seriesWithoutPercentiles.length > 0 ? seriesWithoutPercentiles : lineChartData;
       }
-      if (lineChartData) return [lineChartData];
-      return [];
+      return lineChartData;
     });
-    // This should re-run whenever the data changes, or whenever a different scenario or a different compartment is selected.
   }, [chartPercentileData, selectedCompartment, selectedScenario, theme]);
+  
 
   return (
     <DataContext.Provider

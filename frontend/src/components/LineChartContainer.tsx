@@ -7,7 +7,7 @@ import LoadingContainer from './shared/LoadingContainer';
 import {useTheme} from '@mui/material';
 import {DataContext} from '../DataContext';
 import {useAppDispatch, useAppSelector} from 'store/hooks';
-import {selectDate} from 'store/DataSelectionSlice';
+import {selectDate, selectUncertainty} from 'store/DataSelectionSlice';
 import {setReferenceDayBottom} from 'store/LayoutSlice';
 import {useTranslation} from 'react-i18next';
 
@@ -20,11 +20,13 @@ export default function LineChartContainer() {
 
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
   const selectedDateInStore = useAppSelector((state) => state.dataSelection.date);
+  const selectedUncertaintyInStore = useAppSelector((state) => state.dataSelection.uncertainty);
   const referenceDay = useAppSelector((state) => state.dataSelection.simulationStart);
   const minDate = useAppSelector((state) => state.dataSelection.minDate);
   const maxDate = useAppSelector((state) => state.dataSelection.maxDate);
 
   const [selectedDate, setSelectedDate] = useState<string>(selectedDateInStore ?? '2024-08-07');
+  const [selectedUncertainty, setSelectedUncertainty] = useState<Boolean>(selectedUncertaintyInStore ?? true);
   const [referenceDayBottomPosition, setReferenceDayBottomPosition] = useState<number>(0);
 
   const yAxisLabel = useMemo(() => {
@@ -51,6 +53,21 @@ export default function LineChartContainer() {
     // This effect should only run when the referenceDay changes
   }, [referenceDayBottomPosition, dispatch]);
 
+
+  // Set selected date in store
+  useEffect(() => {
+    dispatch(selectUncertainty(selectedUncertainty));
+    // This effect should only run when the selectedDate changes
+  }, [selectedUncertainty, dispatch]);
+
+    // Set uncertainty type in state when it changes in store
+    useEffect(() => {
+      if (selectedUncertaintyInStore) {
+        setSelectedUncertainty(selectedUncertaintyInStore);
+      }
+      // This effect should only run when the selectedUncertaintyInStore changes
+    }, [selectedUncertaintyInStore]);
+
   return (
     <LoadingContainer
       sx={{width: '100%', height: '100%'}}
@@ -66,6 +83,8 @@ export default function LineChartContainer() {
         maxDate={maxDate}
         referenceDay={referenceDay}
         yAxisLabel={yAxisLabel}
+        toggleButton={selectedUncertainty}
+        setToggleButton = {setSelectedUncertainty}
       />
     </LoadingContainer>
   );
