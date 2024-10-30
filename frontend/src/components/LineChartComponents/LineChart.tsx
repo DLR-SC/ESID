@@ -93,7 +93,6 @@ export default function LineChart({
   setToggleButton,
 }: LineChartProps): JSX.Element {
   const {t: defaultT, i18n} = useTranslation();
-  
 
   const memoizedLocalization = useMemo(() => {
     return (
@@ -182,7 +181,7 @@ export default function LineChart({
         width: 300, // Set width
         height: 50, // Set height
         label: Label.new(root, {
-          text: "Toggle Uncertainty Representation"
+          text: 'Toggle Uncertainty Representation'
         })
       })
     );
@@ -197,8 +196,6 @@ export default function LineChart({
         toggleButton = true;
         setToggleButton(true)
       }
-
-      console.log(toggleButton)
     });
   
     return {
