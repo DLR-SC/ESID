@@ -19,6 +19,7 @@ SPDX-License-Identifier: CC-BY-4.0
 ### Improvements
 
 - Added translations for additional scenarios.
+- If an inactive scenario is being clicked on it will automatically be revealed and selected.
 
 ### Bug fixes
 
