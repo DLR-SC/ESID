@@ -19,6 +19,7 @@ SPDX-License-Identifier: CC-BY-4.0
 ### Verbesserungen
 
 - Es wurde mehr Übersetzungen für Szenarien hinzugefügt.
+- Wenn ein deaktiviertes Scenario angeklickt wird, wird es automatisch aufgedeckt und selektiert.
 
 ### Fehlerbehebungen
 

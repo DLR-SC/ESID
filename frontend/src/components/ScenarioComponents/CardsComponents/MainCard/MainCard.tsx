@@ -122,9 +122,10 @@ function MainCard({
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       onClick={() => {
-        if (activeScenario) {
-          setSelectedScenario(index);
+        if (!activeScenario) {
+          setActiveScenarios([...(activeScenarios ?? []), index]);
         }
+        setSelectedScenario(index);
       }}
     >
       <Box
