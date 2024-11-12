@@ -2,10 +2,11 @@
 // SPDX-License-Identifier: Apache-2.0
 
 /** Display names for the diffent enums of the pandemos data */
+/* eslint-disable @typescript-eslint/no-namespace */
 export namespace KeyInfo {
   export const anyOption: KeyInfoItem = {
     icon: '🤷',
-    fullName: "Any",
+    fullName: 'Any',
   };
   /** Locations */
   export const location_type: Record<number, KeyInfoItem> = {

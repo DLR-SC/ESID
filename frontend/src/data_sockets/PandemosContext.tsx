@@ -1,12 +1,11 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, {createContext, useCallback, useEffect, useMemo, useState} from 'react';
+import React, {createContext, useEffect, useMemo, useState} from 'react';
 import crossfilter, {Crossfilter} from 'crossfilter2';
 import agentList from '../../assets/pandemos/agents_lookup.json?url';
 import locationList from '../../assets/pandemos/locations_lookup.json?url';
 import trajectories from '../../assets/pandemos/trajectories.json?url';
-import hash from 'object-hash';
 import {Agent, Location, Trip, TripExpanded, TripChain} from 'types/pandemos';
 /**
  * Data context for the pandemos data.
@@ -90,9 +89,9 @@ export const PandemosProvider = ({children}: {children: React.ReactNode}) => {
         trips?.map((trip) => {
           return {
             ...trip,
-            agent_age_group: agents![trip.agent_id].age_group,
-            start_location_type: locations![trip.start_location].location_type,
-            end_location_type: locations![trip.end_location].location_type,
+            agent_age_group: agents[trip.agent_id].age_group,
+            start_location_type: locations[trip.start_location].location_type,
+            end_location_type: locations[trip.end_location].location_type,
           } as TripExpanded;
         })
       );
@@ -120,7 +119,7 @@ export const PandemosProvider = ({children}: {children: React.ReactNode}) => {
           tripChains.push({agent_id: trip.agent_id, chain_id: chain_id++, trips: tripChain.slice(start, index + 1)});
       });
     }
-    return tripChains
+    return tripChains;
   }, [trips, locations]);
 
   return (
