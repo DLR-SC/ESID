@@ -61,3 +61,5 @@ export const factorPerZone: {[key: number]: number} = {
   4: 4,
   5: 6,
 };
+
+export const ETRS89Boundaries: [[number, number], [number, number]] = [[32.88, -16.1], [84.73, 40.18]]

@@ -1,27 +1,30 @@
-import { cellSize, factorPerZone, latitudeSpacing } from './Constants';
+import { cellSize, factorPerZone, latitudeSpacing, ETRS89Boundaries} from './Constants';
 import { degreesToUnit, getLongitudinalFactorAndZone, range, unitToDegrees } from './Utils';
 import { InspireGridCell } from './Types';
 
 export function getGrid(bounds: [[number, number], [number, number]], level: number) {
-    const scalingFactorLat = latitudeSpacing[level] / 3600;
-    const scalingFactorLong = 2 * latitudeSpacing[level] / 3600; // BS is in Zone 2
-
+    
     const latMin: number = bounds[0][0];
     const lonMin: number = bounds[0][1];
     const latMax: number = bounds[1][0];
     const lonMax: number = bounds[1][1];
 
-    const latMinNew: number = latMin - latMin % scalingFactorLat;
-    const latMaxNew: number = latMax - latMax % scalingFactorLat;
-    const lonMinNew: number = lonMin - lonMin % scalingFactorLong;
-    const lonMaxNew: number = lonMax - lonMax % scalingFactorLong;
+    const { factor } = getLongitudinalFactorAndZone(latMin);
+    
+    const scalingFactorLat = factor * latitudeSpacing[level] / 3600;
+    const scalingFactorLong = latitudeSpacing[level] / 3600;
+    var  values = closestAdjustedCoordinates(bounds, scalingFactorLat, scalingFactorLong);
+    
+    const latMinNew: number = values[0]; 
+    const latMaxNew: number = latMax + latMax % scalingFactorLat;
+    const lonMinNew: number = values[1];
+    const lonMaxNew: number = lonMax + lonMax % scalingFactorLong;
 
     return {    
         latitudes: latitudeCoordinates(latMinNew, latMaxNew, lonMinNew, lonMaxNew, level),
         longitudes: longitudeCoordinates(latMinNew, latMaxNew, lonMinNew, lonMaxNew, level),
     };
 }
-
 
 function latitudeCoordinates(latMin: number, latMax: number, lonMin: number, lonMax: number, level: number) {
     const linesLat = [];
@@ -126,4 +129,13 @@ export function cellBoundsFromId(cellIdentifier: string): Array<Array<number>> |
     return null;
 }
 
-
+function closestAdjustedCoordinates(
+    map: [[number, number], [number, number]], 
+    scalingFactorLat: number,
+    scalingFactorLong: number
+): number[] {
+    const adjustedLat = Math.ceil((map[0][0] - ETRS89Boundaries[0][0]) / scalingFactorLat) * scalingFactorLat + ETRS89Boundaries[0][0];
+    const adjustedLong = Math.ceil((map[0][1] - ETRS89Boundaries[0][1]) / scalingFactorLong) * scalingFactorLong + ETRS89Boundaries[0][1];
+    return [adjustedLat - scalingFactorLat, adjustedLong - scalingFactorLong];
+}
+    
