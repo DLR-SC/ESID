@@ -5,7 +5,7 @@
 export namespace KeyInfo {
   export const anyOption: KeyInfoItem = {
     icon: '🤷',
-    fullName: "Any/Don't Care",
+    fullName: "Any",
   };
   /** Locations */
   export const location_type: Record<number, KeyInfoItem> = {
@@ -16,7 +16,7 @@ export namespace KeyInfo {
     /** Social Event */ 4: {icon: '🏟', fullName: 'Social Event'},
     /**     Shopping */ 5: {icon: '🏪', fullName: 'Shopping'},
     /**     Hospital */ 6: {icon: '🏥❗', fullName: 'Hospital'},
-    /**          ICU */ 7: {icon: '🏥‼', fullName: 'Intensive Care Unit'},
+    /**          ICU */ 7: {icon: '🏥‼', fullName: 'Intensive Care'},
     /**          Car */ 8: {icon: '🚘', fullName: 'Car'},
     /**       Public */ 9: {icon: '⛲', fullName: 'Public Space'},
     /**    Transport */ 10: {icon: '🚍', fullName: 'Public Transport'},
@@ -30,8 +30,8 @@ export namespace KeyInfo {
     /** Car (Passenger) */ 3: {icon: '🚘👥', fullName: 'Car as Passenger'},
     /**             Bus */ 4: {icon: '🚍', fullName: 'Bus'},
     /**         Walking */ 5: {icon: '🚶‍♀️', fullName: 'Walking'},
-    /**           Other */ 6: {icon: '🛸', fullName: 'Other Mode'},
-    /**         Unknown */ 7: {icon: '❓', fullName: 'Unknown Mode'},
+    /**           Other */ 6: {icon: '🛸', fullName: 'Other'},
+    /**         Unknown */ 7: {icon: '❓', fullName: 'Unknown'},
   };
 
   export const activity: Record<number, string> = {
@@ -53,7 +53,7 @@ export namespace KeyInfo {
     /** Infected with critical symptoms */ 5: {icon: '🤮', fullName: 'Critically Symptomatic'},
     /**                       Recovered */ 6: {icon: '😀', fullName: 'Recovered from Infection'},
     /**                            Dead */ 7: {icon: '💀', fullName: 'Deceased'},
-    /**                         Unknown */ 8: {icon: '❓', fullName: 'Unknown State'},
+    /**                         Unknown */ 8: {icon: '❓', fullName: 'Unknown'},
   };
 }
 
