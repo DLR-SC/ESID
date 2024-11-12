@@ -3,13 +3,7 @@
 
 import {deepCopy, Dictionary} from 'util/util';
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
-import {
-  SimulationDataByDate,
-  SimulationDataByNode,
-  SimulationModel,
-  SimulationModels,
-  Simulations,
-} from '../../types/scenario';
+import {SimulationDataByDate, SimulationDataByNode, SimulationModel, Simulations} from '../../types/scenario';
 /* [CDtemp-begin] */
 import cologneData from '../../../assets/stadtteile_cologne_list.json';
 import {District} from 'types/cologneDistricts';
@@ -43,22 +37,30 @@ function modifyDistrictResults(cologneDistrict: string | undefined, data: Simula
   // return modified data
   return data;
 }
+
 /* [CDtemp-end] */
 
 export const scenarioApi = createApi({
   reducerPath: 'scenarioApi',
   // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-  baseQuery: fetchBaseQuery({baseUrl: `${import.meta.env.VITE_API_URL || ''}/api/v1/`}),
+  baseQuery: fetchBaseQuery({
+    baseUrl: `${import.meta.env.VITE_API_URL || ''}`,
+    prepareHeaders: (headers) => {
+      headers.set('Authorization', `Bearer TODO`);
+      return headers;
+    },
+  }),
+
   endpoints: (builder) => ({
-    getSimulationModels: builder.query<SimulationModels, void>({
+    getSimulationModels: builder.query<string, void>({
       query: () => {
-        return 'simulationmodels/';
+        return 'models/';
       },
     }),
 
     getSimulationModel: builder.query<{results: SimulationModel}, string>({
-      query: (key: string) => {
-        return `simulationmodels/${key}/`;
+      query: (modelId: string) => {
+        return `models/${modelId}/`;
       },
     }),
 

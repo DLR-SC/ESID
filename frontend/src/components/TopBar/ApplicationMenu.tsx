@@ -29,6 +29,8 @@ export default function ApplicationMenu(): JSX.Element {
   const realm = useAppSelector((state) => state.realm.name);
   const {login, token, logOut} = useContext<IAuthContext>(AuthContext);
 
+  console.log(token);
+
   // user cannot login when realm is not selected
   const loginDisabled = realm === '';
   // user is authenticated when token is not empty

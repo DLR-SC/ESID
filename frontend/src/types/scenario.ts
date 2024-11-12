@@ -4,13 +4,6 @@
 import {Scenario} from 'store/ScenarioSlice';
 import {Dictionary} from 'util/util';
 
-export interface SimulationModels {
-  count: number;
-  previous: string | null;
-  next: string | null;
-  results: Array<{key: string; name: string}>;
-}
-
 export interface SimulationModel {
   key: string;
   name: string;
