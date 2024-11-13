@@ -1,7 +1,7 @@
 [
   {
     "//comment": "This is a reduced/dummy file. Please replace this file with the original one."
-  },  
+  },
   {"location_id": 0, "location_type": 10, "lat": 52.2656, "lon": 10.5145},
   {"location_id": 1, "location_type": 5, "lat": 52.2656, "lon": 10.5145},
   {"location_id": 2, "location_type": 6, "lat": 52.2656, "lon": 10.5145},
