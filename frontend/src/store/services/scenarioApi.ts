@@ -3,10 +3,11 @@
 
 import {deepCopy, Dictionary} from 'util/util';
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
-import {SimulationDataByDate, SimulationDataByNode, SimulationModel, Simulations} from '../../types/scenario';
+import {SimulationDataByDate, SimulationDataByNode, SimulationModel} from '../../types/scenario';
 /* [CDtemp-begin] */
 import cologneData from '../../../assets/stadtteile_cologne_list.json';
 import {District} from 'types/cologneDistricts';
+import {generateParameters} from './apiUtils';
 
 /** Checks if input node is a city district and returns the node to fetch data, and the city distrct suffix if there is one */
 function validateDistrictNode(inNode: string): {node: string; cologneDistrict?: string} {
@@ -52,30 +53,32 @@ export const scenarioApi = createApi({
   }),
 
   endpoints: (builder) => ({
-    getSimulationModels: builder.query<string, void>({
+    getModels: builder.query<Array<string>, void>({
       query: () => {
         return 'models/';
       },
     }),
 
-    getSimulationModel: builder.query<{results: SimulationModel}, string>({
+    getModel: builder.query<{results: SimulationModel}, string>({
       query: (modelId: string) => {
         return `models/${modelId}/`;
       },
     }),
 
-    getSimulations: builder.query<Simulations, void>({
+    getScenarios: builder.query<Array<string>, void>({
       query: () => {
-        return `simulations/`;
+        return `scenarios/`;
       },
     }),
 
-    getSimulationDataByDate: builder.query<SimulationDataByDate, SimulationDataByDateParameters>({
+    getScenarioDataByDate: builder.query<SimulationDataByDate, SimulationDataByDateParameters>({
       async queryFn(arg, _queryApi, _extraOptions, fetchWithBQ) {
-        const groups = arg.groups && arg.groups.length > 0 ? `&groups=${arg.groups.join(',')}` : '&groups=total';
-        const compartments = arg.compartments ? `&compartments=${arg.compartments.join(',')}` : '';
+        const params = generateParameters({
+          groups: arg.groups && arg.groups.length > 0 ? arg.groups : 'total',
+          compartments: arg.compartments ? arg.compartments : '',
+        });
 
-        const currResult = await fetchWithBQ(`simulation/${arg.id}/${arg.day}/?all${groups}${compartments}`);
+        const currResult = await fetchWithBQ(`simulation/${arg.id}/${arg.day}/?all&${params}`);
         if (currResult.error) return {error: currResult.error};
 
         const data = currResult.data as SimulationDataByDate;
@@ -105,7 +108,7 @@ export const scenarioApi = createApi({
       },
     }),
 
-    getSimulationDataByNode: builder.query<SimulationDataByNode, SimulationDataByNodeParameters>({
+    getScenarioDataByNode: builder.query<SimulationDataByNode, SimulationDataByNodeParameters>({
       async queryFn(arg, _queryApi, _extraOptions, fetchWithBQ) {
         const groups = arg.groups && arg.groups.length > 0 ? `&groups=${arg.groups.join(',')}` : '&groups=total';
         const compartments = arg.compartments ? `&compartments=${arg.compartments.join(',')}&all` : '';
@@ -131,7 +134,7 @@ export const scenarioApi = createApi({
       },
     }),
 
-    getSingleSimulationEntry: builder.query<SimulationDataByNode, SingleSimulationEntryParameters>({
+    getSingleScenarioEntry: builder.query<SimulationDataByNode, SingleSimulationEntryParameters>({
       async queryFn(arg, _queryApi, _extraOptions, fetchWithBQ) {
         const day = arg.day ? `&day=${arg.day}` : '';
         const groups = arg.groups && arg.groups.length > 0 ? `&groups=${arg.groups.join(',')}` : '&groups=total';
@@ -156,7 +159,7 @@ export const scenarioApi = createApi({
       },
     }),
 
-    getMultipleSimulationEntry: builder.query<SimulationDataByNode[], MultipleSimulationEntryParameters>({
+    getMultipleScenarioEntries: builder.query<SimulationDataByNode[], MultipleSimulationEntryParameters>({
       async queryFn(arg, _queryApi, _extraOptions, fetchWithBQ) {
         const day = arg.day ? `&day=${arg.day}` : '';
         const groups = arg.groups && arg.groups.length > 0 ? `&groups=${arg.groups.join(',')}` : '&groups=total';
@@ -184,7 +187,7 @@ export const scenarioApi = createApi({
       },
     }),
 
-    getMultipleSimulationDataByNode: builder.query<SimulationDataByNode[], MultipleSimulationDataByNodeParameters>({
+    getMultipleScenarioDataByNode: builder.query<SimulationDataByNode[], MultipleSimulationDataByNodeParameters>({
       async queryFn(arg, _queryApi, _extraOptions, fetchWithBQ) {
         const groups = arg.groups && arg.groups.length > 0 ? `&groups=${arg.groups.join(',')}` : '&groups=total';
         const compartments = arg.compartments ? `&compartments=${arg.compartments.join(',')}` : '';
