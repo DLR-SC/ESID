@@ -145,11 +145,9 @@ export default function MapContainer() {
         background: theme.palette.background.default,
       }}
     >
-        <Container disableGutters sx={{flexGrow: 1}}>
+      <Container disableGutters sx={{flexGrow: 1}}>
         <SidebarTabs />
-      </Container> 
-   
-     
+      </Container>
     </Stack>
   );
 }

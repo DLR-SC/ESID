@@ -3,19 +3,19 @@
 
 import Box from '@mui/material/Box';
 import {useTranslation} from 'react-i18next';
-import React, { useCallback, useContext, useMemo, useRef, useState } from 'react';
+import React, {useCallback, useContext, useMemo, useRef, useState} from 'react';
 import logo from '../../../assets/logo/LOKI_compact.svg';
-import { Grid, Typography } from '@mui/material';
+import {Grid, Typography} from '@mui/material';
 import TabContext from '@mui/lab/TabContext';
 import TabPanel from '@mui/lab/TabPanel';
-import { useAppDispatch, useAppSelector } from 'store/hooks';
+import {useAppDispatch, useAppSelector} from 'store/hooks';
 import TabList from '@mui/lab/TabList';
-import { selectTab } from 'store/UserPreferenceSlice';
+import {selectTab} from 'store/UserPreferenceSlice';
 import Tab, {tabClasses} from '@mui/material/Tab';
 import {useTheme} from '@mui/material/styles';
 import {buttonBaseClasses} from '@mui/material/ButtonBase';
 import StatisticsDashboard from './StatisicsComponent/StatisticsDashboard';
-import { Stack} from '@mui/material';
+import {Stack} from '@mui/material';
 import * as am5 from '@amcharts/amcharts5';
 import {HeatmapLegend} from 'types/heatmapLegend';
 import i18n from 'util/i18n';
@@ -60,7 +60,7 @@ export default function SidebarTabs(): JSX.Element {
     }),
     [theme]
   );
-  
+
   const handleChange = useCallback(
     (_: unknown, newValue: string) => {
       return dispatch(selectTab(newValue));
@@ -85,7 +85,6 @@ export default function SidebarTabs(): JSX.Element {
     searchBarData: [],
   };
 
-  
   const optionLabel = useCallback(
     (option: GeoJsonProperties) => {
       return `${option?.GEN}${option?.BEZ ? ` (${t(`BEZ.${option?.BEZ}`)})` : ''}`;
@@ -93,7 +92,7 @@ export default function SidebarTabs(): JSX.Element {
     [t]
   );
 
-   const defaultValue = useMemo(() => {
+  const defaultValue = useMemo(() => {
     return {
       RS: '00000',
       GEN: t('germany'),
@@ -139,10 +138,9 @@ export default function SidebarTabs(): JSX.Element {
   }, [formatNumber]);
 
   return (
-    <Grid id="sidebar-tabs"item sx={{display: 'flex', flexGrow: 1, flexDirection: 'column'}}>
-
-    <TabContext value={selectedTab}>   
-    <Box sx={{flexGrow: 0, borderTop: 1, borderColor: 'divider', width: '100%'}}>
+    <Grid id='sidebar-tabs' item sx={{display: 'flex', flexGrow: 1, flexDirection: 'column'}}>
+      <TabContext value={selectedTab}>
+        <Box sx={{flexGrow: 0, borderTop: 1, borderColor: 'divider', width: '100%'}}>
           <TabList
             onChange={handleChange}
             centered
@@ -150,130 +148,122 @@ export default function SidebarTabs(): JSX.Element {
               minHeight: '0',
             }}
           >
-            <Tab
-              label={<Typography>Map</Typography>}
-              value='1'
-              sx={tabStyle}
-            />
-            <Tab
-               label={<Typography>Statistics</Typography>}
-              value='2'
-              sx={tabStyle}
-            />
+            <Tab label={<Typography>Map</Typography>} value='1' sx={tabStyle} />
+            <Tab label={<Typography>Statistics</Typography>} value='2' sx={tabStyle} />
           </TabList>
-        </Box> 
-      <TabPanel value='1' sx={{flexGrow: 1, padding: 0}}>
-          <Box id='sidebartabs-main-content'
+        </Box>
+        <TabPanel value='1' sx={{flexGrow: 1, padding: 0}}>
+          <Box
+            id='sidebartabs-main-content'
             sx={{
               display: 'flex',
               flexDirection: 'column',
-         //     alignItems: 'center',
-         //     justifyContent: 'center',
-             // width: '422px',
-             width: '100%',
-              height: '100%'
+              //     alignItems: 'center',
+              //     justifyContent: 'center',
+              // width: '422px',
+              width: '100%',
+              height: '100%',
             }}
           >
-               <Box id='sidebar-map-search-bar-wrapper'>
-        <SearchBar
-          data={searchBarData}
-          sortProperty={'GEN'}
-          optionLabel={optionLabel}
-          autoCompleteValue={{
-            RS: selectedArea?.RS as string,
-            GEN: selectedArea?.GEN as string,
-            BEZ: selectedArea?.BEZ as string,
-            id: selectedArea?.id as number,
-          }}
-          onChange={(_event, option) => {
-            if (option) {
-              if (option.RS && option.GEN && option.BEZ) setSelectedArea(option);
-              else setSelectedArea(defaultValue);
-            }
-          }}
-          placeholder={`${selectedArea?.GEN}${selectedArea?.BEZ ? ` (${t(`BEZ.${selectedArea?.BEZ}`)})` : ''}`}
-          optionEqualProperty='RS'
-          valueEqualProperty='RS'
-        />
-      </Box>
-      <Box id='sidebar-map-wrapper'>
-        <LoadingContainer show={areMapValuesFetching || longLoad} overlayColor={theme.palette.background.default}>
-          <HeatMap
-            selectedArea={selectedArea}
-            setSelectedArea={setSelectedArea}
-            aggregatedMax={aggregatedMax}
-            setAggregatedMax={setAggregatedMax}
-            legend={legend}
-            legendRef={legendRef}
-            fixedLegendMaxValue={fixedLegendMaxValue}
-            mapData={geoData}
-            tooltipText={calculateToolTip}
-            tooltipTextWhileFetching={calculateToolTipFetching}
-            defaultSelectedValue={defaultValue}
-            values={mapData}
-            isDataFetching={areMapValuesFetching}
-            longLoad={longLoad}
-            setLongLoad={setLongLoad}
-            selectedScenario={selectedScenario}
-            areaId={'RS'}
-            localization={localization}
-            maxZoomLevel={32}
-          />
-          <Grid container px={1}>
-            <Grid item container xs={11} alignItems='flex-end'>
-              <HeatLegend
-                legend={legend}
-                exposeLegend={useCallback((legend: am5.HeatLegend | null) => {
-                  // move exposed legend item (or null if disposed) into ref
-                  legendRef.current = legend;
-                }, [])}
-                min={0}
-                // use math.round to convert the numbers to integers
-                max={
-                  legend.isNormalized
-                    ? Math.round(aggregatedMax)
-                    : Math.round(legend.steps[legend.steps.length - 1].value)
-                }
-                displayText={true}
-                localization={localization}
+            <Box id='sidebar-map-search-bar-wrapper'>
+              <SearchBar
+                data={searchBarData}
+                sortProperty={'GEN'}
+                optionLabel={optionLabel}
+                autoCompleteValue={{
+                  RS: selectedArea?.RS as string,
+                  GEN: selectedArea?.GEN as string,
+                  BEZ: selectedArea?.BEZ as string,
+                  id: selectedArea?.id as number,
+                }}
+                onChange={(_event, option) => {
+                  if (option) {
+                    if (option.RS && option.GEN && option.BEZ) setSelectedArea(option);
+                    else setSelectedArea(defaultValue);
+                  }
+                }}
+                placeholder={`${selectedArea?.GEN}${selectedArea?.BEZ ? ` (${t(`BEZ.${selectedArea?.BEZ}`)})` : ''}`}
+                optionEqualProperty='RS'
+                valueEqualProperty='RS'
               />
-            </Grid>
-            <Grid item container justifyContent='center' direction={'column'} xs={1}>
-              <LockMaxValue
-                fixedLegendMaxValue={fixedLegendMaxValue}
-                setFixedLegendMaxValue={setFixedLegendMaxValue}
-                aggregatedMax={aggregatedMax}
-              />
-              <HeatLegendEdit
-                legend={legend}
-                setLegend={setLegend}
-                selectedScenario={selectedScenario}
-                legendPresetsUrl={legendPresets}
-              />
-            </Grid>
-          </Grid>
-        </LoadingContainer>
-      </Box>
-       
-           <a
+            </Box>
+            <Box id='sidebar-map-wrapper'>
+              <LoadingContainer show={areMapValuesFetching || longLoad} overlayColor={theme.palette.background.default}>
+                <HeatMap
+                  selectedArea={selectedArea}
+                  setSelectedArea={setSelectedArea}
+                  aggregatedMax={aggregatedMax}
+                  setAggregatedMax={setAggregatedMax}
+                  legend={legend}
+                  legendRef={legendRef}
+                  fixedLegendMaxValue={fixedLegendMaxValue}
+                  mapData={geoData}
+                  tooltipText={calculateToolTip}
+                  tooltipTextWhileFetching={calculateToolTipFetching}
+                  defaultSelectedValue={defaultValue}
+                  values={mapData}
+                  isDataFetching={areMapValuesFetching}
+                  longLoad={longLoad}
+                  setLongLoad={setLongLoad}
+                  selectedScenario={selectedScenario}
+                  areaId={'RS'}
+                  localization={localization}
+                  maxZoomLevel={32}
+                />
+                <Grid container px={1}>
+                  <Grid item container xs={11} alignItems='flex-end'>
+                    <HeatLegend
+                      legend={legend}
+                      exposeLegend={useCallback((legend: am5.HeatLegend | null) => {
+                        // move exposed legend item (or null if disposed) into ref
+                        legendRef.current = legend;
+                      }, [])}
+                      min={0}
+                      // use math.round to convert the numbers to integers
+                      max={
+                        legend.isNormalized
+                          ? Math.round(aggregatedMax)
+                          : Math.round(legend.steps[legend.steps.length - 1].value)
+                      }
+                      displayText={true}
+                      localization={localization}
+                    />
+                  </Grid>
+                  <Grid item container justifyContent='center' direction={'column'} xs={1}>
+                    <LockMaxValue
+                      fixedLegendMaxValue={fixedLegendMaxValue}
+                      setFixedLegendMaxValue={setFixedLegendMaxValue}
+                      aggregatedMax={aggregatedMax}
+                    />
+                    <HeatLegendEdit
+                      legend={legend}
+                      setLegend={setLegend}
+                      selectedScenario={selectedScenario}
+                      legendPresetsUrl={legendPresets}
+                    />
+                  </Grid>
+                </Grid>
+              </LoadingContainer>
+            </Box>
+
+            <a
               href={`https://www.helmholtz.de/loki-pandemics/${i18n.language.includes('de') ? '' : 'en/'}`}
               target='_blank'
               rel='noopener noreferrer'
               style={{width: '40%'}}
             >
               <img src={logo} alt={t('loki-logo')} width='100%' />
-            </a> 
+            </a>
           </Box>
         </TabPanel>
         <TabPanel value='2' sx={{flexGrow: 1, padding: 0}}>
-        <Box  sx={{height: '100%', position: 'relative', flexGrow: 1}}>
+          <Box sx={{height: '100%', position: 'relative', flexGrow: 1}}>
             <Box sx={{position: 'absolute', top: 20, right: 0, bottom: 0, left: 0}}>
-              <StatisticsDashboard/>
+              <StatisticsDashboard />
             </Box>
           </Box>
-        </TabPanel> 
-     
-     </TabContext> 
+        </TabPanel>
+      </TabContext>
     </Grid>
   );
 }

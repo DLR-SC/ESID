@@ -32,7 +32,7 @@ export namespace KeyInfo {
     /**    Transport */ 9: 'Transport',
     /**     Cemetery */ 10: 'Cemetery',
   };
-   /** Location types returning string and not icons. -Pawan */
+  /** Location types returning string and not icons. -Pawan */
   export const transport_mode: Record<number, string> = {
     /**            Bike */ 0: '🚴‍♀️',
     /**    Car (Driver) */ 1: '🚘👤',
@@ -52,7 +52,7 @@ export namespace KeyInfo {
     /**           Other */ 5: 'Other',
     /**         Unknown */ 6: 'Unknown',
   };
-  
+
   export const activity: Record<number, string> = {
     /**       Workplace */ 0: 'Workplace',
     /**       Education */ 1: 'Education',
@@ -72,17 +72,16 @@ export namespace KeyInfo {
     /**                       Recovered */ 5: '😀',
     /**                            Dead */ 6: '💀',
     /**                         Unknown */ 7: '❓',
-  }; 
+  };
 
   export const age: Record<number, string> = {
-     0: '0-4',
+    0: '0-4',
     1: '5-14',
     2: '15-34',
     3: '35-39',
     4: '60-79',
-    5: '80+'
+    5: '80+',
   };
-
 }
 
 export interface Agent {

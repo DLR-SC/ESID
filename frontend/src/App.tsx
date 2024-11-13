@@ -5,6 +5,7 @@ import React, {Suspense, useEffect} from 'react';
 import {Provider} from 'react-redux';
 
 import './App.scss';
+import '../node_modules/dc/dist/style/dc.css'; //needed for statistical dashboard
 
 import TopBar from './components/TopBar';
 import SidebarContainer from './components/Sidebar/SidebarContainer';

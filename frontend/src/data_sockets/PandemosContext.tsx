@@ -121,7 +121,7 @@ export const PandemosProvider = ({children}: {children: React.ReactNode}) => {
     //    validate start & end locations of trips match?
     //
     return chains;
-  }, [agents, locations, trips])
+  }, [agents, locations, trips]);
 
   return (
     <PandemosContext.Provider
