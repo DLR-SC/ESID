@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
 
 export function getLongitudinalFactorAndZone(lat: number): {factor: number; zone: number} {
   let factor: number = 1;

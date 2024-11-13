@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
+
 import React, {useEffect} from 'react';
 import {LayerGroup, LayersControl, MapContainer, TileLayer, useMap, Polyline} from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -47,7 +50,6 @@ function MapEventsHandler({setMapZoom, setMapBounds, setMapCenter}: BaseLayerPro
         [bounds.getSouthWest().lat, bounds.getSouthWest().lng],
         [bounds.getNorthEast().lat, bounds.getNorthEast().lng],
       ]);
-      console.log(bounds);
       setMapCenter([center.lat, center.lng]);
     };
 
@@ -55,7 +57,7 @@ function MapEventsHandler({setMapZoom, setMapBounds, setMapCenter}: BaseLayerPro
       const clickedPosition = position.latlng;
       console.log(
         getCellFromPosition([clickedPosition.lat, clickedPosition.lng], getResolutionFromZoom(map.getZoom()))
-      ); // change level to include level
+      );
     };
 
     map.on('zoomend', handleZoomEnd);

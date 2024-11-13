@@ -1,7 +1,10 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
+
 import React from 'react';
 import LoadingContainer from './shared/LoadingContainer';
 import {useTheme} from '@mui/material';
-import BaseLayer from './InspireGridComponents/BaseLayerTest';
+import BaseLayer from './InspireGridComponents/BaseLayer';
 import {useAppDispatch, useAppSelector} from 'store/hooks';
 import {setMapZoom, setMapBounds, setMapCenter} from 'store/inspireGridSlice';
 import Box from '@mui/material/Box';
