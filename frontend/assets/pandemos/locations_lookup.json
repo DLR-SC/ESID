@@ -1,0 +1,13 @@
+[
+  {"location_id": 0, "location_type": 10, "lat": 52.2656, "lon": 10.5145},
+  {"location_id": 1, "location_type": 5, "lat": 52.2656, "lon": 10.5145},
+  {"location_id": 2, "location_type": 6, "lat": 52.2656, "lon": 10.5145},
+  {"location_id": 3, "location_type": 0, "lat": 52.2656, "lon": 10.5145},
+  {"location_id": 4, "location_type": 2, "lat": 52.2673, "lon": 10.51},
+  {"location_id": 5, "location_type": 3, "lat": 52.2639, "lon": 10.5227},
+  {"location_id": 6, "location_type": 0, "lat": 52.265, "lon": 10.5146},
+  {"location_id": 7, "location_type": 2, "lat": 52.2662, "lon": 10.4992},
+  {"location_id": 8, "location_type": 4, "lat": 52.2638, "lon": 10.5236},
+  {"location_id": 9, "location_type": 0, "lat": 52.2655, "lon": 10.5157},
+  {"location_id": 10, "location_type": 1, "lat": 52.2707, "lon": 10.5211}
+]
