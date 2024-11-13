@@ -1,5 +1,8 @@
 [
   {
+    "//comment": "This is a reduced/dummy file. Please replace this file with the original one."
+  },
+  {
     "timestep": 1,
     "agent_id": 13,
     "trip_id": 0,
