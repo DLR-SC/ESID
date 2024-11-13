@@ -1,22 +1,28 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React from 'react';
+import React, {useCallback} from 'react';
 
 // Third-party
 import * as am5map from '@amcharts/amcharts5/map';
-import {ZoomIn, ZoomOut, ZoomOutMap} from '@mui/icons-material';
-import {ButtonGroup, IconButton, Stack} from '@mui/material';
 
-interface CustomControlProps {
+import ZoomIn from '@mui/icons-material/ZoomIn';
+import ZoomOut from '@mui/icons-material/ZoomOut';
+import ZoomOutMap from '@mui/icons-material/ZoomOutMap';
+
+import Stack from '@mui/material/Stack';
+import IconButton from '@mui/material/IconButton';
+import ButtonGroup from '@mui/material/ButtonGroup';
+
+interface MapControlBarProps {
   chart: am5map.MapChart | null;
   onHomeClick?: () => void;
   maxZoomLevel: number; // MaxZoom Var from HeatMap.tsx
 }
 
-export default function CustomControl({chart, onHomeClick, maxZoomLevel}: CustomControlProps) {
+export default function MapControlBar({chart, onHomeClick, maxZoomLevel}: MapControlBarProps) {
   // Zoom In Handler
-  const handleZoomIn = () => {
+  const handleZoomIn = useCallback(() => {
     if (chart && chart.seriesContainer) {
       try {
         const currentZoom = chart.get('zoomLevel', 1);
@@ -31,10 +37,10 @@ export default function CustomControl({chart, onHomeClick, maxZoomLevel}: Custom
         console.error('Error while zooming in:', error);
       }
     }
-  };
+  }, [chart, maxZoomLevel]);
 
   // Zoom Out Handler
-  const handleZoomOut = () => {
+  const handleZoomOut = useCallback(() => {
     if (chart && chart.seriesContainer) {
       try {
         const currentZoom = chart.get('zoomLevel', 1);
@@ -50,10 +56,10 @@ export default function CustomControl({chart, onHomeClick, maxZoomLevel}: Custom
         console.error('Error while zooming out:', error);
       }
     }
-  };
+  }, [chart]);
 
   // Reset view
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
     if (chart) {
       try {
         chart.goHome(300);
@@ -62,7 +68,7 @@ export default function CustomControl({chart, onHomeClick, maxZoomLevel}: Custom
         console.error('Error while resetting zoom:', error);
       }
     }
-  };
+  }, [chart, onHomeClick]);
 
   // If there's no chart, don't render.
   if (!chart) return null;
