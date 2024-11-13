@@ -12,7 +12,7 @@ import {useTheme} from '@mui/material/styles';
 import {Feature, GeoJSON, GeoJsonProperties} from 'geojson';
 
 // Local components
-import CustomControl from './CustomControl';
+import MapControlBar from './MapControlBar';
 import useMapChart from 'components/shared/HeatMap/Map';
 import usePolygonSeries from 'components/shared/HeatMap/Polygon';
 import useRoot from 'components/shared/Root';
@@ -137,7 +137,7 @@ export default function HeatMap({
 
   const root = useRoot(mapId);
 
-  // CustomControl.tsx
+  // MapControlBar.tsx
   // Add home button click handler
   const handleHomeClick = useCallback(() => {
     setSelectedArea(defaultSelectedValue);
@@ -380,7 +380,7 @@ export default function HeatMap({
         },
       }}
     >
-      {chart && <CustomControl chart={chart} onHomeClick={handleHomeClick} maxZoomLevel={maxZoomLevel} />}
+      {chart && <MapControlBar chart={chart} onHomeClick={handleHomeClick} maxZoomLevel={maxZoomLevel} />}
     </Box>
   );
 }
