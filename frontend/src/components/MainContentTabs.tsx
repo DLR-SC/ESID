@@ -10,6 +10,7 @@ import TabList from '@mui/lab/TabList';
 import Box from '@mui/material/Box';
 import ShowChart from '@mui/icons-material/ShowChart';
 import Coronavirus from '@mui/icons-material/Coronavirus';
+import AirlineStops from '@mui/icons-material/AirlineStops';
 import Typography from '@mui/material/Typography';
 import {buttonBaseClasses} from '@mui/material/ButtonBase';
 import {useTranslation} from 'react-i18next';
@@ -100,8 +101,8 @@ export default function MainContentTabs() {
               sx={tabStyle}
             />
             <Tab
-              label={<Typography variant='body1'>{t('bottomTabs.pandemos')}</Typography>}
-              icon={<Grid />}
+              label={<Typography variant='body1'>{t('bottomTabs.tripchain')}</Typography>}
+              icon={<AirlineStops />}
               iconPosition='start'
               value='3'
               sx={tabStyle}

@@ -82,6 +82,7 @@
   bottomTabs: {
     timeSeries: 'Time Series',
     parameters: 'Parameters',
+    tripchain: 'Trip Chains',
   },
   parameters: {
     'no-parameters': 'No parameters available for the selected scenario.',
