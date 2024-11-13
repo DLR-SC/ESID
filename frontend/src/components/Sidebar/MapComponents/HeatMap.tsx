@@ -1,21 +1,27 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, {useState, useEffect, useRef, useMemo, useCallback, useLayoutEffect} from 'react';
+// React imports
+import React, {useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState} from 'react';
+
+// Third-party
 import * as am5 from '@amcharts/amcharts5';
 import * as am5map from '@amcharts/amcharts5/map';
-import {Feature, GeoJSON, GeoJsonProperties} from 'geojson';
-import svgZoomResetURL from '../../../../assets/svg/zoom_out_map_white_24dp.svg?url';
-import svgZoomInURL from '../../../../assets/svg/zoom_in_white_24dp.svg?url';
-import svgZoomOutURL from '../../../../assets/svg/zoom_out_white_24dp.svg?url';
 import {Box} from '@mui/material';
+import {useTheme} from '@mui/material/styles';
+import {Feature, GeoJSON, GeoJsonProperties} from 'geojson';
+
+// Local components
+import MapControlBar from './MapControlBar';
 import useMapChart from 'components/shared/HeatMap/Map';
 import usePolygonSeries from 'components/shared/HeatMap/Polygon';
-import {HeatmapLegend} from '../../../types/heatmapLegend';
-import {useTheme} from '@mui/material/styles';
-import {Localization} from 'types/localization';
 import useRoot from 'components/shared/Root';
-import useZoomControl from 'components/shared/HeatMap/Zoom';
+
+// Types and interfaces
+import {HeatmapLegend} from '../../../types/heatmapLegend';
+import {Localization} from 'types/localization';
+
+// Utils
 import {useConst} from 'util/hooks';
 
 interface MapProps {
@@ -131,70 +137,19 @@ export default function HeatMap({
 
   const root = useRoot(mapId);
 
-  const zoomSettings = useMemo(() => {
-    return {
-      paddingBottom: 25,
-      opacity: 50,
-    };
-  }, []);
-
-  const zoom = useZoomControl(
-    root,
-    zoomSettings,
-    useCallback(
-      (zoom: am5map.ZoomControl) => {
-        if (!root) return;
-        const fixSVGPosition = {
-          width: 25,
-          height: 25,
-          dx: -5,
-          dy: -3,
-        };
-        zoom.homeButton.set('visible', true);
-        zoom.homeButton.set(
-          'icon',
-          am5.Picture.new(root, {
-            src: svgZoomResetURL,
-            ...fixSVGPosition,
-          }) as unknown as am5.Graphics
-        );
-        zoom.plusButton.set(
-          'icon',
-          am5.Picture.new(root, {
-            src: svgZoomInURL,
-            ...fixSVGPosition,
-          }) as unknown as am5.Graphics
-        );
-        zoom.minusButton.set(
-          'icon',
-          am5.Picture.new(root, {
-            src: svgZoomOutURL,
-            ...fixSVGPosition,
-          }) as unknown as am5.Graphics
-        );
-      },
-      [root]
-    )
-  );
-
-  // This effect is responsible for setting the selected area when the home button is clicked.
-  useEffect(() => {
-    if (!zoom || !root || root.isDisposed() || zoom.isDisposed()) return;
-    zoom.homeButton.events.on('click', () => {
-      setSelectedArea(defaultSelectedValue);
-    });
-    // This effect should only run when the zoom control is set
-  }, [zoom, root, setSelectedArea, defaultSelectedValue]);
+  // MapControlBar.tsx
+  // Add home button click handler
+  const handleHomeClick = useCallback(() => {
+    setSelectedArea(defaultSelectedValue);
+  }, [setSelectedArea, defaultSelectedValue]);
 
   const chartSettings = useMemo(() => {
-    if (!zoom) return null;
     return {
       projection: am5map.geoMercator(),
       maxZoomLevel: maxZoomLevel,
       maxPanOut: 0.4,
-      zoomControl: zoom,
     };
-  }, [maxZoomLevel, zoom]);
+  }, [maxZoomLevel]);
 
   const chart = useMapChart(root, chartSettings);
 
@@ -411,7 +366,23 @@ export default function HeatMap({
     areaId,
   ]);
 
-  return <Box id={mapId} height={mapHeight} />;
+  return (
+    <Box
+      id={mapId}
+      height={mapHeight}
+      sx={{
+        position: 'relative',
+        width: '100%',
+        '& > div:first-of-type': {
+          position: 'absolute',
+          width: '100%',
+          height: '100%',
+        },
+      }}
+    >
+      {chart && <MapControlBar chart={chart} onHomeClick={handleHomeClick} maxZoomLevel={maxZoomLevel} />}
+    </Box>
+  );
 }
 
 function getColorFromLegend(
