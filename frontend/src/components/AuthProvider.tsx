@@ -36,7 +36,7 @@ function AuthProvider({children}: AuthProviderProps) {
         import.meta.env.VITE_OAUTH_REDIRECT_URL === undefined
           ? window.location.origin
           : `${import.meta.env.VITE_OAUTH_REDIRECT_URL}`,
-      scope: 'openid profile email', // default scope without audience
+      scope: 'openid profile email loki-back-audience roles', // default scope without audience
       autoLogin: false,
     };
   }

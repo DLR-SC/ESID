@@ -13,6 +13,7 @@ import {
 /* [CDtemp-begin] */
 import cologneData from '../../../assets/stadtteile_cologne_list.json';
 import {District} from 'types/cologneDistricts';
+import {RootState} from 'store';
 
 /** Checks if input node is a city district and returns the node to fetch data, and the city distrct suffix if there is one */
 function validateDistrictNode(inNode: string): {node: string; cologneDistrict?: string} {
@@ -48,8 +49,29 @@ function modifyDistrictResults(cologneDistrict: string | undefined, data: Simula
 export const scenarioApi = createApi({
   reducerPath: 'scenarioApi',
   // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-  baseQuery: fetchBaseQuery({baseUrl: `${import.meta.env.VITE_API_URL || ''}/api/v1/`}),
+  baseQuery: fetchBaseQuery({
+    baseUrl: `${import.meta.env.VITE_API_URL || ''}/`,
+    prepareHeaders: (headers, {getState}) => {
+      const realm = (getState() as RootState).realm.name;
+
+      if (realm !== '') {
+        // include realm in req header
+        headers.set('x-realm', realm);
+      }
+
+      return headers;
+    },
+  }),
   endpoints: (builder) => ({
+    createProtectedScenario: builder.mutation<string, string>({
+      query: (token) => ({
+        url: 'scenarios/protected/',
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+    }),
     getSimulationModels: builder.query<SimulationModels, void>({
       query: () => {
         return 'simulationmodels/';
@@ -397,4 +419,5 @@ export const {
   useGetMultipleSimulationDataByNodeQuery,
   useGetPercentileDataQuery,
   useGetScenarioParametersQuery,
+  useCreateProtectedScenarioMutation,
 } = scenarioApi;
