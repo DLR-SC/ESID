@@ -2,55 +2,37 @@
 // SPDX-License-Identifier: Apache-2.0
 
 /** Display names for the diffent enums of the pandemos data */
+/* eslint-disable @typescript-eslint/no-namespace */
 export namespace KeyInfo {
+  export const anyOption: KeyInfoItem = {
+    icon: '🤷',
+    fullName: 'Any',
+  };
   /** Locations */
-  export const location_type: Record<number, string> = {
-    /**         Home */ 0: '🏡',
-    /**       School */ 1: '🏫',
-    /**         Work */ 2: '🏭/🏢',
-    /** Social Event */ 3: '🏟',
-    /**     Shopping */ 4: '🏪',
-    /**     Hospital */ 5: '🏥❗',
-    /**          ICU */ 6: '🏥‼',
-    /**          Car */ 7: '🚘',
-    /**       Public */ 8: '⛲',
-    /**    Transport */ 9: '🚍',
-    /**     Cemetery */ 10: '⚰',
+  export const location_type: Record<number, KeyInfoItem> = {
+    /**          Any */ 0: anyOption,
+    /**         Home */ 1: {icon: '🏡', fullName: 'Home'},
+    /**       School */ 2: {icon: '🏫', fullName: 'School'},
+    /**         Work */ 3: {icon: '🏭/🏢', fullName: 'Workplace'},
+    /** Social Event */ 4: {icon: '🏟', fullName: 'Social Event'},
+    /**     Shopping */ 5: {icon: '🏪', fullName: 'Shopping'},
+    /**     Hospital */ 6: {icon: '🏥❗', fullName: 'Hospital'},
+    /**          ICU */ 7: {icon: '🏥‼', fullName: 'Intensive Care'},
+    /**          Car */ 8: {icon: '🚘', fullName: 'Car'},
+    /**       Public */ 9: {icon: '⛲', fullName: 'Public Space'},
+    /**    Transport */ 10: {icon: '🚍', fullName: 'Public Transport'},
+    /**     Cemetery */ 11: {icon: '⚰', fullName: 'Cemetery'},
   };
 
-  /** Location types returning string and not icons. -Pawan */
-  export const location_type_string: Record<number, string> = {
-    /**         Home */ 0: 'Home',
-    /**       School */ 1: 'School',
-    /**         Work */ 2: 'Work',
-    /** Social Event */ 3: 'Social Event',
-    /**     Shopping */ 4: 'Shopping',
-    /**     Hospital */ 5: 'Hospital',
-    /**          ICU */ 6: 'ICU',
-    /**          Car */ 7: 'Car',
-    /**       Public */ 8: 'Public',
-    /**    Transport */ 9: 'Transport',
-    /**     Cemetery */ 10: 'Cemetery',
-  };
-  /** Location types returning string and not icons. -Pawan */
-  export const transport_mode: Record<number, string> = {
-    /**            Bike */ 0: '🚴‍♀️',
-    /**    Car (Driver) */ 1: '🚘👤',
-    /** Car (Passenger) */ 2: '🚘👥',
-    /**             Bus */ 3: '🚍',
-    /**         Walking */ 4: '🚶‍♀️',
-    /**           Other */ 5: '🛸',
-    /**         Unknown */ 6: '❓',
-  };
-
-  export const transport_mode_string: Record<number, string> = {
-    /**            Bike */ 0: 'Bike',
-    /**    Car (Driver) */ 1: 'Car_Driver',
-    /** Car (Passenger) */ 2: 'Car_Passenger',
-    /**             Bus */ 3: 'Bus',
-    /**         Walking */ 4: 'Walking',
-    /**           Other */ 5: 'Other',
-    /**         Unknown */ 6: 'Unknown',
+  export const transport_mode: Record<number, KeyInfoItem> = {
+    /**             Any */ 0: anyOption,
+    /**            Bike */ 1: {icon: '🚴‍♀️', fullName: 'Bicycle'},
+    /**    Car (Driver) */ 2: {icon: '🚘👤', fullName: 'Car as Driver'},
+    /** Car (Passenger) */ 3: {icon: '🚘👥', fullName: 'Car as Passenger'},
+    /**             Bus */ 4: {icon: '🚍', fullName: 'Bus'},
+    /**         Walking */ 5: {icon: '🚶‍♀️', fullName: 'Walking'},
+    /**           Other */ 6: {icon: '🛸', fullName: 'Other'},
+    /**         Unknown */ 7: {icon: '❓', fullName: 'Unknown'},
   };
 
   export const activity: Record<number, string> = {
@@ -63,24 +45,16 @@ export namespace KeyInfo {
     /**      Going Home */ 6: 'Going Home',
     /**         Unknown */ 7: 'Unknown',
   };
-  export const infection_state: Record<number, string> = {
-    /**                     Susceptible */ 0: '🙂',
-    /**       Infected with no symptoms */ 1: '🤔',
-    /**          Infected with symptoms */ 2: '🤧',
-    /**   Infected with severe symptoms */ 3: '🤒',
-    /** Infected with critical symptoms */ 4: '🤮',
-    /**                       Recovered */ 5: '😀',
-    /**                            Dead */ 6: '💀',
-    /**                         Unknown */ 7: '❓',
-  };
-
-  export const age: Record<number, string> = {
-    0: '0-4',
-    1: '5-14',
-    2: '15-34',
-    3: '35-39',
-    4: '60-79',
-    5: '80+',
+  export const infection_state: Record<number, KeyInfoItem> = {
+    /**                             Any */ 0: anyOption,
+    /**                     Susceptible */ 1: {icon: '🙂', fullName: 'Susceptible to Infection'},
+    /**       Infected with no symptoms */ 2: {icon: '🤔', fullName: 'Asymptomatic Infection'},
+    /**          Infected with symptoms */ 3: {icon: '🤧', fullName: 'Symptomatic Infection'},
+    /**   Infected with severe symptoms */ 4: {icon: '🤒', fullName: 'Severely Symptomatic'},
+    /** Infected with critical symptoms */ 5: {icon: '🤮', fullName: 'Critically Symptomatic'},
+    /**                       Recovered */ 6: {icon: '😀', fullName: 'Recovered from Infection'},
+    /**                            Dead */ 7: {icon: '💀', fullName: 'Deceased'},
+    /**                         Unknown */ 8: {icon: '❓', fullName: 'Unknown'},
   };
 }
 
@@ -139,4 +113,9 @@ export interface TripChain {
   chain_id: number;
   agent_id: number;
   trips: Array<Trip>;
+}
+
+export interface KeyInfoItem {
+  icon: string;
+  fullName: string;
 }

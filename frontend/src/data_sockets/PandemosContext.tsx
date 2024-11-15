@@ -1,12 +1,11 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, {createContext, useCallback, useEffect, useMemo, useState} from 'react';
+import React, {createContext, useEffect, useMemo, useState} from 'react';
 import crossfilter, {Crossfilter} from 'crossfilter2';
 import agentList from '../../assets/pandemos/agents_lookup.json?url';
 import locationList from '../../assets/pandemos/locations_lookup.json?url';
 import trajectories from '../../assets/pandemos/trajectories.json?url';
-import hash from 'object-hash';
 import {Agent, Location, Trip, TripExpanded, TripChain} from 'types/pandemos';
 /**
  * Data context for the pandemos data.
@@ -93,7 +92,7 @@ export const PandemosProvider = ({children}: {children: React.ReactNode}) => {
             agent_age_group: agents[trip.agent_id].age_group,
             start_location_type: locations[trip.start_location].location_type,
             end_location_type: locations[trip.end_location].location_type,
-          } as TripExpanded ?? {};
+          } as TripExpanded;
         })
       );
     } else {
@@ -103,25 +102,25 @@ export const PandemosProvider = ({children}: {children: React.ReactNode}) => {
 
   // Preprocess trip chains
   const tripChains = useMemo<Array<TripChain>>(() => {
-    const chains: Array<TripChain> = [];
-    // TODO process trips
-    //
-    // go thru each trip
-    //  if start location is home
-    //    create new chain with agent & new chain id (icr id)
-    //    add trip to chain
-    //    in active chains array put chain id at agent id idx
-    //  if any other trip
-    //    add trip to chain with id from active chains array at agent id idx
-    //  if end location is home (activity going home?)
-    //    add trip to chain
-    //    clear agent id idx in active chains array
-    //  Errors/Validation:
-    //    notify any open chains at the end
-    //    validate start & end locations of trips match?
-    //
-    return chains;
-  }, [agents, locations, trips]);
+    const agentTrips = new Map<number, Array<Trip>>();
+
+    // Group trips by agent
+    for (const trip of trips ?? []) {
+      agentTrips.set(trip.agent_id, [...(agentTrips.get(trip.agent_id) ?? []), trip]);
+    }
+
+    let chain_id = 0;
+    const tripChains = new Array<TripChain>();
+    for (const tripChain of agentTrips.values()) {
+      let start = 0;
+      tripChain.forEach((trip, index) => {
+        if (locations![trip.start_location].location_type === 0) start = index;
+        if (trip.activity === 6)
+          tripChains.push({agent_id: trip.agent_id, chain_id: chain_id++, trips: tripChain.slice(start, index + 1)});
+      });
+    }
+    return tripChains;
+  }, [trips, locations]);
 
   return (
     <PandemosContext.Provider
