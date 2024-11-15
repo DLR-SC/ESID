@@ -10,29 +10,29 @@ export namespace KeyInfo {
   };
   /** Locations */
   export const location_type: Record<number, KeyInfoItem> = {
-    /**          Any */ 0: anyOption,
-    /**         Home */ 1: {icon: '🏡', fullName: 'Home'},
-    /**       School */ 2: {icon: '🏫', fullName: 'School'},
-    /**         Work */ 3: {icon: '🏭/🏢', fullName: 'Workplace'},
-    /** Social Event */ 4: {icon: '🏟', fullName: 'Social Event'},
-    /**     Shopping */ 5: {icon: '🏪', fullName: 'Shopping'},
-    /**     Hospital */ 6: {icon: '🏥❗', fullName: 'Hospital'},
-    /**          ICU */ 7: {icon: '🏥‼', fullName: 'Intensive Care'},
-    /**          Car */ 8: {icon: '🚘', fullName: 'Car'},
-    /**       Public */ 9: {icon: '⛲', fullName: 'Public Space'},
-    /**    Transport */ 10: {icon: '🚍', fullName: 'Public Transport'},
-    /**     Cemetery */ 11: {icon: '⚰', fullName: 'Cemetery'},
+    /**          Any */ 99: anyOption,
+    /**         Home */ 0: {icon: '🏡', fullName: 'Home'},
+    /**       School */ 1: {icon: '🏫', fullName: 'School'},
+    /**         Work */ 2: {icon: '🏭/🏢', fullName: 'Workplace'},
+    /** Social Event */ 3: {icon: '🏟', fullName: 'Social Event'},
+    /**     Shopping */ 4: {icon: '🏪', fullName: 'Shopping'},
+    /**     Hospital */ 5: {icon: '🏥❗', fullName: 'Hospital'},
+    /**          ICU */ 6: {icon: '🏥‼', fullName: 'Intensive Care'},
+    /**          Car */ 7: {icon: '🚘', fullName: 'Car'},
+    /**       Public */ 8: {icon: '⛲', fullName: 'Public Space'},
+    /**    Transport */ 9: {icon: '🚍', fullName: 'Public Transport'},
+    /**     Cemetery */ 10: {icon: '⚰', fullName: 'Cemetery'},
   };
 
   export const transport_mode: Record<number, KeyInfoItem> = {
-    /**             Any */ 0: anyOption,
-    /**            Bike */ 1: {icon: '🚴‍♀️', fullName: 'Bicycle'},
-    /**    Car (Driver) */ 2: {icon: '🚘👤', fullName: 'Car as Driver'},
-    /** Car (Passenger) */ 3: {icon: '🚘👥', fullName: 'Car as Passenger'},
-    /**             Bus */ 4: {icon: '🚍', fullName: 'Bus'},
-    /**         Walking */ 5: {icon: '🚶‍♀️', fullName: 'Walking'},
-    /**           Other */ 6: {icon: '🛸', fullName: 'Other'},
-    /**         Unknown */ 7: {icon: '❓', fullName: 'Unknown'},
+    /**             Any */ 99: anyOption,
+    /**            Bike */ 0: {icon: '🚴‍♀️', fullName: 'Bicycle'},
+    /**    Car (Driver) */ 1: {icon: '🚘👤', fullName: 'Car as Driver'},
+    /** Car (Passenger) */ 2: {icon: '🚘👥', fullName: 'Car as Passenger'},
+    /**             Bus */ 3: {icon: '🚍', fullName: 'Bus'},
+    /**         Walking */ 4: {icon: '🚶‍♀️', fullName: 'Walking'},
+    /**           Other */ 5: {icon: '🛸', fullName: 'Other'},
+    /**         Unknown */ 6: {icon: '❓', fullName: 'Unknown'},
   };
 
   export const activity: Record<number, string> = {
@@ -55,6 +55,15 @@ export namespace KeyInfo {
     /**                       Recovered */ 6: {icon: '😀', fullName: 'Recovered from Infection'},
     /**                            Dead */ 7: {icon: '💀', fullName: 'Deceased'},
     /**                         Unknown */ 8: {icon: '❓', fullName: 'Unknown'},
+  };
+
+  export const age_group: Record<number, KeyInfoItem> = {
+    /** Ages 0 to 4 */ 1: {icon: '0-4', fullName: 'Ages 0 to 4'},
+    /** Ages 5 to 14 */ 2: {icon: '5-14', fullName: 'Ages 5 to 14'},
+    /** Ages 15 to 34 */ 3: {icon: '15-34', fullName: 'Ages 15 to 34'},
+    /** Ages 35 to 59 */ 4: {icon: '35-59', fullName: 'Ages 35 to 59'},
+    /** Ages 60 to 79 */ 5: {icon: '60-79', fullName: 'Ages 60 to 79'},
+    /** Ages 80 and older */ 6: {icon: '80+', fullName: 'Ages 80 and older'},
   };
 }
 
