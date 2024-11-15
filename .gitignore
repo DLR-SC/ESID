@@ -6,3 +6,4 @@
 # ignore user/workspace settings etc.
 .vscode
 .idea
+frontend/assets/pandemos/trajectories.json
