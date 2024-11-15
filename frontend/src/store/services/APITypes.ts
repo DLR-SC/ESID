@@ -1,83 +1,165 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-// Common
+// Common -----------------------------------------------------------------------------------------
+
 type Identifiable = {id: string};
 
-// Groups
-export type Groups = Array<string>;
-export type CreateGroup = {
+// Scenarios --------------------------------------------------------------------------------------
+
+export type Scenarios = Array<ScenarioPreview>;
+
+export type NewScenario = {
   name: string;
   description?: string;
-  category: string;
+  modelId: string;
+  modelParameters: Array<ParameterValue>;
+  nodeListId: string;
+  linkedInterventions: Array<InterventionImplementation>;
 };
 
-export type Group = CreateGroup & Identifiable;
+export type Scenario = Required<NewScenario> &
+  Identifiable & {
+    timestampSubmitted: string;
+    timestampSimulated: string;
+  };
 
-// Interventions
-export type Interventions = Array<string>;
-export type CreateIntervention = {
-  name: string;
-  description?: string;
-};
-export type Intervention = CreateIntervention & Identifiable;
+export type ScenarioPreview = Pick<Scenario, 'id' | 'name' | 'description'>;
 
-// Models
-export type Models = Array<string>;
-export type CreateModel = {
-  name: string;
-  description?: string;
-  aggregations?: Array<Array<string>>;
-  compartments: Array<Compartment>;
-  groups: Groups;
-  parameterDefinitions: ParameterDefinitions;
+export type InfectionDataParameters = {
+  path: {
+    scenarioId: string;
+  };
+  query: {
+    nodes?: Array<string>;
+    startDate?: string;
+    endDate?: string;
+    compartments?: Array<string>;
+    aggregations?: Record<string, Array<string>>;
+    groups?: Array<string>;
+    percentiles?: Array<string>;
+  };
 };
-export type Model = CreateModel & Identifiable;
-export type Compartment = {
+
+export type InfectionData = Array<InfectionDataEntry>;
+
+export type InfectionDataEntry = {
+  date?: string;
+  node?: string;
+  group?: string;
+  compartment?: string;
+  aggregation?: string;
+  values: Record<string, number>;
+};
+
+// Interventions ----------------------------------------------------------------------------------
+
+export type InterventionTemplates = Array<InterventionTemplates>;
+
+export type NewInterventionTemplate = {
   name: string;
   description?: string;
   tags: Array<string>;
 };
 
-// Movements
-// TODO
+export type InterventionTemplate = Required<NewInterventionTemplate> & Identifiable;
 
-// Nodes
-export type Nodes = Array<string>;
-export type CreateNode = {
-  NUTS: string;
-  name?: string;
+export type InterventionImplementation = {
+  interventionId: string;
+  startDate: string;
+  endDate: string;
+  coefficient: number;
 };
-export type Node = CreateNode & Identifiable;
 
-export type NodeLists = Array<string>;
-export type CreateNodeList = {
+// Models -----------------------------------------------------------------------------------------
+
+export type Models = Array<ModelPreview>;
+
+export type NewModel = {
+  name: string;
+  description?: string;
+  compartments: Array<string>;
+  groups: Array<string>;
+  parameterDefinitions: Array<string>;
+};
+
+export type Model = Required<NewModel> & Identifiable;
+
+export type ModelPreview = Pick<Model, 'id' | 'name' | 'description'>;
+
+// Compartments -----------------------------------------------------------------------------------
+
+export type Compartments = Array<Compartment>;
+
+export type NewCompartment = {
+  name: string;
+  description?: string;
+  tags: Array<string>;
+};
+
+export type Compartment = Required<NewCompartment> & Identifiable;
+
+// Nodes ------------------------------------------------------------------------------------------
+
+export type Nodes = Array<Node>;
+
+export type NewNode = {
+  nuts: string;
+  name: string;
+};
+
+export type Node = Required<NewNode> & Identifiable;
+
+export type NodeLists = Array<NodeListPreview>;
+
+export type NewNodeList = {
   name: string;
   description?: string;
   nodeIds: Nodes;
 };
-export type NodeList = CreateNodeList & Identifiable;
 
-// Parameter
-export type ParameterDefinitions = Array<string>;
-export type CreateParameterDefinition = {
+export type NodeList = Required<NewNodeList> & Identifiable;
+
+export type NodeListPreview = Pick<NodeList, 'id' | 'name' | 'description'>;
+
+// Movements --------------------------------------------------------------------------------------
+
+// TODO
+
+// Groups -----------------------------------------------------------------------------------------
+
+export type Groups = Array<Group>;
+
+export type NewGroup = {
+  name: string;
+  description?: string;
+  category: string;
+};
+
+export type Group = Required<NewGroup> & Identifiable;
+
+// Group Categories -------------------------------------------------------------------------------
+
+// TODO
+
+// Parameter --------------------------------------------------------------------------------------
+
+export type ParameterDefinitions = Array<ParameterDefinition>;
+
+export type NewParameterDefinition = {
   name: string;
   description?: string;
 };
-export type ParameterDefinition = CreateParameterDefinition & Identifiable;
 
+export type ParameterDefinition = Required<NewParameterDefinition> & Identifiable;
 
-
-// Scenarios
-export type Scenarios = Array<string>;
-export type CreateScenario = {
-  name: string;
-  description?: string;
-  modelId: string;
-  modelParameters: object; // TODO
-  nodeListId: string;
-  linkedInterventions: Interventions;
+export type ParameterValue = {
+  parameterId: string;
+  values: Array<ParameterValueRange>;
 };
 
-// Aggregations
-
+export type ParameterValueRange = {
+  groupId: string;
+  valueMin: number;
+  valueMax: number;
+};

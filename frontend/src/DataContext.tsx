@@ -2,13 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import {useGetSimulationStartValues} from 'components/ScenarioComponents/hooks';
-import React, {createContext, useState, useEffect, useMemo} from 'react';
+import React, {createContext, useState, useEffect} from 'react';
 import {useAppSelector} from 'store/hooks';
-import {
-  useGetCaseDataByDateQuery,
-  useGetCaseDataByDistrictQuery,
-  useGetCaseDataSingleSimulationEntryQuery,
-} from 'store/services/caseDataApi';
+import {useGetCaseDataByDistrictQuery, useGetCaseDataSingleSimulationEntryQuery} from 'store/services/caseDataApi';
 import {
   useGetMultipleGroupFilterDataQuery,
   useGetGroupCategoriesQuery,
@@ -18,16 +14,12 @@ import {
   GroupSubcategories,
 } from 'store/services/groupApi';
 import {
-  useGetPercentileDataQuery,
-  useGetSimulationDataByDateQuery,
-  useGetMultipleSimulationDataByNodeQuery,
-  useGetSimulationModelQuery,
-  useGetSimulationModelsQuery,
-  useGetSimulationsQuery,
-  useGetMultipleSimulationEntryQuery,
+  useGetScenariosQuery,
+  useGetModelQuery,
+  useGetModelsQuery,
 } from 'store/services/scenarioApi';
 import {CaseDataByNode} from 'types/caseData';
-import {Simulations, SimulationModel, SimulationDataByNode, SimulationMetaData} from 'types/scenario';
+import {Simulations, SimulationModel, SimulationDataByNode} from 'types/scenario';
 import {Dictionary} from 'util/util';
 import data from '../assets/lk_germany_reduced.geojson?url';
 import {GeoJSON, GeoJsonProperties} from 'geojson';
@@ -82,11 +74,10 @@ export const DataContext = createContext<{
 // Create a provider component
 export const DataProvider = ({children}: {children: React.ReactNode}) => {
   const {t: defaultT} = useTranslation();
-  const {t: backendT} = useTranslation('backend');
   const theme = useTheme();
 
   const [geoData, setGeoData] = useState<GeoJSON>();
-  const [mapData, setMapData] = useState<{id: string; value: number}[] | undefined>(undefined);
+  const [mapData] = useState<{id: string; value: number}[] | undefined>(undefined);
   const [searchBarData, setSearchBarData] = useState<GeoJsonProperties[] | undefined>(undefined);
   const [simulationModelKey, setSimulationModelKey] = useState<string>('unset');
   const [chartData, setChartData] = useState<LineChartData[] | undefined>(undefined);
@@ -97,7 +88,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
   const selectedDate = useAppSelector((state) => state.dataSelection.date);
   const groupFilterList = useAppSelector((state) => state.dataSelection.groupFilters);
-  const scenarioList = useAppSelector((state) => state.scenarioList);
+  // const scenarioList = useAppSelector((state) => state.scenarioList);
 
   const startValues = useGetSimulationStartValues(selectedDistrict);
 
@@ -111,17 +102,17 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
 
   const {data: groupSubCategories} = useGetGroupSubcategoriesQuery();
 
-  const {data: scenarioListData} = useGetSimulationsQuery();
+  const {data: scenarioListData} = useGetScenariosQuery();
 
-  const getId = useMemo(() => {
+  /*const getId = useMemo(() => {
     return scenarioListData?.results.map((simulation: SimulationMetaData) => {
       return simulation.id;
     });
-  }, [scenarioListData?.results]);
+  }, [scenarioListData?.results]);*/
 
-  const {data: simulationModelsData} = useGetSimulationModelsQuery();
+  const {data: simulationModelsData} = useGetModelsQuery();
 
-  const {data: simulationModelData} = useGetSimulationModelQuery(simulationModelKey, {
+  const {data: simulationModelData} = useGetModelQuery(simulationModelKey, {
     skip: simulationModelKey === 'unset',
   });
 
@@ -136,7 +127,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
 
   const {data: scenarioSimulationDataForCardFiltersValues} = useGetMultipleGroupFilterDataQuery(
     {
-      ids: getId ?? [],
+      ids: /*getId ??*/ [],
       node: selectedDistrict,
       day: selectedDate ?? '',
       groupFilterList: groupFilterList,
@@ -144,6 +135,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
     {skip: !selectedDate || !selectedDistrict}
   );
 
+  /*
   const {data: scenarioSimulationDataForCard} = useGetMultipleSimulationEntryQuery(
     {
       ids: getId ?? [],
@@ -163,7 +155,9 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
     },
     {skip: selectedScenario == null || selectedScenario === 0 || !selectedCompartment || !selectedDate}
   );
+  */
 
+  /*
   const {currentData: mapCaseData, isFetching: mapIsCaseDataFetching} = useGetCaseDataByDateQuery(
     {
       day: selectedDate ?? '',
@@ -193,6 +187,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
     },
     {skip: !selectedCompartment || !selectedDistrict}
   );
+  */
 
   const {data: chartCaseData, isFetching: chartCaseDataFetching} = useGetCaseDataByDistrictQuery(
     {
@@ -203,6 +198,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
     {skip: !selectedCompartment || !selectedDistrict}
   );
 
+  /*
   const {data: chartPercentileData} = useGetPercentileDataQuery(
     {
       id: selectedScenario as number,
@@ -214,6 +210,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
       skip: selectedScenario === null || selectedScenario === 0 || !selectedCompartment || !selectedDistrict,
     }
   );
+  */
 
   const {data: chartGroupFilterData} = useGetMultipleGroupFilterDataLineChartQuery(
     groupFilterList && selectedScenario && selectedDistrict && selectedCompartment
@@ -342,13 +339,14 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
 
   // This useEffect is used in order to set the SimulationModelKey
   useEffect(() => {
-    if (simulationModelsData && simulationModelsData.results.length > 0) {
-      const {key} = simulationModelsData.results[0];
+    if (simulationModelsData && simulationModelsData.length > 0) {
+      const key = simulationModelsData[0];
       setSimulationModelKey(key);
     }
     // This effect should re-run whenever simulationModelsData changes.
   }, [simulationModelsData]);
 
+  /*
   // This effect sets the data for the map according to the selections.
   useEffect(() => {
     if (mapSimulationData && selectedCompartment && selectedScenario) {
@@ -374,6 +372,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
     }
     // This effect should re-run whenever there is new data or the selected card or compartment changed.
   }, [mapSimulationData, selectedCompartment, mapCaseData, selectedScenario]);
+  */
 
   // This effect sets the chart case data based on the selection.
   useEffect(() => {
@@ -414,6 +413,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
     // This should re-run whenever the case data changes, or a different compartment is selected.
   }, [chartCaseData, selectedCompartment, activeScenarios, defaultT]);
 
+  /*
   // This effect sets the chart simulation data based on the selection.
   useEffect(() => {
     const lineChartData: LineChartData[] = [];
@@ -446,6 +446,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
         }
       }
     }
+    
     // Update the chart data state with the new line chart data
     setChartData((prevData) => {
       if (prevData && prevData.length > 0) {
@@ -459,6 +460,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
     // This should re-run whenever the simulation data changes, or a different compartment is selected.
   }, [chartSimulationData, selectedCompartment, theme, activeScenarios, scenarioList, backendT]);
 
+   */
   // This effect sets the chart group filter data based on the selection.
   useEffect(() => {
     const lineChartData: LineChartData[] = [];
@@ -512,7 +514,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
     });
     // This should re-run whenever the group filter data changes, or a different compartment is selected.
   }, [chartGroupFilterData, selectedCompartment, selectedScenario, theme, groupFilterList]);
-
+  /*
   // This effect sets the chart percentile data based on the selection.
   useEffect(() => {
     let lineChartData: LineChartData | null = null;
@@ -555,26 +557,26 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
     });
     // This should re-run whenever the data changes, or whenever a different scenario or a different compartment is selected.
   }, [chartPercentileData, selectedCompartment, selectedScenario, theme]);
-
+*/
   return (
     <DataContext.Provider
       value={{
         geoData,
         mapData,
-        areMapValuesFetching: mapIsCaseDataFetching || mapIsSimulationDataFetching,
+        areMapValuesFetching: true, // mapIsCaseDataFetching, //|| mapIsSimulationDataFetching,
         searchBarData,
         chartData,
-        isChartDataFetching: chartCaseDataFetching || chartSimulationFetching,
+        isChartDataFetching: true, // chartCaseDataFetching || chartSimulationFetching,
         startValues,
         groupCategories,
         groupSubCategories,
-        scenarioListData,
+        scenarioListData: undefined, //scenarioListData,
         caseScenarioSimulationData: caseScenarioSimulationData.data,
-        simulationModelData: simulationModelData?.results,
-        caseScenarioData,
+        simulationModelData: undefined, // simulationModelData,
+        caseScenarioData: undefined, //caseScenarioData,
         scenarioSimulationDataForCardFiltersValues,
-        getId,
-        scenarioSimulationDataForCard,
+        getId: undefined, //getId,
+        scenarioSimulationDataForCard: undefined, //scenarioSimulationDataForCard,
       }}
     >
       {children}

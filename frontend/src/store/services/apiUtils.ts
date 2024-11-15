@@ -1,45 +1,44 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-type QueryParameterValue = string | number | boolean | Array<QueryParameterValue>;
+import {SimulationDataByNode} from '../../types/scenario';
 
-export function generateParameters(
-  parameters: Iterable<[string, QueryParameterValue]> | Record<string, QueryParameterValue>
-): string {
-  let kvPairs: [string, QueryParameterValue][];
-  if (Symbol.iterator in parameters) {
-    kvPairs = [...parameters];
-  } else {
-    kvPairs = Object.entries(parameters);
+/* [CDtemp-begin] */
+
+/** Checks if input node is a city district and returns the node to fetch data, and the city distrct suffix if there is one */
+export function validateDistrictNode(inNode: string): {node: string; cologneDistrict?: string} {
+  if (inNode.length > 5) {
+    return {node: inNode.slice(0, 5), cologneDistrict: inNode.slice(-3)};
   }
-
-  return kvPairs.map(([key, value]) => `${key}=${typeof value === 'object' ? value.join(',') : value}`).join('&');
+  return {node: inNode.slice(0, 5)};
 }
 
-console.log(
-  generateParameters(
-    new Map<string, QueryParameterValue>([
-      ['number', 1],
-      ['bool', false],
-      ['array', [2, true, 'bye']],
-      ['string', 'hi'],
-    ])
-  )
-);
-console.log(
-  generateParameters([
-    ['number', 1],
-    ['bool', false],
-    ['array', [2, true, 'bye']],
-    ['string', 'hi'],
-  ])
-);
+import {District} from 'types/cologneDistricts';
+import cologneData from '../../../assets/stadtteile_cologne_list.json';
 
-console.log(
-  generateParameters({
-    number: 1,
-    bool: false,
-    array: [2, true, 'bye'],
-    string: 'hi',
-  })
-);
+/** Applies the city district weight if a district suffix is supplied */
+export function modifyDistrictResults(
+  cologneDistrict: string | undefined,
+  data: SimulationDataByNode
+): SimulationDataByNode {
+  // pass data if it is not for a city district
+  if (!cologneDistrict) return data;
+
+  // find weight for city district
+  const weight = (cologneData as unknown as Array<District>).find(
+    (dist) => dist.Stadtteil_ID === cologneDistrict
+  )!.Population_rel;
+
+  // loop thru days in data to replace compartment data
+  data.results = data.results.map(({day, compartments}) => {
+    // loop through compartments and apply weight
+    Object.keys(compartments).forEach((compName) => {
+      compartments[compName] *= weight;
+    });
+    return {day, compartments};
+  });
+  // return modified data
+  return data;
+}
+
+/* [CDtemp-end] */
