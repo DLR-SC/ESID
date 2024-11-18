@@ -13,11 +13,63 @@ import {Dictionary} from 'util/util';
 import {District} from 'types/district';
 import {HorizontalThreshold} from 'types/horizontalThreshold';
 import {userEvent} from '@testing-library/user-event';
+import {GroupFilter} from 'types/group';
+import {GroupCategories, GroupSubcategories} from 'store/services/groupApi';
 
 const LineChartSettingsTest: React.FC = () => {
   const selectedDistrict: District = {ags: '00000', name: 'district1', type: 'type1'};
   const selectedCompartment = 'Compartment 1';
   const [horizontalThresholds, setHorizontalThresholds] = useState<Dictionary<HorizontalThreshold>>({});
+  const [groupFilters, setGroupFilters] = useState<Dictionary<GroupFilter>>({});
+  const mockGroupCategories: GroupCategories = {
+    count: 2,
+    next: null,
+    previous: null,
+    results: [
+      {
+        key: 'age',
+        name: 'Age',
+        description: 'Filters by age groups.',
+      },
+      {
+        key: 'gender',
+        name: 'Gender',
+        description: 'Filters by gender categories.',
+      },
+    ],
+  };
+
+  const mockGroupSubcategories: GroupSubcategories = {
+    count: 4,
+    next: null,
+    previous: null,
+    results: [
+      {
+        key: 'age_0_10',
+        name: '0-10 years',
+        description: 'Age group for children.',
+        category: 'age',
+      },
+      {
+        key: 'age_11_20',
+        name: '11-20 years',
+        description: 'Age group for teenagers.',
+        category: 'age',
+      },
+      {
+        key: 'male',
+        name: 'Male',
+        description: 'Gender: Male.',
+        category: 'gender',
+      },
+      {
+        key: 'female',
+        name: 'Female',
+        description: 'Gender: Female.',
+        category: 'gender',
+      },
+    ],
+  };
 
   return (
     <div data-testid='line-chart-settings'>
@@ -28,6 +80,10 @@ const LineChartSettingsTest: React.FC = () => {
             selectedCompartment={selectedCompartment}
             horizontalThresholds={horizontalThresholds}
             setHorizontalThresholds={setHorizontalThresholds}
+            groupFilters={groupFilters}
+            setGroupFilters={setGroupFilters}
+            groupCategories={mockGroupCategories?.results}
+            groupSubCategories={mockGroupSubcategories?.results}
           />
         </Provider>
       </ThemeProvider>
@@ -57,7 +113,8 @@ describe('LineChartSettings', () => {
     const settingsButton = screen.getByTestId('settings-popover-button-testid');
     await userEvent.click(settingsButton);
 
-    expect(screen.getByText('Horizontal Threshold Settings')).toBeInTheDocument();
+    expect(screen.getByTestId('settings-menu-item-horizontalThreshold')).toBeInTheDocument();
+    expect(screen.getByTestId('settings-menu-item-filters')).toBeInTheDocument();
   });
 
   test('Navigates to all menu item in popover', async () => {
@@ -66,33 +123,27 @@ describe('LineChartSettings', () => {
     await userEvent.click(settingsButton);
 
     // add more menus here
-    const menuItems = ['Horizontal Threshold Settings'];
+    const menuItemsTestId = [
+      {
+        settingsMenu: 'settings-menu-item-horizontalThreshold',
+        menuContainer: 'horizontalThresholdSettings-setting-container',
+      },
+      {
+        settingsMenu: 'settings-menu-item-filters',
+        menuContainer: 'filters-setting-container',
+      },
+    ];
 
-    for (const menuItem of menuItems) {
-      await userEvent.click(screen.getByText(menuItem));
-      expect(screen.getByText(menuItem)).toBeInTheDocument();
+    for (const menuItem of menuItemsTestId) {
+      await userEvent.click(screen.getByTestId(menuItem.settingsMenu));
+      expect(screen.getByTestId(menuItem.menuContainer)).toBeInTheDocument();
 
       const backButton = screen.getByTestId('settings-back-button');
       await userEvent.click(backButton);
 
       // Ensure we're back at the main settings menu
-      expect(screen.getByText('Line Chart Settings')).toBeInTheDocument();
+      expect(screen.getByTestId('main-settings-menu')).toBeInTheDocument();
     }
-  });
-
-  test('Displays the settings main menu when back button is clicked from any menu', async () => {
-    render(<LineChartSettingsTest />);
-    const settingsButton = screen.getByTestId('settings-popover-button-testid');
-    await userEvent.click(settingsButton);
-
-    const thresholdSettingsButton = screen.getByText('Horizontal Threshold Settings');
-    await userEvent.click(thresholdSettingsButton);
-
-    const backButton = screen.getByTestId('settings-back-button');
-    await userEvent.click(backButton);
-
-    const settingsHeader = screen.getByText('Line Chart Settings');
-    expect(settingsHeader).toBeInTheDocument();
   });
 
   test('closes the popover when close button is clicked', async () => {

@@ -148,7 +148,10 @@ export function LineChartSettings({
   };
 
   const renderHeader = (title: string, handleCustomBackButton?: void) => (
-    <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginY: '1rem'}}>
+    <Box
+      sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginY: '1rem'}}
+      data-testid={`${currentView}-setting-container`}
+    >
       <IconButton
         onClick={handleCustomBackButton ?? handleBackButton}
         disabled={currentView === 'settingsMenu'}
@@ -200,7 +203,7 @@ export function LineChartSettings({
         }}
       >
         {currentView === 'settingsMenu' && (
-          <Box p={4}>
+          <Box p={4} data-testid='main-settings-menu'>
             {renderHeader(tSettings('title'))}
             {Object.entries(settingsMenu).map(([key, item]) => (
               <>
@@ -208,6 +211,7 @@ export function LineChartSettings({
 
                 <Button
                   key={key}
+                  data-testid={`settings-menu-item-${key}`}
                   onClick={() => handleNavigate(item.view as SettingsView)}
                   sx={{
                     display: 'flex',

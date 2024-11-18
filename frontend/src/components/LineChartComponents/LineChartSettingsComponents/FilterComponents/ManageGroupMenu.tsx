@@ -195,6 +195,7 @@ export default function ManageGroup({
               flexDirection: 'column',
               justifyContent: 'center',
               alignItems: 'center',
+              padding: 2,
             }}
           >
             <Typography variant='body1'>

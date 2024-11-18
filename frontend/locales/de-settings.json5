@@ -4,9 +4,11 @@
 {
   title: 'Liniendiagramm Einstellungen',
   manageGroups: 'Filter',
-  manageThreshold: 'Threshold',
+  manageGroupsDescription: 'Verwalten Sie Filtergruppen, um spezifische Daten im Diagramm anzuzeigen oder auszublenden.',
+  manageThreshold: 'Schwellenwerte',
+  manageThresholdDescription: 'Verwalten Sie die Schwellenwerte für den aktuell ausgewählten Bezirk und Infektionsstatus.',
   horizontalThresholds: {
-    title: 'Schwellen Verwalten',
+    title: 'Schwellenwerte Verwalten',
     district: 'Bezirk',
     compartment: 'Infektionsstatus',
     threshold: 'Schwelle',
