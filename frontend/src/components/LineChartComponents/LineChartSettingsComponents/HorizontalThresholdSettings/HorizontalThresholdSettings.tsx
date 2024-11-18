@@ -7,6 +7,8 @@ import type {District} from 'types/district';
 import type {Localization} from 'types/localization';
 import type {HorizontalThreshold} from 'types/horizontalThreshold';
 import HorizontalThresholdList from './HorizontalThresholdList';
+import Divider from '@mui/material/Divider';
+import Box from '@mui/material/Box';
 
 export interface HorizontalThresholdSettingsProps {
   /** The district to which the settings apply. */
@@ -33,12 +35,17 @@ export default function HorizontalThresholdSettings({
   localization,
 }: HorizontalThresholdSettingsProps) {
   return (
-    <HorizontalThresholdList
-      horizontalThresholds={horizontalThresholds}
-      setHorizontalThresholds={setHorizontalThresholds}
-      selectedDistrict={selectedDistrict}
-      selectedCompartment={selectedCompartment}
-      localization={localization}
-    />
+    <>
+      <Divider orientation='horizontal' variant='middle' sx={{marginY: 2}} flexItem />
+      <Box p={2}>
+        <HorizontalThresholdList
+          horizontalThresholds={horizontalThresholds}
+          setHorizontalThresholds={setHorizontalThresholds}
+          selectedDistrict={selectedDistrict}
+          selectedCompartment={selectedCompartment}
+          localization={localization}
+        />
+      </Box>
+    </>
   );
 }

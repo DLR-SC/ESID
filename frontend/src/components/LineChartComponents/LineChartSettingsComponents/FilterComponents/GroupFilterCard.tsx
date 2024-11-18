@@ -16,7 +16,7 @@ import {
   useTheme,
 } from '@mui/material';
 import {useState} from 'react';
-import ConfirmDialog from '../../shared/ConfirmDialog';
+import ConfirmDialog from 'components/shared/ConfirmDialog';
 import {useTranslation} from 'react-i18next';
 import React from 'react';
 import {GroupFilter} from 'types/group';

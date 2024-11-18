@@ -8,13 +8,18 @@ import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
+import DataThresholdingIcon from '@mui/icons-material/DataThresholdingRounded';
+import FilterAltIcon from '@mui/icons-material/FilterAltOutlined';
 import {Dictionary} from 'util/util';
 import type {HorizontalThreshold} from 'types/horizontalThreshold';
+import type {GroupFilter} from 'types/group';
+import {GroupCategory, GroupSubcategory} from 'store/services/groupApi';
 import type {District} from 'types/district';
 import type {Localization} from 'types/localization';
 import {useTranslation} from 'react-i18next';
 import HorizontalThresholdSettings from './HorizontalThresholdSettings/HorizontalThresholdSettings';
+import FilterContainer from './FilterComponents/FilterContainer';
+import ConfirmDialog from 'components/shared/ConfirmDialog';
 
 /**
  * The different views that can be displayed in the settings popover.
@@ -25,6 +30,7 @@ type SettingsView = 'settingsMenu' | 'horizontalThresholdSettings' | 'filters';
 type SettingsMenu = {
   [key: string]: {
     label: string;
+    description: string;
     view: string;
     icon: JSX.Element;
   };
@@ -38,6 +44,14 @@ export interface LineChartSettingsProps {
 
   /** The horizontal thresholds for the y-axis. */
   horizontalThresholds: Dictionary<HorizontalThreshold>;
+
+  groupFilters: Dictionary<GroupFilter>;
+
+  groupCategories: GroupCategory[] | undefined;
+
+  groupSubCategories: GroupSubcategory[] | undefined;
+
+  setGroupFilters: React.Dispatch<React.SetStateAction<Dictionary<GroupFilter>>>;
 
   /** A function that sets the horizontal thresholds for the y-axis. */
   setHorizontalThresholds: React.Dispatch<React.SetStateAction<Dictionary<HorizontalThreshold>>>;
@@ -55,35 +69,57 @@ export function LineChartSettings({
   selectedDistrict,
   selectedCompartment,
   horizontalThresholds,
+  groupFilters,
+  groupCategories,
+  groupSubCategories,
+  setGroupFilters,
   setHorizontalThresholds,
-  localization,
+  localization = {formatNumber: (value: number) => value.toString(), customLang: 'global', overrides: {}},
 }: LineChartSettingsProps) {
   const {t: tSettings} = useTranslation('settings');
+  const {t: customT} = useTranslation(localization.customLang);
 
   /**
    * The settings menu for the line chart. Each item in the menu has a label, a view, and an icon.
    */
-
   const settingsMenu: SettingsMenu = {
     horizontalThreshold: {
       label: tSettings('manageThreshold'),
+      description: tSettings('manageThresholdDescription'),
       view: 'horizontalThresholdSettings',
-      icon: <HorizontalRuleIcon />,
+      icon: (
+        <DataThresholdingIcon
+          sx={{backgroundColor: 'primary.main', color: 'white', padding: '4px', borderRadius: '10%'}}
+        />
+      ),
     },
-    // filters: {
-    //   label: tSettings('manageGroups'),
-    //   view: 'filters',
-    //   icon: <HorizontalRuleIcon />,
-    // },
+    filters: {
+      label: tSettings('manageGroups'),
+      description: tSettings('manageGroupsDescription'),
+      view: 'filters',
+      icon: (
+        <FilterAltIcon sx={{backgroundColor: 'primary.main', color: 'white', padding: '4px', borderRadius: '10%'}} />
+      ),
+    },
   };
 
   const [currentView, setCurrentView] = useState<SettingsView>('settingsMenu');
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [showPopover, setShowPopover] = useState<boolean>(false);
+  const [unsavedChanges, setunsavedChanges] = useState(false);
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
 
   const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
     setShowPopover(true);
+  };
+
+  const handlePopoverCloseRequest = () => {
+    if (unsavedChanges) {
+      setConfirmDialogOpen(true);
+    } else {
+      handlePopoverClose();
+    }
   };
 
   const handlePopoverClose = () => {
@@ -91,21 +127,39 @@ export function LineChartSettings({
     setShowPopover(false);
   };
 
+  const handleConfirmDialogClose = (discard: boolean) => {
+    setConfirmDialogOpen(false);
+    if (discard) {
+      setunsavedChanges(false);
+      handlePopoverClose();
+    }
+  };
+
   const handleNavigate = (view: SettingsView) => {
     setCurrentView(view);
   };
 
   const handleBackButton = () => {
-    setCurrentView('settingsMenu');
+    if (unsavedChanges) {
+      setConfirmDialogOpen(true);
+    } else {
+      setCurrentView('settingsMenu');
+    }
   };
 
-  const renderHeader = (title: string) => (
+  const renderHeader = (title: string, handleCustomBackButton?: void) => (
     <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginY: '1rem'}}>
-      <IconButton onClick={() => handleBackButton()} disabled={currentView === 'settingsMenu'}>
+      <IconButton
+        onClick={handleCustomBackButton ?? handleBackButton}
+        disabled={currentView === 'settingsMenu'}
+        sx={{
+          opacity: currentView === 'settingsMenu' ? 0 : 1,
+        }}
+      >
         <ArrowBackIosNewIcon fontSize='small' data-testid='settings-back-button' />
       </IconButton>
       <Typography variant='h1'>{title}</Typography>
-      <IconButton onClick={handlePopoverClose} data-testid='settings-close-button'>
+      <IconButton onClick={handlePopoverCloseRequest} data-testid='settings-close-button'>
         <CloseIcon />
       </IconButton>
     </Box>
@@ -130,14 +184,18 @@ export function LineChartSettings({
         data-testid='line-chart-settings-popover-testid'
         anchorEl={anchorEl}
         open={showPopover}
-        onClose={handlePopoverClose}
+        onClose={handlePopoverCloseRequest}
         anchorOrigin={{
           vertical: 'top',
           horizontal: 'right',
         }}
+        transformOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
         slotProps={{
           paper: {
-            sx: {minWidth: '30%'},
+            sx: {minWidth: '30%', minHeight: '50%'},
           },
         }}
       >
@@ -146,25 +204,37 @@ export function LineChartSettings({
             {renderHeader(tSettings('title'))}
             {Object.entries(settingsMenu).map(([key, item]) => (
               <>
-                <Divider sx={{marginY: 2}} />
-                <Box>
-                  <Button key={key} onClick={() => handleNavigate(item.view as SettingsView)}>
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        padding: 2,
-                        borderRadius: 1,
-                        gap: 2,
-                      }}
-                    >
-                      {item.icon}
+                <Divider sx={{marginY: 2}} variant='middle' />
 
-                      <Typography variant='h2'>{item.label}</Typography>
-                    </Box>
-                  </Button>
-                </Box>
+                <Button
+                  key={key}
+                  onClick={() => handleNavigate(item.view as SettingsView)}
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    width: '100%',
+                    justifyContent: 'flex-start',
+                    alignContent: 'center',
+                  }}
+                >
+                  {item.icon}
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'flex-start',
+                      justifyContent: 'center',
+                      marginLeft: 4,
+                    }}
+                  >
+                    <Typography variant='h2' sx={{textTransform: 'none', color: 'black'}}>
+                      {item.label}
+                    </Typography>
+                    <Typography variant='subtitle1' sx={{textTransform: 'none', color: 'gray'}}>
+                      {item.description}
+                    </Typography>
+                  </Box>
+                </Button>
               </>
             ))}
           </Box>
@@ -182,6 +252,33 @@ export function LineChartSettings({
             />
           </Box>
         )}
+        {currentView === 'filters' && (
+          <Box p={4}>
+            {renderHeader(
+              localization.overrides && localization.overrides['group-filters.title']
+                ? customT(localization.overrides['group-filters.title'])
+                : tSettings('group-filters.title')
+            )}
+            {groupCategories && groupSubCategories && (
+              <FilterContainer
+                groupFilters={groupFilters}
+                setGroupFilters={setGroupFilters}
+                groupCategories={groupCategories}
+                groupSubCategories={groupSubCategories}
+                setUnsavedChanges={setunsavedChanges}
+                localization={localization}
+              />
+            )}
+          </Box>
+        )}
+        <ConfirmDialog
+          open={confirmDialogOpen}
+          title={localization.overrides?.['group-filters.confirm-discard-title'] ?? 'Discard changes?'}
+          text={localization.overrides?.['group-filters.confirm-discard-text'] ?? 'You have unsaved changes. Discard?'}
+          abortButtonText={localization.overrides?.['group-filters.close'] ?? 'Cancel'}
+          confirmButtonText={localization.overrides?.['group-filters.discard'] ?? 'Discard'}
+          onAnswer={handleConfirmDialogClose}
+        />
       </Popover>
     </Box>
   );
