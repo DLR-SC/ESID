@@ -105,8 +105,10 @@ export default function ApplicationMenu(): JSX.Element {
   };
 
   const keycloakLogout = () => {
-    window.location.assign(`${import.meta.env.VITE_OAUTH_API_URL}/realms/${realm}/protocol/openid-connect/logout?post_logout_redirect_uri=${encodeURI(import.meta.env.VITE_OAUTH_REDIRECT_URL)}&id_token_hint=${idToken}`);
-  }
+    window.location.assign(
+      `${import.meta.env.VITE_OAUTH_API_URL}/realms/${realm}/protocol/openid-connect/logout?post_logout_redirect_uri=${encodeURI(import.meta.env.VITE_OAUTH_REDIRECT_URL)}&id_token_hint=${idToken}`
+    );
+  };
 
   return (
     <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'flex-end'}}>
