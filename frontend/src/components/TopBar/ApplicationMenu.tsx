@@ -28,7 +28,7 @@ export default function ApplicationMenu(): JSX.Element {
   const {t} = useTranslation();
 
   const realm = useAppSelector((state) => state.realm.name);
-  const {login, token, logOut} = useContext<IAuthContext>(AuthContext);
+  const {login, token, logOut, idToken} = useContext<IAuthContext>(AuthContext);
 
   // user cannot login when realm is not selected
   const loginDisabled = realm === '';
@@ -64,6 +64,7 @@ export default function ApplicationMenu(): JSX.Element {
   const logoutClicked = () => {
     closeMenu();
     logOut();
+    keycloakLogout();
   };
 
   /** This method gets called, when the imprint menu entry was clicked. It opens a dialog showing the legal text. */
@@ -102,6 +103,10 @@ export default function ApplicationMenu(): JSX.Element {
       .then((res) => console.log(res))
       .catch((err) => console.error(err));
   };
+
+  const keycloakLogout = () => {
+    window.location.assign(`${import.meta.env.VITE_OAUTH_API_URL}/realms/${realm}/protocol/openid-connect/logout?post_logout_redirect_uri=${encodeURI(import.meta.env.VITE_OAUTH_REDIRECT_URL)}&id_token_hint=${idToken}`);
+  }
 
   return (
     <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'flex-end'}}>
