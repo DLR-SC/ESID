@@ -57,7 +57,7 @@ describe('LineChartSettings', () => {
     const settingsButton = screen.getByTestId('settings-popover-button-testid');
     await userEvent.click(settingsButton);
 
-    expect(screen.getByText('Horizontal Threshold Settings')).toBeInTheDocument();
+    expect(screen.getByTestId('settings-menu-item-horizontalThreshold')).toBeInTheDocument();
   });
 
   test('Navigates to all menu item in popover', async () => {
@@ -66,33 +66,23 @@ describe('LineChartSettings', () => {
     await userEvent.click(settingsButton);
 
     // add more menus here
-    const menuItems = ['Horizontal Threshold Settings'];
-
-    for (const menuItem of menuItems) {
-      await userEvent.click(screen.getByText(menuItem));
-      expect(screen.getByText(menuItem)).toBeInTheDocument();
+    const menuItemsTestId = [
+      {
+        settingsMenu: 'settings-menu-item-horizontalThreshold',
+        menuContainer: 'horizontalThresholdSettings-setting-container',
+      },
+      // add more menus here
+    ];
+    for (const menuItem of menuItemsTestId) {
+      await userEvent.click(screen.getByTestId(menuItem.settingsMenu));
+      expect(screen.getByTestId(menuItem.menuContainer)).toBeInTheDocument();
 
       const backButton = screen.getByTestId('settings-back-button');
       await userEvent.click(backButton);
 
       // Ensure we're back at the main settings menu
-      expect(screen.getByText('Line Chart Settings')).toBeInTheDocument();
+      expect(screen.getByTestId('main-settings-menu')).toBeInTheDocument();
     }
-  });
-
-  test('Displays the settings main menu when back button is clicked from any menu', async () => {
-    render(<LineChartSettingsTest />);
-    const settingsButton = screen.getByTestId('settings-popover-button-testid');
-    await userEvent.click(settingsButton);
-
-    const thresholdSettingsButton = screen.getByText('Horizontal Threshold Settings');
-    await userEvent.click(thresholdSettingsButton);
-
-    const backButton = screen.getByTestId('settings-back-button');
-    await userEvent.click(backButton);
-
-    const settingsHeader = screen.getByText('Line Chart Settings');
-    expect(settingsHeader).toBeInTheDocument();
   });
 
   test('closes the popover when close button is clicked', async () => {

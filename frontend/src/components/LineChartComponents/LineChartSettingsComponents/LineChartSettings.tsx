@@ -100,7 +100,10 @@ export function LineChartSettings({
   };
 
   const renderHeader = (title: string) => (
-    <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginY: '1rem'}}>
+    <Box
+      sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginY: '1rem'}}
+      data-testid={`${currentView}-setting-container`}
+    >
       <IconButton onClick={() => handleBackButton()} disabled={currentView === 'settingsMenu'}>
         <ArrowBackIosNewIcon fontSize='small' data-testid='settings-back-button' />
       </IconButton>
@@ -142,13 +145,17 @@ export function LineChartSettings({
         }}
       >
         {currentView === 'settingsMenu' && (
-          <Box p={4}>
+          <Box p={4} data-testid='main-settings-menu'>
             {renderHeader(tSettings('title'))}
             {Object.entries(settingsMenu).map(([key, item]) => (
               <>
                 <Divider sx={{marginY: 2}} />
                 <Box>
-                  <Button key={key} onClick={() => handleNavigate(item.view as SettingsView)}>
+                  <Button
+                    key={key}
+                    data-testid={`settings-menu-item-${key}`}
+                    onClick={() => handleNavigate(item.view as SettingsView)}
+                  >
                     <Box
                       sx={{
                         display: 'flex',
