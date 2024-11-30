@@ -1,4 +1,7 @@
-import {MenuItem} from '@mui/material';
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR) and CISPA Helmholtz Center for Information Security
+// SPDX-License-Identifier: Apache-2.0
+
+import MenuItem from '@mui/material/MenuItem';
 import React from 'react';
 import {useContext} from 'react';
 import {AuthContext, IAuthContext} from 'react-oauth2-code-pkce';
