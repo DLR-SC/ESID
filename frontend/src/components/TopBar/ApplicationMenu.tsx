@@ -12,7 +12,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Box from '@mui/system/Box';
 import {useAppSelector} from 'store/hooks';
 import {AuthContext, IAuthContext} from 'react-oauth2-code-pkce';
-import {useCreateProtectedScenarioMutation} from 'store/services/scenarioApi';
+import ToyCreateProtectedScenarioMenuItem from './ToyCreateProtectedScenarioMenuItem';
 
 const ChangelogDialog = React.lazy(() => import('./PopUps/ChangelogDialog'));
 const ImprintDialog = React.lazy(() => import('./PopUps/ImprintDialog'));
@@ -34,8 +34,6 @@ export default function ApplicationMenu(): JSX.Element {
   const loginDisabled = realm === '';
   // user is authenticated when token is not empty
   const isAuthenticated = token !== '';
-
-  const [createProtectedScenario] = useCreateProtectedScenarioMutation();
 
   const [anchorElement, setAnchorElement] = React.useState<Element | null>(null);
   const [imprintOpen, setImprintOpen] = React.useState(false);
@@ -97,16 +95,10 @@ export default function ApplicationMenu(): JSX.Element {
     setChangelogOpen(true);
   };
 
-  const createProtectedScenarioClicked = () => {
-    createProtectedScenario(token)
-      .unwrap()
-      .then((res) => console.log(res))
-      .catch((err) => console.error(err));
-  };
-
+  /** Redirect user to logout from the IdP (Keycloak) */
   const keycloakLogout = () => {
     window.location.assign(
-      `${import.meta.env.VITE_OAUTH_API_URL}/realms/${realm}/protocol/openid-connect/logout?post_logout_redirect_uri=${encodeURI(import.meta.env.VITE_OAUTH_REDIRECT_URL)}&id_token_hint=${idToken}`
+      `${import.meta.env.VITE_OAUTH_API_URL}/realms/${realm}/protocol/openid-connect/logout?post_logout_redirect_uri=${encodeURI(`${import.meta.env.VITE_OAUTH_REDIRECT_URL}`)}&id_token_hint=${idToken}`
     );
   };
 
@@ -123,16 +115,16 @@ export default function ApplicationMenu(): JSX.Element {
       </Button>
       <Menu id='application-menu' anchorEl={anchorElement} open={Boolean(anchorElement)} onClose={closeMenu}>
         {isAuthenticated ? (
-          <MenuItem onClick={logoutClicked}>{t('topBar.menu.logout')}</MenuItem>
+          <>
+            <MenuItem onClick={logoutClicked}>{t('topBar.menu.logout')}</MenuItem>
+            <ToyCreateProtectedScenarioMenuItem />
+          </>
         ) : (
           <MenuItem onClick={loginClicked} disabled={loginDisabled}>
             {t('topBar.menu.login')}
           </MenuItem>
         )}
         <Divider />
-        <MenuItem onClick={createProtectedScenarioClicked} disabled={!isAuthenticated}>
-          Create Protected Scenario
-        </MenuItem>
         <MenuItem onClick={imprintClicked}>{t('topBar.menu.imprint')}</MenuItem>
         <MenuItem onClick={privacyPolicyClicked}>{t('topBar.menu.privacy-policy')}</MenuItem>
         <MenuItem onClick={accessibilityClicked}>{t('topBar.menu.accessibility')}</MenuItem>
