@@ -115,10 +115,10 @@ export default function ApplicationMenu(): JSX.Element {
       </Button>
       <Menu id='application-menu' anchorEl={anchorElement} open={Boolean(anchorElement)} onClose={closeMenu}>
         {isAuthenticated ? (
-          <>
+          <Box>
             <MenuItem onClick={logoutClicked}>{t('topBar.menu.logout')}</MenuItem>
             <ToyCreateProtectedScenarioMenuItem />
-          </>
+          </Box>
         ) : (
           <MenuItem onClick={loginClicked} disabled={loginDisabled}>
             {t('topBar.menu.login')}
