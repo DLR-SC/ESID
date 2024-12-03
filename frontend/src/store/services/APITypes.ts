@@ -3,7 +3,7 @@
 
 // Common -----------------------------------------------------------------------------------------
 
-type Identifiable = {id: string};
+export type Identifiable = {id: string};
 
 // Scenarios --------------------------------------------------------------------------------------
 
@@ -12,6 +12,8 @@ export type Scenarios = Array<ScenarioPreview>;
 export type NewScenario = {
   name: string;
   description?: string;
+  startDate: string;
+  endDate: string;
   modelId: string;
   modelParameters: Array<ParameterValue>;
   nodeListId: string;
@@ -24,7 +26,7 @@ export type Scenario = Required<NewScenario> &
     timestampSimulated: string;
   };
 
-export type ScenarioPreview = Pick<Scenario, 'id' | 'name' | 'description'>;
+export type ScenarioPreview = Pick<Scenario, 'id' | 'name' | 'description' | 'startDate' | 'endDate'>;
 
 export type InfectionDataParameters = {
   path: {
@@ -54,7 +56,7 @@ export type InfectionDataEntry = {
 
 // Interventions ----------------------------------------------------------------------------------
 
-export type InterventionTemplates = Array<InterventionTemplates>;
+export type InterventionTemplates = Array<InterventionTemplate>;
 
 export type NewInterventionTemplate = {
   name: string;
@@ -140,7 +142,7 @@ export type Group = Required<NewGroup> & Identifiable;
 
 // Group Categories -------------------------------------------------------------------------------
 
-// TODO
+export type GroupCategories = Array<string>;
 
 // Parameter --------------------------------------------------------------------------------------
 

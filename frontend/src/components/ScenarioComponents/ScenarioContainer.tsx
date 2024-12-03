@@ -17,7 +17,6 @@ import {
 import {Dictionary, dateToISOString} from 'util/util';
 import {DataContext} from 'DataContext';
 import {ScrollSync} from 'react-scroll-sync';
-import {Scenario, setCompartments, setScenarios} from 'store/ScenarioSlice';
 import {useBoundingclientrectRef} from 'rooks';
 import {setReferenceDayTop} from 'store/LayoutSlice';
 import React from 'react';
@@ -26,11 +25,8 @@ import CompartmentsRows from './CompartmentsComponents/CompartmentsRows';
 import FilterDialogContainer from './FilterComponents/FilterDialogContainer';
 import GeneralButton from './ExpandedButtonComponents/ExpandedButton';
 import ReferenceDatePicker from './ReferenceDatePickerComponents.tsx/ReferenceDatePicker';
-import {GroupFilter, GroupResponse} from 'types/group';
-import {SimulationModel, SimulationDataByNode, Simulations} from 'types/scenario';
-import {CaseDataByNode} from 'types/caseData';
+import {GroupFilter} from 'types/group';
 import {useAppDispatch, useAppSelector} from 'store/hooks';
-import {GroupCategories, GroupSubcategories} from 'store/services/groupApi';
 import {CardValue, FilterValue} from 'types/card';
 import {setInitialVisit} from 'store/UserPreferenceSlice';
 
@@ -52,157 +48,38 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
   const {formatNumber} = NumberFormatter(i18n.language, 1, 0);
   const theme = useTheme();
 
-  const {
-    simulationModelData,
-    caseScenarioData,
-    startValues,
-    scenarioListData,
-    caseScenarioSimulationData,
-    groupCategories,
-    groupSubCategories,
-    scenarioSimulationDataForCardFiltersValues,
-    scenarioSimulationDataForCard,
-    getId,
-  }: {
-    simulationModelData: SimulationModel | undefined;
-    caseScenarioData: SimulationDataByNode | undefined;
-    startValues: Dictionary<number> | null;
-    scenarioSimulationDataForCardFiltersValues: Dictionary<GroupResponse>[] | undefined;
-    scenarioListData: Simulations | undefined;
-    caseScenarioSimulationData: CaseDataByNode | undefined;
-    groupCategories: GroupCategories | undefined;
-    groupSubCategories: GroupSubcategories | undefined;
-    scenarioSimulationDataForCard: (SimulationDataByNode | undefined)[] | undefined;
-    getId: number[] | undefined;
-  } = useContext(DataContext) || {
-    simulationModelData: undefined,
-    caseScenarioData: undefined,
-    startValues: null,
-    scenarioListData: [],
-    scenarioSimulationDataForCardFiltersValues: undefined,
-    caseScenarioSimulationData: undefined,
-    groupCategories: undefined,
-    groupSubCategories: undefined,
-    scenarioSimulationDataForCard: undefined,
-    getId: undefined,
-  };
+  const {scenarios: scenarioData, compartments, referenceDateValues} = useContext(DataContext);
 
-  const storeGroupFilters = useAppSelector((state) => state.dataSelection.groupFilters);
+  const groupFilters = useAppSelector((state) => state.dataSelection.groupFilters);
   const storeCompartmentsExpanded = useAppSelector((state) => state.dataSelection.compartmentsExpanded);
-  const storeActiveScenarios = useAppSelector((state) => state.dataSelection.activeScenarios);
-  const storeSelectedScenario = useAppSelector((state) => state.dataSelection.scenario);
-  const scenariosState = useAppSelector((state) => state.scenarioList.scenarios);
-  const compartments = useAppSelector((state) => state.scenarioList.compartments);
+  const activeScenarios = useAppSelector((state) => state.dataSelection.activeScenarios);
+  const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
   const storeSelectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
   const storeStartDay = useAppSelector((state) => state.dataSelection.simulationStart);
   const isInitialUserVisit = useAppSelector((state) => state.userPreference.isInitialVisit);
 
   const [cardValues, setCardValues] = useState<Dictionary<CardValue> | undefined>();
   const [filterValues, setFilterValues] = useState<Dictionary<FilterValue[]> | undefined>();
-  const [groupFilters, setgroupFilters] = useState<Dictionary<GroupFilter>>(storeGroupFilters);
   const [compartmentsExpanded, setCompartmentsExpanded] = useState<boolean>(storeCompartmentsExpanded ?? false);
-  const [activeScenarios, setActiveScenarios] = useState<number[] | null>(storeActiveScenarios);
-  const [selectedScenario, setSelectedScenario] = useState<number | null>(storeSelectedScenario);
   const [selectedCompartment, setSelectedCompartment] = useState<string>(storeSelectedCompartment ?? 'MildInfections');
   const [startDay, setStartDay] = useState<string | null>(storeStartDay ?? '2024-07-08');
   const [resizeRef, resizeBoundingRect] = useBoundingclientrectRef();
 
-  const scenarios: Scenario[] = useMemo(() => {
-    const aux: Scenario[] = [{id: 0, label: t('scenario-names.caseData')}];
-
-    for (const scenarioKey in scenariosState) {
-      const {id, label}: Scenario = scenariosState[scenarioKey];
-      aux.push({id, label: t(`scenario-names.${label}`)});
-    }
-
-    return aux;
-  }, [scenariosState, t]);
-
-  const compartmentsMemo = useMemo(() => {
-    return compartments;
-  }, [compartments]);
+  const scenarios = useMemo(
+    () =>
+      scenarioData?.map((scenario) => ({
+        id: scenario.id,
+        label: t(`scenario-names.${scenario.name}`),
+      })) ?? [],
+    [scenarioData, t]
+  );
 
   const localization = useMemo(() => {
     return {
       formatNumber: formatNumber,
       customLang: 'backend',
-      overrides: {
-        ['compartments.Infected']: 'infection-states.Infected',
-        ['compartments.MildInfections']: 'infection-states.MildInfections',
-        ['compartments.Hospitalized']: 'infection-states.Hospitalized',
-        ['compartments.ICU']: 'infection-states.ICU',
-        ['compartments.Dead']: 'infection-states.Dead',
-        ['compartments.DeadV1']: 'infection-states.DeadV1',
-        ['compartments.DeadV2']: 'infection-states.DeadV2',
-        ['compartments.Exposed']: 'infection-states.Exposed',
-        ['compartments.Recovered']: 'infection-states.Recovered',
-        ['compartments.Carrier']: 'infection-states.Carrier',
-        ['compartments.Susceptible']: 'infection-states.Susceptible',
-        ['compartments.InfectedT']: 'infection-states.InfectedT',
-        ['compartments.InfectedTV1']: 'infection-states.InfectedTV1',
-        ['compartments.InfectedTV2']: 'infection-states.InfectedTV2',
-        ['compartments.InfectedV1']: 'infection-states.InfectedV1',
-        ['compartments.InfectedV2']: 'infection-states.InfectedV2',
-        ['compartments.HospitalizedV1']: 'infection-states.HospitalizedV1',
-        ['compartments.HospitalizedV2']: 'infection-states.HospitalizedV2',
-        ['compartments.ICUV1']: 'infection-states.ICUV1',
-        ['compartments.ICUV2']: 'infection-states.ICUV2',
-        ['compartments.ExposedV1']: 'infection-states.ExposedV1',
-        ['compartments.ExposedV2']: 'infection-states.ExposedV2',
-        ['compartments.CarrierT']: 'infection-states.CarrierT',
-        ['compartments.CarrierTV1']: 'infection-states.CarrierTV1',
-        ['compartments.CarrierTV2']: 'infection-states.CarrierTV2',
-        ['compartments.CarrierV1']: 'infection-states.CarrierV1',
-        ['compartments.CarrierV2']: 'infection-states.CarrierV2',
-        ['compartments.SusceptibleV1']: 'infection-states.SusceptibleV1',
-        ['compartments.SusceptibleV2']: 'infection-states.SusceptibleV2',
-        ['tooltip']: 'infection-states.tooltip',
-        ['scenario-names.caseData']: 'scenario-names.caseData',
-        ['scenario-names.baseline']: 'scenario-names.baseline',
-        ['scenario-names.closed_schools']: 'scenario-names.closed_schools',
-        ['scenario-names.remote_work']: 'scenario-names.remote_work',
-        ['scenario-names.10p_reduced_contacts']: 'scenario-names.10p_reduced_contacts',
-        ['scenario-names.Summer 2021 Simulation 1']: 'scenario-names.Summer 2021 Simulation 1',
-        ['scenario-names.Summer 2021 Simulation 2']: 'scenario-names.Summer 2021 Simulation 2',
-        ['group-filters.categories.age']: 'group-filters.categories.age',
-        ['group-filters.categories.gender']: 'group-filters.categories.gender',
-        ['group-filters.groups.age_0']: 'group-filters.groups.age_0',
-        ['group-filters.groups.age_1']: 'group-filters.groups.age_1',
-        ['group-filters.groups.age_2']: 'group-filters.groups.age_2',
-        ['group-filters.groups.age_3']: 'group-filters.groups.age_3',
-        ['group-filters.groups.age_4']: 'group-filters.groups.age_4',
-        ['group-filters.groups.age_5']: 'group-filters.groups.age_5',
-        ['group-filters.groups.total']: 'group-filters.groups.total',
-        ['group-filters.groups.female']: 'group-filters.groups.female',
-        ['group-filters.groups.male']: 'group-filters.groups.male',
-        ['group-filters.groups.nonbinary']: 'group-filters.groups.nonbinary',
-      },
     };
   }, [formatNumber]);
-
-  // This effect updates the group filters in the state whenever they change.
-  useEffect(() => {
-    dispatch(setGroupFilters(groupFilters));
-  }, [groupFilters, dispatch]);
-
-  // This effect updates the compartments in the state whenever the simulation model data changes.
-  useEffect(() => {
-    if (simulationModelData) {
-      const {compartments} = simulationModelData;
-      dispatch(setCompartments(compartments));
-    }
-  }, [simulationModelData, dispatch]);
-
-  // This effect updates the selected scenario in the state whenever it changes.
-  useEffect(() => {
-    dispatch(selectScenario(selectedScenario == undefined ? null : selectedScenario));
-  }, [selectedScenario, dispatch]);
-
-  // This effect updates the active scenario in the state whenever the active scenarios change.
-  useEffect(() => {
-    if (activeScenarios?.length == 0) dispatch(setActiveScenario(null));
-    else dispatch(setActiveScenario(activeScenarios));
-  }, [activeScenarios, dispatch]);
 
   // This effect updates the selected compartment in the state whenever it changes.
   useEffect(() => {
@@ -400,12 +277,12 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
               >
                 <CompartmentsRows
                   compartmentsExpanded={compartmentsExpanded}
-                  compartments={compartmentsMemo}
+                  compartments={compartments}
                   selectedCompartment={selectedCompartment}
-                  setSelectedCompartment={setSelectedCompartment}
+                  setSelectedCompartment={(newCompartment) => dispatch(selectCompartment(newCompartment))}
                   minCompartmentsRows={minCompartmentsRows}
                   maxCompartmentsRows={maxCompartmentsRows}
-                  compartmentValues={startValues}
+                  compartmentValues={referenceDateValues}
                   localization={localization}
                 />
               </Box>
@@ -439,7 +316,7 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
               scenarios={scenarios}
               compartments={compartmentsMemo}
               activeScenarios={activeScenarios}
-              setActiveScenarios={setActiveScenarios}
+              setActiveScenarios={(newActiveScenarios) => dispatch(setActiveScenario(newActiveScenarios))}
               minCompartmentsRows={minCompartmentsRows}
               maxCompartmentsRows={maxCompartmentsRows}
               localization={localization}
@@ -453,7 +330,7 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
               groupFilters={groupFilters}
               groupCategories={groupCategories.results}
               groupSubCategories={groupSubCategories.results}
-              setGroupFilters={setgroupFilters}
+              setGroupFilters={(newGroupFilters) => dispatch(setGroupFilters(newGroupFilters))}
               localization={localization}
             />
           )}

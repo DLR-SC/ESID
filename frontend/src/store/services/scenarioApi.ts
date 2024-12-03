@@ -3,7 +3,28 @@
 
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 
-import {NewGroup, Group, Groups, InfectionData, InfectionDataParameters, Model, Models, Scenarios} from './APITypes';
+import {
+  Group,
+  Groups,
+  InfectionData,
+  InfectionDataParameters,
+  Model,
+  Models,
+  Scenarios,
+  Identifiable,
+  NewScenario,
+  InterventionTemplates,
+  InterventionTemplate,
+  NewInterventionTemplate,
+  Nodes,
+  NodeLists,
+  Compartments,
+  Compartment,
+  ParameterDefinitions,
+  ParameterDefinition,
+  Scenario,
+  GroupCategories,
+} from './APITypes';
 
 export const scenarioApi = createApi({
   reducerPath: 'scenarioApi',
@@ -17,7 +38,7 @@ export const scenarioApi = createApi({
   tagTypes: [
     'Group',
     'Model',
-    'Intervention',
+    'InterventionTemplate',
     'Node',
     'NodeList',
     'ParameterDefinition',
@@ -27,6 +48,132 @@ export const scenarioApi = createApi({
   ],
 
   endpoints: (build) => ({
+    // Scenarios -------------------------------------------------------------------------------------------------------
+
+    getScenarios: build.query<Scenarios, void>({
+      query() {
+        return `scenarios/`;
+      },
+      providesTags: (scenarios = []) => [
+        {type: 'Scenario', id: 'LIST'},
+        ...scenarios.map((scenario) => ({type: 'Scenario' as const, id: scenario.id})),
+      ],
+    }),
+
+    createScenario: build.mutation<Identifiable, NewScenario>({
+      query(parameters) {
+        return {
+          url: `scenarios/`,
+          method: 'POST',
+          body: parameters,
+        };
+      },
+      invalidatesTags: [{type: 'Scenario', id: 'LIST'}],
+    }),
+
+    getScenario: build.query<Scenario, string>({
+      query(scenarioId: string) {
+        return `scenarios/${scenarioId}/`;
+      },
+      providesTags: (_1, _2, modelId) => [{type: 'Scenario', id: modelId}],
+    }),
+
+    deleteScenario: build.mutation<void, string>({
+      query(scenarioId) {
+        return {
+          url: `scenarios/${scenarioId}/`,
+          method: 'DELETE',
+        };
+      },
+      invalidatesTags: (_1, _2, scenarioId) => [
+        {type: 'Scenario', id: scenarioId},
+        {type: 'Scenario', id: 'LIST'},
+      ],
+    }),
+
+    getScenarioInfectionData: build.query<InfectionData, InfectionDataParameters>({
+      query(parameters: InfectionDataParameters) {
+        return {
+          url: `scenarios/${parameters.path.scenarioId}/infectiondata`,
+          params: parameters.query,
+        };
+      },
+      providesTags: (_1, _2, parameters) => [{type: 'Scenario', id: parameters.path.scenarioId}],
+    }),
+
+    getMultiScenarioInfectionData: build.query<
+      Record<string, InfectionData>,
+      {pathIds: Array<string>} & Pick<InfectionDataParameters, 'query'>
+    >({
+      async queryFn(parameters, _2, _3, fetchWithBQ) {
+        const results: Record<string, InfectionData> = {};
+
+        for (const id of parameters.pathIds) {
+          const response = await fetchWithBQ({
+            url: `scenarios/${id}/infectiondata`,
+            params: parameters.query,
+          });
+
+          if (response.error) {
+            return {error: response.error};
+          }
+
+          results[id] = response.data as InfectionData;
+        }
+
+        return {data: results};
+      },
+      providesTags: (infectionDatasets: Record<string, InfectionData> = {}) => [
+        {type: 'Scenario', id: 'LIST'},
+        ...Object.keys(infectionDatasets).map((scenarioId) => ({type: 'Scenario' as const, id: scenarioId})),
+      ],
+    }),
+
+    // Interventions ---------------------------------------------------------------------------------------------------
+
+    getInterventionTemplates: build.query<InterventionTemplates, void>({
+      query() {
+        return 'interventions/templates/';
+      },
+      providesTags: (interventionTemplates = []) => [
+        {type: 'InterventionTemplate', id: 'LIST'},
+        ...interventionTemplates.map((template) => ({type: 'InterventionTemplate' as const, id: template.id})),
+      ],
+    }),
+
+    getInterventionTemplate: build.query<InterventionTemplate, string>({
+      query(templateId: string) {
+        return `interventions/templates/${templateId}/`;
+      },
+      providesTags: (_1, _2, templateId) => [{type: 'InterventionTemplate', id: templateId}],
+    }),
+
+    createInterventionTemplate: build.mutation<Identifiable, NewInterventionTemplate>({
+      query(parameters: NewInterventionTemplate) {
+        return {
+          url: `interventions/templates/`,
+          method: 'POST',
+          body: parameters,
+        };
+      },
+      invalidatesTags: [{type: 'InterventionTemplate', id: 'LIST'}],
+    }),
+
+    deleteInterventionTemplate: build.mutation<void, string>({
+      query(templateId) {
+        return {
+          url: `interventions/templates/${templateId}/`,
+          method: 'DELETE',
+        };
+      },
+      invalidatesTags: (_1, _2, templateId) => [
+        {type: 'InterventionTemplate', id: templateId},
+        {type: 'InterventionTemplate', id: 'LIST'},
+      ],
+    }),
+
+    // Models ----------------------------------------------------------------------------------------------------------
+
     getModels: build.query<Models, void>({
       query() {
         return 'models/';
@@ -44,31 +191,43 @@ export const scenarioApi = createApi({
       providesTags: (_1, _2, modelId) => [{type: 'Model', id: modelId}],
     }),
 
-    getScenarios: build.query<Scenarios, void>({
+    // Nodes -----------------------------------------------------------------------------------------------------------
+
+    getNodes: build.query<Nodes, void>({
       query() {
-        return `scenarios/`;
+        return `nodes/`;
       },
-      providesTags: (scenarios = []) => [
-        {type: 'Scenario', id: 'LIST'},
-        ...scenarios.map((scenario) => ({type: 'Scenario' as const, id: scenario.id})),
+      providesTags: (nodes = []) => [
+        {type: 'Node', id: 'LIST'},
+        ...nodes.map((node) => ({type: 'Node' as const, id: node.id})),
       ],
     }),
 
-    getScenario: build.query<Scenarios, string>({
-      query(scenarioId: string) {
-        return `scenarios/${scenarioId}/`;
+    getNode: build.query<Node, string>({
+      query(nodeId: string) {
+        return `nodes/${nodeId}/`;
       },
-      providesTags: (_1, _2, modelId) => [{type: 'Scenario', id: modelId}],
+      providesTags: (_1, _2, nodes) => [{type: 'Node', id: nodes}],
     }),
 
-    getScenarioInfectionData: build.query<InfectionData, InfectionDataParameters>({
-      query(parameters: InfectionDataParameters) {
-        return {
-          url: `scenarios/${parameters.path.scenarioId}/`,
-          params: parameters.query,
-        };
+    getNodeLists: build.query<NodeLists, void>({
+      query() {
+        return `nodelists/`;
       },
+      providesTags: (nodeLists = []) => [
+        {type: 'NodeList', id: 'LIST'},
+        ...nodeLists.map((nodeList) => ({type: 'NodeList' as const, id: nodeList.id})),
+      ],
     }),
+
+    getNodeList: build.query<NodeList, string>({
+      query(nodeListId: string) {
+        return `nodelists/${nodeListId}/`;
+      },
+      providesTags: (_1, _2, nodeListId) => [{type: 'NodeList', id: nodeListId}],
+    }),
+
+    // Groups ----------------------------------------------------------------------------------------------------------
 
     getGroups: build.query<Groups, void>({
       query() {
@@ -87,41 +246,55 @@ export const scenarioApi = createApi({
       providesTags: (_1, _2, groupId) => [{type: 'Group', id: groupId}],
     }),
 
-    createGroup: build.mutation<string, NewGroup>({
-      query(parameters: NewGroup) {
-        return {
-          url: `groups/`,
-          method: 'POST',
-          body: parameters,
-        };
+    getGroupCategories: build.query<GroupCategories, void>({
+      query() {
+        return 'groups/categories/';
       },
-      invalidatesTags: [{type: 'Group', id: 'LIST'}],
+      providesTags: [{type: 'Group', id: 'LIST'}],
     }),
 
-    deleteGroup: build.mutation<void, string>({
-      query(groupId) {
-        return {
-          url: `groups/${groupId}/`,
-          method: 'DELETE',
-        };
+    // Compartments ----------------------------------------------------------------------------------------------------
+
+    getCompartments: build.query<Compartments, void>({
+      query() {
+        return 'compartments/';
       },
-      invalidatesTags: (_1, _2, groupId) => [
-        {type: 'Group', id: groupId},
-        {type: 'Group', id: 'LIST'},
+      providesTags: (compartments = []) => [
+        {type: 'Compartment', id: 'LIST'},
+        ...compartments.map((compartment) => ({type: 'Compartment' as const, id: compartment.id})),
       ],
+    }),
+
+    getCompartment: build.query<Compartment, string>({
+      query(compartmentId: string) {
+        return `compartments/${compartmentId}/`;
+      },
+      providesTags: (_1, _2, compartmentId) => [{type: 'Compartment', id: compartmentId}],
+    }),
+
+    // ParameterDefinitions --------------------------------------------------------------------------------------------
+
+    getParameterDefinitions: build.query<ParameterDefinitions, void>({
+      query() {
+        return 'parameterdefinitions/';
+      },
+      providesTags: (parameterDefinitions = []) => [
+        {type: 'ParameterDefinition', id: 'LIST'},
+        ...parameterDefinitions.map((parameterDefinition) => ({
+          type: 'ParameterDefinition' as const,
+          id: parameterDefinition.id,
+        })),
+      ],
+    }),
+
+    getParameterDefinition: build.query<ParameterDefinition, string>({
+      query(parameterDefinitionId: string) {
+        return `parameterdefinitions/${parameterDefinitionId}/`;
+      },
+      providesTags: (_1, _2, parameterDefinitionId) => [{type: 'ParameterDefinition', id: parameterDefinitionId}],
     }),
   }),
 });
-
-export interface ParameterRESTData {
-  results: {
-    name: string;
-    description: string;
-    simulationModel: string;
-    numberOfGroups: number;
-    parameters: Array<{parameter: string; groups: Array<{min: number; max: number}>}>;
-  };
-}
 
 export interface ParameterData {
   symbol: string;
@@ -131,12 +304,27 @@ export interface ParameterData {
 }
 
 export const {
+  useGetScenariosQuery,
+  useCreateScenarioMutation,
+  useGetScenarioQuery,
+  useDeleteScenarioMutation,
+  useGetScenarioInfectionDataQuery,
+  useGetMultiScenarioInfectionDataQuery,
+  useGetInterventionTemplatesQuery,
+  useCreateInterventionTemplateMutation,
+  useGetInterventionTemplateQuery,
+  useDeleteInterventionTemplateMutation,
   useGetModelsQuery,
   useGetModelQuery,
-  useGetScenariosQuery,
-  useGetScenarioInfectionDataQuery,
+  useGetNodesQuery,
+  useGetNodeQuery,
+  useGetNodeListsQuery,
+  useGetNodeListQuery,
   useGetGroupsQuery,
   useGetGroupQuery,
-  useCreateGroupMutation,
-  useDeleteGroupMutation,
+  useGetGroupCategoriesQuery,
+  useGetCompartmentsQuery,
+  useGetCompartmentQuery,
+  useGetParameterDefinitionsQuery,
+  useGetParameterDefinitionQuery,
 } = scenarioApi;

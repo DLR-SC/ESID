@@ -4,7 +4,6 @@
 import {combineReducers, configureStore} from '@reduxjs/toolkit';
 import DataSelectionReducer from './DataSelectionSlice';
 import {caseDataApi} from './services/caseDataApi';
-import ScenarioReducer from './ScenarioSlice';
 import {scenarioApi} from './services/scenarioApi';
 import UserPreferenceReducer from './UserPreferenceSlice';
 import {persistReducer, persistStore} from 'redux-persist';
@@ -22,7 +21,6 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   dataSelection: DataSelectionReducer,
-  scenarioList: ScenarioReducer,
   userPreference: UserPreferenceReducer,
   layoutSlice: LayoutReducer,
   userOnboarding: UserOnboardingReducer,

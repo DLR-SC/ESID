@@ -26,10 +26,10 @@ export interface DataSelection {
   };
   /** The current date in the store. Must be an ISO 8601 date cutoff at time (YYYY-MM-DD) */
   date: string | null;
-  scenario: number | null;
+  scenario: string | null;
   compartment: string | null;
   compartmentsExpanded: boolean | null;
-  activeScenarios: number[] | null;
+  activeScenarios: string[] | null;
   simulationStart: string | null;
   minDate: string | null;
   maxDate: string | null;
@@ -39,10 +39,10 @@ export interface DataSelection {
 const initialState: DataSelection = {
   district: {ags: '00000', name: '', type: ''},
   date: null,
-  scenario: 0,
+  scenario: null,
   compartment: null,
   compartmentsExpanded: null,
-  activeScenarios: [0],
+  activeScenarios: [],
   simulationStart: null,
   minDate: null,
   maxDate: null,
@@ -56,7 +56,7 @@ export const DataSelectionSlice = createSlice({
   name: 'DataSelection',
   initialState,
   reducers: {
-    setActiveScenario(state, action: PayloadAction<number[] | null>) {
+    setActiveScenario(state, action: PayloadAction<string[] | null>) {
       if (action.payload) state.activeScenarios = action.payload;
       else state.activeScenarios = null;
     },
@@ -102,7 +102,7 @@ export const DataSelectionSlice = createSlice({
         state.date = state.minDate;
       }
     },
-    selectScenario(state, action: PayloadAction<number | null>) {
+    selectScenario(state, action: PayloadAction<string | null>) {
       state.scenario = action.payload;
     },
     selectCompartment(state, action: PayloadAction<string>) {
