@@ -19,7 +19,8 @@ import {selectDistrict} from './store/DataSelectionSlice';
 import {I18nextProvider, useTranslation} from 'react-i18next';
 import i18n from './util/i18n';
 import {MUILocalization} from './components/shared/MUILocalization';
-import {DataProvider} from 'DataContext';
+import {DataProvider} from 'data_sockets/DataContext';
+import {PandemosProvider} from 'data_sockets/PandemosContext';
 
 /**
  * This is the root element of the React application. It divides the main screen area into the three main components.
@@ -34,23 +35,29 @@ export default function App(): JSX.Element {
             <I18nextProvider i18n={i18n}>
               <MUILocalization>
                 <DataProvider>
-                  <Initializer />
-                  <Box id='app' display='flex' flexDirection='column' sx={{height: '100%', width: '100%'}}>
-                    <TopBar />
-                    <Box
-                      id='app-content'
-                      sx={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        flexGrow: 1,
-                        alignItems: 'stretch',
-                        width: '100%',
-                      }}
-                    >
-                      <SidebarContainer />
-                      <MainContent />
+                  <PandemosProvider>
+                    <Initializer />
+                    <Box id='app' display='flex' flexDirection='column' sx={{height: '100vh', width: '100vw'}}>
+                      <TopBar />
+                      <Box
+                        id='app-content'
+                        sx={{
+                          // Self
+                          flexGrow: 1,
+                          width: '100%',
+
+                          // Child Layout
+                          display: 'flex',
+                          flexDirection: 'row',
+                          alignItems: 'stretch',
+                          overflow: 'hidden',
+                        }}
+                      >
+                        <SidebarContainer />
+                        <MainContent />
+                      </Box>
                     </Box>
-                  </Box>
+                  </PandemosProvider>
                 </DataProvider>
               </MUILocalization>
             </I18nextProvider>
