@@ -68,7 +68,7 @@ export default function TripChainView(): JSX.Element {
 
   const getLocation = useCallback(
     (id: number) => {
-      return context.locations?.all().find((location) => location.location_id === id);
+      return context.locations?.find((location) => location.location_id === id);
     },
     [context.locations]
   );
