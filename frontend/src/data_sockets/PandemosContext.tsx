@@ -1,63 +1,22 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, {createContext, useCallback, useEffect, useState} from 'react';
+import React, {createContext, useCallback, useEffect, useMemo, useState} from 'react';
 import crossfilter, {Crossfilter} from 'crossfilter2';
 import agentList from '../../assets/pandemos/agents_lookup.json?url';
 import locationList from '../../assets/pandemos/locations_lookup.json?url';
 import trajectories from '../../assets/pandemos/trajectories.json?url';
-
-export interface Agent {
-  /** ID of the agent (same as index) */
-  agent_id: number;
-  /** Location ID of the agent's home */
-  home_id: number;
-  /** Enum of the agent's age group (refer to key_info.md for more info) */
-  age_group: number;
-}
-
-export interface Location {
-  /** ID of the location (same as index) */
-  location_id: number;
-  /** Enum of the location's type (refer to key_info.md for more info) */
-  location_type: number;
-  /** Latitude of the location */
-  lat: number;
-  /** Longitude of the location */
-  lon: number;
-}
-
-export interface Trip {
-  /** Timestep in which the trip took place */
-  timestep: number;
-  /** ID of the agent who did the trip */
-  agent_id: number;
-  /** ID of the trip (same as index) */
-  trip_id: number;
-  /** ID of the start location */
-  start_location: number;
-  /** ID of the end location */
-  end_location: number;
-  /** Time in seconds when the trip started */
-  start_time: number;
-  /** Time in seconds when the trip ended */
-  end_time: number;
-  /** Enum of the mode of transportation used (refer to key_info.md for more info) */
-  transport_mode: number;
-  /** Enum of the activity type at the end of this trip (refer to key_info.md for more info) */
-  activity: number;
-  /** Enum of the infection state of this trip (refer to key_info.md for more info) */
-  infection_state: number;
-}
+import {Agent, Location, Trip, TripExpanded} from '../types/pandemos';
 
 /** Data context for the pandemos data.
  *  Provides Crossfilter objects for agents, locations, and trips.
  *  Use .all() to get raw array.
  */
 export const PandemosContext = createContext<{
-  agents: Crossfilter<Agent> | undefined;
-  locations: Crossfilter<Location> | undefined;
-  trips: Crossfilter<Trip> | undefined;
+  agents: Array<Agent> | undefined;
+  locations: Array<Location> | undefined;
+  trips: Array<Trip> | undefined;
+  expandedTrips: Crossfilter<TripExpanded> | undefined;
   tripChains: Map<number, Array<Trip>> | undefined;
   filteredTripChains: number[][] | undefined;
   setFilteredTripChains: ((value: number[][]) => void) | undefined;
@@ -66,6 +25,7 @@ export const PandemosContext = createContext<{
   agents: undefined,
   locations: undefined,
   trips: undefined,
+  expandedTrips: undefined,
   tripChains: undefined,
   filteredTripChains: undefined,
   setFilteredTripChains: undefined,
@@ -73,12 +33,14 @@ export const PandemosContext = createContext<{
 
 // Create provider component
 export const PandemosProvider = ({children}: {children: React.ReactNode}) => {
-  const [agents, setAgents] = useState<Crossfilter<Agent>>();
-  const [locations, setLocations] = useState<Crossfilter<Location>>();
-  const [trips, setTrips] = useState<Crossfilter<Trip>>();
+  const [agents, setAgents] = useState<Array<Agent>>();
+  const [locations, setLocations] = useState<Array<Location>>();
+  const [trips, setTrips] = useState<Array<Trip>>();
 
   const [tripChains, setTripChains] = useState<Map<number, Array<Trip>>>();
   const [filteredTripChains, setFilteredTripChains] = useState<number[][]>([]);
+
+ 
 
   // Effect to fetch the data
   useEffect(() => {
@@ -120,20 +82,20 @@ export const PandemosProvider = ({children}: {children: React.ReactNode}) => {
       // handle data on promises accept
       ([agents, locations, trips]: [Array<Agent>, Array<Location>, Array<Trip>]) => {
         // setup crossfilter objects for each
-        setAgents(crossfilter(agents));
-        setLocations(crossfilter(locations));
-        setTrips(crossfilter(trips));
+        setAgents(agents);
+        setLocations(locations);
+        setTrips(trips);
       },
       // on promises reject
       (reason) => console.error('Failed to parse Pandemos data.', reason)
     );
     // This should only run once when the page loads
-    // TODO: Lazy load when the pandemos tab is selected
+    // TODO: Lazy load when the pandemos tab is selected?
   }, []);
 
   const getLocation = useCallback(
     (id: number) => {
-      return locations?.all().find((location) => location.location_id === id);
+      return locations?.find((location) => location.location_id === id);
     },
     [locations]
   );
@@ -141,7 +103,7 @@ export const PandemosProvider = ({children}: {children: React.ReactNode}) => {
   useEffect(() => {
     const agentTrips = new Map<number, Array<Trip>>();
 
-    for (const trip of trips?.all() ?? []) {
+    for (const trip of trips ?? []) {
       agentTrips.set(trip.agent_id, [...(agentTrips.get(trip.agent_id) ?? []), trip]);
     }
 
@@ -158,6 +120,26 @@ export const PandemosProvider = ({children}: {children: React.ReactNode}) => {
 
     setTripChains(tripChains);
   }, [getLocation, locations, trips]);
+  // Preprocess a single crossfilter with information of agents & locations included in the trips
+
+  const expandedTrips = useMemo<crossfilter.Crossfilter<TripExpanded>>(() => {
+    if (trips && agents && locations) {
+      return crossfilter(
+        trips?.map((trip) => {
+          return (
+            ({
+              ...trip,
+              agent_age_group: agents[trip.agent_id].age_group,
+              start_location_type: locations[trip.start_location].location_type,
+              end_location_type: locations[trip.end_location].location_type,
+            } as TripExpanded) ?? {}
+          );
+        })
+      );
+    } else {
+      return crossfilter([]);
+    }
+  }, [agents, locations, trips]);
 
   return (
     <PandemosContext.Provider
@@ -165,6 +147,7 @@ export const PandemosProvider = ({children}: {children: React.ReactNode}) => {
         agents,
         locations,
         trips,
+        expandedTrips,
         tripChains,
         filteredTripChains,
         setFilteredTripChains,
