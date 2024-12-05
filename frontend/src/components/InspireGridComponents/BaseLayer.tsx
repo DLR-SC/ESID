@@ -1,11 +1,12 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, {useEffect} from 'react';
-import {LayerGroup, LayersControl, MapContainer, TileLayer, useMap, Polyline} from 'react-leaflet';
+import React, { useCallback, useContext, useEffect, useMemo } from 'react';
+import { LayerGroup, LayersControl, MapContainer, TileLayer, Rectangle, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import {getGrid, getCellFromPosition} from './inspire';
-import {LatLngExpression} from 'leaflet';
+import { getGridNew, getCellFromPosition } from './inspire'; 
+import { PandemosContext } from '../../data_sockets/PandemosContext';
+import { susceptibleStates, infectionStates } from './Constants';
 
 type MapBounds = [[number, number], [number, number]];
 type MapCenter = [number, number];
@@ -22,14 +23,8 @@ interface BaseLayerProps {
   setMapCenter: (center: MapCenter) => void;
 }
 
-function MapEventsHandler({setMapZoom, setMapBounds, setMapCenter}: BaseLayerProps) {
+function MapEventsHandler({ setMapZoom, setMapBounds, setMapCenter }: BaseLayerProps) {
   const map = useMap();
-
-  const minZoom = map.getBoundsZoom([
-    [52.248, 10.477],
-    [52.273, 10.572],
-  ]);
-  map.setMinZoom(minZoom);
 
   useEffect(() => {
     const bounds: MapBounds = [
@@ -55,9 +50,9 @@ function MapEventsHandler({setMapZoom, setMapBounds, setMapCenter}: BaseLayerPro
 
     const handleMouseClick = (position: any) => {
       const clickedPosition = position.latlng;
-      console.log(
+      /* console.log(
         getCellFromPosition([clickedPosition.lat, clickedPosition.lng], getResolutionFromZoom(map.getZoom()))
-      );
+      ); */
     };
 
     map.on('zoomend', handleZoomEnd);
@@ -101,18 +96,92 @@ export default function BaseLayer({
   setMapBounds,
   setMapCenter,
 }: BaseLayerProps): JSX.Element {
-  let multiPolyline: LatLngExpression[][] = [];
-  inspireGridLevel = getResolutionFromZoom(mapZoom);
+  const context = useContext(PandemosContext);
 
-  if (inspireGrid) {
-    const gridData = getGrid(mapBounds, inspireGridLevel);
-    const latitudes = gridData.latitudes.map((line) => line.map((coord) => [coord[1], coord[0]]) as LatLngExpression[]);
-    const longitudes = gridData.longitudes.map(
-      (line) => line.map((coord) => [coord[1], coord[0]]) as LatLngExpression[]
-    );
+  const gridResolution = useMemo(() => getResolutionFromZoom(mapZoom), [mapZoom]);
 
-    multiPolyline = [...latitudes, ...longitudes];
-  }
+  const gridData = useMemo(() => {
+    const bounds: MapBounds = [
+      [52.248, 10.477],
+      [52.273, 10.572],
+    ];
+    return getGridNew(mapBounds, gridResolution); 
+  }, [mapBounds, gridResolution]);
+
+  
+  const getLocationPos = useCallback(
+    (location: number) => {
+      const result = context.locations?.find((loc) => loc.location_id === location);
+      return result ? [result.lat, result.lon] : undefined;
+    },
+    [context.locations]
+  );
+
+  // Calculate infected locations from filtered trip chains
+  const infectedLocations = useMemo(() => {
+    const infectedLocations: { pos: number[]; infectionType: number }[] = [];
+    context.filteredTripChains?.forEach((tripChains) => {
+      tripChains.forEach((tripChainId) => {
+        if (context.tripChains) {
+          const tripChain = context.tripChains.get(tripChainId);
+          tripChain?.forEach((trip, index) => {
+            if (tripChain[index - 1] !== undefined) {
+              if (
+                infectionStates.includes(trip.infection_state) &&
+                trip.infection_state !== tripChain[index - 1].infection_state &&
+                susceptibleStates.includes(tripChain[index - 1].infection_state)
+              ) {
+                infectedLocations.push({
+                  pos: getLocationPos(trip.start_location),
+                  infectionType: trip.infection_state,
+                });
+              }
+            }
+          });
+        }
+      });
+    });
+    return infectedLocations;
+  }, [context.filteredTripChains, context.tripChains, getLocationPos]);
+  const getColorForInfection = (infectionCount: number, maxInfectionCount: number) => {
+    const ratio = infectionCount / maxInfectionCount;
+  
+    // TODO: Check colour scale
+    const r = Math.min(255, Math.floor(ratio * 120 + 100)); 
+    const g = Math.min(255, Math.floor((1 - ratio) * 120 + 100)); 
+    const b = Math.min(255, Math.floor((1 - ratio) * 50)); 
+  
+    return `rgb(${r}, ${g}, ${b})`; 
+  };
+  
+
+  // Calculate infection count per grid cell
+  const infectedCellData = useMemo(() => {
+    const cellsData: { bounds: [[number, number], [number, number]]; infectionCount: number }[] = [];
+    
+    gridData.rectangles.forEach(([latMin, lonMin, latMax, lonMax]) => {
+      const infectionCount = infectedLocations.filter((loc) => {
+        return (
+          loc.pos[0] >= latMin &&
+          loc.pos[0] <= latMax &&
+          loc.pos[1] >= lonMin &&
+          loc.pos[1] <= lonMax
+        );
+      }).length;
+
+      cellsData.push({
+        bounds: [
+          [latMin, lonMin],
+          [latMax, lonMax],
+        ],
+        infectionCount,
+      });
+    });
+
+    const maxInfectionCount = Math.max(...cellsData.map((cell) => cell.infectionCount), 0);
+
+    return { cellsData, maxInfectionCount };
+  }, [infectedLocations, gridData]);
 
   return (
     <MapContainer
@@ -121,27 +190,39 @@ export default function BaseLayer({
       scrollWheelZoom={true}
       doubleClickZoom={false}
       dragging={true}
-      maxBounds={[
-        [52.248, 10.477],
-        [52.273, 10.572],
-      ]}
+      maxBounds={mapBounds}
       maxBoundsViscosity={1.0}
-      style={{height: '100%', zIndex: '1', position: 'relative'}}
+      style={{ height: '100%', zIndex: '1', position: 'relative' }}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
       />
       <LayersControl position='topright'>
-        <LayersControl.Overlay checked name='InspireGridOverlay'>
+        <LayersControl.Overlay checked name="Infection Heatmap">
           <LayerGroup>
-            {multiPolyline.map((polyline, index) => (
-              <Polyline key={index} pathOptions={{weight: 1}} positions={polyline} />
-            ))}
+            {infectedCellData.cellsData.map((rectangle, index) => {
+              const fillColor = getColorForInfection(
+                rectangle.infectionCount,
+                infectedCellData.maxInfectionCount
+              );
+
+              return (
+                <Rectangle
+                  key={index}
+                  bounds={rectangle.bounds}
+                  pathOptions={{
+                    weight: 1,
+                    color: 'black',
+                    fillColor: fillColor,
+                    fillOpacity: 0.2,
+                  }}
+                />
+              );
+            })}
           </LayerGroup>
         </LayersControl.Overlay>
       </LayersControl>
-
       <MapEventsHandler setMapZoom={setMapZoom} setMapBounds={setMapBounds} setMapCenter={setMapCenter} />
     </MapContainer>
   );

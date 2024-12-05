@@ -69,3 +69,6 @@ export const ETRS89Boundaries: [[number, number], [number, number]] = [
   [32.88, -16.1],
   [84.73, 40.18],
 ];
+
+export const infectionStates: Array<number> = [1, 2, 3, 4];
+export const susceptibleStates: Array<number> = [0, 5, 7];
