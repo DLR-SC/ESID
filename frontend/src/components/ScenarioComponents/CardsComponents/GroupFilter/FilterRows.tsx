@@ -6,14 +6,10 @@ import {Box, List, ListItem, ListItemText, useTheme} from '@mui/material';
 import {ScrollSyncPane} from 'react-scroll-sync';
 import {useTranslation} from 'react-i18next';
 import {Localization} from 'types/localization';
-import {Dictionary} from 'util/util';
 
 interface FilterRowsProps {
-  /** Array of compartments */
-  compartments: string[];
-
   /** Dictionary of filtered values */
-  filteredValues: Dictionary<number> | null;
+  filteredValues: Record<string, number> | null;
 
   /** Boolean to determine if the rows are flipped */
   isFlipped?: boolean;
@@ -22,7 +18,7 @@ interface FilterRowsProps {
   compartmentExpanded?: boolean;
 
   /** Selected compartment */
-  selectedCompartment: string;
+  selectedCompartmentId: string | null;
 
   /** Minimum number of compartment rows */
   minCompartmentsRows: number;
@@ -30,7 +26,7 @@ interface FilterRowsProps {
   /** Maximum number of compartment rows */
   maxCompartmentsRows: number;
 
-  /** An object containing localization information (translation & number formattation).*/
+  /** An object containing localization information (translation & number formation).*/
   localization?: Localization;
 }
 
@@ -39,11 +35,10 @@ interface FilterRowsProps {
  * It also supports localization.
  */
 export default function FilterRows({
-  compartments,
   filteredValues,
   isFlipped = true,
   compartmentExpanded = true,
-  selectedCompartment,
+  selectedCompartmentId,
   minCompartmentsRows,
   maxCompartmentsRows,
   localization = {
@@ -88,13 +83,12 @@ export default function FilterRows({
             className='hide-scrollbar'
           >
             <List dense className='hide-scrollbar' sx={{paddingTop: 2, paddingBottom: 2}}>
-              {compartments.map((comp: string, id: number) => {
-                const compartmentId = `compartment-${id}`;
+              {Object.entries(filteredValues ?? {}).map(([compartmentId, value], index) => {
                 return (
                   <ListItem
-                    key={comp}
+                    key={compartmentId}
                     sx={{
-                      display: compartmentExpanded || id < minCompartmentsRows ? 'flex' : 'none',
+                      display: compartmentExpanded || index < minCompartmentsRows ? 'flex' : 'none',
                       alignContent: 'end',
                       justifyContent: 'flex-end',
                       paddingTop: 2,
@@ -102,11 +96,11 @@ export default function FilterRows({
                     }}
                   >
                     <ListItemText
-                      id={compartmentId}
-                      primary={GetFormattedAndTranslatedValues(filteredValues ? filteredValues[comp] : null)}
+                      id={`compartment-${compartmentId}`}
+                      primary={GetFormattedAndTranslatedValues(filteredValues ? value : null)}
                       disableTypography={true}
                       sx={{
-                        color: comp != selectedCompartment ? 'GrayText' : 'black',
+                        color: compartmentId !== selectedCompartmentId ? 'GrayText' : 'black',
                         typography: 'listElement',
                         fontFamily: ['Inter', 'Arial', 'sans-serif'].join(','),
                         textAlign: 'right',

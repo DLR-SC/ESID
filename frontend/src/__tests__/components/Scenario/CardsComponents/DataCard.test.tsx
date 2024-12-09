@@ -87,19 +87,19 @@ const DataCardTest = () => {
       <DataCard
         index={Index}
         compartmentValues={CompartmentValues}
-        startValues={StartValues}
-        label={Label}
+        referenceValues={StartValues}
+        title={Label}
         compartmentsExpanded={CompartmentsExpanded}
         compartments={Compartments}
-        selectedCompartment={SelectedCompartment}
-        selectedScenario={SelectedScenario}
+        selectedCompartmentId={SelectedCompartment}
+        isSelected={SelectedScenario}
         color={Color}
-        activeScenarios={activeScenarios}
+        isActive={activeScenarios}
         filterValues={FilterValues}
         numberSelectedScenario={Index}
         minCompartmentsRows={MinCompartmentsRows}
         maxCompartmentsRows={MaxCompartmentsRows}
-        setSelectedScenario={setSelectedScenario}
+        setSelected={setSelectedScenario}
         setActiveScenarios={setActiveScenarios}
         groupFilters={GroupFilters}
       />

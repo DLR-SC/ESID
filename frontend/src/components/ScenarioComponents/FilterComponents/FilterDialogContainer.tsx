@@ -3,29 +3,27 @@
 
 import {Box, Button, Dialog, useTheme} from '@mui/material';
 import ConfirmDialog from '../../shared/ConfirmDialog';
-import {useState} from 'react';
+import React, {Dispatch, useState} from 'react';
 import ManageGroupDialog from './ManageGroupDialog';
 import {useTranslation} from 'react-i18next';
-import React from 'react';
-import {GroupCategory, GroupSubcategory} from 'store/services/groupApi';
+
 import {GroupFilter} from 'types/group';
-import {Dictionary} from 'util/util';
 import {Localization} from 'types/localization';
 import {useAppDispatch} from '../../../store/hooks';
 import {setIsFilterDialogOpen} from '../../../store/UserOnboardingSlice';
 
 export interface FilterDialogContainerProps {
-  /** A dictionary of group filters.*/
-  groupFilters: Dictionary<GroupFilter>;
+  /** A dictionary of group filters. */
+  groupFilters: Record<string, GroupFilter>;
 
-  /** An array of group category.*/
-  groupCategories: GroupCategory[];
+  /** An array of group category. */
+  categories: Array<{id: string; name: string}>;
 
-  /** An array of group subcategory.*/
-  groupSubCategories: GroupSubcategory[];
+  /** An array of groups. */
+  groups: Array<{id: string; name: string; category: string}>;
 
   /** A function that allows setting the groupFilter state so that if the user adds a filter, the new filter will be visible */
-  setGroupFilters: React.Dispatch<React.SetStateAction<Dictionary<GroupFilter>>>;
+  setGroupFilters: Dispatch<Record<string, GroupFilter>>;
 
   /** An object containing localization information (translation & number formattation).*/
   localization?: Localization;
@@ -37,9 +35,13 @@ export interface FilterDialogContainerProps {
 export default function FilterDialogContainer({
   groupFilters,
   setGroupFilters,
-  groupCategories,
-  groupSubCategories,
-  localization = {formatNumber: (value: number) => value.toString(), customLang: 'global', overrides: {}},
+  categories,
+  groups,
+  localization = {
+    formatNumber: (value: number) => value.toString(),
+    customLang: 'global',
+    overrides: {},
+  },
 }: FilterDialogContainerProps) {
   const [open, setOpen] = useState(false);
   const [closeDialogOpen, setCloseDialogOpen] = useState(false);
@@ -130,8 +132,8 @@ export default function FilterDialogContainer({
         <ManageGroupDialog
           groupFilters={groupFilters}
           setGroupFilters={setGroupFilters}
-          groupCategories={groupCategories}
-          groupSubCategories={groupSubCategories}
+          categories={categories}
+          groups={groups}
           onCloseRequest={handleClose}
           unsavedChangesCallback={(unsavedChanges) => setGroupEditorUnsavedChanges(unsavedChanges)}
           localization={localization}

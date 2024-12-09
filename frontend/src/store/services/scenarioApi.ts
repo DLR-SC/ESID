@@ -293,12 +293,38 @@ export const scenarioApi = createApi({
       },
       providesTags: (_1, _2, parameterDefinitionId) => [{type: 'ParameterDefinition', id: parameterDefinitionId}],
     }),
+
+    getMultiParameterDefinitions: build.query<Record<string, ParameterDefinition>, Array<string>>({
+      async queryFn(parameters, _2, _3, fetchWithBQ) {
+        const results: Record<string, ParameterDefinition> = {};
+
+        for (const id of parameters) {
+          const response = await fetchWithBQ({
+            url: `parameterdefinitions/${id}/`,
+          });
+
+          if (response.error) {
+            return {error: response.error};
+          }
+
+          results[id] = response.data as ParameterDefinition;
+        }
+
+        return {data: results};
+      },
+      providesTags: (parameters: Record<string, ParameterDefinition> = {}) => [
+        {type: 'ParameterDefinition', id: 'LIST'},
+        ...Object.keys(parameters).map((parameterId) => ({type: 'ParameterDefinition' as const, id: parameterId})),
+      ],
+    }),
   }),
 });
 
 export interface ParameterData {
+  id: string;
   symbol: string;
-  key: string;
+  description: string;
+  unit: string;
   type: string;
   data: Array<{span: number; min: number; max: number}> | string;
 }
@@ -327,4 +353,5 @@ export const {
   useGetCompartmentQuery,
   useGetParameterDefinitionsQuery,
   useGetParameterDefinitionQuery,
+  useGetMultiParameterDefinitionsQuery,
 } = scenarioApi;

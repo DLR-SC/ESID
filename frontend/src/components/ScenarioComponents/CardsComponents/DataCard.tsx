@@ -2,57 +2,50 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import Box from '@mui/material/Box';
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {Dispatch, useEffect, useMemo, useState} from 'react';
 import MainCard from './MainCard/MainCard';
 import FiltersContainer from './GroupFilter/FiltersContainer';
-import {FilterValue} from 'types/card';
+import {FilterValues} from 'types/card';
 import {GroupFilter} from 'types/group';
 import {Localization} from 'types/localization';
-import {Dictionary} from 'util/util';
 
 interface DataCardProps {
   /** A unique identifier for the card.*/
-  index: number;
+  id: string;
 
   /** A dictionary of compartment values associated with the card.*/
-  compartmentValues: Dictionary<number> | null;
+  compartmentValues: Record<string, number> | null;
 
   /** A dictionary of start values used for calculating the rate. This determines whether the values have increased, decreased, or remained the same. */
-  startValues: Dictionary<number> | null;
+  referenceValues: Record<string, number> | null;
 
   /** The title of the card.*/
-  label: string;
+  title: string;
 
   /** A boolean indicating whether the compartments are expanded.*/
   compartmentsExpanded: boolean;
 
-  /** An array of compartments.*/
-  compartments: string[];
-
   /** The compartment that is currently selected.*/
-  selectedCompartment: string;
+  selectedCompartmentId: string | null;
 
   /** A boolean indicating whether the scenario is selected.*/
-  selectedScenario: boolean;
+  isSelected: boolean;
 
   /** The color of the card.*/
   color: string;
 
-  /** An array of active scenarios.*/
-  activeScenarios: number[] | null;
+  /** if this scenario is active.*/
+  isActive: boolean;
 
   /** A dictionary of filter values. This is an array of objects, each containing a title and a dictionary of numbers representing
    * the filtered information to be displayed, it's used a disctionary because each card has to have the same amount of filter. */
-  filterValues?: Dictionary<FilterValue[]> | null;
+  filterValues?: Record<string, FilterValues[]> | null;
 
   /** A function to set the selected scenario.*/
-  setSelectedScenario: React.Dispatch<React.SetStateAction<number | null>>;
+  setSelected: Dispatch<{id: string; state: boolean}>;
 
-  /** A function to set the active scenarios.*/
-  setActiveScenarios: React.Dispatch<React.SetStateAction<number[] | null>>;
-
-  /** The number of the selected scenario.*/
-  numberSelectedScenario: number | null;
+  /** A function to set the active scenario.*/
+  setActive: Dispatch<{id: string; state: boolean}>;
 
   /** The minimum number of compartment rows.*/
   minCompartmentsRows: number;
@@ -64,7 +57,7 @@ interface DataCardProps {
   localization?: Localization;
 
   /** A dictionary of group filters.*/
-  groupFilters: Dictionary<GroupFilter> | undefined;
+  groupFilters: Record<string, GroupFilter> | undefined;
 
   /** Boolean to determine if the arrow is displayed */
   arrow?: boolean;
@@ -76,22 +69,20 @@ interface DataCardProps {
  * The filter container renders a button and generates the necessary number of cards based on the presence of any filters.
  */
 export default function DataCard({
-  index,
+  id,
   compartmentValues,
-  startValues,
-  label,
+  referenceValues,
+  title,
   compartmentsExpanded,
-  compartments,
-  selectedCompartment,
+  selectedCompartmentId,
   filterValues,
   color,
-  activeScenarios,
-  selectedScenario,
-  numberSelectedScenario,
+  isActive,
+  isSelected,
   minCompartmentsRows,
   maxCompartmentsRows,
-  setSelectedScenario,
-  setActiveScenarios,
+  setSelected,
+  setActive,
   localization = {
     formatNumber: (value: number) => value.toString(),
     customLang: 'global',
@@ -105,18 +96,18 @@ export default function DataCard({
   const [visibility, setVisibility] = useState<boolean>(true);
 
   const filteredTitles: string[] = useMemo(() => {
-    if (activeScenarios?.includes(index) && filterValues?.[index.toString()]) {
-      return filterValues[index.toString()].map((filterValue: FilterValue) => filterValue.filteredTitle);
+    if (isActive && filterValues?.[id.toString()]) {
+      return filterValues[id.toString()].map((filterValue: FilterValues) => filterValue.filteredTitle);
     }
     return [];
-  }, [activeScenarios, filterValues, index]);
+  }, [isActive, filterValues, id]);
 
-  const filteredValues: Array<Dictionary<number> | null> = useMemo(() => {
-    if (activeScenarios?.includes(index) && filterValues?.[index.toString()]) {
-      return filterValues[index.toString()].map((filterValue: FilterValue) => filterValue.filteredValues);
+  const filteredValues = useMemo(() => {
+    if (isActive && filterValues?.[id.toString()]) {
+      return filterValues[id.toString()].map((filterValue: FilterValues) => filterValue.filteredValues);
     }
     return [];
-  }, [activeScenarios, filterValues, index]);
+  }, [isActive, filterValues, id]);
 
   /*
    * This useEffect hook updates the visibility of the component based on groupFilters and filteredTitles.
@@ -137,7 +128,7 @@ export default function DataCard({
 
   return (
     <Box
-      id={`data-card-${index}`}
+      id={`data-card-${id}`}
       sx={{
         display: 'flex',
         flexDirection: 'row',
@@ -145,45 +136,39 @@ export default function DataCard({
       }}
     >
       <MainCard
-        index={index}
-        label={label}
+        id={id}
+        label={title}
         hover={hover}
         color={color}
-        startValues={startValues}
+        referenceValues={referenceValues}
         compartmentValues={compartmentValues}
         setHover={setHover}
-        compartments={compartments}
         compartmentsExpanded={compartmentsExpanded}
-        selectedCompartment={selectedCompartment}
-        selectedScenario={selectedScenario}
-        activeScenario={activeScenarios?.includes(index) ?? false}
-        setSelectedScenario={setSelectedScenario}
-        setActiveScenarios={setActiveScenarios}
-        numberSelectedScenario={numberSelectedScenario}
-        activeScenarios={activeScenarios}
+        selectedCompartmentId={selectedCompartmentId}
+        isSelected={isSelected}
+        isActive={isActive}
+        setSelected={setSelected}
+        setActive={setActive}
         minCompartmentsRows={minCompartmentsRows}
         maxCompartmentsRows={maxCompartmentsRows}
         localization={localization}
         arrow={arrow}
       />
-      {activeScenarios?.includes(index) &&
-        filterValues?.[index.toString()] &&
-        Object.keys(groupFilters || {}).length !== 0 &&
-        visibility && (
-          <FiltersContainer
-            index={index}
-            filteredTitles={filteredTitles}
-            folded={folded}
-            setFolded={setFolded}
-            compartmentsExpanded={compartmentsExpanded}
-            compartments={compartments}
-            selectedCompartment={selectedCompartment}
-            filteredValues={filteredValues}
-            minCompartmentsRows={minCompartmentsRows}
-            maxCompartmentsRows={maxCompartmentsRows}
-            localization={localization}
-          />
-        )}
+      {isActive && filterValues?.[id.toString()] && Object.keys(groupFilters || {}).length !== 0 && visibility && (
+        <FiltersContainer
+          id={id}
+          color={color}
+          filteredTitles={filteredTitles}
+          folded={folded}
+          setFolded={setFolded}
+          compartmentsExpanded={compartmentsExpanded}
+          selectedCompartmentId={selectedCompartmentId}
+          filteredValues={filteredValues}
+          minCompartmentsRows={minCompartmentsRows}
+          maxCompartmentsRows={maxCompartmentsRows}
+          localization={localization}
+        />
+      )}
     </Box>
   );
 }

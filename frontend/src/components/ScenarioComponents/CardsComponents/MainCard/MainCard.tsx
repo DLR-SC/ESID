@@ -1,17 +1,17 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React from 'react';
+import React, {Dispatch} from 'react';
 import {Box, useTheme} from '@mui/material';
 import CardTitle from './CardTitle';
 import CardTooltip from './CardTooltip';
 import CardRows from './CardRows';
 import {Localization} from 'types/localization';
-import {Dictionary, hexToRGB} from 'util/util';
+import {hexToRGB} from 'util/util';
 
 interface MainCardProps {
   /** A unique identifier for the card. */
-  index: number;
+  id: string;
 
   /** The title of the card. */
   label: string;
@@ -20,43 +20,34 @@ interface MainCardProps {
   color: string;
 
   /** A dictionary of compartment values associated with the card. */
-  compartmentValues: Dictionary<number> | null;
+  compartmentValues: Record<string, number> | null;
 
   /** A dictionary of start values used for calculating the rate. This determines whether the values have increased, decreased, or remained the same. */
-  startValues: Dictionary<number> | null;
-
-  /** An array of compartment names. */
-  compartments: string[];
+  referenceValues: Record<string, number> | null;
 
   /** A boolean indicating whether the compartments are expanded. */
   compartmentsExpanded: boolean;
 
   /** The compartment that is currently selected. */
-  selectedCompartment: string;
+  selectedCompartmentId: string | null;
 
   /** A boolean indicating whether the user is hovering over the card. */
   hover: boolean;
 
   /** A function to set the hover state of the card. */
-  setHover: React.Dispatch<React.SetStateAction<boolean>>;
+  setHover: Dispatch<boolean>;
 
   /** A boolean indicating whether the scenario is selected. */
-  selectedScenario: boolean;
+  isSelected: boolean;
 
   /** A function to set the selected scenario. */
-  setSelectedScenario: React.Dispatch<React.SetStateAction<number | null>>;
-
-  /** The number of the selected scenario. */
-  numberSelectedScenario: number | null;
+  setSelected: Dispatch<{id: string; state: boolean}>;
 
   /** A boolean indicating whether the scenario is active. */
-  activeScenario: boolean;
+  isActive: boolean;
 
-  /** A function to set the active scenarios. */
-  setActiveScenarios: React.Dispatch<React.SetStateAction<number[] | null>>;
-
-  /** An array of active scenarios. */
-  activeScenarios: number[] | null;
+  /** A function to set the active scenario. */
+  setActive: Dispatch<{id: string; state: boolean}>;
 
   /** The minimum number of compartment rows. */
   minCompartmentsRows: number;
@@ -77,23 +68,20 @@ interface MainCardProps {
  * Furthermore, the card is clickable, and if clicked, it will become the selected scenario.
  */
 function MainCard({
-  index,
+  id,
   label,
   hover,
   compartmentValues,
-  startValues,
+  referenceValues,
   setHover,
-  compartments,
   compartmentsExpanded,
-  selectedCompartment,
+  selectedCompartmentId,
   color,
-  selectedScenario,
-  activeScenario,
-  numberSelectedScenario,
+  isSelected,
+  isActive,
   minCompartmentsRows,
-  setSelectedScenario,
-  setActiveScenarios,
-  activeScenarios,
+  setSelected,
+  setActive,
   maxCompartmentsRows,
   localization = {
     formatNumber: (value: number) => value.toString(),
@@ -105,30 +93,26 @@ function MainCard({
   const theme = useTheme();
   return (
     <Box
-      id={`main-card-external-container-${index}`}
+      id={`main-card-external-container-${id}`}
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        backgroundColor:
-          ((hover || selectedScenario) && activeScenarios?.includes(index)) || hover ? hexToRGB(color, 0.4) : null,
+        backgroundColor: ((hover || isSelected) && isActive) || hover ? hexToRGB(color, 0.4) : null,
         zIndex: 3,
-        boxShadow:
-          ((hover || selectedScenario) && activeScenarios?.includes(index)) || hover
-            ? `0 0 0 6px ${hexToRGB(color, 0.4)}`
-            : null,
-        borderRadius: ((hover || selectedScenario) && activeScenarios?.includes(index)) || hover ? 1 : null,
+        boxShadow: ((hover || isSelected) && isActive) || hover ? `0 0 0 6px ${hexToRGB(color, 0.4)}` : null,
+        borderRadius: ((hover || isSelected) && isActive) || hover ? 1 : null,
         borderColor: color,
       }}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       onClick={() => {
-        if (activeScenario) {
-          setSelectedScenario(index);
+        if (isActive) {
+          setSelected({id, state: true});
         }
       }}
     >
       <Box
-        id={`main-card-title&compartments-container-${index}`}
+        id={`main-card-title&compartments-container-${id}`}
         className='hide-scrollbar'
         sx={{
           maxHeight: compartmentsExpanded
@@ -148,29 +132,28 @@ function MainCard({
           borderColor: color,
           transition: 'transform 0.5s',
           transformStyle: 'preserve-3d',
-          transform: activeScenario ? 'none' : 'rotateY(180deg)',
+          transform: isActive ? 'none' : 'rotateY(180deg)',
         }}
       >
         <Box
-          id={`main-card-title-container-${index}`}
+          id={`main-card-title-container-${id}`}
           sx={{
             display: 'flex',
             height: '65px',
             alignItems: 'self-end',
             justifyContent: 'left',
             width: 'full',
-            transform: activeScenarios?.includes(index) ? 'none' : 'rotateY(180deg)',
+            transform: isActive ? 'none' : 'rotateY(180deg)',
           }}
         >
           <CardTitle label={label} color={color} />
         </Box>
         <CardRows
-          compartments={compartments}
           compartmentValues={compartmentValues}
-          startValues={startValues}
-          isFlipped={activeScenario}
+          referenceValues={referenceValues}
+          isFlipped={isActive}
           compartmentExpanded={compartmentsExpanded}
-          selectedCompartment={selectedCompartment}
+          selectedCompartmentId={selectedCompartmentId}
           color={color}
           minCompartmentsRows={minCompartmentsRows}
           maxCompartmentsRows={maxCompartmentsRows}
@@ -181,12 +164,10 @@ function MainCard({
       <CardTooltip
         hover={hover}
         color={color}
-        index={index}
-        activeScenario={activeScenarios?.includes(index) || false}
-        activeScenarios={activeScenarios}
-        numberSelectedScenario={numberSelectedScenario}
-        setActiveScenarios={setActiveScenarios}
-        setSelectedScenario={setSelectedScenario}
+        id={id}
+        isActive={isActive}
+        setActive={setActive}
+        setSelected={setSelected}
         localization={localization}
       />
     </Box>

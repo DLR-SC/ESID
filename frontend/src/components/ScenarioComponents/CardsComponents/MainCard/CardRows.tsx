@@ -7,17 +7,14 @@ import {ScrollSyncPane} from 'react-scroll-sync';
 import {useTranslation} from 'react-i18next';
 import React from 'react';
 import {Localization} from 'types/localization';
-import {Dictionary, hexToRGB} from 'util/util';
+import {hexToRGB} from 'util/util';
 
 interface CardRowsProps {
-  /** Array of compartments */
-  compartments: string[];
-
   /** Dictionary of compartment values */
-  compartmentValues: Dictionary<number> | null;
+  compartmentValues: Record<string, number> | null;
 
   /** Dictionary of start values */
-  startValues: Dictionary<number> | null;
+  referenceValues: Record<string, number> | null;
 
   /** Boolean to determine if the card is flipped */
   isFlipped?: boolean;
@@ -29,7 +26,7 @@ interface CardRowsProps {
   compartmentExpanded?: boolean;
 
   /** Selected compartment */
-  selectedCompartment: string;
+  selectedCompartmentId: string | null;
 
   /** Color of the card row */
   color: string;
@@ -49,13 +46,12 @@ interface CardRowsProps {
  * It also supports localization.
  */
 export default function CardRows({
-  compartments,
   isFlipped = true,
   arrow = true,
   compartmentValues,
-  startValues,
+  referenceValues,
   compartmentExpanded,
-  selectedCompartment,
+  selectedCompartmentId,
   color,
   minCompartmentsRows,
   maxCompartmentsRows,
@@ -87,13 +83,18 @@ export default function CardRows({
 
   // Function to get compartment rate
   const getCompartmentRate = (compartment: string): string => {
-    if (!compartmentValues || !(compartment in compartmentValues) || !startValues || !(compartment in startValues)) {
+    if (
+      !compartmentValues ||
+      !(compartment in compartmentValues) ||
+      !referenceValues ||
+      !(compartment in referenceValues)
+    ) {
       // Return a Figure Dash (‒) where a rate cannot be calculated.
       return '\u2012';
     }
 
     const value = compartmentValues[compartment];
-    const startValue = startValues[compartment];
+    const startValue = referenceValues[compartment];
     const result = Math.round(100 * (value / startValue) - 100);
 
     if (!isFinite(result)) {
@@ -136,23 +137,23 @@ export default function CardRows({
             className='hide-scrollbar'
           >
             <List dense className='hide-scrollbar' sx={{paddingTop: 2, paddingBottom: 2}}>
-              {compartments.map((comp: string, id: number) => {
+              {Object.entries(compartmentValues || {}).map(([id, value], index) => {
                 return (
                   <ListItem
-                    key={comp}
+                    key={id}
                     sx={{
-                      display: compartmentExpanded || id < minCompartmentsRows ? 'flex' : 'none',
-                      backgroundColor: comp == selectedCompartment ? hexToRGB(color, 0.1) : 'none',
+                      display: compartmentExpanded || index < minCompartmentsRows ? 'flex' : 'none',
+                      backgroundColor: id === selectedCompartmentId ? hexToRGB(color, 0.1) : 'none',
                       paddingTop: 2,
                       paddingBottom: 2,
                     }}
                   >
                     <ListItemText
                       key={id}
-                      primary={GetFormattedAndTranslatedValues(compartmentValues ? compartmentValues[comp] : null)}
+                      primary={GetFormattedAndTranslatedValues(value)}
                       disableTypography={true}
                       sx={{
-                        color: comp != selectedCompartment ? 'GrayText' : 'black',
+                        color: id !== selectedCompartmentId ? 'GrayText' : 'black',
                         typography: 'listElement',
                         fontFamily: ['Inter', 'Arial', 'sans-serif'].join(','),
                         textAlign: 'right',
@@ -161,10 +162,10 @@ export default function CardRows({
                       }}
                     />
                     <ListItemText
-                      primary={getCompartmentRate(comp)}
+                      primary={getCompartmentRate(id)}
                       disableTypography={true}
                       sx={{
-                        color: comp != selectedCompartment ? 'GrayText' : 'black',
+                        color: id !== selectedCompartmentId ? 'GrayText' : 'black',
                         typography: 'listElement',
                         fontFamily: ['Inter', 'Arial', 'sans-serif'].join(','),
                         fontWeight: 'bold',
@@ -175,10 +176,8 @@ export default function CardRows({
                     />
                     {arrow && (
                       <TrendArrow
-                        value={parseFloat(
-                          GetFormattedAndTranslatedValues(compartmentValues ? compartmentValues[comp] : null)
-                        )}
-                        rate={getCompartmentRate(comp)}
+                        value={parseFloat(GetFormattedAndTranslatedValues(value))}
+                        rate={getCompartmentRate(id)}
                       />
                     )}
                   </ListItem>

@@ -18,8 +18,8 @@ interface FilterButtonProps {
   /** Background color of the button */
   backgroundColor: string;
 
-  /** ID number of the button */
-  idNumber: number;
+  /** ID of the button */
+  id: string;
 
   /** Maximum number of compartment rows */
   maxCompartmentsRows: number;
@@ -39,7 +39,7 @@ export default function FilterButton({
   folded,
   setFolded,
   borderColor,
-  idNumber,
+  id,
   backgroundColor,
   maxCompartmentsRows,
   compartmentsExpanded,
@@ -47,7 +47,7 @@ export default function FilterButton({
 }: FilterButtonProps) {
   return (
     <Button
-      id={`scenario-card-number-group-filter-fold-toggle-${idNumber}`}
+      id={`scenario-card-number-group-filter-fold-toggle-${id}`}
       sx={{
         width: '26px',
         minWidth: '26px',

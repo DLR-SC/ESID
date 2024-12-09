@@ -2,16 +2,11 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import DataCard from './DataCard';
-import {Dispatch, SetStateAction} from 'react';
-import React, {useMemo} from 'react';
-import {useTheme} from '@mui/material/styles';
+import React, {Dispatch, useMemo} from 'react';
 import Box from '@mui/material/Box/Box';
-import {Scenario} from 'store/ScenarioSlice';
-import {CardValue, FilterValue} from 'types/card';
+import {FilterValues} from 'types/card';
 import {GroupFilter} from 'types/group';
 import {Localization} from 'types/localization';
-import {getScenarioPrimaryColor} from 'util/Theme';
-import {Dictionary} from 'util/util';
 
 interface CardContainerProps {
   /** A boolean indicating whether the compartments are expanded. */
@@ -19,32 +14,31 @@ interface CardContainerProps {
 
   /** A dictionary of card values. Each value is an object containing 'startValues', a dictionary used for rate calculation, and 'compartmentValues' for each card.
    *'startValues' help determine whether the values have increased, decreased, or remained the same. */
-  cardValues: Dictionary<CardValue> | undefined;
+  cardValues: Record<string, Record<string, number>> | undefined;
+
+  referenceValues: Record<string, number> | undefined;
 
   /** A dictionary of filter values. This is an array of objects, each containing a title and a dictionary of numbers representing
-   * the filtered information to be displayed, it's used a disctionary because each card has to have the same amount of filter. */
-  filterValues?: Dictionary<FilterValue[]> | null;
+   * the filtered information to be displayed, it's used a dictionary because each card has to have the same amount of filter. */
+  filterValues?: Record<string, FilterValues[]> | null;
 
   /** The compartment that is currently selected. */
-  selectedCompartment: string;
+  selectedCompartmentId: string | null;
 
   /** An array of scenarios. */
-  scenarios: Scenario[];
-
-  /** An array of compartments. */
-  compartments: string[];
+  scenarios: Array<{id: string; name: string; color: string}>;
 
   /** An array of active scenarios. */
-  activeScenarios: number[] | null;
+  activeScenarios: string[];
 
   /** A function to set the active scenarios. */
-  setActiveScenarios: React.Dispatch<React.SetStateAction<number[] | null>>;
+  setActiveScenario: Dispatch<{id: string; state: boolean}>;
 
   /** The selected scenario. */
-  selectedScenario: number | null;
+  selectedScenario: string | null;
 
   /** A function to set the selected scenario. */
-  setSelectedScenario: Dispatch<SetStateAction<number | null>>;
+  setSelectedScenario: Dispatch<{id: string; state: boolean}>;
 
   /** The minimum number of compartment rows. */
   minCompartmentsRows: number;
@@ -56,7 +50,7 @@ interface CardContainerProps {
   localization?: Localization;
 
   /** A dictionary of group filters. */
-  groupFilters: Dictionary<GroupFilter> | undefined;
+  groupFilters: Record<string, GroupFilter> | undefined;
 
   /** Boolean to determine if the arrow is displayed */
   arrow?: boolean;
@@ -69,14 +63,14 @@ interface CardContainerProps {
 export default function CardContainer({
   compartmentsExpanded,
   filterValues,
-  selectedCompartment,
-  compartments,
+  selectedCompartmentId,
   scenarios,
   activeScenarios,
   cardValues,
+  referenceValues,
   minCompartmentsRows,
   maxCompartmentsRows,
-  setActiveScenarios,
+  setActiveScenario,
   localization = {
     formatNumber: (value: number) => value.toString(),
     customLang: 'global',
@@ -87,7 +81,6 @@ export default function CardContainer({
   groupFilters,
   arrow = true,
 }: CardContainerProps) {
-  const theme = useTheme();
   const minHeight = useMemo(() => {
     let height;
     if (compartmentsExpanded) {
@@ -107,29 +100,23 @@ export default function CardContainer({
   }, [compartmentsExpanded, maxCompartmentsRows, minCompartmentsRows]);
 
   const dataCards = scenarios.map((scenario) => {
-    const cardValue = cardValues ? cardValues[scenario.id.toString()] : null;
-    if (!cardValue) {
-      return null;
-    }
     return (
       <DataCard
         key={scenario.id}
-        index={scenario.id}
-        color={scenario.id == 0 ? '#00000' : getScenarioPrimaryColor(scenario.id, theme)}
-        label={scenario.label}
+        id={scenario.id}
+        color={scenario.color}
+        title={scenario.name}
         compartmentsExpanded={compartmentsExpanded}
-        compartments={compartments}
-        compartmentValues={cardValue.compartmentValues}
-        startValues={cardValue.startValues}
-        selectedCompartment={selectedCompartment}
+        compartmentValues={cardValues ? cardValues[scenario.id] : null}
+        referenceValues={referenceValues ?? null}
+        selectedCompartmentId={selectedCompartmentId}
         filterValues={filterValues}
-        selectedScenario={selectedScenario == scenario.id}
-        activeScenarios={activeScenarios}
-        setSelectedScenario={setSelectedScenario}
-        numberSelectedScenario={selectedScenario ?? null}
-        setActiveScenarios={setActiveScenarios}
+        isSelected={selectedScenario === scenario.id}
+        isActive={activeScenarios.includes(scenario.id)}
+        setSelected={setSelectedScenario}
+        setActive={setActiveScenario}
         minCompartmentsRows={minCompartmentsRows}
-        maxCompartmentsRows={compartments.length < maxCompartmentsRows ? compartments.length : maxCompartmentsRows}
+        maxCompartmentsRows={maxCompartmentsRows}
         localization={localization}
         groupFilters={groupFilters}
         arrow={arrow}

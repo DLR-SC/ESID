@@ -15,23 +15,21 @@ import {
   IconButton,
   useTheme,
 } from '@mui/material';
-import {useState} from 'react';
+import React, {Dispatch, useState} from 'react';
 import ConfirmDialog from '../../shared/ConfirmDialog';
 import {useTranslation} from 'react-i18next';
-import React from 'react';
 import {GroupFilter} from 'types/group';
-import {Dictionary} from 'util/util';
 import {Localization} from 'types/localization';
 
 interface GroupFilterCardProps {
   /** The GroupFilter item to be displayed. */
   item: GroupFilter;
 
-  /** A dictionary of group filters.*/
-  groupFilters: Dictionary<GroupFilter>;
-
   /** A function that allows setting the groupFilter state so that if the user adds a filter, the new filter will be visible */
-  setGroupFilters: React.Dispatch<React.SetStateAction<Dictionary<GroupFilter>>>;
+  toggleGroupFilter: Dispatch<GroupFilter>;
+
+  /** TODO */
+  deleteGroupFilter: Dispatch<string>;
 
   /** Whether the filter is selected or not. If it is selected, the detail view is displaying this filter's config. */
   selected: boolean;
@@ -52,47 +50,20 @@ interface GroupFilterCardProps {
  */
 export default function GroupFilterCard({
   item,
-  groupFilters,
-  setGroupFilters,
+  toggleGroupFilter,
+  deleteGroupFilter,
   selected,
   selectFilterCallback,
-  localization = {formatNumber: (value: number) => value.toString(), customLang: 'global', overrides: {}},
+  localization = {
+    formatNumber: (value: number) => value.toString(),
+    customLang: 'global',
+    overrides: {},
+  },
 }: GroupFilterCardProps) {
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const {t: defaultT} = useTranslation();
   const {t: customT} = useTranslation(localization.customLang);
   const theme = useTheme();
-
-  //Function used to change the visibility of the filter
-  const ChangeVisibility = (id: string) => {
-    // Find the filter with the specific id
-    const filterToChange = groupFilters[id];
-
-    // Check if the filter exists
-    if (filterToChange) {
-      // Create a new copy of groupFilters with the updated filter
-      const newGroupFilters = {
-        ...groupFilters,
-        [id]: {
-          ...filterToChange,
-          isVisible: !filterToChange.isVisible,
-        },
-      };
-
-      // Update the state with the new copy of groupFilters
-      setGroupFilters(newGroupFilters);
-    }
-  };
-
-  // Function used to delete filters
-  const DeleteFilter = (id: string) => {
-    // Create a new copy of groupFilters without the filter with the specific id
-    const newGroupFilters = {...groupFilters};
-    delete newGroupFilters[id];
-
-    // Update the state with the new copy of groupFilters
-    setGroupFilters(newGroupFilters);
-  };
 
   return (
     <Card
@@ -124,7 +95,8 @@ export default function GroupFilterCard({
           icon={<VisibilityOffOutlined color='disabled' />}
           checked={item.isVisible}
           onClick={() => {
-            ChangeVisibility(item.id);
+            item.isVisible = !item.isVisible;
+            toggleGroupFilter(item);
           }}
         />
         <ConfirmDialog
@@ -153,7 +125,7 @@ export default function GroupFilterCard({
           }
           onAnswer={(answer) => {
             if (answer) {
-              DeleteFilter(item.id);
+              deleteGroupFilter(item.id);
             }
             setConfirmDialogOpen(false);
           }}

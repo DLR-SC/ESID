@@ -34,10 +34,10 @@ interface LineChartProps {
   chartId?: string;
 
   /** Array of line chart data points to be plotted on the chart. */
-  lineChartData: LineChartData[] | undefined;
+  lineChartData: Array<LineChartData> | undefined;
 
   /** The currently selected date in the chart in ISO format (YYYY-MM-DD). */
-  selectedDate: string;
+  selectedDate: string | null;
 
   /** Callback function to update the selected date in the chart. */
   setSelectedDate: (date: string) => void;
@@ -343,7 +343,7 @@ export default function LineChart({
       return {
         xAxis: xAxis,
         yAxis: yAxis,
-        id: `${chartId}_${line.serieId}`,
+        id: `${chartId}_${line.seriesId}`,
         name: line.name ?? '',
         valueXField: 'date',
         valueYField: String(line.valueYField),
@@ -353,8 +353,8 @@ export default function LineChart({
         tooltip: Tooltip.new(root, {
           labelText: line.tooltipText,
         }),
-        stroke: line.stroke.color,
-        fill: line.fill ?? undefined,
+        stroke: line.stroke.color ? color(line.stroke.color) : undefined,
+        fill: line.fill ? color(line.fill) : undefined,
       };
     });
   }, [lineChartData, root, xAxis, yAxis, chartId]);
@@ -366,7 +366,7 @@ export default function LineChart({
     useCallback(
       (series: LineSeries) => {
         if (!lineChartData) return;
-        const seriesSettings = lineChartData.find((line) => line.serieId === series.get('id')?.split('_')[1]);
+        const seriesSettings = lineChartData.find((line) => line.seriesId === series.get('id')?.split('_')[1]);
         series.strokes.template.setAll({
           strokeWidth: seriesSettings?.stroke.strokeWidth ?? 2,
           strokeDasharray: seriesSettings?.stroke.strokeDasharray ?? undefined,
@@ -393,7 +393,7 @@ export default function LineChart({
     const dataMap = new Map<string, {[key: string]: number}>();
 
     lineChartData.forEach((serie) => {
-      const id = serie.serieId;
+      const id = serie.seriesId;
       if (typeof id === 'string' && id.startsWith('group-filter-')) {
         serie.values.forEach((entry) => {
           dataMap.set(entry.day, {...dataMap.get(entry.day), [serie.name!]: entry.value as number});
@@ -585,17 +585,17 @@ export default function LineChart({
 
     if (lineChartData) {
       lineChartData.forEach((serie) => {
-        if (serie.serieId === 'percentiles' || serie.serieId.toString().startsWith('group-filter-')) return;
+        if (serie.seriesId === 'percentiles' || serie.seriesId.toString().startsWith('group-filter-')) return;
 
         // Add scenario label to export data field names
         dataFields = {
           ...dataFields,
-          [String(serie.serieId)]: serie.name ?? '',
+          [String(serie.seriesId)]: serie.name ?? '',
         };
         // Add scenario id to export data field order (for sorted export like csv)
-        dataFieldsOrder.push(`${serie.serieId}`);
+        dataFieldsOrder.push(`${serie.seriesId}`);
         // If this is the selected scenario also add percentiles after it
-        if (lineChartData.find((line) => line.openValueYField && line.parentId == serie.serieId)) {
+        if (lineChartData.find((line) => line.openValueYField && line.parentId == serie.seriesId)) {
           dataFieldsOrder.push('percentileDown', 'percentileUp');
         }
       });

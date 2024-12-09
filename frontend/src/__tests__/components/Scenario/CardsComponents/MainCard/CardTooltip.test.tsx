@@ -22,14 +22,14 @@ const CardTooltipTest = ({hovertest, scenarios, index, activeScenario}: CardTool
   return (
     <ThemeProvider theme={Theme}>
       <CardTooltip
-        index={index}
+        id={index}
         hover={hovertest}
         color={color}
-        activeScenario={activeScenario}
+        isActive={activeScenario}
         activeScenarios={activeScenarios}
         numberSelectedScenario={numberSelectedScenario}
-        setActiveScenarios={setActiveScenarios}
-        setSelectedScenario={setSelectedScenario}
+        setActive={setActiveScenarios}
+        setSelected={setSelectedScenario}
       />
     </ThemeProvider>
   );

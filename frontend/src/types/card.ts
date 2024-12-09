@@ -1,26 +1,24 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import {Dictionary} from 'util/util';
-
 /**
  * Represents the value of a card.
  */
-export interface CardValue {
+export interface CardValues {
   /** A dictionary of compartment values associated with the card.*/
-  compartmentValues: Dictionary<number> | null;
+  compartmentValues: Record<string, number>;
 
   /** A dictionary of start values */
-  startValues: Dictionary<number> | null;
+  startValues: Record<string, number>;
 }
 
 /**
  * Represents the filter value for a card.
  */
-export interface FilterValue {
+export interface FilterValues {
   /** The filter title. */
   filteredTitle: string;
 
   /** The filtered values. */
-  filteredValues: Dictionary<number> | null;
+  filteredValues: Record<string, number>;
 }

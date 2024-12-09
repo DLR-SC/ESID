@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useContext, useMemo, useState} from 'react';
 import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
 import TableHead from '@mui/material/TableHead';
@@ -14,11 +14,10 @@ import {useTheme} from '@mui/material/styles';
 import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
 import MathMarkdown from './shared/MathMarkdown';
-import {ParameterData, useGetScenarioParametersQuery, useGetSimulationsQuery} from '../store/services/scenarioApi';
+import {ParameterData} from '../store/services/scenarioApi';
 import {useTranslation} from 'react-i18next';
-import {useGetGroupSubcategoriesQuery} from '../store/services/groupApi';
-import {useAppSelector} from '../store/hooks';
 import GridOff from '@mui/icons-material/GridOff';
+import {DataContext} from '../DataContext';
 
 /**
  * This component visualizes the parameters of the selected scenario. It uses a table with the following format:
@@ -34,36 +33,74 @@ import GridOff from '@mui/icons-material/GridOff';
  */
 export default function ParameterEditor() {
   const {t} = useTranslation();
+  const {t: tBackend} = useTranslation('backend');
   const theme = useTheme();
 
-  const [scenarioId, setScenarioId] = useState<number | null>(null);
+  const [scenarioId] = useState<number | null>(null);
 
-  const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
-  const {data: simulations} = useGetSimulationsQuery();
-  const {data: parameters} = useGetScenarioParametersQuery(scenarioId);
+  const {selectedSimulationModel, selectedScenarioData, groups, parameterDefinitions} = useContext(DataContext);
 
-  // This effect gets the id of the scenario, where the parameters are stored.
-  useEffect(() => {
-    const scenario = simulations?.results.find((sim) => sim.id === selectedScenario);
+  const parameters: Array<ParameterData> = useMemo(() => {
+    return (
+      selectedScenarioData?.modelParameters?.flatMap((paramValues) => {
+        if (parameterDefinitions) {
+          const paramDefinition = parameterDefinitions[paramValues.parameterId];
 
-    // The scenario id is unfortunately hidden in a URL. It is always the last number in the URL, so we use the
-    // following regex to extract that number.
-    const scenarioIdResult = scenario?.scenario.match(/(\d+)(?!.*\d)/);
-    if (scenarioIdResult) {
-      const id = parseInt(scenarioIdResult[0]);
-      setScenarioId(id);
-    } else {
-      setScenarioId(null);
-    }
-  }, [simulations, selectedScenario]);
+          const data = paramValues.values.flatMap((group) => ({
+            span: 1,
+            min: group.valueMin,
+            max: group.valueMax,
+          }));
+          const mergedData = [data[0]];
+
+          for (let i = 1; i < data.length; i++) {
+            const prev = mergedData[mergedData.length - 1];
+            const curr = data[i];
+            if (prev.min == curr.min && prev.max == curr.max) {
+              prev.span++;
+            } else {
+              mergedData.push(curr);
+            }
+          }
+
+          return {
+            id: paramValues.parameterId,
+            symbol: tBackend(`parameters.${paramDefinition.name}.symbol`),
+            description: tBackend(`parameters.${paramDefinition.name}.description`),
+            unit: tBackend(`parameters.${paramDefinition.name}.unit`),
+            type: 'MIN_MAX_GROUPED',
+            data: mergedData,
+          };
+        }
+        return [];
+      }) ?? []
+    );
+  }, [parameterDefinitions, selectedScenarioData?.modelParameters, tBackend]);
+
+  const groupData = useMemo(() => {
+    return (
+      selectedSimulationModel?.groups.flatMap((groupId) => {
+        const group = groups?.find((group) => group.id === groupId);
+        if (group) {
+          return {
+            id: groupId,
+            name: tBackend(`groups.${group.name}`),
+          };
+        }
+        return [];
+      }) ?? []
+    );
+  }, [groups, selectedSimulationModel?.groups, tBackend]);
 
   if (scenarioId !== null) {
     return (
       <TableContainer sx={{background: theme.palette.background.paper, height: '100%'}} id='table-container'>
         <Table stickyHeader size='small' sx={{position: 'relative'}}>
-          <TableHeader />
+          <TableHeader groups={groupData} />
           <TableBody>
-            {parameters?.map((entry) => <ParameterRow key={'row-' + crypto.randomUUID()} params={entry} />)}
+            {parameters.map((entry) => (
+              <ParameterRow key={'row-' + crypto.randomUUID()} params={entry} />
+            ))}
           </TableBody>
         </Table>
       </TableContainer>
@@ -77,7 +114,7 @@ export default function ParameterEditor() {
     >
       <TableContainer>
         <Table stickyHeader size='small' sx={{position: 'relative'}}>
-          <TableHeader />
+          <TableHeader groups={groupData} />
         </Table>
       </TableContainer>
       <Box
@@ -99,18 +136,14 @@ export default function ParameterEditor() {
 /**
  * Creates the header row of the parameter editor.
  */
-function TableHeader(): JSX.Element {
-  const {t: tBackend} = useTranslation('backend');
-  const {data: groups} = useGetGroupSubcategoriesQuery();
+function TableHeader(props: {groups: Array<{id: string; name: string}>}): JSX.Element {
   return (
     <TableHead>
       <TableRow>
         <ParameterColumHeader colSpan={2} name='Parameter' />
-        {groups?.results // Currently only age groups are supported. We also need to ignore the 'total' group.
-          ?.filter((group) => group.key !== 'total')
-          .filter((group) => group.category === 'age')
+        {props.groups // Currently only age groups are supported. We also need to ignore the 'total' group.
           .map((group) => (
-            <ParameterColumHeader key={group.key} name={tBackend(`group-filters.groups.${group.key}`)} />
+            <ParameterColumHeader key={group.id} name={group.name} />
           ))}
       </TableRow>
     </TableHead>
@@ -156,14 +189,12 @@ function ParameterRowHeader(props: Readonly<{symbol: string; description: string
  * Depending on the type of parameter, this component renders different types of parameter rows.
  */
 function ParameterRow(props: Readonly<{params: ParameterData}>): JSX.Element | null {
-  const {t} = useTranslation('backend');
-
   return (
     <TableRow>
       <ParameterRowHeader
-        symbol={t(`parameters.${props.params.key}.symbol`)}
-        description={t(`parameters.${props.params.key}.description`)}
-        unit={t(`parameters.${props.params.key}.unit`)}
+        symbol={props.params.symbol}
+        description={props.params.description}
+        unit={props.params.unit}
       />
       {((): JSX.Element | null => {
         // jsx inline switch case
@@ -186,11 +217,11 @@ function ParameterRow(props: Readonly<{params: ParameterData}>): JSX.Element | n
  */
 function ParameterRowMinMaxGrouped(props: Readonly<{params: ParameterData}>): Array<JSX.Element> {
   const theme = useTheme();
-  const {t, i18n} = useTranslation('backend');
+  const {i18n} = useTranslation();
 
   const getContent = useCallback(
     (min: number, max: number) => {
-      const unit = t(`parameters.${props.params.key}.unit`);
+      const unit = props.params.unit;
       if (unit === '%') {
         min *= 100;
         max *= 100;
@@ -202,7 +233,7 @@ function ParameterRowMinMaxGrouped(props: Readonly<{params: ParameterData}>): Ar
         return `${min.toLocaleString(i18n.language)} - ${max.toLocaleString(i18n.language)}\u202F${unit}`;
       }
     },
-    [i18n.language, props.params.key, t]
+    [i18n.language, props.params.unit]
   );
 
   return (props.params.data as Array<{span: number; min: number; max: number}>).map((entry) => (

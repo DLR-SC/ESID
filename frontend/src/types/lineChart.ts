@@ -1,8 +1,6 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import {Color} from '@amcharts/amcharts5/.internal/core/util/Color';
-
 /**
  * Represents the data for a line chart.
  */
@@ -20,7 +18,7 @@ export interface LineChartData {
   /**
    * The ID of the series.
    */
-  serieId: string | number;
+  seriesId: string | number;
 
   /**
    * The field used for the Y-axis value.
@@ -49,7 +47,7 @@ export interface LineChartData {
     /**
      * The color of the stroke.
      */
-    color?: Color;
+    color?: string;
 
     /**
      * The width of the stroke.
@@ -65,7 +63,7 @@ export interface LineChartData {
   /**
    * The fill color for the line chart.
    */
-  fill?: Color;
+  fill?: string;
 
   /**
    * The opacity of the fill color.

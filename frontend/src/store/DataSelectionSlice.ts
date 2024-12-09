@@ -56,9 +56,12 @@ export const DataSelectionSlice = createSlice({
   name: 'DataSelection',
   initialState,
   reducers: {
-    setActiveScenario(state, action: PayloadAction<string[] | null>) {
-      if (action.payload) state.activeScenarios = action.payload;
-      else state.activeScenarios = null;
+    setActiveScenario(state, action: PayloadAction<{id: string; state: boolean}>) {
+      if (action.payload.state && !state.activeScenarios?.includes(action.payload.id)) {
+        state.activeScenarios = [...(state.activeScenarios ?? []), action.payload.id];
+      } else {
+        state.activeScenarios = state.activeScenarios?.filter((id) => id !== action.payload.id) ?? [];
+      }
     },
     setGroupFilters(state, action: PayloadAction<Dictionary<GroupFilter>>) {
       state.groupFilters = action.payload;

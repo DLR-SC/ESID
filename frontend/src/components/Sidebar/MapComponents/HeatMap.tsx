@@ -46,9 +46,6 @@ interface MapProps {
   /** The default selected region's data. */
   defaultSelectedValue: GeoJsonProperties;
 
-  /** Optional currently selected scenario identifier. */
-  selectedScenario?: number | null;
-
   /** Optional flag indicating if data is being fetched. Default is false. */
   isDataFetching?: boolean;
 
@@ -102,7 +99,6 @@ export default function HeatMap({
   tooltipText = () => '{id}',
   tooltipTextWhileFetching = () => 'Loading...',
   defaultSelectedValue,
-  selectedScenario = 0,
   isDataFetching = false,
   values,
   setSelectedArea,
@@ -120,14 +116,6 @@ export default function HeatMap({
   const theme = useTheme();
   const lastSelectedPolygon = useRef<am5map.MapPolygon | null>(null);
   const [longLoadTimeout, setLongLoadTimeout] = useState<number>();
-
-  // This memo returns if the required data is currently being fetched. Either the case data or the scenario data.
-  const isFetching = useMemo(() => {
-    if (selectedScenario == null) {
-      return true;
-    }
-    return isDataFetching;
-  }, [isDataFetching, selectedScenario]);
 
   const root = useRoot(mapId);
 
@@ -260,7 +248,7 @@ export default function HeatMap({
   // This effect is responsible for showing the loading indicator if the data is not ready within 1 second. This
   // prevents that the indicator is showing for every little change.
   useEffect(() => {
-    if (isFetching) {
+    if (isDataFetching) {
       setLongLoadTimeout(
         window.setTimeout(() => {
           setLongLoad(true);
@@ -272,7 +260,7 @@ export default function HeatMap({
     }
     // This effect should only re-run when the fetching state changes
     // eslint-disable-next-line
-  }, [isFetching, setLongLoad, setLongLoadTimeout]); // longLoadTimeout is deliberately ignored here.
+  }, [isDataFetching, setLongLoad, setLongLoadTimeout]); // longLoadTimeout is deliberately ignored here.
 
   // Set aggregatedMax if fixedLegendMaxValue is set or values are available
   useEffect(() => {
@@ -303,7 +291,7 @@ export default function HeatMap({
       }
       // Highlight selected polygon
       polygonSeries.mapPolygons.each((mapPolygon) => {
-        if (mapPolygon.dataItem && mapPolygon.dataItem.dataContext) {
+        if (mapPolygon.dataItem?.dataContext) {
           const areaData = mapPolygon.dataItem.dataContext as Feature;
           const id: string | number = areaData[areaId as keyof Feature] as string | number;
           if (id == selectedArea![areaId as keyof GeoJsonProperties]) {
@@ -344,7 +332,7 @@ export default function HeatMap({
     if (!polygonSeries || polygonSeries.isDisposed()) return;
 
     const updatePolygons = () => {
-      if (selectedScenario !== null && !isFetching && values && Number.isFinite(aggregatedMax) && polygonSeries) {
+      if (!isDataFetching && values && Number.isFinite(aggregatedMax) && polygonSeries) {
         const valueMap = new Map<string | number, number>();
 
         values.forEach((value) => valueMap.set(value.id, value.value));
@@ -398,8 +386,6 @@ export default function HeatMap({
     };
   }, [
     polygonSeries,
-    selectedScenario,
-    isFetching,
     values,
     aggregatedMax,
     defaultFill,
@@ -409,6 +395,7 @@ export default function HeatMap({
     tooltipTextWhileFetching,
     theme.palette.text.disabled,
     areaId,
+    isDataFetching,
   ]);
 
   return <Box id={mapId} height={mapHeight} />;

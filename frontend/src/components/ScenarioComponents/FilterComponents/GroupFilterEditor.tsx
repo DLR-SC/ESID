@@ -2,12 +2,10 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import {Box, TextField, Typography, FormGroup, FormControlLabel, Checkbox, Button, useTheme} from '@mui/material';
-import {useState, useEffect, useCallback} from 'react';
+import {useState, useEffect, useCallback, Dispatch} from 'react';
 import {useTranslation} from 'react-i18next';
 import React from 'react';
-import {GroupCategory, GroupSubcategory} from 'store/services/groupApi';
 import {GroupFilter} from 'types/group';
-import {Dictionary} from 'util/util';
 import {Localization} from 'types/localization';
 
 interface GroupFilterEditorProps {
@@ -15,16 +13,16 @@ interface GroupFilterEditorProps {
   groupFilter: GroupFilter;
 
   /** A dictionary of group filters.*/
-  groupFilters: Dictionary<GroupFilter>;
+  groupFilters: Record<string, GroupFilter>;
 
   /** An array of group category.*/
-  groupCategories: GroupCategory[];
+  categories: Array<{id: string; name: string}>;
 
   /** An array of group subcategory.*/
-  groupSubCategories: GroupSubcategory[];
+  groups: Array<{id: string; name: string; category: string}>;
 
   /** A function that allows setting the groupFilter state so that if the user adds a filter, the new filter will be visible */
-  setGroupFilters: React.Dispatch<React.SetStateAction<Dictionary<GroupFilter>>>;
+  setGroupFilters: Dispatch<Record<string, GroupFilter>>;
 
   /**
    * Callback function that is called, when a new filter is created, so it will be selected immediately or when the user
@@ -52,8 +50,8 @@ interface GroupFilterEditorProps {
 export default function GroupFilterEditor({
   groupFilter,
   groupFilters,
-  groupCategories,
-  groupSubCategories,
+  categories,
+  groups,
   setGroupFilters,
   selectGroupFilterCallback,
   unsavedChangesCallback,
@@ -63,16 +61,18 @@ export default function GroupFilterEditor({
   const {t: customT} = useTranslation(localization.customLang);
   const theme = useTheme();
   const [name, setName] = useState(groupFilter.name);
-  const [groups, setGroups] = useState(groupFilter.groups);
+  const [groupSelection, setGroupSelection] = useState(groupFilter.groups);
 
   // Every group must have at least one element selected to be valid.
-  const [valid, setValid] = useState(name.length > 0 && Object.values(groups).every((group) => group.length > 0));
+  const [valid, setValid] = useState(
+    name.length > 0 && Object.values(groupSelection).every((group) => group.length > 0)
+  );
   const [unsavedChanges, setUnsavedChanges] = useState(false);
 
   // Checks if the group filer is in a valid state.
   useEffect(() => {
-    setValid(name.length > 0 && Object.values(groups).every((group) => group.length > 0));
-  }, [name, groups]);
+    setValid(name.length > 0 && Object.values(groupSelection).every((group) => group.length > 0));
+  }, [name, groupSelection]);
 
   // Updates the parent about the current save state of the group filter.
   useEffect(() => {
@@ -80,22 +80,22 @@ export default function GroupFilterEditor({
   }, [unsavedChanges, unsavedChangesCallback]);
 
   const toggleGroup = useCallback(
-    (subGroup: GroupSubcategory) => {
-      let category = [...groups[subGroup.category]];
+    (group: {id: string; name: string; category: string}) => {
+      let category = [...groupSelection[group.category]];
 
-      if (category.includes(subGroup.key)) {
-        category = category.filter((key) => key !== subGroup.key);
+      if (category.includes(group.id)) {
+        category = category.filter((key) => key !== group.id);
       } else {
-        category.push(subGroup.key);
+        category.push(group.id);
       }
 
-      setGroups({
-        ...groups,
-        [subGroup.category]: category,
+      setGroupSelection({
+        ...groupSelection,
+        [group.category]: category,
       });
       setUnsavedChanges(true);
     },
-    [groups, setGroups]
+    [groupSelection, setGroupSelection]
   );
 
   return (
@@ -132,38 +132,31 @@ export default function GroupFilterEditor({
           paddingBottom: 2,
         }}
       >
-        {groupCategories.map((group) => (
+        {categories.map((category) => (
           <Box
-            key={group.key}
+            key={category.id}
             sx={{
               display: 'flex',
               flexDirection: 'column',
             }}
           >
             <Typography
-              color={groups[group.key].length > 0 ? theme.palette.text.primary : theme.palette.error.main}
+              color={groupSelection[category.id].length > 0 ? theme.palette.text.primary : theme.palette.error.main}
               variant='h2'
             >
-              {localization.overrides && localization.overrides[`group-filters.categories.${group.key}`]
-                ? customT(localization.overrides[`group-filters.categories.${group.key}`])
-                : defaultT(`group-filters.categories.${group.key}`)}
+              {category.name}
             </Typography>
             <FormGroup>
-              {groupSubCategories
-                ?.filter((subCategory) => subCategory.category === group.key)
-                .filter((subGroup) => subGroup.key !== 'total') // TODO: We filter out the total group for now.
-                .map((subGroup) => (
+              {groups
+                .filter((group) => group.category === category.id)
+                .map((group) => (
                   <FormControlLabel
-                    key={subGroup.key}
-                    label={
-                      localization.overrides && localization.overrides[`group-filters.groups.${subGroup.key}`]
-                        ? customT(localization.overrides[`group-filters.groups.${subGroup.key}`])
-                        : defaultT(`group-filters.groups.${subGroup.key}`)
-                    }
+                    key={group.id}
+                    label={group.name}
                     control={
                       <Checkbox
-                        checked={groups[group.key].includes(subGroup.key)}
-                        onClick={() => toggleGroup(subGroup)}
+                        checked={groupSelection[category.id].includes(group.id)}
+                        onClick={() => toggleGroup(group)}
                       />
                     }
                   />
@@ -204,7 +197,7 @@ export default function GroupFilterEditor({
               id: groupFilter.id,
               name: name,
               isVisible: true,
-              groups: groups,
+              groups: groupSelection,
             };
             setGroupFilters({
               ...groupFilters,

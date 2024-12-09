@@ -4,26 +4,23 @@
 import Close from '@mui/icons-material/Close';
 import GroupAdd from '@mui/icons-material/GroupAdd';
 import {Box, Typography, IconButton, Divider, Card, CardActionArea, CardContent, Button, useTheme} from '@mui/material';
-import {useState, useEffect} from 'react';
+import React, {useState, useEffect, Dispatch} from 'react';
 import ConfirmDialog from '../../shared/ConfirmDialog';
 import GroupFilterCard from './GroupFilterCard';
 import GroupFilterEditor from './GroupFilterEditor';
 import {useTranslation} from 'react-i18next';
-import React from 'react';
-import {GroupCategory, GroupSubcategory} from 'store/services/groupApi';
 import {GroupFilter} from 'types/group';
-import {Dictionary} from 'util/util';
 import {Localization} from 'types/localization';
 
 export interface ManageGroupDialogProps {
   /** A dictionary of group filters.*/
-  groupFilters: Dictionary<GroupFilter>;
+  groupFilters: Record<string, GroupFilter>;
 
   /** An array of group category.*/
-  groupCategories: GroupCategory[];
+  categories: Array<{id: string; name: string}>;
 
   /** An array of group subcategory.*/
-  groupSubCategories: GroupSubcategory[];
+  groups: Array<{id: string; name: string; category: string}>;
 
   /** Callback function, which is called, when the close button is called.*/
   onCloseRequest: () => void;
@@ -34,10 +31,10 @@ export interface ManageGroupDialogProps {
    */
   unsavedChangesCallback: (unsavedChanges: boolean) => void;
 
-  /** A function that allows setting the groupFilter state so that if the user adds a filter, the new filter will be visible.*/
-  setGroupFilters: React.Dispatch<React.SetStateAction<Dictionary<GroupFilter>>>;
+  /** A function that allows setting the groupFilter state so that if the user adds a filter, the new filter will be visible */
+  setGroupFilters: Dispatch<Record<string, GroupFilter>>;
 
-  /** An object containing localization information (translation & number formattation).*/
+  /** An object containing localization information (translation & number formatting).*/
   localization?: Localization;
 }
 
@@ -47,12 +44,15 @@ export interface ManageGroupDialogProps {
  */
 export default function ManageGroupDialog({
   groupFilters,
-  groupCategories,
-  groupSubCategories,
+  categories,
+  groups,
   onCloseRequest,
   unsavedChangesCallback,
   setGroupFilters,
-  localization = {formatNumber: (value: number) => value.toString(), customLang: 'global', overrides: {}},
+  localization = {
+    formatNumber: (value: number) => value.toString(),
+    customLang: 'global',
+  },
 }: ManageGroupDialogProps) {
   const {t: defaultT} = useTranslation();
   const {t: customT} = useTranslation(localization.customLang);
@@ -141,8 +141,14 @@ export default function ManageGroupDialog({
             <GroupFilterCard
               key={item.id}
               item={item}
-              groupFilters={groupFilters}
-              setGroupFilters={setGroupFilters}
+              toggleGroupFilter={(value) => {
+                setGroupFilters({...groupFilters, [item.id]: value});
+              }}
+              deleteGroupFilter={(value) => {
+                const newGroupFilters = {...groupFilters};
+                delete newGroupFilters[value];
+                setGroupFilters(newGroupFilters);
+              }}
               selected={selectedGroupFilter?.id === item.id}
               selectFilterCallback={(groupFilter) => setNextSelectedGroupFilter(groupFilter)}
               localization={localization}
@@ -165,13 +171,13 @@ export default function ManageGroupDialog({
                   : defaultT('group-filters.add-group')
               }
               onClick={() => {
-                const groups: Dictionary<Array<string>> = {};
-                groupCategories.forEach((group) => (groups[group.key] = []));
+                const categoryFilters: Record<string, Array<string>> = {};
+                categories.forEach((group) => (categoryFilters[group.id] = []));
                 setNextSelectedGroupFilter({
                   id: crypto.randomUUID(),
                   name: '',
                   isVisible: false,
-                  groups: groups,
+                  groups: categoryFilters,
                 });
               }}
             >
@@ -202,8 +208,8 @@ export default function ManageGroupDialog({
             setGroupFilters={setGroupFilters}
             selectGroupFilterCallback={(groupFilter: GroupFilter | null) => setNextSelectedGroupFilter(groupFilter)}
             unsavedChangesCallback={(edited) => setUnsavedChanges(edited)}
-            groupCategories={groupCategories}
-            groupSubCategories={groupSubCategories}
+            categories={categories}
+            groups={groups}
             localization={localization}
           />
         ) : (
@@ -230,13 +236,13 @@ export default function ManageGroupDialog({
               }
               sx={{marginTop: 2}}
               onClick={() => {
-                const groups: Dictionary<Array<string>> = {};
-                groupCategories.forEach((group) => (groups[group.key] = []));
+                const categoryFilters: Record<string, Array<string>> = {};
+                categories.forEach((group) => (categoryFilters[group.id] = []));
                 setNextSelectedGroupFilter({
                   id: crypto.randomUUID(),
                   name: '',
                   isVisible: false,
-                  groups: groups,
+                  groups: categoryFilters,
                 });
               }}
             >

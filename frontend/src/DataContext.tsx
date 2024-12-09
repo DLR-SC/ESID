@@ -12,6 +12,8 @@ import {
   useGetModelsQuery,
   useGetGroupsQuery,
   useGetGroupCategoriesQuery,
+  useGetModelQuery,
+  useGetMultiParameterDefinitionsQuery,
 } from 'store/services/scenarioApi';
 import data from '../assets/lk_germany_reduced.geojson?url';
 import {GeoJSON, GeoJsonProperties} from 'geojson';
@@ -24,7 +26,11 @@ import {
   Groups,
   InfectionData,
   InfectionDataParameters,
+  Model,
   Models,
+  ParameterDefinition,
+  Scenario,
+  ScenarioPreview,
   Scenarios,
 } from './store/services/APITypes';
 import {
@@ -32,6 +38,7 @@ import {
   selectDate,
   selectScenario,
   setActiveScenario,
+  setMinMaxDates,
   setStartDate,
 } from './store/DataSelectionSlice';
 
@@ -46,7 +53,10 @@ export const DataContext = createContext<{
   groupCategories: GroupCategories | undefined;
   groups: Groups | undefined;
   scenarios: Scenarios | undefined;
+  selectedScenarioData: Scenario | undefined;
   simulationModels: Models | undefined;
+  selectedSimulationModel: Model | undefined;
+  parameterDefinitions: Record<string, ParameterDefinition> | undefined;
   compartments: Compartments | undefined;
 }>({
   geoData: undefined,
@@ -58,7 +68,10 @@ export const DataContext = createContext<{
   groupCategories: undefined,
   groups: undefined,
   scenarios: undefined,
+  selectedScenarioData: undefined,
   simulationModels: undefined,
+  selectedSimulationModel: undefined,
+  parameterDefinitions: undefined,
   compartments: undefined,
 });
 
@@ -115,6 +128,8 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
     }
   );
 
+  // TODO: GroupFilterData
+
   const {data: lineChartData} = useGetMultiScenarioInfectionDataQuery(
     {
       pathIds: activeScenarios ?? [],
@@ -138,14 +153,22 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
     },
   });
 
+  const {data: selectedScenarioData} = useGetScenarioQuery(selectedScenario!, {skip: !selectedScenario});
   const {data: simulationModels} = useGetModelsQuery();
+  const {data: selectedSimulationModel} = useGetModelQuery(selectedScenarioData!.modelId, {
+    skip: !selectedScenarioData,
+  });
+  const {data: parameterDefinitions} = useGetMultiParameterDefinitionsQuery(
+    selectedSimulationModel!.parameterDefinitions,
+    {skip: !selectedSimulationModel}
+  );
   const {data: groups} = useGetGroupsQuery();
   const {data: groupCategories} = useGetGroupCategoriesQuery();
 
   // Try to set at least one active scenario.
   useEffect(() => {
     if (activeScenarios?.length === 0 && caseDataScenario) {
-      dispatch(setActiveScenario([caseDataScenario.id]));
+      dispatch(setActiveScenario({id: caseDataScenario.id, state: true}));
     }
   }, [activeScenarios, caseDataScenario, dispatch]);
 
@@ -169,6 +192,33 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
       dispatch(setStartDate(caseDataScenario.endDate));
     }
   });
+
+  // Set start and end date.
+  useEffect(() => {
+    if (activeScenarios && scenarios) {
+      const active = activeScenarios
+        .map((activeScenario) => scenarios.find((scenario) => scenario.id === activeScenario))
+        .filter((scenario) => scenario !== undefined) as Array<ScenarioPreview>;
+
+      const minMax = active.reduce(
+        (
+          previous: {
+            min: string;
+            max: string;
+          },
+          current
+        ) => ({
+          min: previous.min.localeCompare(current.startDate) < 0 ? previous.min : current.startDate,
+          max: previous.max.localeCompare(current.endDate) > 0 ? previous.max : current.endDate,
+        }),
+        {min: 'XXXX-XX-XX', max: '0000-00-00'}
+      );
+
+      if (minMax) {
+        dispatch(setMinMaxDates({minDate: minMax.min, maxDate: minMax.max}));
+      }
+    }
+  }, [activeScenarios, dispatch, scenarios]);
 
   // Try to select a date if none is selected.
   useEffect(() => {
@@ -232,20 +282,26 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
           groupCategories,
           groups,
           scenarios,
+          selectedScenarioData,
           simulationModels,
+          selectedSimulationModel,
+          parameterDefinitions,
           compartments,
         }),
         [
           geoData,
-          groupCategories,
-          groups,
-          lineChartData,
           mapData,
+          searchBarData,
+          lineChartData,
           referenceDateValues,
           scenarioCardData,
+          groupCategories,
+          groups,
           scenarios,
-          searchBarData,
+          selectedScenarioData,
           simulationModels,
+          selectedSimulationModel,
+          parameterDefinitions,
           compartments,
         ]
       )}

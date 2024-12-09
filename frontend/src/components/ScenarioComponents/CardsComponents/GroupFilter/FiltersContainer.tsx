@@ -6,15 +6,15 @@ import FilterButton from './FilterButton';
 import FilterCard from './FilterCard';
 import React from 'react';
 import {Localization} from 'types/localization';
-import {getScenarioPrimaryColor} from 'util/Theme';
-import {Dictionary} from 'util/util';
 
 interface FiltersContainerProps {
+  /** Id of the filter container */
+  id: string;
+
+  color: string;
+
   /** Array of filtered titles */
   filteredTitles: string[];
-
-  /** Index of the filter container */
-  index: number;
 
   /** Boolean to determine if the filter container is folded */
   folded: boolean;
@@ -26,13 +26,10 @@ interface FiltersContainerProps {
   compartmentsExpanded: boolean;
 
   /** Selected compartment */
-  selectedCompartment: string;
-
-  /** Array of compartments */
-  compartments: string[];
+  selectedCompartmentId: string | null;
 
   /** Array of filtered values */
-  filteredValues: Array<Dictionary<number> | null>;
+  filteredValues: Array<Record<string, number>>;
 
   /** Minimum number of compartment rows */
   minCompartmentsRows: number;
@@ -49,12 +46,12 @@ interface FiltersContainerProps {
  * It also supports localization.
  */
 export default function FiltersContainer({
-  index,
+  id,
+  color,
   folded,
   setFolded,
   compartmentsExpanded,
-  selectedCompartment,
-  compartments,
+  selectedCompartmentId,
   filteredValues,
   filteredTitles,
   maxCompartmentsRows,
@@ -68,7 +65,7 @@ export default function FiltersContainer({
   const theme = useTheme();
   return (
     <Box
-      id={`filters-container-${index}`}
+      id={`filters-container-${id}`}
       sx={{
         display: 'flex',
         flexDirection: 'row',
@@ -81,7 +78,7 @@ export default function FiltersContainer({
             : `${(325 / 4) * minCompartmentsRows}px`,
         boxSizing: 'border-box',
         border: 1,
-        borderColor: getScenarioPrimaryColor(index, theme),
+        borderColor: color,
         borderRadius: 1,
         bgcolor: theme.palette.background.paper,
         zIndex: 2,
@@ -92,14 +89,14 @@ export default function FiltersContainer({
         setFolded={setFolded}
         borderColor={theme.palette.divider}
         backgroundColor={theme.palette.background.paper}
-        idNumber={1}
+        id={'1'}
         maxCompartmentsRows={maxCompartmentsRows}
         compartmentsExpanded={compartmentsExpanded}
         minCompartmentsRows={minCompartmentsRows}
       />
       <Collapse in={folded} orientation='horizontal'>
         <Box
-          id={`filtercards-container-${index}`}
+          id={`filtercards-container-${id}`}
           sx={{
             display: 'flex',
             flexDirection: 'row',
@@ -115,21 +112,20 @@ export default function FiltersContainer({
                 : `${(325 / 4) * minCompartmentsRows}px`,
           }}
         >
-          {filteredValues.map((_, id: number) => (
+          {filteredValues.map((filter, index) => (
             <FilterCard
-              key={id}
-              color={getScenarioPrimaryColor(index, theme)}
-              title={filteredTitles[id]}
-              compartments={compartments}
-              groupFilterIndex={id}
-              totalCardNumber={filteredValues.length}
+              key={index}
+              color={color}
+              title={filteredTitles[index]}
               compartmentExpanded={compartmentsExpanded}
-              selectedCompartment={selectedCompartment}
-              filteredValues={filteredValues[id]}
+              selectedCompartmentId={selectedCompartmentId}
+              filteredValues={filter}
               minCompartmentsRows={minCompartmentsRows}
               maxCompartmentsRows={maxCompartmentsRows}
               localization={localization}
               compartmentsExpanded={compartmentsExpanded}
+              isFirstCard={index === 0}
+              isLastCard={index === filteredValues.length - 1}
             />
           ))}
         </Box>

@@ -3,7 +3,7 @@
 
 import CardContainer from 'components/ScenarioComponents/CardsComponents/CardContainer';
 import React, {useState} from 'react';
-import {FilterValue, CardValue} from 'types/card';
+import {FilterValues, CardValues} from 'types/card';
 import {GroupFilter} from 'types/group';
 import {Dictionary} from 'util/util';
 import {describe, test, expect} from 'vitest';
@@ -19,7 +19,7 @@ const CardContainerTest = () => {
   const compartments = ['Compartment 1', 'Compartment 2', 'Compartment 3'];
   const minCompartmentsRows = 1;
   const maxCompartmentsRows = 3;
-  const filterValues: Dictionary<FilterValue[]> = {
+  const filterValues: Dictionary<FilterValues[]> = {
     'Compartment 1': [
       {filteredTitle: 'Title 1', filteredValues: {'Compartment 1': 10, 'Compartment 2': 20, 'Compartment 3': 30}},
     ],
@@ -35,7 +35,7 @@ const CardContainerTest = () => {
     {id: 1, label: 'Scenario 2'},
     {id: 2, label: 'Scenario 3'},
   ];
-  const cardValues: Dictionary<CardValue> = {
+  const cardValues: Dictionary<CardValues> = {
     '0': {
       compartmentValues: {'Compartment 1': 10, 'Compartment 2': 20, 'Compartment 3': 30},
       startValues: {'Compartment 1': 100, 'Compartment 2': 200, 'Compartment 3': 307},
@@ -79,14 +79,14 @@ const CardContainerTest = () => {
         <CardContainer
           compartmentsExpanded={compartmentsExpanded}
           filterValues={filterValues}
-          selectedCompartment={selectedCompartment}
+          selectedCompartmentId={selectedCompartment}
           compartments={compartments}
           scenarios={scenarios}
           activeScenarios={activeScenarios}
           cardValues={cardValues}
           minCompartmentsRows={minCompartmentsRows}
           maxCompartmentsRows={maxCompartmentsRows}
-          setActiveScenarios={setActiveScenarios}
+          setActiveScenario={setActiveScenarios}
           setSelectedScenario={setSelectedScenario}
           groupFilters={groupFilters}
           selectedScenario={selectedScenario}
@@ -111,7 +111,7 @@ describe('CardContainer', () => {
   });
   const compartments: string[] = ['Compartment 1', 'Compartment 2', 'Compartment 3'];
 
-  const filterValues: Dictionary<FilterValue[]> = {
+  const filterValues: Dictionary<FilterValues[]> = {
     'Compartment 1': [
       {filteredTitle: 'Title 1', filteredValues: {'Compartment 1': 10, 'Compartment 2': 20, 'Compartment 3': 30}},
     ],

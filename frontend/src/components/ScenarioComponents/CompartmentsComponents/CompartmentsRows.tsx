@@ -21,7 +21,7 @@ interface CompartmentsRowsProps {
   selectedCompartment: string;
 
   /** Function to set the selected compartment */
-  setSelectedCompartment: Dispatch<SetStateAction<string>>;
+  setSelectedCompartment: Dispatch<string>;
 
   /** Minimum number of compartment rows */
   minCompartmentsRows: number;
@@ -30,7 +30,7 @@ interface CompartmentsRowsProps {
   maxCompartmentsRows: number;
 
   /** Values for each compartment */
-  compartmentValues: Dictionary<number> | null;
+  compartmentValues: Record<string, number> | null;
 
   /** An object containing localization information (translation & number formattation). */
   localization?: Localization;

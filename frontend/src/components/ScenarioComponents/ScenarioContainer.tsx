@@ -10,11 +10,8 @@ import {
   selectScenario,
   setActiveScenario,
   setGroupFilters,
-  setMinMaxDates,
-  setStartDate,
   toggleCompartmentExpansion,
 } from 'store/DataSelectionSlice';
-import {Dictionary, dateToISOString} from 'util/util';
 import {DataContext} from 'DataContext';
 import {ScrollSync} from 'react-scroll-sync';
 import {useBoundingclientrectRef} from 'rooks';
@@ -25,10 +22,7 @@ import CompartmentsRows from './CompartmentsComponents/CompartmentsRows';
 import FilterDialogContainer from './FilterComponents/FilterDialogContainer';
 import GeneralButton from './ExpandedButtonComponents/ExpandedButton';
 import ReferenceDatePicker from './ReferenceDatePickerComponents.tsx/ReferenceDatePicker';
-import {GroupFilter} from 'types/group';
 import {useAppDispatch, useAppSelector} from 'store/hooks';
-import {CardValue, FilterValue} from 'types/card';
-import {setInitialVisit} from 'store/UserPreferenceSlice';
 
 interface ScenarioContainerProps {
   /** The minimum number of compartment rows.*/
@@ -48,20 +42,22 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
   const {formatNumber} = NumberFormatter(i18n.language, 1, 0);
   const theme = useTheme();
 
-  const {scenarios: scenarioData, compartments, referenceDateValues} = useContext(DataContext);
+  const {
+    scenarios: scenarioData,
+    scenarioCardData,
+    compartments,
+    referenceDateValues,
+    groups,
+    groupCategories,
+  } = useContext(DataContext);
 
   const groupFilters = useAppSelector((state) => state.dataSelection.groupFilters);
-  const storeCompartmentsExpanded = useAppSelector((state) => state.dataSelection.compartmentsExpanded);
+  const compartmentsExpanded = useAppSelector((state) => state.dataSelection.compartmentsExpanded);
+  const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
   const activeScenarios = useAppSelector((state) => state.dataSelection.activeScenarios);
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
-  const storeSelectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
   const storeStartDay = useAppSelector((state) => state.dataSelection.simulationStart);
-  const isInitialUserVisit = useAppSelector((state) => state.userPreference.isInitialVisit);
 
-  const [cardValues, setCardValues] = useState<Dictionary<CardValue> | undefined>();
-  const [filterValues, setFilterValues] = useState<Dictionary<FilterValue[]> | undefined>();
-  const [compartmentsExpanded, setCompartmentsExpanded] = useState<boolean>(storeCompartmentsExpanded ?? false);
-  const [selectedCompartment, setSelectedCompartment] = useState<string>(storeSelectedCompartment ?? 'MildInfections');
   const [startDay, setStartDay] = useState<string | null>(storeStartDay ?? '2024-07-08');
   const [resizeRef, resizeBoundingRect] = useBoundingclientrectRef();
 
@@ -69,10 +65,49 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
     () =>
       scenarioData?.map((scenario) => ({
         id: scenario.id,
-        label: t(`scenario-names.${scenario.name}`),
+        name: t(`scenario-names.${scenario.name}`),
+        color: '#FFF',
       })) ?? [],
     [scenarioData, t]
   );
+
+  const compartmentNames = useMemo(() => {
+    return compartments?.map((compartment) => t(`infection-states.${compartment.name}`)) ?? [];
+  }, [compartments, t]);
+
+  const compartmentValues = useMemo(() => {
+    const result: Record<string, number> = {};
+    referenceDateValues?.forEach(
+      (referenceDate) => (result[t(`infection-states.${referenceDate.compartment}`)] = referenceDate.values['50'])
+    );
+    return result;
+  }, [referenceDateValues, t]);
+
+  const translatedCategories = useMemo(() => {
+    return groupCategories?.map((category) => ({id: category, name: t(`group-filters.${category}`)})) ?? [];
+  }, [groupCategories, t]);
+
+  const translatedGroups = useMemo(
+    () =>
+      groups?.map((group) => ({id: group.id, name: t(`group-filters.${group.name}`), category: group.category})) ?? [],
+    [groups, t]
+  );
+
+  const cardValues = useMemo(() => {
+    const result: Record<string, Record<string, number>> = {};
+    Object.entries(scenarioCardData ?? {}).forEach(([id, infectionData]) => {
+      const values: Record<string, number> = {};
+      infectionData.forEach((entry) => {
+        values[entry.compartment!] = entry.values['50']!;
+      });
+      result[id] = values;
+    });
+    return result;
+  }, [scenarioCardData]);
+
+  const filterValues = useMemo(() => {
+    return {}; // TODO
+  }, []);
 
   const localization = useMemo(() => {
     return {
@@ -80,135 +115,6 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
       customLang: 'backend',
     };
   }, [formatNumber]);
-
-  // This effect updates the selected compartment in the state whenever it changes.
-  useEffect(() => {
-    dispatch(selectCompartment(selectedCompartment));
-  }, [dispatch, selectedCompartment]);
-
-  // This effect updates the start date in the state whenever the reference day changes.
-  useEffect(() => {
-    dispatch(setStartDate(startDay!));
-  }, [startDay, dispatch]);
-
-  const remainingCard = useMemo(() => {
-    return scenarioSimulationDataForCard?.reduce(
-      (acc: {[key: string]: CardValue}, scenarioSimulationDataCard, id) => {
-        const compartments = scenarioSimulationDataCard?.results?.[0]?.compartments;
-        acc[id.toString()] = {
-          compartmentValues: compartments || null,
-          startValues: startValues,
-        };
-        return acc;
-      },
-      {} as {[key: string]: CardValue}
-    );
-  }, [scenarioSimulationDataForCard, startValues]);
-
-  /*
-   * This useEffect hook is utilized to adapt the format of the scenario simulation & case data.
-   * This effect takes the original data, provided by the ESID API through the context and transforms it,
-   * ensuring it conforms to the new format required by the generalized Scenario cards.
-   */
-  useEffect(() => {
-    const caseCompartments = caseScenarioData?.results?.[0]?.compartments;
-    setCardValues({
-      '0': {
-        compartmentValues: caseCompartments || null,
-        startValues: startValues,
-      },
-      ...remainingCard,
-    });
-  }, [caseScenarioData, remainingCard, startValues]);
-
-  /*
-   * This useEffect hook is used to adapting the data format for display in the filter appendage cards.
-   * This effect takes the original data, provided by the ESID API through the context and transforms it,
-   * ensuring it conforms to the new format required by the generalized Scenario cards.
-   */
-  useEffect(() => {
-    if (
-      !scenarioSimulationDataForCardFiltersValues ||
-      scenarioSimulationDataForCardFiltersValues === undefined ||
-      Object.keys(scenarioSimulationDataForCardFiltersValues).length === 0
-    )
-      return;
-
-    const filterValuesTemp: Array<FilterValue[]> =
-      scenarioSimulationDataForCardFiltersValues?.map((scenarioSimulation) => {
-        return Object.values(groupFilters)
-          .filter((groupFilter) => groupFilter.isVisible)
-          .map((groupFilter) => {
-            const groupResponse = scenarioSimulation?.[groupFilter.name]?.results?.[0]?.compartments || null;
-            return {
-              filteredTitle: groupFilter.name,
-              filteredValues: groupResponse,
-            };
-          });
-      }) || [];
-    const temp: Dictionary<FilterValue[]> = {};
-    getId?.forEach((id, index) => {
-      temp[id.toString()] = filterValuesTemp[index];
-    });
-    setFilterValues(temp);
-  }, [getId, groupFilters, scenarioSimulationDataForCardFiltersValues]);
-
-  // This effect calculates the start and end days from the case and scenario data.
-  useEffect(() => {
-    let minDate: string | null = null;
-    let maxDate: string | null = null;
-
-    if (scenarioListData) {
-      const scenarios = scenarioListData.results.map((scenario) => ({
-        id: scenario.id,
-        label: scenario.description,
-      }));
-      dispatch(setScenarios(scenarios));
-
-      if (scenarios.length > 0) {
-        // The simulation data (results) are only available one day after the start day onward.
-        const startDay = new Date(scenarioListData.results[0].startDay);
-        startDay.setUTCDate(startDay.getUTCDate() + 1);
-
-        const endDay = new Date(startDay);
-        endDay.setDate(endDay.getDate() + scenarioListData.results[0].numberOfDays - 1);
-
-        minDate = dateToISOString(startDay);
-        maxDate = dateToISOString(endDay);
-      }
-
-      if (isInitialUserVisit && scenarios.length > 0) {
-        const baselineScenarioId = scenarios[0].id;
-        setActiveScenarios((prevScenarios) => [...(prevScenarios ?? []), baselineScenarioId]);
-        setSelectedScenario(baselineScenarioId);
-      }
-    }
-    if (caseScenarioSimulationData) {
-      const entries = caseScenarioSimulationData.results.map((entry) => entry.day).sort((a, b) => a.localeCompare(b));
-      const firstCaseDataDay = entries[0];
-      if (!minDate) {
-        minDate = firstCaseDataDay;
-      } else {
-        minDate = minDate.localeCompare(firstCaseDataDay) < 0 ? minDate : firstCaseDataDay;
-      }
-
-      const lastCaseDataDay = entries.slice(-1)[0];
-      if (!maxDate) {
-        maxDate = lastCaseDataDay;
-      } else {
-        maxDate = maxDate.localeCompare(lastCaseDataDay) > 0 ? maxDate : lastCaseDataDay;
-      }
-    }
-
-    if (minDate && maxDate) {
-      dispatch(setMinMaxDates({minDate, maxDate}));
-    }
-
-    // Setting the initial user visit to the data and
-    if (isInitialUserVisit && scenarioListData !== undefined) {
-      dispatch(setInitialVisit(false));
-    }
-  }, [activeScenarios, scenarioListData, dispatch, caseScenarioSimulationData, isInitialUserVisit]);
 
   /*
    * This useEffect hook is utilized to enable the connection between the dashed border line of the box
@@ -276,13 +182,13 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
                 }}
               >
                 <CompartmentsRows
-                  compartmentsExpanded={compartmentsExpanded}
-                  compartments={compartments}
-                  selectedCompartment={selectedCompartment}
+                  compartmentsExpanded={compartmentsExpanded ?? false}
+                  compartments={compartmentNames}
+                  selectedCompartment={selectedCompartment ?? ''}
                   setSelectedCompartment={(newCompartment) => dispatch(selectCompartment(newCompartment))}
                   minCompartmentsRows={minCompartmentsRows}
                   maxCompartmentsRows={maxCompartmentsRows}
-                  compartmentValues={referenceDateValues}
+                  compartmentValues={compartmentValues}
                   localization={localization}
                 />
               </Box>
@@ -296,40 +202,45 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
               >
                 <GeneralButton
                   buttonTexts={{clicked: t('less'), unclicked: t('more')}}
-                  isDisabled={compartmentsMemo.length <= minCompartmentsRows}
+                  isDisabled={compartmentNames.length <= minCompartmentsRows}
                   handleClick={() => {
-                    if (compartments.indexOf(selectedCompartment) >= minCompartmentsRows) {
-                      setSelectedCompartment('MildInfections');
+                    if (compartmentNames.indexOf(selectedCompartment ?? '') >= minCompartmentsRows) {
+                      dispatch(selectCompartment(compartmentNames[0]));
                     }
                     dispatch(toggleCompartmentExpansion());
-                    setCompartmentsExpanded(!compartmentsExpanded);
                   }}
-                  isExpanded={compartmentsExpanded}
+                  isExpanded={compartmentsExpanded ?? false}
                 />
               </Box>
             </Box>
             <CardContainer
-              compartmentsExpanded={compartmentsExpanded}
+              compartmentsExpanded={compartmentsExpanded ?? false}
               cardValues={cardValues}
+              referenceValues={compartmentValues}
               filterValues={filterValues}
-              selectedCompartment={selectedCompartment}
+              selectedCompartmentId={selectedCompartment}
               scenarios={scenarios}
-              compartments={compartmentsMemo}
-              activeScenarios={activeScenarios}
-              setActiveScenarios={(newActiveScenarios) => dispatch(setActiveScenario(newActiveScenarios))}
+              activeScenarios={activeScenarios ?? []}
+              setActiveScenario={(newActiveScenarios) => dispatch(setActiveScenario(newActiveScenarios))}
               minCompartmentsRows={minCompartmentsRows}
               maxCompartmentsRows={maxCompartmentsRows}
               localization={localization}
               selectedScenario={selectedScenario}
-              setSelectedScenario={setSelectedScenario}
+              setSelectedScenario={(selection) => {
+                if (selection.state) {
+                  dispatch(selectScenario(selection.id));
+                } else if (selectedScenario === selection.id) {
+                  dispatch(selectScenario(null));
+                }
+              }}
               groupFilters={groupFilters}
             />
           </Box>
-          {groupCategories && groupCategories.results && groupSubCategories && groupSubCategories.results && (
+          {groupCategories && groups && (
             <FilterDialogContainer
               groupFilters={groupFilters}
-              groupCategories={groupCategories.results}
-              groupSubCategories={groupSubCategories.results}
+              categories={translatedCategories}
+              groups={translatedGroups}
               setGroupFilters={(newGroupFilters) => dispatch(setGroupFilters(newGroupFilters))}
               localization={localization}
             />

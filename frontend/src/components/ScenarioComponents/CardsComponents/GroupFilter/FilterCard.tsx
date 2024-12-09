@@ -6,7 +6,6 @@ import Divider from '@mui/material/Divider';
 import FilterRows from './FilterRows';
 import CardTitle from '../MainCard/CardTitle';
 import {Localization} from 'types/localization';
-import {Dictionary} from 'util/util';
 
 interface FilterCardProps {
   /** Title of the filter card */
@@ -15,23 +14,14 @@ interface FilterCardProps {
   /** Color of the filter card */
   color: string;
 
-  /** Array of compartments */
-  compartments: string[];
-
   /** Dictionary of filtered values */
-  filteredValues: Dictionary<number> | null;
-
-  /** Index of the group filter */
-  groupFilterIndex: number;
-
-  /** Total number of cards */
-  totalCardNumber: number;
+  filteredValues: Record<string, number>;
 
   /** Boolean to determine if the compartment is expanded */
   compartmentExpanded?: boolean;
 
   /** Selected compartment */
-  selectedCompartment: string;
+  selectedCompartmentId: string | null;
 
   /** Minimum number of compartment rows */
   minCompartmentsRows: number;
@@ -44,6 +34,9 @@ interface FilterCardProps {
 
   /** An object containing localization information (translation & number formattation).*/
   localization?: Localization;
+
+  isFirstCard: boolean;
+  isLastCard: boolean;
 }
 
 /**
@@ -53,12 +46,9 @@ interface FilterCardProps {
 export default function FilterCard({
   title,
   color,
-  compartments,
   filteredValues,
-  groupFilterIndex,
-  totalCardNumber,
   compartmentExpanded,
-  selectedCompartment,
+  selectedCompartmentId,
   maxCompartmentsRows,
   minCompartmentsRows,
   compartmentsExpanded,
@@ -67,6 +57,8 @@ export default function FilterCard({
     customLang: 'global',
     overrides: {},
   },
+  isFirstCard,
+  isLastCard,
 }: FilterCardProps) {
   const theme = useTheme();
 
@@ -90,7 +82,7 @@ export default function FilterCard({
 
   return (
     <Box
-      id={`external-cardfilter-container-${groupFilterIndex}`}
+      id={`external-cardfilter-container-${title}`}
       sx={{
         display: 'flex',
         flexDirection: 'row',
@@ -98,7 +90,7 @@ export default function FilterCard({
       }}
     >
       <Box
-        id={`cardfilter-title&cardContent-container-${groupFilterIndex}`}
+        id={`cardfilter-title&cardContent-container-${title}`}
         className='hide-scrollbar'
         sx={{
           maxHeight: maxHeight,
@@ -107,12 +99,12 @@ export default function FilterCard({
           zIndex: 0,
           display: 'flex',
           flexDirection: 'column',
-          borderColor: groupFilterIndex == 0 ? null : 'divider',
-          borderRadius: groupFilterIndex == totalCardNumber - 1 ? '0 0.2em 0.2em 0' : '0',
+          borderColor: isFirstCard ? null : 'divider',
+          borderRadius: isLastCard ? '0 0.2em 0.2em 0' : '0',
         }}
       >
         <Box
-          id={`cardfilter-title-container-${groupFilterIndex}`}
+          id={`cardfilter-title-container-${title}`}
           sx={{
             display: 'flex',
             height: '58px',
@@ -125,16 +117,15 @@ export default function FilterCard({
           <CardTitle label={title} color={color} />
         </Box>
         <FilterRows
-          compartments={compartments}
           filteredValues={filteredValues}
           compartmentExpanded={compartmentExpanded}
-          selectedCompartment={selectedCompartment}
+          selectedCompartmentId={selectedCompartmentId}
           maxCompartmentsRows={maxCompartmentsRows}
           minCompartmentsRows={minCompartmentsRows}
           localization={localization}
         />
       </Box>
-      {groupFilterIndex != totalCardNumber - 1 && <Divider orientation='vertical' flexItem />}
+      {isLastCard && <Divider orientation='vertical' flexItem />}
     </Box>
   );
 }

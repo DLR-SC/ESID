@@ -43,19 +43,19 @@ const MainCardTest = () => {
         label={Label}
         hover={hover}
         compartmentValues={CompartmentValues}
-        startValues={StartValues}
+        referenceValues={StartValues}
         setHover={setHover}
         compartments={Compartments}
         compartmentsExpanded={CompartmentsExpanded}
-        selectedCompartment={SelectedCompartment}
+        selectedCompartmentId={SelectedCompartment}
         color={Color}
-        selectedScenario={SelectedScenario}
-        activeScenario={true}
+        isSelected={SelectedScenario}
+        isActive={true}
         numberSelectedScenario={Index}
         minCompartmentsRows={MinCompartmentsRows}
         maxCompartmentsRows={MaxCompartmentsRows}
-        setSelectedScenario={setSelectedScenario}
-        setActiveScenarios={setActiveScenarios}
+        setSelected={setSelectedScenario}
+        setActive={setActiveScenarios}
         activeScenarios={activeScenarios}
         arrow={true}
       />

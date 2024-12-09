@@ -22,7 +22,7 @@ import Box from '@mui/material/Box';
 import {selectDistrict} from 'store/DataSelectionSlice';
 import legendPresets from '../../../assets/heatmap_legend_presets.json?url';
 import {selectHeatmapLegend} from 'store/UserPreferenceSlice';
-import {GeoJSON, GeoJsonProperties} from 'geojson';
+import {GeoJsonProperties} from 'geojson';
 
 export default function MapContainer() {
   const {t} = useTranslation();
@@ -31,22 +31,7 @@ export default function MapContainer() {
   const theme = useTheme();
   const dispatch = useAppDispatch();
 
-  const {
-    geoData,
-    mapData,
-    areMapValuesFetching,
-    searchBarData,
-  }: {
-    geoData: GeoJSON | undefined;
-    mapData: {id: string; value: number}[] | undefined;
-    areMapValuesFetching: boolean;
-    searchBarData: GeoJsonProperties[] | undefined;
-  } = useContext(DataContext) || {
-    geoData: {type: 'FeatureCollection', features: []},
-    mapData: [],
-    areMapValuesFetching: false,
-    searchBarData: [],
-  };
+  const {geoData, mapData, searchBarData} = useContext(DataContext);
 
   const storeSelectedArea = useAppSelector((state) => state.dataSelection.district);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
@@ -168,7 +153,7 @@ export default function MapContainer() {
         />
       </Box>
       <Box id='sidebar-map-wrapper'>
-        <LoadingContainer show={areMapValuesFetching || longLoad} overlayColor={theme.palette.background.default}>
+        <LoadingContainer show={mapData === undefined || longLoad} overlayColor={theme.palette.background.default}>
           <HeatMap
             selectedArea={selectedArea}
             setSelectedArea={setSelectedArea}
@@ -182,10 +167,9 @@ export default function MapContainer() {
             tooltipTextWhileFetching={calculateToolTipFetching}
             defaultSelectedValue={defaultValue}
             values={mapData}
-            isDataFetching={areMapValuesFetching}
+            isDataFetching={mapData === undefined}
             longLoad={longLoad}
             setLongLoad={setLongLoad}
-            selectedScenario={selectedScenario}
             areaId={'RS'}
             localization={localization}
             maxZoomLevel={32}
@@ -218,7 +202,6 @@ export default function MapContainer() {
               <HeatLegendEdit
                 legend={legend}
                 setLegend={setLegend}
-                selectedScenario={selectedScenario}
                 legendPresetsUrl={legendPresets}
               />
             </Grid>
