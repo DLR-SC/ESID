@@ -375,7 +375,6 @@ export default function LineChart({
       const fillColor = line.fill ?? color(theme.palette.error.main);
 
       return {
-        serieId: line.serieId ?? '',
         threshold: horizontalYAxisThreshold,
         fills: {
           fill: fillColor, // change the fill of the range above threshold
@@ -390,8 +389,10 @@ export default function LineChart({
         },
         alternatingStrokes: {
           stroke: lineColor,
-          strokeWidth: 2,
-          layer: 1,
+          strokeWidth: 2.5,
+
+          // somehow the layer needs to be set to a high number to be drawn on top of the other stroke, using values between 1-5 will not work and not refresh if we select another scenario
+          layer: 30,
           strokeDasharray: [10, 10],
           strokeOpacity: 1,
           visible: line.stroke.visible ?? true,
@@ -415,7 +416,7 @@ export default function LineChart({
 
         // set stroke settings from original line chart data below the threshold
         series.strokes.template.setAll({
-          strokeWidth: seriesSettings?.stroke.strokeWidth ?? 2,
+          strokeWidth: seriesSettings?.stroke.strokeWidth ?? 2.5,
           strokeDasharray: seriesSettings?.stroke.strokeDasharray ?? undefined,
         });
 
