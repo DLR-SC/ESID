@@ -8,15 +8,13 @@ import {useLineSeriesList} from './LineSeries';
 import {useLayoutEffect} from 'react';
 import {AxisRenderer, ValueAxis} from '@amcharts/amcharts5/xy';
 import {IGraphicsSettings} from '@amcharts/amcharts5';
-import {ILineSeriesAxisRange} from '@amcharts/amcharts5/.internal/charts/xy/series/LineSeries';
 
 export function useSeriesRange(
   root: Root | null,
   chart: XYChart | null,
-  settings: Array<ILineSeriesSettings>,
+  lineChartSettings: Array<ILineSeriesSettings>,
   yAxis: ValueAxis<AxisRenderer> | null,
   rangeSettings: Array<{
-    serieId?: string | number;
     threshold?: number;
     fills?: Partial<IGraphicsSettings>;
     strokes?: Partial<IGraphicsSettings>;
@@ -25,7 +23,7 @@ export function useSeriesRange(
   initializer?: (series: LineSeries, i: number) => void
 ) {
   // Use the existing `useLineSeriesList` hook to create the series
-  const seriesList = useLineSeriesList(root, chart, settings, initializer);
+  const seriesList = useLineSeriesList(root, chart, lineChartSettings, initializer);
 
   // Use `useLayoutEffect` to apply the series range logic after the series are created
   useLayoutEffect(() => {
@@ -38,38 +36,37 @@ export function useSeriesRange(
 
       const seriesRangeDataItem = yAxis.makeDataItem({
         value: rangeSetting.threshold, // Start of the range
-        endValue: 1e6, // End value of the range (adjust as needed)
+        endValue: 1e6, // end value range (top of the chart)
       });
 
-      const aboveThresholdRange = series.createAxisRange(seriesRangeDataItem);
-
-      // Apply the fill settings
-      if (rangeSetting.fills) {
-        aboveThresholdRange.fills?.template.setAll(rangeSetting.fills);
-      }
-
-      // Apply the stroke settings
-      if (rangeSetting.strokes) {
-        aboveThresholdRange.strokes?.template.setAll(rangeSetting.strokes);
-      }
-
+      // this creates a new range series with it's own styling for alternating strokes
       if (rangeSetting.alternatingStrokes) {
         const alternatingStrokeSeriesRange = series.createAxisRange(seriesRangeDataItem);
         alternatingStrokeSeriesRange.strokes?.template.setAll(rangeSetting.alternatingStrokes);
       }
+
+      const aboveThresholdRange = series.createAxisRange(seriesRangeDataItem);
+
+      // apply fill settings to aboveThresholdRange
+      if (rangeSetting.fills) {
+        aboveThresholdRange.fills?.template.setAll(rangeSetting.fills);
+      }
+
+      // apply stroke settings to aboveThresholdRange
+      if (rangeSetting.strokes) {
+        aboveThresholdRange.strokes?.template.setAll(rangeSetting.strokes);
+      }
     });
 
     return () => {
-      // Dispose of the ranges when the component unmounts
       seriesList.forEach((series: LineSeries) => {
-        series.axisRanges.each((range: ILineSeriesAxisRange) => {
-          if (series.axisRanges.contains(range)) {
-            series.axisRanges.removeValue(range);
-          }
-        });
+        // Clear the axis ranges when the component is unmounted
+        if (!series.isDisposed()) {
+          series.axisRanges.clear();
+        }
       });
     };
-  }, [seriesList, rangeSettings, yAxis]);
+  }, [seriesList, rangeSettings, yAxis, chart]);
 
   return seriesList ?? null;
 }
