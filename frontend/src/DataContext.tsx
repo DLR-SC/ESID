@@ -540,7 +540,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
         visible: true,
         fill: color(getScenarioPrimaryColor(selectedScenario, theme)),
         fillOpacity: 0.3,
-        stroke: {strokeWidth: 0},
+        stroke: {strokeWidth: 0, visible: false},
         parentId: selectedScenario,
       };
     }

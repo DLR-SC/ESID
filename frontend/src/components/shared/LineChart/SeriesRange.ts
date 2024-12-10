@@ -14,12 +14,14 @@ export function useSeriesRange(
   root: Root | null,
   chart: XYChart | null,
   settings: Array<ILineSeriesSettings>,
-  yAxis: ValueAxis<AxisRenderer> | null, // The yAxis for creating range
-  rangeSettings: {
-    threshold?: number; // The threshold for the series range
-    fills?: Partial<IGraphicsSettings>; // Fill color for the range
-    strokes?: Partial<IGraphicsSettings>; // Stroke color for the range
-  },
+  yAxis: ValueAxis<AxisRenderer> | null,
+  rangeSettings: Array<{
+    serieId?: string | number;
+    threshold?: number;
+    fills?: Partial<IGraphicsSettings>;
+    strokes?: Partial<IGraphicsSettings>;
+    alternatingStrokes?: Partial<IGraphicsSettings>;
+  }>, // Update to accept an array of settings
   initializer?: (series: LineSeries, i: number) => void
 ) {
   // Use the existing `useLineSeriesList` hook to create the series
@@ -27,24 +29,33 @@ export function useSeriesRange(
 
   // Use `useLayoutEffect` to apply the series range logic after the series are created
   useLayoutEffect(() => {
-    if (!seriesList || !yAxis || seriesList.length === 0) return;
+    if (!seriesList || !yAxis || seriesList.length === 0 || !rangeSettings) return;
 
-    // Iterate over each series to create and apply the series range
-    seriesList.forEach((series: LineSeries) => {
+    // Iterate over each series passed on and match the corresponding range settings
+    seriesList.forEach((series: LineSeries, index: number) => {
+      const rangeSetting = rangeSettings[index]; // Match range settings by index
+      if (!rangeSetting || !rangeSetting.threshold) return;
+
       const seriesRangeDataItem = yAxis.makeDataItem({
-        value: rangeSettings.threshold, // Start of the range
+        value: rangeSetting.threshold, // Start of the range
         endValue: 1e6, // End value of the range (adjust as needed)
       });
 
-      const seriesRange = series.createAxisRange(seriesRangeDataItem);
+      const aboveThresholdRange = series.createAxisRange(seriesRangeDataItem);
 
-      // Set the fill and stroke properties for the range
-      if (rangeSettings.fills) {
-        seriesRange.fills?.template.setAll(rangeSettings.fills);
+      // Apply the fill settings
+      if (rangeSetting.fills) {
+        aboveThresholdRange.fills?.template.setAll(rangeSetting.fills);
       }
 
-      if (rangeSettings.strokes) {
-        seriesRange.strokes?.template.setAll(rangeSettings.strokes);
+      // Apply the stroke settings
+      if (rangeSetting.strokes) {
+        aboveThresholdRange.strokes?.template.setAll(rangeSetting.strokes);
+      }
+
+      if (rangeSetting.alternatingStrokes) {
+        const alternatingStrokeSeriesRange = series.createAxisRange(seriesRangeDataItem);
+        alternatingStrokeSeriesRange.strokes?.template.setAll(rangeSetting.alternatingStrokes);
       }
     });
 

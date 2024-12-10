@@ -364,29 +364,43 @@ export default function LineChart({
     });
   }, [lineChartData, root, xAxis, yAxis, chartId]);
 
-  // Effect to add series range above threshold to chart
+  // this sets the chart settings above the threshold
   const seriesRangeSettings = useMemo(() => {
-    if (!root || !horizontalYAxisThreshold || horizontalYAxisThreshold === 0) {
-      return {};
+    if (!root || !horizontalYAxisThreshold || horizontalYAxisThreshold === 0 || !lineChartData) {
+      return [];
     }
 
-    return {
-      threshold: horizontalYAxisThreshold,
-      fills: {
-        fill: color(theme.palette.error.main),
-        fillOpacity: 0.3,
-        visible: true,
-      },
-      strokes: {
-        stroke: color(theme.palette.error.main),
-        strokeWidth: 2,
-        strokeOpacity: 1,
-        strokeDasharray: [6, 4],
-        visible: true,
-      },
-    };
-  }, [root, horizontalYAxisThreshold, theme.palette.error.main]);
+    return lineChartData.map((line) => {
+      const lineColor = line.stroke.color ?? color(theme.palette.error.main);
+      const fillColor = line.fill ?? color(theme.palette.error.main);
 
+      return {
+        serieId: line.serieId ?? '',
+        threshold: horizontalYAxisThreshold,
+        fills: {
+          fill: fillColor, // change the fill of the range above threshold
+          visible: true, // visibility of the fill
+          fillOpacity: line.fillOpacity ?? 0.15,
+        },
+        strokes: {
+          stroke: color(theme.palette.error.main), // change the stroke for points above threshold
+          strokeWidth: line.stroke.strokeWidth ?? 2,
+          strokeOpacity: 1,
+          visible: line.stroke.visible ?? true, // use the one from the lineChartData if it is defined
+        },
+        alternatingStrokes: {
+          stroke: lineColor,
+          strokeWidth: 2,
+          layer: 1,
+          strokeDasharray: [10, 10],
+          strokeOpacity: 1,
+          visible: line.stroke.visible ?? true,
+        },
+      };
+    });
+  }, [root, horizontalYAxisThreshold, theme.palette.error.main, lineChartData]);
+
+  // add linechart and series. The lineSeries will be initialized using the initializer, whereas the seriesRange will be initialized using the seriesRangeSettings
   useSeriesRange(
     root,
     chart,
@@ -398,13 +412,17 @@ export default function LineChart({
         if (!lineChartData) return;
 
         const seriesSettings = lineChartData.find((line) => line.serieId === series.get('id')?.split('_')[1]);
-        console.log(seriesSettings);
+
+        // set stroke settings from original line chart data below the threshold
         series.strokes.template.setAll({
           strokeWidth: seriesSettings?.stroke.strokeWidth ?? 2,
           strokeDasharray: seriesSettings?.stroke.strokeDasharray ?? undefined,
         });
+
+        // set fill settings from original line chart data below the threshold
         if (seriesSettings?.fill) {
           series.fills.template.setAll({
+            fill: seriesSettings.fill,
             fillOpacity: seriesSettings.fillOpacity ?? 1,
             visible: true,
           });
@@ -429,7 +447,7 @@ export default function LineChart({
       grid: {
         stroke: color(theme.palette.error.main), // Use dynamic stroke color based on the threshold
         strokeOpacity: 0.8,
-        strokeWidth: 1.5,
+        strokeWidth: 2,
         visible: true,
         location: 0,
       },
