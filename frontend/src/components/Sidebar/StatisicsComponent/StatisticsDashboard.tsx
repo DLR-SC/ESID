@@ -73,10 +73,11 @@ export default function StatisticsDashboard(props: any): JSX.Element {
         .height(170)
         .dimension(infectionDimension)
         .group(filteredInfectionStateGroup)
-        .keyAccessor((d: any) => KeyInfo.infection_state[d.key].icon)
+        .label((d: any) => KeyInfo.infection_state[d.key].icon)
+        .keyAccessor((d: any) => d.key)
         .colors(d3.scaleOrdinal(d3.schemeBlues[9].slice().reverse()))
         .on('filtered', function (_chart: any) {
-          const selectedFilters = _chart.filters().map((d: any) => Object.values(KeyInfo.infection_state).findIndex((e: any) => e.icon === d));
+          const selectedFilters = _chart.filters()//.map((d: any) => Object.values(KeyInfo.infection_state).findIndex((e: any) => e.icon === d));
           dispatch(
             selectInfectionStates({
               infectionStates: selectedFilters,
@@ -171,7 +172,7 @@ export default function StatisticsDashboard(props: any): JSX.Element {
           return 'Mode:' + KeyInfo.transport_mode[d.key].fullName + '\nvalue: ' + d.value;
         })
 
-        .on('filtered', function (_chart: any, filter: any) {
+        .on('filtered', function (_chart: any) {
           const selectedFilters = _chart.filters();
           dispatch(
             selectTransportationModes({
@@ -209,7 +210,7 @@ export default function StatisticsDashboard(props: any): JSX.Element {
         .title((d: any) => {
           return 'Activity:' + '' + KeyInfo.activity[d.key] + '\nvalue: ' + d.value;
         })
-        .on('filtered', function (_chart: any, filter: any) {
+        .on('filtered', function (_chart: any) {
           const selectedFilters = _chart.filters();
           dispatch(
             selectActivities({
@@ -280,10 +281,11 @@ export default function StatisticsDashboard(props: any): JSX.Element {
         .x(d3.scaleOrdinal())
         .xUnits(dc.units.ordinal)
         .barPadding(0.1)
-        .keyAccessor((d: any) => KeyInfo.age_group[d.key].icon)
+        .keyAccessor((d: any) => d.key)
+        .label((d: any) => KeyInfo.age_group[d.data.key].icon)
         .on('filtered', function (_chart: any) {
           // Get all selected filters
-          const selectedFilters = _chart.filters().map((d: any) => Object.values(KeyInfo.age_group).findIndex((e: any) => e.icon === d));
+          const selectedFilters = _chart.filters()
           dispatch(
             selectAgeGroups({
               ageGroups: selectedFilters,

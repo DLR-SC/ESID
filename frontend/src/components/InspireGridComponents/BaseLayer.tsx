@@ -124,12 +124,8 @@ export default function BaseLayer({
 
     const infectedLocations: {pos: number[]; infectionType: number}[] = [];
     context.tripChains?.forEach((tripChain) => {
-      tripChain?.forEach((trip) => {
-        infectedLocations.push({
-          pos: getLocationPos(trip.start_location),
-          infectionType: trip.infection_state,
-        });
-        /*if (index > 0) {
+      tripChain?.forEach((trip, index) => {
+        if (index > 0) {
             if (
               infectionStates.includes(trip.infection_state) &&
               trip.infection_state !== tripChain[index - 1].infection_state &&
@@ -140,7 +136,7 @@ export default function BaseLayer({
                 infectionType: trip.infection_state,
               });
             }
-          }*/
+          }
       });
     });
     return infectedLocations;
@@ -356,7 +352,7 @@ export default function BaseLayer({
                     weight: 0,
                     color: 'black',
                     fillColor: fillColor,
-                    fillOpacity: 0.5,
+                    fillOpacity: 0.4 * (rectangle.infectionCount / infectedCellData.maxInfectionCount) + 0.4,
                   }}
                 />
               );
