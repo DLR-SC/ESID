@@ -125,9 +125,9 @@ export const PandemosProvider = ({children}: {children: React.ReactNode}) => {
           return (
             ({
               ...trip,
-              agent_age_group: agents[trip.agent_id].age_group,
-              start_location_type: locations[trip.start_location].location_type,
-              end_location_type: locations[trip.end_location].location_type,
+              agent_age_group: agents.find((agent) => agent.agent_id === trip.agent_id)!.age_group,
+              start_location_type: locations.find((loc) => loc.location_id === trip.start_location)!.location_type,
+              end_location_type: locations.find((loc) => loc.location_id === trip.end_location)!.location_type,
             } as TripExpanded) ?? {}
           );
         })
@@ -136,29 +136,7 @@ export const PandemosProvider = ({children}: {children: React.ReactNode}) => {
       return crossfilter([]);
     }
   }, [agents, locations, trips]);
-  /*
-  // Preprocess trip chains
-  const tripChains = useMemo<Array<TripChain>>(() => {
-    const agentTrips = new Map<number, Array<Trip>>();
 
-    // Group trips by agent
-    for (const trip of trips ?? []) {
-      agentTrips.set(trip.agent_id, [...(agentTrips.get(trip.agent_id) ?? []), trip]);
-    }
-
-    let chain_id = 0;
-    const tripChains = new Array<TripChain>();
-    for (const tripChain of agentTrips.values()) {
-      let start = 0;
-      tripChain.forEach((trip, index) => {
-        if (locations![trip.start_location].location_type === 0) start = index;
-        if (trip.activity === 6)
-          tripChains.push({agent_id: trip.agent_id, chain_id: chain_id++, trips: tripChain.slice(start, index + 1)});
-      });
-    }
-    return tripChains;
-  }, [trips, locations]);
-*/
   return (
     <PandemosContext.Provider
       value={useMemo(

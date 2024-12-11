@@ -58,12 +58,12 @@ export namespace KeyInfo {
   };
 
   export const age_group: Record<number, KeyInfoItem> = {
-    /** Ages 0 to 4 */ 1: {icon: '0-4', fullName: 'Ages 0 to 4'},
-    /** Ages 5 to 14 */ 2: {icon: '5-14', fullName: 'Ages 5 to 14'},
-    /** Ages 15 to 34 */ 3: {icon: '15-34', fullName: 'Ages 15 to 34'},
-    /** Ages 35 to 59 */ 4: {icon: '35-59', fullName: 'Ages 35 to 59'},
-    /** Ages 60 to 79 */ 5: {icon: '60-79', fullName: 'Ages 60 to 79'},
-    /** Ages 80 and older */ 6: {icon: '80+', fullName: 'Ages 80 and older'},
+    /** Ages 0 to 4 */ 0: {icon: '0-4', fullName: 'Ages 0 to 4'},
+    /** Ages 5 to 14 */ 1: {icon: '5-14', fullName: 'Ages 5 to 14'},
+    /** Ages 15 to 34 */ 2: {icon: '15-34', fullName: 'Ages 15 to 34'},
+    /** Ages 35 to 59 */ 3: {icon: '35-59', fullName: 'Ages 35 to 59'},
+    /** Ages 60 to 79 */ 4: {icon: '60-79', fullName: 'Ages 60 to 79'},
+    /** Ages 80 and older */ 5: {icon: '80+', fullName: 'Ages 80 and older'},
   };
 }
 

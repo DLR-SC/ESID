@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, {useCallback, useContext, useEffect, useMemo} from 'react';
+import React, {useCallback, useContext, useEffect, useMemo, useState} from 'react';
 import {LayerGroup, LayersControl, MapContainer, TileLayer, Rectangle, useMap, Polyline} from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import {getGridNew, getCellFromPosition} from './inspire';
@@ -31,8 +31,8 @@ function MapEventsHandler({setMapZoom, setMapBounds, setMapCenter}: BaseLayerPro
 
   useEffect(() => {
     const bounds: MapBounds = [
-      [52.248, 10.477],
-      [52.273, 10.572],
+      [52.15, 10.2],
+      [52.5, 10.8],
     ];
     map.setMaxBounds(bounds);
 
@@ -73,9 +73,9 @@ function MapEventsHandler({setMapZoom, setMapBounds, setMapCenter}: BaseLayerPro
 }
 
 function getResolutionFromZoom(input: number): number {
-  const inputStart = 14;
+  const inputStart = 13;
   const inputEnd = 18;
-  const outputStart = 9;
+  const outputStart = 8;
   const outputEnd = 12;
 
   if (input < inputStart || input > inputEnd) {
@@ -89,12 +89,10 @@ function getResolutionFromZoom(input: number): number {
 export default function BaseLayer({
   mapZoom = 14,
   mapBounds = [
-    [52.248, 10.477],
-    [52.273, 10.572],
+    [52.15, 10],
+    [52.5, 11],
   ],
   mapCenter = [52.26, 10.525],
-  inspireGrid = true,
-  inspireGridLevel = 10,
   setMapZoom,
   setMapBounds,
   setMapCenter,
@@ -102,16 +100,14 @@ export default function BaseLayer({
   const context = useContext(PandemosContext);
   const selectedTab = useAppSelector((state) => state.userPreference.selectedSidebarTab ?? '1');
   const filter = useAppSelector((state) => state.pandemosFilter);
+  const [showTrips, setShowTrips] = useState(false);
+  const [showHeatMap, setShowHeatMap] = useState(false);
 
   const gridResolution = useMemo(() => getResolutionFromZoom(mapZoom), [mapZoom]);
 
   const gridData = useMemo(() => {
-    const bounds: MapBounds = [
-      [52.248, 10.477],
-      [52.273, 10.572],
-    ];
     return getGridNew(mapBounds, gridResolution);
-  }, [mapBounds, gridResolution]);
+  }, [gridResolution, mapBounds]);
 
   const getLocationPos = useCallback(
     (location: number) => {
@@ -121,36 +117,34 @@ export default function BaseLayer({
     [context.locations]
   );
 
-  // Calculate infected locations from filtered trip chains
   const infectedLocations = useMemo(() => {
+    if (!showHeatMap) {
+      return [];
+    }
+
     const infectedLocations: {pos: number[]; infectionType: number}[] = [];
-    context.filteredTripChains?.forEach((tripChains) => {
-      tripChains.forEach((tripChainId) => {
-        if (context.tripChains) {
-          const tripChain = context.tripChains.get(tripChainId);
-          tripChain?.forEach((trip, index) => {
-            infectedLocations.push({
-              pos: getLocationPos(trip.start_location),
-              infectionType: trip.infection_state,
-            });
-            /*if (index > 0) {
-              if (
-                infectionStates.includes(trip.infection_state) &&
-                trip.infection_state !== tripChain[index - 1].infection_state &&
-                susceptibleStates.includes(tripChain[index - 1].infection_state)
-              ) {
-                infectedLocations.push({
-                  pos: getLocationPos(trip.start_location),
-                  infectionType: trip.infection_state,
-                });
-              }
-            }*/
-          });
-        }
+    context.tripChains?.forEach((tripChain) => {
+      tripChain?.forEach((trip) => {
+        infectedLocations.push({
+          pos: getLocationPos(trip.start_location),
+          infectionType: trip.infection_state,
+        });
+        /*if (index > 0) {
+            if (
+              infectionStates.includes(trip.infection_state) &&
+              trip.infection_state !== tripChain[index - 1].infection_state &&
+              susceptibleStates.includes(tripChain[index - 1].infection_state)
+            ) {
+              infectedLocations.push({
+                pos: getLocationPos(trip.start_location),
+                infectionType: trip.infection_state,
+              });
+            }
+          }*/
       });
     });
     return infectedLocations;
-  }, [context.filteredTripChains, context.tripChains, getLocationPos]);
+  }, [context.tripChains, getLocationPos, showHeatMap]);
   const getColorForInfection = (infectionCount: number, maxInfectionCount: number) => {
     const ratio = infectionCount / maxInfectionCount;
 
@@ -164,11 +158,15 @@ export default function BaseLayer({
 
   // Calculate infection count per grid cell
   const infectedCellData = useMemo(() => {
+    if (!showHeatMap) {
+      return {cellsData: [], maxInfectionCount: 0};
+    }
+
     const cellsData: {bounds: [[number, number], [number, number]]; infectionCount: number}[] = [];
 
     gridData.rectangles.forEach(([latMin, lonMin, latMax, lonMax]) => {
       const infectionCount = infectedLocations.filter((loc) => {
-        return loc.pos[0] >= latMin && loc.pos[0] <= latMax && loc.pos[1] >= lonMin && loc.pos[1] <= lonMax;
+        return loc.pos[1] >= latMin && loc.pos[1] <= latMax && loc.pos[0] >= lonMin && loc.pos[0] <= lonMax;
       }).length;
 
       cellsData.push({
@@ -183,10 +181,14 @@ export default function BaseLayer({
     const maxInfectionCount = Math.max(...cellsData.map((cell) => cell.infectionCount), 0);
 
     return {cellsData, maxInfectionCount};
-  }, [infectedLocations, gridData]);
+  }, [showHeatMap, gridData.rectangles, infectedLocations]);
 
   const trips = useMemo(() => {
-    const trips: {pos: [number, number]; color: string}[] = [];
+    if (!showTrips) {
+      return [];
+    }
+
+    const trips: {id: number; pos: [number, number]; color: string}[] = [];
 
     if (selectedTab === '3') {
       context.filteredTripChains?.forEach((tripChains) => {
@@ -218,6 +220,7 @@ export default function BaseLayer({
                   color = 'red'; // Unknown
               }
               trips.push({
+                id: trip.trip_id,
                 pos: [getLocationPos(trip.start_location), getLocationPos(trip.end_location)],
                 color: color,
               });
@@ -254,9 +257,8 @@ export default function BaseLayer({
                     filter.destinationTypes.includes(end?.location_type ?? -1)
                   ) {
                     if (
-                      !filter.infectionStates ||
-                      filter.infectionStates.length === 0 ||
-                      filter.infectionStates.includes(trip.infection_state)
+                      ((!filter.infectionStates || filter.infectionStates.length === 0) && trip.infection_state > 0) ||
+                      filter.infectionStates?.includes(trip.infection_state)
                     ) {
                       let color: string;
                       switch (trip.transport_mode) {
@@ -282,6 +284,7 @@ export default function BaseLayer({
                           color = 'red'; // Unknown
                       }
                       trips.push({
+                        id: trip.trip_id,
                         pos: [getLocationPos(trip.start_location), getLocationPos(trip.end_location)],
                         color: color,
                       });
@@ -311,6 +314,7 @@ export default function BaseLayer({
     filter.tripDurationMin,
     getLocationPos,
     selectedTab,
+    showTrips,
   ]);
 
   return (
@@ -320,6 +324,7 @@ export default function BaseLayer({
       scrollWheelZoom={true}
       doubleClickZoom={false}
       dragging={true}
+      minZoom={13}
       maxBounds={mapBounds}
       maxBoundsViscosity={1.0}
       style={{height: '100%', zIndex: '1', position: 'relative'}}
@@ -328,9 +333,18 @@ export default function BaseLayer({
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
       />
-      <LayersControl position='topright'>
-        <LayersControl.Overlay checked name='Infection Heatmap'>
-          <LayerGroup>
+      <LayersControl position='topright' sortLayers={false}>
+        <LayersControl.Overlay checked={showHeatMap} name='Infection Heatmap'>
+          <LayerGroup
+            eventHandlers={{
+              add() {
+                setShowHeatMap(true);
+              },
+              remove() {
+                setShowHeatMap(false);
+              },
+            }}
+          >
             {infectedCellData.cellsData.map((rectangle, index) => {
               const fillColor = getColorForInfection(rectangle.infectionCount, infectedCellData.maxInfectionCount);
 
@@ -349,11 +363,25 @@ export default function BaseLayer({
             })}
           </LayerGroup>
         </LayersControl.Overlay>
-        <LayersControl.Overlay checked name='Trips'>
-          <LayerGroup>
-            {trips.map((line, index) => (
-              <Polyline key={index} pathOptions={{weight: 1, color: line.color}} positions={line.pos} zIndex={1000} />
-            ))}
+        <LayersControl.Overlay checked={showTrips} name='Trips'>
+          <LayerGroup
+            eventHandlers={{
+              add() {
+                setShowTrips(true);
+              },
+              remove() {
+                setShowTrips(false);
+              },
+            }}
+          >
+            {trips
+              .map((line) => (
+                <Polyline
+                  key={line.id}
+                  pathOptions={{weight: 1, color: line.color}}
+                  positions={line.pos.map((pos) => [pos[1], pos[0]])}
+                />
+              ))}
           </LayerGroup>
         </LayersControl.Overlay>
       </LayersControl>

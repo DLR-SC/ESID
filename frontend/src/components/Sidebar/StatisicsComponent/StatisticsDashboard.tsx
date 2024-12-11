@@ -8,7 +8,7 @@ import {
   selectActivities,
   selectAgeGroups,
   selectDestinationTypes,
-  selectInfectionStates,
+  selectInfectionStates, selectOriginTypes,
   selectTransportationModes,
   selectTripDuration,
 } from 'store/PandemosFilterSlice';
@@ -37,7 +37,6 @@ export default function StatisticsDashboard(props: any): JSX.Element {
   // To reset individual chart
   const resetChart = (chartId: string) => {
     const chart = chartRefs.current[chartId]; // Retrieve the chart from chartRefs using chartId
-    console.log('chart', chart);
     if (chart) {
       chart.filterAll();
       chart.redraw();
@@ -49,8 +48,6 @@ export default function StatisticsDashboard(props: any): JSX.Element {
 
   useLayoutEffect(() => {
     if (context.expandedTrips && context.expandedTrips?.size() > 0) {
-      console.log('+++++++', context.expandedTrips);
-
       // **************************************** 1. INFECTION CHART ******************************************//
 
       // Create the dimension based on infection_state
@@ -79,7 +76,7 @@ export default function StatisticsDashboard(props: any): JSX.Element {
         .keyAccessor((d: any) => KeyInfo.infection_state[d.key].icon)
         .colors(d3.scaleOrdinal(d3.schemeBlues[9].slice().reverse()))
         .on('filtered', function (_chart: any) {
-          const selectedFilters = _chart.filters();
+          const selectedFilters = _chart.filters().map((d: any) => Object.values(KeyInfo.infection_state).findIndex((e: any) => e.icon === d));
           dispatch(
             selectInfectionStates({
               infectionStates: selectedFilters,
@@ -137,8 +134,13 @@ export default function StatisticsDashboard(props: any): JSX.Element {
       odInfectionChart.on('filtered', function (_chart: any, filter: any) {
         const selectedFilters = _chart.filters();
         dispatch(
+          selectOriginTypes({
+            originTypes: selectedFilters.map((d: any) => d[0]),
+          })
+        );
+        dispatch(
           selectDestinationTypes({
-            destinationTypes: selectedFilters,
+            destinationTypes: selectedFilters.map((d: any) => d[1]),
           })
         );
       });
@@ -231,7 +233,6 @@ export default function StatisticsDashboard(props: any): JSX.Element {
         return Math.floor((endTime - startTime) / 60);
       });
       const tripDurationGroup = tripDurationDimension.group().reduceCount();
-      console.log('tripDurationxxxx', tripDurationGroup.top(3));
       if (!tripDurationDimension || !tripDurationGroup) {
         console.error('Trip duration dimension or group is not defined');
         return;
@@ -248,11 +249,13 @@ export default function StatisticsDashboard(props: any): JSX.Element {
         .clipPadding(10)
         .group(tripDurationGroup)
         .on('filtered', function (_chart: any, filter: any) {
+          /*const selectedFilters = _chart.filters();
           dispatch(
             selectTripDuration({
-              // tripDurationMax: filter  // TODO: once the real data is available
+              start: Math.round(selectedFilters[0][0]),
+              end: Math.round(selectedFilters[0][1]),
             })
-          );
+          );*/
         })
         .title((d: any) => d.value);
 
@@ -261,7 +264,6 @@ export default function StatisticsDashboard(props: any): JSX.Element {
       // **************************************** 5. AGE CHART  ******************************************//
       const ageDimension = context.expandedTrips?.dimension((d) => d.agent_age_group);
       const ageGroup = ageDimension?.group().reduceCount();
-      console.log('agebins', ageGroup.all());
       if (!ageDimension || !ageGroup) {
         console.error('Age dimension or group is not defined');
         return;
@@ -302,7 +304,6 @@ export default function StatisticsDashboard(props: any): JSX.Element {
           variant='contained'
           startIcon={<RestartAltIcon />}
           onClick={resetFilters}
-          href='javascript:dashboard.filterAll();dc.redrawAll();'
           sx={{
             width: '80px',
             height: '26px',
