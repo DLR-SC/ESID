@@ -1,12 +1,12 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { useCallback, useContext, useEffect, useMemo } from 'react';
-import { LayerGroup, LayersControl, MapContainer, TileLayer, Rectangle, useMap } from 'react-leaflet';
+import React, {useCallback, useContext, useEffect, useMemo} from 'react';
+import {LayerGroup, LayersControl, MapContainer, TileLayer, Rectangle, useMap} from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import { getGridNew, getCellFromPosition } from './inspire'; 
-import { PandemosContext } from '../../data_sockets/PandemosContext';
-import { susceptibleStates, infectionStates } from './Constants';
+import {getGridNew, getCellFromPosition} from './inspire';
+import {PandemosContext} from '../../data_sockets/PandemosContext';
+import {susceptibleStates, infectionStates} from './Constants';
 
 type MapBounds = [[number, number], [number, number]];
 type MapCenter = [number, number];
@@ -23,7 +23,7 @@ interface BaseLayerProps {
   setMapCenter: (center: MapCenter) => void;
 }
 
-function MapEventsHandler({ setMapZoom, setMapBounds, setMapCenter }: BaseLayerProps) {
+function MapEventsHandler({setMapZoom, setMapBounds, setMapCenter}: BaseLayerProps) {
   const map = useMap();
 
   useEffect(() => {
@@ -72,7 +72,7 @@ function MapEventsHandler({ setMapZoom, setMapBounds, setMapCenter }: BaseLayerP
 function getResolutionFromZoom(input: number): number {
   const inputStart = 14;
   const inputEnd = 18;
-  const outputStart = 8;
+  const outputStart = 9;
   const outputEnd = 12;
 
   if (input < inputStart || input > inputEnd) {
@@ -105,10 +105,9 @@ export default function BaseLayer({
       [52.248, 10.477],
       [52.273, 10.572],
     ];
-    return getGridNew(mapBounds, gridResolution); 
+    return getGridNew(mapBounds, gridResolution);
   }, [mapBounds, gridResolution]);
 
-  
   const getLocationPos = useCallback(
     (location: number) => {
       const result = context.locations?.find((loc) => loc.location_id === location);
@@ -119,13 +118,17 @@ export default function BaseLayer({
 
   // Calculate infected locations from filtered trip chains
   const infectedLocations = useMemo(() => {
-    const infectedLocations: { pos: number[]; infectionType: number }[] = [];
+    const infectedLocations: {pos: number[]; infectionType: number}[] = [];
     context.filteredTripChains?.forEach((tripChains) => {
       tripChains.forEach((tripChainId) => {
         if (context.tripChains) {
           const tripChain = context.tripChains.get(tripChainId);
           tripChain?.forEach((trip, index) => {
-            if (tripChain[index - 1] !== undefined) {
+            infectedLocations.push({
+              pos: getLocationPos(trip.start_location),
+              infectionType: trip.infection_state,
+            });
+            /*if (index > 0) {
               if (
                 infectionStates.includes(trip.infection_state) &&
                 trip.infection_state !== tripChain[index - 1].infection_state &&
@@ -136,7 +139,7 @@ export default function BaseLayer({
                   infectionType: trip.infection_state,
                 });
               }
-            }
+            }*/
           });
         }
       });
@@ -145,28 +148,22 @@ export default function BaseLayer({
   }, [context.filteredTripChains, context.tripChains, getLocationPos]);
   const getColorForInfection = (infectionCount: number, maxInfectionCount: number) => {
     const ratio = infectionCount / maxInfectionCount;
-  
+
     // TODO: Check colour scale
-    const r = Math.min(255, Math.floor(ratio * 120 + 100)); 
-    const g = Math.min(255, Math.floor((1 - ratio) * 120 + 100)); 
-    const b = Math.min(255, Math.floor((1 - ratio) * 50)); 
-  
-    return `rgb(${r}, ${g}, ${b})`; 
+    const r = Math.min(255, Math.floor(ratio * 120 + 100));
+    const g = Math.min(255, Math.floor((1 - ratio) * 120 + 100));
+    const b = Math.min(255, Math.floor((1 - ratio) * 50));
+
+    return `rgb(${r}, ${g}, ${b})`;
   };
-  
 
   // Calculate infection count per grid cell
   const infectedCellData = useMemo(() => {
-    const cellsData: { bounds: [[number, number], [number, number]]; infectionCount: number }[] = [];
-    
+    const cellsData: {bounds: [[number, number], [number, number]]; infectionCount: number}[] = [];
+
     gridData.rectangles.forEach(([latMin, lonMin, latMax, lonMax]) => {
       const infectionCount = infectedLocations.filter((loc) => {
-        return (
-          loc.pos[0] >= latMin &&
-          loc.pos[0] <= latMax &&
-          loc.pos[1] >= lonMin &&
-          loc.pos[1] <= lonMax
-        );
+        return loc.pos[1] >= latMin && loc.pos[1] <= latMax && loc.pos[0] >= lonMin && loc.pos[0] <= lonMax;
       }).length;
 
       cellsData.push({
@@ -180,7 +177,7 @@ export default function BaseLayer({
 
     const maxInfectionCount = Math.max(...cellsData.map((cell) => cell.infectionCount), 0);
 
-    return { cellsData, maxInfectionCount };
+    return {cellsData, maxInfectionCount};
   }, [infectedLocations, gridData]);
 
   return (
@@ -192,20 +189,17 @@ export default function BaseLayer({
       dragging={true}
       maxBounds={mapBounds}
       maxBoundsViscosity={1.0}
-      style={{ height: '100%', zIndex: '1', position: 'relative' }}
+      style={{height: '100%', zIndex: '1', position: 'relative'}}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
       />
       <LayersControl position='topright'>
-        <LayersControl.Overlay checked name="Infection Heatmap">
+        <LayersControl.Overlay checked name='Infection Heatmap'>
           <LayerGroup>
             {infectedCellData.cellsData.map((rectangle, index) => {
-              const fillColor = getColorForInfection(
-                rectangle.infectionCount,
-                infectedCellData.maxInfectionCount
-              );
+              const fillColor = getColorForInfection(rectangle.infectionCount, infectedCellData.maxInfectionCount);
 
               return (
                 <Rectangle

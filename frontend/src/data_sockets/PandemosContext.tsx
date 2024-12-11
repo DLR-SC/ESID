@@ -40,8 +40,6 @@ export const PandemosProvider = ({children}: {children: React.ReactNode}) => {
   const [tripChains, setTripChains] = useState<Map<number, Array<Trip>>>();
   const [filteredTripChains, setFilteredTripChains] = useState<number[][]>([]);
 
- 
-
   // Effect to fetch the data
   useEffect(() => {
     Promise.all([
@@ -84,7 +82,7 @@ export const PandemosProvider = ({children}: {children: React.ReactNode}) => {
         // setup crossfilter objects for each
         setAgents(agents);
         setLocations(locations);
-        setTrips(trips);
+        setTrips(trips.filter((_1, index) => index < 100000));
       },
       // on promises reject
       (reason) => console.error('Failed to parse Pandemos data.', reason)
