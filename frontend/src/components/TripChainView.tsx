@@ -16,7 +16,7 @@ import hash from 'object-hash';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import ToggleButton from '@mui/material/ToggleButton';
 import {infectionStates, susceptibleStates} from './InspireGridComponents/Constants';
-import {Trip} from '../types/pandemos';
+import {Trip, Location} from '../types/pandemos';
 
 function TripChainTransport(props: {modeOfTransport: string}): JSX.Element {
   return <Chip label={<Typography sx={{fontSize: '14px'}}>{props.modeOfTransport}</Typography>} variant='outlined' />;
@@ -88,9 +88,7 @@ export default function TripChainView(): JSX.Element {
         filterInfections &&
         !tripChain.find(
           (trip, index) =>
-            infectionStates.includes(trip.infection_state) &&
-            index > 0 &&
-            susceptibleStates.includes(tripChain[index - 1].infection_state)
+            infectionStates.includes(trip.infection_state)
         )
       ) {
         continue;

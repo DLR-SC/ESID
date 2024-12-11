@@ -3,27 +3,21 @@
 
 import React, {useState, useEffect, useMemo} from 'react';
 import {useTranslation} from 'react-i18next';
-import {useTheme} from '@mui/material';
 import {useAppDispatch, useAppSelector} from 'store/hooks';
 import {HeatmapLegend} from 'types/heatmapLegend';
 import i18n from 'util/i18n';
 import SidebarTabs from './SidebarTabs';
-import Box from '@mui/material/Box';
 import {selectDistrict} from 'store/DataSelectionSlice';
 import {selectHeatmapLegend} from 'store/UserPreferenceSlice';
-import ToggleButton from '@mui/material/ToggleButton';
-import {GeoJsonProperties} from 'geojson';
 import {useTheme} from '@mui/material/styles';
 import {GeoJsonProperties} from 'geojson';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import ToggleButton from '@mui/material/ToggleButton';
 
 export default function MapContainer() {
   const {t} = useTranslation();
   const theme = useTheme();
   const dispatch = useAppDispatch();
-  const theme = useTheme();
 
   const storeSelectedArea = useAppSelector((state) => state.dataSelection.district);
   const storeHeatLegend = useAppSelector((state) => state.userPreference.selectedHeatmap);
@@ -83,7 +77,8 @@ export default function MapContainer() {
         borderRight: `1px solid ${theme.palette.divider}`,
         background: theme.palette.background.default,
         display: 'flex',
-      }}>
+      }}
+    >
       <SidebarTabs />
       <ToggleButton
         color='primary'

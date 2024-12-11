@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React, {useCallback, useContext, useEffect, useMemo} from 'react';
-import {LayerGroup, LayersControl, MapContainer, TileLayer, Rectangle, useMap} from 'react-leaflet';
+import {LayerGroup, LayersControl, MapContainer, TileLayer, Rectangle, useMap, Polyline} from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import {getGridNew, getCellFromPosition} from './inspire';
 import {PandemosContext} from '../../data_sockets/PandemosContext';
@@ -163,7 +163,7 @@ export default function BaseLayer({
 
     gridData.rectangles.forEach(([latMin, lonMin, latMax, lonMax]) => {
       const infectionCount = infectedLocations.filter((loc) => {
-        return loc.pos[1] >= latMin && loc.pos[1] <= latMax && loc.pos[0] >= lonMin && loc.pos[0] <= lonMax;
+        return loc.pos[0] >= latMin && loc.pos[0] <= latMax && loc.pos[1] >= lonMin && loc.pos[1] <= lonMax;
       }).length;
 
       cellsData.push({
@@ -179,6 +179,47 @@ export default function BaseLayer({
 
     return {cellsData, maxInfectionCount};
   }, [infectedLocations, gridData]);
+
+  const trips = useMemo(() => {
+    const trips: {pos: [number, number]; color: string}[] = [];
+    context.filteredTripChains?.forEach((tripChains) => {
+      tripChains.forEach((tripChainId) => {
+        if (context.tripChains) {
+          const tripChain = context.tripChains.get(tripChainId);
+          tripChain?.forEach((trip) => {
+            let color: string;
+            switch (trip.transport_mode) {
+              case 0:
+                color = 'green'; // Bike
+                break;
+              case 1:
+                color = 'brown'; // Car (Driver)
+                break;
+              case 2:
+                color = 'brown'; // Car (Passenger)
+                break;
+              case 3:
+                color = 'blue'; // Bus
+                break;
+              case 4:
+                color = 'white'; // Walking
+                break;
+              case 5:
+                color = 'grey'; // Other
+                break;
+              default:
+                color = 'red'; // Unknown
+            }
+            trips.push({
+              pos: [getLocationPos(trip.start_location), getLocationPos(trip.end_location)],
+              color: color,
+            });
+          });
+        }
+      });
+    });
+    return trips;
+  }, [context.filteredTripChains, context.tripChains, getLocationPos]);
 
   return (
     <MapContainer
@@ -206,14 +247,21 @@ export default function BaseLayer({
                   key={index}
                   bounds={rectangle.bounds}
                   pathOptions={{
-                    weight: 1,
+                    weight: 0,
                     color: 'black',
                     fillColor: fillColor,
-                    fillOpacity: 0.2,
+                    fillOpacity: 0.5,
                   }}
                 />
               );
             })}
+          </LayerGroup>
+        </LayersControl.Overlay>
+        <LayersControl.Overlay checked name='Trips'>
+          <LayerGroup>
+            {trips.map((line, index) => (
+              <Polyline key={index} pathOptions={{weight: 1, color: line.color}} positions={line.pos} />
+            ))}
           </LayerGroup>
         </LayersControl.Overlay>
       </LayersControl>

@@ -141,15 +141,18 @@ export const PandemosProvider = ({children}: {children: React.ReactNode}) => {
 
   return (
     <PandemosContext.Provider
-      value={{
-        agents,
-        locations,
-        trips,
-        expandedTrips,
-        tripChains,
-        filteredTripChains,
-        setFilteredTripChains,
-      }}
+      value={useMemo(
+        () => ({
+          agents,
+          locations,
+          trips,
+          expandedTrips,
+          tripChains,
+          filteredTripChains,
+          setFilteredTripChains,
+        }),
+        [agents, locations, trips, expandedTrips, tripChains, filteredTripChains, setFilteredTripChains]
+      )}
     >
       {children}
     </PandemosContext.Provider>
