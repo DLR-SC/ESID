@@ -39,7 +39,7 @@ export const PandemosFilterSlice = createSlice({
     selectAgeGroups(state, action: PayloadAction<{ageGroups?: number | number[]}>) {
       if (action.payload.ageGroups) {
         state.ageGroups = [];
-        state.ageGroups.concat(action.payload.ageGroups);
+        state.ageGroups = state.ageGroups.concat(action.payload.ageGroups);
       } else {
         // reset filter if parameter is undefined
         state.ageGroups = undefined;
@@ -53,7 +53,7 @@ export const PandemosFilterSlice = createSlice({
     selectTransportationModes(state, action: PayloadAction<{transportationModes?: number | number[]}>) {
       if (action.payload.transportationModes) {
         state.transportationModes = [];
-        state.transportationModes.concat(action.payload.transportationModes);
+        state.transportationModes = state.transportationModes.concat(action.payload.transportationModes);
       } else {
         // reset filter if parameter is undefined
         state.transportationModes = undefined;
@@ -67,7 +67,7 @@ export const PandemosFilterSlice = createSlice({
     selectActivities(state, action: PayloadAction<{activities?: number | number[]}>) {
       if (action.payload.activities) {
         state.activities = [];
-        state.activities.concat(action.payload.activities);
+        state.activities = state.activities.concat(action.payload.activities);
       } else {
         // reset filter if parameter is undefined
         state.activities = undefined;
@@ -81,7 +81,7 @@ export const PandemosFilterSlice = createSlice({
     selectOriginTypes(state, action: PayloadAction<{originTypes?: number | number[]}>) {
       if (action.payload.originTypes) {
         state.originTypes = [];
-        state.originTypes.concat(action.payload.originTypes);
+        state.originTypes = state.originTypes.concat(action.payload.originTypes);
       } else {
         // reset filter if parameter is undefined
         state.originTypes = undefined;
@@ -95,7 +95,7 @@ export const PandemosFilterSlice = createSlice({
     selectDestinationTypes(state, action: PayloadAction<{destinationTypes?: number | number[]}>) {
       if (action.payload.destinationTypes) {
         state.destinationTypes = [];
-        state.destinationTypes.concat(action.payload.destinationTypes);
+        state.destinationTypes = state.destinationTypes.concat(action.payload.destinationTypes);
       } else {
         // reset filter if parameter is undefined
         state.destinationTypes = undefined;
@@ -109,7 +109,7 @@ export const PandemosFilterSlice = createSlice({
     selectInfectionStates(state, action: PayloadAction<{infectionStates?: number | number[]}>) {
       if (action.payload.infectionStates) {
         state.infectionStates = [];
-        state.infectionStates.concat(action.payload.infectionStates);
+        state.infectionStates = state.infectionStates.concat(action.payload.infectionStates);
       } else {
         // reset filter if parameter is undefined
         state.infectionStates = undefined;

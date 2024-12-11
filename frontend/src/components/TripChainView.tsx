@@ -87,7 +87,7 @@ export default function TripChainView(): JSX.Element {
       if (
         filterInfections &&
         !tripChain.find(
-          (trip, index) =>
+          (trip) =>
             infectionStates.includes(trip.infection_state)
         )
       ) {

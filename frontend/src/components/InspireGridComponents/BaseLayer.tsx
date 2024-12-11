@@ -7,6 +7,9 @@ import 'leaflet/dist/leaflet.css';
 import {getGridNew, getCellFromPosition} from './inspire';
 import {PandemosContext} from '../../data_sockets/PandemosContext';
 import {susceptibleStates, infectionStates} from './Constants';
+import {useAppSelector} from '../../store/hooks';
+import {KeyInfo} from '../../types/pandemos';
+import age_group = KeyInfo.age_group;
 
 type MapBounds = [[number, number], [number, number]];
 type MapCenter = [number, number];
@@ -97,6 +100,8 @@ export default function BaseLayer({
   setMapCenter,
 }: BaseLayerProps): JSX.Element {
   const context = useContext(PandemosContext);
+  const selectedTab = useAppSelector((state) => state.userPreference.selectedSidebarTab ?? '1');
+  const filter = useAppSelector((state) => state.pandemosFilter);
 
   const gridResolution = useMemo(() => getResolutionFromZoom(mapZoom), [mapZoom]);
 
@@ -182,44 +187,131 @@ export default function BaseLayer({
 
   const trips = useMemo(() => {
     const trips: {pos: [number, number]; color: string}[] = [];
-    context.filteredTripChains?.forEach((tripChains) => {
-      tripChains.forEach((tripChainId) => {
-        if (context.tripChains) {
-          const tripChain = context.tripChains.get(tripChainId);
-          tripChain?.forEach((trip) => {
-            let color: string;
-            switch (trip.transport_mode) {
-              case 0:
-                color = 'green'; // Bike
-                break;
-              case 1:
-                color = 'brown'; // Car (Driver)
-                break;
-              case 2:
-                color = 'brown'; // Car (Passenger)
-                break;
-              case 3:
-                color = 'blue'; // Bus
-                break;
-              case 4:
-                color = 'white'; // Walking
-                break;
-              case 5:
-                color = 'grey'; // Other
-                break;
-              default:
-                color = 'red'; // Unknown
-            }
-            trips.push({
-              pos: [getLocationPos(trip.start_location), getLocationPos(trip.end_location)],
-              color: color,
+
+    if (selectedTab === '3') {
+      context.filteredTripChains?.forEach((tripChains) => {
+        tripChains.forEach((tripChainId) => {
+          if (context.tripChains) {
+            const tripChain = context.tripChains.get(tripChainId);
+            tripChain?.forEach((trip) => {
+              let color: string;
+              switch (trip.transport_mode) {
+                case 0:
+                  color = 'green'; // Bike
+                  break;
+                case 1:
+                  color = 'brown'; // Car (Driver)
+                  break;
+                case 2:
+                  color = 'brown'; // Car (Passenger)
+                  break;
+                case 3:
+                  color = 'blue'; // Bus
+                  break;
+                case 4:
+                  color = 'white'; // Walking
+                  break;
+                case 5:
+                  color = 'grey'; // Other
+                  break;
+                default:
+                  color = 'red'; // Unknown
+              }
+              trips.push({
+                pos: [getLocationPos(trip.start_location), getLocationPos(trip.end_location)],
+                color: color,
+              });
             });
-          });
+          }
+        });
+      });
+    } else if (selectedTab === '2') {
+      context.trips?.forEach((trip) => {
+        const duration = trip.end_time - trip.start_time;
+        const agent = context.agents?.find((agent) => agent.agent_id === trip.agent_id);
+        const start = context.locations?.find((loc) => loc.location_id === trip.start_location);
+        const end = context.locations?.find((loc) => loc.location_id === trip.end_location);
+        if (
+          agent &&
+          duration >= (filter.tripDurationMin ?? 0) &&
+          duration < (filter.tripDurationMax ?? Number.MAX_SAFE_INTEGER)
+        ) {
+          if (!filter.ageGroups || filter.ageGroups.length === 0 || filter.ageGroups.includes(agent.age_group)) {
+            if (
+              !filter.transportationModes ||
+              filter.transportationModes.length === 0 ||
+              filter.transportationModes.includes(trip.transport_mode)
+            ) {
+              if (!filter.activities || filter.activities.length === 0 || filter.activities.includes(trip.activity)) {
+                if (
+                  !filter.originTypes ||
+                  filter.originTypes.length === 0 ||
+                  filter.originTypes.includes(start?.location_type ?? -1)
+                ) {
+                  if (
+                    !filter.destinationTypes ||
+                    filter.destinationTypes.length === 0 ||
+                    filter.destinationTypes.includes(end?.location_type ?? -1)
+                  ) {
+                    if (
+                      !filter.infectionStates ||
+                      filter.infectionStates.length === 0 ||
+                      filter.infectionStates.includes(trip.infection_state)
+                    ) {
+                      let color: string;
+                      switch (trip.transport_mode) {
+                        case 0:
+                          color = 'green'; // Bike
+                          break;
+                        case 1:
+                          color = 'brown'; // Car (Driver)
+                          break;
+                        case 2:
+                          color = 'brown'; // Car (Passenger)
+                          break;
+                        case 3:
+                          color = 'blue'; // Bus
+                          break;
+                        case 4:
+                          color = 'white'; // Walking
+                          break;
+                        case 5:
+                          color = 'grey'; // Other
+                          break;
+                        default:
+                          color = 'red'; // Unknown
+                      }
+                      trips.push({
+                        pos: [getLocationPos(trip.start_location), getLocationPos(trip.end_location)],
+                        color: color,
+                      });
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       });
-    });
+    }
     return trips;
-  }, [context.filteredTripChains, context.tripChains, getLocationPos]);
+  }, [
+    context.agents,
+    context.filteredTripChains,
+    context.locations,
+    context.tripChains,
+    context.trips,
+    filter.activities,
+    filter.ageGroups,
+    filter.destinationTypes,
+    filter.infectionStates,
+    filter.originTypes,
+    filter.transportationModes,
+    filter.tripDurationMax,
+    filter.tripDurationMin,
+    getLocationPos,
+    selectedTab,
+  ]);
 
   return (
     <MapContainer
@@ -260,7 +352,7 @@ export default function BaseLayer({
         <LayersControl.Overlay checked name='Trips'>
           <LayerGroup>
             {trips.map((line, index) => (
-              <Polyline key={index} pathOptions={{weight: 1, color: line.color}} positions={line.pos} />
+              <Polyline key={index} pathOptions={{weight: 1, color: line.color}} positions={line.pos} zIndex={1000} />
             ))}
           </LayerGroup>
         </LayersControl.Overlay>

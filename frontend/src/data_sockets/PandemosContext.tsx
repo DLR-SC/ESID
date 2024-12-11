@@ -1,12 +1,12 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, {createContext, useEffect, useMemo, useState} from 'react';
+import React, {createContext, useCallback, useEffect, useMemo, useState} from 'react';
 import crossfilter, {Crossfilter} from 'crossfilter2';
 import agentList from '../../assets/pandemos/agents_lookup.json?url';
 import locationList from '../../assets/pandemos/locations_lookup.json?url';
 import trajectories from '../../assets/pandemos/trajectories.json?url';
-import {Agent, Location, Trip, TripExpanded, TripChain} from 'types/pandemos';
+import {Agent, Location, Trip, TripExpanded} from 'types/pandemos';
 /**
  * Data context for the pandemos data.
  */
@@ -136,7 +136,7 @@ export const PandemosProvider = ({children}: {children: React.ReactNode}) => {
       return crossfilter([]);
     }
   }, [agents, locations, trips]);
-
+  /*
   // Preprocess trip chains
   const tripChains = useMemo<Array<TripChain>>(() => {
     const agentTrips = new Map<number, Array<Trip>>();
@@ -158,7 +158,7 @@ export const PandemosProvider = ({children}: {children: React.ReactNode}) => {
     }
     return tripChains;
   }, [trips, locations]);
-
+*/
   return (
     <PandemosContext.Provider
       value={useMemo(

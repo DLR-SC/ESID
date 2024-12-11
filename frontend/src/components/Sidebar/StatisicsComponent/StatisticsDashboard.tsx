@@ -135,9 +135,10 @@ export default function StatisticsDashboard(props: any): JSX.Element {
       odInfectionChart.controlsUseVisibility(true);
 
       odInfectionChart.on('filtered', function (_chart: any, filter: any) {
+        const selectedFilters = _chart.filters();
         dispatch(
           selectDestinationTypes({
-            destinationTypes: filter,
+            destinationTypes: selectedFilters,
           })
         );
       });
@@ -169,9 +170,10 @@ export default function StatisticsDashboard(props: any): JSX.Element {
         })
 
         .on('filtered', function (_chart: any, filter: any) {
+          const selectedFilters = _chart.filters();
           dispatch(
             selectTransportationModes({
-              transportationModes: filter,
+              transportationModes: selectedFilters,
             })
           );
         });
@@ -206,9 +208,10 @@ export default function StatisticsDashboard(props: any): JSX.Element {
           return 'Activity:' + '' + KeyInfo.activity[d.key] + '\nvalue: ' + d.value;
         })
         .on('filtered', function (_chart: any, filter: any) {
+          const selectedFilters = _chart.filters();
           dispatch(
             selectActivities({
-              activities: filter,
+              activities: selectedFilters,
             })
           );
         });
@@ -278,7 +281,7 @@ export default function StatisticsDashboard(props: any): JSX.Element {
         .keyAccessor((d: any) => KeyInfo.age_group[d.key].icon)
         .on('filtered', function (_chart: any) {
           // Get all selected filters
-          const selectedFilters = _chart.filters();
+          const selectedFilters = _chart.filters().map((d: any) => Object.values(KeyInfo.age_group).findIndex((e: any) => e.icon === d));
           dispatch(
             selectAgeGroups({
               ageGroups: selectedFilters,
@@ -290,7 +293,7 @@ export default function StatisticsDashboard(props: any): JSX.Element {
 
       // *********************************************************************************//
     }
-  }, [context.expandedTrips, chartGroup]);
+  }, [context.expandedTrips, chartGroup, dispatch]);
 
   return (
     <Box sx={{p: 1}} id='dashboard'>
