@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, {useCallback, useContext, useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useContext, useMemo, useState, useEffect} from 'react';
 import {
   infectionStateNames,
   locationNames,
@@ -15,6 +15,7 @@ import Divider from '@mui/material/Divider';
 import hash from 'object-hash';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import ToggleButton from '@mui/material/ToggleButton';
+import {infectionStates, susceptibleStates} from './InspireGridComponents/Constants';
 import {Trip} from '../types/pandemos';
 
 function TripChainTransport(props: {modeOfTransport: string}): JSX.Element {
@@ -67,7 +68,7 @@ export default function TripChainView(): JSX.Element {
 
   const getLocation = useCallback(
     (id: number) => {
-      return context.locations.find((location) => location.location_id === id);
+      return context.locations?.find((location) => location.location_id === id);
     },
     [context.locations]
   );
@@ -83,7 +84,15 @@ export default function TripChainView(): JSX.Element {
 
     const tripMap = new Map<string, Array<number>>();
     for (const [id, tripChain] of context.tripChains) {
-      if (filterInfections && !tripChain.find((trip) => trip.infection_state > 0)) {
+      if (
+        filterInfections &&
+        !tripChain.find(
+          (trip, index) =>
+            infectionStates.includes(trip.infection_state) &&
+            index > 0 &&
+            susceptibleStates.includes(tripChain[index - 1].infection_state)
+        )
+      ) {
         continue;
       }
 
@@ -105,9 +114,9 @@ export default function TripChainView(): JSX.Element {
 
   useEffect(() => {
     if (context.setFilteredTripChains) {
-      context.setFilteredTripChains(tripChainsByOccurrence.slice(0, maxDisplayed > 0 ? maxDisplayed : -1));
+      context.setFilteredTripChains(tripChainsByOccurrence.slice(0, maxDisplayed > 0 ? maxDisplayed : 100));
     }
-  }, [tripChainsByOccurrence, context.setFilteredTripChains, context, maxDisplayed]);
+  }, [tripChainsByOccurrence, context.setFilteredTripChains, maxDisplayed, context]);
 
   return (
     <Box width='100%' height='100%' overflow='hidden' display='flex' flexDirection='column'>
@@ -127,7 +136,7 @@ export default function TripChainView(): JSX.Element {
         <ToggleButtonGroup
           size='small'
           color='primary'
-          value={maxDisplayed > 0 ? maxDisplayed.toString() : 'all'}
+          value={maxDisplayed > 0 ? maxDisplayed.toString() : '100'}
           exclusive
           fullWidth
           onChange={(_, value: string) => setMaxDisplayed(parseInt(value))}
@@ -135,11 +144,10 @@ export default function TripChainView(): JSX.Element {
           <ToggleButton value='10'>10</ToggleButton>
           <ToggleButton value='20'>20</ToggleButton>
           <ToggleButton value='100'>100</ToggleButton>
-          <ToggleButton value='all'>All</ToggleButton>
         </ToggleButtonGroup>
       </Box>
       <List sx={{minWidth: '100%', flexGrow: 1, overflow: 'auto'}}>
-        {tripChainsByOccurrence?.slice(0, maxDisplayed > 0 ? maxDisplayed : -1).map((tc) => {
+        {tripChainsByOccurrence?.slice(0, maxDisplayed > 0 ? maxDisplayed : 100).map((tc) => {
           return (
             <ListItem key={tc[0]} divider disablePadding>
               <Typography fontWeight='bold' sx={{minWidth: '50px', textAlign: 'right'}}>

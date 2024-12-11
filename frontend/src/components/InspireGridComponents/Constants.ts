@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
+
 export const latitudeSpacing: {[key: number]: number} = {
   0: 3600,
   1: 3000,
@@ -61,3 +64,11 @@ export const factorPerZone: {[key: number]: number} = {
   4: 4,
   5: 6,
 };
+
+export const ETRS89Boundaries: [[number, number], [number, number]] = [
+  [32.88, -16.1],
+  [84.73, 40.18],
+];
+
+export const infectionStates: Array<number> = [1, 2, 3, 4];
+export const susceptibleStates: Array<number> = [0, 5, 7];

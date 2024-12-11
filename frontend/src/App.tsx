@@ -40,6 +40,7 @@ export default function App(): JSX.Element {
                   <DataProvider>
                     <PandemosProvider>
                       <Initializer />
+                    <Box id='app' display='flex' flexDirection='column' sx={{height: '100vh', width: '100vw'}}>
                     <WelcomeDialogWrapper />
                       <Box id='app' display='flex' flexDirection='column' sx={{height: '100%', width: '100%'}}>
                         <TopBar />
