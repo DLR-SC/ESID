@@ -1,16 +1,14 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, {createContext, useCallback, useEffect, useMemo, useState} from 'react';
+import React, {createContext, useEffect, useMemo, useState} from 'react';
 import crossfilter, {Crossfilter} from 'crossfilter2';
 import agentList from '../../assets/pandemos/agents_lookup.json?url';
 import locationList from '../../assets/pandemos/locations_lookup.json?url';
 import trajectories from '../../assets/pandemos/trajectories.json?url';
-import {Agent, Location, Trip, TripExpanded} from 'types/pandemos';
-
-/** Data context for the pandemos data.
- *  Provides Crossfilter objects for agents, locations, and trips.
- *  Use .all() to get raw array.
+import {Agent, Location, Trip, TripExpanded, TripChain} from 'types/pandemos';
+/**
+ * Data context for the pandemos data.
  */
 export const PandemosContext = createContext<{
   agents: Array<Agent> | undefined;
@@ -138,6 +136,28 @@ export const PandemosProvider = ({children}: {children: React.ReactNode}) => {
       return crossfilter([]);
     }
   }, [agents, locations, trips]);
+
+  // Preprocess trip chains
+  const tripChains = useMemo<Array<TripChain>>(() => {
+    const agentTrips = new Map<number, Array<Trip>>();
+
+    // Group trips by agent
+    for (const trip of trips ?? []) {
+      agentTrips.set(trip.agent_id, [...(agentTrips.get(trip.agent_id) ?? []), trip]);
+    }
+
+    let chain_id = 0;
+    const tripChains = new Array<TripChain>();
+    for (const tripChain of agentTrips.values()) {
+      let start = 0;
+      tripChain.forEach((trip, index) => {
+        if (locations![trip.start_location].location_type === 0) start = index;
+        if (trip.activity === 6)
+          tripChains.push({agent_id: trip.agent_id, chain_id: chain_id++, trips: tripChain.slice(start, index + 1)});
+      });
+    }
+    return tripChains;
+  }, [trips, locations]);
 
   return (
     <PandemosContext.Provider

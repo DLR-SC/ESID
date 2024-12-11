@@ -1,363 +1,453 @@
-import React, {useContext, useEffect, useLayoutEffect, useRef, useState} from "react";
-import * as dc from "dc";
-import * as d3 from "d3";
-import { PandemosContext } from 'data_sockets/PandemosContext';
-import { Crossfilter } from 'crossfilter2';
-import { Box, FormControl, Grid, Radio, Typography } from "@mui/material";
-import  { curveLinear, scaleLinear, scaleOrdinal, scaleBand, curveStepBefore} from 'd3';
-import { TabContext, TabPanel } from "@mui/lab";
-import { useAppDispatch, useAppSelector } from "store/hooks";
-import { selectActivities, selectAgeGroups, selectDestinationTypes, selectInfectionStates, selectOriginTypes, selectTransportationModes, selectTripDuration } from "store/PandemosFilterSlice";
-import { KeyInfo, TripExpanded } from "types/pandemos";
+import React, {useContext, useLayoutEffect, useRef, useState} from 'react';
+import * as dc from 'dc';
+import * as d3 from 'd3';
+import {PandemosContext} from 'data_sockets/PandemosContext';
+import {Box, Button, Grid, Typography} from '@mui/material';
+import {useAppDispatch} from 'store/hooks';
+import {
+  selectActivities,
+  selectAgeGroups,
+  selectDestinationTypes,
+  selectInfectionStates,
+  selectTransportationModes,
+  selectTripDuration,
+} from 'store/PandemosFilterSlice';
+import {KeyInfo} from 'types/pandemos';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import {scaleLinear} from 'd3';
 
-export default function StatisticsDashboard(props: any):JSX.Element {
-    const context = useContext(PandemosContext);
-   // const [chart,updateChart] = React.useState(null);
-   /*  const [selectedValue, setSelectedValue] = React.useState('o'); */
-    const dispatch = useAppDispatch();
-    const chartRefs = useRef<{[key: string]: any}>({});
-   // const [infectionState, setSelectedInfectionState] = React.useState('1');
-  const [selectedInfectionState, setSelectedInfectionState] = useState<number[]>([1, 2, 3, 4]); // Default to all infection states
-    /* const handleChange = (event: SelectChangeEvent) => {
-        setSelectedInfectionState(event.target.value as unknown as number[]);
-      }; */
-    
-  const infectionStateChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-        setSelectedInfectionState(event.target.value as number[]);
-    };
-       
-    // General reset function for any chart
-    const resetChart = (chartId: string) => {
-        const chart = chartRefs.current[chartId];
-        if (chart) {
-            chart.filterAll();
-            dc.redrawAll();
-        }
-    };
+export default function StatisticsDashboard(props: any): JSX.Element {
+  const context = useContext(PandemosContext);
+  const dispatch = useAppDispatch();
+  const chartRefs = useRef<{[key: string]: any}>({});
+  const chartGroup = 'dashboard' as any;
+  const [showReset, setShowReset] = useState<string | null>(null);
 
-    useLayoutEffect(() => {
-    if (context.expandedTrips){
+  // To reset the app
+  const resetFilters = () => {
+    dc.filterAll('dashboard');
+    dc.redrawAll('dashboard');
+  };
 
-    
-/*         // TODO: change data to enumerate via drop down 1-4
-        const odInfectionDimension = context.expandedTrips?.dimension(
-            (d:any) => {
-                if (selectedInfectionState.includes(d.infection_state)) {
-                    return [d.start_location_type, d.end_location_type];
-                }
-                return null; // Ensure we return null for filtering
-            }
-        ) */
-          
-    const odInfectionDimension = context.expandedTrips?.dimension((d:any) =>  [d.start_location_type, d.end_location_type])
-    const odInfectionGroup = odInfectionDimension.group().reduce(
-                function(p:any, v:any) {
-                    if (v.infection_state >= 1 && v.infection_state <= 4) {
-                        p.count += v.infection_state;
-                    }
-                    return p;
-                },
-                function(p:any, v:any) {
-                    if (v.infection_state >= 1 && v.infection_state <= 4) {
-                        p.count -= v.infection_state;
-                    }
-                    return p;
-                },
-                function() {
-                    return { count: 0 };
-                }
-            );
+  // Shows the reset icon for the clicked chart
+  const handleChartClick = (chartId: string) => {
+    setShowReset(chartId);
+  };
 
-    
-
-   // const odInfectionGroup = odInfectionDimension.group().reduceCount//reduceSum(function(d) { return d.infection_state });;
-    //const odInfectionGroup = odInfectionDimension?.group().reduceCount();
-    console.log("d.odInfectionGroup",odInfectionGroup?.top(Infinity));
-
-    if (!odInfectionDimension || !odInfectionGroup) {
-        console.error("Origin destionation infection dimension or group is not defined");
-        return; 
+  // To reset individual chart
+  const resetChart = (chartId: string) => {
+    const chart = chartRefs.current[chartId]; // Retrieve the chart from chartRefs using chartId
+    console.log('chart', chart);
+    if (chart) {
+      chart.filterAll();
+      chart.redraw();
+    } else {
+      console.error(`Chart with ID ${chartId} not found.`);
     }
+    setShowReset(null);
+  };
 
-   // console.log("d.odInfectionGroup",odInfectionDimension?.top(Infinity));
-  
-    const odInfectionChart = (dc.heatMap("#odInfection") as any)
-    chartRefs.current['odInfection'] = odInfectionChart;
-   // const odInfectionChartLegend = (dc.htmlLegend() as any).container("#odInfectionChart-legend").horizontal(false).highlightSelected(true);
-    odInfectionChart
-   .width(400).height(200)
-   . dimension(odInfectionDimension).group(odInfectionGroup)
-    .keyAccessor((d:any) => KeyInfo.location_type_string[d.key[0]])
-    .valueAccessor((d:any) => KeyInfo.location_type_string[d.key[1]])
-    .margins({ top: 30, right: 10, bottom: 30, left: 90 }) 
-   // .style('font-size', '10px')
-  //  .selectAll('.axis text').style('font-size', '10px')
-   // .keyAccessor(function(d: { key: (string )[]; }) { return  KeyInfo.location_type_string[d.key[0]]; })
-    //.valueAccessor(function(d: { key: (string | number)[]; }) { return +d.key[1]; })
-    .colorAccessor(function(d: { value: number; }) { 
-        //console.log(d.value)
-        return +d.value.count; })
-        .title((d:any) => {
-            return "Start: " + KeyInfo.location_type_string[d.key[0]] +
-                   "\nEnd: " + KeyInfo.location_type_string[d.key[1]] +
-                   "\nInfection Count: " + d.value.count;
+  useLayoutEffect(() => {
+    if (context.expandedTrips && context.expandedTrips?.size() > 0) {
+      console.log('+++++++', context.expandedTrips);
+
+      // **************************************** 1. INFECTION CHART ******************************************//
+
+      // Create the dimension based on infection_state
+      const infectionDimension = context.expandedTrips?.dimension((d: any) => +d.infection_state);
+      const infectionGroup = infectionDimension?.group().reduceCount();
+
+      // Override the `all` method to filter out the `key: 0` entry
+      const filteredInfectionStateGroup = {
+        all: () => infectionGroup.all().filter((d) => d.key !== 0),
+      };
+
+      if (!infectionDimension || !infectionGroup) {
+        console.error('Infection state dimension or group is not defined');
+        return;
+      }
+
+      const odInfectionChart = dc.heatMap('#odInfection', chartGroup) as any;
+      const infectionChart = dc.rowChart('#infection', chartGroup) as any;
+      chartRefs.current['infection'] = infectionChart;
+
+      infectionChart
+        .width(400)
+        .height(170)
+        .dimension(infectionDimension)
+        .group(filteredInfectionStateGroup)
+        .keyAccessor((d: any) => KeyInfo.infection_state[d.key].icon)
+        .colors(d3.scaleOrdinal(d3.schemeBlues[9].slice().reverse()))
+        .on('filtered', function (_chart: any) {
+          const selectedFilters = _chart.filters();
+          dispatch(
+            selectInfectionStates({
+              infectionStates: selectedFilters,
+            })
+          );
+        });
+
+      // *********************************************************************************//
+
+      // **************************************** 2. ORIGIN DESTINATION MATRIX ******************************************//
+      const odInfectionDimension = context.expandedTrips?.dimension((d: any) => [
+        d.start_location_type,
+        d.end_location_type,
+      ]);
+
+      const odInfectionGroup = odInfectionDimension.group().reduceSum((d) => +d.infection_state);
+
+      // Set up a quantized color scale for better mapping of numerical values
+      const maxValue = Math.max(...odInfectionGroup.all().map((d: any) => d.value)); // Get max value
+      const colorScale = d3
+        .scaleQuantize<string>() // Explicitly set the type as <string>
+        .domain([0, maxValue])
+        .range(d3.schemeBlues[9].slice(1)); // Remove lightest shades as it gets white
+
+      if (!odInfectionDimension || !odInfectionGroup) {
+        console.error('Origin destionation infection dimension or group is not defined');
+        return;
+      }
+
+      chartRefs.current['odInfection'] = odInfectionChart;
+
+      odInfectionChart
+        .width(400)
+        .height(200)
+        .dimension(odInfectionDimension)
+        .group(odInfectionGroup)
+        .keyAccessor((d: any) => (d.key && d.key[0] !== undefined ? KeyInfo.location_type[d.key[0]].icon : 'Unknown'))
+        .valueAccessor((d: any) => (d.key && d.key[1] !== undefined ? KeyInfo.location_type[d.key[1]].icon : 'Unknown'))
+        .colorAccessor((d: any) => +d.value)
+        .colors((d: d3.NumberValue) => colorScale(d))
+        //.colors(d3.scaleOrdinal(d3.schemeBlues[8]))
+        .title((d: any) => {
+          return (
+            'Start: ' +
+            (d.key && d.key[0] !== undefined ? KeyInfo.location_type[d.key[0]].icon : 'Unknown') +
+            '\nEnd: ' +
+            (d.key && d.key[1] !== undefined ? KeyInfo.location_type[d.key[1]].icon : 'Unknown') +
+            '\nInfection Count: ' +
+            (d.value !== undefined ? d.value : 'No data')
+          );
+        });
+      odInfectionChart.turnOnControls(true);
+      odInfectionChart.controlsUseVisibility(true);
+
+      odInfectionChart.on('filtered', function (_chart: any, filter: any) {
+        dispatch(
+          selectDestinationTypes({
+            destinationTypes: filter,
+          })
+        );
+      });
+
+      // *********************************************************************************//
+
+      // **************************************** 3. TRANPORTATION CHART  ******************************************//
+      const transportModeDimension = context.expandedTrips.dimension((d: {transport_mode: any}) => +d.transport_mode);
+
+      const transportModeGroup = transportModeDimension.group();
+      if (!transportModeDimension || !transportModeGroup) {
+        console.error('Transport mode dimension or group is not defined');
+        return;
+      }
+      const transportModeChart = dc.pieChart('#transportMode', chartGroup) as any;
+      chartRefs.current['transportMode'] = transportModeChart;
+      transportModeChart
+        .width(170)
+        .height(170)
+        .minAngleForLabel(0.2)
+        .dimension(transportModeDimension)
+        .group(transportModeGroup)
+        .colors(d3.scaleOrdinal(d3.schemeBlues[9].slice().reverse()))
+        .label((d: any) => {
+          return KeyInfo.transport_mode[d.key].icon;
         })
-        .colors(d3.scaleSequential(d3.interpolateViridis))
-       .calculateColorDomain();//.legend(odInfectionChartLegend);
-    odInfectionChart.renderlet((d:any) => {
-        d.selectAll('.axis text')
-          .style('font-size', '10px')
-         // .style('font-family', 'Arial, sans-serif')
-          //.style('fill', 'blue'); // Customize as needed
-      }); 
-/*       odInfectionChart.on('filtered', (d:any)=> {
-        dispatch(
-            selectOriginTypes({
-                originTypes: d.key[0] 
-            }),
-            selectDestinationTypes({
-                destinationTypes: d.key[1] 
-      }));
-    });  */
-    odInfectionChart.render();
+        .title((d: any) => {
+          return 'Mode:' + KeyInfo.transport_mode[d.key].fullName + '\nvalue: ' + d.value;
+        })
 
-     // Add reset function
-    // addResetFunction('odInfection');
-  
-   
-    const transportModeDimension = context.expandedTrips?.dimension((d: { transport_mode: any; }) => d.transport_mode);
- 
-    const transportModeGroup = transportModeDimension?.group();
-
-   if (!transportModeDimension || !transportModeGroup) {
-    console.error("Transport mode dimension or group is not defined");
-    return;
-}
-    const transportModeChart = (dc.pieChart("#transportMode") as any)
-    chartRefs.current['transportMode'] = transportModeChart;
-
-     transportModeChart
-     .width(150)
-     .height(150)
-     .radius(90)
-     .dimension(transportModeDimension)
-     .group(transportModeGroup)
-     .label( (d: any) => KeyInfo.transport_mode_string[d.key]) 
-     .title((d:any) => {
-        return "Mode:" + KeyInfo.transport_mode_string[d.key] +
-               "\nvalue: " + d.value;
-    })
-     .on('filtered', function(_chart: any, filter: any) {
-        dispatch(
+        .on('filtered', function (_chart: any, filter: any) {
+          dispatch(
             selectTransportationModes({
-                transportationModes: filter 
+              transportationModes: filter,
             })
-    ); 
-    });  
-    
-    transportModeChart.on('pretransition', (d: any)=> {
-        d.selectAll('text.pie-slice').each(function() {
-            d3.select(this).style('font-size', '10px'); // Adjust the font size as needed
+          );
         });
-    });
-    transportModeChart.render()
-    //addResetFunction('transportMode');
-  
- 
-    const activityDimension = context.expandedTrips?.dimension(
-        (d)=> d.activity
-);
- 
-    const activityGroup = activityDimension?.group();
-   if (!activityDimension || !activityGroup) {
-    console.error("Activity dimension or group is not defined");
-    return;
-}
-   const activityChart = (dc.pieChart("#activity") as any)
-   chartRefs.current['activity'] = activityChart;
 
-    activityChart.width(150)
-    .height(150)
-    .dimension(activityDimension).group(activityGroup).label( 
-            (d: any) => KeyInfo.activity[d.key]
-    ) .title((d:any) => {
-        return "Activity:" + KeyInfo.activity[d.key] +
-               "\nvalue: " + d.value;
-    })
-      .on('filtered', function(_chart: any, filter: any) {
-        dispatch(
-            selectActivities({
-                activities: filter // TODO: make sure this is the activity type number
-            })
-    );
-    });  
+      // ************************************************************************************//
 
-            
-    activityChart.on('pretransition', (d: any)=> {
-        d.selectAll('text.pie-slice').each(function() {
-            d3.select(this).style('font-size', '10px'); // Adjust the font size as needed
-        });
-    });
+      // **************************************** 4. ACTIVITY CHART  ******************************************//
+      const activityDimension = context.expandedTrips.dimension((d) => d.activity);
 
-    activityChart.render();
+      const activityGroup = activityDimension?.group();
+      if (!activityDimension || !activityGroup) {
+        console.error('Activity dimension or group is not defined');
+        return;
+      }
+      const activityChart = dc.pieChart('#activity', chartGroup) as any;
+      chartRefs.current['activity'] = activityChart;
 
-  //  addResetFunction('activity');
- 
-    const tripDurationDimension = context.expandedTrips?.dimension(function(d: any) {
-        const endTime = Math.floor(Math.random() * 3600);
-        const startTime = Math.floor(Math.random() * 2600)  
-        //return Math.floor((d.end_time-d.start_time)/60)  Only when new data with correct start and end time is available for Pandemos
-        return Math.floor((endTime-startTime)/60)
-    
-    });
-    const tripDurationGroup = tripDurationDimension?.group().reduceCount();
-    
-    if (!tripDurationDimension || !tripDurationGroup) {
-        console.error("Trip duration dimension or group is not defined");
-        return; 
-    }
-    const tripdurationChart = (dc.lineChart("#tripDuration") as any)
-    chartRefs.current['tripDuration'] = tripdurationChart;
-    tripdurationChart.width(220)
-    .height(200)
-    .margins({ top: 10, right: 30, bottom: 30, left: 40 }) // Adjust margins
-    .x(scaleLinear().domain([0, 60]))
-      .curve(curveLinear)
-      .renderArea(true)
-      .xAxisLabel("Trip duration")
-     // .yAxisLabel("Number of trips")
-     // .xUnits(units.integers)
-     .dimension(tripDurationDimension)
-      .clipPadding(10)
-    .group(tripDurationGroup)
-    .on('filtered', function(_chart: any, filter: any) {
-        dispatch(
-           selectTripDuration({
-               // tripDurationMax: filter  // TODO: not working ask Moritz
-            })
-    );
-        console.log('mode:', filter);
-    });  
-        tripdurationChart.render();
-    
-    //    addResetFunction('tripDuration');
+      activityChart
+        .width(170)
+        .height(170)
 
-    const ageDimension = context.expandedTrips?.dimension((d) => d.agent_age_group)
-    const ageGroup   =   ageDimension?.group().reduceCount();
-
-    if (!ageDimension || !ageGroup) {
-        console.error("Age dimension or group is not defined");
-        return; 
-    }
-    const ageChart = (dc.barChart("#age") as any);
-    chartRefs.current['age'] = ageChart;
-    ageChart.width(210)
-    .height(200)
-    .margins({ top: 10, right: 20, bottom: 30, left: 40 }) // Adjust margins
-      .x (scaleBand())
-      .xUnits(dc.units.ordinal)
-      
-      .xAxisLabel("Age groups")
-    //  .yAxisLabel("Number of people")
-     // .dimension(ageDim)
-     .dimension(ageDimension)
-      .brushOn(false)
-// .group(ageGroup)
-.group(ageGroup)
-.keyAccessor((d: any) => KeyInfo.age[d.key])
-.on('filtered', function(_chart: any, filter: any) {
-    dispatch(
-       selectAgeGroups({
-         ageGroups: filter  // tripDurationMax: filter  // TODO: not working ask Moritz
+        .slicesCap(8)
+        .dimension(activityDimension)
+        .group(activityGroup)
+        .minAngleForLabel(0.2)
+        .colorAccessor(function (d: {value: any}, i: any) {
+          return d.value;
         })
-);
-    //console.log('mode:', filter);
-});  
-ageChart.render();
-//addResetFunction('age');
+        .colors(d3.scaleOrdinal(d3.schemeBlues[9].slice().reverse()))
+        .label((d: any) => KeyInfo.activity[d.key])
+        .title((d: any) => {
+          return 'Activity:' + '' + KeyInfo.activity[d.key] + '\nvalue: ' + d.value;
+        })
+        .on('filtered', function (_chart: any, filter: any) {
+          dispatch(
+            selectActivities({
+              activities: filter,
+            })
+          );
+        });
 
-//dc.renderAll()
-}
-}, [context.expandedTrips]);
- 
+      activityChart.on('renderlet', (d: any) => {
+        d.selectAll('text.pie-slice').style('fill', 'white'); // Change color based on the color scheme of the pie chart so that text is visible
+        d.selectAll('text.pie-slice').style('font-size', '11px');
+      });
 
+      // *********************************************************************************//
 
-return(
-  
-<Box sx={{
-        display: 'flex',
-        flexDirection: 'column',
-       // flexGrow: '1',
-       // top: '10',
-       // marginLeft:1,
-       alignItems: 'left',
-      }}>
-  <Grid id="sidebar-tabs"item sx={{display: 'flex', flexGrow: 2, flexDirection: 'row'}}> 
-{/*   <Box sx={{ minWidth: 120 }}>
-      <FormControl fullWidth>
-        <InputLabel id="simple-select-infection-state">Select infection state</InputLabel>
-        <Select
-          labelId="simple-select-infection-state"
-          id="simple-select"
-          value={infectionState}
-          label="Infection State"
-          onChange={handleChange}
+      // **************************************** 5. TRIP DURATION CHART  ******************************************//
+      const tripDurationDimension = context.expandedTrips?.dimension(function (d: any) {
+        const endTime = Math.floor(Math.random() * 3600);
+        const startTime = Math.floor(Math.random() * 2600);
+        //return Math.floor((d.end_time-d.start_time)/60)  Only when real data with correct start and end time is available
+        return Math.floor((endTime - startTime) / 60);
+      });
+      const tripDurationGroup = tripDurationDimension.group().reduceCount();
+      console.log('tripDurationxxxx', tripDurationGroup.top(3));
+      if (!tripDurationDimension || !tripDurationGroup) {
+        console.error('Trip duration dimension or group is not defined');
+        return;
+      }
+      const tripdurationChart = dc.lineChart('#tripDuration', chartGroup) as any;
+      chartRefs.current['tripDuration'] = tripdurationChart;
+      tripdurationChart
+        .width(220)
+        .height(200)
+        .margins({top: 10, right: 30, bottom: 30, left: 40})
+        .x(scaleLinear().domain([0, 60]))
+        .renderArea(true)
+        .dimension(tripDurationDimension)
+        .clipPadding(10)
+        .group(tripDurationGroup)
+        .on('filtered', function (_chart: any, filter: any) {
+          dispatch(
+            selectTripDuration({
+              // tripDurationMax: filter  // TODO: once the real data is available
+            })
+          );
+        })
+        .title((d: any) => d.value);
+
+      // **********************************************************************************//
+
+      // **************************************** 5. AGE CHART  ******************************************//
+      const ageDimension = context.expandedTrips?.dimension((d) => d.agent_age_group);
+      const ageGroup = ageDimension?.group().reduceCount();
+      console.log('agebins', ageGroup.all());
+      if (!ageDimension || !ageGroup) {
+        console.error('Age dimension or group is not defined');
+        return;
+      }
+      const ageChart = dc.barChart('#age', chartGroup) as any;
+      chartRefs.current['age'] = ageChart;
+      ageChart
+        .width(250)
+        .height(200)
+        .margins({top: 10, right: 10, bottom: 30, left: 40})
+        .dimension(ageDimension)
+        .group(ageGroup)
+        .elasticY(true)
+        .x(d3.scaleOrdinal())
+        .xUnits(dc.units.ordinal)
+        .barPadding(0.1)
+        .keyAccessor((d: any) => KeyInfo.age_group[d.key].icon)
+        .on('filtered', function (_chart: any) {
+          // Get all selected filters
+          const selectedFilters = _chart.filters();
+          dispatch(
+            selectAgeGroups({
+              ageGroups: selectedFilters,
+            })
+          );
+        });
+
+      dc.renderAll(chartGroup); // Render the dc chart group
+
+      // *********************************************************************************//
+    }
+  }, [context.expandedTrips, chartGroup]);
+
+  return (
+    <Box sx={{p: 1}} id='dashboard'>
+      <Grid container spacing={2}>
+        <Button
+          variant='contained'
+          startIcon={<RestartAltIcon />}
+          onClick={resetFilters}
+          href='javascript:dashboard.filterAll();dc.redrawAll();'
+          sx={{
+            width: '80px',
+            height: '26px',
+            borderRadius: '20px',
+            padding: '4px',
+            fontSize: '12px',
+            backgroundColor: 'grey',
+            color: 'white',
+            marginLeft: 'auto',
+            marginBottom: '5px',
+          }}
         >
-          <MenuItem value={1}>1</MenuItem>
-          <MenuItem value={2}>2</MenuItem>
-          <MenuItem value={3}>3</MenuItem>
-          <MenuItem value={4}>4</MenuItem>
+          Reset
+        </Button>
+        {/* Infection Chart */}
+        <Grid item xs={12} sx={{border: '2px solid #ddd', borderRadius: '4px', padding: 2}}>
+          <Box sx={{display: 'flex', flexDirection: 'column'}}>
+            <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+              <Typography variant='h5'>Infection Chart</Typography>
+              {showReset === 'infection' && ( //to show reset icon for individual charts
+                <RestartAltIcon
+                  onClick={() => resetChart('infection')}
+                  sx={{
+                    cursor: 'pointer',
+                    color: 'grey',
+                    '&:hover': {color: 'black'},
+                  }}
+                />
+              )}
+            </Box>
+            <div id='infection' onClick={() => handleChartClick('infection')}></div>
+          </Box>
+        </Grid>
 
-        </Select>
-      </FormControl>
-    </Box> */}
+        {/* OD Infection Heatmap */}
+        <Grid item xs={12} sx={{border: '2px solid #ddd', borderRadius: '4px', padding: 2}}>
+          <Box sx={{display: 'flex', flexDirection: 'column'}}>
+            <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+              <Typography variant='h5'>Origin-Destination Infection</Typography>
+              {showReset === 'odInfection' && ( //to show reset icon for individual charts
+                <RestartAltIcon
+                  onClick={() => resetChart('odInfection')}
+                  sx={{
+                    cursor: 'pointer',
+                    color: 'grey',
+                    '&:hover': {color: 'black'},
+                  }}
+                />
+              )}
+            </Box>
+            <div id='odInfection' onClick={() => handleChartClick('odInfection')}></div>
+          </Box>
+        </Grid>
 
-    <RestartAltIcon  onClick={() => resetChart('odInfection')}/> 
-         <Box id="odInfection"></Box>   
-   
-</Grid>  
-   <Box id="odInfection" sx={{ display: "inline-block", marginRight:"10px", cursor:"pointer" }} ></Box>  
-  <Grid id="sidebar-tabs"item sx={{display: 'flex', flexGrow: 1, flexDirection: 'row'}}> 
- 
-  <RestartAltIcon  onClick={() => resetChart('tripDuration')}/> <Box  id="tripDuration" ></Box>    
-   <RestartAltIcon  onClick={() => resetChart('transportMode')}/>     <Box  id="transportMode" sx={{ flexBasis: '30%', marginRight: 1 }}></Box> 
-        
-  </Grid>  
-  <Grid id="sidebar-tabs"item sx={{display: 'flex', flexGrow: 1, flexDirection: 'row'}}>
-  <RestartAltIcon  onClick={() => resetChart('age')}/>  <Box  id="age" sx={{ flexBasis: '70%', paddingLeft: 80 }}></Box>  
-  <RestartAltIcon  onClick={() => resetChart('activity')}/>    <Box  id="activity"sx={{ flexBasis: '70%', marginLeft: 1 }}></Box> 
-  </Grid> 
-    
-{/* <Grid id="sidebar-tabs"item sx={{display: 'flex', flexGrow: 1, flexDirection: 'row'}}>
-<Radio
-  checked={selectedValue === 'o'} 
-  onChange={handleChange}
-  value="a"
-  name="radio-buttons"
-  aria-label="Origin"
-  inputProps={{ 'aria-label': 'A' }}
-/>
-<Radio
-  checked={selectedValue === 'destination'}
-  onChange={handleChange}
-  value="b"
-  name="radio-buttons"
- aria-label="Destination"
-  inputProps={{ 'aria-label': 'B' }}
-/> 
-   
-    </Grid>  */}
+        <Grid item xs={12}>
+          <Box
+            sx={{
+              border: '2px solid #ccc',
+              borderRadius: '8px',
+              padding: 2,
+            }}
+          >
+            <Grid container spacing={2}>
+              {/* Age Groups */}
+              <Grid item xs={12} md={6}>
+                <Box sx={{display: 'flex', flexDirection: 'column'}}>
+                  <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                    <Typography variant='h5'>Age Groups</Typography>
+                    {showReset === 'age' && ( //to show reset icon for individual charts
+                      <RestartAltIcon
+                        onClick={() => resetChart('age')}
+                        sx={{
+                          cursor: 'pointer',
+                          color: 'grey',
+                          '&:hover': {color: 'black'},
+                        }}
+                      />
+                    )}
+                  </Box>
+                  <div id='age' onClick={() => handleChartClick('age')}></div>
+                </Box>
+              </Grid>
 
+              {/* Transportation Modes */}
+              <Grid item xs={12} md={6}>
+                <Box sx={{display: 'flex', flexDirection: 'column', mb: 2, ml: 4}}>
+                  <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                    <Typography variant='h5'>Transportation Modes</Typography>
+                    {showReset === 'transportMode' && ( //to show reset icon for individual charts
+                      <RestartAltIcon
+                        onClick={() => resetChart('transportMode')}
+                        sx={{
+                          cursor: 'pointer',
+                          color: 'grey',
+                          '&:hover': {color: 'black'},
+                        }}
+                      />
+                    )}
+                  </Box>
+                  <div id='transportMode' onClick={() => handleChartClick('transportMode')}></div>
+                </Box>
+              </Grid>
+            </Grid>
 
+            <Grid container spacing={2} sx={{mt: 2}}>
+              {/* Trip Duration */}
+              <Grid item xs={12} md={6}>
+                <Box sx={{display: 'flex', flexDirection: 'column', ml: 2}}>
+                  <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                    <Typography variant='h5'>Trip Duration</Typography>
+                    {showReset === 'tripDuration' && (
+                      <RestartAltIcon
+                        onClick={() => resetChart('tripDuration')} //to show reset icon for individual charts
+                        sx={{
+                          cursor: 'pointer',
+                          color: 'grey',
+                          '&:hover': {color: 'black'},
+                        }}
+                      />
+                    )}
+                  </Box>
+                  <div id='tripDuration' onMouseDown={() => handleChartClick('tripDuration')}></div>
+                </Box>
+              </Grid>
 
-</Box>
-
-
-
-
-
-)};
+              {/* Activities */}
+              <Grid item xs={12} md={6}>
+                <Box sx={{display: 'flex', flexDirection: 'column', ml: 4}}>
+                  <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                    <Typography variant='h5'>Agent Activities</Typography>
+                    {showReset === 'activity' && (
+                      <RestartAltIcon
+                        onClick={() => resetChart('activity')} //to show reset icon for individual charts
+                        sx={{
+                          cursor: 'pointer',
+                          color: 'grey',
+                          '&:hover': {color: 'black'},
+                        }}
+                      />
+                    )}
+                  </Box>
+                  <div id='activity' onClick={() => setShowReset('activity')}></div>
+                </Box>
+              </Grid>
+            </Grid>
+          </Box>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+}

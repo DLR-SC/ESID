@@ -1,0 +1,137 @@
+[
+  {
+    "//comment": "This is a reduced/dummy file. Please replace this file with the original one."
+  },
+  {
+    "timestep": 1,
+    "agent_id": 13,
+    "trip_id": 0,
+    "start_location": 42,
+    "end_location": 41,
+    "start_time": 3600,
+    "end_time": 3600,
+    "transport_mode": 6,
+    "activity": 6,
+    "infection_state": 0
+  },
+  {
+    "timestep": 1,
+    "agent_id": 71,
+    "trip_id": 1,
+    "start_location": 25,
+    "end_location": 184,
+    "start_time": 3600,
+    "end_time": 3600,
+    "transport_mode": 5,
+    "activity": 6,
+    "infection_state": 0
+  },
+  {
+    "timestep": 1,
+    "agent_id": 165,
+    "trip_id": 2,
+    "start_location": 378,
+    "end_location": 68,
+    "start_time": 3600,
+    "end_time": 3600,
+    "transport_mode": 5,
+    "activity": 3,
+    "infection_state": 0
+  },
+  {
+    "timestep": 1,
+    "agent_id": 303,
+    "trip_id": 3,
+    "start_location": 652,
+    "end_location": 653,
+    "start_time": 3600,
+    "end_time": 3600,
+    "transport_mode": 5,
+    "activity": 0,
+    "infection_state": 0
+  },
+  {
+    "timestep": 1,
+    "agent_id": 654,
+    "trip_id": 4,
+    "start_location": 1116,
+    "end_location": 42,
+    "start_time": 3600,
+    "end_time": 3600,
+    "transport_mode": 6,
+    "activity": 6,
+    "infection_state": 0
+  },
+  {
+    "timestep": 1,
+    "agent_id": 892,
+    "trip_id": 5,
+    "start_location": 1498,
+    "end_location": 1,
+    "start_time": 3600,
+    "end_time": 3600,
+    "transport_mode": 6,
+    "activity": 5,
+    "infection_state": 4
+  },
+  {
+    "timestep": 2,
+    "agent_id": 663,
+    "trip_id": 6,
+    "start_location": 1132,
+    "end_location": 36,
+    "start_time": 7200,
+    "end_time": 7200,
+    "transport_mode": 5,
+    "activity": 2,
+    "infection_state": 0
+  },
+  {
+    "timestep": 3,
+    "agent_id": 165,
+    "trip_id": 7,
+    "start_location": 68,
+    "end_location": 378,
+    "start_time": 10800,
+    "end_time": 10800,
+    "transport_mode": 1,
+    "activity": 6,
+    "infection_state": 0
+  },
+  {
+    "timestep": 3,
+    "agent_id": 209,
+    "trip_id": 8,
+    "start_location": 472,
+    "end_location": 187,
+    "start_time": 10800,
+    "end_time": 10800,
+    "transport_mode": 1,
+    "activity": 3,
+    "infection_state": 0
+  },
+  {
+    "timestep": 3,
+    "agent_id": 573,
+    "trip_id": 9,
+    "start_location": 992,
+    "end_location": 993,
+    "start_time": 10800,
+    "end_time": 10800,
+    "transport_mode": 3,
+    "activity": 0,
+    "infection_state": 0
+  },
+  {
+    "timestep": 3,
+    "agent_id": 663,
+    "trip_id": 10,
+    "start_location": 36,
+    "end_location": 374,
+    "start_time": 10800,
+    "end_time": 10800,
+    "transport_mode": 6,
+    "activity": 2,
+    "infection_state": 0
+  }
+]
