@@ -39,8 +39,10 @@ import {
   selectScenario,
   setActiveScenario,
   setMinMaxDates,
+  setScenarioColors,
   setStartDate,
 } from './store/DataSelectionSlice';
+import theme from './util/Theme';
 
 // Create the context
 export const DataContext = createContext<{
@@ -50,6 +52,7 @@ export const DataContext = createContext<{
   lineChartData: Record<string, InfectionData> | undefined;
   referenceDateValues: InfectionData | undefined;
   scenarioCardData: Record<string, InfectionData> | undefined;
+  groupFilterData: Record<string, InfectionData> | undefined;
   groupCategories: GroupCategories | undefined;
   groups: Groups | undefined;
   scenarios: Scenarios | undefined;
@@ -65,6 +68,7 @@ export const DataContext = createContext<{
   lineChartData: undefined,
   referenceDateValues: undefined,
   scenarioCardData: undefined,
+  groupFilterData: undefined,
   groupCategories: undefined,
   groups: undefined,
   scenarios: undefined,
@@ -89,6 +93,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
   const referenceDate = useAppSelector((state) => state.dataSelection.simulationStart);
   const selectedDate = useAppSelector((state) => state.dataSelection.date);
+  const groupFilters = useAppSelector((state) => state.dataSelection.groupFilters);
 
   const {data: scenarios} = useGetScenariosQuery();
   const {data: compartments} = useGetCompartmentsQuery();
@@ -128,7 +133,23 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
     }
   );
 
-  // TODO: GroupFilterData
+  const {data: groupFilterData} = useGetMultiScenarioInfectionDataQuery(
+    {
+      pathIds: activeScenarios ?? [],
+      query: {
+        startDate: selectedDate!,
+        endDate: selectedDate!,
+        nodes: [selectedDistrict],
+        percentiles: ['50'],
+        groups: Object.values(groupFilters)
+          .filter((groupFilter) => groupFilter.isVisible) // Filter visible groups
+          .flatMap((groupFilter) => Object.values(groupFilter.groups).flat()), // Extract and flatten group Ids.
+      },
+    },
+    {
+      skip: !activeScenarios || !selectedDate || !selectedDistrict || Object.keys(groupFilters).length === 0,
+    }
+  );
 
   const {data: lineChartData} = useGetMultiScenarioInfectionDataQuery(
     {
@@ -179,6 +200,20 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
     }
   }, [caseDataScenario, dispatch, selectedScenario]);
 
+  // Set scenario colors
+  useEffect(() => {
+    if (caseDataScenario) {
+      dispatch(setScenarioColors({id: caseDataScenario.id, colors: theme.custom.scenarios[0]}));
+    }
+
+    scenarios?.forEach((scenario, index) => {
+      if (scenario.id !== caseDataScenario?.id) {
+        const colorIndex = (index + 1) % theme.custom.scenarios.length; // +1 to avoid using the first predefined color set
+        dispatch(setScenarioColors({id: scenario.id, colors: theme.custom.scenarios[colorIndex]}));
+      }
+    });
+  }, [caseDataScenario, dispatch, scenarios]);
+
   // If we have no selected compartment, we try to set the first one as selected.
   useEffect(() => {
     if (!selectedCompartment && compartments && compartments.length > 0) {
@@ -191,7 +226,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
     if (!referenceDate && caseDataScenario) {
       dispatch(setStartDate(caseDataScenario.endDate));
     }
-  });
+  }, [caseDataScenario, dispatch, referenceDate]);
 
   // Set start and end date.
   useEffect(() => {
@@ -279,6 +314,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
           lineChartData,
           referenceDateValues,
           scenarioCardData,
+          groupFilterData,
           groupCategories,
           groups,
           scenarios,
@@ -298,6 +334,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
           groupCategories,
           groups,
           scenarios,
+          groupFilterData,
           selectedScenarioData,
           simulationModels,
           selectedSimulationModel,

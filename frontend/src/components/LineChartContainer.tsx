@@ -25,6 +25,7 @@ export default function LineChartContainer() {
   const referenceDay = useAppSelector((state) => state.dataSelection.simulationStart);
   const minDate = useAppSelector((state) => state.dataSelection.minDate);
   const maxDate = useAppSelector((state) => state.dataSelection.maxDate);
+  const scenarioColors = useAppSelector((state) => state.dataSelection.scenarioColors);
 
   const [referenceDayBottomPosition, setReferenceDayBottomPosition] = useState<number>(0);
 
@@ -41,7 +42,7 @@ export default function LineChartContainer() {
         name: scenarios?.find((scenario) => scenario.id === id)?.name,
         visible: true,
         stroke: {
-          color: 'red', // TODO
+          color: scenarioColors?.[id]?.[0] ?? 'transparent',
         },
         valueYField: id,
         values: infectionDataToLineChartData(data, ['50']),
@@ -61,7 +62,7 @@ export default function LineChartContainer() {
           seriesId: `${id}-${percentile.lower}-${percentile.upper}`,
           name: scenarios?.find((scenario) => scenario.id === id)?.name,
           visible: true,
-          fill: 'red', // TODO
+          fill: scenarioColors?.[id]?.[0] ?? 'transparent',
           fillOpacity: 0.2 + 0.6 * (index / percentiles.length),
           valueYField: 'percentileUp',
           openValueYField: 'percentileDown',

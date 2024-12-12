@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import {Box, Button, Dialog, useTheme} from '@mui/material';
+import Dialog from '@mui/material/Dialog';
 import ConfirmDialog from '../../shared/ConfirmDialog';
 import React, {Dispatch, useState} from 'react';
 import ManageGroupDialog from './ManageGroupDialog';
@@ -48,7 +48,6 @@ export default function FilterDialogContainer({
   const [groupEditorUnsavedChanges, setGroupEditorUnsavedChanges] = useState(false);
   const {t: defaultT} = useTranslation();
   const {t: customT} = useTranslation(localization.customLang);
-  const theme = useTheme();
   const dispatch = useAppDispatch();
 
   /**
@@ -66,108 +65,45 @@ export default function FilterDialogContainer({
   };
 
   return (
-    <>
-      <Box
-        id='scenario-footer-container'
-        sx={{
-          minHeight: '20vh',
-          paddingLeft: 4,
-          paddingRight: 4,
-          paddingTop: 2,
-          display: 'flex',
-          flexDirection: 'column',
+    <Dialog id='manage-filters-dialog' maxWidth='lg' fullWidth={true} open={open} onClose={handleClose}>
+      <ManageGroupDialog
+        groupFilters={groupFilters}
+        setGroupFilters={setGroupFilters}
+        categories={categories}
+        groups={groups}
+        onCloseRequest={handleClose}
+        unsavedChangesCallback={(unsavedChanges) => setGroupEditorUnsavedChanges(unsavedChanges)}
+        localization={localization}
+      />
+      <ConfirmDialog
+        open={closeDialogOpen}
+        title={
+          localization?.overrides?.['group-filters.confirm-discard-title']
+            ? customT(localization.overrides['group-filters.confirm-discard-title'])
+            : defaultT('group-filters.confirm-discard-title')
+        }
+        text={
+          localization?.overrides?.['group-filters.confirm-discard-text']
+            ? customT(localization.overrides['group-filters.confirm-discard-text'])
+            : defaultT('group-filters.confirm-discard-text')
+        }
+        abortButtonText={
+          localization?.overrides?.['group-filters.close']
+            ? customT(localization.overrides['group-filters.close'])
+            : defaultT('group-filters.close')
+        }
+        confirmButtonText={
+          localization?.overrides?.['group-filters.discard']
+            ? customT(localization.overrides['group-filters.discard'])
+            : defaultT('group-filters.discard')
+        }
+        onAnswer={(answer) => {
+          if (answer) {
+            setOpen(false);
+          }
+          setCloseDialogOpen(false);
         }}
-      >
-        <Button
-          id='scenario-add-button'
-          variant='outlined'
-          color='success'
-          sx={{
-            height: '244px',
-            width: '200px',
-            fontWeight: 'bolder',
-            fontSize: '3rem',
-            border: `2px ${theme.palette.divider} dashed`,
-            borderRadius: '3px',
-            color: `${theme.palette.divider}`,
-            alignSelf: 'top',
-            '&:hover': {
-              border: `2px ${theme.palette.divider} dashed`,
-              background: '#E7E7E7',
-            },
-          }}
-          aria-label={
-            localization.overrides && localization.overrides['scenario.add']
-              ? customT(localization.overrides['scenario.add'])
-              : defaultT('scenario.add')
-          }
-        >
-          +
-        </Button>
-        <Button
-          id='manage-filters-button'
-          variant='outlined'
-          color='primary'
-          sx={{
-            width: '200px',
-            alignSelf: 'center',
-            marginTop: '20px',
-          }}
-          onClick={() => {
-            setOpen(true);
-            dispatch(setIsFilterDialogOpen(true));
-          }}
-          aria-label={
-            localization.overrides && localization.overrides['group-filters.title']
-              ? customT(localization.overrides['group-filters.title'])
-              : defaultT('group-filters.title')
-          }
-        >
-          {localization.overrides && localization.overrides['scenario.manage-groups']
-            ? customT(localization.overrides['scenario.manage-groups'])
-            : defaultT('scenario.manage-groups')}
-        </Button>
-      </Box>
-      <Dialog id='manage-filters-dialog' maxWidth='lg' fullWidth={true} open={open} onClose={handleClose}>
-        <ManageGroupDialog
-          groupFilters={groupFilters}
-          setGroupFilters={setGroupFilters}
-          categories={categories}
-          groups={groups}
-          onCloseRequest={handleClose}
-          unsavedChangesCallback={(unsavedChanges) => setGroupEditorUnsavedChanges(unsavedChanges)}
-          localization={localization}
-        />
-        <ConfirmDialog
-          open={closeDialogOpen}
-          title={
-            localization.overrides && localization.overrides['group-filters.confirm-discard-title']
-              ? customT(localization.overrides['group-filters.confirm-discard-title'])
-              : defaultT('group-filters.confirm-discard-title')
-          }
-          text={
-            localization.overrides && localization.overrides['group-filters.confirm-discard-text']
-              ? customT(localization.overrides['group-filters.confirm-discard-text'])
-              : defaultT('group-filters.confirm-discard-text')
-          }
-          abortButtonText={
-            localization.overrides && localization.overrides['group-filters.close']
-              ? customT(localization.overrides['group-filters.close'])
-              : defaultT('group-filters.close')
-          }
-          confirmButtonText={
-            localization.overrides && localization.overrides['group-filters.discard']
-              ? customT(localization.overrides['group-filters.discard'])
-              : defaultT('group-filters.discard')
-          }
-          onAnswer={(answer) => {
-            if (answer) {
-              setOpen(false);
-            }
-            setCloseDialogOpen(false);
-          }}
-        />
-      </Dialog>
-    </>
+      />
+    </Dialog>
   );
 }

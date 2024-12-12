@@ -1,8 +1,10 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import {Box, darken, useTheme} from '@mui/material';
-import {useContext, useEffect, useMemo, useState} from 'react';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import {darken, useTheme} from '@mui/material/';
+import React, {useContext, useEffect, useMemo, useState} from 'react';
 import {NumberFormatter} from 'util/hooks';
 import {useTranslation} from 'react-i18next';
 import {
@@ -16,7 +18,7 @@ import {DataContext} from 'DataContext';
 import {ScrollSync} from 'react-scroll-sync';
 import {useBoundingclientrectRef} from 'rooks';
 import {setReferenceDayTop} from 'store/LayoutSlice';
-import React from 'react';
+
 import CardContainer from './CardsComponents/CardContainer';
 import CompartmentsRows from './CompartmentsComponents/CompartmentsRows';
 import FilterDialogContainer from './FilterComponents/FilterDialogContainer';
@@ -36,7 +38,8 @@ interface ScenarioContainerProps {
  * Renders the ScenarioContainer component.
  */
 export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartmentsRows = 6}: ScenarioContainerProps) {
-  const {t} = useTranslation('backend');
+  const {t: tBackend} = useTranslation('backend');
+  const {t} = useTranslation();
   const dispatch = useAppDispatch();
   const {i18n} = useTranslation();
   const {formatNumber} = NumberFormatter(i18n.language, 1, 0);
@@ -65,32 +68,37 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
     () =>
       scenarioData?.map((scenario) => ({
         id: scenario.id,
-        name: t(`scenario-names.${scenario.name}`),
+        name: tBackend(`scenario-names.${scenario.name}`),
         color: '#FFF',
       })) ?? [],
-    [scenarioData, t]
+    [scenarioData, tBackend]
   );
 
   const compartmentNames = useMemo(() => {
-    return compartments?.map((compartment) => t(`infection-states.${compartment.name}`)) ?? [];
-  }, [compartments, t]);
+    return compartments?.map((compartment) => tBackend(`infection-states.${compartment.name}`)) ?? [];
+  }, [compartments, tBackend]);
 
   const compartmentValues = useMemo(() => {
     const result: Record<string, number> = {};
     referenceDateValues?.forEach(
-      (referenceDate) => (result[t(`infection-states.${referenceDate.compartment}`)] = referenceDate.values['50'])
+      (referenceDate) =>
+        (result[tBackend(`infection-states.${referenceDate.compartment}`)] = referenceDate.values['50'])
     );
     return result;
-  }, [referenceDateValues, t]);
+  }, [referenceDateValues, tBackend]);
 
   const translatedCategories = useMemo(() => {
-    return groupCategories?.map((category) => ({id: category, name: t(`group-filters.${category}`)})) ?? [];
-  }, [groupCategories, t]);
+    return groupCategories?.map((category) => ({id: category, name: tBackend(`group-filters.${category}`)})) ?? [];
+  }, [groupCategories, tBackend]);
 
   const translatedGroups = useMemo(
     () =>
-      groups?.map((group) => ({id: group.id, name: t(`group-filters.${group.name}`), category: group.category})) ?? [],
-    [groups, t]
+      groups?.map((group) => ({
+        id: group.id,
+        name: tBackend(`group-filters.${group.name}`),
+        category: group.category,
+      })) ?? [],
+    [groups, tBackend]
   );
 
   const cardValues = useMemo(() => {
@@ -235,6 +243,40 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
               }}
               groupFilters={groupFilters}
             />
+          </Box>
+          <Box
+            id='scenario-footer-container'
+            sx={{
+              minHeight: '20vh',
+              paddingLeft: 4,
+              paddingRight: 4,
+              paddingTop: 2,
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
+            <Button
+              id='scenario-add-button'
+              variant='outlined'
+              color='success'
+              sx={{
+                height: '244px',
+                width: '200px',
+                fontWeight: 'bolder',
+                fontSize: '3rem',
+                border: `2px ${theme.palette.divider} dashed`,
+                borderRadius: '3px',
+                color: `${theme.palette.divider}`,
+                alignSelf: 'top',
+                '&:hover': {
+                  border: `2px ${theme.palette.divider} dashed`,
+                  background: '#E7E7E7',
+                },
+              }}
+              aria-label={t('scenario.add')}
+            >
+              +
+            </Button>
           </Box>
           {groupCategories && groups && (
             <FilterDialogContainer

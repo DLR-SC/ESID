@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {dateToISOString, Dictionary} from '../util/util';
+import {dateToISOString} from '../util/util';
 import {GroupFilter} from 'types/group';
 
 /**
@@ -30,10 +30,11 @@ export interface DataSelection {
   compartment: string | null;
   compartmentsExpanded: boolean | null;
   activeScenarios: string[] | null;
+  scenarioColors: Record<string, Array<string>> | null;
   simulationStart: string | null;
   minDate: string | null;
   maxDate: string | null;
-  groupFilters: Dictionary<GroupFilter>;
+  groupFilters: Record<string, GroupFilter>;
 }
 
 const initialState: DataSelection = {
@@ -43,6 +44,7 @@ const initialState: DataSelection = {
   compartment: null,
   compartmentsExpanded: null,
   activeScenarios: [],
+  scenarioColors: null,
   simulationStart: null,
   minDate: null,
   maxDate: null,
@@ -63,7 +65,10 @@ export const DataSelectionSlice = createSlice({
         state.activeScenarios = state.activeScenarios?.filter((id) => id !== action.payload.id) ?? [];
       }
     },
-    setGroupFilters(state, action: PayloadAction<Dictionary<GroupFilter>>) {
+    setScenarioColors(state, action: PayloadAction<{id: string; colors: Array<string>}>) {
+      state.scenarioColors = {...state.scenarioColors, [action.payload.id]: action.payload.colors};
+    },
+    setGroupFilters(state, action: PayloadAction<Record<string, GroupFilter>>) {
       state.groupFilters = action.payload;
     },
     selectDistrict(state, action: PayloadAction<{ags: AGS; name: string; type: string}>) {
@@ -143,6 +148,7 @@ export const DataSelectionSlice = createSlice({
 export const {
   selectDistrict,
   setActiveScenario,
+  setScenarioColors,
   setGroupFilters,
   selectDate,
   previousDay,

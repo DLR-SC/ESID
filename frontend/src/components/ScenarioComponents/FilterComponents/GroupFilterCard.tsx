@@ -28,7 +28,9 @@ interface GroupFilterCardProps {
   /** A function that allows setting the groupFilter state so that if the user adds a filter, the new filter will be visible */
   toggleGroupFilter: Dispatch<GroupFilter>;
 
-  /** TODO */
+  /**
+   * Dispatch function to handle deletion of a group filter.
+   */
   deleteGroupFilter: Dispatch<string>;
 
   /** Whether the filter is selected or not. If it is selected, the detail view is displaying this filter's config. */
