@@ -99,7 +99,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
   const {data: referenceDateValues} = useGetScenarioInfectionDataQuery(
     {
       path: {
-        scenarioId: caseDataScenario!.id,
+        scenarioId: caseDataScenario?.id,
       },
       query: {
         startDate: referenceDate!,
@@ -155,11 +155,11 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
 
   const {data: selectedScenarioData} = useGetScenarioQuery(selectedScenario!, {skip: !selectedScenario});
   const {data: simulationModels} = useGetModelsQuery();
-  const {data: selectedSimulationModel} = useGetModelQuery(selectedScenarioData!.modelId, {
+  const {data: selectedSimulationModel} = useGetModelQuery(selectedScenarioData?.modelId ?? '', {
     skip: !selectedScenarioData,
   });
   const {data: parameterDefinitions} = useGetMultiParameterDefinitionsQuery(
-    selectedSimulationModel!.parameterDefinitions,
+    selectedSimulationModel?.parameterDefinitions ?? [],
     {skip: !selectedSimulationModel}
   );
   const {data: groups} = useGetGroupsQuery();

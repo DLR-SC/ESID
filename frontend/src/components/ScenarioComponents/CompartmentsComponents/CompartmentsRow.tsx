@@ -3,9 +3,8 @@
 
 import {ListItemButton, ListItemText, ListItemIcon, ClickAwayListener, Tooltip, useTheme} from '@mui/material';
 import InfoOutlined from '@mui/icons-material/InfoOutlined';
-import {Dispatch, SetStateAction, useState} from 'react';
+import React, {Dispatch, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import React from 'react';
 import {Localization} from 'types/localization';
 
 interface CompartmentsRowProps {
@@ -25,7 +24,7 @@ interface CompartmentsRowProps {
   compartmentsExpanded: boolean;
 
   /** Function to set the selected compartment */
-  setSelectedCompartment: Dispatch<SetStateAction<string>>;
+  setSelectedCompartment: Dispatch<string>;
 
   /** Minimum number of compartment rows */
   minCompartmentsRows: number;

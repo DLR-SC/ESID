@@ -118,6 +118,10 @@ export default function MapContainer() {
     [t]
   );
 
+  const data = useMemo(() => {
+    return mapData?.map((entry) => ({id: entry.node ?? '', value: entry.values['50'] ?? 0}));
+  }, [mapData]);
+
   return (
     <Stack
       id='sidebar-root'
@@ -166,7 +170,7 @@ export default function MapContainer() {
             tooltipText={calculateToolTip}
             tooltipTextWhileFetching={calculateToolTipFetching}
             defaultSelectedValue={defaultValue}
-            values={mapData}
+            values={data}
             isDataFetching={mapData === undefined}
             longLoad={longLoad}
             setLongLoad={setLongLoad}
@@ -199,11 +203,7 @@ export default function MapContainer() {
                 setFixedLegendMaxValue={setFixedLegendMaxValue}
                 aggregatedMax={aggregatedMax}
               />
-              <HeatLegendEdit
-                legend={legend}
-                setLegend={setLegend}
-                legendPresetsUrl={legendPresets}
-              />
+              <HeatLegendEdit legend={legend} setLegend={setLegend} legendPresetsUrl={legendPresets} />
             </Grid>
           </Grid>
         </LoadingContainer>

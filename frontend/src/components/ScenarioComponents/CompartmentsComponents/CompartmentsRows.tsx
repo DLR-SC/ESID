@@ -3,11 +3,10 @@
 
 import {List} from '@mui/material';
 import {ScrollSyncPane} from 'react-scroll-sync';
-import {Dispatch, SetStateAction} from 'react';
+import React, {Dispatch} from 'react';
 import CompartmentsRow from './CompartmentsRow';
-import React from 'react';
+
 import {Localization} from 'types/localization';
-import {Dictionary} from 'util/util';
 import {useTranslation} from 'react-i18next';
 
 interface CompartmentsRowsProps {

@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, {useState, useEffect, useMemo, useRef} from 'react';
+import React, {useState, useEffect, useMemo, useRef, useContext} from 'react';
 import Joyride, {CallBackProps, Step, STATUS, ACTIONS, EVENTS} from 'react-joyride';
 import {useAppDispatch, useAppSelector} from '../../../store/hooks';
 import {useTranslation} from 'react-i18next';
@@ -9,6 +9,7 @@ import {useTheme} from '@mui/material/styles';
 import {setShowPopover, setTourCompleted, setActiveTour} from '../../../store/UserOnboardingSlice';
 import {selectTab} from '../../../store/UserPreferenceSlice';
 import {DataSelection, selectDate, selectScenario} from '../../../store/DataSelectionSlice';
+import {DataContext} from '../../../DataContext';
 
 /**
  * Interface for the state of the tour steps
@@ -38,6 +39,7 @@ export default function TourSteps(): JSX.Element {
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const {t: tOnboarding} = useTranslation('onboarding');
+  const context = useContext(DataContext);
 
   const activeTour = useAppSelector((state) => state.userOnboarding.activeTour);
   const showPopover = useAppSelector((state) => state.userOnboarding.showPopover);
@@ -46,7 +48,7 @@ export default function TourSteps(): JSX.Element {
   const selectedTab = useAppSelector((state) => state.userPreference.selectedTab);
   const simulationStart = useAppSelector((state) => state.dataSelection.simulationStart);
   const dataSelection = useAppSelector((state) => state.dataSelection);
-  const scenarioList = useAppSelector((state) => state.scenarioList.scenarios);
+  const scenarioList = context.scenarios;
 
   const previousSimulationStart = useRef(simulationStart); // To keep track of the previous simulation start date for the scenario controlled tour.
   const savedUserDataSelection = useRef<null | DataSelection>(null); // To keep track of the original data selection before starting any tour.
@@ -69,14 +71,14 @@ export default function TourSteps(): JSX.Element {
    * sets the simulation start date, and starts the tour once preferences are saved.
    */
   useEffect(() => {
-    if (activeTour && !showPopover && !showWelcomeDialog && !run) {
+    if (activeTour && !showPopover && !showWelcomeDialog && !run && scenarioList) {
       if (!savedUserDataSelection.current) {
         savedUserDataSelection.current = dataSelection; // Save the current data selection of the user so we can override it with different values during the tour
 
-        const maxDate = dataSelection.maxDate || '2024-07-08'; // Get the maximum date from the data selection
+        const maxDate = dataSelection.maxDate ?? '2024-07-08'; // Get the maximum date from the data selection
         dispatch(selectDate(maxDate)); // Set the simulation start date (purple line) to the maximum date
 
-        const firstScenarioId = Number(Object.keys(scenarioList)[0]); // We get the first scenario id (base scenario) from scenarioList
+        const firstScenarioId = scenarioList[0].id; // We get the first scenario id (base scenario) from scenarioList
         dispatch(selectScenario(firstScenarioId)); // Dispatch the selectScenario action with the base scenario
 
         setArePreferencesSaved(true); // Flag to indicate that the preferences are saved
@@ -163,8 +165,8 @@ export default function TourSteps(): JSX.Element {
 
     // If the tour is finished, skipped or closed
     if (([STATUS.FINISHED, STATUS.SKIPPED] as string[]).includes(status) || action === ACTIONS.CLOSE) {
-      dispatch(selectDate(savedUserDataSelection.current?.date || '2024-07-08')); // Restore the original date in the data selection
-      dispatch(selectScenario(savedUserDataSelection.current?.scenario || 0)); // Restore the original selected scenario in the data selection
+      dispatch(selectDate(savedUserDataSelection.current?.date ?? '2024-07-08')); // Restore the original date in the data selection
+      dispatch(selectScenario(savedUserDataSelection.current?.scenario ?? '')); // Restore the original selected scenario in the data selection
       savedUserDataSelection.current = null; // Reset the saved preferences after the tour is completed
 
       // If the tour was finished and not skipped or closed, mark as completed
