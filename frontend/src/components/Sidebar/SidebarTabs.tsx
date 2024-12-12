@@ -3,7 +3,7 @@
 
 import Box from '@mui/material/Box';
 import {useTranslation} from 'react-i18next';
-import React, {useCallback, useContext, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useMemo, useRef, useState} from 'react';
 import {Grid, Typography} from '@mui/material';
 import TabContext from '@mui/lab/TabContext';
 import TabPanel from '@mui/lab/TabPanel';
@@ -27,6 +27,7 @@ import legendPresets from '../../../assets/heatmap_legend_presets.json?url';
 import {GeoJSON, GeoJsonProperties} from 'geojson';
 import TripChainView from '../TripChainView';
 import StatisticsDashboard from './StatisicsComponent/StatisticsDashboard';
+import {selectDistrict} from '../../store/DataSelectionSlice';
 
 export default function SidebarTabs(): JSX.Element {
   const {t, i18n} = useTranslation('global');
@@ -126,6 +127,18 @@ export default function SidebarTabs(): JSX.Element {
     [t]
   );
 
+  // Set selected area in store
+  useEffect(() => {
+    dispatch(
+      selectDistrict({
+        ags: String(selectedArea?.['RS']),
+        name: String(selectedArea?.['GEN']),
+        type: String(selectedArea?.['BEZ']),
+      })
+    );
+    // This effect should only run when the selectedArea changes
+  }, [selectedArea, dispatch]);
+
   const localization = useMemo(() => {
     return {
       formatNumber: formatNumber,
@@ -173,7 +186,7 @@ export default function SidebarTabs(): JSX.Element {
               height: '100%',
             }}
           >
-            <Box id='sidebar-map-search-bar-wrapper' sx={{width: '100%'}}>
+            <Box id='sidebar-map-search-bar-wrapper' sx={{width: '95%'}}>
               <SearchBar
                 data={searchBarData}
                 sortProperty={'GEN'}
@@ -195,7 +208,7 @@ export default function SidebarTabs(): JSX.Element {
                 valueEqualProperty='RS'
               />
             </Box>
-            <Box id='sidebar-map-wrapper' sx={{width: '100%'}}>
+            <Box id='sidebar-map-wrapper' sx={{width: '95%'}}>
               <LoadingContainer show={areMapValuesFetching || longLoad} overlayColor={theme.palette.background.default}>
                 <HeatMap
                   selectedArea={selectedArea}

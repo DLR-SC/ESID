@@ -10,7 +10,6 @@ import {
   selectDestinationTypes,
   selectInfectionStates, selectOriginTypes,
   selectTransportationModes,
-  selectTripDuration,
 } from 'store/PandemosFilterSlice';
 import {KeyInfo} from 'types/pandemos';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
@@ -77,7 +76,7 @@ export default function StatisticsDashboard(props: any): JSX.Element {
         .keyAccessor((d: any) => d.key)
         .colors(d3.scaleOrdinal(d3.schemeBlues[9].slice().reverse()))
         .on('filtered', function (_chart: any) {
-          const selectedFilters = _chart.filters()//.map((d: any) => Object.values(KeyInfo.infection_state).findIndex((e: any) => e.icon === d));
+          const selectedFilters = _chart.filters()
           dispatch(
             selectInfectionStates({
               infectionStates: selectedFilters,
