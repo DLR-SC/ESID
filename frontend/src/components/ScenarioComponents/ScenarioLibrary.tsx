@@ -18,69 +18,24 @@ import Close from '@mui/icons-material/Close';
 import CardTitle from './CardsComponents/MainCard/CardTitle';
 import WebAssetOff from '@mui/icons-material/WebAssetOff';
 import {DataContext} from '../../DataContext';
-
-function getState(
-  name: string,
-  shownScenarios: string[] | null,
-  activeScenarios: string[] | null
-): 'active' | 'inactive' | 'hidden' {
-  if (shownScenarios?.includes(name) && activeScenarios?.includes(name)) {
-    return 'active';
-  }
-
-  if (shownScenarios?.includes(name)) {
-    return 'inactive';
-  }
-
-  return 'hidden';
-}
-
-type ScenarioState = {id: string; name: string; state: 'active' | 'inactive' | 'hidden'};
-
-function useScenarioState(): Array<ScenarioState> {
-  const {scenarios} = useContext(DataContext);
-  const shownScenarios = useAppSelector((state) => state.dataSelection.shownScenarios);
-  const activeScenarios = useAppSelector((state) => state.dataSelection.activeScenarios);
-
-  return useMemo(() => {
-    if (!scenarios) {
-      return [];
-    }
-
-    const result = [
-      {
-        id: scenarios.find((scenario) => scenario.name === 'casedata')?.id ?? '',
-        name: 'casedata',
-        state: getState('casedata', shownScenarios, activeScenarios),
-      },
-    ];
-
-    for (const scenario of scenarios) {
-      if (scenario.name === 'casedata') {
-        continue;
-      }
-      result.push({
-        id: scenario.id,
-        name: scenario.name,
-        state: getState(scenario.name, shownScenarios, activeScenarios),
-      });
-    }
-
-    return result;
-  }, [scenarios, shownScenarios, activeScenarios]);
-}
-
-function useHiddenScenarios() {
-  const scenarios = useScenarioState();
-
-  return useMemo(() => scenarios.filter((scenario) => scenario.state === 'hidden'), [scenarios]);
-}
+import LibraryAddOutlined from '@mui/icons-material/LibraryAddOutlined';
 
 export default function ScenarioLibrary(): JSX.Element {
   const {t} = useTranslation();
   const theme = useTheme();
 
-  const libScenarios = useHiddenScenarios();
+  const {scenarios} = useContext(DataContext);
+  const scenariosState = useAppSelector((state) => state.dataSelection.scenarios);
+
+  const hiddenScenarios = useMemo(() => {
+    return Object.entries(scenariosState)
+      .filter(([_, value]) => !value.shown)
+      .map(([key]) => ({
+        id: key,
+        name: scenarios?.find((scenario) => scenario.id === key)?.name ?? 'unknown',
+      }));
+  }, [scenarios, scenariosState]);
+
   const anchorRef = useRef<HTMLButtonElement>(null);
 
   const [open, setOpen] = useState(false);
@@ -171,8 +126,9 @@ export default function ScenarioLibrary(): JSX.Element {
                   marginTop: theme.spacing(2),
                 }}
               >
-                {libScenarios.length > 0 ? (
-                  libScenarios.map((scenario) => <LibraryCard key={scenario.id} {...scenario} />)
+                <NewScenarioCard />
+                {hiddenScenarios.length > 0 ? (
+                  hiddenScenarios.map((scenario) => <LibraryCard key={scenario.id} {...scenario} />)
                 ) : (
                   <Box
                     sx={{
@@ -196,7 +152,7 @@ export default function ScenarioLibrary(): JSX.Element {
   );
 }
 
-function LibraryCard(props: Readonly<ScenarioState>): JSX.Element {
+function LibraryCard(props: Readonly<{id: string; name: string}>): JSX.Element {
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const {t: tBackend} = useTranslation('backend');
@@ -246,7 +202,7 @@ function LibraryCard(props: Readonly<ScenarioState>): JSX.Element {
               background: '#EEEEEEEE',
             },
           }}
-          onClick={() => dispatch(showScenario(props.name))}
+          onClick={() => dispatch(showScenario(props.id))}
         >
           <Box
             id={`card-front-${props.id}`}
@@ -273,6 +229,90 @@ function LibraryCard(props: Readonly<ScenarioState>): JSX.Element {
               aria-label={'+'}
             >
               +
+            </Box>
+          </Box>
+        </Box>
+      </Box>
+    </Box>
+  );
+}
+
+function NewScenarioCard(): JSX.Element {
+  const theme = useTheme();
+  const {t} = useTranslation();
+
+  return (
+    <Box
+      id={`new-scenario-card-root`}
+      sx={{
+        display: 'flex',
+        flexDirection: 'row',
+        color: theme.palette.divider,
+        width: 'min-content',
+        paddingLeft: theme.spacing(3),
+        paddingRight: theme.spacing(3),
+      }}
+    >
+      <Box
+        id='new-scenario-card-container'
+        sx={{
+          position: 'relative',
+          zIndex: 0,
+          flexGrow: 0,
+          flexShrink: 0,
+          width: '200px',
+          boxSizing: 'border-box',
+          marginX: '2px',
+          marginY: theme.spacing(2),
+          marginBottom: 0,
+        }}
+      >
+        <Box
+          id={`new-scenario-card-main-card`}
+          sx={{
+            position: 'relative',
+            zIndex: 0,
+            boxSizing: 'border-box',
+            height: '244px',
+            paddingTop: theme.spacing(2),
+            paddingBottom: theme.spacing(2),
+            border: `2px solid ${theme.palette.primary.light}`,
+            borderRadius: '3px',
+            background: theme.palette.background.paper,
+            color: theme.palette.primary.main,
+            cursor: 'pointer',
+
+            '&:hover': {
+              background: '#EEEEEEEE',
+            },
+          }}
+          onClick={() => undefined}
+        >
+          <Box
+            id={`new-scenario-card-front`}
+            sx={{
+              marginTop: '6px',
+              marginBottom: '6px',
+              height: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
+            <CardTitle label={t('new-scenario')} />
+            <Box
+              sx={{
+                fontWeight: 'bolder',
+                fontSize: '3rem',
+                color: theme.palette.primary.light,
+                textAlign: 'center',
+                flexGrow: 1,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+              aria-label={t('new-scenario')}
+            >
+              <LibraryAddOutlined color='primary' fontSize='large' />
             </Box>
           </Box>
         </Box>

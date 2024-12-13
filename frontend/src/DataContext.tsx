@@ -97,7 +97,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
 
   const selectedDistrict = useAppSelector((state) => state.dataSelection.district.ags);
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
-  const activeScenarios = useAppSelector((state) => state.dataSelection.activeScenarios);
+  const scenariosState = useAppSelector((state) => state.dataSelection.scenarios);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
   const referenceDate = useAppSelector((state) => state.dataSelection.simulationStart);
   const selectedDate = useAppSelector((state) => state.dataSelection.date);
@@ -126,9 +126,17 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
     }
   );
 
+  const activeScenarios = useMemo(() => {
+    return (
+      Object.entries(scenariosState)
+        .filter(([_, value]) => value.active && value.shown)
+        .map(([key]) => key) ?? []
+    );
+  }, [scenariosState]);
+
   const {data: scenarioCardData} = useGetMultiScenarioInfectionDataQuery(
     {
-      pathIds: activeScenarios ?? [],
+      pathIds: activeScenarios,
       query: {
         startDate: selectedDate!,
         endDate: selectedDate!,
@@ -143,7 +151,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
 
   const {data: groupFilterData} = useGetMultiScenarioInfectionDataQuery(
     {
-      pathIds: activeScenarios ?? [],
+      pathIds: activeScenarios,
       query: {
         startDate: selectedDate!,
         endDate: selectedDate!,
@@ -155,13 +163,14 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
       },
     },
     {
-      skip: !activeScenarios || !selectedDate || !selectedDistrict || Object.keys(groupFilters).length === 0,
+      skip:
+        activeScenarios.length === 0 || !selectedDate || !selectedDistrict || Object.keys(groupFilters).length === 0,
     }
   );
 
   const {data: lineChartData} = useGetMultiScenarioInfectionDataQuery(
     {
-      pathIds: activeScenarios ?? [],
+      pathIds: activeScenarios,
       query: {
         nodes: [selectedDistrict],
         compartments: [selectedCompartment!],

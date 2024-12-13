@@ -13,6 +13,12 @@ import {GroupFilter} from 'types/group';
  */
 export type AGS = string;
 
+export interface ScenarioState {
+  active: boolean;
+  shown: boolean;
+  colors: Array<string>;
+}
+
 /**
  * This contains all the state, that the user can configure directly.
  *
@@ -29,9 +35,7 @@ export interface DataSelection {
   scenario: string | null;
   compartment: string | null;
   compartmentsExpanded: boolean | null;
-  shownScenarios: string[] | null;
-  activeScenarios: string[] | null;
-  scenarioColors: Record<string, Array<string>> | null;
+  scenarios: Record<string, ScenarioState>;
   simulationStart: string | null;
   minDate: string | null;
   maxDate: string | null;
@@ -44,9 +48,7 @@ const initialState: DataSelection = {
   scenario: null,
   compartment: null,
   compartmentsExpanded: null,
-  shownScenarios: [],
-  activeScenarios: [],
-  scenarioColors: null,
+  scenarios: {},
   simulationStart: null,
   minDate: null,
   maxDate: null,
@@ -61,14 +63,64 @@ export const DataSelectionSlice = createSlice({
   initialState,
   reducers: {
     setActiveScenario(state, action: PayloadAction<{id: string; state: boolean}>) {
-      if (action.payload.state && !state.activeScenarios?.includes(action.payload.id)) {
-        state.activeScenarios = [...(state.activeScenarios ?? []), action.payload.id];
-      } else {
-        state.activeScenarios = state.activeScenarios?.filter((id) => id !== action.payload.id) ?? [];
+      if (!state.scenarios) {
+        state.scenarios = {};
       }
+
+      if (!state.scenarios[action.payload.id]) {
+        state.scenarios[action.payload.id] = {
+          active: false,
+          shown: false,
+          colors: [],
+        };
+      }
+
+      state.scenarios[action.payload.id] = {...state.scenarios[action.payload.id], active: action.payload.state};
+    },
+    showScenario(state, action: PayloadAction<string>) {
+      if (!state.scenarios) {
+        state.scenarios = {};
+      }
+
+      if (!state.scenarios[action.payload]) {
+        state.scenarios[action.payload] = {
+          active: false,
+          shown: false,
+          colors: [],
+        };
+      }
+
+      state.scenarios[action.payload] = {...state.scenarios[action.payload], shown: true};
+    },
+    hideScenario(state, action: PayloadAction<string>) {
+      if (!state.scenarios) {
+        state.scenarios = {};
+      }
+
+      if (!state.scenarios[action.payload]) {
+        state.scenarios[action.payload] = {
+          active: false,
+          shown: false,
+          colors: [],
+        };
+      }
+
+      state.scenarios[action.payload] = {...state.scenarios[action.payload], shown: false};
     },
     setScenarioColors(state, action: PayloadAction<{id: string; colors: Array<string>}>) {
-      state.scenarioColors = {...state.scenarioColors, [action.payload.id]: action.payload.colors};
+      if (!state.scenarios) {
+        state.scenarios = {};
+      }
+
+      if (!state.scenarios[action.payload.id]) {
+        state.scenarios[action.payload.id] = {
+          active: false,
+          shown: false,
+          colors: [],
+        };
+      }
+
+      state.scenarios[action.payload.id] = {...state.scenarios[action.payload.id], colors: action.payload.colors};
     },
     setGroupFilters(state, action: PayloadAction<Record<string, GroupFilter>>) {
       state.groupFilters = action.payload;
@@ -142,26 +194,6 @@ export const DataSelectionSlice = createSlice({
 
       if (state.groupFilters[action.payload]) {
         state.groupFilters[action.payload].isVisible = !state.groupFilters[action.payload].isVisible;
-      }
-    },
-    showScenario(state, action: PayloadAction<string>) {
-      if (!state.shownScenarios) {
-        state.shownScenarios = ['casedata', 'baseline'];
-      }
-
-      const index = state.shownScenarios.indexOf(action.payload);
-      if (index === -1) {
-        state.shownScenarios.push(action.payload);
-      }
-    },
-    hideScenario(state, action: PayloadAction<string>) {
-      if (!state.shownScenarios) {
-        state.shownScenarios = ['casedata', 'baseline'];
-      }
-
-      const index = state.shownScenarios.indexOf(action.payload);
-      if (index !== -1) {
-        state.shownScenarios.splice(index, 1);
       }
     },
   },
