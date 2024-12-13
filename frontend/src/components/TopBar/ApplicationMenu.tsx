@@ -26,8 +26,8 @@ const AttributionDialog = React.lazy(() => import('./PopUps/AttributionDialog'))
 export default function ApplicationMenu(): JSX.Element {
   const {t} = useTranslation();
 
-  const realm = useAppSelector((state) => state.realm.name);
-  const {login, token, logOut} = useContext<IAuthContext>(AuthContext);
+  const realm = useAppSelector((state) => state.auth.realm);
+  const {login, token, logOut, idToken} = useContext<IAuthContext>(AuthContext);
 
   console.log(token);
 
@@ -42,6 +42,12 @@ export default function ApplicationMenu(): JSX.Element {
   const [accessibilityOpen, setAccessibilityOpen] = React.useState(false);
   const [attributionsOpen, setAttributionsOpen] = React.useState(false);
   const [changelogOpen, setChangelogOpen] = React.useState(false);
+
+  const keycloakLogout = () => {
+    window.location.assign(
+      `${import.meta.env.VITE_OAUTH_API_URL}/realms/${realm}/protocol/openid-connect/logout?post_logout_redirect_uri=${encodeURI(`${import.meta.env.VITE_OAUTH_REDIRECT_URL}`)}&id_token_hint=${idToken}`
+    );
+  };
 
   /** Calling this method opens the application menu. */
   const openMenu = (event: MouseEvent) => {
@@ -63,6 +69,7 @@ export default function ApplicationMenu(): JSX.Element {
   const logoutClicked = () => {
     closeMenu();
     logOut();
+    keycloakLogout();
   };
 
   /** This method gets called, when the imprint menu entry was clicked. It opens a dialog showing the legal text. */

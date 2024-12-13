@@ -1,8 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR) and CISPA Helmholtz Center for Information Security
 // SPDX-License-Identifier: Apache-2.0
 
-import React from 'react';
-import {ReactNode} from 'react';
+import React, {ReactNode} from 'react';
 import {AuthProvider as OAuth2WithPkceProvider, TAuthConfig} from 'react-oauth2-code-pkce';
 import {useAppSelector} from 'store/hooks';
 
@@ -11,7 +10,7 @@ interface AuthProviderProps {
 }
 
 function AuthProvider({children}: AuthProviderProps) {
-  const realm = useAppSelector((state) => state.realm.name);
+  const realm = useAppSelector((state) => state.auth.realm);
   let authConfig: TAuthConfig;
 
   if (!import.meta.env.VITE_OAUTH_CLIENT_ID || !import.meta.env.VITE_OAUTH_API_URL) {
@@ -36,7 +35,7 @@ function AuthProvider({children}: AuthProviderProps) {
         import.meta.env.VITE_OAUTH_REDIRECT_URL === undefined
           ? window.location.origin
           : `${import.meta.env.VITE_OAUTH_REDIRECT_URL}`,
-      scope: 'openid profile email', // default scope without audience
+      scope: 'openid profile email loki-back-audience roles', // default scope without audience
       autoLogin: false,
     };
   }

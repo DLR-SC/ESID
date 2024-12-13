@@ -11,6 +11,7 @@ import {GroupFilter} from 'types/group';
 import {Localization} from 'types/localization';
 import {useAppDispatch} from '../../../store/hooks';
 import {setIsFilterDialogOpen} from '../../../store/UserOnboardingSlice';
+import Button from '@mui/material/Button';
 
 export interface FilterDialogContainerProps {
   /** A dictionary of group filters. */
@@ -65,45 +66,70 @@ export default function FilterDialogContainer({
   };
 
   return (
-    <Dialog id='manage-filters-dialog' maxWidth='lg' fullWidth={true} open={open} onClose={handleClose}>
-      <ManageGroupDialog
-        groupFilters={groupFilters}
-        setGroupFilters={setGroupFilters}
-        categories={categories}
-        groups={groups}
-        onCloseRequest={handleClose}
-        unsavedChangesCallback={(unsavedChanges) => setGroupEditorUnsavedChanges(unsavedChanges)}
-        localization={localization}
-      />
-      <ConfirmDialog
-        open={closeDialogOpen}
-        title={
-          localization?.overrides?.['group-filters.confirm-discard-title']
-            ? customT(localization.overrides['group-filters.confirm-discard-title'])
-            : defaultT('group-filters.confirm-discard-title')
-        }
-        text={
-          localization?.overrides?.['group-filters.confirm-discard-text']
-            ? customT(localization.overrides['group-filters.confirm-discard-text'])
-            : defaultT('group-filters.confirm-discard-text')
-        }
-        abortButtonText={
-          localization?.overrides?.['group-filters.close']
-            ? customT(localization.overrides['group-filters.close'])
-            : defaultT('group-filters.close')
-        }
-        confirmButtonText={
-          localization?.overrides?.['group-filters.discard']
-            ? customT(localization.overrides['group-filters.discard'])
-            : defaultT('group-filters.discard')
-        }
-        onAnswer={(answer) => {
-          if (answer) {
-            setOpen(false);
-          }
-          setCloseDialogOpen(false);
+    <>
+      <Button
+        id='manage-filters-button'
+        variant='outlined'
+        color='primary'
+        sx={{
+          width: '200px',
+          alignSelf: 'center',
+          marginTop: '20px',
         }}
-      />
-    </Dialog>
+        onClick={() => {
+          setOpen(true);
+          dispatch(setIsFilterDialogOpen(true));
+        }}
+        aria-label={
+          localization?.overrides?.['group-filters.title']
+            ? customT(localization.overrides['group-filters.title'])
+            : defaultT('group-filters.title')
+        }
+      >
+        {localization?.overrides?.['scenario.manage-groups']
+          ? customT(localization.overrides['scenario.manage-groups'])
+          : defaultT('scenario.manage-groups')}
+      </Button>
+      <Dialog id='manage-filters-dialog' maxWidth='lg' fullWidth={true} open={open} onClose={handleClose}>
+        <ManageGroupDialog
+          groupFilters={groupFilters}
+          setGroupFilters={setGroupFilters}
+          categories={categories}
+          groups={groups}
+          onCloseRequest={handleClose}
+          unsavedChangesCallback={(unsavedChanges) => setGroupEditorUnsavedChanges(unsavedChanges)}
+          localization={localization}
+        />
+        <ConfirmDialog
+          open={closeDialogOpen}
+          title={
+            localization?.overrides?.['group-filters.confirm-discard-title']
+              ? customT(localization.overrides['group-filters.confirm-discard-title'])
+              : defaultT('group-filters.confirm-discard-title')
+          }
+          text={
+            localization?.overrides?.['group-filters.confirm-discard-text']
+              ? customT(localization.overrides['group-filters.confirm-discard-text'])
+              : defaultT('group-filters.confirm-discard-text')
+          }
+          abortButtonText={
+            localization?.overrides?.['group-filters.close']
+              ? customT(localization.overrides['group-filters.close'])
+              : defaultT('group-filters.close')
+          }
+          confirmButtonText={
+            localization?.overrides?.['group-filters.discard']
+              ? customT(localization.overrides['group-filters.discard'])
+              : defaultT('group-filters.discard')
+          }
+          onAnswer={(answer) => {
+            if (answer) {
+              setOpen(false);
+            }
+            setCloseDialogOpen(false);
+          }}
+        />
+      </Dialog>
+    </>
   );
 }

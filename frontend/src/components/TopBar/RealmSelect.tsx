@@ -7,14 +7,14 @@ import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import {useAppDispatch, useAppSelector} from 'store/hooks';
-import {setRealm} from 'store/RealmSlice';
+import {setRealm} from 'store/AuthSlice';
 import {useTranslation} from 'react-i18next';
 import Box from '@mui/material/Box';
 
 function RealmSelect() {
   const {t} = useTranslation();
 
-  const realm = useAppSelector((state) => state.realm.name);
+  const realm = useAppSelector((state) => state.auth.realm);
   const dispatch = useAppDispatch();
 
   // realms are hardcoded for now

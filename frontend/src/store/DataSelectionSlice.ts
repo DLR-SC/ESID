@@ -29,6 +29,7 @@ export interface DataSelection {
   scenario: string | null;
   compartment: string | null;
   compartmentsExpanded: boolean | null;
+  shownScenarios: string[] | null;
   activeScenarios: string[] | null;
   scenarioColors: Record<string, Array<string>> | null;
   simulationStart: string | null;
@@ -43,6 +44,7 @@ const initialState: DataSelection = {
   scenario: null,
   compartment: null,
   compartmentsExpanded: null,
+  shownScenarios: [],
   activeScenarios: [],
   scenarioColors: null,
   simulationStart: null,
@@ -142,6 +144,26 @@ export const DataSelectionSlice = createSlice({
         state.groupFilters[action.payload].isVisible = !state.groupFilters[action.payload].isVisible;
       }
     },
+    showScenario(state, action: PayloadAction<string>) {
+      if (!state.shownScenarios) {
+        state.shownScenarios = ['casedata', 'baseline'];
+      }
+
+      const index = state.shownScenarios.indexOf(action.payload);
+      if (index === -1) {
+        state.shownScenarios.push(action.payload);
+      }
+    },
+    hideScenario(state, action: PayloadAction<string>) {
+      if (!state.shownScenarios) {
+        state.shownScenarios = ['casedata', 'baseline'];
+      }
+
+      const index = state.shownScenarios.indexOf(action.payload);
+      if (index !== -1) {
+        state.shownScenarios.splice(index, 1);
+      }
+    },
   },
 });
 
@@ -161,6 +183,8 @@ export const {
   setGroupFilter,
   deleteGroupFilter,
   toggleGroupFilter,
+  showScenario,
+  hideScenario,
 } = DataSelectionSlice.actions;
 
 export default DataSelectionSlice.reducer;

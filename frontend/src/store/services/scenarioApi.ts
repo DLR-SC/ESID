@@ -25,13 +25,23 @@ import {
   Scenario,
   GroupCategories,
 } from './APITypes';
+import {RootState} from '../index';
 
 export const scenarioApi = createApi({
   reducerPath: 'scenarioApi',
   baseQuery: fetchBaseQuery({
     baseUrl: `${import.meta.env.VITE_API_URL || ''}`,
-    prepareHeaders: (headers) => {
-      headers.set('Authorization', `Bearer TODO`);
+    prepareHeaders: (headers, {getState}) => {
+      const auth = (getState() as RootState).auth;
+
+      if (auth.realm && auth.realm !== '') {
+        headers.set('x-realm', auth.realm);
+      }
+
+      if (auth.token && auth.token !== '') {
+        headers.set('Authorization', 'Bearer ' + auth.token);
+      }
+
       return headers;
     },
   }),

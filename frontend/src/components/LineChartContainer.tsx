@@ -73,7 +73,7 @@ export default function LineChartContainer() {
 
       return lines;
     });
-  }, [lineChartData, scenarios]);
+  }, [lineChartData, scenarioColors, scenarios]);
 
   // Set reference day in store
   useEffect(() => {

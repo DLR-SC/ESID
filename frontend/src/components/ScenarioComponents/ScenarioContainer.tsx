@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import {darken, useTheme} from '@mui/material/';
 import React, {useContext, useEffect, useMemo, useState} from 'react';
 import {NumberFormatter} from 'util/hooks';
@@ -25,6 +24,7 @@ import FilterDialogContainer from './FilterComponents/FilterDialogContainer';
 import GeneralButton from './ExpandedButtonComponents/ExpandedButton';
 import ReferenceDatePicker from './ReferenceDatePickerComponents.tsx/ReferenceDatePicker';
 import {useAppDispatch, useAppSelector} from 'store/hooks';
+import ScenarioLibrary from './ScenarioLibrary';
 
 interface ScenarioContainerProps {
   /** The minimum number of compartment rows.*/
@@ -255,30 +255,7 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
               flexDirection: 'column',
             }}
           >
-            <Button
-              id='scenario-add-button'
-              variant='outlined'
-              color='success'
-              sx={{
-                height: '244px',
-                width: '200px',
-                fontWeight: 'bolder',
-                fontSize: '3rem',
-                border: `2px ${theme.palette.divider} dashed`,
-                borderRadius: '3px',
-                color: `${theme.palette.divider}`,
-                alignSelf: 'top',
-                '&:hover': {
-                  border: `2px ${theme.palette.divider} dashed`,
-                  background: '#E7E7E7',
-                },
-              }}
-              aria-label={t('scenario.add')}
-            >
-              +
-            </Button>
-          </Box>
-          {groupCategories && groups && (
+            <ScenarioLibrary />
             <FilterDialogContainer
               groupFilters={groupFilters}
               categories={translatedCategories}
@@ -286,7 +263,7 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
               setGroupFilters={(newGroupFilters) => dispatch(setGroupFilters(newGroupFilters))}
               localization={localization}
             />
-          )}
+          </Box>
         </Box>
       </div>
     </ScrollSync>

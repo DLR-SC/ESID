@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, {createContext, useState, useEffect, useMemo} from 'react';
+import React, {createContext, useState, useEffect, useMemo, useContext} from 'react';
 import {useAppDispatch, useAppSelector} from 'store/hooks';
 import {
   useGetScenariosQuery,
@@ -43,6 +43,8 @@ import {
   setStartDate,
 } from './store/DataSelectionSlice';
 import theme from './util/Theme';
+import {AuthContext} from 'react-oauth2-code-pkce';
+import {setToken} from './store/AuthSlice';
 
 // Create the context
 export const DataContext = createContext<{
@@ -86,6 +88,12 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
 
   const [geoData, setGeoData] = useState<GeoJSON>();
   const [searchBarData, setSearchBarData] = useState<GeoJsonProperties[] | undefined>(undefined);
+
+  const {token} = useContext(AuthContext);
+
+  useEffect(() => {
+    dispatch(setToken(token));
+  }, [dispatch, token]);
 
   const selectedDistrict = useAppSelector((state) => state.dataSelection.district.ags);
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
