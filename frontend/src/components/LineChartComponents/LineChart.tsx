@@ -370,16 +370,22 @@ export default function LineChart({
       return [];
     }
 
-    return lineChartData.map((line) => {
+    const totalScenarios = lineChartData.length;
+    const maxOpacity = 0.2; // Maximum cumulative opacity
+
+    return lineChartData.map((line, index) => {
       const lineColor = line.stroke.color ?? color(theme.palette.error.main);
       const fillColor = line.fill ?? color(theme.palette.error.main);
+
+      const weight = (index + 1) / totalScenarios; // Proportional weight
+      const opacity = weight * maxOpacity; // Adjust opacity based on weight
 
       return {
         threshold: horizontalYAxisThreshold,
         fills: {
           fill: fillColor, // change the fill of the range above threshold
           visible: true, // visibility of the fill
-          fillOpacity: line.fillOpacity ?? 0.15,
+          fillOpacity: opacity,
         },
         strokes: {
           stroke: color(theme.palette.error.main), // change the stroke for points above threshold
