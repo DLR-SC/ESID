@@ -267,7 +267,7 @@
       description: 'Average time span before exposed individuals become infectious',
       unit: 'days',
     },
-    TimeInfectedNoSymptoms: {
+    TimeInfectedNoSymptom: {
       symbol: 'T_C',
       description: 'Average time span of infectiousness without symptoms',
       unit: 'days',
@@ -275,6 +275,7 @@
   },
   'scenario-names': {
     caseData: 'Estimated Cases',
+    casedata: 'Estimated Cases',
     baseline: 'Baseline Scenario',
     closed_schools: 'Schools Closed',
     remote_work: 'Home Office',

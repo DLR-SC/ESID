@@ -14,7 +14,7 @@ interface DataCardProps {
   id: string;
 
   /** A dictionary of compartment values associated with the card.*/
-  compartmentValues: Record<string, number> | null;
+  compartmentValues: Record<string, number | null> | null;
 
   /** A dictionary of start values used for calculating the rate. This determines whether the values have increased, decreased, or remained the same. */
   referenceValues: Record<string, number> | null;
@@ -46,6 +46,8 @@ interface DataCardProps {
 
   /** A function to set the active scenario.*/
   setActive: Dispatch<{id: string; state: boolean}>;
+
+  hide: Dispatch<string>;
 
   /** The minimum number of compartment rows.*/
   minCompartmentsRows: number;
@@ -83,6 +85,7 @@ export default function DataCard({
   maxCompartmentsRows,
   setSelected,
   setActive,
+  hide,
   localization = {
     formatNumber: (value: number) => value.toString(),
     customLang: 'global',
@@ -149,6 +152,7 @@ export default function DataCard({
         isActive={isActive}
         setSelected={setSelected}
         setActive={setActive}
+        hide={hide}
         minCompartmentsRows={minCompartmentsRows}
         maxCompartmentsRows={maxCompartmentsRows}
         localization={localization}

@@ -20,7 +20,7 @@ interface MainCardProps {
   color: string;
 
   /** A dictionary of compartment values associated with the card. */
-  compartmentValues: Record<string, number> | null;
+  compartmentValues: Record<string, number | null> | null;
 
   /** A dictionary of start values used for calculating the rate. This determines whether the values have increased, decreased, or remained the same. */
   referenceValues: Record<string, number> | null;
@@ -48,6 +48,8 @@ interface MainCardProps {
 
   /** A function to set the active scenario. */
   setActive: Dispatch<{id: string; state: boolean}>;
+
+  hide: Dispatch<string>;
 
   /** The minimum number of compartment rows. */
   minCompartmentsRows: number;
@@ -82,6 +84,7 @@ function MainCard({
   minCompartmentsRows,
   setSelected,
   setActive,
+  hide,
   maxCompartmentsRows,
   localization = {
     formatNumber: (value: number) => value.toString(),
@@ -167,6 +170,7 @@ function MainCard({
         id={id}
         isActive={isActive}
         setActive={setActive}
+        hide={hide}
         setSelected={setSelected}
         localization={localization}
       />

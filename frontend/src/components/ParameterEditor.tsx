@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, {useCallback, useContext, useMemo, useState} from 'react';
+import React, {useCallback, useContext, useMemo} from 'react';
 import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
 import TableHead from '@mui/material/TableHead';
@@ -35,8 +35,6 @@ export default function ParameterEditor() {
   const {t} = useTranslation();
   const {t: tBackend} = useTranslation('backend');
   const theme = useTheme();
-
-  const [scenarioId] = useState<number | null>(null);
 
   const {selectedSimulationModel, selectedScenarioData, groups, parameterDefinitions} = useContext(DataContext);
 
@@ -84,7 +82,7 @@ export default function ParameterEditor() {
         if (group) {
           return {
             id: groupId,
-            name: tBackend(`groups.${group.name}`),
+            name: tBackend(`group-filters.groups.${group.name}`),
           };
         }
         return [];
@@ -92,7 +90,7 @@ export default function ParameterEditor() {
     );
   }, [groups, selectedSimulationModel?.groups, tBackend]);
 
-  if (scenarioId !== null) {
+  if (parameters.length > 0) {
     return (
       <TableContainer sx={{background: theme.palette.background.paper, height: '100%'}} id='table-container'>
         <Table stickyHeader size='small' sx={{position: 'relative'}}>

@@ -3,12 +3,10 @@
 
 import {combineReducers, configureStore} from '@reduxjs/toolkit';
 import DataSelectionReducer from './DataSelectionSlice';
-import {caseDataApi} from './services/caseDataApi';
 import {scenarioApi} from './services/scenarioApi';
 import UserPreferenceReducer from './UserPreferenceSlice';
 import {persistReducer, persistStore} from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import {groupApi} from './services/groupApi';
 import LayoutReducer from './LayoutSlice';
 import AuthReducer from './AuthSlice';
 import UserOnboardingReducer from './UserOnboardingSlice';
@@ -25,9 +23,7 @@ const rootReducer = combineReducers({
   layoutSlice: LayoutReducer,
   userOnboarding: UserOnboardingReducer,
   auth: AuthReducer,
-  [caseDataApi.reducerPath]: caseDataApi.reducer,
   [scenarioApi.reducerPath]: scenarioApi.reducer,
-  [groupApi.reducerPath]: groupApi.reducer,
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
@@ -38,7 +34,7 @@ export const Store = configureStore({
       serializableCheck: {
         ignoredActions: ['persist/PERSIST'],
       },
-    }).concat(caseDataApi.middleware, scenarioApi.middleware, groupApi.middleware),
+    }).concat(scenarioApi.middleware),
 });
 
 export const Persistor = persistStore(Store);

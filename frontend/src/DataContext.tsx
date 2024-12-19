@@ -14,6 +14,8 @@ import {
   useGetGroupCategoriesQuery,
   useGetModelQuery,
   useGetMultiParameterDefinitionsQuery,
+  useGetInterventionTemplatesQuery,
+  useGetNodeListsQuery,
 } from 'store/services/scenarioApi';
 import data from '../assets/lk_germany_reduced.geojson?url';
 import {GeoJSON, GeoJsonProperties} from 'geojson';
@@ -26,14 +28,18 @@ import {
   Groups,
   InfectionData,
   InfectionDataParameters,
+  InterventionTemplates,
   Model,
   Models,
+  NodeLists,
   ParameterDefinition,
   Scenario,
   ScenarioPreview,
   Scenarios,
 } from './store/services/APITypes';
 import {
+  addScenario,
+  removeScenario,
   selectCompartment,
   selectDate,
   selectScenario,
@@ -41,6 +47,7 @@ import {
   setMinMaxDates,
   setScenarioColors,
   setStartDate,
+  showScenario,
 } from './store/DataSelectionSlice';
 import theme from './util/Theme';
 import {AuthContext} from 'react-oauth2-code-pkce';
@@ -63,6 +70,8 @@ export const DataContext = createContext<{
   selectedSimulationModel: Model | undefined;
   parameterDefinitions: Record<string, ParameterDefinition> | undefined;
   compartments: Compartments | undefined;
+  npis: InterventionTemplates | undefined;
+  nodeLists: NodeLists | undefined;
 }>({
   geoData: undefined,
   mapData: undefined,
@@ -79,6 +88,8 @@ export const DataContext = createContext<{
   selectedSimulationModel: undefined,
   parameterDefinitions: undefined,
   compartments: undefined,
+  npis: undefined,
+  nodeLists: undefined,
 });
 
 // Create a provider component
@@ -105,8 +116,26 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
 
   const {data: scenarios} = useGetScenariosQuery();
   const {data: compartments} = useGetCompartmentsQuery();
+  const {data: npis} = useGetInterventionTemplatesQuery();
+  const {data: nodeLists} = useGetNodeListsQuery();
 
-  const caseDataId = scenarios?.find((scenario) => scenario.name === 'caseData')?.id;
+  useEffect(() => {
+    if (scenarios) {
+      for (const [id, _] of Object.entries(scenariosState)) {
+        if (!scenarios.find((s) => s.id === id)) {
+          dispatch(removeScenario(id));
+        }
+      }
+
+      for (const scenario of scenarios) {
+        if (!scenariosState[scenario.id]) {
+          dispatch(addScenario({id: scenario.id, state: {shown: false, active: false, colors: []}}));
+        }
+      }
+    }
+  }, [dispatch, scenarios, scenariosState]);
+
+  const caseDataId = scenarios?.find((scenario) => scenario.name === 'casedata')?.id;
   const {data: caseDataScenario} = useGetScenarioQuery(caseDataId!, {skip: !caseDataId});
 
   const {data: referenceDateValues} = useGetScenarioInfectionDataQuery(
@@ -181,15 +210,18 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
     }
   );
 
-  const {data: mapData} = useGetScenarioInfectionDataQuery({
-    path: {scenarioId: selectedScenario!},
-    query: {
-      startDate: selectedDate!,
-      endDate: selectedDate!,
-      percentiles: ['50'],
-      compartments: [selectedCompartment!],
+  const {data: mapData} = useGetScenarioInfectionDataQuery(
+    {
+      path: {scenarioId: selectedScenario!},
+      query: {
+        startDate: selectedDate!,
+        endDate: selectedDate!,
+        percentiles: ['50'],
+        compartments: [selectedCompartment!],
+      },
     },
-  });
+    {skip: !selectedScenario || !selectedDate || !selectedCompartment}
+  );
 
   const {data: selectedScenarioData} = useGetScenarioQuery(selectedScenario!, {skip: !selectedScenario});
   const {data: simulationModels} = useGetModelsQuery();
@@ -206,6 +238,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
   // Try to set at least one active scenario.
   useEffect(() => {
     if (activeScenarios?.length === 0 && caseDataScenario) {
+      dispatch(showScenario(caseDataScenario.id));
       dispatch(setActiveScenario({id: caseDataScenario.id, state: true}));
     }
   }, [activeScenarios, caseDataScenario, dispatch]);
@@ -340,6 +373,8 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
           selectedSimulationModel,
           parameterDefinitions,
           compartments,
+          npis,
+          nodeLists,
         }),
         [
           geoData,
@@ -357,6 +392,8 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
           selectedSimulationModel,
           parameterDefinitions,
           compartments,
+          npis,
+          nodeLists,
         ]
       )}
     >

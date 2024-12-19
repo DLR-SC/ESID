@@ -269,7 +269,7 @@
       description: 'Mittlere Zeitspanne bevor angesteckte Personen infektiös werden',
       unit: 'Tage',
     },
-    TimeInfectedNoSymptoms: {
+    TimeInfectedNoSymptom: {
       symbol: 'T_C',
       description: 'Mittlere Zeitspanne der Infektiösität ohne Symptome',
       unit: 'Tage',
@@ -277,6 +277,7 @@
   },
   'scenario-names': {
     caseData: 'Geschätzte Fälle',
+    casedata: 'Geschätzte Fälle',
     baseline: 'Basisszenario',
     closed_schools: 'Geschlossene Schulen',
     remote_work: 'Homeoffice',

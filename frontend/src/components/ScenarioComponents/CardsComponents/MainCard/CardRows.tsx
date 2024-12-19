@@ -11,7 +11,7 @@ import {hexToRGB} from 'util/util';
 
 interface CardRowsProps {
   /** Dictionary of compartment values */
-  compartmentValues: Record<string, number> | null;
+  compartmentValues: Record<string, number | null> | null;
 
   /** Dictionary of start values */
   referenceValues: Record<string, number> | null;
@@ -70,10 +70,6 @@ export default function CardRows({
       return localization.formatNumber ? localization.formatNumber(filteredValues) : filteredValues.toString();
     }
 
-    if (compartmentValues && Object.keys(compartmentValues).length !== 0) {
-      return '0';
-    }
-
     const noDataText = localization.overrides?.['no-data']
       ? customT(localization.overrides['no-data'])
       : defaultT('no-data');
@@ -94,6 +90,11 @@ export default function CardRows({
     }
 
     const value = compartmentValues[compartment];
+    if (value === null) {
+      // Return a Figure Dash (‒) where a rate cannot be calculated.
+      return '\u2012';
+    }
+
     const startValue = referenceValues[compartment];
     const result = Math.round(100 * (value / startValue) - 100);
 

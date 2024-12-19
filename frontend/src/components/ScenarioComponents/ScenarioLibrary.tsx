@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, {useContext, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useContext, useMemo, useRef, useState} from 'react';
 import Paper from '@mui/material/Paper';
 import Popper from '@mui/material/Popper';
 import Box from '@mui/material/Box';
@@ -19,22 +19,55 @@ import CardTitle from './CardsComponents/MainCard/CardTitle';
 import WebAssetOff from '@mui/icons-material/WebAssetOff';
 import {DataContext} from '../../DataContext';
 import LibraryAddOutlined from '@mui/icons-material/LibraryAddOutlined';
+import Dialog from '@mui/material/Dialog';
+import NewScenarioDialog, {NewScenarioData} from './NewScenarioDialog';
+import {InterventionTemplates, Models, NodeLists, Scenario} from '../../store/services/APITypes';
+import {useGetMultiScenariosQuery} from '../../store/services/scenarioApi';
+import {useArrayState} from 'rooks';
 
 export default function ScenarioLibrary(): JSX.Element {
   const {t} = useTranslation();
+  const {t: tBackend} = useTranslation('backend');
   const theme = useTheme();
 
-  const {scenarios} = useContext(DataContext);
+  const {scenarios, simulationModels, npis, nodeLists} = useContext(DataContext);
   const scenariosState = useAppSelector((state) => state.dataSelection.scenarios);
+
+  const {data: completeScenarios} = useGetMultiScenariosQuery(scenarios?.map((s) => s.id) ?? [], {skip: !scenarios});
+
+  const [userScenarios, userScenarioControls] = useArrayState<{id: string; name: string}>(
+    scenarios
+      ?.filter((s) => s.name === 'casedata')
+      ?.map((s) => ({id: s.id, name: tBackend('scenario-names.casedata')})) ?? []
+  );
+
+  const scenarioCreated = useCallback(
+    (data: NewScenarioData) => {
+      const result = Object.values(completeScenarios ?? {}).find((scenario: Scenario) => {
+        if (scenario.linkedInterventions.length === data.npis.length) {
+          return data.npis.every((id) =>
+            scenario.linkedInterventions.find((intervention) => intervention.interventionId === id)
+          );
+        }
+        return false;
+      });
+
+      if (result) {
+        userScenarioControls.push({id: result.id, name: data.name});
+      }
+    },
+    [completeScenarios, userScenarioControls]
+  );
 
   const hiddenScenarios = useMemo(() => {
     return Object.entries(scenariosState)
+      .filter(([id]) => userScenarios.find((s) => s.id === id))
       .filter(([_, value]) => !value.shown)
       .map(([key]) => ({
         id: key,
-        name: scenarios?.find((scenario) => scenario.id === key)?.name ?? 'unknown',
+        name: userScenarios?.find((scenario) => scenario.id === key)?.name ?? 'unknown',
       }));
-  }, [scenarios, scenariosState]);
+  }, [scenariosState, userScenarios]);
 
   const anchorRef = useRef<HTMLButtonElement>(null);
 
@@ -88,7 +121,7 @@ export default function ScenarioLibrary(): JSX.Element {
           <ClickAwayListener onClickAway={handleClose}>
             <Box
               sx={{
-                width: '700px',
+                width: '930px',
                 margin: theme.spacing(2),
                 display: 'flex',
                 flexDirection: 'column',
@@ -118,15 +151,22 @@ export default function ScenarioLibrary(): JSX.Element {
               <Divider orientation='horizontal' variant='middle' flexItem />
               <Box
                 sx={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  flexGrow: '1',
-                  flexWrap: 'wrap',
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fill, 204px)',
+                  gridGap: '1rem',
+                  justifyContent: 'space-between',
                   width: '100%',
                   marginTop: theme.spacing(2),
+                  maxHeight: '500px',
+                  overflowY: 'auto',
                 }}
               >
-                <NewScenarioCard />
+                <NewScenarioCard
+                  models={simulationModels ?? []}
+                  npis={npis ?? []}
+                  nodeLists={nodeLists ?? []}
+                  scenarioCreated={scenarioCreated}
+                />
                 {hiddenScenarios.length > 0 ? (
                   hiddenScenarios.map((scenario) => <LibraryCard key={scenario.id} {...scenario} />)
                 ) : (
@@ -155,7 +195,7 @@ export default function ScenarioLibrary(): JSX.Element {
 function LibraryCard(props: Readonly<{id: string; name: string}>): JSX.Element {
   const dispatch = useAppDispatch();
   const theme = useTheme();
-  const {t: tBackend} = useTranslation('backend');
+  const {t: tBackend, i18n} = useTranslation('backend');
 
   return (
     <Box
@@ -165,8 +205,6 @@ function LibraryCard(props: Readonly<{id: string; name: string}>): JSX.Element {
         flexDirection: 'row',
         color: theme.palette.divider,
         width: 'min-content',
-        paddingLeft: theme.spacing(3),
-        paddingRight: theme.spacing(3),
       }}
     >
       <Box
@@ -192,10 +230,10 @@ function LibraryCard(props: Readonly<{id: string; name: string}>): JSX.Element {
             height: '244px',
             paddingTop: theme.spacing(2),
             paddingBottom: theme.spacing(2),
-            border: `2px solid ${theme.palette.primary.light}`,
+            border: `2px solid ${theme.palette.secondary.light}`,
             borderRadius: '3px',
             background: theme.palette.background.paper,
-            color: theme.palette.primary.main,
+            color: theme.palette.secondary.main,
             cursor: 'pointer',
 
             '&:hover': {
@@ -214,12 +252,19 @@ function LibraryCard(props: Readonly<{id: string; name: string}>): JSX.Element {
               flexDirection: 'column',
             }}
           >
-            <CardTitle label={tBackend(`scenario-names.${props.name}`)} />
+            <CardTitle
+              color={theme.palette.secondary.light}
+              label={
+                i18n.exists(`scenario-names.${props.name}`, {ns: 'backend'})
+                  ? tBackend(`scenario-names.${props.name}`)
+                  : props.name
+              }
+            />
             <Box
               sx={{
                 fontWeight: 'bolder',
-                fontSize: '3rem',
-                color: theme.palette.primary.light,
+                fontSize: '4rem',
+                color: theme.palette.secondary.light,
                 textAlign: 'center',
                 flexGrow: 1,
                 display: 'flex',
@@ -237,9 +282,20 @@ function LibraryCard(props: Readonly<{id: string; name: string}>): JSX.Element {
   );
 }
 
-function NewScenarioCard(): JSX.Element {
+function NewScenarioCard({
+  models,
+  npis,
+  nodeLists,
+  scenarioCreated,
+}: {
+  models: Models;
+  npis: InterventionTemplates;
+  nodeLists: NodeLists;
+  scenarioCreated: (data: NewScenarioData) => void;
+}): JSX.Element {
   const theme = useTheme();
   const {t} = useTranslation();
+  const [newScenarioDialogOpen, setNewScenarioDialogOpen] = useState(false);
 
   return (
     <Box
@@ -249,8 +305,6 @@ function NewScenarioCard(): JSX.Element {
         flexDirection: 'row',
         color: theme.palette.divider,
         width: 'min-content',
-        paddingLeft: theme.spacing(3),
-        paddingRight: theme.spacing(3),
       }}
     >
       <Box
@@ -276,7 +330,7 @@ function NewScenarioCard(): JSX.Element {
             height: '244px',
             paddingTop: theme.spacing(2),
             paddingBottom: theme.spacing(2),
-            border: `2px solid ${theme.palette.primary.light}`,
+            border: `2px solid ${theme.palette.primary.main}`,
             borderRadius: '3px',
             background: theme.palette.background.paper,
             color: theme.palette.primary.main,
@@ -286,7 +340,7 @@ function NewScenarioCard(): JSX.Element {
               background: '#EEEEEEEE',
             },
           }}
-          onClick={() => undefined}
+          onClick={() => setNewScenarioDialogOpen(true)}
         >
           <Box
             id={`new-scenario-card-front`}
@@ -298,12 +352,12 @@ function NewScenarioCard(): JSX.Element {
               flexDirection: 'column',
             }}
           >
-            <CardTitle label={t('new-scenario')} />
+            <CardTitle label={t('scenario-library.new-scenario')} />
             <Box
               sx={{
                 fontWeight: 'bolder',
                 fontSize: '3rem',
-                color: theme.palette.primary.light,
+                color: theme.palette.primary.main,
                 textAlign: 'center',
                 flexGrow: 1,
                 display: 'flex',
@@ -317,6 +371,24 @@ function NewScenarioCard(): JSX.Element {
           </Box>
         </Box>
       </Box>
+      <Dialog open={newScenarioDialogOpen} maxWidth='sm' fullWidth={true}>
+        <NewScenarioDialog
+          models={[models[0]?.name ?? 'SECIRVV']}
+          npiOptions={npis.map((npi) => {
+            return {
+              id: npi.id,
+              name: npi.name,
+            };
+          })}
+          nodeOptions={[nodeLists[0]?.name ?? 'Districts of Germany']}
+          onSubmit={(data) => {
+            if (data) {
+              scenarioCreated(data);
+            }
+            setNewScenarioDialogOpen(false);
+          }}
+        />
+      </Dialog>
     </Box>
   );
 }

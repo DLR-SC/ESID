@@ -14,7 +14,7 @@ interface CardContainerProps {
 
   /** A dictionary of card values. Each value is an object containing 'startValues', a dictionary used for rate calculation, and 'compartmentValues' for each card.
    *'startValues' help determine whether the values have increased, decreased, or remained the same. */
-  cardValues: Record<string, Record<string, number>> | undefined;
+  cardValues: Record<string, Record<string, number | null>> | undefined;
 
   referenceValues: Record<string, number> | undefined;
 
@@ -26,10 +26,7 @@ interface CardContainerProps {
   selectedCompartmentId: string | null;
 
   /** An array of scenarios. */
-  scenarios: Array<{id: string; name: string; color: string}>;
-
-  /** An array of active scenarios. */
-  activeScenarios: string[];
+  scenarios: Array<{id: string; name: string; color: string; active: boolean}>;
 
   /** A function to set the active scenarios. */
   setActiveScenario: Dispatch<{id: string; state: boolean}>;
@@ -39,6 +36,8 @@ interface CardContainerProps {
 
   /** A function to set the selected scenario. */
   setSelectedScenario: Dispatch<{id: string; state: boolean}>;
+
+  hide: Dispatch<string>;
 
   /** The minimum number of compartment rows. */
   minCompartmentsRows: number;
@@ -65,12 +64,12 @@ export default function CardContainer({
   filterValues,
   selectedCompartmentId,
   scenarios,
-  activeScenarios,
   cardValues,
   referenceValues,
   minCompartmentsRows,
   maxCompartmentsRows,
   setActiveScenario,
+  hide,
   localization = {
     formatNumber: (value: number) => value.toString(),
     customLang: 'global',
@@ -112,9 +111,10 @@ export default function CardContainer({
         selectedCompartmentId={selectedCompartmentId}
         filterValues={filterValues}
         isSelected={selectedScenario === scenario.id}
-        isActive={activeScenarios.includes(scenario.id)}
+        isActive={scenario.active}
         setSelected={setSelectedScenario}
         setActive={setActiveScenario}
+        hide={hide}
         minCompartmentsRows={minCompartmentsRows}
         maxCompartmentsRows={maxCompartmentsRows}
         localization={localization}

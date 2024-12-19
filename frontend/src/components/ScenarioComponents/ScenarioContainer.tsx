@@ -7,6 +7,7 @@ import React, {useContext, useEffect, useMemo, useState} from 'react';
 import {NumberFormatter} from 'util/hooks';
 import {useTranslation} from 'react-i18next';
 import {
+  hideScenario,
   selectCompartment,
   selectScenario,
   setActiveScenario,
@@ -38,7 +39,7 @@ interface ScenarioContainerProps {
  * Renders the ScenarioContainer component.
  */
 export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartmentsRows = 6}: ScenarioContainerProps) {
-  const {t: tBackend} = useTranslation('backend');
+  const {t: tBackend, i18n: i18nBackend} = useTranslation('backend');
   const {t} = useTranslation();
   const dispatch = useAppDispatch();
   const {i18n} = useTranslation();
@@ -57,61 +58,91 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
   const groupFilters = useAppSelector((state) => state.dataSelection.groupFilters);
   const compartmentsExpanded = useAppSelector((state) => state.dataSelection.compartmentsExpanded);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
-  const activeScenarios = useAppSelector((state) => state.dataSelection.activeScenarios);
+  const scenariosState = useAppSelector((state) => state.dataSelection.scenarios);
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
   const storeStartDay = useAppSelector((state) => state.dataSelection.simulationStart);
 
   const [startDay, setStartDay] = useState<string | null>(storeStartDay ?? '2024-07-08');
   const [resizeRef, resizeBoundingRect] = useBoundingclientrectRef();
 
-  const scenarios = useMemo(
-    () =>
-      scenarioData?.map((scenario) => ({
-        id: scenario.id,
-        name: tBackend(`scenario-names.${scenario.name}`),
-        color: '#FFF',
-      })) ?? [],
-    [scenarioData, tBackend]
-  );
+  const scenarios = useMemo(() => {
+    if (!scenarioData) {
+      return [];
+    }
+    return (
+      Object.entries(scenariosState)
+        .filter(([_, scenario]) => scenario.shown)
+        .map(([id, scenario]) => {
+          const apiScenario = scenarioData.find((s) => s.id === id);
+          let name = apiScenario?.name ?? 'unknown';
+          if (i18nBackend.exists(`scenario-names.${apiScenario?.name}`, {ns: 'backend'})) {
+            name = tBackend(`scenario-names.${apiScenario!.name}`);
+          }
+
+          return {
+            id: id,
+            name: name,
+            color: scenario.colors[0],
+            active: scenario.shown && scenario.active,
+          };
+        }) ?? []
+    );
+  }, [i18nBackend, scenarioData, scenariosState, tBackend]);
 
   const compartmentNames = useMemo(() => {
-    return compartments?.map((compartment) => tBackend(`infection-states.${compartment.name}`)) ?? [];
-  }, [compartments, tBackend]);
+    return (
+      compartments?.map((compartment) => {
+        return i18nBackend.exists(`infection-states.${compartment.name}`, {ns: 'backend'})
+          ? tBackend(`infection-states.${compartment.name}`)
+          : compartment.name;
+      }) ?? []
+    );
+  }, [compartments, i18nBackend, tBackend]);
 
   const compartmentValues = useMemo(() => {
     const result: Record<string, number> = {};
-    referenceDateValues?.forEach(
-      (referenceDate) =>
-        (result[tBackend(`infection-states.${referenceDate.compartment}`)] = referenceDate.values['50'])
-    );
+    referenceDateValues?.forEach((referenceDate) => {
+      const key = i18nBackend.exists(`infection-states.${referenceDate.compartment}`, {ns: 'backend'})
+        ? tBackend(`infection-states.${referenceDate.compartment}`)
+        : referenceDate.compartment!;
+
+      result[key] = referenceDate.values['50'];
+    });
     return result;
-  }, [referenceDateValues, tBackend]);
+  }, [i18nBackend, referenceDateValues, tBackend]);
 
   const translatedCategories = useMemo(() => {
-    return groupCategories?.map((category) => ({id: category, name: tBackend(`group-filters.${category}`)})) ?? [];
+    return (
+      groupCategories?.map((category) => ({id: category, name: tBackend(`group-filters.categories.${category}`)})) ?? []
+    );
   }, [groupCategories, tBackend]);
 
   const translatedGroups = useMemo(
     () =>
       groups?.map((group) => ({
         id: group.id,
-        name: tBackend(`group-filters.${group.name}`),
+        name: tBackend(`group-filters.groups.${group.name}`),
         category: group.category,
       })) ?? [],
     [groups, tBackend]
   );
 
   const cardValues = useMemo(() => {
-    const result: Record<string, Record<string, number>> = {};
+    const result: Record<string, Record<string, number | null>> = {};
+    Object.keys(scenariosState).forEach((id) => {
+      result[id] = {};
+      compartmentNames.forEach((name) => (result[id][name] = null));
+    });
+
     Object.entries(scenarioCardData ?? {}).forEach(([id, infectionData]) => {
-      const values: Record<string, number> = {};
       infectionData.forEach((entry) => {
-        values[entry.compartment!] = entry.values['50']!;
+        if (entry.compartment) {
+          result[id][entry.compartment] = entry.values['50']!;
+        }
       });
-      result[id] = values;
     });
     return result;
-  }, [scenarioCardData]);
+  }, [compartmentNames, scenarioCardData, scenariosState]);
 
   const filterValues = useMemo(() => {
     return {}; // TODO
@@ -228,8 +259,8 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
               filterValues={filterValues}
               selectedCompartmentId={selectedCompartment}
               scenarios={scenarios}
-              activeScenarios={activeScenarios ?? []}
               setActiveScenario={(newActiveScenarios) => dispatch(setActiveScenario(newActiveScenarios))}
+              hide={(scenarioId) => dispatch(hideScenario(scenarioId))}
               minCompartmentsRows={minCompartmentsRows}
               maxCompartmentsRows={maxCompartmentsRows}
               localization={localization}

@@ -39,8 +39,9 @@ export const scenarioApi = createApi({
       }
 
       if (auth.token && auth.token !== '') {
-        headers.set('Authorization', 'Bearer ' + auth.token);
+        // headers.set('Authorization', 'Bearer ' + auth.token);
       }
+      headers.set('Authorization', 'Bearer ' + 'TODO');
 
       return headers;
     },
@@ -67,6 +68,30 @@ export const scenarioApi = createApi({
       providesTags: (scenarios = []) => [
         {type: 'Scenario', id: 'LIST'},
         ...scenarios.map((scenario) => ({type: 'Scenario' as const, id: scenario.id})),
+      ],
+    }),
+
+    getMultiScenarios: build.query<Record<string, Scenario>, Array<string>>({
+      async queryFn(ids, _2, _3, fetchWithBQ) {
+        const results: Record<string, Scenario> = {};
+
+        for (const id of ids) {
+          const response = await fetchWithBQ({
+            url: `scenarios/${id}/`,
+          });
+
+          if (response.error) {
+            return {error: response.error};
+          }
+
+          results[id] = response.data as Scenario;
+        }
+
+        return {data: results};
+      },
+      providesTags: (scenarios: Record<string, Scenario> = {}) => [
+        {type: 'Scenario', id: 'LIST'},
+        ...Object.keys(scenarios).map((scenarioId) => ({type: 'Scenario' as const, id: scenarioId})),
       ],
     }),
 
@@ -344,6 +369,7 @@ export const {
   useCreateScenarioMutation,
   useGetScenarioQuery,
   useDeleteScenarioMutation,
+  useGetMultiScenariosQuery,
   useGetScenarioInfectionDataQuery,
   useGetMultiScenarioInfectionDataQuery,
   useGetInterventionTemplatesQuery,

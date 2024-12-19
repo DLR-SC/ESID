@@ -51,6 +51,7 @@
     more: 'More properties',
     activate: 'Activate scenario',
     deactivate: 'Deactivate scenario',
+    hide: 'Move to the library',
     'manage-groups': 'Filters',
     'reference-day': 'Reference Day',
   },
@@ -85,6 +86,29 @@
   },
   parameters: {
     'no-parameters': 'No parameters available for the selected scenario.',
+  },
+  'scenario-library': {
+    'title': 'Scenario Library',
+    'add': 'Add',
+    'no-scenarios': 'No further scenarios available.',
+    'new-scenario': 'Create Scenario',
+    'new': {
+      'title': 'Create new Scenario',
+      'name': 'Name',
+      'description': 'Description',
+      'start-date': 'Start',
+      'end-date': 'End',
+      'interventions': 'Interventions',
+      'model': 'Simulation Model',
+      'node-list': 'Regions',
+      'create': 'Create Scenario',
+      'cancel': 'Cancel',
+
+      'name-required': 'A name is required!',
+      'model-required': 'A model needs to be selected!',
+      'node-required': 'A region needs to be selected!',
+      'date-order': 'The start date needs to be before the end date!',
+    }
   },
   today: 'Today',
   more: 'More',

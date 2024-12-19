@@ -62,6 +62,20 @@ export const DataSelectionSlice = createSlice({
   name: 'DataSelection',
   initialState,
   reducers: {
+    addScenario(state, action: PayloadAction<{id: string; state: ScenarioState}>) {
+      if (!state.scenarios) {
+        state.scenarios = {};
+      }
+
+      state.scenarios[action.payload.id] = action.payload.state;
+    },
+    removeScenario(state, action: PayloadAction<string>) {
+      if (!state.scenarios) {
+        state.scenarios = {};
+      }
+
+      delete state.scenarios[action.payload];
+    },
     setActiveScenario(state, action: PayloadAction<{id: string; state: boolean}>) {
       if (!state.scenarios) {
         state.scenarios = {};
@@ -200,6 +214,8 @@ export const DataSelectionSlice = createSlice({
 });
 
 export const {
+  addScenario,
+  removeScenario,
   selectDistrict,
   setActiveScenario,
   setScenarioColors,

@@ -8,6 +8,7 @@ import {useTranslation} from 'react-i18next';
 import React, {Dispatch} from 'react';
 import {Localization} from 'types/localization';
 import {hexToRGB} from 'util/util';
+import Close from '@mui/icons-material/Close';
 
 interface CardTooltipProps {
   /** A boolean indicating whether the user is hovering over the card. */
@@ -26,7 +27,9 @@ interface CardTooltipProps {
   isActive: boolean;
 
   /** A function to set the active scenarios. */
-  setActive: React.Dispatch<{id: string; state: boolean}>;
+  setActive: Dispatch<{id: string; state: boolean}>;
+
+  hide: Dispatch<string>;
 
   /** An object containing localization information (translation & number formatting).*/
   localization?: Localization;
@@ -42,6 +45,7 @@ export default function CardTooltip({
   setSelected,
   isActive,
   setActive,
+  hide,
   localization = {
     formatNumber: (value: number) => value.toString(),
     customLang: 'global',
@@ -67,10 +71,10 @@ export default function CardTooltip({
       <Tooltip
         title={
           isActive
-            ? localization.overrides && localization.overrides['scenario.deactivate']
+            ? localization.overrides?.['scenario.deactivate']
               ? customT(localization.overrides['scenario.deactivate'])
               : defaultT('scenario.deactivate')
-            : localization.overrides && localization.overrides['scenario.activate']
+            : localization.overrides?.['scenario.activate']
               ? customT(localization.overrides['scenario.activate'])
               : defaultT('scenario.activate')
         }
@@ -90,15 +94,26 @@ export default function CardTooltip({
           }}
           aria-label={
             isActive
-              ? localization.overrides && localization.overrides['scenario.deactivate']
+              ? localization.overrides?.['scenario.deactivate']
                 ? customT(localization.overrides['scenario.deactivate'])
                 : defaultT('scenario.deactivate')
-              : localization.overrides && localization.overrides['scenario.activate']
+              : localization.overrides?.['scenario.activate']
                 ? customT(localization.overrides['scenario.activate'])
                 : defaultT('scenario.activate')
           }
         >
           {isActive ? <CheckBox /> : <CheckBoxOutlineBlank />}
+        </IconButton>
+      </Tooltip>
+      <Tooltip title={defaultT('scenario.hide').toString()} arrow={true}>
+        <IconButton
+          color={'primary'}
+          onClick={() => {
+            hide(id);
+          }}
+          aria-label={defaultT('scenario.hide')}
+        >
+          <Close />
         </IconButton>
       </Tooltip>
     </Box>

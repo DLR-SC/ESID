@@ -80,11 +80,7 @@ export default function CompartmentsRow({
       }}
     >
       <ListItemText
-        primary={
-          localization?.overrides && localization?.overrides[`compartments.${compartment}`]
-            ? customT(localization?.overrides[`compartments.${compartment}`])
-            : defaultT(`compartments.${compartment}`)
-        }
+        primary={compartment}
         disableTypography={true}
         sx={{
           typography: 'listElement',
