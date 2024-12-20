@@ -15,7 +15,7 @@ import {
   useGetModelQuery,
   useGetMultiParameterDefinitionsQuery,
   useGetInterventionTemplatesQuery,
-  useGetNodeListsQuery,
+  useGetNodeListsQuery, useGetNodesQuery,
 } from 'store/services/scenarioApi';
 import data from '../assets/lk_germany_reduced.geojson?url';
 import {GeoJSON, GeoJsonProperties} from 'geojson';
@@ -31,7 +31,7 @@ import {
   InterventionTemplates,
   Model,
   Models,
-  NodeLists,
+  NodeLists, Nodes,
   ParameterDefinition,
   Scenario,
   ScenarioPreview,
@@ -42,12 +42,11 @@ import {
   removeScenario,
   selectCompartment,
   selectDate,
+  selectDistrict,
   selectScenario,
-  setActiveScenario,
   setMinMaxDates,
-  setScenarioColors,
   setStartDate,
-  showScenario,
+  updateScenario,
 } from './store/DataSelectionSlice';
 import theme from './util/Theme';
 import {AuthContext} from 'react-oauth2-code-pkce';
@@ -72,6 +71,7 @@ export const DataContext = createContext<{
   compartments: Compartments | undefined;
   npis: InterventionTemplates | undefined;
   nodeLists: NodeLists | undefined;
+  nodes: Nodes | undefined;
 }>({
   geoData: undefined,
   mapData: undefined,
@@ -90,11 +90,13 @@ export const DataContext = createContext<{
   compartments: undefined,
   npis: undefined,
   nodeLists: undefined,
+  nodes: undefined,
 });
 
 // Create a provider component
 export const DataProvider = ({children}: {children: React.ReactNode}) => {
-  const {t: defaultT} = useTranslation();
+  const {t: defaultT, i18n} = useTranslation();
+  const {t: tBackend} = useTranslation('backend');
   const dispatch = useAppDispatch();
 
   const [geoData, setGeoData] = useState<GeoJSON>();
@@ -106,7 +108,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
     dispatch(setToken(token));
   }, [dispatch, token]);
 
-  const selectedDistrict = useAppSelector((state) => state.dataSelection.district.ags);
+  const selectedDistrict = useAppSelector((state) => state.dataSelection.district.id);
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
   const scenariosState = useAppSelector((state) => state.dataSelection.scenarios);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
@@ -118,6 +120,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
   const {data: compartments} = useGetCompartmentsQuery();
   const {data: npis} = useGetInterventionTemplatesQuery();
   const {data: nodeLists} = useGetNodeListsQuery();
+  const {data: nodes} = useGetNodesQuery();
 
   useEffect(() => {
     if (scenarios) {
@@ -129,14 +132,33 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
 
       for (const scenario of scenarios) {
         if (!scenariosState[scenario.id]) {
-          dispatch(addScenario({id: scenario.id, state: {shown: false, active: false, colors: []}}));
+          dispatch(
+            addScenario({
+              id: scenario.id,
+              state: {
+                name: i18n.exists(`scenario-names.${scenario.name}`, {ns: 'backend'})
+                  ? tBackend(`scenario-names.${scenario.name}`)
+                  : scenario.name,
+                description: scenario.description,
+                visibility: 'hidden',
+                colors: [],
+              },
+            })
+          );
         }
       }
     }
-  }, [dispatch, scenarios, scenariosState]);
+  }, [dispatch, i18n, scenarios, scenariosState, tBackend]);
 
   const caseDataId = scenarios?.find((scenario) => scenario.name === 'casedata')?.id;
   const {data: caseDataScenario} = useGetScenarioQuery(caseDataId!, {skip: !caseDataId});
+
+  useEffect(() => {
+    const node = nodes?.find((node) => node.name === '00000');
+    if (node) {
+      dispatch(selectDistrict({id: node.id, ags: node.name, name: '', type: ''}));
+    }
+  }, [dispatch, nodes]);
 
   const {data: referenceDateValues} = useGetScenarioInfectionDataQuery(
     {
@@ -158,7 +180,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
   const activeScenarios = useMemo(() => {
     return (
       Object.entries(scenariosState)
-        .filter(([_, value]) => value.active && value.shown)
+        .filter(([_, value]) => value.visibility === 'faceUp' || value.visibility === 'faceDown')
         .map(([key]) => key) ?? []
     );
   }, [scenariosState]);
@@ -216,7 +238,6 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
       query: {
         startDate: selectedDate!,
         endDate: selectedDate!,
-        percentiles: ['50'],
         compartments: [selectedCompartment!],
       },
     },
@@ -238,8 +259,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
   // Try to set at least one active scenario.
   useEffect(() => {
     if (activeScenarios?.length === 0 && caseDataScenario) {
-      dispatch(showScenario(caseDataScenario.id));
-      dispatch(setActiveScenario({id: caseDataScenario.id, state: true}));
+      dispatch(updateScenario({id: caseDataScenario.id, state: {visibility: 'faceUp'}}));
     }
   }, [activeScenarios, caseDataScenario, dispatch]);
 
@@ -253,13 +273,13 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
   // Set scenario colors
   useEffect(() => {
     if (caseDataScenario) {
-      dispatch(setScenarioColors({id: caseDataScenario.id, colors: theme.custom.scenarios[0]}));
+      dispatch(updateScenario({id: caseDataScenario.id, state: {colors: theme.custom.scenarios[0]}}));
     }
 
     scenarios?.forEach((scenario, index) => {
       if (scenario.id !== caseDataScenario?.id) {
         const colorIndex = (index + 1) % theme.custom.scenarios.length; // +1 to avoid using the first predefined color set
-        dispatch(setScenarioColors({id: scenario.id, colors: theme.custom.scenarios[colorIndex]}));
+        dispatch(updateScenario({id: scenario.id, state: {colors: theme.custom.scenarios[colorIndex]}}));
       }
     });
   }, [caseDataScenario, dispatch, scenarios]);
@@ -375,6 +395,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
           compartments,
           npis,
           nodeLists,
+          nodes,
         }),
         [
           geoData,
@@ -394,6 +415,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
           compartments,
           npis,
           nodeLists,
+          nodes,
         ]
       )}
     >

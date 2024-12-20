@@ -13,9 +13,12 @@ import {GroupFilter} from 'types/group';
  */
 export type AGS = string;
 
+export type ScenarioVisibility = 'faceUp' | 'faceDown' | 'inLibrary' | 'hidden';
+
 export interface ScenarioState {
-  active: boolean;
-  shown: boolean;
+  name: string;
+  description: string;
+  visibility: ScenarioVisibility;
   colors: Array<string>;
 }
 
@@ -26,6 +29,7 @@ export interface ScenarioState {
  */
 export interface DataSelection {
   district: {
+    id: string;
     ags: AGS;
     name: string;
     type: string;
@@ -43,7 +47,7 @@ export interface DataSelection {
 }
 
 const initialState: DataSelection = {
-  district: {ags: '00000', name: '', type: ''},
+  district: {id: '', ags: '00000', name: '', type: ''},
   date: null,
   scenario: null,
   compartment: null,
@@ -76,70 +80,17 @@ export const DataSelectionSlice = createSlice({
 
       delete state.scenarios[action.payload];
     },
-    setActiveScenario(state, action: PayloadAction<{id: string; state: boolean}>) {
+    updateScenario(state, action: PayloadAction<{id: string; state: Partial<ScenarioState>}>) {
       if (!state.scenarios) {
         state.scenarios = {};
       }
 
-      if (!state.scenarios[action.payload.id]) {
-        state.scenarios[action.payload.id] = {
-          active: false,
-          shown: false,
-          colors: [],
-        };
-      }
-
-      state.scenarios[action.payload.id] = {...state.scenarios[action.payload.id], active: action.payload.state};
-    },
-    showScenario(state, action: PayloadAction<string>) {
-      if (!state.scenarios) {
-        state.scenarios = {};
-      }
-
-      if (!state.scenarios[action.payload]) {
-        state.scenarios[action.payload] = {
-          active: false,
-          shown: false,
-          colors: [],
-        };
-      }
-
-      state.scenarios[action.payload] = {...state.scenarios[action.payload], shown: true};
-    },
-    hideScenario(state, action: PayloadAction<string>) {
-      if (!state.scenarios) {
-        state.scenarios = {};
-      }
-
-      if (!state.scenarios[action.payload]) {
-        state.scenarios[action.payload] = {
-          active: false,
-          shown: false,
-          colors: [],
-        };
-      }
-
-      state.scenarios[action.payload] = {...state.scenarios[action.payload], shown: false};
-    },
-    setScenarioColors(state, action: PayloadAction<{id: string; colors: Array<string>}>) {
-      if (!state.scenarios) {
-        state.scenarios = {};
-      }
-
-      if (!state.scenarios[action.payload.id]) {
-        state.scenarios[action.payload.id] = {
-          active: false,
-          shown: false,
-          colors: [],
-        };
-      }
-
-      state.scenarios[action.payload.id] = {...state.scenarios[action.payload.id], colors: action.payload.colors};
+      state.scenarios[action.payload.id] = {...state.scenarios[action.payload.id], ...action.payload.state};
     },
     setGroupFilters(state, action: PayloadAction<Record<string, GroupFilter>>) {
       state.groupFilters = action.payload;
     },
-    selectDistrict(state, action: PayloadAction<{ags: AGS; name: string; type: string}>) {
+    selectDistrict(state, action: PayloadAction<{id: string; ags: AGS; name: string; type: string}>) {
       state.district = action.payload;
     },
     selectDate(state, action: PayloadAction<string>) {
@@ -216,9 +167,8 @@ export const DataSelectionSlice = createSlice({
 export const {
   addScenario,
   removeScenario,
+  updateScenario,
   selectDistrict,
-  setActiveScenario,
-  setScenarioColors,
   setGroupFilters,
   selectDate,
   previousDay,
@@ -231,8 +181,6 @@ export const {
   setGroupFilter,
   deleteGroupFilter,
   toggleGroupFilter,
-  showScenario,
-  hideScenario,
 } = DataSelectionSlice.actions;
 
 export default DataSelectionSlice.reducer;

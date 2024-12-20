@@ -7,12 +7,11 @@ import React, {useContext, useEffect, useMemo, useState} from 'react';
 import {NumberFormatter} from 'util/hooks';
 import {useTranslation} from 'react-i18next';
 import {
-  hideScenario,
   selectCompartment,
   selectScenario,
-  setActiveScenario,
   setGroupFilters,
   toggleCompartmentExpansion,
+  updateScenario,
 } from 'store/DataSelectionSlice';
 import {DataContext} from 'DataContext';
 import {ScrollSync} from 'react-scroll-sync';
@@ -71,30 +70,26 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
     }
     return (
       Object.entries(scenariosState)
-        .filter(([_, scenario]) => scenario.shown)
+        .filter(([_, scenario]) => scenario.visibility === 'faceUp' || scenario.visibility === 'faceDown')
         .map(([id, scenario]) => {
-          const apiScenario = scenarioData.find((s) => s.id === id);
-          let name = apiScenario?.name ?? 'unknown';
-          if (i18nBackend.exists(`scenario-names.${apiScenario?.name}`, {ns: 'backend'})) {
-            name = tBackend(`scenario-names.${apiScenario!.name}`);
-          }
-
           return {
             id: id,
-            name: name,
+            name: scenario.name,
             color: scenario.colors[0],
-            active: scenario.shown && scenario.active,
+            active: scenario.visibility == 'faceUp',
           };
         }) ?? []
     );
-  }, [i18nBackend, scenarioData, scenariosState, tBackend]);
+  }, [scenarioData, scenariosState]);
 
   const compartmentNames = useMemo(() => {
     return (
       compartments?.map((compartment) => {
-        return i18nBackend.exists(`infection-states.${compartment.name}`, {ns: 'backend'})
+        const name = i18nBackend.exists(`infection-states.${compartment.name}`, {ns: 'backend'})
           ? tBackend(`infection-states.${compartment.name}`)
           : compartment.name;
+
+        return {id: compartment.id, name};
       }) ?? []
     );
   }, [compartments, i18nBackend, tBackend]);
@@ -106,7 +101,7 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
         ? tBackend(`infection-states.${referenceDate.compartment}`)
         : referenceDate.compartment!;
 
-      result[key] = referenceDate.values['50'];
+      result[key] = referenceDate.value;
     });
     return result;
   }, [i18nBackend, referenceDateValues, tBackend]);
@@ -131,13 +126,13 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
     const result: Record<string, Record<string, number | null>> = {};
     Object.keys(scenariosState).forEach((id) => {
       result[id] = {};
-      compartmentNames.forEach((name) => (result[id][name] = null));
+      compartmentNames.forEach((c) => (result[id][c.id] = null));
     });
 
     Object.entries(scenarioCardData ?? {}).forEach(([id, infectionData]) => {
       infectionData.forEach((entry) => {
         if (entry.compartment) {
-          result[id][entry.compartment] = entry.values['50']!;
+          result[id][entry.compartment] = entry.value;
         }
       });
     });
@@ -243,8 +238,8 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
                   buttonTexts={{clicked: t('less'), unclicked: t('more')}}
                   isDisabled={compartmentNames.length <= minCompartmentsRows}
                   handleClick={() => {
-                    if (compartmentNames.indexOf(selectedCompartment ?? '') >= minCompartmentsRows) {
-                      dispatch(selectCompartment(compartmentNames[0]));
+                    if (compartmentNames.map((c) => c.id).indexOf(selectedCompartment ?? '') >= minCompartmentsRows) {
+                      dispatch(selectCompartment(compartmentNames[0].id));
                     }
                     dispatch(toggleCompartmentExpansion());
                   }}
@@ -259,8 +254,22 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
               filterValues={filterValues}
               selectedCompartmentId={selectedCompartment}
               scenarios={scenarios}
-              setActiveScenario={(newActiveScenarios) => dispatch(setActiveScenario(newActiveScenarios))}
-              hide={(scenarioId) => dispatch(hideScenario(scenarioId))}
+              setActiveScenario={(newActiveScenarios) =>
+                dispatch(
+                  updateScenario({
+                    id: newActiveScenarios.id,
+                    state: {visibility: newActiveScenarios.state ? 'faceUp' : 'faceDown'},
+                  })
+                )
+              }
+              hide={(scenarioId) =>
+                dispatch(
+                  updateScenario({
+                    id: scenarioId,
+                    state: {visibility: 'inLibrary'},
+                  })
+                )
+              }
               minCompartmentsRows={minCompartmentsRows}
               maxCompartmentsRows={maxCompartmentsRows}
               localization={localization}

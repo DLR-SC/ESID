@@ -11,7 +11,6 @@ import {useTranslation} from 'react-i18next';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
-import {showScenario} from '../../store/DataSelectionSlice';
 import {useAppDispatch, useAppSelector} from '../../store/hooks';
 import IconButton from '@mui/material/IconButton';
 import Close from '@mui/icons-material/Close';
@@ -23,11 +22,11 @@ import Dialog from '@mui/material/Dialog';
 import NewScenarioDialog, {NewScenarioData} from './NewScenarioDialog';
 import {InterventionTemplates, Models, NodeLists, Scenario} from '../../store/services/APITypes';
 import {useGetMultiScenariosQuery} from '../../store/services/scenarioApi';
-import {useArrayState} from 'rooks';
+import {updateScenario} from '../../store/DataSelectionSlice';
 
 export default function ScenarioLibrary(): JSX.Element {
+  const dispatch = useAppDispatch();
   const {t} = useTranslation();
-  const {t: tBackend} = useTranslation('backend');
   const theme = useTheme();
 
   const {scenarios, simulationModels, npis, nodeLists} = useContext(DataContext);
@@ -35,15 +34,12 @@ export default function ScenarioLibrary(): JSX.Element {
 
   const {data: completeScenarios} = useGetMultiScenariosQuery(scenarios?.map((s) => s.id) ?? [], {skip: !scenarios});
 
-  const [userScenarios, userScenarioControls] = useArrayState<{id: string; name: string}>(
-    scenarios
-      ?.filter((s) => s.name === 'casedata')
-      ?.map((s) => ({id: s.id, name: tBackend('scenario-names.casedata')})) ?? []
-  );
-
   const scenarioCreated = useCallback(
     (data: NewScenarioData) => {
       const result = Object.values(completeScenarios ?? {}).find((scenario: Scenario) => {
+        if (scenario.name === 'casedata') {
+          return false;
+        }
         if (scenario.linkedInterventions.length === data.npis.length) {
           return data.npis.every((id) =>
             scenario.linkedInterventions.find((intervention) => intervention.interventionId === id)
@@ -53,21 +49,29 @@ export default function ScenarioLibrary(): JSX.Element {
       });
 
       if (result) {
-        userScenarioControls.push({id: result.id, name: data.name});
+        dispatch(
+          updateScenario({
+            id: result.id,
+            state: {
+              name: data.name,
+              description: data.description,
+              visibility: 'inLibrary',
+            },
+          })
+        );
       }
     },
-    [completeScenarios, userScenarioControls]
+    [completeScenarios]
   );
 
   const hiddenScenarios = useMemo(() => {
     return Object.entries(scenariosState)
-      .filter(([id]) => userScenarios.find((s) => s.id === id))
-      .filter(([_, value]) => !value.shown)
-      .map(([key]) => ({
+      .filter(([_, value]) => value.visibility === 'inLibrary')
+      .map(([key, scenario]) => ({
         id: key,
-        name: userScenarios?.find((scenario) => scenario.id === key)?.name ?? 'unknown',
+        name: scenario.name,
       }));
-  }, [scenariosState, userScenarios]);
+  }, [scenariosState]);
 
   const anchorRef = useRef<HTMLButtonElement>(null);
 
@@ -240,7 +244,7 @@ function LibraryCard(props: Readonly<{id: string; name: string}>): JSX.Element {
               background: '#EEEEEEEE',
             },
           }}
-          onClick={() => dispatch(showScenario(props.id))}
+          onClick={() => dispatch(updateScenario({id: props.id, state: {visibility: 'faceDown'}}))}
         >
           <Box
             id={`card-front-${props.id}`}

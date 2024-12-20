@@ -18,20 +18,20 @@ export default function LineChartContainer() {
   const theme = useTheme();
   const dispatch = useAppDispatch();
 
-  const {lineChartData, scenarios} = useContext(DataContext);
+  const {lineChartData, scenarios, compartments} = useContext(DataContext);
 
+  const scenariosState = useAppSelector((state) => state.dataSelection.scenarios);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
   const selectedDate = useAppSelector((state) => state.dataSelection.date);
   const referenceDay = useAppSelector((state) => state.dataSelection.simulationStart);
   const minDate = useAppSelector((state) => state.dataSelection.minDate);
   const maxDate = useAppSelector((state) => state.dataSelection.maxDate);
-  const scenarioColors = useAppSelector((state) => state.dataSelection.scenarioColors);
 
   const [referenceDayBottomPosition, setReferenceDayBottomPosition] = useState<number>(0);
 
   const yAxisLabel = useMemo(() => {
-    return t(`infection-states.${selectedCompartment}`);
-  }, [selectedCompartment, t]);
+    return t(`infection-states.${compartments?.find((c) => c.id === selectedCompartment)?.name}`);
+  }, [compartments, selectedCompartment, t]);
 
   const mappedLineChartData = useMemo(() => {
     return Object.entries(lineChartData ?? {}).flatMap(([id, data]) => {
@@ -42,12 +42,12 @@ export default function LineChartContainer() {
         name: scenarios?.find((scenario) => scenario.id === id)?.name,
         visible: true,
         stroke: {
-          color: scenarioColors?.[id]?.[0] ?? 'transparent',
+          color: scenariosState[id]?.colors[0] ?? 'transparent',
         },
         valueYField: id,
-        values: infectionDataToLineChartData(data, ['50']),
+        values: infectionDataToLineChartData(data),
       });
-
+      /*
       const percentiles: Array<{lower: string; upper: string}> = [];
 
       if (data.length > 0) {
@@ -62,18 +62,18 @@ export default function LineChartContainer() {
           seriesId: `${id}-${percentile.lower}-${percentile.upper}`,
           name: scenarios?.find((scenario) => scenario.id === id)?.name,
           visible: true,
-          fill: scenarioColors?.[id]?.[0] ?? 'transparent',
+          fill: scenariosState[id]?.colors[0] ?? 'transparent',
           fillOpacity: 0.2 + 0.6 * (index / percentiles.length),
           valueYField: 'percentileUp',
           openValueYField: 'percentileDown',
           stroke: {strokeWidth: 0},
-          values: infectionDataToLineChartData(data, [percentile.lower, percentile.upper]),
+          values: infectionDataToLineChartData(data),
         });
-      });
+      });*/
 
       return lines;
     });
-  }, [lineChartData, scenarioColors, scenarios]);
+  }, [lineChartData, scenarios, scenariosState]);
 
   // Set reference day in store
   useEffect(() => {
@@ -102,13 +102,11 @@ export default function LineChartContainer() {
 }
 
 function infectionDataToLineChartData(
-  data: InfectionData,
-  percentiles: Array<string>
+  data: InfectionData
+  // percentiles: Array<string>
 ): Array<{day: string; value: number | Array<number>}> {
   return data.map((entry) => ({
     day: entry.date!,
-    value: Object.entries(entry.values)
-      .filter(([key]) => percentiles.includes(key))
-      .map(([, value]) => value),
+    value: entry.value,
   }));
 }

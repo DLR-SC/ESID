@@ -14,7 +14,7 @@ interface CompartmentsRowsProps {
   compartmentsExpanded: boolean;
 
   /** Array of compartment names */
-  compartments: string[];
+  compartments: Array<{id: string; name: string}>;
 
   /** Currently selected compartment */
   selectedCompartment: string;
@@ -82,15 +82,15 @@ export default function CompartmentsRows({
             }}
             className='hide-scrollbar'
           >
-            {compartments.map((comp: string, id: number) => {
-              const selected = comp === selectedCompartment;
+            {compartments.map(({id, name}, index) => {
+              const selected = id === selectedCompartment;
               return (
                 <CompartmentsRow
                   key={id}
-                  id={id}
+                  id={index}
                   selected={selected}
-                  compartment={comp}
-                  value={GetFormattedAndTranslatedValues(compartmentValues ? compartmentValues[comp] : null)}
+                  compartment={{id, name}}
+                  value={GetFormattedAndTranslatedValues(compartmentValues ? compartmentValues[name] : null)}
                   compartmentsExpanded={compartmentsExpanded}
                   setSelectedCompartment={setSelectedCompartment}
                   minCompartmentsRows={minCompartmentsRows}

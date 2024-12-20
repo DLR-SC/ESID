@@ -51,7 +51,8 @@ export type InfectionDataEntry = {
   group?: string;
   compartment?: string;
   aggregation?: string;
-  values: Record<string, number>;
+  percentile: number;
+  value: number;
 };
 
 // Interventions ----------------------------------------------------------------------------------

@@ -15,7 +15,7 @@ interface CompartmentsRowProps {
   selected: boolean;
 
   /** Name of the compartment */
-  compartment: string;
+  compartment: {id: string; name: string};
 
   /** Value of the compartment */
   value: string;
@@ -76,11 +76,11 @@ export default function CompartmentsRow({
       }}
       selected={selected}
       onClick={() => {
-        setSelectedCompartment(compartment);
+        setSelectedCompartment(compartment.id);
       }}
     >
       <ListItemText
-        primary={compartment}
+        primary={compartment.name}
         disableTypography={true}
         sx={{
           typography: 'listElement',
@@ -102,7 +102,7 @@ export default function CompartmentsRow({
         }}
       />
       <ListItemIcon
-        id={`info-button-${compartment}`}
+        id={`info-button-${compartment.id}`}
         sx={{
           minWidth: 'auto',
         }}

@@ -31,7 +31,7 @@ export default function MapContainer() {
   const theme = useTheme();
   const dispatch = useAppDispatch();
 
-  const {geoData, mapData, searchBarData} = useContext(DataContext);
+  const {geoData, mapData, searchBarData, nodes, compartments} = useContext(DataContext);
 
   const storeSelectedArea = useAppSelector((state) => state.dataSelection.district);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
@@ -70,15 +70,19 @@ export default function MapContainer() {
 
   // Set selected area in store
   useEffect(() => {
-    dispatch(
-      selectDistrict({
-        ags: String(selectedArea?.['RS']),
-        name: String(selectedArea?.['GEN']),
-        type: String(selectedArea?.['BEZ']),
-      })
-    );
+    const id = nodes?.find((node) => node.name === selectedArea?.['RS']);
+    if (id) {
+      dispatch(
+        selectDistrict({
+          id: String(id.id),
+          ags: String(selectedArea?.['RS']),
+          name: String(selectedArea?.['GEN']),
+          type: String(selectedArea?.['BEZ']),
+        })
+      );
+    }
     // This effect should only run when the selectedArea changes
-  }, [selectedArea, dispatch]);
+  }, [selectedArea, dispatch, nodes]);
 
   // Set legend in store
   useEffect(() => {
@@ -89,12 +93,14 @@ export default function MapContainer() {
   const calculateToolTip = useCallback(
     (regionData: GeoJsonProperties) => {
       const bez = t(`BEZ.${regionData?.BEZ}`);
-      const compartmentName = tBackend(`infection-states.${selectedCompartment}`);
+      const compartmentName = tBackend(
+        `infection-states.${compartments?.find((c) => c.id === selectedCompartment)?.name}`
+      );
       return selectedScenario !== null && selectedCompartment
         ? `${bez} {GEN}\n${compartmentName}: ${formatNumber(Number(regionData?.value))}`
         : `${bez} {GEN}`;
     },
-    [formatNumber, selectedCompartment, selectedScenario, t, tBackend]
+    [compartments, formatNumber, selectedCompartment, selectedScenario, t, tBackend]
   );
 
   const calculateToolTipFetching = useCallback(
@@ -119,8 +125,8 @@ export default function MapContainer() {
   );
 
   const data = useMemo(() => {
-    return mapData?.map((entry) => ({id: entry.node ?? '', value: entry.values['50'] ?? 0}));
-  }, [mapData]);
+    return mapData?.map((entry) => ({id: nodes?.find((n) => n.id === entry.node)?.name ?? '', value: entry.value}));
+  }, [mapData, nodes]);
 
   return (
     <Stack
