@@ -15,7 +15,8 @@ import {
   useGetModelQuery,
   useGetMultiParameterDefinitionsQuery,
   useGetInterventionTemplatesQuery,
-  useGetNodeListsQuery, useGetNodesQuery,
+  useGetNodeListsQuery,
+  useGetNodesQuery,
 } from 'store/services/scenarioApi';
 import data from '../assets/lk_germany_reduced.geojson?url';
 import {GeoJSON, GeoJsonProperties} from 'geojson';
@@ -31,7 +32,8 @@ import {
   InterventionTemplates,
   Model,
   Models,
-  NodeLists, Nodes,
+  NodeLists,
+  Nodes,
   ParameterDefinition,
   Scenario,
   ScenarioPreview,
@@ -121,6 +123,12 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
   const {data: npis} = useGetInterventionTemplatesQuery();
   const {data: nodeLists} = useGetNodeListsQuery();
   const {data: nodes} = useGetNodesQuery();
+  const {data: groups} = useGetGroupsQuery();
+  const {data: groupCategories} = useGetGroupCategoriesQuery();
+
+  const totalGroup = useMemo(() => {
+    return groups?.find((group) => group.name === 'total');
+  }, [groups]);
 
   useEffect(() => {
     if (scenarios) {
@@ -170,10 +178,11 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
         endDate: referenceDate!,
         nodes: [selectedDistrict],
         percentiles: ['50'],
+        groups: totalGroup ? [totalGroup.id] : [],
       },
     } as InfectionDataParameters,
     {
-      skip: !caseDataScenario || !referenceDate,
+      skip: !caseDataScenario || !referenceDate || !totalGroup,
     }
   );
 
@@ -193,10 +202,11 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
         endDate: selectedDate!,
         nodes: [selectedDistrict],
         percentiles: ['50'],
+        groups: totalGroup ? [totalGroup.id] : [],
       },
     },
     {
-      skip: !caseDataScenario || !referenceDate,
+      skip: !caseDataScenario || !referenceDate || !totalGroup,
     }
   );
 
@@ -225,10 +235,11 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
       query: {
         nodes: [selectedDistrict],
         compartments: [selectedCompartment!],
+        groups: totalGroup ? [totalGroup.id] : [],
       },
     },
     {
-      skip: !selectedCompartment,
+      skip: !selectedCompartment || !totalGroup,
     }
   );
 
@@ -239,9 +250,10 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
         startDate: selectedDate!,
         endDate: selectedDate!,
         compartments: [selectedCompartment!],
+        groups: totalGroup ? [totalGroup.id] : [],
       },
     },
-    {skip: !selectedScenario || !selectedDate || !selectedCompartment}
+    {skip: !selectedScenario || !selectedDate || !selectedCompartment || !totalGroup}
   );
 
   const {data: selectedScenarioData} = useGetScenarioQuery(selectedScenario!, {skip: !selectedScenario});
@@ -253,8 +265,6 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
     selectedSimulationModel?.parameterDefinitions ?? [],
     {skip: !selectedSimulationModel}
   );
-  const {data: groups} = useGetGroupsQuery();
-  const {data: groupCategories} = useGetGroupCategoriesQuery();
 
   // Try to set at least one active scenario.
   useEffect(() => {
