@@ -38,6 +38,10 @@ export default function MapContainer() {
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
   const storeHeatLegend = useAppSelector((state) => state.userPreference.selectedHeatmap);
 
+  const germanyNode = useMemo(() => {
+    return nodes?.find((node) => node.name === '00000');
+  }, []);
+
   const defaultValue = useMemo(() => {
     return {
       RS: '00000',
@@ -125,8 +129,13 @@ export default function MapContainer() {
   );
 
   const data = useMemo(() => {
-    return mapData?.map((entry) => ({id: nodes?.find((n) => n.id === entry.node)?.name ?? '', value: entry.value}));
-  }, [mapData, nodes]);
+    return mapData
+      ?.filter((entry) => entry.node !== germanyNode?.id)
+      ?.map((entry) => ({
+        id: nodes?.find((n) => n.id === entry.node)?.name ?? '',
+        value: entry.value,
+      }));
+  }, [germanyNode?.id, mapData, nodes]);
 
   return (
     <Stack
