@@ -127,7 +127,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
   const {data: groupCategories} = useGetGroupCategoriesQuery();
 
   const totalGroup = useMemo(() => {
-    return groups?.find((group) => group.name === 'total');
+    return groups?.find((group) => group.name === 'Total');
   }, [groups]);
 
   useEffect(() => {
