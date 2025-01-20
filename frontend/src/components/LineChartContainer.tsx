@@ -47,7 +47,7 @@ export default function LineChartContainer() {
         valueYField: id,
         values: infectionDataToLineChartData(data),
       });
-      /*
+
       const percentiles: Array<{lower: string; upper: string}> = [];
 
       if (data.length > 0) {
@@ -69,7 +69,9 @@ export default function LineChartContainer() {
           stroke: {strokeWidth: 0},
           values: infectionDataToLineChartData(data),
         });
-      });*/
+      });
+
+      console.log(lines);
 
       return lines;
     });

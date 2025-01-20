@@ -236,6 +236,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
         nodes: [selectedDistrict],
         compartments: [selectedCompartment!],
         groups: totalGroup ? [totalGroup.id] : [],
+        percentiles: ['50'],
       },
     },
     {
