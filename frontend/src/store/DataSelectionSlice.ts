@@ -30,7 +30,7 @@ export interface ScenarioState {
 export interface DataSelection {
   district: {
     id: string;
-    ags: AGS;
+    nuts: AGS;
     name: string;
     type: string;
   };
@@ -47,7 +47,7 @@ export interface DataSelection {
 }
 
 const initialState: DataSelection = {
-  district: {id: '', ags: '00000', name: '', type: ''},
+  district: {id: '', nuts: '00000', name: '', type: ''},
   date: null,
   scenario: null,
   compartment: null,
@@ -90,7 +90,7 @@ export const DataSelectionSlice = createSlice({
     setGroupFilters(state, action: PayloadAction<Record<string, GroupFilter>>) {
       state.groupFilters = action.payload;
     },
-    selectDistrict(state, action: PayloadAction<{id: string; ags: AGS; name: string; type: string}>) {
+    selectDistrict(state, action: PayloadAction<{id: string; nuts: AGS; name: string; type: string}>) {
       state.district = action.payload;
     },
     selectDate(state, action: PayloadAction<string>) {

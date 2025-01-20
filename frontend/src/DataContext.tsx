@@ -131,6 +131,15 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
   }, [groups]);
 
   useEffect(() => {
+    if (!selectedDistrict) {
+      const germanyNode = nodes?.find((node) => node.name === '00000');
+      if (germanyNode) {
+        dispatch(selectDistrict({...germanyNode, type: ''}));
+      }
+    }
+  }, [dispatch, nodes, selectedDistrict]);
+
+  useEffect(() => {
     if (scenarios) {
       for (const [id, _] of Object.entries(scenariosState)) {
         if (!scenarios.find((s) => s.id === id)) {
@@ -164,7 +173,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
   useEffect(() => {
     const node = nodes?.find((node) => node.name === '00000');
     if (node) {
-      dispatch(selectDistrict({id: node.id, ags: node.name, name: '', type: ''}));
+      dispatch(selectDistrict({id: node.id, nuts: node.name, name: '', type: ''}));
     }
   }, [dispatch, nodes]);
 

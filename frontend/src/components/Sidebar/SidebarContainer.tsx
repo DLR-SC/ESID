@@ -49,7 +49,7 @@ export default function MapContainer() {
 
   const [selectedArea, setSelectedArea] = useState<GeoJsonProperties>(
     storeSelectedArea.name != ''
-      ? {RS: storeSelectedArea.ags, GEN: storeSelectedArea.name, BEZ: storeSelectedArea.type}
+      ? {RS: storeSelectedArea.nuts, GEN: storeSelectedArea.name, BEZ: storeSelectedArea.type}
       : defaultValue
   );
   const [aggregatedMax, setAggregatedMax] = useState<number>(1);
@@ -75,7 +75,7 @@ export default function MapContainer() {
       dispatch(
         selectDistrict({
           id: String(id.id),
-          ags: String(selectedArea?.['RS']),
+          nuts: String(selectedArea?.['RS']),
           name: String(selectedArea?.['GEN']),
           type: String(selectedArea?.['BEZ']),
         })
