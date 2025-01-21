@@ -71,8 +71,6 @@ export default function LineChartContainer() {
         });
       });
 
-      console.log(lines);
-
       return lines;
     });
   }, [lineChartData, scenarios, scenariosState]);

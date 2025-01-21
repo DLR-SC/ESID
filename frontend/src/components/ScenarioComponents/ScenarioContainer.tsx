@@ -3,13 +3,14 @@
 
 import Box from '@mui/material/Box';
 import {darken, useTheme} from '@mui/material/';
-import React, {useContext, useEffect, useMemo, useState} from 'react';
+import React, {useContext, useEffect, useMemo} from 'react';
 import {NumberFormatter} from 'util/hooks';
 import {useTranslation} from 'react-i18next';
 import {
   selectCompartment,
   selectScenario,
   setGroupFilters,
+  setStartDate,
   toggleCompartmentExpansion,
   updateScenario,
 } from 'store/DataSelectionSlice';
@@ -25,6 +26,7 @@ import GeneralButton from './ExpandedButtonComponents/ExpandedButton';
 import ReferenceDatePicker from './ReferenceDatePickerComponents.tsx/ReferenceDatePicker';
 import {useAppDispatch, useAppSelector} from 'store/hooks';
 import ScenarioLibrary from './ScenarioLibrary';
+import {dateToISOString} from '../../util/util';
 
 interface ScenarioContainerProps {
   /** The minimum number of compartment rows.*/
@@ -59,9 +61,8 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
   const scenariosState = useAppSelector((state) => state.dataSelection.scenarios);
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
-  const storeStartDay = useAppSelector((state) => state.dataSelection.simulationStart);
+  const referenceDay = useAppSelector((state) => state.dataSelection.simulationStart);
 
-  const [startDay, setStartDay] = useState<string | null>(storeStartDay ?? '2024-07-08');
   const [resizeRef, resizeBoundingRect] = useBoundingclientrectRef();
 
   const scenarios = useMemo(() => {
@@ -202,8 +203,8 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
               }}
             >
               <ReferenceDatePicker
-                startDay={startDay}
-                setStartDay={setStartDay}
+                startDay={referenceDay}
+                setStartDay={(day) => dispatch(setStartDate(day ?? dateToISOString(new Date())))}
                 minDate={useAppSelector((state) => state.dataSelection.minDate)}
                 maxDate={useAppSelector((state) => state.dataSelection.maxDate)}
                 localization={localization}

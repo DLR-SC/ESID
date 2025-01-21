@@ -2,12 +2,11 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import Box from '@mui/material/Box';
-import {Dispatch, SetStateAction} from 'react';
+import React, {Dispatch} from 'react';
 import dayjs, {Dayjs} from 'dayjs';
 import {DatePicker} from '@mui/x-date-pickers';
 import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
 import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
-import React from 'react';
 import {Localization} from 'types/localization';
 import {useTranslation} from 'react-i18next';
 import {dateToISOString} from 'util/util';
@@ -17,7 +16,7 @@ interface DatePickerProps {
   startDay: string | null;
 
   /** Function used to set the new start date */
-  setStartDay: Dispatch<SetStateAction<string | null>>;
+  setStartDay: Dispatch<string | null>;
 
   /** Minimum date pickable for which some data are provided */
   minDate: string | null;
@@ -37,7 +36,11 @@ export default function ReferenceDatePicker({
   setStartDay,
   minDate,
   maxDate,
-  localization = {formatNumber: (value: number) => value.toString(), customLang: 'global', overrides: {}},
+  localization = {
+    formatNumber: (value: number) => value.toString(),
+    customLang: 'global',
+    overrides: {},
+  },
 }: DatePickerProps) {
   // Function used to update the starting date
   const {t: defaultT} = useTranslation();

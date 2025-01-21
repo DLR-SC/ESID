@@ -13,7 +13,7 @@ export interface UserPreference {
 const initialState: UserPreference = {
   // Heatmaps are initialized in the HeatLegendEdit Component
   selectedHeatmap: {
-    name: 'uninitialized',
+    name: 'Default',
     isNormalized: true,
     steps: [
       {color: 'rgb(255,255,255)', value: 0},

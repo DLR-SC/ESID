@@ -90,7 +90,7 @@ export default function CompartmentsRows({
                   id={index}
                   selected={selected}
                   compartment={{id, name}}
-                  value={GetFormattedAndTranslatedValues(compartmentValues ? compartmentValues[name] : null)}
+                  value={GetFormattedAndTranslatedValues(compartmentValues ? compartmentValues[id] : null)}
                   compartmentsExpanded={compartmentsExpanded}
                   setSelectedCompartment={setSelectedCompartment}
                   minCompartmentsRows={minCompartmentsRows}
