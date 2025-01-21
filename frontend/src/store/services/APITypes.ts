@@ -18,6 +18,7 @@ export type NewScenario = {
   modelParameters: Array<ParameterValue>;
   nodeListId: string;
   linkedInterventions: Array<InterventionImplementation>;
+  percentiles: Array<number>;
 };
 
 export type Scenario = Required<NewScenario> &
@@ -26,7 +27,7 @@ export type Scenario = Required<NewScenario> &
     timestampSimulated: string;
   };
 
-export type ScenarioPreview = Pick<Scenario, 'id' | 'name' | 'description' | 'startDate' | 'endDate'>;
+export type ScenarioPreview = Pick<Scenario, 'id' | 'name' | 'description' | 'startDate' | 'endDate' | 'percentiles'>;
 
 export type InfectionDataParameters = {
   path: {

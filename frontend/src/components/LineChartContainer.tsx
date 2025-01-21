@@ -21,6 +21,7 @@ export default function LineChartContainer() {
   const {lineChartData, scenarios, compartments} = useContext(DataContext);
 
   const scenariosState = useAppSelector((state) => state.dataSelection.scenarios);
+  const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
   const selectedDate = useAppSelector((state) => state.dataSelection.date);
   const referenceDay = useAppSelector((state) => state.dataSelection.simulationStart);
@@ -48,32 +49,35 @@ export default function LineChartContainer() {
         values: infectionDataToLineChartData(data),
       });
 
-      const percentiles: Array<{lower: string; upper: string}> = [];
+      if (id === selectedScenario) {
+        const scenario = scenarios!.find((scenario) => scenario.id === id)!;
+        const percentiles: Array<{lower: number; upper: number}> = [];
 
-      if (data.length > 0) {
-        const bandLines = Object.keys(data[0]).filter((percentile) => percentile !== '50');
-        for (let i = 0; i < bandLines.length / 2; i++) {
-          percentiles.push({lower: bandLines[i], upper: bandLines[bandLines.length - 1 - i]});
+        if (scenario.percentiles.length > 0) {
+          const bandLines = scenario.percentiles.filter((percentile) => percentile !== 50);
+          for (let i = 0; i < bandLines.length / 2; i++) {
+            percentiles.push({lower: bandLines[i], upper: bandLines[bandLines.length - 1 - i]});
+          }
         }
-      }
 
-      percentiles.forEach((percentile, index) => {
-        lines.push({
-          seriesId: `${id}-${percentile.lower}-${percentile.upper}`,
-          name: scenarios?.find((scenario) => scenario.id === id)?.name,
-          visible: true,
-          fill: scenariosState[id]?.colors[0] ?? 'transparent',
-          fillOpacity: 0.2 + 0.6 * (index / percentiles.length),
-          valueYField: 'percentileUp',
-          openValueYField: 'percentileDown',
-          stroke: {strokeWidth: 0},
-          values: infectionDataToLineChartData(data),
+        percentiles.forEach((percentile, index) => {
+          lines.push({
+            seriesId: `${id}-${percentile.lower}-${percentile.upper}`,
+            name: `${scenariosState[id].name} (${percentile.lower} - ${percentile.upper})`,
+            visible: true,
+            fill: scenariosState[id]?.colors[0] ?? 'transparent',
+            fillOpacity: 0.2 + 0.6 * (index / percentiles.length),
+            valueYField: id + percentile.lower,
+            openValueYField: id + percentile.upper,
+            stroke: {strokeWidth: 0},
+            values: percentileDataToLineChartData(data, percentile.lower, percentile.upper),
+          });
         });
-      });
+      }
 
       return lines;
     });
-  }, [lineChartData, scenarios, scenariosState]);
+  }, [lineChartData, scenariosState, selectedScenario]);
 
   // Set reference day in store
   useEffect(() => {
@@ -101,12 +105,26 @@ export default function LineChartContainer() {
   );
 }
 
-function infectionDataToLineChartData(
-  data: InfectionData
-  // percentiles: Array<string>
-): Array<{day: string; value: number | Array<number>}> {
-  return data.map((entry) => ({
+function infectionDataToLineChartData(data: InfectionData): Array<{day: string; value: number}> {
+  return data
+    .filter((entry) => entry.percentile === 50)
+    .map((entry) => ({
+      day: entry.date!,
+      value: entry.value,
+    }));
+}
+
+function percentileDataToLineChartData(
+  data: InfectionData,
+  lower: number,
+  upper: number
+): Array<{day: string; value: number; openValue: number}> {
+  const lowerPs = data.filter((entry) => entry.percentile === lower).sort((a, b) => a.date!.localeCompare(b.date!));
+  const upperPs = data.filter((entry) => entry.percentile === upper).sort((a, b) => a.date!.localeCompare(b.date!));
+
+  return lowerPs.map((entry, i) => ({
     day: entry.date!,
     value: entry.value,
+    openValue: upperPs[i].value,
   }));
 }

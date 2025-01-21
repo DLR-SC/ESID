@@ -8,7 +8,7 @@ export interface LineChartData {
   /**
    * The values for the line chart.
    */
-  values: {day: string; value: number | number[]}[];
+  values: {day: string; value: number | number[]; openValue?: number | number[]}[];
 
   /**
    * The name of the line chart.

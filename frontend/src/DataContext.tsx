@@ -238,14 +238,21 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
     }
   );
 
+  const faceUpScenarios = useMemo(() => {
+    return (
+      Object.entries(scenariosState)
+        .filter(([_, value]) => value.visibility === 'faceUp')
+        .map(([key]) => key) ?? []
+    );
+  }, [scenariosState]);
+
   const {data: lineChartData} = useGetMultiScenarioInfectionDataQuery(
     {
-      pathIds: activeScenarios,
+      pathIds: faceUpScenarios,
       query: {
         nodes: [selectedDistrict],
         compartments: [selectedCompartment!],
         groups: totalGroup ? [totalGroup.id] : [],
-        percentiles: ['50'],
       },
     },
     {

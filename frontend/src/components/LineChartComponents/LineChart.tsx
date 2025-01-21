@@ -400,11 +400,8 @@ export default function LineChart({
         });
       } else if (serie.openValueYField) {
         serie.values.forEach((entry) => {
-          dataMap.set(entry.day, {...dataMap.get(entry.day), [serie.valueYField]: (entry.value as number[])[1]});
-          dataMap.set(entry.day, {
-            ...dataMap.get(entry.day),
-            [String(serie.openValueYField)]: (entry.value as number[])[0],
-          });
+          dataMap.set(entry.day, {...dataMap.get(entry.day), [serie.valueYField]: entry.value as number});
+          dataMap.set(entry.day, {...dataMap.get(entry.day), [serie.openValueYField!]: entry.openValue as number});
         });
       } else {
         serie.values.forEach((entry) => {
