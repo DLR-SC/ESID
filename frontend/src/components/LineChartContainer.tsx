@@ -39,7 +39,7 @@ export default function LineChartContainer() {
 
       lines.push({
         seriesId: id,
-        name: scenarios?.find((scenario) => scenario.id === id)?.name,
+        name: scenariosState[id].name,
         visible: true,
         stroke: {
           color: scenariosState[id]?.colors[0] ?? 'transparent',
