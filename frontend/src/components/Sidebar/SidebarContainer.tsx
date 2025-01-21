@@ -20,7 +20,7 @@ import SidebarTabs from './SidebarTabs';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import {selectDistrict} from 'store/DataSelectionSlice';
-import legendPresets from '../../../assets/heatmap_legend_presets.json?url';
+import legendPresets from '../../../assets/heatmap_legend_presets.json?raw';
 import {selectHeatmapLegend} from 'store/UserPreferenceSlice';
 import {GeoJsonProperties} from 'geojson';
 
@@ -36,11 +36,12 @@ export default function MapContainer() {
   const storeSelectedArea = useAppSelector((state) => state.dataSelection.district);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
+  const scenariosState = useAppSelector((state) => state.dataSelection.scenarios);
   const storeHeatLegend = useAppSelector((state) => state.userPreference.selectedHeatmap);
 
   const germanyNode = useMemo(() => {
     return nodes?.find((node) => node.name === '00000');
-  }, []);
+  }, [nodes]);
 
   const defaultValue = useMemo(() => {
     return {
@@ -137,6 +138,39 @@ export default function MapContainer() {
       }));
   }, [germanyNode?.id, mapData, nodes]);
 
+  const presets = useMemo(() => {
+    const presetList = JSON.parse(legendPresets) as unknown as Array<HeatmapLegend>;
+    presetList.forEach((legend) => {
+      if (legend.isNormalized) {
+        legend.steps.forEach((step) => {
+          //set step to normalized values
+          step.value = step.value / legend.steps[legend.steps.length - 1].value;
+        });
+      }
+    });
+    return presetList;
+  }, []);
+
+  const legends = useMemo(() => {
+    if (selectedScenario) {
+      const colors = scenariosState[selectedScenario]?.colors;
+      const stepCount = colors.length - 1;
+      const steps = [];
+      for (let j = 0; j < stepCount; j++) {
+        steps.push({
+          color: colors[stepCount - 1 - j],
+          value: j / (stepCount - 1),
+        });
+      }
+      const defaultLegend: HeatmapLegend = {name: 'Default', isNormalized: true, steps};
+      const result = [defaultLegend];
+      result.push(...presets);
+      return result;
+    } else {
+      return presets;
+    }
+  }, [presets, scenariosState, selectedScenario]);
+
   return (
     <Stack
       id='sidebar-root'
@@ -218,7 +252,7 @@ export default function MapContainer() {
                 setFixedLegendMaxValue={setFixedLegendMaxValue}
                 aggregatedMax={aggregatedMax}
               />
-              <HeatLegendEdit legend={legend} setLegend={setLegend} legendPresetsUrl={legendPresets} />
+              <HeatLegendEdit selectedLegend={legend} setSelectedLegend={setLegend} legends={legends} />
             </Grid>
           </Grid>
         </LoadingContainer>

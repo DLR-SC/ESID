@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, {useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useLayoutEffect, useMemo, useRef} from 'react';
 import Select, {SelectChangeEvent} from '@mui/material/Select';
 import EditIcon from '@mui/icons-material/Edit';
 import {
@@ -24,28 +24,23 @@ interface HeatLegendEditProps {
   /**
    * Function to set a new heatmap legend.
    */
-  setLegend: (legend: HeatmapLegend) => void;
+  setSelectedLegend: (legend: HeatmapLegend) => void;
 
   /**
    * The current heatmap legend to be edited.
    */
-  legend: HeatmapLegend;
+  selectedLegend: HeatmapLegend;
 
   /**
-   * Optional ID of the selected scenario. Defaults to null.
+   * The available legends.
    */
-  selectedScenario?: number | null;
+  legends: Array<HeatmapLegend>;
 
   /**
    * Optional localization settings for the component.
    * Includes number formatting and language overrides.
    */
   localization?: Localization;
-
-  /**
-   * Optional URL to fetch the legend presets from. Defaults to null.
-   */
-  legendPresetsUrl?: string | null;
 }
 
 /**
@@ -53,11 +48,10 @@ interface HeatLegendEditProps {
  * @returns {JSX.Element} JSX Element to render the Heatmap Legend Editor.
  */
 export default function HeatLegendEdit({
-  setLegend,
-  legend,
-  selectedScenario = null,
+  setSelectedLegend,
+  selectedLegend,
+  legends,
   localization,
-  legendPresetsUrl = null,
 }: HeatLegendEditProps): JSX.Element {
   const theme = useTheme();
   const {t: defaultT} = useTranslation();
@@ -74,89 +68,23 @@ export default function HeatLegendEdit({
 
   const {t: customT} = useTranslation(memoizedLocalization.customLang);
 
-  // This contains all legends using the default colors.
-  const defaultLegends = useDefaultLegends();
-
-  // This contains all legends from the presets file.
-  const [heatmapLegends, setHeatmapLegends] = useState<Array<HeatmapLegend>>([]);
-
-  // This contains the default legend and the presets and is used for displaying the list to the user.
-  const [availablePresets, setAvailablePresets] = useState<Array<HeatmapLegend>>([]);
-
   // modal state
   const [heatLegendEditOpen, setHeatLegendEditOpen] = React.useState(false);
 
   // Try to select a heatlegend using the given name.
   const selectLegendByName = useCallback(
     (name: string) => {
-      const preset = availablePresets.find((preset) => preset.name === name);
+      const preset = legends.find((legend) => legend.name === name);
       if (preset) {
-        setLegend(preset);
+        setSelectedLegend(preset);
       }
     },
-    [availablePresets, setLegend]
+    [legends, setSelectedLegend]
   );
 
-  // This effect loads the presets file, once the modal is opened the first time.
   useEffect(() => {
-    if (heatmapLegends.length === 0 && heatLegendEditOpen && legendPresetsUrl) {
-      fetch(legendPresetsUrl, {
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-      })
-        .then((response) => response.json())
-        .then(
-          (presetList: HeatmapLegend[]) => {
-            presetList.forEach((legend) => {
-              if (legend.isNormalized) {
-                legend.steps.forEach((step) => {
-                  //set step to normalized values
-                  step.value = step.value / legend.steps[legend.steps.length - 1].value;
-                });
-              }
-            });
-
-            setHeatmapLegends(presetList);
-          },
-          // Reject Promise
-          () => {
-            console.warn('Did not receive proper heatmap legend presets');
-          }
-        );
-    }
-
-    // This effect should only run once when the modal is opened the first time.
-  }, [setHeatmapLegends, heatmapLegends, heatLegendEditOpen, legendPresetsUrl]);
-
-  // This effect builds the list of available presets from the "defaultLegends" and "heatmapLegends".
-  useEffect(() => {
-    if (selectedScenario == null || defaultLegends.length === 0) {
-      return;
-    }
-    const scenarioDefault =
-      selectedScenario === 0 ? defaultLegends[0] : defaultLegends[(selectedScenario % (defaultLegends.length - 1)) + 1];
-    const legends = [...heatmapLegends];
-    legends.unshift(scenarioDefault);
-
-    if (legend.name !== 'Default' && heatmapLegends.length === 0) {
-      legends.push(legend);
-    }
-
-    setAvailablePresets(legends);
-    // This effect should only run when the scenario changes or the legends are loaded.
-  }, [selectedScenario, defaultLegends, heatmapLegends, legend]);
-
-  // This effect updates the selected legend, if a default legend is selected and the scenario changes.
-  useEffect(() => {
-    if (legend.name !== 'Default' && legend.name !== 'uninitialized') {
-      return;
-    }
-
-    selectLegendByName('Default');
-    // This effect should only run when the legend is a default legend or unitialized.
-  }, [legend, selectLegendByName]);
+    selectLegendByName(selectedLegend.name);
+  }, [legends, selectLegendByName, selectedLegend.name]);
 
   return (
     <>
@@ -198,10 +126,10 @@ export default function HeatLegendEdit({
                   ? customT(memoizedLocalization.overrides['heatlegend.edit'])
                   : defaultT('heatlegend.edit')
               }
-              value={legend.name}
+              value={selectedLegend.name}
               onChange={(event: SelectChangeEvent) => selectLegendByName(event.target.value)}
             >
-              {availablePresets.map((preset, i) => (
+              {legends.map((preset, i) => (
                 <MenuItem key={'legendPresetSelect' + i.toString()} value={preset.name}>
                   <Box sx={{width: '100%'}}>
                     <LegendGradient legend={preset} />
@@ -248,30 +176,4 @@ function LegendGradient({legend}: Readonly<{legend: HeatmapLegend}>): JSX.Elemen
   return (
     <div ref={divRef} id={`legend-gradient-${legend.name}`} style={{width: '100%', height: '50px', margin: '5px'}} />
   );
-}
-
-/**
- * This hook generates the heatmap legends for all scenarios using the current theme.
- */
-function useDefaultLegends(): Array<HeatmapLegend> {
-  const theme = useTheme();
-  const [defaultLegends, setDefaultLegends] = useState<Array<HeatmapLegend>>([]);
-
-  useEffect(() => {
-    const legends: Array<HeatmapLegend> = [];
-    const stepCount = theme.custom.scenarios[0].length - 1;
-    for (const element of theme.custom.scenarios) {
-      const steps = [];
-      for (let j = 0; j < stepCount; j++) {
-        steps.push({
-          color: element[stepCount - 1 - j],
-          value: j / (stepCount - 1),
-        });
-      }
-      legends.push({name: 'Default', isNormalized: true, steps});
-    }
-    setDefaultLegends(legends);
-  }, [theme, setDefaultLegends]);
-
-  return defaultLegends;
 }
