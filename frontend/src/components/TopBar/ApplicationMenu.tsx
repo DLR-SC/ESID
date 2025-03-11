@@ -12,6 +12,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Box from '@mui/system/Box';
 import {useAppSelector} from 'store/hooks';
 import {AuthContext, IAuthContext} from 'react-oauth2-code-pkce';
+import ToyCreateProtectedScenarioMenuItem from './ToyCreateProtectedScenarioMenuItem';
 
 const ChangelogDialog = React.lazy(() => import('./PopUps/ChangelogDialog'));
 const ImprintDialog = React.lazy(() => import('./PopUps/ImprintDialog'));
@@ -27,7 +28,7 @@ export default function ApplicationMenu(): JSX.Element {
   const {t} = useTranslation();
 
   const realm = useAppSelector((state) => state.realm.name);
-  const {login, token, logOut} = useContext<IAuthContext>(AuthContext);
+  const {login, token, logOut, idToken} = useContext<IAuthContext>(AuthContext);
 
   // user cannot login when realm is not selected
   const loginDisabled = realm === '';
@@ -61,6 +62,7 @@ export default function ApplicationMenu(): JSX.Element {
   const logoutClicked = () => {
     closeMenu();
     logOut();
+    keycloakLogout();
   };
 
   /** This method gets called, when the imprint menu entry was clicked. It opens a dialog showing the legal text. */
@@ -93,6 +95,13 @@ export default function ApplicationMenu(): JSX.Element {
     setChangelogOpen(true);
   };
 
+  /** Redirect user to logout from the IdP (Keycloak) */
+  const keycloakLogout = () => {
+    window.location.assign(
+      `${import.meta.env.VITE_OAUTH_API_URL}/realms/${realm}/protocol/openid-connect/logout?post_logout_redirect_uri=${encodeURI(`${import.meta.env.VITE_OAUTH_REDIRECT_URL}`)}&id_token_hint=${idToken}`
+    );
+  };
+
   return (
     <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'flex-end'}}>
       <Button
@@ -106,7 +115,10 @@ export default function ApplicationMenu(): JSX.Element {
       </Button>
       <Menu id='application-menu' anchorEl={anchorElement} open={Boolean(anchorElement)} onClose={closeMenu}>
         {isAuthenticated ? (
-          <MenuItem onClick={logoutClicked}>{t('topBar.menu.logout')}</MenuItem>
+          <Box>
+            <MenuItem onClick={logoutClicked}>{t('topBar.menu.logout')}</MenuItem>
+            <ToyCreateProtectedScenarioMenuItem />
+          </Box>
         ) : (
           <MenuItem onClick={loginClicked} disabled={loginDisabled}>
             {t('topBar.menu.login')}
