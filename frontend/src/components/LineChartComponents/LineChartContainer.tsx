@@ -2,14 +2,19 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React, {useContext, useEffect, useMemo, useState} from 'react';
-import LineChart from './LineChartComponents/LineChart';
-import LoadingContainer from './shared/LoadingContainer';
+import LineChart from './LineChart';
+import LoadingContainer from '../shared/LoadingContainer';
 import {useTheme} from '@mui/material';
-import {DataContext} from '../DataContext';
+import {DataContext} from '../../DataContext';
 import {useAppDispatch, useAppSelector} from 'store/hooks';
 import {selectDate} from 'store/DataSelectionSlice';
 import {setReferenceDayBottom} from 'store/LayoutSlice';
 import {useTranslation} from 'react-i18next';
+import {LineChartSettings} from './LineChartSettingsComponents/LineChartSettings';
+import {Dictionary} from 'util/util';
+import {HorizontalThreshold} from 'types/horizontalThreshold';
+import {setHorizontalYAxisThresholds} from 'store/UserPreferenceSlice';
+import {useCompartmentLocalization} from 'util/localization';
 
 export default function LineChartContainer() {
   const {t} = useTranslation('backend');
@@ -19,17 +24,26 @@ export default function LineChartContainer() {
   const {isChartDataFetching, chartData} = useContext(DataContext);
 
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
+  const selectedDistrict = useAppSelector((state) => state.dataSelection.district);
   const selectedDateInStore = useAppSelector((state) => state.dataSelection.date);
+  const storeHorizontalThresholds = useAppSelector((state) => state.userPreference.horizontalYAxisThresholds ?? {});
   const referenceDay = useAppSelector((state) => state.dataSelection.simulationStart);
   const minDate = useAppSelector((state) => state.dataSelection.minDate);
   const maxDate = useAppSelector((state) => state.dataSelection.maxDate);
 
   const [selectedDate, setSelectedDate] = useState<string>(selectedDateInStore ?? '2024-08-07');
   const [referenceDayBottomPosition, setReferenceDayBottomPosition] = useState<number>(0);
+  const [horizontalThresholds, sethorizontalThresholds] =
+    useState<Dictionary<HorizontalThreshold>>(storeHorizontalThresholds);
 
   const yAxisLabel = useMemo(() => {
     return t(`infection-states.${selectedCompartment}`);
   }, [selectedCompartment, t]);
+
+  // Set horizontal thresholds in store
+  useEffect(() => {
+    dispatch(setHorizontalYAxisThresholds(horizontalThresholds));
+  }, [horizontalThresholds, dispatch]);
 
   // Set selected date in store
   useEffect(() => {
@@ -66,6 +80,14 @@ export default function LineChartContainer() {
         maxDate={maxDate}
         referenceDay={referenceDay}
         yAxisLabel={yAxisLabel}
+        horizontalYAxisThreshold={horizontalThresholds[`${selectedDistrict.ags}-${selectedCompartment}`]?.threshold}
+      />
+      <LineChartSettings
+        selectedDistrict={selectedDistrict}
+        selectedCompartment={selectedCompartment ?? ''}
+        horizontalThresholds={horizontalThresholds}
+        setHorizontalThresholds={sethorizontalThresholds}
+        localization={useCompartmentLocalization()}
       />
     </LoadingContainer>
   );

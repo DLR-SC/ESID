@@ -25,9 +25,10 @@ import useDateAxis from 'components/shared/LineChart/DateAxis';
 import useValueAxis from 'components/shared/LineChart/ValueAxis';
 import {useDateSelectorFilter} from 'components/shared/LineChart/Filter';
 import useDateAxisRange from 'components/shared/LineChart/AxisRange';
-import {useLineSeriesList} from 'components/shared/LineChart/LineSeries';
-import {LineSeries} from '@amcharts/amcharts5/.internal/charts/xy/series/LineSeries';
+import useValueAxisRange from 'components/shared/LineChart/ValueAxisRange';
 import {LineChartData} from 'types/lineChart';
+import {LineSeries} from '@amcharts/amcharts5/xy';
+import {useSeriesRange} from 'components/shared/LineChart/SeriesRange';
 
 interface LineChartProps {
   /** Optional unique identifier for the chart. Defaults to 'chartdiv'. */
@@ -65,6 +66,9 @@ interface LineChartProps {
 
   /** Optional localization settings for the chart, including number formatting and language overrides. */
   localization?: Localization;
+
+  /** Optional horizontal limit for the Y-axis. Defaults to 0. */
+  horizontalYAxisThreshold?: number;
 }
 /**
  * React Component to render the Linechart Section
@@ -82,6 +86,7 @@ export default function LineChart({
   exportedFileName = 'Data',
   yAxisLabel,
   localization,
+  horizontalYAxisThreshold = undefined,
 }: LineChartProps): JSX.Element {
   const {t: defaultT, i18n} = useTranslation();
 
@@ -359,20 +364,73 @@ export default function LineChart({
     });
   }, [lineChartData, root, xAxis, yAxis, chartId]);
 
-  useLineSeriesList(
+  // this sets the chart settings above the threshold
+  const seriesRangeSettings = useMemo(() => {
+    if (!root || !horizontalYAxisThreshold || horizontalYAxisThreshold === 0 || !lineChartData) {
+      return [];
+    }
+
+    const totalScenarios = lineChartData.length;
+    const maxOpacity = 0.3; // Maximum cumulative opacity
+
+    // Compute per-series opacity using the formula:
+    // o = 1 - (1 - O_eff)^(1/n)
+    const perSeriesOpacity = totalScenarios > 0 ? 1 - Math.pow(1 - maxOpacity, 1 / totalScenarios) : 0;
+
+    return lineChartData.map((line) => {
+      const lineColor = line.stroke.color ?? color(theme.palette.error.main);
+      const fillColor = line.fill ?? color(theme.palette.error.main);
+
+      return {
+        threshold: horizontalYAxisThreshold,
+        fills: {
+          fill: fillColor, // change the fill of the range above threshold
+          visible: true, // visibility of the fill
+          fillOpacity: perSeriesOpacity,
+        },
+        strokes: {
+          stroke: color(theme.palette.error.main), // change the stroke for points above threshold
+          strokeWidth: line.stroke.strokeWidth ?? 2,
+          strokeOpacity: 1,
+          visible: line.stroke.visible ?? true, // use the one from the lineChartData if it is defined
+        },
+        alternatingStrokes: {
+          stroke: lineColor,
+          strokeWidth: 2.5,
+
+          // somehow the layer needs to be set to a high number to be drawn on top of the other stroke, using values between 1-5 will not work and not refresh if we select another scenario
+          layer: 30,
+          strokeDasharray: [10, 10],
+          strokeOpacity: 1,
+          visible: line.stroke.visible ?? true,
+        },
+      };
+    });
+  }, [root, horizontalYAxisThreshold, theme.palette.error.main, lineChartData]);
+
+  // add linechart and series. The lineSeries will be initialized using the initializer, whereas the seriesRange will be initialized using the seriesRangeSettings
+  useSeriesRange(
     root,
     chart,
     lineChartDataSettings,
+    yAxis,
+    seriesRangeSettings,
     useCallback(
       (series: LineSeries) => {
         if (!lineChartData) return;
+
         const seriesSettings = lineChartData.find((line) => line.serieId === series.get('id')?.split('_')[1]);
+
+        // set stroke settings from original line chart data below the threshold
         series.strokes.template.setAll({
-          strokeWidth: seriesSettings?.stroke.strokeWidth ?? 2,
+          strokeWidth: seriesSettings?.stroke.strokeWidth ?? 2.5,
           strokeDasharray: seriesSettings?.stroke.strokeDasharray ?? undefined,
         });
+
+        // set fill settings from original line chart data below the threshold
         if (seriesSettings?.fill) {
           series.fills.template.setAll({
+            fill: seriesSettings.fill,
             fillOpacity: seriesSettings.fillOpacity ?? 1,
             visible: true,
           });
@@ -381,6 +439,43 @@ export default function LineChart({
       [lineChartData]
     )
   );
+
+  // a horizontal line to limit the y-axis
+  const targetLineSettings = useMemo(() => {
+    if (!root || !yAxis || !horizontalYAxisThreshold || horizontalYAxisThreshold === 0) {
+      return {};
+    }
+
+    return {
+      data: {
+        value: horizontalYAxisThreshold,
+        endValue: 1e6, // Adjust max value as needed
+        above: true,
+      },
+      grid: {
+        stroke: color(theme.palette.error.main), // Use dynamic stroke color based on the threshold
+        strokeOpacity: 0.8,
+        strokeWidth: 2,
+        visible: true,
+        location: 0,
+      },
+      label: {
+        fill: color(theme.palette.primary.contrastText),
+        text: `Threshold: ${horizontalYAxisThreshold}`,
+        location: 0,
+        centerY: -3,
+        centerX: 0,
+        inside: true,
+        background: RoundedRectangle.new(root, {
+          fill: color(theme.palette.error.main),
+        }),
+        layer: Number.MAX_VALUE,
+      },
+    };
+  }, [root, yAxis, horizontalYAxisThreshold, theme.palette.error.main, theme.palette.primary.contrastText]);
+
+  // Add horizontal line to limit the y-axis
+  useValueAxisRange(targetLineSettings, root, chart, yAxis);
 
   // Effect to update data in series
   useEffect(() => {

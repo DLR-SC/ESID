@@ -60,6 +60,16 @@ export interface LineChartData {
      * The dash array for the stroke.
      */
     strokeDasharray?: number[];
+
+    /**
+     * The opacity of the stroke.
+     */
+    strokeOpacity?: number;
+
+    /**
+     * visibility of the stroke
+     */
+    visible?: boolean;
   };
 
   /**
