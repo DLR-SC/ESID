@@ -28,19 +28,27 @@ import {
 } from 'store/services/scenarioApi';
 import {CaseDataByNode} from 'types/caseData';
 import {Simulations, SimulationModel, SimulationDataByNode, SimulationMetaData} from 'types/scenario';
-import {Dictionary} from 'util/util';
+import {
+  calculateProportionalValue,
+  combineCologneData,
+  convertToProportionalValues,
+  Dictionary,
+  getTotalPopulationById,
+} from 'util/util';
 import data from '../assets/lk_germany_reduced.geojson?url';
 import {GeoJSON, GeoJsonProperties} from 'geojson';
 import cologneDistricts from '../assets/stadtteile_cologne.geojson?url';
 import {District} from 'types/cologneDistricts';
 import searchbarMapData from '../assets/lk_germany_reduced_list.json?url';
 import searchbarCologneData from '../assets/stadtteile_cologne_list.json';
+import populationDataJson from '../assets/population_data_v3.json';
 import {useTranslation} from 'react-i18next';
 import {GroupResponse} from 'types/group';
 import {color} from '@amcharts/amcharts5/.internal/core/util/Color';
 import {getScenarioPrimaryColor} from 'util/Theme';
 import {useTheme} from '@mui/material';
 import {LineChartData} from 'types/lineChart';
+import {PopulationData} from 'types/populationValueMode';
 
 // Create the context
 export const DataContext = createContext<{
@@ -85,11 +93,18 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
   const {t: backendT} = useTranslation('backend');
   const theme = useTheme();
 
+  const combinedPopulationJsonData = combineCologneData(
+    populationDataJson as unknown as Array<PopulationData>,
+    searchbarCologneData as unknown as Array<District>
+  );
+
   const [geoData, setGeoData] = useState<GeoJSON>();
   const [mapData, setMapData] = useState<{id: string; value: number}[] | undefined>(undefined);
   const [searchBarData, setSearchBarData] = useState<GeoJsonProperties[] | undefined>(undefined);
   const [simulationModelKey, setSimulationModelKey] = useState<string>('unset');
   const [chartData, setChartData] = useState<LineChartData[] | undefined>(undefined);
+
+  const [originalMapData, setOriginalMapData] = useState<{id: string; value: number}[] | undefined>(undefined);
 
   const selectedDistrict = useAppSelector((state) => state.dataSelection.district.ags);
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
@@ -98,6 +113,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
   const selectedDate = useAppSelector((state) => state.dataSelection.date);
   const groupFilterList = useAppSelector((state) => state.dataSelection.groupFilters);
   const scenarioList = useAppSelector((state) => state.scenarioList);
+  const populationValueMode = useAppSelector((state) => state.userPreference.populationValueMode);
 
   const startValues = useGetSimulationStartValues(selectedDistrict);
 
@@ -131,7 +147,30 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
       day: selectedDate ?? '',
       groups: ['total'],
     },
-    {skip: selectedDate === null || !selectedDistrict}
+    {
+      skip: selectedDate === null || !selectedDistrict,
+      selectFromResult: ({data}) => {
+        if (!data) return {data};
+
+        if (populationValueMode !== 'proportional') {
+          return {data};
+        }
+
+        const totalPopulation = getTotalPopulationById(combinedPopulationJsonData, selectedDistrict);
+
+        const transformedResults = data.results.map((entry) => ({
+          ...entry,
+          compartments: Object.fromEntries(
+            Object.entries(entry.compartments).map(([key, value]) => [
+              key,
+              calculateProportionalValue(value, totalPopulation),
+            ])
+          ),
+        }));
+
+        return {data: {results: transformedResults}};
+      },
+    }
   );
 
   const {data: scenarioSimulationDataForCardFiltersValues} = useGetMultipleGroupFilterDataQuery(
@@ -151,7 +190,31 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
       day: selectedDate ?? '',
       groups: ['total'],
     },
-    {skip: !selectedDate || !selectedDistrict}
+    {
+      skip: selectedDate === null || !selectedDistrict,
+      selectFromResult: ({data}) => {
+        if (!data) return {data};
+
+        if (populationValueMode !== 'proportional') return {data};
+
+        const totalPopulation = getTotalPopulationById(combinedPopulationJsonData, selectedDistrict);
+
+        const transformedData = data.map((simData) => ({
+          ...simData,
+          results: simData.results.map((entry) => ({
+            ...entry,
+            compartments: Object.fromEntries(
+              Object.entries(entry.compartments).map(([key, value]) => [
+                key,
+                calculateProportionalValue(value, totalPopulation),
+              ])
+            ),
+          })),
+        }));
+
+        return {data: transformedData};
+      },
+    }
   );
 
   const {currentData: mapSimulationData, isFetching: mapIsSimulationDataFetching} = useGetSimulationDataByDateQuery(
@@ -200,7 +263,12 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
       groups: ['total'],
       compartments: [selectedCompartment ?? ''],
     },
-    {skip: !selectedCompartment || !selectedDistrict}
+    {
+      skip: !selectedCompartment || !selectedDistrict,
+      selectFromResult: ({data, isFetching}) => {
+        return {data,isFetching};
+      },
+    }
   );
 
   const {data: chartPercentileData} = useGetPercentileDataQuery(
@@ -232,6 +300,18 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
       skip: !selectedDistrict || selectedScenario === null || selectedScenario === 0,
     }
   );
+
+  useEffect(() => {
+    if (originalMapData) {
+      if (populationValueMode === 'absolute') {
+        setMapData(originalMapData);
+      }
+      if (populationValueMode === 'proportional') {
+        const {matchedMapData} = convertToProportionalValues(originalMapData, combinedPopulationJsonData);
+        setMapData(matchedMapData);
+      }
+    }
+  }, [populationValueMode, originalMapData]);
 
   // Effect to fetch the geoJSON files for the map displays.
   useEffect(() => {
@@ -352,25 +432,23 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
   // This effect sets the data for the map according to the selections.
   useEffect(() => {
     if (mapSimulationData && selectedCompartment && selectedScenario) {
-      setMapData(
-        mapSimulationData.results
-          .filter((element: {name: string}) => {
-            return element.name != '00000';
-          })
-          .map((element: {name: string; compartments: {[key: string]: number}}) => {
-            return {id: element.name, value: element.compartments[selectedCompartment]} as {id: string; value: number};
-          })
-      );
+      const originalMapData = mapSimulationData.results
+        .filter((element: {name: string}) => {
+          return element.name != '00000';
+        })
+        .map((element: {name: string; compartments: {[key: string]: number}}) => {
+          return {id: element.name, value: element.compartments[selectedCompartment]} as {id: string; value: number};
+        });
+      setOriginalMapData(originalMapData);
     } else if (mapCaseData && selectedCompartment) {
-      setMapData(
-        mapCaseData.results
-          .filter((element: {name: string}) => {
-            return element.name != '00000';
-          })
-          .map((element: {name: string; compartments: {[key: string]: number}}) => {
-            return {id: element.name, value: element.compartments[selectedCompartment]};
-          })
-      );
+      const originalMapData = mapCaseData.results
+        .filter((element: {name: string}) => {
+          return element.name != '00000';
+        })
+        .map((element: {name: string; compartments: {[key: string]: number}}) => {
+          return {id: element.name, value: element.compartments[selectedCompartment]};
+        });
+      setOriginalMapData(originalMapData);
     }
     // This effect should re-run whenever there is new data or the selected card or compartment changed.
   }, [mapSimulationData, selectedCompartment, mapCaseData, selectedScenario]);

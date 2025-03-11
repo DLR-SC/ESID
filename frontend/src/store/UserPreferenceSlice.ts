@@ -3,11 +3,13 @@
 
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {HeatmapLegend} from '../types/heatmapLegend';
+import {PopulationValueModeType} from 'types/populationValueMode';
 
 export interface UserPreference {
   selectedHeatmap: HeatmapLegend;
   selectedTab?: string;
   isInitialVisit: boolean;
+  populationValueMode: PopulationValueModeType;
 }
 
 const initialState: UserPreference = {
@@ -22,6 +24,7 @@ const initialState: UserPreference = {
   },
   selectedTab: '1',
   isInitialVisit: true,
+  populationValueMode: 'absolute',
 };
 
 /**
@@ -42,8 +45,12 @@ export const UserPreferenceSlice = createSlice({
     setInitialVisit(state, action: PayloadAction<boolean>) {
       state.isInitialVisit = action.payload;
     },
+    /** User preferred population value mode (absolute or proportional) */
+    setPopulationValueMode(state, action: PayloadAction<PopulationValueModeType>) {
+      state.populationValueMode = action.payload;
+    },
   },
 });
 
-export const {selectHeatmapLegend, selectTab, setInitialVisit} = UserPreferenceSlice.actions;
+export const {selectHeatmapLegend, selectTab, setInitialVisit, setPopulationValueMode} = UserPreferenceSlice.actions;
 export default UserPreferenceSlice.reducer;

@@ -12,6 +12,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Box from '@mui/system/Box';
 import {useAppSelector} from 'store/hooks';
 import {AuthContext, IAuthContext} from 'react-oauth2-code-pkce';
+import PopulationValueToggle from './PopulationValueToggle';
 
 const ChangelogDialog = React.lazy(() => import('./PopUps/ChangelogDialog'));
 const ImprintDialog = React.lazy(() => import('./PopUps/ImprintDialog'));
@@ -112,6 +113,10 @@ export default function ApplicationMenu(): JSX.Element {
             {t('topBar.menu.login')}
           </MenuItem>
         )}
+        <Divider />
+        <MenuItem>
+          <PopulationValueToggle />
+        </MenuItem>
         <Divider />
         <MenuItem onClick={imprintClicked}>{t('topBar.menu.imprint')}</MenuItem>
         <MenuItem onClick={privacyPolicyClicked}>{t('topBar.menu.privacy-policy')}</MenuItem>
