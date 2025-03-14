@@ -111,6 +111,9 @@ function MainCard({
       onClick={() => {
         if (isActive) {
           setSelected({id, state: true});
+        } else {
+          setActive({id, state: true});
+          setSelected({id, state: true});
         }
       }}
     >
