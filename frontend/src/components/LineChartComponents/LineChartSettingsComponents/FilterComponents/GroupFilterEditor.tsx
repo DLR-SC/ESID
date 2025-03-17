@@ -44,7 +44,7 @@ interface GroupFilterEditorProps {
 }
 
 /**
- * This is the detail view of the GroupFilter dialog. It allows to edit and create groups. It has a text field for the
+ * This is the detail view of the GroupFilter menu. It allows to edit and create groups. It has a text field for the
  * name at the top and columns of checkboxes for groups in the center. It requires that at least one checkbox of each
  * group is selected before the apply button becomes available. It is also possible to discard changes by clicking the
  * abort button before applying the changes.

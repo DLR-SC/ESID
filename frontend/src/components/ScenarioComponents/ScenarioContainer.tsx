@@ -9,7 +9,6 @@ import {
   selectCompartment,
   selectScenario,
   setActiveScenario,
-  setGroupFilters,
   setMinMaxDates,
   setStartDate,
   toggleCompartmentExpansion,
@@ -23,10 +22,9 @@ import {setReferenceDayTop} from 'store/LayoutSlice';
 import React from 'react';
 import CardContainer from './CardsComponents/CardContainer';
 import CompartmentsRows from './CompartmentsComponents/CompartmentsRows';
-import FilterDialogContainer from './FilterComponents/FilterDialogContainer';
 import GeneralButton from './ExpandedButtonComponents/ExpandedButton';
 import ReferenceDatePicker from './ReferenceDatePickerComponents.tsx/ReferenceDatePicker';
-import {GroupFilter, GroupResponse} from 'types/group';
+import {GroupResponse} from 'types/group';
 import {SimulationModel, SimulationDataByNode, Simulations} from 'types/scenario';
 import {CaseDataByNode} from 'types/caseData';
 import {useAppDispatch, useAppSelector} from 'store/hooks';
@@ -58,8 +56,6 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
     startValues,
     scenarioListData,
     caseScenarioSimulationData,
-    groupCategories,
-    groupSubCategories,
     scenarioSimulationDataForCardFiltersValues,
     scenarioSimulationDataForCard,
     getId,
@@ -99,7 +95,6 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
 
   const [cardValues, setCardValues] = useState<Dictionary<CardValue> | undefined>();
   const [filterValues, setFilterValues] = useState<Dictionary<FilterValue[]> | undefined>();
-  const [groupFilters, setgroupFilters] = useState<Dictionary<GroupFilter>>(storeGroupFilters);
   const [compartmentsExpanded, setCompartmentsExpanded] = useState<boolean>(storeCompartmentsExpanded ?? false);
   const [activeScenarios, setActiveScenarios] = useState<number[] | null>(storeActiveScenarios);
   const [selectedScenario, setSelectedScenario] = useState<number | null>(storeSelectedScenario);
@@ -164,26 +159,9 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
         ['scenario-names.10p_reduced_contacts']: 'scenario-names.10p_reduced_contacts',
         ['scenario-names.Summer 2021 Simulation 1']: 'scenario-names.Summer 2021 Simulation 1',
         ['scenario-names.Summer 2021 Simulation 2']: 'scenario-names.Summer 2021 Simulation 2',
-        ['group-filters.categories.age']: 'group-filters.categories.age',
-        ['group-filters.categories.gender']: 'group-filters.categories.gender',
-        ['group-filters.groups.age_0']: 'group-filters.groups.age_0',
-        ['group-filters.groups.age_1']: 'group-filters.groups.age_1',
-        ['group-filters.groups.age_2']: 'group-filters.groups.age_2',
-        ['group-filters.groups.age_3']: 'group-filters.groups.age_3',
-        ['group-filters.groups.age_4']: 'group-filters.groups.age_4',
-        ['group-filters.groups.age_5']: 'group-filters.groups.age_5',
-        ['group-filters.groups.total']: 'group-filters.groups.total',
-        ['group-filters.groups.female']: 'group-filters.groups.female',
-        ['group-filters.groups.male']: 'group-filters.groups.male',
-        ['group-filters.groups.nonbinary']: 'group-filters.groups.nonbinary',
       },
     };
   }, [formatNumber]);
-
-  // This effect updates the group filters in the state whenever they change.
-  useEffect(() => {
-    dispatch(setGroupFilters(groupFilters));
-  }, [groupFilters, dispatch]);
 
   // This effect updates the compartments in the state whenever the simulation model data changes.
   useEffect(() => {
@@ -208,6 +186,11 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
   useEffect(() => {
     dispatch(selectCompartment(selectedCompartment));
   }, [dispatch, selectedCompartment]);
+
+  // updates the selected compartment in the state when the compartment in the store changes for use with LineChartSettings
+  useEffect(() => {
+    setSelectedCompartment(storeSelectedCompartment ?? 'MildInfections'); // Sync the local state with the store's selected compartment
+  }, [storeSelectedCompartment]);
 
   // This effect updates the start date in the state whenever the reference day changes.
   useEffect(() => {
@@ -259,7 +242,7 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
 
     const filterValuesTemp: Array<FilterValue[]> =
       scenarioSimulationDataForCardFiltersValues?.map((scenarioSimulation) => {
-        return Object.values(groupFilters)
+        return Object.values(storeGroupFilters)
           .filter((groupFilter) => groupFilter.isVisible)
           .map((groupFilter) => {
             const groupResponse = scenarioSimulation?.[groupFilter.name]?.results?.[0]?.compartments || null;
@@ -274,7 +257,7 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
       temp[id.toString()] = filterValuesTemp[index];
     });
     setFilterValues(temp);
-  }, [getId, groupFilters, scenarioSimulationDataForCardFiltersValues]);
+  }, [getId, storeGroupFilters, scenarioSimulationDataForCardFiltersValues]);
 
   // This effect calculates the start and end days from the case and scenario data.
   useEffect(() => {
@@ -445,18 +428,9 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
               localization={localization}
               selectedScenario={selectedScenario}
               setSelectedScenario={setSelectedScenario}
-              groupFilters={groupFilters}
+              groupFilters={storeGroupFilters}
             />
           </Box>
-          {groupCategories && groupCategories.results && groupSubCategories && groupSubCategories.results && (
-            <FilterDialogContainer
-              groupFilters={groupFilters}
-              groupCategories={groupCategories.results}
-              groupSubCategories={groupSubCategories.results}
-              setGroupFilters={setgroupFilters}
-              localization={localization}
-            />
-          )}
         </Box>
       </div>
     </ScrollSync>

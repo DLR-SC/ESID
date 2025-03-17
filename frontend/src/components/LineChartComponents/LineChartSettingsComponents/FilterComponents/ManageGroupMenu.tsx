@@ -1,11 +1,10 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import Close from '@mui/icons-material/Close';
 import GroupAdd from '@mui/icons-material/GroupAdd';
-import {Box, Typography, IconButton, Divider, Card, CardActionArea, CardContent, Button, useTheme} from '@mui/material';
+import {Box, Typography, Divider, Card, CardActionArea, CardContent, Button, useTheme} from '@mui/material';
 import {useState, useEffect} from 'react';
-import ConfirmDialog from '../../shared/ConfirmDialog';
+import ConfirmDialog from 'components/shared/ConfirmDialog';
 import GroupFilterCard from './GroupFilterCard';
 import GroupFilterEditor from './GroupFilterEditor';
 import {useTranslation} from 'react-i18next';
@@ -42,14 +41,13 @@ export interface ManageGroupDialogProps {
 }
 
 /**
- * This dialog provides an editor to create, edit, toggle and delete group filters. It uses a classic master detail view
+ * This filter menu provides an editor to create, edit, toggle and delete group filters. It uses a classic master detail view
  * with the available filters on the left and the filter configuration on the right.
  */
-export default function ManageGroupDialog({
+export default function ManageGroup({
   groupFilters,
   groupCategories,
   groupSubCategories,
-  onCloseRequest,
   unsavedChangesCallback,
   setGroupFilters,
   localization = {formatNumber: (value: number) => value.toString(), customLang: 'global', overrides: {}},
@@ -64,6 +62,11 @@ export default function ManageGroupDialog({
 
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
+
+  // Trigger layout recalculation when switching to GroupFilterEditor
+  useEffect(() => {
+    window.dispatchEvent(new Event('resize'));
+  }, [selectedGroupFilter]);
 
   // This effect ensures that the user doesn't discard unsaved changes without confirming it first.
   useEffect(() => {
@@ -82,7 +85,7 @@ export default function ManageGroupDialog({
       setSelectedGroupFilter(null);
     }
     unsavedChangesCallback(unsavedChanges);
-  }, [unsavedChanges, nextSelectedGroupFilter, selectedGroupFilter, unsavedChangesCallback, onCloseRequest]);
+  }, [unsavedChanges, nextSelectedGroupFilter, selectedGroupFilter, unsavedChangesCallback]);
 
   const theme = useTheme();
   return (
@@ -91,32 +94,10 @@ export default function ManageGroupDialog({
         display: 'flex',
         flexDirection: 'column',
         flexGrow: '1',
-        padding: '26px',
+        minWidth: '800px',
         alignItems: 'center',
       }}
     >
-      <Box
-        id='group-filter-dialog-title-bar'
-        sx={{
-          display: 'grid',
-          gridTemplateColumns: '1fr auto 1fr',
-          gridColumnGap: '5px',
-          alignItems: 'center',
-          justifyItems: 'center',
-          width: '100%',
-          marginBottom: 2,
-        }}
-      >
-        <div />
-        <Typography variant='h1'>
-          {localization.overrides && localization.overrides['group-filters.title']
-            ? customT(localization.overrides['group-filters.title'])
-            : defaultT('group-filters.title')}
-        </Typography>
-        <IconButton color='primary' sx={{marginLeft: 'auto'}} onClick={onCloseRequest}>
-          <Close />
-        </IconButton>
-      </Box>
       <Divider orientation='horizontal' variant='middle' flexItem />
       <Box
         sx={{
@@ -214,6 +195,7 @@ export default function ManageGroupDialog({
               flexDirection: 'column',
               justifyContent: 'center',
               alignItems: 'center',
+              padding: 2,
             }}
           >
             <Typography variant='body1'>

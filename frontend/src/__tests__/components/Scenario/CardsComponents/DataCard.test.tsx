@@ -6,7 +6,7 @@ import {render, screen} from '@testing-library/react';
 import {describe, test, expect} from 'vitest';
 import {Dictionary} from 'util/util';
 import {GroupFilter} from 'types/group';
-import {filterValue} from 'types/card';
+import {FilterValue} from 'types/card';
 import Theme from 'util/Theme';
 import {ThemeProvider} from '@mui/system';
 import DataCard from 'components/ScenarioComponents/CardsComponents/DataCard';
@@ -30,7 +30,7 @@ const DataCardTest = () => {
   const SelectedScenario = true;
   const Color = 'primary';
   const ActiveScenarios = [0, 1, 2];
-  const FilterValues: Dictionary<filterValue[]> = {
+  const FilterValues: Dictionary<FilterValue[]> = {
     '0': [
       {filteredTitle: 'Group 1', filteredValues: {'Compartment 1': 10, 'Compartment 2': 20, 'Compartment 3': 30}},
       {filteredTitle: 'Group 2', filteredValues: {'Compartment 1': 40, 'Compartment 2': 50, 'Compartment 3': 60}},
