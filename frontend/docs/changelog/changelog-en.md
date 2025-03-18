@@ -19,6 +19,7 @@ SPDX-License-Identifier: CC-BY-4.0
 ### Improvements
 
 - Added translations for additional scenarios.
+- Inactive scenario cards can now be activated (flipped face up) by clicking anywhere on the card, not only on the checkbox.
 
 ### Bug fixes
 

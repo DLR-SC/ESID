@@ -19,6 +19,7 @@ SPDX-License-Identifier: CC-BY-4.0
 ### Verbesserungen
 
 - Es wurde mehr Übersetzungen für Szenarien hinzugefügt.
+- Inaktive Szenariokarten können nun durch Klicken an beliebiger Stelle auf der Karte aktiviert werden, nicht nur über die Checkbox.
 
 ### Fehlerbehebungen
 
