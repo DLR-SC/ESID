@@ -19,6 +19,7 @@ SPDX-License-Identifier: CC-BY-4.0
 ### Improvements
 
 - Added translations for additional scenarios.
+- Scenario cards added from the library or created via the "Create a new Scenario" dialog are now immediately activated and displayed face up on the dashboard.
 
 ### Bug fixes
 
