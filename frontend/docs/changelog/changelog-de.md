@@ -20,6 +20,7 @@ SPDX-License-Identifier: CC-BY-4.0
 
 - Es wurde mehr Übersetzungen für Szenarien hinzugefügt.
 - Szenariokarten, die aus der Bibliothek hinzugefügt oder über den Dialog "Neues Szenario erstellen" erzeugt werden, erscheinen nun direkt aktiviert auf dem Dashboard.
+- Inaktive Szenariokarten können nun durch Klicken an beliebiger Stelle auf der Karte aktiviert werden, nicht nur über die Checkbox.
 
 ### Fehlerbehebungen
 
