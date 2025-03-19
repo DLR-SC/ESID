@@ -31,10 +31,11 @@ ubuntu:publish-esid-apache-image:
     - echo VITE_OAUTH_CLIENT_ID=$VITE_API_URL >> .env
     - echo VITE_OAUTH_REDIRECT_URL=$VITE_API_URL >> .env
     - docker image build -t esid:apache .
+    - docker save -o esid-apache.tar esid:apache
   artifacts:
     expire_in: 1 hour
     paths:
-      - .docker/apache
+      - frontend/esid-apache.tar
 
 ubuntu:build:
   stage: build
