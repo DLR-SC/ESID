@@ -1,10 +1,7 @@
-# SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
-# SPDX-License-Identifier: CC0-1.0
-
-# ! PLEASE NOTE THAT THIS IS ONLY FOR INTERNAL USE AND THE FILE IS UPLOADED ON GITHUB FOR CONVENIENCE  
+# ! PLEASE NOTE THAT THIS IS ONLY FOR INTERNAL USE AND THE FILE IS UPLOADED ON GITHUB FOR CONVENIENCE
 
 # The bellow pipeline allows to build and deploy the website automatically, whenever developer pushes code to the application.
-# The building stage uses a predefined docker image to improve performance. 
+# The building stage uses a predefined docker image to improve performance.
 
 stages:
   - docker
@@ -32,7 +29,7 @@ ubuntu:build:
     - cd frontend
   script:
     - npm set cache .npm
-    - npm ci
+    - npm install
     - npm run build
   cache:
     key: "$CI_JOB_NAME"
