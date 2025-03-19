@@ -20,6 +20,18 @@ ubuntu:publish-docker-image:
     paths:
       - .docker/ubuntu-gcc
 
+ubuntu:publish-esid-apache-image:
+  stage: docker
+  tags:
+    - shell
+  script:
+    - cd frontend
+    - docker image build -t esid:apache .
+  artifacts:
+    expire_in: 1 hour
+    paths:
+      - .docker/apache
+
 ubuntu:build:
   stage: build
   image: esid:ubuntu-gcc
@@ -40,23 +52,23 @@ ubuntu:build:
     paths:
       - frontend/build
 
-pages:
-  stage: deploy
-  image: esid:ubuntu-gcc
-  tags:
-    - docker
-  script:
-    - folderName=$(echo "${CI_COMMIT_REF_NAME}" | tr / -)
-    - rm -rf public/$folderName/
-    - mkdir -p public/$folderName/
-    - cp -rv frontend/build/* public/$folderName
-    - cd public
-    - tree -H '.' -L 1 -d --noreport --charset utf-8 > index.html
-  cache:
-    key: "$CI_JOB_NAME"
-    paths:
-      - public
-  artifacts:
-    expire_in: 1 hour
-    paths:
-      - public
+# pages:
+#   stage: deploy
+#   image: esid:ubuntu-gcc
+#   tags:
+#     - docker
+#   script:
+#     - folderName=$(echo "${CI_COMMIT_REF_NAME}" | tr / -)
+#     - rm -rf public/$folderName/
+#     - mkdir -p public/$folderName/
+#     - cp -rv frontend/build/* public/$folderName
+#     - cd public
+#     - tree -H '.' -L 1 -d --noreport --charset utf-8 > index.html
+#   cache:
+#     key: "$CI_JOB_NAME"
+#     paths:
+#       - public
+#   artifacts:
+#     expire_in: 1 hour
+#     paths:
+#       - public
