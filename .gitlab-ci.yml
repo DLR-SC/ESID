@@ -26,6 +26,10 @@ ubuntu:publish-esid-apache-image:
     - shell
   script:
     - cd frontend
+    - echo VITE_API_URL=$VITE_API_URL >> .env
+    - echo VITE_OAUTH_API_URL=$VITE_API_URL >> .env
+    - echo VITE_OAUTH_CLIENT_ID=$VITE_API_URL >> .env
+    - echo VITE_OAUTH_REDIRECT_URL=$VITE_API_URL >> .env
     - docker image build -t esid:apache .
   artifacts:
     expire_in: 1 hour
