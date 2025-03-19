@@ -118,28 +118,56 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
   const selectedDate = useAppSelector((state) => state.dataSelection.date);
   const groupFilters = useAppSelector((state) => state.dataSelection.groupFilters);
 
-  const {data: scenarios} = useGetScenariosQuery();
-  const {data: compartments} = useGetCompartmentsQuery();
-  const {data: npis} = useGetInterventionTemplatesQuery();
-  const {data: nodeLists} = useGetNodeListsQuery();
-  const {data: nodes} = useGetNodesQuery();
-  const {data: groups} = useGetGroupsQuery();
-  const {data: groupCategories} = useGetGroupCategoriesQuery();
+  const {data: scenarios, ...scenariosResult} = useGetScenariosQuery();
+  const {data: compartments, ...compartmentsResult} = useGetCompartmentsQuery();
+  const {data: npis, ...npisResult} = useGetInterventionTemplatesQuery();
+  const {data: nodeLists, ...nodeListsResult} = useGetNodeListsQuery();
+  const {data: nodes, ...nodesResult} = useGetNodesQuery();
+  const {data: groups, ...groupsResult} = useGetGroupsQuery();
+  const {data: groupCategories, ...groupCategoriesResult} = useGetGroupCategoriesQuery();
+
+  const initialLoadCompleted = useMemo(() => {
+    return (
+      !scenariosResult.isLoading &&
+      !compartmentsResult.isLoading &&
+      !npisResult.isLoading &&
+      !nodeListsResult.isLoading &&
+      !nodesResult.isLoading &&
+      !groupsResult.isLoading &&
+      !groupCategoriesResult.isLoading
+    );
+  }, [
+    compartmentsResult.isLoading,
+    groupCategoriesResult.isLoading,
+    groupsResult.isLoading,
+    nodeListsResult.isLoading,
+    nodesResult.isLoading,
+    npisResult.isLoading,
+    scenariosResult.isLoading,
+  ]);
 
   const totalGroup = useMemo(() => {
     return groups?.find((group) => group.name === 'Total');
   }, [groups]);
 
   useEffect(() => {
+    if (!initialLoadCompleted) {
+      return;
+    }
+
     if (!selectedDistrict) {
       const germanyNode = nodes?.find((node) => node.name === '00000');
       if (germanyNode) {
         dispatch(selectDistrict({...germanyNode, type: ''}));
       }
     }
-  }, [dispatch, nodes, selectedDistrict]);
+  }, [dispatch, initialLoadCompleted, nodes, selectedDistrict]);
 
   useEffect(() => {
+    if (!initialLoadCompleted) {
+      return;
+    }
+
     if (scenarios) {
       for (const [id, _] of Object.entries(scenariosState)) {
         if (!scenarios.find((s) => s.id === id)) {
@@ -165,17 +193,21 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
         }
       }
     }
-  }, [dispatch, i18n, scenarios, scenariosState, tBackend]);
+  }, [dispatch, i18n, initialLoadCompleted, scenarios, scenariosState, tBackend]);
 
   const caseDataId = scenarios?.find((scenario) => scenario.name === 'casedata')?.id;
   const {data: caseDataScenario} = useGetScenarioQuery(caseDataId!, {skip: !caseDataId});
 
   useEffect(() => {
+    if (!initialLoadCompleted) {
+      return;
+    }
+
     const node = nodes?.find((node) => node.name === '00000');
     if (node) {
       dispatch(selectDistrict({id: node.id, nuts: node.name, name: '', type: ''}));
     }
-  }, [dispatch, nodes]);
+  }, [dispatch, initialLoadCompleted, nodes]);
 
   const {data: referenceDateValues} = useGetScenarioInfectionDataQuery(
     {
@@ -285,20 +317,32 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
 
   // Try to set at least one active scenario.
   useEffect(() => {
+    if (!initialLoadCompleted) {
+      return;
+    }
+
     if (activeScenarios?.length === 0 && caseDataScenario) {
       dispatch(updateScenario({id: caseDataScenario.id, state: {visibility: 'faceUp'}}));
     }
-  }, [activeScenarios, caseDataScenario, dispatch]);
+  }, [activeScenarios, caseDataScenario, dispatch, initialLoadCompleted]);
 
   // If we have no selected scenario, we try to set the case data as selected.
   useEffect(() => {
+    if (!initialLoadCompleted) {
+      return;
+    }
+
     if (!selectedScenario && caseDataScenario) {
       dispatch(selectScenario(caseDataScenario.id));
     }
-  }, [caseDataScenario, dispatch, selectedScenario]);
+  }, [caseDataScenario, dispatch, initialLoadCompleted, selectedScenario]);
 
   // Set scenario colors
   useEffect(() => {
+    if (!initialLoadCompleted) {
+      return;
+    }
+
     if (caseDataScenario) {
       dispatch(updateScenario({id: caseDataScenario.id, state: {colors: theme.custom.scenarios[0]}}));
     }
@@ -309,24 +353,36 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
         dispatch(updateScenario({id: scenario.id, state: {colors: theme.custom.scenarios[colorIndex]}}));
       }
     });
-  }, [caseDataScenario, dispatch, scenarios]);
+  }, [caseDataScenario, dispatch, initialLoadCompleted, scenarios]);
 
   // If we have no selected compartment, we try to set the first one as selected.
   useEffect(() => {
+    if (!initialLoadCompleted) {
+      return;
+    }
+
     if (!selectedCompartment && compartments && compartments.length > 0) {
       dispatch(selectCompartment(compartments[0].id));
     }
-  }, [compartments, dispatch, selectedCompartment]);
+  }, [compartments, dispatch, initialLoadCompleted, selectedCompartment]);
 
   // If we have no reference day, we try to set the last day of case data as reference day.
   useEffect(() => {
+    if (!initialLoadCompleted) {
+      return;
+    }
+
     if (!referenceDate && caseDataScenario) {
       dispatch(setStartDate(caseDataScenario.endDate));
     }
-  }, [caseDataScenario, dispatch, referenceDate]);
+  }, [caseDataScenario, dispatch, initialLoadCompleted, referenceDate]);
 
   // Set start and end date.
   useEffect(() => {
+    if (!initialLoadCompleted) {
+      return;
+    }
+
     if (activeScenarios && scenarios) {
       const active = activeScenarios
         .map((activeScenario) => scenarios.find((scenario) => scenario.id === activeScenario))
@@ -350,15 +406,19 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
         dispatch(setMinMaxDates({minDate: minMax.min, maxDate: minMax.max}));
       }
     }
-  }, [activeScenarios, dispatch, scenarios]);
+  }, [activeScenarios, dispatch, initialLoadCompleted, scenarios]);
 
   // Try to select a date if none is selected.
   useEffect(() => {
+    if (!initialLoadCompleted) {
+      return;
+    }
+
     if (!selectedDate && scenarios && scenarios.length > 0) {
       const lastDay = scenarios.map((scenario) => scenario.endDate).sort((a, b) => b.localeCompare(a))[0];
       dispatch(selectDate(lastDay));
     }
-  }, [dispatch, scenarios, selectedDate]);
+  }, [dispatch, initialLoadCompleted, scenarios, selectedDate]);
 
   // Effect to fetch the geoJSON files for the map displays.
   useEffect(() => {
@@ -401,52 +461,52 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
     // this init should only run once on first render
   }, [defaultT]);
 
+  const result = useMemo(
+    () => ({
+      geoData,
+      mapData,
+      searchBarData,
+      lineChartData,
+      referenceDateValues,
+      scenarioCardData,
+      groupFilterData,
+      groupCategories,
+      groups,
+      scenarios,
+      selectedScenarioData,
+      simulationModels,
+      selectedSimulationModel,
+      parameterDefinitions,
+      compartments,
+      npis,
+      nodeLists,
+      nodes,
+    }),
+    [
+      geoData,
+      mapData,
+      searchBarData,
+      lineChartData,
+      referenceDateValues,
+      scenarioCardData,
+      groupCategories,
+      groups,
+      scenarios,
+      groupFilterData,
+      selectedScenarioData,
+      simulationModels,
+      selectedSimulationModel,
+      parameterDefinitions,
+      compartments,
+      npis,
+      nodeLists,
+      nodes,
+    ]
+  );
+
   return (
-    <DataContext.Provider
-      value={useMemo(
-        () => ({
-          geoData,
-          mapData,
-          searchBarData,
-          lineChartData,
-          referenceDateValues,
-          scenarioCardData,
-          groupFilterData,
-          groupCategories,
-          groups,
-          scenarios,
-          selectedScenarioData,
-          simulationModels,
-          selectedSimulationModel,
-          parameterDefinitions,
-          compartments,
-          npis,
-          nodeLists,
-          nodes,
-        }),
-        [
-          geoData,
-          mapData,
-          searchBarData,
-          lineChartData,
-          referenceDateValues,
-          scenarioCardData,
-          groupCategories,
-          groups,
-          scenarios,
-          groupFilterData,
-          selectedScenarioData,
-          simulationModels,
-          selectedSimulationModel,
-          parameterDefinitions,
-          compartments,
-          npis,
-          nodeLists,
-          nodes,
-        ]
-      )}
-    >
-      {children}
+    <DataContext.Provider value={result}>
+      {initialLoadCompleted ? children : null}
     </DataContext.Provider>
   );
 };
