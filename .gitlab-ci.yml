@@ -13,5 +13,5 @@ ubuntu:publish-esid-nginx-image:
   script:
     - cd frontend
     - echo $ARTIFACTORY_TOKEN | docker login $ARTIFACT_STORE -u $ARTIFACTORY_USER --password-stdin
-    - docker image build -t $ARTIFACT_STORE/esid:nginx-latest .
-    - docker push $ARTIFACT_STORE/esid:nginx-latest
+    - docker image build -t $ARTIFACT_STORE/esid/frontend:nginx-latest .
+    - docker push $ARTIFACT_STORE/esid/frontend:nginx-latest
