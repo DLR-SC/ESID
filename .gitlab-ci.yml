@@ -6,7 +6,7 @@
 stages:
   - docker
 
-ubuntu:publish-esid-apache-image:
+ubuntu:publish-esid-nginx-image:
   stage: docker
   tags:
     - shell
