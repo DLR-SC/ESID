@@ -11,8 +11,6 @@ WORKDIR /app
 #copy all the folder contents from local to container
 COPY . .
 
-COPY ./.env ./.env
-
 #Run command npm install to install packages
 RUN npm ci
 
@@ -26,5 +24,8 @@ FROM nginx:alpine
 #into nginx html directory where it will serve our index file
 COPY --from=build-stage /app/dist/ /usr/share/nginx/html
 COPY --from=build-stage /app/nginx.conf /etc/nginx/templates/default.conf.template
+
+COPY env.sh /docker-entrypoint.d/env.sh
+RUN chmod +x /docker-entrypoint.d/env.sh
 
 CMD ["nginx", "-g", "daemon off;"]

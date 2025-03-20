@@ -5,20 +5,6 @@
 
 stages:
   - docker
-  - build
-  - deploy
-
-ubuntu:publish-docker-image:
-  stage: docker
-  tags:
-    - shell
-  script:
-    - cd .docker/ubuntu-gcc
-    - docker image build -t esid:ubuntu-gcc .
-  artifacts:
-    expire_in: 1 hour
-    paths:
-      - .docker/ubuntu-gcc
 
 ubuntu:publish-esid-apache-image:
   stage: docker
@@ -26,56 +12,6 @@ ubuntu:publish-esid-apache-image:
     - shell
   script:
     - cd frontend
-    - echo VITE_API_URL=$VITE_API_URL >> .env
-    - echo VITE_OAUTH_API_URL=$VITE_API_URL >> .env
-    - echo VITE_OAUTH_CLIENT_ID=$VITE_API_URL >> .env
-    - echo VITE_OAUTH_REDIRECT_URL=$VITE_API_URL >> .env
     - echo $ARTIFACTORY_TOKEN | docker login vcevis-common-docker-snapshot.artifacts.dlr.de -u $ARTIFACTORY_USER --password-stdin
-    - docker image build -t vcevis-common-docker-snapshot.artifacts.dlr.de/esid:apache .
-    - docker push vcevis-common-docker-snapshot.artifacts.dlr.de/esid:apache
-
-  artifacts:
-    expire_in: 1 hour
-    paths:
-      - frontend/esid-apache.tar
-
-ubuntu:build:
-  stage: build
-  image: esid:ubuntu-gcc
-  tags:
-    - docker
-  before_script:
-    - cd frontend
-  script:
-    - npm set cache .npm
-    - npm install
-    - npm run build
-  cache:
-    key: "$CI_JOB_NAME"
-    paths:
-      - frontend/.npm
-  artifacts:
-    expire_in: 1 hour
-    paths:
-      - frontend/build
-
-# pages:
-#   stage: deploy
-#   image: esid:ubuntu-gcc
-#   tags:
-#     - docker
-#   script:
-#     - folderName=$(echo "${CI_COMMIT_REF_NAME}" | tr / -)
-#     - rm -rf public/$folderName/
-#     - mkdir -p public/$folderName/
-#     - cp -rv frontend/build/* public/$folderName
-#     - cd public
-#     - tree -H '.' -L 1 -d --noreport --charset utf-8 > index.html
-#   cache:
-#     key: "$CI_JOB_NAME"
-#     paths:
-#       - public
-#   artifacts:
-#     expire_in: 1 hour
-#     paths:
-#       - public
+    - docker image build -t vcevis-common-docker-snapshot.artifacts.dlr.de/esid:nginx-latest .
+    - docker push vcevis-common-docker-snapshot.artifacts.dlr.de/esid:nginx-latest
