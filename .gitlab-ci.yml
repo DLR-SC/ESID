@@ -12,6 +12,6 @@ ubuntu:publish-esid-apache-image:
     - shell
   script:
     - cd frontend
-    - echo $ARTIFACTORY_TOKEN | docker login vcevis-common-docker-snapshot.artifacts.dlr.de -u $ARTIFACTORY_USER --password-stdin
-    - docker image build -t vcevis-common-docker-snapshot.artifacts.dlr.de/esid:nginx-latest .
-    - docker push vcevis-common-docker-snapshot.artifacts.dlr.de/esid:nginx-latest
+    - echo $ARTIFACTORY_TOKEN | docker login $ARTIFACT_STORE -u $ARTIFACTORY_USER --password-stdin
+    - docker image build -t $ARTIFACT_STORE/esid:nginx-latest .
+    - docker push $ARTIFACT_STORE/esid:nginx-latest
