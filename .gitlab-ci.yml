@@ -30,7 +30,7 @@ ubuntu:publish-esid-apache-image:
     - echo VITE_OAUTH_API_URL=$VITE_API_URL >> .env
     - echo VITE_OAUTH_CLIENT_ID=$VITE_API_URL >> .env
     - echo VITE_OAUTH_REDIRECT_URL=$VITE_API_URL >> .env
-    - echo $ARTIFACTORY_TOKEN | docker login vcevis-common-docker-snapshot.artifacts.dlr.de --password-stdin
+    - echo $ARTIFACTORY_TOKEN | docker login vcevis-common-docker-snapshot.artifacts.dlr.de -u $ARTIFACTORY_USER --password-stdin
     - docker image build -t vcevis-common-docker-snapshot.artifacts.dlr.de/esid:apache .
     - docker push vcevis-common-docker-snapshot.artifacts.dlr.de/esid:apache
 
