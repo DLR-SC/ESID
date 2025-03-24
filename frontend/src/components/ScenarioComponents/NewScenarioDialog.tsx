@@ -39,6 +39,7 @@ export interface NewScenarioData {
 
 export default function NewScenarioDialog({models, npiOptions, nodeOptions, onSubmit}: ScenarioFormProps) {
   const {t} = useTranslation();
+  const {t: tBackend} = useTranslation('backend');
 
   const [formData, setFormData] = React.useState<NewScenarioData>({
     name: '',
@@ -156,7 +157,7 @@ export default function NewScenarioDialog({models, npiOptions, nodeOptions, onSu
             <FormControlLabel
               key={npi.id}
               control={<Checkbox checked={formData.npis.includes(npi.id)} onChange={() => handleNPIChange(npi.id)} />}
-              label={npi.name}
+              label={tBackend(`interventions.${npi.name}`)}
             />
           ))}
         </FormGroup>
@@ -172,7 +173,7 @@ export default function NewScenarioDialog({models, npiOptions, nodeOptions, onSu
         >
           {models.map((model) => (
             <MenuItem key={model} value={model}>
-              {model}
+              {tBackend(`models.${model}`)}
             </MenuItem>
           ))}
         </Select>
@@ -188,7 +189,7 @@ export default function NewScenarioDialog({models, npiOptions, nodeOptions, onSu
         >
           {nodeOptions.map((node) => (
             <MenuItem key={node} value={node}>
-              {node}
+              {tBackend(`regions.${node}`)}
             </MenuItem>
           ))}
         </Select>

@@ -202,7 +202,17 @@
       description: 'Relative reduction against symptomatic CODs for individuals with partial immunity',
       unit: '%',
     },
+    ReducedInfectedSymptomsPartialImmunity: {
+      symbol: 'p_{I_{Sy,PI}}',
+      description: 'Relative reduction against symptomatic CODs for individuals with partial immunity',
+      unit: '%',
+    },
     ReducExposedImprovedImmunity: {
+      symbol: 'p_{E_{II}}',
+      description: 'Relative reduction against any infection for individuals with improved immunity',
+      unit: '%',
+    },
+    ReducedExposedImprovedImmunity: {
       symbol: 'p_{E_{II}}',
       description: 'Relative reduction against any infection for individuals with improved immunity',
       unit: '%',
@@ -212,7 +222,17 @@
       description: 'Relative reduction against symptomatic CODs for individuals with improved immunity',
       unit: '%',
     },
+    ReducedInfectedSymptomsImprovedImmunity: {
+      symbol: 'p_{I_{Sy,II}}',
+      description: 'Relative reduction against symptomatic CODs for individuals with improved immunity',
+      unit: '%',
+    },
     ReducInfectedSevereCriticalDeadImprovedImmunity: {
+      symbol: 'p_{I_{Sev,II}}',
+      description: 'Relative reduction against severe and critical CODs for individuals with improved immunity',
+      unit: '%',
+    },
+    ReducedInfectedSevereCriticalDeadImprovedImmunity: {
       symbol: 'p_{I_{Sev,II}}',
       description: 'Relative reduction against severe and critical CODs for individuals with improved immunity',
       unit: '%',
@@ -222,12 +242,27 @@
       description: 'Relative reduction against severe and critical CODs for individuals with partial immunity',
       unit: '%',
     },
+    ReducedInfectedSevereCriticalDeadPartialImmunity: {
+      symbol: 'p_{I_{Sev,PI}}',
+      description: 'Relative reduction against severe and critical CODs for individuals with partial immunity',
+      unit: '%',
+    },
     ReducTimeInfectedMild: {
       symbol: '\\kappa',
       description: 'Relative reduction of time span of mild infections for individuals with partial and improved immunity',
       unit: 'days',
     },
+    ReducedTimeInfectedMild: {
+      symbol: '\\kappa',
+      description: 'Relative reduction of time span of mild infections for individuals with partial and improved immunity',
+      unit: 'days',
+    },
     ReducExposedPartialImmunity: {
+      symbol: 'p_{E_{PI}}',
+      description: 'Relative reduction against any infection for individuals with partial immunity',
+      unit: '%',
+    },
+    ReducedExposedPartialImmunity: {
       symbol: 'p_{E_{PI}}',
       description: 'Relative reduction against any infection for individuals with partial immunity',
       unit: '%',
@@ -272,6 +307,11 @@
       description: 'Average time span of infectiousness without symptoms',
       unit: 'days',
     },
+    TimeInfectedNoSymptoms: {
+      symbol: 'T_C',
+      description: 'Average time span of infectiousness without symptoms',
+      unit: 'days',
+    },
   },
   'scenario-names': {
     caseData: 'Estimated Cases',
@@ -299,6 +339,27 @@
       female: 'Female',
       male: 'Male',
       nonbinary: 'Non-Binary',
+
+      Group1: '0 - 4 Years',
+      Group2: '5 - 14 Years',
+      Group3: '15 - 34 Years',
+      Group4: '35 - 59 Years',
+      Group5: '60 - 79 Years',
+      Group6: 'Above 80 Years',
+      Total: 'Total',
     },
   },
+  interventions: {
+    'School closure': 'School closure',
+    "Face masks & social distancing School": "Face masks & social distancing School",
+    "Face masks & social distancing Work": "Face masks & social distancing Work",
+    "Face masks & social distancing Other": "Face masks & social distancing Other",
+    "Remote work": "Implementation of remote work policies"
+  },
+  models: {
+    secirvvs: 'SECIRVVS',
+  },
+  regions: {
+    all_counties: 'All Districts'
+  }
 }

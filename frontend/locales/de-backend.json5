@@ -204,7 +204,17 @@
       description: 'Relative Reduktion symptomatischer Infektionen für Personen mit partieller Immunität',
       unit: '%',
     },
+    ReducedInfectedSymptomsPartialImmunity: {
+      symbol: 'p_{I_{Sy,PI}}',
+      description: 'Relative Reduktion symptomatischer Infektionen für Personen mit partieller Immunität',
+      unit: '%',
+    },
     ReducExposedImprovedImmunity: {
+      symbol: 'p_{E_{II}}',
+      description: 'Relative Reduktion jedweder Infektion für Personen mit hoher Immunität',
+      unit: '%',
+    },
+    ReducedExposedImprovedImmunity: {
       symbol: 'p_{E_{II}}',
       description: 'Relative Reduktion jedweder Infektion für Personen mit hoher Immunität',
       unit: '%',
@@ -214,7 +224,17 @@
       description: 'Relative Reduktion symptomatischer Infektionen für Personen mit hoher Immunität',
       unit: '%',
     },
+    ReducedInfectedSymptomsImprovedImmunity: {
+      symbol: 'p_{I_{Sy,II}}',
+      description: 'Relative Reduktion symptomatischer Infektionen für Personen mit hoher Immunität',
+      unit: '%',
+    },
     ReducInfectedSevereCriticalDeadImprovedImmunity: {
+      symbol: 'p_{I_{Sev,II}}',
+      description: 'Relative Reduktion schwerer oder kritischer Infektion für Personen mit hoher Immunität',
+      unit: '%',
+    },
+    ReducedInfectedSevereCriticalDeadImprovedImmunity: {
       symbol: 'p_{I_{Sev,II}}',
       description: 'Relative Reduktion schwerer oder kritischer Infektion für Personen mit hoher Immunität',
       unit: '%',
@@ -224,12 +244,27 @@
       description: 'Relative Reduktion schwerer oder kritischer Infektionen für Personen mit partieller Immunität',
       unit: '%',
     },
+    ReducedInfectedSevereCriticalDeadPartialImmunity: {
+      symbol: 'p_{I_{Sev,PI}}',
+      description: 'Relative Reduktion schwerer oder kritischer Infektionen für Personen mit partieller Immunität',
+      unit: '%',
+    },
     ReducTimeInfectedMild: {
       symbol: '\\kappa',
       description: 'Relative Reduktion der Dauer milder Infektionen für partiell und gut geschützte Individuen',
       unit: 'Tage',
     },
+    ReducedTimeInfectedMild: {
+      symbol: '\\kappa',
+      description: 'Relative Reduktion der Dauer milder Infektionen für partiell und gut geschützte Individuen',
+      unit: 'Tage',
+    },
     ReducExposedPartialImmunity: {
+      symbol: 'p_{E_{PI}}',
+      description: 'Relative Reduktion jedweder Infektion für Personen mit partieller Immunität',
+      unit: '%',
+    },
+    ReducedExposedPartialImmunity: {
       symbol: 'p_{E_{PI}}',
       description: 'Relative Reduktion jedweder Infektion für Personen mit partieller Immunität',
       unit: '%',
@@ -274,6 +309,11 @@
       description: 'Mittlere Zeitspanne der Infektiösität ohne Symptome',
       unit: 'Tage',
     },
+    TimeInfectedNoSymptoms: {
+      symbol: 'T_C',
+      description: 'Mittlere Zeitspanne der Infektiösität ohne Symptome',
+      unit: 'Tage',
+    },
   },
   'scenario-names': {
     caseData: 'Geschätzte Fälle',
@@ -301,6 +341,27 @@
       female: 'Weiblich',
       male: 'Männlich',
       nonbinary: 'Divers',
+
+      Group1: '0 - 4 Jahre',
+      Group2: '5 - 14 Jahre',
+      Group3: '15 - 34 Jahre',
+      Group4: '35 - 59 Jahre',
+      Group5: '60 - 79 Jahre',
+      Group6: 'Über 80 Jahre',
+      Total: 'Gesamt'
     },
   },
+  interventions: {
+    'School closure': 'Schulschließungen',
+    "Face masks & social distancing School": "Maskenpflicht & Abstandsregeln Schule",
+    "Face masks & social distancing Work": "Maskenpflicht & Abstandsregeln Arbeit",
+    "Face masks & social distancing Other": "Maskenpflicht & Abstandsregeln Sonstiges",
+    "Remote work": "Einführung von Homeoffice-Regelungen"
+  },
+  models: {
+    secirvvs: 'SECIRVVS',
+  },
+  regions: {
+    all_counties: 'Alle Landkreise'
+  }
 }
