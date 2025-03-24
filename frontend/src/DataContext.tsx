@@ -126,7 +126,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
   const {data: groups, ...groupsResult} = useGetGroupsQuery();
   const {data: groupCategories, ...groupCategoriesResult} = useGetGroupCategoriesQuery();
 
-  const initialLoadCompleted = useMemo(() => {
+  const dataLoadingCompleted = useMemo(() => {
     return (
       !scenariosResult.isLoading &&
       !compartmentsResult.isLoading &&
@@ -146,12 +146,14 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
     scenariosResult.isLoading,
   ]);
 
+  const [stateUpdateCompleted, setStateUpdateCompleted] = useState(false);
+
   const totalGroup = useMemo(() => {
     return groups?.find((group) => group.name === 'Total');
   }, [groups]);
 
   useEffect(() => {
-    if (!initialLoadCompleted) {
+    if (!dataLoadingCompleted) {
       return;
     }
 
@@ -161,10 +163,10 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
         dispatch(selectDistrict({...germanyNode, type: ''}));
       }
     }
-  }, [dispatch, initialLoadCompleted, nodes, selectedDistrict]);
+  }, [dispatch, dataLoadingCompleted, nodes, selectedDistrict]);
 
   useEffect(() => {
-    if (!initialLoadCompleted) {
+    if (!dataLoadingCompleted) {
       return;
     }
 
@@ -193,13 +195,13 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
         }
       }
     }
-  }, [dispatch, i18n, initialLoadCompleted, scenarios, scenariosState, tBackend]);
+  }, [dispatch, i18n, dataLoadingCompleted, scenarios, scenariosState, tBackend]);
 
   const caseDataId = scenarios?.find((scenario) => scenario.name === 'casedata')?.id;
   const {data: caseDataScenario} = useGetScenarioQuery(caseDataId!, {skip: !caseDataId});
 
   useEffect(() => {
-    if (!initialLoadCompleted) {
+    if (!dataLoadingCompleted) {
       return;
     }
 
@@ -207,7 +209,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
     if (node) {
       dispatch(selectDistrict({id: node.id, nuts: node.name, name: '', type: ''}));
     }
-  }, [dispatch, initialLoadCompleted, nodes]);
+  }, [dispatch, dataLoadingCompleted, nodes]);
 
   const {data: referenceDateValues} = useGetScenarioInfectionDataQuery(
     {
@@ -317,29 +319,35 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
 
   // Try to set at least one active scenario.
   useEffect(() => {
-    if (!initialLoadCompleted) {
+    if (!dataLoadingCompleted) {
       return;
     }
 
     if (activeScenarios?.length === 0 && caseDataScenario) {
       dispatch(updateScenario({id: caseDataScenario.id, state: {visibility: 'faceUp'}}));
     }
-  }, [activeScenarios, caseDataScenario, dispatch, initialLoadCompleted]);
+  }, [activeScenarios, caseDataScenario, dispatch, dataLoadingCompleted]);
 
   // If we have no selected scenario, we try to set the case data as selected.
   useEffect(() => {
-    if (!initialLoadCompleted) {
+    if (!dataLoadingCompleted) {
       return;
+    }
+
+    if (selectedScenario && !scenariosState[selectedScenario]) {
+      dispatch(selectScenario(null));
     }
 
     if (!selectedScenario && caseDataScenario) {
       dispatch(selectScenario(caseDataScenario.id));
     }
-  }, [caseDataScenario, dispatch, initialLoadCompleted, selectedScenario]);
+
+    setStateUpdateCompleted(true);
+  }, [caseDataScenario, dispatch, dataLoadingCompleted, scenariosState, selectedScenario]);
 
   // Set scenario colors
   useEffect(() => {
-    if (!initialLoadCompleted) {
+    if (!dataLoadingCompleted) {
       return;
     }
 
@@ -353,33 +361,33 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
         dispatch(updateScenario({id: scenario.id, state: {colors: theme.custom.scenarios[colorIndex]}}));
       }
     });
-  }, [caseDataScenario, dispatch, initialLoadCompleted, scenarios]);
+  }, [caseDataScenario, dispatch, dataLoadingCompleted, scenarios]);
 
   // If we have no selected compartment, we try to set the first one as selected.
   useEffect(() => {
-    if (!initialLoadCompleted) {
+    if (!dataLoadingCompleted) {
       return;
     }
 
     if (!selectedCompartment && compartments && compartments.length > 0) {
       dispatch(selectCompartment(compartments[0].id));
     }
-  }, [compartments, dispatch, initialLoadCompleted, selectedCompartment]);
+  }, [compartments, dispatch, dataLoadingCompleted, selectedCompartment]);
 
   // If we have no reference day, we try to set the last day of case data as reference day.
   useEffect(() => {
-    if (!initialLoadCompleted) {
+    if (!dataLoadingCompleted) {
       return;
     }
 
     if (!referenceDate && caseDataScenario) {
       dispatch(setStartDate(caseDataScenario.endDate));
     }
-  }, [caseDataScenario, dispatch, initialLoadCompleted, referenceDate]);
+  }, [caseDataScenario, dispatch, dataLoadingCompleted, referenceDate]);
 
   // Set start and end date.
   useEffect(() => {
-    if (!initialLoadCompleted) {
+    if (!dataLoadingCompleted) {
       return;
     }
 
@@ -406,11 +414,11 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
         dispatch(setMinMaxDates({minDate: minMax.min, maxDate: minMax.max}));
       }
     }
-  }, [activeScenarios, dispatch, initialLoadCompleted, scenarios]);
+  }, [activeScenarios, dispatch, dataLoadingCompleted, scenarios]);
 
   // Try to select a date if none is selected.
   useEffect(() => {
-    if (!initialLoadCompleted) {
+    if (!dataLoadingCompleted) {
       return;
     }
 
@@ -418,7 +426,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
       const lastDay = scenarios.map((scenario) => scenario.endDate).sort((a, b) => b.localeCompare(a))[0];
       dispatch(selectDate(lastDay));
     }
-  }, [dispatch, initialLoadCompleted, scenarios, selectedDate]);
+  }, [dispatch, dataLoadingCompleted, scenarios, selectedDate]);
 
   // Effect to fetch the geoJSON files for the map displays.
   useEffect(() => {
@@ -506,7 +514,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
 
   return (
     <DataContext.Provider value={result}>
-      {initialLoadCompleted ? children : null}
+      {dataLoadingCompleted && stateUpdateCompleted ? children : 'Loading...'}
     </DataContext.Provider>
   );
 };
