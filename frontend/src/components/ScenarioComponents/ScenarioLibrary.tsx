@@ -55,7 +55,7 @@ export default function ScenarioLibrary(): JSX.Element {
             state: {
               name: data.name,
               description: data.description,
-              visibility: 'inLibrary',
+              visibility: 'faceUp',
             },
           })
         );
@@ -244,7 +244,7 @@ function LibraryCard(props: Readonly<{id: string; name: string}>): JSX.Element {
               background: '#EEEEEEEE',
             },
           }}
-          onClick={() => dispatch(updateScenario({id: props.id, state: {visibility: 'faceDown'}}))}
+          onClick={() => dispatch(updateScenario({id: props.id, state: {visibility: 'faceUp'}}))}
         >
           <Box
             id={`card-front-${props.id}`}
