@@ -5,7 +5,6 @@ import {defineConfig, splitVendorChunkPlugin} from 'vite';
 import react from '@vitejs/plugin-react';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import preload from 'unplugin-inject-preload/vite';
-import eslintPlugin from '@nabla/vite-plugin-eslint';
 
 export default defineConfig((configEnv) => {
   return {
@@ -13,7 +12,6 @@ export default defineConfig((configEnv) => {
     base: './',
     plugins: [
       react(),
-      eslintPlugin(),
       tsconfigPaths(),
       splitVendorChunkPlugin(),
       preload({
@@ -35,20 +33,6 @@ export default defineConfig((configEnv) => {
     ],
     build: {
       assetsInlineLimit: 0,
-    },
-    test: {
-      environment: 'jsdom',
-      setupFiles: './src/__tests__/setup.ts',
-      coverage: {
-        reporter: ['text', 'clover'],
-        reportsDirectory: 'reports',
-      },
-      threads: false,
-      server: {
-        deps: {
-          inline: ['vitest-canvas-mock'],
-        },
-      },
     },
   };
 });

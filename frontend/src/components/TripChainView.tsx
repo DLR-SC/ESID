@@ -2,12 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React, {useCallback, useContext, useMemo, useState, useEffect} from 'react';
-import {
-  infectionStateNames,
-  locationNames,
-  PandemosContext,
-  transportNames,
-} from '../data_sockets/PandemosContext';
+import {infectionStateNames, locationNames, PandemosContext, transportNames} from '../data_sockets/PandemosContext';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import {Card, Checkbox, Chip, FormControlLabel, List, ListItem} from '@mui/material';
@@ -15,7 +10,7 @@ import Divider from '@mui/material/Divider';
 import hash from 'object-hash';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import ToggleButton from '@mui/material/ToggleButton';
-import {infectionStates, susceptibleStates} from './InspireGridComponents/Constants';
+import {infectionStates} from './InspireGridComponents/Constants';
 import {Trip, Location} from '../types/pandemos';
 
 function TripChainTransport(props: {modeOfTransport: string}): JSX.Element {
@@ -84,13 +79,7 @@ export default function TripChainView(): JSX.Element {
 
     const tripMap = new Map<string, Array<number>>();
     for (const [id, tripChain] of context.tripChains) {
-      if (
-        filterInfections &&
-        !tripChain.find(
-          (trip) =>
-            infectionStates.includes(trip.infection_state)
-        )
-      ) {
+      if (filterInfections && !tripChain.find((trip) => infectionStates.includes(trip.infection_state))) {
         continue;
       }
 

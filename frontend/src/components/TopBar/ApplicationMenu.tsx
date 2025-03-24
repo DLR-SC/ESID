@@ -1,23 +1,19 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, {MouseEvent, useContext} from 'react';
+import React, {MouseEvent} from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
 import {useTranslation} from 'react-i18next';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import Divider from '@mui/material/Divider';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Box from '@mui/system/Box';
-import {useAppSelector} from 'store/hooks';
-import {AuthContext, IAuthContext} from 'react-oauth2-code-pkce';
 
-const ChangelogDialog = React.lazy(() => import('./PopUps/ChangelogDialog'));
-const ImprintDialog = React.lazy(() => import('./PopUps/ImprintDialog'));
-const PrivacyPolicyDialog = React.lazy(() => import('./PopUps/PrivacyPolicyDialog'));
-const AccessibilityDialog = React.lazy(() => import('./PopUps/AccessibilityDialog'));
-const AttributionDialog = React.lazy(() => import('./PopUps/AttributionDialog'));
+import ImprintDialog from './PopUps/ImprintDialog';
+import PrivacyPolicyDialog from './PopUps/PrivacyPolicyDialog';
+import AccessibilityDialog from './PopUps/AccessibilityDialog';
+import AttributionDialog from './PopUps/AttributionDialog';
 
 /**
  * This menu is found at the top right of the application and is reachable from everywhere. It contains ways to access
@@ -26,20 +22,11 @@ const AttributionDialog = React.lazy(() => import('./PopUps/AttributionDialog'))
 export default function ApplicationMenu(): JSX.Element {
   const {t} = useTranslation();
 
-  const realm = useAppSelector((state) => state.realm.name);
-  const {login, token, logOut} = useContext<IAuthContext>(AuthContext);
-
-  // user cannot login when realm is not selected
-  const loginDisabled = realm === '';
-  // user is authenticated when token is not empty
-  const isAuthenticated = token !== '';
-
   const [anchorElement, setAnchorElement] = React.useState<Element | null>(null);
   const [imprintOpen, setImprintOpen] = React.useState(false);
   const [privacyPolicyOpen, setPrivacyPolicyOpen] = React.useState(false);
   const [accessibilityOpen, setAccessibilityOpen] = React.useState(false);
   const [attributionsOpen, setAttributionsOpen] = React.useState(false);
-  const [changelogOpen, setChangelogOpen] = React.useState(false);
 
   /** Calling this method opens the application menu. */
   const openMenu = (event: MouseEvent) => {
@@ -49,18 +36,6 @@ export default function ApplicationMenu(): JSX.Element {
   /** Calling this method closes the application menu. */
   const closeMenu = () => {
     setAnchorElement(null);
-  };
-
-  /** This method gets called, when the login menu entry was clicked. */
-  const loginClicked = () => {
-    closeMenu();
-    login();
-  };
-
-  /** This method gets called, when the logout menu entry was clicked. */
-  const logoutClicked = () => {
-    closeMenu();
-    logOut();
   };
 
   /** This method gets called, when the imprint menu entry was clicked. It opens a dialog showing the legal text. */
@@ -87,12 +62,6 @@ export default function ApplicationMenu(): JSX.Element {
     setAttributionsOpen(true);
   };
 
-  /** This method gets called, when the changelog menu entry was clicked. */
-  const changelogClicked = () => {
-    closeMenu();
-    setChangelogOpen(true);
-  };
-
   return (
     <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'flex-end'}}>
       <Button
@@ -105,19 +74,10 @@ export default function ApplicationMenu(): JSX.Element {
         <MenuIcon />
       </Button>
       <Menu id='application-menu' anchorEl={anchorElement} open={Boolean(anchorElement)} onClose={closeMenu}>
-        {isAuthenticated ? (
-          <MenuItem onClick={logoutClicked}>{t('topBar.menu.logout')}</MenuItem>
-        ) : (
-          <MenuItem onClick={loginClicked} disabled={loginDisabled}>
-            {t('topBar.menu.login')}
-          </MenuItem>
-        )}
-        <Divider />
         <MenuItem onClick={imprintClicked}>{t('topBar.menu.imprint')}</MenuItem>
         <MenuItem onClick={privacyPolicyClicked}>{t('topBar.menu.privacy-policy')}</MenuItem>
         <MenuItem onClick={accessibilityClicked}>{t('topBar.menu.accessibility')}</MenuItem>
         <MenuItem onClick={attributionClicked}>{t('topBar.menu.attribution')}</MenuItem>
-        <MenuItem onClick={changelogClicked}>{t('topBar.menu.changelog')}</MenuItem>
       </Menu>
 
       <Dialog maxWidth='lg' fullWidth={true} open={imprintOpen} onClose={() => setImprintOpen(false)}>
@@ -134,10 +94,6 @@ export default function ApplicationMenu(): JSX.Element {
 
       <Dialog maxWidth='lg' fullWidth={true} open={attributionsOpen} onClose={() => setAttributionsOpen(false)}>
         <AttributionDialog />
-      </Dialog>
-
-      <Dialog maxWidth='lg' fullWidth={true} open={changelogOpen} onClose={() => setChangelogOpen(false)}>
-        <ChangelogDialog />
       </Dialog>
     </Box>
   );

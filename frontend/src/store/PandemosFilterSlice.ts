@@ -119,7 +119,6 @@ export const PandemosFilterSlice = createSlice({
 });
 
 export const {
-  selectTripDuration,
   selectAgeGroups,
   selectTransportationModes,
   selectActivities,

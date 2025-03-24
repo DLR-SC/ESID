@@ -67,7 +67,6 @@ function getRectangles(latMin: number, latMax: number, lonMin: number, lonMax: n
   return rectangles;
 }
 
-
 function latitudeCoordinates(latMin: number, latMax: number, lonMin: number, lonMax: number, level: number) {
   const linesLat = [];
 

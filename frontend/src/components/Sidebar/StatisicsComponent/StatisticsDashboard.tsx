@@ -8,14 +8,15 @@ import {
   selectActivities,
   selectAgeGroups,
   selectDestinationTypes,
-  selectInfectionStates, selectOriginTypes,
+  selectInfectionStates,
+  selectOriginTypes,
   selectTransportationModes,
 } from 'store/PandemosFilterSlice';
 import {KeyInfo} from 'types/pandemos';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import {scaleLinear} from 'd3';
 
-export default function StatisticsDashboard(props: any): JSX.Element {
+export default function StatisticsDashboard(): JSX.Element {
   const context = useContext(PandemosContext);
   const dispatch = useAppDispatch();
   const chartRefs = useRef<{[key: string]: any}>({});
@@ -284,7 +285,7 @@ export default function StatisticsDashboard(props: any): JSX.Element {
         .label((d: any) => KeyInfo.age_group[d.data.key].icon)
         .on('filtered', function (_chart: any) {
           // Get all selected filters
-          const selectedFilters = _chart.filters()
+          const selectedFilters = _chart.filters();
           dispatch(
             selectAgeGroups({
               ageGroups: selectedFilters,

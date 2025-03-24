@@ -6,10 +6,7 @@ import React from 'react';
 import {useTranslation} from 'react-i18next';
 import ApplicationMenu from './ApplicationMenu';
 import Box from '@mui/material/Box';
-import LanguagePicker from './LanguagePicker';
-import RealmSelect from './RealmSelect';
 import esidLogo from '../../../assets/logo/logo-200x66.svg';
-import InfoButton from '../../components/OnboardingComponents/InfoButton';
 
 /**
  * This is the top navigation bar of the application. It contains the logo and a burger menu to access settings and
@@ -25,6 +22,7 @@ export default function TopBar(): JSX.Element {
         display: 'flex',
         alignItems: 'center',
         height: '56px',
+        minHeight: '56px',
         backgroundColor: theme.palette.background.default,
         borderBottom: `1px solid ${theme.palette.divider}`,
         paddingLeft: theme.spacing(4),
@@ -44,11 +42,6 @@ export default function TopBar(): JSX.Element {
         />
       </Box>
       <Box sx={{flexGrow: 1}} />
-      <LanguagePicker />
-      <RealmSelect />
-      <Box sx={{alignItems: 'center'}}>
-        <InfoButton />
-      </Box>
       <ApplicationMenu />
     </Box>
   );

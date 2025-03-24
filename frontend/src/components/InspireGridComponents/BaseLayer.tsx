@@ -4,12 +4,10 @@
 import React, {useCallback, useContext, useEffect, useMemo, useState} from 'react';
 import {LayerGroup, LayersControl, MapContainer, TileLayer, Rectangle, useMap, Polyline} from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import {getGridNew, getCellFromPosition} from './inspire';
+import {getGridNew} from './inspire';
 import {PandemosContext} from '../../data_sockets/PandemosContext';
 import {susceptibleStates, infectionStates} from './Constants';
 import {useAppSelector} from '../../store/hooks';
-import {KeyInfo} from '../../types/pandemos';
-import age_group = KeyInfo.age_group;
 
 type MapBounds = [[number, number], [number, number]];
 type MapCenter = [number, number];
@@ -51,21 +49,12 @@ function MapEventsHandler({setMapZoom, setMapBounds, setMapCenter}: BaseLayerPro
       setMapCenter([center.lat, center.lng]);
     };
 
-    const handleMouseClick = (position: any) => {
-      const clickedPosition = position.latlng;
-      /* console.log(
-        getCellFromPosition([clickedPosition.lat, clickedPosition.lng], getResolutionFromZoom(map.getZoom()))
-      ); */
-    };
-
     map.on('zoomend', handleZoomEnd);
     map.on('moveend', handleMoveEnd);
-    map.on('click', handleMouseClick);
 
     return () => {
       map.off('zoomend', handleZoomEnd);
       map.off('moveend', handleMoveEnd);
-      map.off('click', handleMouseClick);
     };
   }, [map, setMapZoom, setMapBounds, setMapCenter]);
 
@@ -101,7 +90,7 @@ export default function BaseLayer({
   const selectedTab = useAppSelector((state) => state.userPreference.selectedSidebarTab ?? '1');
   const filter = useAppSelector((state) => state.pandemosFilter);
   const [showTrips, setShowTrips] = useState(false);
-  const [showHeatMap, setShowHeatMap] = useState(false);
+  const [showHeatMap, setShowHeatMap] = useState(true);
 
   const gridResolution = useMemo(() => getResolutionFromZoom(mapZoom), [mapZoom]);
 
@@ -126,17 +115,17 @@ export default function BaseLayer({
     context.tripChains?.forEach((tripChain) => {
       tripChain?.forEach((trip, index) => {
         if (index > 0) {
-            if (
-              infectionStates.includes(trip.infection_state) &&
-              trip.infection_state !== tripChain[index - 1].infection_state &&
-              susceptibleStates.includes(tripChain[index - 1].infection_state)
-            ) {
-              infectedLocations.push({
-                pos: getLocationPos(trip.start_location),
-                infectionType: trip.infection_state,
-              });
-            }
+          if (
+            infectionStates.includes(trip.infection_state) &&
+            trip.infection_state !== tripChain[index - 1].infection_state &&
+            susceptibleStates.includes(tripChain[index - 1].infection_state)
+          ) {
+            infectedLocations.push({
+              pos: getLocationPos(trip.start_location),
+              infectionType: trip.infection_state,
+            });
           }
+        }
       });
     });
     return infectedLocations;
@@ -186,7 +175,7 @@ export default function BaseLayer({
 
     const trips: {id: number; pos: [number, number]; color: string}[] = [];
 
-    if (selectedTab === '3') {
+    if (selectedTab === '2') {
       context.filteredTripChains?.forEach((tripChains) => {
         tripChains.forEach((tripChainId) => {
           if (context.tripChains) {
@@ -224,7 +213,7 @@ export default function BaseLayer({
           }
         });
       });
-    } else if (selectedTab === '2') {
+    } else if (selectedTab === '1') {
       context.trips?.forEach((trip) => {
         const duration = trip.end_time - trip.start_time;
         const agent = context.agents?.find((agent) => agent.agent_id === trip.agent_id);
@@ -329,7 +318,7 @@ export default function BaseLayer({
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
       />
-      <LayersControl position='topright' sortLayers={false}>
+      <LayersControl position='topright' sortLayers={false} collapsed={false}>
         <LayersControl.Overlay checked={showHeatMap} name='Infection Heatmap'>
           <LayerGroup
             eventHandlers={{
@@ -370,14 +359,13 @@ export default function BaseLayer({
               },
             }}
           >
-            {trips
-              .map((line) => (
-                <Polyline
-                  key={line.id}
-                  pathOptions={{weight: 1, color: line.color}}
-                  positions={line.pos.map((pos) => [pos[1], pos[0]])}
-                />
-              ))}
+            {trips.map((line) => (
+              <Polyline
+                key={line.id}
+                pathOptions={{weight: 1, color: line.color}}
+                positions={line.pos.map((pos) => [pos[1], pos[0]])}
+              />
+            ))}
           </LayerGroup>
         </LayersControl.Overlay>
       </LayersControl>

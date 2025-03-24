@@ -5,7 +5,6 @@ import React, {useEffect, useState} from 'react';
 import {useTheme} from '@mui/material/styles';
 import {useTranslation} from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
-import LazyLoad from 'react-lazyload';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import Grid from '@mui/material/Grid';
@@ -73,10 +72,8 @@ export default function AttributionDialog(): JSX.Element {
   function AttributionList(props: {attrib: Array<string>}): JSX.Element {
     return (
       <>
-        {props.attrib.map((a: string, i) => (
-          <LazyLoad key={i}>
-            <ReactMarkdown>{a}</ReactMarkdown>
-          </LazyLoad>
+        {props.attrib.map((a: string) => (
+          <ReactMarkdown>{a}</ReactMarkdown>
         ))}
       </>
     );

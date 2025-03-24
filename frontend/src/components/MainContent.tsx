@@ -2,12 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React from 'react';
-import IconBar from './IconBar';
 import Grid from '@mui/material/Grid';
 import {useTheme} from '@mui/material/styles';
-import MainContentTabs from './MainContentTabs';
-import {ReferenceDayConnector} from './ReferenceDayConnector';
-import ScenarioContainer from './ScenarioComponents/ScenarioContainer';
+import InspireGrid from './InspireGridContainer';
 
 export default function MainContent(): JSX.Element {
   const theme = useTheme();
@@ -23,21 +20,7 @@ export default function MainContent(): JSX.Element {
         width: 'calc(100% - 423px)',
       }}
     >
-      <Grid
-        id='main-content-icon-bar-wrapper'
-        item
-        sx={{
-          marginLeft: 'auto',
-          marginRight: 'auto',
-        }}
-      >
-        <IconBar />
-      </Grid>
-      <Grid sx={{width: '100%', maxWidth: '100%'}} id='main-content-scenario-wrapper' item>
-        <ScenarioContainer />
-      </Grid>
-      <ReferenceDayConnector />
-      <MainContentTabs />
+      <InspireGrid />
     </Grid>
   );
 }
