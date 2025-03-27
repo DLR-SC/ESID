@@ -16,8 +16,10 @@ export default function MapContainer() {
       id='sidebar-root'
       sx={{
         // Self
-        width: selectedTab == '2' ? '650px' : '422px',
-        transition: 'width 1s',
+        minWidth: selectedTab == '2' ? '600px' : '422px',
+        width: selectedTab == '2' ? '600px' : '422px',
+        maxWidth: selectedTab == '2' ? '600px' : '422px',
+        transition: 'width 1s, min-width 1s, max-width 1s',
         height: '100%',
         borderRight: `1px solid ${theme.palette.divider}`,
         background: theme.palette.background.default,

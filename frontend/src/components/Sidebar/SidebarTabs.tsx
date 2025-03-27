@@ -3,7 +3,7 @@
 
 import Box from '@mui/material/Box';
 import React, {useCallback, useMemo} from 'react';
-import {Typography} from '@mui/material';
+import Typography from '@mui/material/Typography';
 import TabContext from '@mui/lab/TabContext';
 import TabPanel from '@mui/lab/TabPanel';
 import {useAppDispatch, useAppSelector} from 'store/hooks';
@@ -71,7 +71,7 @@ export default function SidebarTabs(): JSX.Element {
             <Tab label={<Typography>Trip Chains</Typography>} value='2' sx={tabStyle} />
           </TabList>
         </Box>
-        <TabPanel value='1' sx={{flexGrow: 1, padding: 0}}>
+        <TabPanel value='1' sx={{flexGrow: 1, padding: 0, overflowY: 'auto'}}>
           <Box sx={{height: '100%', position: 'relative'}}>
             <Box sx={{position: 'absolute', top: 20, right: 0, bottom: 0, left: 0}}>{<StatisticsDashboard />}</Box>
           </Box>

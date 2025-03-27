@@ -25,7 +25,6 @@ export namespace KeyInfo {
   };
 
   export const transport_mode: Record<number, KeyInfoItem> = {
-    /**             Any */ 99: anyOption,
     /**            Bike */ 0: {icon: '🚴‍♀️', fullName: 'Bicycle'},
     /**    Car (Driver) */ 1: {icon: '🚘👤', fullName: 'Car as Driver'},
     /** Car (Passenger) */ 2: {icon: '🚘👥', fullName: 'Car as Passenger'},
@@ -46,15 +45,15 @@ export namespace KeyInfo {
     /**         Unknown */ 7: 'Unknown',
   };
   export const infection_state: Record<number, KeyInfoItem> = {
-    /**                             Any */ 0: anyOption,
-    /**                     Susceptible */ 1: {icon: '🙂', fullName: 'Susceptible to Infection'},
-    /**       Infected with no symptoms */ 2: {icon: '🤔', fullName: 'Asymptomatic Infection'},
-    /**          Infected with symptoms */ 3: {icon: '🤧', fullName: 'Symptomatic Infection'},
-    /**   Infected with severe symptoms */ 4: {icon: '🤒', fullName: 'Severely Symptomatic'},
-    /** Infected with critical symptoms */ 5: {icon: '🤮', fullName: 'Critically Symptomatic'},
-    /**                       Recovered */ 6: {icon: '😀', fullName: 'Recovered from Infection'},
-    /**                            Dead */ 7: {icon: '💀', fullName: 'Deceased'},
-    /**                         Unknown */ 8: {icon: '❓', fullName: 'Unknown'},
+    /**                             Any */ 99: anyOption,
+    /**                     Susceptible */ 0: {icon: '🙂', fullName: 'Susceptible to Infection'},
+    /**       Infected with no symptoms */ 1: {icon: '🤔', fullName: 'Asymptomatic Infection'},
+    /**          Infected with symptoms */ 2: {icon: '🤧', fullName: 'Symptomatic Infection'},
+    /**   Infected with severe symptoms */ 3: {icon: '🤒', fullName: 'Severely Symptomatic'},
+    /** Infected with critical symptoms */ 4: {icon: '🤮', fullName: 'Critically Symptomatic'},
+    /**                       Recovered */ 5: {icon: '😀', fullName: 'Recovered from Infection'},
+    /**                            Dead */ 6: {icon: '💀', fullName: 'Deceased'},
+    /**                         Unknown */ 7: {icon: '❓', fullName: 'Unknown'},
   };
 
   export const age_group: Record<number, KeyInfoItem> = {

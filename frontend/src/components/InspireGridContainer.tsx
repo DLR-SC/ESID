@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React from 'react';
-import {useTheme} from '@mui/material';
+import {useTheme} from '@mui/material/styles';
 import BaseLayer from './InspireGridComponents/BaseLayer';
 import {useAppDispatch, useAppSelector} from 'store/hooks';
 import {setMapZoom, setMapBounds, setMapCenter} from 'store/inspireGridSlice';

@@ -2,7 +2,10 @@ import React, {useContext, useLayoutEffect, useRef, useState} from 'react';
 import * as dc from 'dc';
 import * as d3 from 'd3';
 import {PandemosContext} from 'data_sockets/PandemosContext';
-import {Box, Button, Grid, Typography} from '@mui/material';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
 import {useAppDispatch} from 'store/hooks';
 import {
   selectActivities,
@@ -74,10 +77,13 @@ export default function StatisticsDashboard(): JSX.Element {
         .dimension(infectionDimension)
         .group(filteredInfectionStateGroup)
         .label((d: any) => KeyInfo.infection_state[d.key].icon)
+        .title((d: any) => {
+          return KeyInfo.infection_state[d.key].fullName + ': ' + d.value;
+        })
         .keyAccessor((d: any) => d.key)
         .colors(d3.scaleOrdinal(d3.schemeBlues[9].slice().reverse()))
         .on('filtered', function (_chart: any) {
-          const selectedFilters = _chart.filters()
+          const selectedFilters = _chart.filters();
           dispatch(
             selectInfectionStates({
               infectionStates: selectedFilters,
@@ -122,9 +128,9 @@ export default function StatisticsDashboard(): JSX.Element {
         .title((d: any) => {
           return (
             'Start: ' +
-            (d.key && d.key[0] !== undefined ? KeyInfo.location_type[d.key[0]].icon : 'Unknown') +
+            (d.key && d.key[0] !== undefined ? KeyInfo.location_type[d.key[0]].fullName : 'Unknown') +
             '\nEnd: ' +
-            (d.key && d.key[1] !== undefined ? KeyInfo.location_type[d.key[1]].icon : 'Unknown') +
+            (d.key && d.key[1] !== undefined ? KeyInfo.location_type[d.key[1]].fullName : 'Unknown') +
             '\nInfection Count: ' +
             (d.value !== undefined ? d.value : 'No data')
           );
@@ -169,7 +175,7 @@ export default function StatisticsDashboard(): JSX.Element {
           return KeyInfo.transport_mode[d.key].icon;
         })
         .title((d: any) => {
-          return 'Mode:' + KeyInfo.transport_mode[d.key].fullName + '\nvalue: ' + d.value;
+          return KeyInfo.transport_mode[d.key].fullName + ': ' + d.value;
         })
 
         .on('filtered', function (_chart: any) {
@@ -208,7 +214,7 @@ export default function StatisticsDashboard(): JSX.Element {
         .colors(d3.scaleOrdinal(d3.schemeBlues[9].slice().reverse()))
         .label((d: any) => KeyInfo.activity[d.key])
         .title((d: any) => {
-          return 'Activity:' + '' + KeyInfo.activity[d.key] + '\nvalue: ' + d.value;
+          return KeyInfo.activity[d.key] + ': ' + d.value;
         })
         .on('filtered', function (_chart: any) {
           const selectedFilters = _chart.filters();
@@ -280,6 +286,7 @@ export default function StatisticsDashboard(): JSX.Element {
         .elasticY(true)
         .x(d3.scaleOrdinal())
         .xUnits(dc.units.ordinal)
+        .yAxisPadding('10%')
         .barPadding(0.1)
         .keyAccessor((d: any) => d.key)
         .label((d: any) => KeyInfo.age_group[d.data.key].icon)
@@ -292,6 +299,8 @@ export default function StatisticsDashboard(): JSX.Element {
             })
           );
         });
+
+      console.log(ageChart);
 
       dc.renderAll(chartGroup); // Render the dc chart group
 
