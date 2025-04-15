@@ -117,6 +117,7 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
   const referenceDate = useAppSelector((state) => state.dataSelection.simulationStart);
   const selectedDate = useAppSelector((state) => state.dataSelection.date);
   const groupFilters = useAppSelector((state) => state.dataSelection.groupFilters);
+  const scenarioColors = useAppSelector((state) => state.userPreference.scenarioColors);
 
   const {data: scenarios, ...scenariosResult} = useGetScenariosQuery();
   const {data: compartments, ...compartmentsResult} = useGetCompartmentsQuery();
@@ -356,12 +357,13 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
     }
 
     scenarios?.forEach((scenario, index) => {
-      if (scenario.id !== caseDataScenario?.id) {
+      // prevent overwriting colors
+      if (scenario.id !== caseDataScenario?.id && !scenarioColors[scenario.id]) {
         const colorIndex = (index + 1) % theme.custom.scenarios.length; // +1 to avoid using the first predefined color set
         dispatch(updateScenario({id: scenario.id, state: {colors: theme.custom.scenarios[colorIndex]}}));
       }
     });
-  }, [caseDataScenario, dispatch, dataLoadingCompleted, scenarios]);
+  }, [caseDataScenario, dispatch, dataLoadingCompleted, scenarios, scenarioColors]);
 
   // If we have no selected compartment, we try to set the first one as selected.
   useEffect(() => {

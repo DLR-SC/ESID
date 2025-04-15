@@ -8,6 +8,7 @@ export interface UserPreference {
   selectedHeatmap: HeatmapLegend;
   selectedTab?: string;
   isInitialVisit: boolean;
+  scenarioColors: Record<string, string[]>;
 }
 
 const initialState: UserPreference = {
@@ -22,6 +23,7 @@ const initialState: UserPreference = {
   },
   selectedTab: '1',
   isInitialVisit: true,
+  scenarioColors: {},
 };
 
 /**
@@ -42,8 +44,15 @@ export const UserPreferenceSlice = createSlice({
     setInitialVisit(state, action: PayloadAction<boolean>) {
       state.isInitialVisit = action.payload;
     },
+    /** Set colors for a specific scenario */
+    setScenarioColors(state, action: PayloadAction<{scenarioId: string; colors: string[]}>) {
+      if (!state.scenarioColors) {
+        state.scenarioColors = {};
+      }
+      state.scenarioColors[action.payload.scenarioId] = action.payload.colors;
+    },
   },
 });
 
-export const {selectHeatmapLegend, selectTab, setInitialVisit} = UserPreferenceSlice.actions;
+export const {selectHeatmapLegend, selectTab, setInitialVisit, setScenarioColors} = UserPreferenceSlice.actions;
 export default UserPreferenceSlice.reducer;

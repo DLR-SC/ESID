@@ -24,6 +24,7 @@ interface ScenarioFormProps {
   models: string[];
   npiOptions: Array<{id: string; name: string}>;
   nodeOptions: string[];
+  colorOptions: string[][];
   onSubmit: (scenarioData: NewScenarioData | null) => void;
 }
 
@@ -35,9 +36,16 @@ export interface NewScenarioData {
   endDate: string;
   npis: string[];
   selectedNode: string;
+  colors: string[];
 }
 
-export default function NewScenarioDialog({models, npiOptions, nodeOptions, onSubmit}: ScenarioFormProps) {
+export default function NewScenarioDialog({
+  models,
+  npiOptions,
+  nodeOptions,
+  onSubmit,
+  colorOptions,
+}: ScenarioFormProps) {
   const {t} = useTranslation();
   const {t: tBackend} = useTranslation('backend');
 
@@ -49,6 +57,7 @@ export default function NewScenarioDialog({models, npiOptions, nodeOptions, onSu
     endDate: dateToISOString(dayjs().add(4, 'week').add(1, 'day').toDate()),
     npis: [],
     selectedNode: nodeOptions[0],
+    colors: [],
   });
 
   const [errors, setErrors] = React.useState<Partial<Record<keyof NewScenarioData, string>>>({});
@@ -67,6 +76,9 @@ export default function NewScenarioDialog({models, npiOptions, nodeOptions, onSu
     }
     if (dayjs(formData.endDate).isBefore(dayjs(formData.startDate))) {
       newErrors.endDate = t('scenario-library.new.date-order');
+    }
+    if (!formData.colors || formData.colors.length === 0) {
+      newErrors.colors = t('scenario-library.new.color-required');
     }
 
     setErrors(newErrors);
@@ -147,6 +159,40 @@ export default function NewScenarioDialog({models, npiOptions, nodeOptions, onSu
           }
         />
       </Box>
+
+      <FormControl fullWidth margin='normal' error={!!errors.colors} required>
+        <InputLabel>{t('scenario-library.new.color')}</InputLabel>
+        <Select
+          value={formData.colors[0]}
+          label={t('scenario-library.new.color')}
+          onChange={(e) => {
+            const selectedColorSet = colorOptions.find((set) => set[0] === e.target.value);
+            if (selectedColorSet) {
+              setFormData((prev) => ({...prev, colors: selectedColorSet}));
+            }
+          }}
+          MenuProps={{
+            disablePortal: true,
+          }} // this is somehow needed to prevent the select menu not being able to show and close the parent dialog
+        >
+          {colorOptions.map((colorSet, index) => (
+            <MenuItem key={index} value={colorSet[0]}>
+              <Box sx={{display: 'flex', alignItems: 'center', gap: 2}}>
+                <Box
+                  sx={{
+                    width: '15px',
+                    height: '15px',
+                    backgroundColor: colorSet[1],
+                    border: '1px solid #ccc',
+                    borderRadius: '4px',
+                  }}
+                />
+                <Typography>{t('scenario-library.new.color-option', {number: index + 1})}</Typography>
+              </Box>
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
 
       <FormControl fullWidth margin='normal' error={!!errors.npis} required>
         <Typography variant='subtitle1' gutterBottom>

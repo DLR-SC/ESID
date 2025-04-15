@@ -23,7 +23,7 @@ import NewScenarioDialog, {NewScenarioData} from './NewScenarioDialog';
 import {InterventionTemplates, Models, NodeLists, Scenario} from '../../store/services/APITypes';
 import {useGetMultiScenariosQuery} from '../../store/services/scenarioApi';
 import {updateScenario} from '../../store/DataSelectionSlice';
-
+import {setScenarioColors} from '../../store/UserPreferenceSlice';
 export default function ScenarioLibrary(): JSX.Element {
   const dispatch = useAppDispatch();
   const {t} = useTranslation();
@@ -56,7 +56,14 @@ export default function ScenarioLibrary(): JSX.Element {
               name: data.name,
               description: data.description,
               visibility: 'faceUp',
+              colors: data.colors,
             },
+          })
+        );
+        dispatch(
+          setScenarioColors({
+            scenarioId: result.id,
+            colors: data.colors,
           })
         );
       }
@@ -200,6 +207,20 @@ function LibraryCard(props: Readonly<{id: string; name: string}>): JSX.Element {
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const {t: tBackend, i18n} = useTranslation('backend');
+  const scenarioColors = useAppSelector((state) => state.userPreference.scenarioColors);
+
+  const handleRestore = () => {
+    const savedColors = scenarioColors[props.id];
+    dispatch(
+      updateScenario({
+        id: props.id,
+        state: {
+          visibility: 'faceUp',
+          colors: savedColors,
+        },
+      })
+    );
+  };
 
   return (
     <Box
@@ -244,7 +265,7 @@ function LibraryCard(props: Readonly<{id: string; name: string}>): JSX.Element {
               background: '#EEEEEEEE',
             },
           }}
-          onClick={() => dispatch(updateScenario({id: props.id, state: {visibility: 'faceUp'}}))}
+          onClick={handleRestore}
         >
           <Box
             id={`card-front-${props.id}`}
@@ -385,6 +406,7 @@ function NewScenarioCard({
             };
           })}
           nodeOptions={[nodeLists[0]?.name ?? 'Districts of Germany']}
+          colorOptions={theme.custom.scenarios}
           onSubmit={(data) => {
             if (data) {
               scenarioCreated(data);
