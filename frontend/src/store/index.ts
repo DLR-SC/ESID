@@ -10,11 +10,13 @@ import storage from 'redux-persist/lib/storage';
 import LayoutReducer from './LayoutSlice';
 import AuthReducer from './AuthSlice';
 import UserOnboardingReducer from './UserOnboardingSlice';
+import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 
 const persistConfig = {
   key: 'root',
   storage,
   whitelist: ['dataSelection', 'userPreference', 'userOnboarding', 'auth'],
+  stateReconciler: autoMergeLevel2,
 };
 
 const rootReducer = combineReducers({
