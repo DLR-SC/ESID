@@ -406,7 +406,7 @@ function NewScenarioCard({
             };
           })}
           nodeOptions={[nodeLists[0]?.name ?? 'Districts of Germany']}
-          colorOptions={theme.custom.scenarios}
+          colorOptions={theme.custom.scenarios.slice(1)}
           onSubmit={(data) => {
             if (data) {
               scenarioCreated(data);
