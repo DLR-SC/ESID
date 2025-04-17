@@ -14,11 +14,14 @@ import {
   Checkbox,
   Button,
   Typography,
+  ToggleButtonGroup,
+  ToggleButton,
 } from '@mui/material';
 import {DatePicker} from '@mui/x-date-pickers/DatePicker';
 import {dateToISOString} from '../../util/util';
 import dayjs, {Dayjs} from 'dayjs';
 import {useTranslation} from 'react-i18next';
+import {useTheme} from '@mui/material/styles';
 
 interface ScenarioFormProps {
   models: string[];
@@ -48,6 +51,7 @@ export default function NewScenarioDialog({
 }: ScenarioFormProps) {
   const {t} = useTranslation();
   const {t: tBackend} = useTranslation('backend');
+  const theme = useTheme();
 
   const [formData, setFormData] = React.useState<NewScenarioData>({
     name: '',
@@ -108,6 +112,16 @@ export default function NewScenarioDialog({
     }));
   };
 
+  const handleColorChange = (_event: React.MouseEvent<HTMLElement>, color: string) => {
+    const selectedColorSet = colorOptions.find((set) => set[0] === color);
+    if (selectedColorSet) {
+      setFormData((prev) => ({
+        ...prev,
+        colors: selectedColorSet,
+      }));
+    }
+  };
+
   return (
     <Box component='form' onSubmit={handleSubmit} onReset={handleReset} sx={{margin: '16px', p: 2}}>
       <Typography variant='h5' gutterBottom>
@@ -161,37 +175,49 @@ export default function NewScenarioDialog({
       </Box>
 
       <FormControl fullWidth margin='normal' error={!!errors.colors} required>
-        <InputLabel>{t('scenario-library.new.color')}</InputLabel>
-        <Select
-          value={formData.colors[0]}
-          label={t('scenario-library.new.color')}
-          onChange={(e) => {
-            const selectedColorSet = colorOptions.find((set) => set[0] === e.target.value);
-            if (selectedColorSet) {
-              setFormData((prev) => ({...prev, colors: selectedColorSet}));
-            }
+        <Typography
+          variant='subtitle1'
+          gutterBottom
+          sx={{
+            color: errors.colors ? theme.palette.error.main : 'inherit',
           }}
-          MenuProps={{
-            disablePortal: true,
-          }} // this is somehow needed to prevent the select menu not being able to show and close the parent dialog
+        >
+          {t('scenario-library.new.color')}
+        </Typography>
+
+        <ToggleButtonGroup
+          fullWidth
+          color='success'
+          value={formData.colors[0]}
+          exclusive
+          onChange={handleColorChange}
+          sx={{
+            border: errors.colors ? theme.palette.error.main : '1px solid #ccc',
+          }}
         >
           {colorOptions.map((colorSet, index) => (
-            <MenuItem key={index} value={colorSet[0]}>
+            <ToggleButton
+              key={index}
+              value={colorSet[0]}
+              aria-label={`Color ${index + 1}`}
+              sx={{
+                border: '0',
+              }}
+            >
               <Box sx={{display: 'flex', alignItems: 'center', gap: 2}}>
                 <Box
                   sx={{
-                    width: '15px',
-                    height: '15px',
+                    width: '25px',
+                    height: '25px',
                     backgroundColor: colorSet[1],
-                    border: '1px solid #ccc',
+                    border: '0.5px solid #ccc',
                     borderRadius: '4px',
                   }}
                 />
-                <Typography>{t('scenario-library.new.color-option', {number: index + 1})}</Typography>
               </Box>
-            </MenuItem>
+            </ToggleButton>
           ))}
-        </Select>
+        </ToggleButtonGroup>
       </FormControl>
 
       <FormControl fullWidth margin='normal' error={!!errors.npis} required>
