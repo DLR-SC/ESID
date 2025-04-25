@@ -187,12 +187,11 @@ export default function NewScenarioDialog({
 
         <ToggleButtonGroup
           fullWidth
-          color='success'
           value={formData.colors[0]}
           exclusive
           onChange={handleColorChange}
           sx={{
-            border: errors.colors ? theme.palette.error.main : '1px solid #ccc',
+            border: errors.colors ? `1px solid ${theme.palette.error.main}` : '1px solid #ccc',
           }}
         >
           {colorOptions.map((colorSet, index) => (
