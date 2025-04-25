@@ -103,11 +103,14 @@
       'node-list': 'Regions',
       'create': 'Create Scenario',
       'cancel': 'Cancel',
+      'color': 'Color Scheme',
+      'color-option': 'Color Scheme {{number}}',
 
       'name-required': 'A name is required!',
       'model-required': 'A model needs to be selected!',
       'node-required': 'A region needs to be selected!',
       'date-order': 'The start date needs to be before the end date!',
+      'color-required': 'A color scheme needs to be selected!'
     }
   },
   today: 'Today',

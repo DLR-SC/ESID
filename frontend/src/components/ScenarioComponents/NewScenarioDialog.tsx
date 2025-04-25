@@ -14,16 +14,20 @@ import {
   Checkbox,
   Button,
   Typography,
+  ToggleButtonGroup,
+  ToggleButton,
 } from '@mui/material';
 import {DatePicker} from '@mui/x-date-pickers/DatePicker';
 import {dateToISOString} from '../../util/util';
 import dayjs, {Dayjs} from 'dayjs';
 import {useTranslation} from 'react-i18next';
+import {useTheme} from '@mui/material/styles';
 
 interface ScenarioFormProps {
   models: string[];
   npiOptions: Array<{id: string; name: string}>;
   nodeOptions: string[];
+  colorOptions: string[][];
   onSubmit: (scenarioData: NewScenarioData | null) => void;
 }
 
@@ -35,11 +39,19 @@ export interface NewScenarioData {
   endDate: string;
   npis: string[];
   selectedNode: string;
+  colors: string[];
 }
 
-export default function NewScenarioDialog({models, npiOptions, nodeOptions, onSubmit}: ScenarioFormProps) {
+export default function NewScenarioDialog({
+  models,
+  npiOptions,
+  nodeOptions,
+  onSubmit,
+  colorOptions,
+}: ScenarioFormProps) {
   const {t} = useTranslation();
   const {t: tBackend} = useTranslation('backend');
+  const theme = useTheme();
 
   const [formData, setFormData] = React.useState<NewScenarioData>({
     name: '',
@@ -49,6 +61,7 @@ export default function NewScenarioDialog({models, npiOptions, nodeOptions, onSu
     endDate: dateToISOString(dayjs().add(4, 'week').add(1, 'day').toDate()),
     npis: [],
     selectedNode: nodeOptions[0],
+    colors: [],
   });
 
   const [errors, setErrors] = React.useState<Partial<Record<keyof NewScenarioData, string>>>({});
@@ -67,6 +80,9 @@ export default function NewScenarioDialog({models, npiOptions, nodeOptions, onSu
     }
     if (dayjs(formData.endDate).isBefore(dayjs(formData.startDate))) {
       newErrors.endDate = t('scenario-library.new.date-order');
+    }
+    if (!formData.colors || formData.colors.length === 0) {
+      newErrors.colors = t('scenario-library.new.color-required');
     }
 
     setErrors(newErrors);
@@ -94,6 +110,16 @@ export default function NewScenarioDialog({models, npiOptions, nodeOptions, onSu
       ...prev,
       npis: newNPIs,
     }));
+  };
+
+  const handleColorChange = (_event: React.MouseEvent<HTMLElement>, color: string) => {
+    const selectedColorSet = colorOptions.find((set) => set[0] === color);
+    if (selectedColorSet) {
+      setFormData((prev) => ({
+        ...prev,
+        colors: selectedColorSet,
+      }));
+    }
   };
 
   return (
@@ -147,6 +173,51 @@ export default function NewScenarioDialog({models, npiOptions, nodeOptions, onSu
           }
         />
       </Box>
+
+      <FormControl fullWidth margin='normal' error={!!errors.colors} required>
+        <Typography
+          variant='subtitle1'
+          gutterBottom
+          sx={{
+            color: errors.colors ? theme.palette.error.main : 'inherit',
+          }}
+        >
+          {t('scenario-library.new.color')}
+        </Typography>
+
+        <ToggleButtonGroup
+          fullWidth
+          value={formData.colors[0]}
+          exclusive
+          onChange={handleColorChange}
+          sx={{
+            border: errors.colors ? `1px solid ${theme.palette.error.main}` : '1px solid #ccc',
+          }}
+        >
+          {colorOptions.map((colorSet, index) => (
+            <ToggleButton
+              key={index}
+              value={colorSet[0]}
+              aria-label={`Color ${index + 1}`}
+              sx={{
+                border: '0',
+              }}
+            >
+              <Box sx={{display: 'flex', alignItems: 'center', gap: 2}}>
+                <Box
+                  sx={{
+                    width: '25px',
+                    height: '25px',
+                    backgroundColor: colorSet[1],
+                    border: '0.5px solid #ccc',
+                    borderRadius: '4px',
+                  }}
+                />
+              </Box>
+            </ToggleButton>
+          ))}
+        </ToggleButtonGroup>
+      </FormControl>
 
       <FormControl fullWidth margin='normal' error={!!errors.npis} required>
         <Typography variant='subtitle1' gutterBottom>
