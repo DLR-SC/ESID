@@ -201,6 +201,9 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
   const caseDataId = scenarios?.find((scenario) => scenario.name === 'casedata')?.id;
   const {data: caseDataScenario} = useGetScenarioQuery(caseDataId!, {skip: !caseDataId});
 
+  const baselineId = scenarios?.find((scenario) => scenario.name === 'baseline')?.id;
+  const {data: baselineScenario} = useGetScenarioQuery(baselineId!, {skip: !baselineId});
+
   useEffect(() => {
     if (!dataLoadingCompleted) {
       return;
@@ -324,10 +327,16 @@ export const DataProvider = ({children}: {children: React.ReactNode}) => {
       return;
     }
 
-    if (activeScenarios?.length === 0 && caseDataScenario) {
-      dispatch(updateScenario({id: caseDataScenario.id, state: {visibility: 'faceUp'}}));
+    if (activeScenarios?.length < 2) {
+      if (caseDataScenario) {
+        dispatch(updateScenario({id: caseDataScenario.id, state: {visibility: 'faceUp'}}));
+      }
+
+      if (baselineScenario) {
+        dispatch(updateScenario({id: baselineScenario.id, state: {visibility: 'faceUp'}}));
+      }
     }
-  }, [activeScenarios, caseDataScenario, dispatch, dataLoadingCompleted]);
+  }, [activeScenarios, caseDataScenario, dispatch, dataLoadingCompleted, baselineScenario]);
 
   // If we have no selected scenario, we try to set the case data as selected.
   useEffect(() => {

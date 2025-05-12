@@ -5,7 +5,7 @@ import {combineReducers, configureStore} from '@reduxjs/toolkit';
 import DataSelectionReducer from './DataSelectionSlice';
 import {scenarioApi} from './services/scenarioApi';
 import UserPreferenceReducer from './UserPreferenceSlice';
-import {persistReducer, persistStore} from 'redux-persist';
+import {WebStorage, persistReducer, persistStore} from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import LayoutReducer from './LayoutSlice';
 import AuthReducer from './AuthSlice';
@@ -27,7 +27,11 @@ const rootReducer = combineReducers({
   auth: AuthReducer,
   [scenarioApi.reducerPath]: scenarioApi.reducer,
 });
-const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+const persistedReducer = persistReducer(
+  persistConfig as {key: 'root'; storage: WebStorage; whitelist: Array<string>},
+  rootReducer
+);
 
 export const Store = configureStore({
   reducer: persistedReducer,
