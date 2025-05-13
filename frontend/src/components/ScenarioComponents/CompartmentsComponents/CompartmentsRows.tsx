@@ -59,9 +59,7 @@ export default function CompartmentsRows({
           ? localization.formatNumber(filteredValues)
           : filteredValues.toString()
         : '0';
-    return localization.overrides?.['no-data']
-      ? customT(localization.overrides['no-data'])
-      : defaultT('no-data');
+    return localization.overrides?.['no-data'] ? customT(localization.overrides['no-data']) : defaultT('no-data');
   }
   return (
     <div style={{position: 'relative'}}>
