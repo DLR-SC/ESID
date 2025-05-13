@@ -351,15 +351,15 @@
   },
   interventions: {
     'School closure': 'School closure',
-    "Face masks & social distancing School": "Face masks & social distancing School",
-    "Face masks & social distancing Work": "Face masks & social distancing Work",
-    "Face masks & social distancing Other": "Face masks & social distancing Other",
-    "Remote work": "Implementation of remote work policies"
+    'Face masks & social distancing School': 'Face masks & social distancing School',
+    'Face masks & social distancing Work': 'Face masks & social distancing Work',
+    'Face masks & social distancing Other': 'Face masks & social distancing Other',
+    'Remote work': 'Implementation of remote work policies',
   },
   models: {
     secirvvs: 'SECIRVVS',
   },
   regions: {
-    all_counties: 'All Districts'
-  }
+    all_counties: 'All Districts',
+  },
 }

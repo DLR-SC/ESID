@@ -9,7 +9,7 @@ import {Localization} from 'types/localization';
 
 interface CompartmentsRowProps {
   /** Unique identifier for the row */
-  id: number;
+  index: number;
 
   /** Boolean to determine if the row is selected */
   selected: boolean;
@@ -37,7 +37,7 @@ interface CompartmentsRowProps {
  * This component renders a single row from the compartment List offering also localization support.
  */
 export default function CompartmentsRow({
-  id,
+  index,
   selected,
   compartment,
   value,
@@ -57,10 +57,10 @@ export default function CompartmentsRow({
   const closeTooltip = () => setTooltipOpen(false);
   return (
     <ListItemButton
-      key={id}
+      key={index}
       className='row'
       sx={{
-        display: compartmentsExpanded || id < minCompartmentsRows ? 'flex' : 'none',
+        display: compartmentsExpanded || index < minCompartmentsRows ? 'flex' : 'none',
         paddingLeft: '8px',
         paddingRight: '8px',
         paddingTop: 2,

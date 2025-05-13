@@ -3,7 +3,7 @@
 
 import CardContainer from 'components/ScenarioComponents/CardsComponents/CardContainer';
 import React, {useState} from 'react';
-import {FilterValues, CardValues} from 'types/card';
+import {FilterValues} from 'types/card';
 import {GroupFilter} from 'types/group';
 import {Dictionary} from 'util/util';
 import {describe, test, expect} from 'vitest';
@@ -14,12 +14,7 @@ import {ThemeProvider} from '@mui/system';
 
 const CardContainerTest = () => {
   // Mock data for the props
-  const compartmentsExpanded = true;
-  const selectedCompartment = 'Compartment 1';
-  const compartments = ['Compartment 1', 'Compartment 2', 'Compartment 3'];
-  const minCompartmentsRows = 1;
-  const maxCompartmentsRows = 3;
-  const filterValues: Dictionary<FilterValues[]> = {
+  const filterValues: Record<string, Array<FilterValues>> = {
     'Compartment 1': [
       {filteredTitle: 'Title 1', filteredValues: {'Compartment 1': 10, 'Compartment 2': 20, 'Compartment 3': 30}},
     ],
@@ -30,26 +25,24 @@ const CardContainerTest = () => {
       {filteredTitle: 'Title 3', filteredValues: {'Compartment 1': 10, 'Compartment 2': 20, 'Compartment 3': 30}},
     ],
   };
-  const scenarios = [
-    {id: 0, label: 'Scenario 1'},
-    {id: 1, label: 'Scenario 2'},
-    {id: 2, label: 'Scenario 3'},
-  ];
-  const cardValues: Dictionary<CardValues> = {
+  const cardValues: Record<string, Record<string, number | null>> = {
     '0': {
-      compartmentValues: {'Compartment 1': 10, 'Compartment 2': 20, 'Compartment 3': 30},
-      startValues: {'Compartment 1': 100, 'Compartment 2': 200, 'Compartment 3': 307},
+      'Compartment 1': 10,
+      'Compartment 2': 20,
+      'Compartment 3': 30,
     },
     '1': {
-      compartmentValues: {'Compartment 1': 40, 'Compartment 2': 50, 'Compartment 3': 60},
-      startValues: {'Compartment 1': 100, 'Compartment 2': 200, 'Compartment 3': 307},
+      'Compartment 1': 40,
+      'Compartment 2': 50,
+      'Compartment 3': 60,
     },
     '2': {
-      compartmentValues: {'Compartment 1': 70, 'Compartment 2': 80, 'Compartment 3': 90},
-      startValues: {'Compartment 1': 100, 'Compartment 2': 200, 'Compartment 3': 307},
+      'Compartment 1': 70,
+      'Compartment 2': 80,
+      'Compartment 3': 90,
     },
   };
-  const groupFilters: Dictionary<GroupFilter> = {
+  const groupFilters: Record<string, GroupFilter> = {
     '0': {
       id: 'group1',
       name: 'Group 1',
@@ -70,26 +63,34 @@ const CardContainerTest = () => {
     },
   };
 
-  const [activeScenarios, setActiveScenarios] = useState<number[] | null>([0, 1, 2, 3]);
-  const [selectedScenario, setSelectedScenario] = useState<number | null>(0);
+  const [scenarios, setScenarios] = useState<Array<{id: string; name: string; color: string; active: boolean}>>([
+    {id: '0', name: 'Scenario 1', color: 'red', active: true},
+    {id: '1', name: 'Scenario 2', color: 'green', active: true},
+    {id: '2', name: 'Scenario 3', color: 'blue', active: true},
+  ]);
+  const [selectedScenario, setSelectedScenario] = useState<string>('0');
 
   return (
     <div data-testid='card-container'>
       <ThemeProvider theme={Theme}>
         <CardContainer
-          compartmentsExpanded={compartmentsExpanded}
+          compartmentsExpanded={true}
           filterValues={filterValues}
-          selectedCompartmentId={selectedCompartment}
-          compartments={compartments}
+          selectedCompartmentId='Compartment 1'
           scenarios={scenarios}
-          activeScenarios={activeScenarios}
           cardValues={cardValues}
-          minCompartmentsRows={minCompartmentsRows}
-          maxCompartmentsRows={maxCompartmentsRows}
-          setActiveScenario={setActiveScenarios}
-          setSelectedScenario={setSelectedScenario}
+          minCompartmentsRows={1}
+          maxCompartmentsRows={3}
+          setActiveScenario={(value) =>
+            setScenarios(
+              scenarios.map((scenario) => (scenario.id === value.id ? {...scenario, active: value.state} : scenario))
+            )
+          }
+          setSelectedScenario={(value) => setSelectedScenario(value.id)}
           groupFilters={groupFilters}
           selectedScenario={selectedScenario}
+          referenceValues={undefined}
+          hide={() => {}}
         />
       </ThemeProvider>
     </div>

@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, {useState} from 'react';
+import React from 'react';
 import {render, screen} from '@testing-library/react';
 import CardTooltip from 'components/ScenarioComponents/CardsComponents/MainCard/CardTooltip';
 import Theme from 'util/Theme';
@@ -10,26 +10,22 @@ import {describe, test, expect} from 'vitest';
 
 interface CardTooltipTestInterface {
   hovertest: boolean;
-  index: number;
+  id: string;
   activeScenario: boolean;
-  scenarios: number[];
 }
-const CardTooltipTest = ({hovertest, scenarios, index, activeScenario}: CardTooltipTestInterface) => {
+const CardTooltipTest = ({hovertest, id, activeScenario}: CardTooltipTestInterface) => {
   const color = '#00000';
-  const [activeScenarios, setActiveScenarios] = useState<number[] | null>(scenarios);
-  const [numberSelectedScenario, setSelectedScenario] = useState<number | null>(index);
 
   return (
     <ThemeProvider theme={Theme}>
       <CardTooltip
-        id={index}
+        id={id}
         hover={hovertest}
         color={color}
         isActive={activeScenario}
-        activeScenarios={activeScenarios}
-        numberSelectedScenario={numberSelectedScenario}
-        setActive={setActiveScenarios}
-        setSelected={setSelectedScenario}
+        setActive={() => {}}
+        setSelected={() => {}}
+        hide={() => {}}
       />
     </ThemeProvider>
   );
@@ -37,17 +33,15 @@ const CardTooltipTest = ({hovertest, scenarios, index, activeScenario}: CardTool
 
 describe('CardTooltip', () => {
   test('renders the tooltip when hover is true', () => {
-    render(<CardTooltipTest hovertest={true} scenarios={[1, 2]} index={1} activeScenario={true} />);
-    expect(screen.getByRole('button')).toBeInTheDocument();
-    expect(screen.getByRole('button')).toHaveAttribute('aria-label', 'scenario.deactivate');
+    render(<CardTooltipTest hovertest={true} id='1' activeScenario={true} />);
+    expect(screen.getByLabelText('scenario.deactivate')).toBeInTheDocument();
   });
   test('does not render the tooltip when hover is false', () => {
-    render(<CardTooltipTest hovertest={false} scenarios={[1, 2]} index={1} activeScenario={true} />);
+    render(<CardTooltipTest hovertest={false} id='1' activeScenario={true} />);
     expect(screen.queryByRole('button')).not.toBeInTheDocument();
   });
   test('renders the tooltip label scenario.activate correctly when hover is true and the scenario is not active', () => {
-    render(<CardTooltipTest hovertest={true} scenarios={[2]} index={1} activeScenario={false} />);
-    expect(screen.getByRole('button')).toBeInTheDocument();
-    expect(screen.getByRole('button')).toHaveAttribute('aria-label', 'scenario.activate');
+    render(<CardTooltipTest hovertest={true} id='1' activeScenario={false} />);
+    expect(screen.getByLabelText('scenario.activate')).toBeInTheDocument();
   });
 });

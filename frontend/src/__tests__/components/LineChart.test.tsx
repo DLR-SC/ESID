@@ -32,7 +32,7 @@ const LineChartTest = () => {
           value: 3688.2426285714214,
         },
       ],
-      serieId: 0,
+      seriesId: 0,
       valueYField: 0,
       stroke: {
         color: color('#000'),

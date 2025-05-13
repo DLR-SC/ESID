@@ -13,12 +13,12 @@ import reducer, {
 
 describe('DataSelectionSlice', () => {
   const initialState = {
-    district: {ags: '00000', name: '', type: ''},
+    district: {id: '', nuts: '00000', name: '', type: ''},
     date: null,
-    scenario: 0,
+    scenario: null,
     compartment: null,
     compartmentsExpanded: null,
-    activeScenarios: [0],
+    scenarios: {},
     simulationStart: null,
     minDate: null,
     maxDate: null,
@@ -30,7 +30,7 @@ describe('DataSelectionSlice', () => {
   });
 
   test('Select District', () => {
-    const newDistrict = {ags: '12345', name: 'Test District', type: 'Test Type'};
+    const newDistrict = {id: '0', nuts: '12345', name: 'Test District', type: 'Test Type'};
     expect(reducer(initialState, selectDistrict(newDistrict))).toEqual(
       Object.assign(initialState, {district: newDistrict})
     );

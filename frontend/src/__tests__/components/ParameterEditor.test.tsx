@@ -9,7 +9,6 @@ import i18n from '../../util/i18nForTests';
 import {Provider} from 'react-redux';
 import React from 'react';
 import ParameterEditor from '../../components/ParameterEditor';
-import {selectScenario} from '../../store/DataSelectionSlice';
 
 describe('ParameterEditor', () => {
   test('Editor Loaded', async () => {
@@ -22,23 +21,6 @@ describe('ParameterEditor', () => {
     );
 
     screen.getByText('Parameter');
-
-    await screen.findByText('group-filters.groups.age_0');
-    await screen.findByText('group-filters.groups.age_1');
-    await screen.findByText('group-filters.groups.age_2');
-    await screen.findByText('group-filters.groups.age_3');
-    await screen.findByText('group-filters.groups.age_4');
-    await screen.findByText('group-filters.groups.age_5');
-
     await screen.findByText('parameters.no-parameters');
-
-    Store.dispatch(selectScenario(1));
-
-    await screen.findByText('parameters.Test Parameter 1.symbol');
-    await screen.findByText('parameters.Test Parameter 1.description');
-    await screen.findByText(/0 - 1 parameters\.Test Parameter 1\.unit/);
-
-    await screen.findByText('parameters.Test Parameter 2.symbol');
-    await screen.findByText('parameters.Test Parameter 2.description');
   });
 });

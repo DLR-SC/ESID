@@ -10,53 +10,40 @@ import MainCard from 'components/ScenarioComponents/CardsComponents/MainCard/Mai
 import {Dictionary} from 'util/util';
 
 const MainCardTest = () => {
-  const Index = 0;
-  const CompartmentValues: Dictionary<number> = {
+  const compartmentValues: Dictionary<number> = {
     'Compartment 1': 10,
     'Compartment 2': 20,
     'Compartment 3': 30,
   };
-  const StartValues: Dictionary<number> = {
+  const referenceValues: Dictionary<number> = {
     'Compartment 1': 100,
     'Compartment 2': 200,
     'Compartment 3': 307,
   };
-  const Label = 'Scenario 1';
-  const CompartmentsExpanded = true;
-  const Compartments = ['Compartment 1', 'Compartment 2', 'Compartment 3'];
-  const SelectedCompartment = 'Compartment 1';
-  const SelectedScenario = false;
-  const Hover = false;
-  const Color = 'primary';
-  const ActiveScenarios = [1, 2];
-  const MinCompartmentsRows = 1;
-  const MaxCompartmentsRows = 3;
 
-  const [hover, setHover] = useState<boolean>(Hover);
-  const [activeScenarios, setActiveScenarios] = useState<number[] | null>(ActiveScenarios);
-  const [, setSelectedScenario] = useState<number | null>(Index);
+  const [hover, setHover] = useState<boolean>(false);
+  const [active, setActive] = useState<boolean>(false);
+  const [selected] = useState<boolean>(false);
 
   return (
     <ThemeProvider theme={Theme}>
       <MainCard
-        index={Index}
-        label={Label}
+        id='0'
+        label='Scenario 1'
         hover={hover}
-        compartmentValues={CompartmentValues}
-        referenceValues={StartValues}
+        compartmentValues={compartmentValues}
+        referenceValues={referenceValues}
         setHover={setHover}
-        compartments={Compartments}
-        compartmentsExpanded={CompartmentsExpanded}
-        selectedCompartmentId={SelectedCompartment}
-        color={Color}
-        isSelected={SelectedScenario}
-        isActive={true}
-        numberSelectedScenario={Index}
-        minCompartmentsRows={MinCompartmentsRows}
-        maxCompartmentsRows={MaxCompartmentsRows}
-        setSelected={setSelectedScenario}
-        setActive={setActiveScenarios}
-        activeScenarios={activeScenarios}
+        compartmentsExpanded={true}
+        selectedCompartmentId='Compartment 1'
+        color='primary'
+        isSelected={selected}
+        isActive={active}
+        minCompartmentsRows={1}
+        setSelected={() => {}}
+        setActive={(value) => setActive(value.state)}
+        hide={() => {}}
+        maxCompartmentsRows={3}
         arrow={true}
       />
     </ThemeProvider>
@@ -82,11 +69,11 @@ describe('MainCard', () => {
 
   test('handles click event to activate and renders tooltip correctly on hover scenario', () => {
     render(<MainCardTest />);
-    // Verify click event to select scenario
+    // Verify click event to select a scenario
     const card = screen.getByText('Scenario 1');
     fireEvent.mouseOver(card);
-    const tooltip = screen.getByLabelText('scenario.activate');
-    fireEvent.click(tooltip);
+    const checkbox = screen.getByLabelText('scenario.activate');
+    fireEvent.click(checkbox);
     expect(screen.getByLabelText('scenario.deactivate')).toBeVisible();
   });
 });

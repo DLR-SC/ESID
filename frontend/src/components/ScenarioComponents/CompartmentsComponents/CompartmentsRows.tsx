@@ -59,10 +59,9 @@ export default function CompartmentsRows({
           ? localization.formatNumber(filteredValues)
           : filteredValues.toString()
         : '0';
-    const noDataText = localization.overrides?.['no-data']
+    return localization.overrides?.['no-data']
       ? customT(localization.overrides['no-data'])
       : defaultT('no-data');
-    return noDataText;
   }
   return (
     <div style={{position: 'relative'}}>
@@ -87,7 +86,7 @@ export default function CompartmentsRows({
               return (
                 <CompartmentsRow
                   key={id}
-                  id={index}
+                  index={index}
                   selected={selected}
                   compartment={{id, name}}
                   value={GetFormattedAndTranslatedValues(compartmentValues ? compartmentValues[id] : null)}

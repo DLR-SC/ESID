@@ -6,31 +6,23 @@ import {render, screen} from '@testing-library/react';
 import {describe, test, expect} from 'vitest';
 import {Dictionary} from 'util/util';
 import {GroupFilter} from 'types/group';
-import {filterValue} from 'types/card';
+import {FilterValues} from 'types/card';
 import Theme from 'util/Theme';
 import {ThemeProvider} from '@mui/system';
 import DataCard from 'components/ScenarioComponents/CardsComponents/DataCard';
 
 const DataCardTest = () => {
-  const Index = 0;
-  const CompartmentValues: Dictionary<number> = {
+  const compartmentValues: Dictionary<number> = {
     'Compartment 1': 10,
     'Compartment 2': 20,
     'Compartment 3': 30,
   };
-  const StartValues: Dictionary<number> = {
+  const refereceValues: Dictionary<number> = {
     'Compartment 1': 100,
     'Compartment 2': 200,
     'Compartment 3': 307,
   };
-  const Label = 'Scenario 1';
-  const CompartmentsExpanded = true;
-  const Compartments = ['Compartment 1', 'Compartment 2', 'Compartment 3'];
-  const SelectedCompartment = 'Compartment 1';
-  const SelectedScenario = true;
-  const Color = 'primary';
-  const ActiveScenarios = [0, 1, 2];
-  const FilterValues: Dictionary<filterValue[]> = {
+  const filterValues: Record<string, Array<FilterValues>> = {
     '0': [
       {filteredTitle: 'Group 1', filteredValues: {'Compartment 1': 10, 'Compartment 2': 20, 'Compartment 3': 30}},
       {filteredTitle: 'Group 2', filteredValues: {'Compartment 1': 40, 'Compartment 2': 50, 'Compartment 3': 60}},
@@ -47,9 +39,7 @@ const DataCardTest = () => {
       {filteredTitle: 'Group 3', filteredValues: {'Compartment 1': 40, 'Compartment 2': 50, 'Compartment 3': 60}},
     ],
   };
-  const MinCompartmentsRows = 1;
-  const MaxCompartmentsRows = 3;
-  const GroupFilters: Dictionary<GroupFilter> = {
+  const groupFilters: Record<string, GroupFilter> = {
     '0': {
       id: 'group1',
       name: 'Group 1',
@@ -79,29 +69,28 @@ const DataCardTest = () => {
     },
   };
 
-  const [activeScenarios, setActiveScenarios] = useState<number[] | null>(ActiveScenarios);
-  const [, setSelectedScenario] = useState<number | null>(Index);
+  const [active, setActive] = useState<boolean>(true);
+  const [selected, setSelected] = useState<boolean>(true);
 
   return (
     <ThemeProvider theme={Theme}>
       <DataCard
-        index={Index}
-        compartmentValues={CompartmentValues}
-        referenceValues={StartValues}
-        title={Label}
-        compartmentsExpanded={CompartmentsExpanded}
-        compartments={Compartments}
-        selectedCompartmentId={SelectedCompartment}
-        isSelected={SelectedScenario}
-        color={Color}
-        isActive={activeScenarios}
-        filterValues={FilterValues}
-        numberSelectedScenario={Index}
-        minCompartmentsRows={MinCompartmentsRows}
-        maxCompartmentsRows={MaxCompartmentsRows}
-        setSelected={setSelectedScenario}
-        setActiveScenarios={setActiveScenarios}
-        groupFilters={GroupFilters}
+        id='0'
+        compartmentValues={compartmentValues}
+        referenceValues={refereceValues}
+        title='Scenario 1'
+        compartmentsExpanded={true}
+        selectedCompartmentId='Compartment 1'
+        isSelected={selected}
+        color='primary'
+        isActive={active}
+        filterValues={filterValues}
+        minCompartmentsRows={1}
+        maxCompartmentsRows={3}
+        setSelected={(value) => setSelected(value.state)}
+        setActive={(value) => setActive(value.state)}
+        groupFilters={groupFilters}
+        hide={() => {}}
       />
     </ThemeProvider>
   );

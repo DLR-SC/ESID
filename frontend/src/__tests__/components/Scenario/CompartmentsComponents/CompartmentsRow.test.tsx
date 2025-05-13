@@ -25,10 +25,10 @@ const CompartmentsRowTest = () => {
       <ThemeProvider theme={Theme}>
         {compartments.map((compartment, index) => (
           <CompartmentsRow
-            id={index}
+            index={index}
             key={index}
             selected={compartment === selectedCompartment}
-            compartment={compartment}
+            compartment={{id: compartment, name: compartment}}
             value={compartmentValues[compartment as keyof typeof compartmentValues].toString()}
             compartmentsExpanded={compartmentsExpanded}
             setSelectedCompartment={setSelectedCompartment}
@@ -60,8 +60,8 @@ describe('CompartmentsRows', () => {
   test('selects the correct compartment on click', async () => {
     render(<CompartmentsRowTest />);
 
-    const compartment1 = screen.getByText('compartments.Compartment 1').closest('div[role="button"]');
-    const compartment2 = screen.getByText('compartments.Compartment 2').closest('div[role="button"]');
+    const compartment1 = screen.getByText('Compartment 1').closest('div[role="button"]');
+    const compartment2 = screen.getByText('Compartment 2').closest('div[role="button"]');
     expect(compartment1).toHaveClass('Mui-selected');
     expect(compartment2).not.toHaveClass('Mui-selected');
     if (compartment2) {

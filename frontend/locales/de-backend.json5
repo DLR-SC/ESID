@@ -348,20 +348,20 @@
       Group4: '35 - 59 Jahre',
       Group5: '60 - 79 Jahre',
       Group6: 'Über 80 Jahre',
-      Total: 'Gesamt'
+      Total: 'Gesamt',
     },
   },
   interventions: {
     'School closure': 'Schulschließungen',
-    "Face masks & social distancing School": "Maskenpflicht & Abstandsregeln Schule",
-    "Face masks & social distancing Work": "Maskenpflicht & Abstandsregeln Arbeit",
-    "Face masks & social distancing Other": "Maskenpflicht & Abstandsregeln Sonstiges",
-    "Remote work": "Einführung von Homeoffice-Regelungen"
+    'Face masks & social distancing School': 'Maskenpflicht & Abstandsregeln Schule',
+    'Face masks & social distancing Work': 'Maskenpflicht & Abstandsregeln Arbeit',
+    'Face masks & social distancing Other': 'Maskenpflicht & Abstandsregeln Sonstiges',
+    'Remote work': 'Einführung von Homeoffice-Regelungen',
   },
   models: {
     secirvvs: 'SECIRVVS',
   },
   regions: {
-    all_counties: 'Alle Landkreise'
-  }
+    all_counties: 'Alle Landkreise',
+  },
 }

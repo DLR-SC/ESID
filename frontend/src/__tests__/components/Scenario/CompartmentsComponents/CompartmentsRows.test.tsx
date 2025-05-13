@@ -25,7 +25,7 @@ const CompartmentsRowsTest = () => {
       <ThemeProvider theme={Theme}>
         <CompartmentsRows
           compartmentsExpanded={compartmentsExpanded}
-          compartments={compartments}
+          compartments={compartments.map((compartment) => ({id: compartment, name: compartment}))}
           selectedCompartment={selectedCompartment}
           setSelectedCompartment={setSelectedCompartment}
           minCompartmentsRows={minCompartmentsRows}
@@ -49,8 +49,8 @@ describe('CompartmentsRows', () => {
 
   test('renders the correct compartment names', async () => {
     render(<CompartmentsRowsTest />);
-    expect(await screen.findByText('compartments.Compartment 1')).toBeInTheDocument();
-    expect(await screen.findByText('compartments.Compartment 2')).toBeInTheDocument();
-    expect(await screen.findByText('compartments.Compartment 3')).toBeInTheDocument();
+    expect(await screen.findByText('Compartment 1')).toBeInTheDocument();
+    expect(await screen.findByText('Compartment 2')).toBeInTheDocument();
+    expect(await screen.findByText('Compartment 3')).toBeInTheDocument();
   });
 });
