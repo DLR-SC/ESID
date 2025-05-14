@@ -41,9 +41,9 @@ You can find a list of the latest changes in the [changelog](docs/changelog/chan
 
 ## Developer Documentation
 
-You can find the developer documentation for the front- and backend in the corresponding folders:
+You can find the developer documentation in the docs folders:
 
-- [Frontend Developer Documentation](docs/contribute.md)
+- [Developer Documentation](docs/contribute.md)
 
 ## Contributing to ESID
 
@@ -108,7 +108,7 @@ chmod +x .git/hooks/commit-msg
 ### Forking ESID
 
 This is pretty straight-forward. Just click the **Fork** button on the top right of this page.
-Then clone the forked repository, perform your changes, push to a feature branch and create a pull request to ESID's develop branch.
+Then clone the forked repository, perform your changes, push to a feature branch, and create a pull request to ESID's develop branch.
 
 ```bash
 git clone git@github.com:<your user name>/ESID.git
@@ -164,7 +164,7 @@ Examples of unacceptable behavior by participants include:
 - Public or private harassment
 - Publishing others' private information, such as a physical or electronic
   address, without explicit permission
-- Other conduct which could reasonably be considered inappropriate in a
+- Other conduct, which could reasonably be considered inappropriate in a
   professional setting
 
 ### Our Responsibilities

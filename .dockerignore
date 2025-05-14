@@ -2,4 +2,9 @@
 # SPDX-License-Identifier: CC0-1.0
 
 node_modules
-build
+dist
+test
+LICENSES
+tools
+.reuse
+.github

@@ -5,7 +5,7 @@ import {beforeAll, afterAll, afterEach} from 'vitest';
 import {cleanup} from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import 'vitest-canvas-mock';
-import server from './mocks/server';
+import server from 'mocks/server';
 
 beforeAll(() => {
   server.listen();
