@@ -3,9 +3,9 @@
 
 name: Epic
 description: Create a new epic
-title: "[EPIC]: "
-projects: "DLR-SC/5"
-labels: ["Epic"]
+title: '[EPIC]: '
+projects: 'DLR-SC/5'
+labels: ['Epic']
 body:
   - type: checkboxes
     id: pre-steps
@@ -24,7 +24,7 @@ body:
       label: Details
       value: |
         <!-- Detailed description of the Epic, its requirements, and goals -->
-        
+
         ---
     validations:
       required: true
