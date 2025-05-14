@@ -78,8 +78,15 @@ function Initializer() {
   // This effect ensures, that we get the correct translation for 'germany'. This is required, as the store initializes
   // before the translations are available.
   useEffect(() => {
-    if (selectedDistrict.ags === '00000' && selectedDistrict.name === '') {
-      dispatch(selectDistrict({ags: '00000', name: t('germany'), type: ''}));
+    if (selectedDistrict.nuts === '00000' && selectedDistrict.name === '') {
+      dispatch(
+        selectDistrict({
+          nuts: '00000',
+          name: t('germany'),
+          type: '',
+          id: '',
+        })
+      );
     }
   }, [selectedDistrict, t, dispatch]);
 
