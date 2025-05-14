@@ -55,9 +55,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 16
+          node-version: 20
       - run: |
-          npm install && npm install -g @lhci/cli@0.12.x
+          npm install && npm install -g @lhci/cli@0.14.x
           npm run build
       - run: lhci autorun --collect.psiStrategy=desktop --upload.target=temporary-public-storage
     env:
