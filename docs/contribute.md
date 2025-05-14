@@ -207,8 +207,7 @@ would be difficult to handle with React's `props` alone.
             // accessing theme spacing via index [0, 4, 8, 12, 26]
             margin: theme.spacing(3), // 12 px margin
           }}
-        >
-        </Box>
+        ></Box>
       );
     }
     ```
