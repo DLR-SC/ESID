@@ -39,7 +39,7 @@ export default function TourSteps(): JSX.Element {
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const {t: tOnboarding} = useTranslation('onboarding');
-  const context = useContext(DataContext)!;
+  const context = useContext(DataContext);
 
   const activeTour = useAppSelector((state) => state.userOnboarding.activeTour);
   const showPopover = useAppSelector((state) => state.userOnboarding.showPopover);
@@ -48,7 +48,7 @@ export default function TourSteps(): JSX.Element {
   const selectedTab = useAppSelector((state) => state.userPreference.selectedTab);
   const simulationStart = useAppSelector((state) => state.dataSelection.simulationStart);
   const dataSelection = useAppSelector((state) => state.dataSelection);
-  const scenarioList = context.scenarios;
+  const scenarioList = context?.scenarios;
 
   const previousSimulationStart = useRef(simulationStart); // To keep track of the previous simulation start date for the scenario controlled tour.
   const savedUserDataSelection = useRef<null | DataSelection>(null); // To keep track of the original data selection before starting any tour.
