@@ -15,7 +15,6 @@ import LoadingContainer from '../shared/LoadingContainer';
 import {NumberFormatter} from 'util/hooks';
 import HeatMap from './MapComponents/HeatMap';
 import HeatLegend from './MapComponents/HeatLegend';
-import {DataContext} from 'DataContext';
 import SidebarTabs from './SidebarTabs';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
@@ -23,6 +22,7 @@ import {selectDistrict} from 'store/DataSelectionSlice';
 import legendPresets from '../../../assets/heatmap_legend_presets.json?raw';
 import {selectHeatmapLegend} from 'store/UserPreferenceSlice';
 import {GeoJsonProperties} from 'geojson';
+import {DataContext} from 'context/SelectedDataContext';
 
 export default function MapContainer() {
   const {t} = useTranslation();
@@ -31,7 +31,7 @@ export default function MapContainer() {
   const theme = useTheme();
   const dispatch = useAppDispatch();
 
-  const {geoData, mapData, searchBarData, nodes, compartments} = useContext(DataContext);
+  const {geoData, mapData, searchBarData, nodes, compartments} = useContext(DataContext)!;
 
   const storeSelectedArea = useAppSelector((state) => state.dataSelection.district);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);

@@ -5,20 +5,20 @@ import React, {useContext, useEffect, useMemo, useState} from 'react';
 import LineChart from './LineChartComponents/LineChart';
 import LoadingContainer from './shared/LoadingContainer';
 import {useTheme} from '@mui/material';
-import {DataContext} from 'DataContext';
 import {useAppDispatch, useAppSelector} from 'store/hooks';
 import {selectDate} from 'store/DataSelectionSlice';
 import {setReferenceDayBottom} from 'store/LayoutSlice';
 import {useTranslation} from 'react-i18next';
 import {LineChartData} from 'types/lineChart';
 import {InfectionData} from 'store/services/APITypes';
+import {DataContext} from 'context/SelectedDataContext';
 
 export default function LineChartContainer() {
   const {t} = useTranslation('backend');
   const theme = useTheme();
   const dispatch = useAppDispatch();
 
-  const {lineChartData, scenarios, compartments} = useContext(DataContext);
+  const {lineChartData, scenarios, compartments} = useContext(DataContext)!;
 
   const scenariosState = useAppSelector((state) => state.dataSelection.scenarios);
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
@@ -50,7 +50,7 @@ export default function LineChartContainer() {
       });
 
       if (id === selectedScenario) {
-        const scenario = scenarios!.find((scenario) => scenario.id === id)!;
+        const scenario = scenarios.find((scenario) => scenario.id === id)!;
         const percentiles: Array<{lower: number; upper: number}> = [];
 
         if (scenario.percentiles.length > 0) {

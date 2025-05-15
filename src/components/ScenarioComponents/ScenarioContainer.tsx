@@ -14,7 +14,6 @@ import {
   toggleCompartmentExpansion,
   updateScenario,
 } from 'store/DataSelectionSlice';
-import {DataContext} from 'DataContext';
 import {ScrollSync} from 'react-scroll-sync';
 import {useBoundingclientrectRef} from 'rooks';
 import {setReferenceDayTop} from 'store/LayoutSlice';
@@ -27,6 +26,7 @@ import ReferenceDatePicker from './ReferenceDatePickerComponents.tsx/ReferenceDa
 import {useAppDispatch, useAppSelector} from 'store/hooks';
 import ScenarioLibrary from './ScenarioLibrary';
 import {dateToISOString} from 'util/util';
+import {DataContext} from 'context/SelectedDataContext';
 
 interface ScenarioContainerProps {
   /** The minimum number of compartment rows.*/
@@ -54,7 +54,7 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
     referenceDateValues,
     groups,
     groupCategories,
-  } = useContext(DataContext);
+  } = useContext(DataContext)!;
 
   const groupFilters = useAppSelector((state) => state.dataSelection.groupFilters);
   const compartmentsExpanded = useAppSelector((state) => state.dataSelection.compartmentsExpanded);

@@ -20,9 +20,9 @@ import {selectDistrict} from 'store/DataSelectionSlice';
 import {I18nextProvider, useTranslation} from 'react-i18next';
 import i18n from './util/i18n';
 import {MUILocalization} from 'components/shared/MUILocalization';
-import {DataProvider} from 'DataContext';
 
 import AuthProvider from './components/AuthProvider';
+import BaseDataContext from 'context/BaseDataContext';
 /**
  * This is the root element of the React application. It divides the main screen area into the three main components.
  * The top bar, the sidebar and the main content area.
@@ -36,7 +36,7 @@ export default function App(): JSX.Element {
             <PersistGate loading={null} persistor={Persistor}>
               <I18nextProvider i18n={i18n}>
                 <MUILocalization>
-                  <DataProvider>
+                  <BaseDataContext>
                     <Initializer />
                     <WelcomeDialogWrapper />
                     <Box id='app' display='flex' flexDirection='column' sx={{height: '100%', width: '100%'}}>
@@ -55,7 +55,7 @@ export default function App(): JSX.Element {
                         <MainContent />
                       </Box>
                     </Box>
-                  </DataProvider>
+                  </BaseDataContext>
                 </MUILocalization>
               </I18nextProvider>
             </PersistGate>

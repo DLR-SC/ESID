@@ -16,7 +16,6 @@ import IconButton from '@mui/material/IconButton';
 import Close from '@mui/icons-material/Close';
 import CardTitle from './CardsComponents/MainCard/CardTitle';
 import WebAssetOff from '@mui/icons-material/WebAssetOff';
-import {DataContext} from 'DataContext';
 import LibraryAddOutlined from '@mui/icons-material/LibraryAddOutlined';
 import Dialog from '@mui/material/Dialog';
 import NewScenarioDialog, {NewScenarioData} from './NewScenarioDialog';
@@ -24,12 +23,13 @@ import {InterventionTemplates, Models, NodeLists, Scenario} from 'store/services
 import {useGetMultiScenariosQuery} from 'store/services/scenarioApi';
 import {updateScenario} from 'store/DataSelectionSlice';
 import {setScenarioColors} from 'store/UserPreferenceSlice';
+import {DataContext} from 'context/SelectedDataContext';
 export default function ScenarioLibrary(): JSX.Element {
   const dispatch = useAppDispatch();
   const {t} = useTranslation();
   const theme = useTheme();
 
-  const {scenarios, simulationModels, npis, nodeLists} = useContext(DataContext);
+  const {scenarios, simulationModels, npis, nodeLists} = useContext(DataContext)!;
   const scenariosState = useAppSelector((state) => state.dataSelection.scenarios);
 
   const {data: completeScenarios} = useGetMultiScenariosQuery(scenarios?.map((s) => s.id) ?? [], {skip: !scenarios});

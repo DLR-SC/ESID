@@ -17,7 +17,7 @@ import MathMarkdown from './shared/MathMarkdown';
 import {ParameterData} from 'store/services/scenarioApi';
 import {useTranslation} from 'react-i18next';
 import GridOff from '@mui/icons-material/GridOff';
-import {DataContext} from 'DataContext';
+import {DataContext} from 'context/SelectedDataContext';
 
 /**
  * This component visualizes the parameters of the selected scenario. It uses a table with the following format:
@@ -36,13 +36,13 @@ export default function ParameterEditor() {
   const {t: tBackend} = useTranslation('backend');
   const theme = useTheme();
 
-  const {selectedSimulationModel, selectedScenarioData, groups, parameterDefinitions} = useContext(DataContext);
+  const contextData = useContext(DataContext);
 
   const parameters: Array<ParameterData> = useMemo(() => {
     return (
-      selectedScenarioData?.modelParameters?.flatMap((paramValues) => {
-        if (parameterDefinitions) {
-          const paramDefinition = parameterDefinitions[paramValues.parameterId];
+      contextData?.selectedScenarioData?.modelParameters?.flatMap((paramValues) => {
+        if (contextData?.parameterDefinitions) {
+          const paramDefinition = contextData.parameterDefinitions[paramValues.parameterId];
 
           const data = paramValues.values.flatMap((group) => ({
             span: 1,
@@ -73,12 +73,12 @@ export default function ParameterEditor() {
         return [];
       }) ?? []
     );
-  }, [parameterDefinitions, selectedScenarioData?.modelParameters, tBackend]);
+  }, [contextData?.parameterDefinitions, contextData?.selectedScenarioData?.modelParameters, tBackend]);
 
   const groupData = useMemo(() => {
     return (
-      selectedSimulationModel?.groups.flatMap((groupId) => {
-        const group = groups?.find((group) => group.id === groupId);
+      contextData?.selectedSimulationModel?.groups.flatMap((groupId) => {
+        const group = contextData?.groups?.find((group) => group.id === groupId);
         if (group) {
           return {
             id: groupId,
@@ -88,7 +88,7 @@ export default function ParameterEditor() {
         return [];
       }) ?? []
     );
-  }, [groups, selectedSimulationModel?.groups, tBackend]);
+  }, [contextData?.groups, contextData?.selectedSimulationModel?.groups, tBackend]);
 
   if (parameters.length > 0) {
     return (

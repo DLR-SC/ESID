@@ -87,6 +87,19 @@ export const DataSelectionSlice = createSlice({
 
       state.scenarios[action.payload.id] = {...state.scenarios[action.payload.id], ...action.payload.state};
     },
+    orderScenarios(state, action: PayloadAction<Array<string>>) {
+      if (!state.scenarios) {
+        state.scenarios = {};
+        return;
+      }
+
+      const newScenarios: Record<string, ScenarioState> = {};
+      action.payload.forEach((id) => {
+        newScenarios[id] = state.scenarios[id];
+      });
+
+      state.scenarios = newScenarios;
+    },
     setGroupFilters(state, action: PayloadAction<Record<string, GroupFilter>>) {
       state.groupFilters = action.payload;
     },
@@ -168,6 +181,7 @@ export const {
   addScenario,
   removeScenario,
   updateScenario,
+  orderScenarios,
   selectDistrict,
   setGroupFilters,
   selectDate,

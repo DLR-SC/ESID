@@ -9,7 +9,7 @@ import {useTheme} from '@mui/material/styles';
 import {setShowPopover, setTourCompleted, setActiveTour} from 'store/UserOnboardingSlice';
 import {selectTab} from 'store/UserPreferenceSlice';
 import {DataSelection, selectDate, selectScenario} from 'store/DataSelectionSlice';
-import {DataContext} from 'DataContext';
+import {DataContext} from 'context/SelectedDataContext';
 
 /**
  * Interface for the state of the tour steps
@@ -39,7 +39,7 @@ export default function TourSteps(): JSX.Element {
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const {t: tOnboarding} = useTranslation('onboarding');
-  const context = useContext(DataContext);
+  const context = useContext(DataContext)!;
 
   const activeTour = useAppSelector((state) => state.userOnboarding.activeTour);
   const showPopover = useAppSelector((state) => state.userOnboarding.showPopover);
