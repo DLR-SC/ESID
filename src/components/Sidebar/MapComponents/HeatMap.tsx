@@ -360,11 +360,6 @@ export default function HeatMap({
       sx={{
         position: 'relative',
         width: '100%',
-        '& > div:first-of-type': {
-          position: 'absolute',
-          width: '100%',
-          height: '100%',
-        },
       }}
     >
       {chart && <MapControlBar chart={chart} onHomeClick={handleHomeClick} maxZoomLevel={maxZoomLevel} />}
