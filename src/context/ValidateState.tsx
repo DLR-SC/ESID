@@ -217,7 +217,10 @@ function useValidateSelectedScenario(scenariosValidated: boolean): boolean {
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
 
   const valid = useMemo(
-    () => scenariosValidated && (selectedScenario === null || scenariosState[selectedScenario].visibility === 'faceUp'),
+    () =>
+      scenariosValidated &&
+      (Object.values(scenariosState).every((scenario) => scenario.visibility !== 'faceUp') ||
+        (selectedScenario !== null && scenariosState[selectedScenario].visibility === 'faceUp')),
     [scenariosState, scenariosValidated, selectedScenario]
   );
 
@@ -229,7 +232,7 @@ function useValidateSelectedScenario(scenariosValidated: boolean): boolean {
         .filter(([_, scenario]) => scenario.visibility === 'faceUp')
         .map(([id, _]) => id);
 
-      dispatch(selectScenario(faceUpScenarios.length > 0 ? faceUpScenarios[0] : null));
+      dispatch(selectScenario(faceUpScenarios.length > 0 ? faceUpScenarios[faceUpScenarios.length - 1] : null));
     }
   }, [dispatch, scenariosState, selectedScenario, scenariosValidated, valid]);
 
@@ -245,7 +248,7 @@ function useValidateDistrictSelection(nodes: Nodes): boolean {
 
     const GERMANY_NODE_ID = '00000';
 
-    const germanyNode = nodes?.find((node) => node.name === GERMANY_NODE_ID);
+    const germanyNode = nodes.find((node) => node.name === GERMANY_NODE_ID);
     if (germanyNode) {
       dispatch(selectDistrict({...germanyNode, type: ''}));
     }
