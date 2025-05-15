@@ -5,6 +5,5 @@ node_modules
 dist
 test
 LICENSES
-tools
 .reuse
 .github
