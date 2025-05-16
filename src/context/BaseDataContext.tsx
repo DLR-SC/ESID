@@ -40,7 +40,11 @@ export interface BaseData {
   searchBarData: GeoJsonProperties[];
 }
 
-export default function BaseDataContext(props: {children: ReactNode}) {
+/**
+ * BaseDataContext is a component that manages the loading and preparation of base data that has no direct dependencies.
+ * It fetches data from several sources and passes it to a validator, once all data is loaded.
+ */
+export default function BaseDataContext(props: {children: ReactNode}): JSX.Element {
   const {data: scenarios, ...scenariosResult} = useGetScenariosQuery();
   const {data: compartments, ...compartmentsResult} = useGetCompartmentsQuery();
   const {data: npis, ...npisResult} = useGetInterventionTemplatesQuery();

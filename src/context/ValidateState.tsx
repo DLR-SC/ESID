@@ -22,6 +22,10 @@ import {useTranslation} from 'react-i18next';
 import theme from 'util/Theme';
 import SelectedDataContext from 'context/SelectedDataContext';
 
+/**
+ * Validates the application state based on the provided data and renders appropriate content, either the children
+ * within a valid context or an error message indicating invalid state details.
+ */
 export default function ValidateState(props: {baseData: BaseData; children: ReactNode}) {
   // 1. Select a default district.
   const validatedDistrictSelection = useValidateDistrictSelection(props.baseData.nodes);
@@ -94,6 +98,11 @@ export default function ValidateState(props: {baseData: BaseData; children: Reac
   );
 }
 
+/**
+ * Synchronizes the scenarios from the API with the application's state. This function ensures that the scenarios stored
+ * in the application's state match the provided API scenarios. It removes obsolete scenarios and adds new ones based on
+ * the provided data.
+ */
 function useSyncScenarios(apiScenarios: Scenarios): boolean {
   const {t, i18n} = useTranslation('backend');
   const dispatch = useAppDispatch();
@@ -140,6 +149,10 @@ function useSyncScenarios(apiScenarios: Scenarios): boolean {
   return valid;
 }
 
+/**
+ * Validates and updates the visibility states for specific scenarios based on their current visibility and synchronized
+ * state. Ensures scenarios are correctly set to a visible state if needed.
+ */
 function useValidateSpecialScenarios(apiScenarios: Scenarios, scenariosSynced: boolean): boolean {
   const dispatch = useAppDispatch();
   const scenariosState = useAppSelector((state) => state.dataSelection.scenarios);
@@ -180,6 +193,12 @@ function useValidateSpecialScenarios(apiScenarios: Scenarios, scenariosSynced: b
   return valid;
 }
 
+/**
+ * Validates and ensures the correct order of scenarios based on predefined criteria.
+ *
+ * This hook checks if the scenarios from the API match the expected order within the application state.
+ * If the scenarios are out of order, it dispatches an action to reorder them correctly.
+ */
 function useValidateScenarioOrder(apiScenarios: Scenarios, scenariosSynced: boolean): boolean {
   const dispatch = useAppDispatch();
   const scenariosState = useAppSelector((state) => state.dataSelection.scenarios);
@@ -214,6 +233,10 @@ function useValidateScenarioOrder(apiScenarios: Scenarios, scenariosSynced: bool
   return ordered;
 }
 
+/**
+ * Validates the selected scenario based on the state of scenarios and their visibility.
+ * Ensures that a valid scenario is selected if none is selected or if the visibility constraints are not met.
+ */
 function useValidateSelectedScenario(scenariosValidated: boolean): boolean {
   const dispatch = useAppDispatch();
   const scenariosState = useAppSelector((state) => state.dataSelection.scenarios);
@@ -242,6 +265,10 @@ function useValidateSelectedScenario(scenariosValidated: boolean): boolean {
   return valid;
 }
 
+/**
+ * Validates and manages the selection of a district. If no district is selected, it defaults the selection to a
+ * specified node (e.g., Germany).
+ */
 function useValidateDistrictSelection(nodes: Nodes): boolean {
   const dispatch = useAppDispatch();
   const selectedDistrict = useAppSelector((state) => state.dataSelection.district.id);
@@ -260,6 +287,10 @@ function useValidateDistrictSelection(nodes: Nodes): boolean {
   return selectedDistrict !== '';
 }
 
+/**
+ * Custom hook to validate the selection of a compartment. Ensures at least one compartment is selected by dispatching
+ * an action to select the first compartment if none is selected.
+ */
 function useValidateCompartmentSelection(compartments: Compartments): boolean {
   const dispatch = useAppDispatch();
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
@@ -275,6 +306,10 @@ function useValidateCompartmentSelection(compartments: Compartments): boolean {
   return selectedCompartment !== null;
 }
 
+/**
+ * Validates the reference date based on provided scenarios and validation state.
+ * Updates the reference date using the first scenario with name 'casedata' if a reference date is not set.
+ */
 function useValidateReferenceDate(scenarios: Scenarios, scenariosValidated: boolean): boolean {
   const dispatch = useAppDispatch();
   const referenceDate = useAppSelector((state) => state.dataSelection.simulationStart);
@@ -292,6 +327,9 @@ function useValidateReferenceDate(scenarios: Scenarios, scenariosValidated: bool
   return referenceDate !== null;
 }
 
+/**
+ * Validates the date range for scenarios and dispatches minimum and maximum dates based on active scenarios.
+ */
 function useValidateDateRange(scenarios: Scenarios, scenariosValidated: boolean): boolean {
   const dispatch = useAppDispatch();
   const scenariosState = useAppSelector((state) => state.dataSelection.scenarios);
@@ -325,10 +363,13 @@ function useValidateDateRange(scenarios: Scenarios, scenariosValidated: boolean)
     }
   }, [dispatch, scenarios, scenariosState, scenariosValidated]);
 
-  // TODO: ???
+  // I think any date range is valid, so we can return true here.
   return true;
 }
 
+/**
+ * Validates whether the currently selected date falls within a specified date range.
+ */
 function useValidateDate(validatedDateRange: boolean): boolean {
   const dispatch = useAppDispatch();
   const selectedDate = useAppSelector((state) => state.dataSelection.date);
