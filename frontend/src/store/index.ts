@@ -13,6 +13,7 @@ import {groupApi} from './services/groupApi';
 import LayoutReducer from './LayoutSlice';
 import RealmReducer from './RealmSlice';
 import UserOnboardingReducer from './UserOnboardingSlice';
+import {idpApi} from './services/idpApi';
 
 const persistConfig = {
   key: 'root',
@@ -30,6 +31,7 @@ const rootReducer = combineReducers({
   [caseDataApi.reducerPath]: caseDataApi.reducer,
   [scenarioApi.reducerPath]: scenarioApi.reducer,
   [groupApi.reducerPath]: groupApi.reducer,
+  [idpApi.reducerPath]: idpApi.reducer,
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
@@ -40,7 +42,7 @@ export const Store = configureStore({
       serializableCheck: {
         ignoredActions: ['persist/PERSIST'],
       },
-    }).concat(caseDataApi.middleware, scenarioApi.middleware, groupApi.middleware),
+    }).concat(caseDataApi.middleware, scenarioApi.middleware, groupApi.middleware, idpApi.middleware),
 });
 
 export const Persistor = persistStore(Store);
