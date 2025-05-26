@@ -8,6 +8,8 @@ import FiltersContainer from './GroupFilter/FiltersContainer';
 import {FilterValues} from 'types/card';
 import {GroupFilter} from 'types/group';
 import {Localization} from 'types/localization';
+import {useSortable} from '@dnd-kit/sortable';
+import {CSS} from '@dnd-kit/utilities';
 
 interface DataCardProps {
   /** A unique identifier for the card.*/
@@ -98,6 +100,16 @@ export default function DataCard({
   const [folded, setFolded] = useState<boolean>(false);
   const [visibility, setVisibility] = useState<boolean>(true);
 
+  // drag and drop
+  const {attributes, listeners, setNodeRef, setActivatorNodeRef, isDragging, transform, transition} = useSortable({
+    id,
+  });
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    cursor: isDragging ? 'grabbing' : 'grab',
+  };
+
   const filteredTitles: string[] = useMemo(() => {
     if (isActive && filterValues?.[id.toString()]) {
       return filterValues[id.toString()].map((filterValue: FilterValues) => filterValue.filteredTitle);
@@ -137,6 +149,8 @@ export default function DataCard({
         flexDirection: 'row',
         alignItems: 'flex-start',
       }}
+      ref={setNodeRef}
+      style={style}
     >
       <MainCard
         id={id}
@@ -157,6 +171,9 @@ export default function DataCard({
         maxCompartmentsRows={maxCompartmentsRows}
         localization={localization}
         arrow={arrow}
+        dragListeners={listeners}
+        dragAttributes={attributes}
+        setActivatorNodeRef={setActivatorNodeRef}
       />
       {isActive && filterValues?.[id.toString()] && Object.keys(groupFilters || {}).length !== 0 && visibility && (
         <FiltersContainer

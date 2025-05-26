@@ -13,6 +13,7 @@ import {
   setStartDate,
   toggleCompartmentExpansion,
   updateScenario,
+  orderScenarios,
 } from 'store/DataSelectionSlice';
 import {ScrollSync} from 'react-scroll-sync';
 import {useBoundingclientrectRef} from 'rooks';
@@ -271,6 +272,7 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
                   })
                 )
               }
+              orderScenarios={(order: string[]) => dispatch(orderScenarios(order))}
               minCompartmentsRows={minCompartmentsRows}
               maxCompartmentsRows={maxCompartmentsRows}
               localization={localization}

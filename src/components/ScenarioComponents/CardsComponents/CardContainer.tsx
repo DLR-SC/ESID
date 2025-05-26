@@ -7,6 +7,15 @@ import Box from '@mui/material/Box/Box';
 import {FilterValues} from 'types/card';
 import {GroupFilter} from 'types/group';
 import {Localization} from 'types/localization';
+import {DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  horizontalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import {restrictToHorizontalAxis} from '@dnd-kit/modifiers';
+import type {DragEndEvent} from '@dnd-kit/core';
 
 interface CardContainerProps {
   /** A boolean indicating whether the compartments are expanded. */
@@ -51,6 +60,9 @@ interface CardContainerProps {
   /** A dictionary of group filters. */
   groupFilters: Record<string, GroupFilter> | undefined;
 
+  /** A function to order the scenarios. */
+  orderScenarios: Dispatch<string[]>;
+
   /** Boolean to determine if the arrow is displayed */
   arrow?: boolean;
 }
@@ -79,7 +91,42 @@ export default function CardContainer({
   setSelectedScenario,
   groupFilters,
   arrow = true,
+  orderScenarios,
 }: CardContainerProps) {
+  // DnD sensors for initiating DnD events
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  // Handle drag end
+  const handleDragEnd = (event: DragEndEvent) => {
+    const {active, over} = event;
+    if (active.id !== over?.id && over) {
+      const oldIndex = scenarios.findIndex((s) => s.id === active.id);
+      const newIndex = scenarios.findIndex((s) => s.id === over.id);
+
+      // Find caseData and baseLine
+      const caseData = scenarios.find((s) => s.name === 'casedata');
+      const baseLine = scenarios.find((s) => s.name === 'baseline');
+
+      // Start with the current order
+      let ids = scenarios.map((s) => s.id);
+      // Move the dragged item
+      ids = arrayMove(ids, oldIndex, newIndex);
+
+      // Reorder to keep caseData and baseLine at the front
+      const orderedIds = [
+        ...(caseData ? [caseData.id] : []),
+        ...(baseLine ? [baseLine.id] : []),
+        ...ids.filter((id) => id !== caseData?.id && id !== baseLine?.id),
+      ];
+      orderScenarios(orderedIds);
+    }
+  };
+
   const minHeight = useMemo(() => {
     let height;
     if (compartmentsExpanded) {
@@ -98,48 +145,56 @@ export default function CardContainer({
     return `${height}px`;
   }, [compartmentsExpanded, maxCompartmentsRows, minCompartmentsRows]);
 
-  const dataCards = scenarios.map((scenario) => {
-    return (
-      <DataCard
-        key={scenario.id}
-        id={scenario.id}
-        color={scenario.color}
-        title={scenario.name}
-        compartmentsExpanded={compartmentsExpanded}
-        compartmentValues={cardValues ? cardValues[scenario.id] : null}
-        referenceValues={referenceValues ?? null}
-        selectedCompartmentId={selectedCompartmentId}
-        filterValues={filterValues}
-        isSelected={selectedScenario === scenario.id}
-        isActive={scenario.active}
-        setSelected={setSelectedScenario}
-        setActive={setActiveScenario}
-        hide={hide}
-        minCompartmentsRows={minCompartmentsRows}
-        maxCompartmentsRows={maxCompartmentsRows}
-        localization={localization}
-        groupFilters={groupFilters}
-        arrow={arrow}
-      />
-    );
-  });
+  // Render DataCards in the order of scenarios prop
+  const dataCards = scenarios.map((scenario) => (
+    <DataCard
+      key={scenario.id}
+      id={scenario.id}
+      color={scenario.color}
+      title={scenario.name}
+      compartmentsExpanded={compartmentsExpanded}
+      compartmentValues={cardValues ? cardValues[scenario.id] : null}
+      referenceValues={referenceValues ?? null}
+      selectedCompartmentId={selectedCompartmentId}
+      filterValues={filterValues}
+      isSelected={selectedScenario === scenario.id}
+      isActive={scenario.active}
+      setSelected={setSelectedScenario}
+      setActive={setActiveScenario}
+      hide={hide}
+      minCompartmentsRows={minCompartmentsRows}
+      maxCompartmentsRows={maxCompartmentsRows}
+      localization={localization}
+      groupFilters={groupFilters}
+      arrow={arrow}
+    />
+  ));
 
   return (
-    <Box
-      id='card-container'
-      sx={{
-        display: 'flex',
-        flexDirection: 'row',
-        gap: 4,
-        minHeight: minHeight,
-        overflowX: 'auto',
-        minWidth: 400,
-        paddingLeft: 4,
-        paddingRight: 4,
-        paddingTop: 2,
-      }}
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      onDragEnd={handleDragEnd}
+      modifiers={[restrictToHorizontalAxis]}
     >
-      {dataCards}
-    </Box>
+      <SortableContext items={scenarios.map((s) => s.id)} strategy={horizontalListSortingStrategy}>
+        <Box
+          id='card-container'
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            gap: 4,
+            minHeight: minHeight,
+            overflowX: 'auto',
+            minWidth: 400,
+            paddingLeft: 4,
+            paddingRight: 4,
+            paddingTop: 2,
+          }}
+        >
+          {dataCards}
+        </Box>
+      </SortableContext>
+    </DndContext>
   );
 }

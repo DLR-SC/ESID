@@ -9,6 +9,9 @@ import React, {Dispatch} from 'react';
 import {Localization} from 'types/localization';
 import {hexToRGB} from 'util/util';
 import Close from '@mui/icons-material/Close';
+import type {SyntheticListenerMap} from '@dnd-kit/core/dist/hooks/utilities';
+import type {DraggableAttributes} from '@dnd-kit/core';
+import DragIndicator from '@mui/icons-material/DragIndicator';
 
 interface CardTooltipProps {
   /** A boolean indicating whether the user is hovering over the card. */
@@ -29,6 +32,15 @@ interface CardTooltipProps {
   /** A function to set the active scenarios. */
   setActive: Dispatch<{id: string; state: boolean}>;
 
+  /** The drag attributes of the card. */
+  dragAttributes: DraggableAttributes | undefined;
+
+  /** The drag listeners of the card. */
+  dragListeners: SyntheticListenerMap | undefined;
+
+  /** The activator node ref of the card. */
+  setActivatorNodeRef: (element: HTMLElement | null) => void;
+
   hide: Dispatch<string>;
 
   /** An object containing localization information (translation & number formatting).*/
@@ -46,6 +58,9 @@ export default function CardTooltip({
   isActive,
   setActive,
   hide,
+  dragAttributes,
+  dragListeners,
+  setActivatorNodeRef,
   localization = {
     formatNumber: (value: number) => value.toString(),
     customLang: 'global',
@@ -66,33 +81,12 @@ export default function CardTooltip({
         display: hover ? 'flex' : 'none',
         alignItems: 'flex-end',
         alignContent: 'flex-start',
+        justifyContent: 'space-between',
       }}
     >
-      <Tooltip
-        title={
-          isActive
-            ? localization.overrides?.['scenario.deactivate']
-              ? customT(localization.overrides['scenario.deactivate'])
-              : defaultT('scenario.deactivate')
-            : localization.overrides?.['scenario.activate']
-              ? customT(localization.overrides['scenario.activate'])
-              : defaultT('scenario.activate')
-        }
-        arrow={true}
-      >
-        <IconButton
-          color={'primary'}
-          onClick={(event) => {
-            event.stopPropagation(); // Used in order to avoid triggering the click event on the card and only allow triggering the event that handles adding the card to the active scenarios.
-            if (isActive) {
-              setActive({id, state: false});
-              setSelected({id, state: false});
-            } else {
-              setActive({id, state: true});
-              setSelected({id, state: true});
-            }
-          }}
-          aria-label={
+      <Box>
+        <Tooltip
+          title={
             isActive
               ? localization.overrides?.['scenario.deactivate']
                 ? customT(localization.overrides['scenario.deactivate'])
@@ -101,19 +95,55 @@ export default function CardTooltip({
                 ? customT(localization.overrides['scenario.activate'])
                 : defaultT('scenario.activate')
           }
+          arrow={true}
         >
-          {isActive ? <CheckBox /> : <CheckBoxOutlineBlank />}
-        </IconButton>
-      </Tooltip>
-      <Tooltip title={defaultT('scenario.hide').toString()} arrow={true}>
+          <IconButton
+            color={'primary'}
+            onClick={(event) => {
+              event.stopPropagation(); // Used in order to avoid triggering the click event on the card and only allow triggering the event that handles adding the card to the active scenarios.
+              if (isActive) {
+                setActive({id, state: false});
+                setSelected({id, state: false});
+              } else {
+                setActive({id, state: true});
+                setSelected({id, state: true});
+              }
+            }}
+            aria-label={
+              isActive
+                ? localization.overrides?.['scenario.deactivate']
+                  ? customT(localization.overrides['scenario.deactivate'])
+                  : defaultT('scenario.deactivate')
+                : localization.overrides?.['scenario.activate']
+                  ? customT(localization.overrides['scenario.activate'])
+                  : defaultT('scenario.activate')
+            }
+          >
+            {isActive ? <CheckBox /> : <CheckBoxOutlineBlank />}
+          </IconButton>
+        </Tooltip>
+        <Tooltip title={defaultT('scenario.hide').toString()} arrow={true}>
+          <IconButton
+            color={'primary'}
+            onClick={() => {
+              hide(id);
+            }}
+            aria-label={defaultT('scenario.hide')}
+          >
+            <Close />
+          </IconButton>
+        </Tooltip>
+      </Box>
+
+      <Tooltip title={defaultT('scenario.drag').toString()} arrow={true}>
         <IconButton
+          ref={setActivatorNodeRef}
           color={'primary'}
-          onClick={() => {
-            hide(id);
-          }}
-          aria-label={defaultT('scenario.hide')}
+          {...dragListeners}
+          {...dragAttributes}
+          style={{cursor: 'grab'}}
         >
-          <Close />
+          <DragIndicator />
         </IconButton>
       </Tooltip>
     </Box>
