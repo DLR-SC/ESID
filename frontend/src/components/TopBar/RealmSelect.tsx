@@ -50,7 +50,6 @@ function RealmSelect() {
         setRealmListLoading(false);
       });
   };
-  console.log(realmList);
 
   return (
     <Box sx={{my: 2}}>
