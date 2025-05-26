@@ -101,13 +101,12 @@ export default function DataCard({
   const [visibility, setVisibility] = useState<boolean>(true);
 
   // drag and drop
-  const {attributes, listeners, setNodeRef, setActivatorNodeRef, isDragging, transform, transition} = useSortable({
+  const {attributes, listeners, setNodeRef, setActivatorNodeRef, transform, isDragging, transition} = useSortable({
     id,
   });
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
-    cursor: isDragging ? 'grabbing' : 'grab',
   };
 
   const filteredTitles: string[] = useMemo(() => {
@@ -174,6 +173,7 @@ export default function DataCard({
         dragListeners={listeners}
         dragAttributes={attributes}
         setActivatorNodeRef={setActivatorNodeRef}
+        isDragging={isDragging}
       />
       {isActive && filterValues?.[id.toString()] && Object.keys(groupFilters || {}).length !== 0 && visibility && (
         <FiltersContainer

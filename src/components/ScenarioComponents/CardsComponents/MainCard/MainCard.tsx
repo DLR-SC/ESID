@@ -65,6 +65,9 @@ interface MainCardProps {
   /** The drag listeners of the card. */
   dragListeners: SyntheticListenerMap | undefined;
 
+  /** A boolean indicating whether the card is being dragged. */
+  isDragging: boolean;
+
   /** The activator node ref of the card. */
   setActivatorNodeRef: (element: HTMLElement | null) => void;
 
@@ -99,6 +102,7 @@ function MainCard({
   maxCompartmentsRows,
   dragAttributes,
   dragListeners,
+  isDragging,
   setActivatorNodeRef,
   localization = {
     formatNumber: (value: number) => value.toString(),
@@ -192,6 +196,7 @@ function MainCard({
         localization={localization}
         dragAttributes={dragAttributes}
         dragListeners={dragListeners}
+        isDragging={isDragging}
         setActivatorNodeRef={setActivatorNodeRef}
       />
     </Box>

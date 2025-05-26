@@ -38,6 +38,9 @@ interface CardTooltipProps {
   /** The drag listeners of the card. */
   dragListeners: SyntheticListenerMap | undefined;
 
+  /** A boolean indicating whether the card is being dragged. */
+  isDragging: boolean;
+
   /** The activator node ref of the card. */
   setActivatorNodeRef: (element: HTMLElement | null) => void;
 
@@ -60,6 +63,7 @@ export default function CardTooltip({
   hide,
   dragAttributes,
   dragListeners,
+  isDragging,
   setActivatorNodeRef,
   localization = {
     formatNumber: (value: number) => value.toString(),
@@ -70,7 +74,7 @@ export default function CardTooltip({
   const {t: defaultT} = useTranslation();
   const {t: customT} = useTranslation(localization.customLang);
 
-  return hover ? (
+  return hover || isDragging ? (
     <Box
       id={`tooltip-container-${id}`}
       sx={{
@@ -78,7 +82,7 @@ export default function CardTooltip({
         width: 'full',
         height: '40px',
         boxShadow: hover || isActive ? 'none' : `0px 0px 0px 6px ${hexToRGB(color, 0.4)}`,
-        display: hover ? 'flex' : 'none',
+        display: hover || isDragging ? 'flex' : 'none',
         alignItems: 'flex-end',
         alignContent: 'flex-start',
         justifyContent: 'space-between',
@@ -141,7 +145,7 @@ export default function CardTooltip({
           color={'primary'}
           {...dragListeners}
           {...dragAttributes}
-          style={{cursor: 'grab'}}
+          style={{cursor: isDragging ? 'grabbing' : 'grab'}}
         >
           <DragIndicator />
         </IconButton>
