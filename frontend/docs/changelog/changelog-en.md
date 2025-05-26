@@ -20,6 +20,7 @@ SPDX-License-Identifier: CC-BY-4.0
 
 - Added translations for additional scenarios.
 - If an inactive scenario is being clicked on it will automatically be revealed and selected.
+- Instead of hard-coded organizations, now organization dropdown options are populated by fetching the actual realms.
 
 ### Bug fixes
 
