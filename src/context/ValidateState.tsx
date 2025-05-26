@@ -244,16 +244,18 @@ function useValidateSelectedScenario(scenariosValidated: boolean): boolean {
 
   const valid = useMemo(
     () =>
-      scenariosValidated &&
-      (Object.values(scenariosState).every((scenario) => scenario.visibility !== 'faceUp') ||
-        (selectedScenario !== null && scenariosState[selectedScenario].visibility === 'faceUp')),
+      (scenariosValidated && Object.keys(scenariosState).length === 0) ||
+      (selectedScenario !== null &&
+        scenariosState[selectedScenario] &&
+        (Object.values(scenariosState).every((scenario) => scenario.visibility !== 'faceUp') ||
+          scenariosState[selectedScenario].visibility === 'faceUp')),
     [scenariosState, scenariosValidated, selectedScenario]
   );
 
   useEffect(() => {
     if (!scenariosValidated || valid) return;
 
-    if (!selectedScenario || scenariosState[selectedScenario].visibility !== 'faceUp') {
+    if (!selectedScenario || scenariosState[selectedScenario]?.visibility !== 'faceUp') {
       const faceUpScenarios = Object.entries(scenariosState)
         .filter(([_, scenario]) => scenario.visibility === 'faceUp')
         .map(([id, _]) => id);
