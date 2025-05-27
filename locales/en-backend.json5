@@ -354,7 +354,7 @@
     'Face masks & social distancing School': 'Face masks & social distancing School',
     'Face masks & social distancing Work': 'Face masks & social distancing Work',
     'Face masks & social distancing Other': 'Face masks & social distancing Other',
-    'Remote work': 'Implementation of remote work policies',
+    'Remote work': 'Remote work policies',
   },
   models: {
     secirvvs: 'SECIRVVS',
