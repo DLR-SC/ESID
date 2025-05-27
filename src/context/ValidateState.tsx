@@ -1,7 +1,8 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, {ReactNode, useEffect, useMemo} from 'react';
+import React, {ReactNode, useEffect, useMemo, useState} from 'react';
+import {Snackbar, Alert, Stack} from '@mui/material';
 
 import {BaseData} from 'context/BaseDataContext';
 import {useAppDispatch, useAppSelector} from 'store/hooks';
@@ -28,6 +29,9 @@ import {dateToISOString} from 'util/util';
  * within a valid context or an error message indicating invalid state details.
  */
 export default function ValidateState(props: {baseData: BaseData; children: ReactNode}) {
+  const {t} = useTranslation();
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+
   // 1. Select a default district.
   const validatedDistrictSelection = useValidateDistrictSelection(props.baseData.nodes);
 
@@ -55,47 +59,70 @@ export default function ValidateState(props: {baseData: BaseData; children: Reac
   // 3. Select a default scenario.
   const validatedSelectedScenario = useValidateSelectedScenario(validatedSpecialScenarios && scenariosOrdered);
 
-  const validState = useMemo(
-    () =>
-      validatedDistrictSelection &&
-      validatedCompartmentSelection &&
-      scenariosSynced &&
-      validatedSpecialScenarios &&
-      scenariosOrdered &&
-      validatedReferenceDate &&
-      validatedDateRange &&
-      validatedSelectedDate &&
-      validatedSelectedScenario,
-    [
-      scenariosOrdered,
-      scenariosSynced,
-      validatedCompartmentSelection,
-      validatedDateRange,
-      validatedDistrictSelection,
-      validatedReferenceDate,
-      validatedSelectedDate,
-      validatedSelectedScenario,
-      validatedSpecialScenarios,
-    ]
-  );
+  // Collect all validation errors
+  const validationErrors = useMemo(() => {
+    const errors: Array<string> = [];
 
-  if (validState) {
-    return <SelectedDataContext baseData={props.baseData}>{props.children}</SelectedDataContext>;
-  }
+    if (!validatedDistrictSelection) errors.push(t('warnings.no-district-selected'));
+    if (!validatedCompartmentSelection) errors.push(t('warnings.no-compartment-selected'));
+    if (!scenariosSynced) errors.push(t('warnings.scenarios-desynchronized'));
+    if (!validatedSpecialScenarios) errors.push(t('warnings.special-scenarios-invalid'));
+    if (!scenariosOrdered) errors.push(t('warnings.scenarios-not-ordered'));
+    if (!validatedReferenceDate) errors.push(t('warnings.no-reference-data'));
+    if (!validatedDateRange) errors.push(t('warnings.no-date-range'));
+    if (!validatedSelectedDate) errors.push(t('warnings.no-selected-date'));
+    if (!validatedSelectedScenario) errors.push(t('warnings.no-scenario-selected'));
+
+    return errors;
+  }, [
+    validatedDistrictSelection,
+    t,
+    validatedCompartmentSelection,
+    scenariosSynced,
+    validatedSpecialScenarios,
+    scenariosOrdered,
+    validatedReferenceDate,
+    validatedDateRange,
+    validatedSelectedDate,
+    validatedSelectedScenario,
+  ]);
+
+  // Show snackbar when there are validation errors
+  useEffect(() => {
+    if (validationErrors.length > 0) {
+      setSnackbarOpen(true);
+    } else {
+      setSnackbarOpen(false);
+    }
+  }, [validationErrors]);
+
+  const handleSnackbarClose = (_: unknown, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackbarOpen(false);
+  };
 
   return (
-    <div>
-      <h1>Invalid state</h1>
-      {!validatedDistrictSelection && <p>No district selected</p>}
-      {!validatedCompartmentSelection && <p>No compartment selected</p>}
-      {!scenariosSynced && <p>Scenarios not synchronized</p>}
-      {!validatedSpecialScenarios && <p>Special scenarios not properly configured</p>}
-      {!scenariosOrdered && <p>Scenarios not properly ordered</p>}
-      {!validatedReferenceDate && <p>Reference date not set</p>}
-      {!validatedDateRange && <p>Date range not properly set</p>}
-      {!validatedSelectedDate && <p>Selected date not valid</p>}
-      {!validatedSelectedScenario && <p>No valid scenario selected</p>}
-    </div>
+    <>
+      <SelectedDataContext baseData={props.baseData}>{props.children}</SelectedDataContext>
+
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={5000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{vertical: 'bottom', horizontal: 'left'}}
+      >
+        <Alert onClose={handleSnackbarClose} severity='warning' variant='standard' sx={{width: '100%'}}>
+          <Stack spacing={1}>
+            <strong>{t('warnings.warning-header')}</strong>
+            {validationErrors.map((error, index) => (
+              <div key={index}>{error}</div>
+            ))}
+          </Stack>
+        </Alert>
+      </Snackbar>
+    </>
   );
 }
 

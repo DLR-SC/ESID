@@ -103,6 +103,18 @@
       'color-required': 'Ein Farbschema muss ausgewählt werden!',
     },
   },
+  warnings: {
+    'warning-header': 'Einer oder mehrere Fehler sind aufgetreten:',
+    'no-district-selected': 'Kein Landkreis ausgewählt!',
+    'no-compartment-selected': 'Kein Infektionszustand ausgewählt!',
+    'scenarios-desynchronized': 'Synchronisation der Szenarien mit dem Server fehlgeschlagen!',
+    'special-scenarios-invalid': 'Falldaten und/oder Basisszenario konnten nicht geladen werden!',
+    'scenarios-not-ordered': 'Es gab einen Fehler beim sortieren der Szenarien!',
+    'no-reference-data': 'Kein Referenztag ausgewählt!',
+    'no-date-range': 'Es konnte keine Zeitspanne aus den Szenarien ermittelt werden!',
+    'no-selected-date': 'Es ist kein Tag ausgewählt!',
+    'no-scenario-selected': 'Es ist kein Szenario ausgewählt!'
+  },
   today: 'Heute',
   more: 'Mehr',
   less: 'Weniger',
