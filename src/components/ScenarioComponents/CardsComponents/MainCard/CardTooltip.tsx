@@ -22,7 +22,7 @@ interface CardTooltipProps {
   /** The title of the card. */
   id: string;
 
-  /** The number of the selected scenario. */
+  /** A function to set the selected scenario. */
   setSelected: Dispatch<{id: string; state: boolean}>;
 
   /** A boolean indicating whether the scenario is active. */
@@ -31,6 +31,7 @@ interface CardTooltipProps {
   /** A function to set the active scenarios. */
   setActive: Dispatch<{id: string; state: boolean}>;
 
+  /** A function to hide/remove the scenario. */
   hide: Dispatch<string>;
 
   /** An object containing localization information (translation & number formatting).*/

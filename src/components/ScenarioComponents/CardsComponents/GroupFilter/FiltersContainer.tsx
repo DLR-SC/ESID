@@ -31,7 +31,7 @@ interface FiltersContainerProps {
   /** Selected compartment */
   selectedCompartmentId: string | null;
 
-  /** Array of filtered values */
+  /** Array of filtered values (Items: {Compartment Name: Value}) */
   filteredValues: Array<Record<string, number>>;
 
   /** Minimum number of compartment rows */

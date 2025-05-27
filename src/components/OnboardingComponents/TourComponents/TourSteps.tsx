@@ -76,7 +76,7 @@ export default function TourSteps(): JSX.Element {
         savedUserDataSelection.current = dataSelection; // Save the current data selection of the user so we can override it with different values during the tour
 
         const maxDate = dataSelection.maxDate ?? '2024-07-08'; // Get the maximum date from the data selection
-        dispatch(selectDate(maxDate)); // Set the simulation start date (purple line) to the maximum date
+        dispatch(selectDate(maxDate)); // Set the selected date (purple line) to the maximum date
 
         const firstScenarioId = scenarioList[0].id; // We get the first scenario id (base scenario) from scenarioList
         dispatch(selectScenario(firstScenarioId)); // Dispatch the selectScenario action with the base scenario

@@ -23,7 +23,7 @@ interface MainCardProps {
   /** A dictionary of compartment values associated with the card. */
   compartmentValues: Record<string, number | null> | null;
 
-  /** A dictionary of start values used for calculating the rate. This determines whether the values have increased, decreased, or remained the same. */
+  /** A dictionary of reference values used for calculating the rate. This determines whether the values have increased, decreased, or remained the same. */
   referenceValues: Record<string, number> | null;
 
   /** A boolean indicating whether the compartments are expanded. */
@@ -50,6 +50,7 @@ interface MainCardProps {
   /** A function to set the active scenario. */
   setActive: Dispatch<{id: string; state: boolean}>;
 
+  /** A function to hide/remove the card. */
   hide: Dispatch<string>;
 
   /** The minimum number of compartment rows. */

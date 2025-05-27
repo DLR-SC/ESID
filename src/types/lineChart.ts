@@ -45,7 +45,7 @@ export interface LineChartData {
    */
   stroke: {
     /**
-     * The color of the stroke.
+     * The html/hex color of the stroke.
      */
     color?: string;
 
@@ -61,7 +61,7 @@ export interface LineChartData {
   };
 
   /**
-   * The fill color for the line chart.
+   * The html/hex color for the line chart fill.
    */
   fill?: string;
 

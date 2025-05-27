@@ -37,6 +37,7 @@ interface CardContainerProps {
   /** A function to set the selected scenario. */
   setSelectedScenario: Dispatch<{id: string; state: boolean}>;
 
+  /** A function to hide/remove the scenario. */
   hide: Dispatch<string>;
 
   /** The minimum number of compartment rows. */

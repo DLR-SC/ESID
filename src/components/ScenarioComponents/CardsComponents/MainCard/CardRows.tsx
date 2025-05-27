@@ -17,7 +17,7 @@ interface CardRowsProps {
   /** Dictionary of compartment values */
   compartmentValues: Record<string, number | null> | null;
 
-  /** Dictionary of start values */
+  /** Dictionary of reference day values */
   referenceValues: Record<string, number> | null;
 
   /** Boolean to determine if the card is flipped */
