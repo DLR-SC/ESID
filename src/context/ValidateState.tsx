@@ -2,8 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React, {ReactNode, useEffect, useMemo, useState} from 'react';
-import {Snackbar, Alert, Stack} from '@mui/material';
-
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
 import {BaseData} from 'context/BaseDataContext';
 import {useAppDispatch, useAppSelector} from 'store/hooks';
 import {
