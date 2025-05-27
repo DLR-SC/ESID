@@ -8,6 +8,7 @@ import React, {useContext, useEffect, useMemo} from 'react';
 import {NumberFormatter} from 'util/hooks';
 import {useTranslation} from 'react-i18next';
 import {
+  ScenarioVisibility,
   selectCompartment,
   selectScenario,
   setGroupFilters,
@@ -72,13 +73,16 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
     }
     return (
       Object.entries(scenariosState)
-        .filter(([_, scenario]) => scenario.visibility === 'faceUp' || scenario.visibility === 'faceDown')
+        .filter(
+          ([_, scenario]) =>
+            scenario.visibility === ScenarioVisibility.FaceUp || scenario.visibility === ScenarioVisibility.FaceDown
+        )
         .map(([id, scenario]) => {
           return {
             id: id,
             name: scenario.name,
             color: scenario.colors[0],
-            active: scenario.visibility == 'faceUp',
+            active: scenario.visibility == ScenarioVisibility.FaceUp,
           };
         }) ?? []
     );
@@ -260,7 +264,9 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
                 dispatch(
                   updateScenario({
                     id: newActiveScenarios.id,
-                    state: {visibility: newActiveScenarios.state ? 'faceUp' : 'faceDown'},
+                    state: {
+                      visibility: newActiveScenarios.state ? ScenarioVisibility.FaceUp : ScenarioVisibility.FaceDown,
+                    },
                   })
                 )
               }
@@ -268,7 +274,7 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
                 dispatch(
                   updateScenario({
                     id: scenarioId,
-                    state: {visibility: 'inLibrary'},
+                    state: {visibility: ScenarioVisibility.InLibrary},
                   })
                 )
               }

@@ -29,6 +29,7 @@ import {
 import {GeoJSON, GeoJsonProperties} from 'geojson';
 import {AuthContext} from 'react-oauth2-code-pkce';
 import {setToken} from 'store/AuthSlice';
+import {ScenarioVisibility} from 'store/DataSelectionSlice';
 
 interface DataContextType {
   geoData: GeoJSON;
@@ -114,7 +115,9 @@ export default function SelectedDataContext(props: {baseData: BaseData; children
   const activeScenarios = useMemo(
     () =>
       Object.keys(scenariosState).filter(
-        (id) => scenariosState[id].visibility === 'faceUp' || scenariosState[id].visibility === 'faceDown'
+        (id) =>
+          scenariosState[id].visibility === ScenarioVisibility.FaceUp ||
+          scenariosState[id].visibility === ScenarioVisibility.FaceDown
       ),
     [scenariosState]
   );
@@ -160,7 +163,7 @@ export default function SelectedDataContext(props: {baseData: BaseData; children
   );
 
   const faceUpScenarios = useMemo(
-    () => Object.keys(scenariosState).filter((id) => scenariosState[id].visibility === 'faceUp'),
+    () => Object.keys(scenariosState).filter((id) => scenariosState[id].visibility === ScenarioVisibility.FaceUp),
     [scenariosState]
   );
 

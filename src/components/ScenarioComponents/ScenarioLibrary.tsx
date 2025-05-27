@@ -21,9 +21,10 @@ import Dialog from '@mui/material/Dialog';
 import NewScenarioDialog, {NewScenarioData} from './NewScenarioDialog';
 import {InterventionTemplates, Models, NodeLists, Scenario} from 'store/services/APITypes';
 import {useGetMultiScenariosQuery} from 'store/services/scenarioApi';
-import {updateScenario} from 'store/DataSelectionSlice';
+import {ScenarioVisibility, updateScenario} from 'store/DataSelectionSlice';
 import {setScenarioColors} from 'store/UserPreferenceSlice';
 import {DataContext} from 'context/SelectedDataContext';
+
 export default function ScenarioLibrary(): JSX.Element {
   const dispatch = useAppDispatch();
   const {t} = useTranslation();
@@ -55,7 +56,7 @@ export default function ScenarioLibrary(): JSX.Element {
             state: {
               name: data.name,
               description: data.description,
-              visibility: 'faceUp',
+              visibility: ScenarioVisibility.FaceUp,
               colors: data.colors,
             },
           })
@@ -73,7 +74,7 @@ export default function ScenarioLibrary(): JSX.Element {
 
   const hiddenScenarios = useMemo(() => {
     return Object.entries(scenariosState)
-      .filter(([_, value]) => value.visibility === 'inLibrary')
+      .filter(([_, value]) => value.visibility === ScenarioVisibility.InLibrary)
       .map(([key, scenario]) => ({
         id: key,
         name: scenario.name,
@@ -215,7 +216,7 @@ function LibraryCard(props: Readonly<{id: string; name: string}>): JSX.Element {
       updateScenario({
         id: props.id,
         state: {
-          visibility: 'faceUp',
+          visibility: ScenarioVisibility.FaceUp,
           colors: savedColors,
         },
       })

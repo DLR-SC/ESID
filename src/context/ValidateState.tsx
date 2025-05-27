@@ -11,6 +11,7 @@ import {
   addScenario,
   orderScenarios,
   removeScenario,
+  ScenarioVisibility,
   selectCompartment,
   selectDate,
   selectDistrict,
@@ -166,7 +167,7 @@ function useSyncScenarios(apiScenarios: Scenarios): boolean {
                 ? t(`scenario-names.${scenario.name}`)
                 : scenario.name,
               description: scenario.description,
-              visibility: 'hidden',
+              visibility: ScenarioVisibility.Hidden,
               colors: [],
             },
           })
@@ -193,10 +194,12 @@ function useValidateSpecialScenarios(apiScenarios: Scenarios, scenariosSynced: b
     () =>
       scenariosSynced &&
       (caseData
-        ? scenariosState[caseData.id].visibility === 'faceUp' || scenariosState[caseData.id].visibility === 'faceDown'
+        ? scenariosState[caseData.id].visibility === ScenarioVisibility.FaceUp ||
+          scenariosState[caseData.id].visibility === ScenarioVisibility.FaceDown
         : true) &&
       (baseLine
-        ? scenariosState[baseLine.id].visibility === 'faceUp' || scenariosState[baseLine.id].visibility === 'faceDown'
+        ? scenariosState[baseLine.id].visibility === ScenarioVisibility.FaceUp ||
+          scenariosState[baseLine.id].visibility === ScenarioVisibility.FaceDown
         : true),
     [baseLine, caseData, scenariosState, scenariosSynced]
   );
@@ -206,16 +209,28 @@ function useValidateSpecialScenarios(apiScenarios: Scenarios, scenariosSynced: b
 
     if (
       caseData &&
-      (scenariosState[caseData.id].visibility === 'hidden' || scenariosState[caseData.id].visibility === 'inLibrary')
+      (scenariosState[caseData.id].visibility === ScenarioVisibility.Hidden ||
+        scenariosState[caseData.id].visibility === ScenarioVisibility.InLibrary)
     ) {
-      dispatch(updateScenario({id: caseData.id, state: {visibility: 'faceUp', colors: theme.custom.scenarios[0]}}));
+      dispatch(
+        updateScenario({
+          id: caseData.id,
+          state: {visibility: ScenarioVisibility.FaceUp, colors: theme.custom.scenarios[0]},
+        })
+      );
     }
 
     if (
       baseLine &&
-      (scenariosState[baseLine.id].visibility === 'hidden' || scenariosState[baseLine.id].visibility === 'inLibrary')
+      (scenariosState[baseLine.id].visibility === ScenarioVisibility.Hidden ||
+        scenariosState[baseLine.id].visibility === ScenarioVisibility.InLibrary)
     ) {
-      dispatch(updateScenario({id: baseLine.id, state: {visibility: 'faceUp', colors: theme.custom.scenarios[1]}}));
+      dispatch(
+        updateScenario({
+          id: baseLine.id,
+          state: {visibility: ScenarioVisibility.FaceUp, colors: theme.custom.scenarios[1]},
+        })
+      );
     }
   }, [baseLine, caseData, dispatch, scenariosState, scenariosSynced, valid]);
 
@@ -276,17 +291,17 @@ function useValidateSelectedScenario(scenariosValidated: boolean): boolean {
       (scenariosValidated && Object.keys(scenariosState).length === 0) ||
       (selectedScenario !== null &&
         scenariosState[selectedScenario] &&
-        (Object.values(scenariosState).every((scenario) => scenario.visibility !== 'faceUp') ||
-          scenariosState[selectedScenario].visibility === 'faceUp')),
+        (Object.values(scenariosState).every((scenario) => scenario.visibility !== ScenarioVisibility.FaceUp) ||
+          scenariosState[selectedScenario].visibility === ScenarioVisibility.FaceUp)),
     [scenariosState, scenariosValidated, selectedScenario]
   );
 
   useEffect(() => {
     if (!scenariosValidated || valid) return;
 
-    if (!selectedScenario || scenariosState[selectedScenario]?.visibility !== 'faceUp') {
+    if (!selectedScenario || scenariosState[selectedScenario]?.visibility !== ScenarioVisibility.FaceUp) {
       const faceUpScenarios = Object.entries(scenariosState)
-        .filter(([_, scenario]) => scenario.visibility === 'faceUp')
+        .filter(([_, scenario]) => scenario.visibility === ScenarioVisibility.FaceUp)
         .map(([id, _]) => id);
 
       dispatch(selectScenario(faceUpScenarios.length > 0 ? faceUpScenarios[faceUpScenarios.length - 1] : null));
@@ -371,7 +386,7 @@ function useValidateDateRange(scenarios: Scenarios, scenariosValidated: boolean)
     if (!scenariosValidated || !scenariosState) return;
 
     const active = Object.entries(scenariosState)
-      .filter(([_, scenario]) => scenario.visibility === 'faceUp')
+      .filter(([_, scenario]) => scenario.visibility === ScenarioVisibility.FaceUp)
       .map(([id, _]) => scenarios.find((scenario) => scenario.id === id))
       .filter((scenario) => scenario !== undefined) as Array<ScenarioPreview>;
 
