@@ -63,6 +63,9 @@ interface DataCardProps {
   /** A dictionary of group filters.*/
   groupFilters: Record<string, GroupFilter> | undefined;
 
+  /** Boolean to determine if the card is draggable */
+  draggable: boolean;
+
   /** Boolean to determine if the arrow is displayed */
   arrow?: boolean;
 }
@@ -94,15 +97,22 @@ export default function DataCard({
     overrides: {},
   },
   groupFilters,
+  draggable,
   arrow = true,
 }: DataCardProps) {
   const [hover, setHover] = useState<boolean>(false);
   const [folded, setFolded] = useState<boolean>(false);
   const [visibility, setVisibility] = useState<boolean>(true);
 
+  console.log(id, title, draggable);
+
   // drag and drop
   const {attributes, listeners, setNodeRef, setActivatorNodeRef, transform, isDragging, transition} = useSortable({
     id,
+    disabled: {
+      draggable: !draggable,
+      droppable: !draggable,
+    },
   });
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -172,6 +182,7 @@ export default function DataCard({
         arrow={arrow}
         dragListeners={listeners}
         dragAttributes={attributes}
+        draggable={draggable}
         setActivatorNodeRef={setActivatorNodeRef}
         isDragging={isDragging}
       />

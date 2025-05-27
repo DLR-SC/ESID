@@ -108,22 +108,12 @@ export default function CardContainer({
       const oldIndex = scenarios.findIndex((s) => s.id === active.id);
       const newIndex = scenarios.findIndex((s) => s.id === over.id);
 
-      // Find caseData and baseLine
-      const caseData = scenarios.find((s) => s.name === 'casedata');
-      const baseLine = scenarios.find((s) => s.name === 'baseline');
-
       // Start with the current order
       let ids = scenarios.map((s) => s.id);
       // Move the dragged item
       ids = arrayMove(ids, oldIndex, newIndex);
 
-      // Reorder to keep caseData and baseLine at the front
-      const orderedIds = [
-        ...(caseData ? [caseData.id] : []),
-        ...(baseLine ? [baseLine.id] : []),
-        ...ids.filter((id) => id !== caseData?.id && id !== baseLine?.id),
-      ];
-      orderScenarios(orderedIds);
+      orderScenarios(ids);
     }
   };
 
@@ -146,7 +136,7 @@ export default function CardContainer({
   }, [compartmentsExpanded, maxCompartmentsRows, minCompartmentsRows]);
 
   // Render DataCards in the order of scenarios prop
-  const dataCards = scenarios.map((scenario) => (
+  const dataCards = scenarios.map((scenario, index) => (
     <DataCard
       key={scenario.id}
       id={scenario.id}
@@ -161,6 +151,7 @@ export default function CardContainer({
       isActive={scenario.active}
       setSelected={setSelectedScenario}
       setActive={setActiveScenario}
+      draggable={index !== 0 && index !== 1}
       hide={hide}
       minCompartmentsRows={minCompartmentsRows}
       maxCompartmentsRows={maxCompartmentsRows}

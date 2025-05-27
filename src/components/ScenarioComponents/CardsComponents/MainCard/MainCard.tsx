@@ -68,6 +68,9 @@ interface MainCardProps {
   /** A boolean indicating whether the card is being dragged. */
   isDragging: boolean;
 
+  /** Boolean to determine if the card is draggable. */
+  draggable: boolean;
+
   /** The activator node ref of the card. */
   setActivatorNodeRef: (element: HTMLElement | null) => void;
 
@@ -103,6 +106,7 @@ function MainCard({
   dragAttributes,
   dragListeners,
   isDragging,
+  draggable,
   setActivatorNodeRef,
   localization = {
     formatNumber: (value: number) => value.toString(),
@@ -197,6 +201,7 @@ function MainCard({
         dragAttributes={dragAttributes}
         dragListeners={dragListeners}
         isDragging={isDragging}
+        draggable={draggable}
         setActivatorNodeRef={setActivatorNodeRef}
       />
     </Box>

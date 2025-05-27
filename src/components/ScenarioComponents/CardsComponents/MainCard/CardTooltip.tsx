@@ -41,6 +41,9 @@ interface CardTooltipProps {
   /** A boolean indicating whether the card is being dragged. */
   isDragging: boolean;
 
+  /** Boolean to determine if the card is draggable. */
+  draggable: boolean;
+
   /** The activator node ref of the card. */
   setActivatorNodeRef: (element: HTMLElement | null) => void;
 
@@ -64,6 +67,7 @@ export default function CardTooltip({
   dragAttributes,
   dragListeners,
   isDragging,
+  draggable,
   setActivatorNodeRef,
   localization = {
     formatNumber: (value: number) => value.toString(),
@@ -143,9 +147,12 @@ export default function CardTooltip({
         <IconButton
           ref={setActivatorNodeRef}
           color={'primary'}
-          {...dragListeners}
-          {...dragAttributes}
-          style={{cursor: isDragging ? 'grabbing' : 'grab'}}
+          {...(draggable ? dragListeners : {})}
+          {...(draggable ? dragAttributes : {})}
+          style={{
+            display: draggable ? 'flex' : 'none',
+            cursor: isDragging ? 'grabbing' : 'grab',
+          }}
         >
           <DragIndicator />
         </IconButton>
