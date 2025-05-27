@@ -13,6 +13,7 @@ interface FiltersContainerProps {
   /** Id of the filter container */
   id: string;
 
+  /** Color of the filter container (should match respective scenario) */
   color: string;
 
   /** Array of filtered titles */
