@@ -104,8 +104,6 @@ export default function DataCard({
   const [folded, setFolded] = useState<boolean>(false);
   const [visibility, setVisibility] = useState<boolean>(true);
 
-  console.log(id, title, draggable);
-
   // drag and drop
   const {attributes, listeners, setNodeRef, setActivatorNodeRef, transform, isDragging, transition} = useSortable({
     id,

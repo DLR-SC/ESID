@@ -143,20 +143,18 @@ export default function CardTooltip({
         </Tooltip>
       </Box>
 
-      <Tooltip title={defaultT('scenario.drag').toString()} arrow={true}>
-        <IconButton
-          ref={setActivatorNodeRef}
-          color={'primary'}
-          {...(draggable ? dragListeners : {})}
-          {...(draggable ? dragAttributes : {})}
-          style={{
-            display: draggable ? 'flex' : 'none',
-            cursor: isDragging ? 'grabbing' : 'grab',
-          }}
-        >
-          <DragIndicator />
-        </IconButton>
-      </Tooltip>
+      <IconButton
+        ref={setActivatorNodeRef}
+        color={'primary'}
+        {...(draggable ? dragListeners : {})}
+        {...(draggable ? dragAttributes : {})}
+        style={{
+          display: draggable ? 'flex' : 'none',
+          cursor: isDragging ? 'grabbing' : 'grab',
+        }}
+      >
+        <DragIndicator />
+      </IconButton>
     </Box>
   ) : null;
 }

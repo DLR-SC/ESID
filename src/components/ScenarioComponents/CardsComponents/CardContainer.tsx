@@ -135,7 +135,6 @@ export default function CardContainer({
     return `${height}px`;
   }, [compartmentsExpanded, maxCompartmentsRows, minCompartmentsRows]);
 
-  // Render DataCards in the order of scenarios prop
   const dataCards = scenarios.map((scenario, index) => (
     <DataCard
       key={scenario.id}
