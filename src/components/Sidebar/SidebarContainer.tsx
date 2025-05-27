@@ -3,7 +3,9 @@
 
 import React, {useState, useEffect, useRef, useCallback, useMemo, useContext} from 'react';
 import {useTranslation} from 'react-i18next';
-import {Grid, Stack, useTheme} from '@mui/material';
+import Grid from '@mui/material/Grid';
+import Stack from '@mui/material/Stack';
+import useTheme from '@mui/material/styles/useTheme';
 import * as am5 from '@amcharts/amcharts5';
 import {useAppDispatch, useAppSelector} from 'store/hooks';
 import {HeatmapLegend} from 'types/heatmapLegend';

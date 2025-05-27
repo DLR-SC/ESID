@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import MobileStepper from '@mui/material/MobileStepper';
 import CloseIcon from '@mui/icons-material/Close';
-import {useTheme} from '@mui/material/styles';
+import useTheme from '@mui/material/styles/useTheme';
 import Slide from './Slide';
 import TourChips from '../TourComponents/TourChipsList';
 import LanguagePicker from 'components/TopBar/LanguagePicker';

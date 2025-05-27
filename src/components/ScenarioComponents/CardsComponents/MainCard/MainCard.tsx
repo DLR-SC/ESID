@@ -2,7 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React, {Dispatch} from 'react';
-import {Box, useTheme} from '@mui/material';
+import Box from '@mui/material/Box';
+import useTheme from '@mui/material/styles/useTheme';
 import CardTitle from './CardTitle';
 import CardTooltip from './CardTooltip';
 import CardRows from './CardRows';

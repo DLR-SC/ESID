@@ -2,7 +2,11 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React from 'react';
-import {Box, List, ListItem, ListItemText, useTheme} from '@mui/material';
+import Box from '@mui/material/Box';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import useTheme from '@mui/material/styles/useTheme';
 import {ScrollSyncPane} from 'react-scroll-sync';
 import {useTranslation} from 'react-i18next';
 import {Localization} from 'types/localization';

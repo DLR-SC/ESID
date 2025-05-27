@@ -104,7 +104,6 @@
       create: 'Create Scenario',
       cancel: 'Cancel',
       color: 'Color Scheme',
-      'color-option': 'Color Scheme {{number}}',
 
       'name-required': 'A name is required!',
       'model-required': 'A model needs to be selected!',

@@ -3,7 +3,15 @@
 
 import Close from '@mui/icons-material/Close';
 import GroupAdd from '@mui/icons-material/GroupAdd';
-import {Box, Typography, IconButton, Divider, Card, CardActionArea, CardContent, Button, useTheme} from '@mui/material';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import Divider from '@mui/material/Divider';
+import Card from '@mui/material/Card';
+import CardActionArea from '@mui/material/CardActionArea';
+import CardContent from '@mui/material/CardContent';
+import Button from '@mui/material/Button';
+import useTheme from '@mui/material/styles/useTheme';
 import React, {useState, useEffect, Dispatch} from 'react';
 import ConfirmDialog from '../../shared/ConfirmDialog';
 import GroupFilterCard from './GroupFilterCard';

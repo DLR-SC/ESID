@@ -95,7 +95,6 @@
       create: 'Szenario Erstellen',
       cancel: 'Abbrechen',
       color: 'Farbschema',
-      'color-option': 'Farbschema {{number}}',
 
       'name-required': 'Der Name muss gesetzt werden!',
       'model-required': 'Ein Modell muss ausgewählt werden!',

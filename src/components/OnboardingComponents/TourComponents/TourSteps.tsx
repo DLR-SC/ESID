@@ -5,7 +5,7 @@ import React, {useState, useEffect, useMemo, useRef, useContext} from 'react';
 import Joyride, {CallBackProps, Step, STATUS, ACTIONS, EVENTS} from 'react-joyride';
 import {useAppDispatch, useAppSelector} from 'store/hooks';
 import {useTranslation} from 'react-i18next';
-import {useTheme} from '@mui/material/styles';
+import useTheme from '@mui/material/styles/useTheme';
 import {setShowPopover, setTourCompleted, setActiveTour} from 'store/UserOnboardingSlice';
 import {selectTab} from 'store/UserPreferenceSlice';
 import {DataSelection, selectDate, selectScenario} from 'store/DataSelectionSlice';

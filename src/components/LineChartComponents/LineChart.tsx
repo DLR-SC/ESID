@@ -14,7 +14,8 @@ import {AxisRendererY} from '@amcharts/amcharts5/.internal/charts/xy/axes/AxisRe
 import {XYCursor} from '@amcharts/amcharts5/.internal/charts/xy/XYCursor';
 import am5locales_en_US from '@amcharts/amcharts5/locales/en_US';
 import am5locales_de_DE from '@amcharts/amcharts5/locales/de_DE';
-import {darken, useTheme} from '@mui/material/styles';
+import useTheme from '@mui/material/styles/useTheme';
+import {darken} from '@mui/system/colorManipulator';
 import Box from '@mui/material/Box';
 import {useTranslation} from 'react-i18next';
 import {Localization} from 'types/localization';

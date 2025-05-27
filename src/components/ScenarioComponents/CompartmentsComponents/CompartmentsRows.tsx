@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import {List} from '@mui/material';
+import List from '@mui/material/List';
 import {ScrollSyncPane} from 'react-scroll-sync';
 import React, {Dispatch} from 'react';
 import CompartmentsRow from './CompartmentsRow';

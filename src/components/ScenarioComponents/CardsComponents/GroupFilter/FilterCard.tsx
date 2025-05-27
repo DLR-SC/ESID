@@ -1,7 +1,8 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 import React, {useMemo} from 'react';
-import {Box, useTheme} from '@mui/material';
+import useTheme from '@mui/material/styles/useTheme';
+import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import FilterRows from './FilterRows';
 import CardTitle from '../MainCard/CardTitle';

@@ -21,6 +21,7 @@ import {Compartments, Nodes, ScenarioPreview, Scenarios} from 'store/services/AP
 import {useTranslation} from 'react-i18next';
 import theme from 'util/Theme';
 import SelectedDataContext from 'context/SelectedDataContext';
+import {dateToISOString} from 'util/util';
 
 /**
  * Validates the application state based on the provided data and renders appropriate content, either the children
@@ -323,6 +324,8 @@ function useValidateReferenceDate(scenarios: Scenarios, scenariosValidated: bool
 
     if (caseData) {
       dispatch(setStartDate(caseData.endDate));
+    } else {
+      dispatch(setStartDate(dateToISOString(new Date())));
     }
   }, [dispatch, referenceDate, scenariosValidated, scenarios]);
 
@@ -382,22 +385,22 @@ function useValidateDate(validatedDateRange: boolean): boolean {
     () =>
       validatedDateRange &&
       selectedDate !== null &&
-      min !== null &&
-      max !== null &&
-      selectedDate.localeCompare(min) >= 0 &&
-      selectedDate.localeCompare(max) <= 0,
+      (!min || selectedDate.localeCompare(min) >= 0) &&
+      (!max || selectedDate.localeCompare(max) <= 0),
     [max, min, selectedDate, validatedDateRange]
   );
 
   useEffect(() => {
-    if (!validatedDateRange || !min || !max || valid) return;
+    if (!validatedDateRange || valid) return;
 
-    if (!selectedDate) {
+    if (!selectedDate && max !== null) {
       dispatch(selectDate(max));
-    } else if (selectedDate.localeCompare(min) < 0) {
+    } else if (selectedDate && min !== null && selectedDate.localeCompare(min) < 0) {
       dispatch(selectDate(min));
-    } else if (selectedDate.localeCompare(max) > 0) {
+    } else if (selectedDate && max !== null && selectedDate.localeCompare(max) > 0) {
       dispatch(selectDate(max));
+    } else {
+      dispatch(selectDate(dateToISOString(new Date())));
     }
   }, [dispatch, selectedDate, min, max, validatedDateRange, valid]);
 

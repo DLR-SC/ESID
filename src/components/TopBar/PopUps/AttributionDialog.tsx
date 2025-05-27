@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React, {useEffect, useState} from 'react';
-import {useTheme} from '@mui/material/styles';
+import useTheme from '@mui/material/styles/useTheme';
 import {useTranslation} from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
 import LazyLoad from 'react-lazyload';

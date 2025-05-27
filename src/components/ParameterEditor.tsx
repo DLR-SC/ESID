@@ -8,16 +8,16 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
-import 'katex/dist/katex.min.css';
 import Typography from '@mui/material/Typography';
-import {useTheme} from '@mui/material/styles';
+import useTheme from '@mui/material/styles/useTheme';
 import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
-import MathMarkdown from './shared/MathMarkdown';
 import {ParameterData} from 'store/services/scenarioApi';
 import {useTranslation} from 'react-i18next';
 import GridOff from '@mui/icons-material/GridOff';
 import {DataContext} from 'context/SelectedDataContext';
+
+const MathMarkdown = React.lazy(() => import('./shared/MathMarkdown'));
 
 /**
  * This component visualizes the parameters of the selected scenario. It uses a table with the following format:

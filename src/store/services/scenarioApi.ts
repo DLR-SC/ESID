@@ -63,7 +63,7 @@ export const scenarioApi = createApi({
 
     getScenarios: build.query<Scenarios, void>({
       query() {
-        return `scenarios/`;
+        return `scenarios`;
       },
       providesTags: (scenarios = []) => [
         {type: 'Scenario', id: 'LIST'},
@@ -77,7 +77,7 @@ export const scenarioApi = createApi({
 
         for (const id of ids) {
           const response = await fetchWithBQ({
-            url: `scenarios/${id}/`,
+            url: `scenarios/${id}`,
           });
 
           if (response.error) {
@@ -98,7 +98,7 @@ export const scenarioApi = createApi({
     createScenario: build.mutation<Identifiable, NewScenario>({
       query(parameters) {
         return {
-          url: `scenarios/`,
+          url: `scenarios`,
           method: 'POST',
           body: parameters,
         };
@@ -108,7 +108,7 @@ export const scenarioApi = createApi({
 
     getScenario: build.query<Scenario, string>({
       query(scenarioId: string) {
-        return `scenarios/${scenarioId}/`;
+        return `scenarios/${scenarioId}`;
       },
       providesTags: (_1, _2, modelId) => [{type: 'Scenario', id: modelId}],
     }),
@@ -116,7 +116,7 @@ export const scenarioApi = createApi({
     deleteScenario: build.mutation<void, string>({
       query(scenarioId) {
         return {
-          url: `scenarios/${scenarioId}/`,
+          url: `scenarios/${scenarioId}`,
           method: 'DELETE',
         };
       },
@@ -168,7 +168,7 @@ export const scenarioApi = createApi({
 
     getInterventionTemplates: build.query<InterventionTemplates, void>({
       query() {
-        return 'interventions/templates/';
+        return 'interventions/templates';
       },
       providesTags: (interventionTemplates = []) => [
         {type: 'InterventionTemplate', id: 'LIST'},
@@ -178,7 +178,7 @@ export const scenarioApi = createApi({
 
     getInterventionTemplate: build.query<InterventionTemplate, string>({
       query(templateId: string) {
-        return `interventions/templates/${templateId}/`;
+        return `interventions/templates/${templateId}`;
       },
       providesTags: (_1, _2, templateId) => [{type: 'InterventionTemplate', id: templateId}],
     }),
@@ -186,7 +186,7 @@ export const scenarioApi = createApi({
     createInterventionTemplate: build.mutation<Identifiable, NewInterventionTemplate>({
       query(parameters: NewInterventionTemplate) {
         return {
-          url: `interventions/templates/`,
+          url: `interventions/templates`,
           method: 'POST',
           body: parameters,
         };
@@ -197,7 +197,7 @@ export const scenarioApi = createApi({
     deleteInterventionTemplate: build.mutation<void, string>({
       query(templateId) {
         return {
-          url: `interventions/templates/${templateId}/`,
+          url: `interventions/templates/${templateId}`,
           method: 'DELETE',
         };
       },
@@ -211,7 +211,7 @@ export const scenarioApi = createApi({
 
     getModels: build.query<Models, void>({
       query() {
-        return 'models/';
+        return 'models';
       },
       providesTags: (models = []) => [
         {type: 'Model', id: 'LIST'},
@@ -221,7 +221,7 @@ export const scenarioApi = createApi({
 
     getModel: build.query<Model, string>({
       query(modelId: string) {
-        return `models/${modelId}/`;
+        return `models/${modelId}`;
       },
       providesTags: (_1, _2, modelId) => [{type: 'Model', id: modelId}],
     }),
@@ -230,7 +230,7 @@ export const scenarioApi = createApi({
 
     getNodes: build.query<Nodes, void>({
       query() {
-        return `nodes/`;
+        return `nodes`;
       },
       providesTags: (nodes = []) => [
         {type: 'Node', id: 'LIST'},
@@ -240,14 +240,14 @@ export const scenarioApi = createApi({
 
     getNode: build.query<Node, string>({
       query(nodeId: string) {
-        return `nodes/${nodeId}/`;
+        return `nodes/${nodeId}`;
       },
       providesTags: (_1, _2, nodes) => [{type: 'Node', id: nodes}],
     }),
 
     getNodeLists: build.query<NodeLists, void>({
       query() {
-        return `nodelists/`;
+        return `nodelists`;
       },
       providesTags: (nodeLists = []) => [
         {type: 'NodeList', id: 'LIST'},
@@ -257,7 +257,7 @@ export const scenarioApi = createApi({
 
     getNodeList: build.query<NodeList, string>({
       query(nodeListId: string) {
-        return `nodelists/${nodeListId}/`;
+        return `nodelists/${nodeListId}`;
       },
       providesTags: (_1, _2, nodeListId) => [{type: 'NodeList', id: nodeListId}],
     }),
@@ -266,7 +266,7 @@ export const scenarioApi = createApi({
 
     getGroups: build.query<Groups, void>({
       query() {
-        return `groups/`;
+        return `groups`;
       },
       providesTags: (groups = []) => [
         {type: 'Group', id: 'LIST'},
@@ -276,7 +276,7 @@ export const scenarioApi = createApi({
 
     getGroup: build.query<Group, string>({
       query(groupId: string) {
-        return `groups/${groupId}/`;
+        return `groups/${groupId}`;
       },
       providesTags: (_1, _2, groupId) => [{type: 'Group', id: groupId}],
     }),
@@ -292,7 +292,7 @@ export const scenarioApi = createApi({
 
     getCompartments: build.query<Compartments, void>({
       query() {
-        return 'compartments/';
+        return 'compartments';
       },
       providesTags: (compartments = []) => [
         {type: 'Compartment', id: 'LIST'},
@@ -302,7 +302,7 @@ export const scenarioApi = createApi({
 
     getCompartment: build.query<Compartment, string>({
       query(compartmentId: string) {
-        return `compartments/${compartmentId}/`;
+        return `compartments/${compartmentId}`;
       },
       providesTags: (_1, _2, compartmentId) => [{type: 'Compartment', id: compartmentId}],
     }),
@@ -311,7 +311,7 @@ export const scenarioApi = createApi({
 
     getParameterDefinitions: build.query<ParameterDefinitions, void>({
       query() {
-        return 'parameterdefinitions/';
+        return 'parameterdefinitions';
       },
       providesTags: (parameterDefinitions = []) => [
         {type: 'ParameterDefinition', id: 'LIST'},
@@ -324,7 +324,7 @@ export const scenarioApi = createApi({
 
     getParameterDefinition: build.query<ParameterDefinition, string>({
       query(parameterDefinitionId: string) {
-        return `parameterdefinitions/${parameterDefinitionId}/`;
+        return `parameterdefinitions/${parameterDefinitionId}`;
       },
       providesTags: (_1, _2, parameterDefinitionId) => [{type: 'ParameterDefinition', id: parameterDefinitionId}],
     }),
@@ -335,7 +335,7 @@ export const scenarioApi = createApi({
 
         for (const id of parameters) {
           const response = await fetchWithBQ({
-            url: `parameterdefinitions/${id}/`,
+            url: `parameterdefinitions/${id}`,
           });
 
           if (response.error) {

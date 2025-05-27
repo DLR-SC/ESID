@@ -21,7 +21,7 @@ import {DatePicker} from '@mui/x-date-pickers/DatePicker';
 import {dateToISOString} from 'util/util';
 import dayjs, {Dayjs} from 'dayjs';
 import {useTranslation} from 'react-i18next';
-import {useTheme} from '@mui/material/styles';
+import useTheme from '@mui/material/styles/useTheme';
 
 interface ScenarioFormProps {
   models: string[];

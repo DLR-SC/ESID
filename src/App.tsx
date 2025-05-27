@@ -12,7 +12,7 @@ import MainContent from './components/MainContent';
 import WelcomeDialogWrapper from './components/OnboardingComponents/WelcomeDialog/WelcomeDialogWrapper';
 import {Persistor, Store} from 'store';
 import Box from '@mui/material/Box';
-import {ThemeProvider} from '@mui/material/styles';
+import ThemeProvider from '@mui/material/styles/ThemeProvider';
 import Theme from './util/Theme';
 import {PersistGate} from 'redux-persist/integration/react';
 import {useAppDispatch, useAppSelector} from 'store/hooks';

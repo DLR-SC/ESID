@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: CC0-1.0
 
-import {defineConfig, splitVendorChunkPlugin} from 'vite';
+import {defineConfig} from 'vite';
 import react from '@vitejs/plugin-react';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import preload from 'unplugin-inject-preload/vite';
@@ -15,7 +15,6 @@ export default defineConfig(() => {
       react(),
       eslintPlugin(),
       tsconfigPaths(),
-      splitVendorChunkPlugin(),
       preload({
         files: [
           {
@@ -35,6 +34,34 @@ export default defineConfig(() => {
     ],
     build: {
       assetsInlineLimit: 0,
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            react: ['react', 'react-dom', 'redux', 'react-redux', '@reduxjs/toolkit', 'redux-persist'],
+            amCharts: ['@amcharts/amcharts5'],
+            mui: [
+              '@emotion/react',
+              '@emotion/styled',
+              '@mui/icons-material',
+              '@mui/lab',
+              '@mui/material',
+              '@mui/system',
+              '@mui/x-date-pickers',
+            ],
+            i18n: ['i18next', 'react-i18next', 'i18next-browser-languagedetector', 'i18next-http-backend'],
+            markdown: ['react-markdown', 'rehype-katex', 'remark-math'],
+            misc: [
+              'dayjs',
+              'react-lazyload',
+              'react-joyride',
+              'react-oauth2-code-pkce',
+              'react-scroll-sync',
+              'json5',
+              'rooks',
+            ],
+          },
+        },
+      },
     },
     test: {
       environment: 'jsdom',

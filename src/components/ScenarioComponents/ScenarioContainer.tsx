@@ -2,7 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import Box from '@mui/material/Box';
-import {darken, useTheme} from '@mui/material/';
+import useTheme from '@mui/material/styles/useTheme';
+import {darken} from '@mui/system/colorManipulator';
 import React, {useContext, useEffect, useMemo} from 'react';
 import {NumberFormatter} from 'util/hooks';
 import {useTranslation} from 'react-i18next';
