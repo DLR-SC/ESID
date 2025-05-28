@@ -21,6 +21,7 @@ SPDX-License-Identifier: CC-BY-4.0
 - Added translations for additional scenarios.
 - Scenario cards added from the library or created via the "Create a new Scenario" dialog are now immediately activated and displayed face up on the dashboard.
 - Inactive scenario cards can now be activated (flipped face up) by clicking anywhere on the card, not only on the checkbox.
+- Instead of hard-coded organizations, now organization dropdown options are populated by fetching the actual realms.
 
 ### Bug fixes
 

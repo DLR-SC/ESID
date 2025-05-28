@@ -8,6 +8,7 @@
     'icon-alt': 'ESID Anwendungslogo',
     language: 'Sprache',
     org: 'Organisation',
+    noOrg: 'Leer',
     menu: {
       label: 'Anwendungsmenü',
       login: 'Anmelden',
