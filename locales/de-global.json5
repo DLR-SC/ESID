@@ -113,7 +113,7 @@
     'no-reference-data': 'Kein Referenztag ausgewählt!',
     'no-date-range': 'Es konnte keine Zeitspanne aus den Szenarien ermittelt werden!',
     'no-selected-date': 'Es ist kein Tag ausgewählt!',
-    'no-scenario-selected': 'Es ist kein Szenario ausgewählt!'
+    'no-scenario-selected': 'Es ist kein Szenario ausgewählt!',
   },
   today: 'Heute',
   more: 'Mehr',
