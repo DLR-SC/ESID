@@ -270,7 +270,7 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
                   })
                 )
               }
-              hide={(scenarioId) =>
+              removeScenario={(scenarioId) =>
                 dispatch(
                   updateScenario({
                     id: scenarioId,

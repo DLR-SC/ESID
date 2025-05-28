@@ -47,7 +47,8 @@ interface DataCardProps {
   /** A function to set the active scenario.*/
   setActive: Dispatch<{id: string; state: boolean}>;
 
-  hide: Dispatch<string>;
+  /** A function to notify the parent that this scenario wants to be removed. */
+  remove: Dispatch<string>;
 
   /** The minimum number of compartment rows.*/
   minCompartmentsRows: number;
@@ -85,7 +86,7 @@ export default function DataCard({
   maxCompartmentsRows,
   setSelected,
   setActive,
-  hide,
+  remove,
   localization = {
     formatNumber: (value: number) => value.toString(),
     customLang: 'global',
@@ -152,7 +153,7 @@ export default function DataCard({
         isActive={isActive}
         setSelected={setSelected}
         setActive={setActive}
-        hide={hide}
+        hide={remove}
         minCompartmentsRows={minCompartmentsRows}
         maxCompartmentsRows={maxCompartmentsRows}
         localization={localization}

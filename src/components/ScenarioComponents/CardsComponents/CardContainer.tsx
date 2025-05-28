@@ -37,8 +37,8 @@ interface CardContainerProps {
   /** A function to set the selected scenario. */
   setSelectedScenario: Dispatch<{id: string; state: boolean}>;
 
-  /** A function to hide/remove the scenario. */
-  hide: Dispatch<string>;
+  /** A function to remove the scenario. */
+  removeScenario: Dispatch<string>;
 
   /** The minimum number of compartment rows. */
   minCompartmentsRows: number;
@@ -70,7 +70,7 @@ export default function CardContainer({
   minCompartmentsRows,
   maxCompartmentsRows,
   setActiveScenario,
-  hide,
+  removeScenario,
   localization = {
     formatNumber: (value: number) => value.toString(),
     customLang: 'global',
@@ -115,7 +115,7 @@ export default function CardContainer({
         isActive={scenario.active}
         setSelected={setSelectedScenario}
         setActive={setActiveScenario}
-        hide={hide}
+        remove={removeScenario}
         minCompartmentsRows={minCompartmentsRows}
         maxCompartmentsRows={maxCompartmentsRows}
         localization={localization}
