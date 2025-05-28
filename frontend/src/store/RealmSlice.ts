@@ -5,10 +5,17 @@ import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 export interface Realm {
   name: string;
+  avalableRealms: RealmSelectItem[];
+}
+
+export interface RealmSelectItem {
+  id: string;
+  name: string;
 }
 
 const initialState: Realm = {
   name: '',
+  avalableRealms: [],
 };
 
 export const RealmSlice = createSlice({
@@ -18,8 +25,11 @@ export const RealmSlice = createSlice({
     setRealm(state, action: PayloadAction<string>) {
       state.name = action.payload;
     },
+    setAvailableRealms(state, action: PayloadAction<RealmSelectItem[]>) {
+      state.avalableRealms = action.payload;
+    },
   },
 });
 
-export const {setRealm} = RealmSlice.actions;
+export const {setRealm, setAvailableRealms} = RealmSlice.actions;
 export default RealmSlice.reducer;
