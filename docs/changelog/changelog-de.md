@@ -5,9 +5,32 @@ SPDX-License-Identifier: CC-BY-4.0
 
 # ESID Änderungshistorie
 
-## v0.3.1-beta
+## v0.4.0-beta
 
 **Veröffentlichungsdatum:** TBD
+
+### Neue Funktionen
+
+- Nutzer können nun Szenarien mit einer limitierten Auswahl an Interventionen erstellen.
+- Die Farbe der Szenarien können nun von Nutzern bei der Szenarienerstellung ausgewählt werden.
+
+### Verbesserungen
+
+- Szenariokarten aus der Bibliothek oder die, die über den "Neues Szenario erstellen"-Dialog erstellt wurden, werden jetzt sofort aktiviert und aufgedeckt auf dem Dashboard angezeigt.
+- Inaktive Szenariokarten können jetzt durch Klicken auf eine beliebige Stelle der Karte aktiviert (aufgedeckt) werden, nicht nur über die Checkbox.
+- Anstelle von fest programmierten Organisationen werden die Auswahlmöglichkeiten im Organisationen-Dropdown nun durch einen API-Aufruf befüllt.
+- Die Validierung des Anwendungszustands ist jetzt robuster. Wenn während der Validierung etwas schiefgeht, wird eine Warnung in der unteren linken Ecke angezeigt.
+- Die Falldaten und das Basis-Szenario werden jetzt immer als erste zwei Szenarien angezeigt.
+
+### Fehlerbehebungen
+
+- Die robustere Validierung eliminiert einen Großteil der Fehler.
+
+---
+
+## v0.3.1-beta
+
+**Veröffentlichungsdatum:** 20.06.2024
 
 ### Neue Funktionen
 
@@ -19,8 +42,6 @@ SPDX-License-Identifier: CC-BY-4.0
 ### Verbesserungen
 
 - Es wurde mehr Übersetzungen für Szenarien hinzugefügt.
-- Szenariokarten, die aus der Bibliothek hinzugefügt oder über den Dialog "Neues Szenario erstellen" erzeugt werden, erscheinen nun direkt aktiviert auf dem Dashboard.
-- Inaktive Szenariokarten können nun durch Klicken an beliebiger Stelle auf der Karte aktiviert werden, nicht nur über die Checkbox.
 
 ### Fehlerbehebungen
 

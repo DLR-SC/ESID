@@ -32,10 +32,11 @@ export const scenarioApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: `${import.meta.env.VITE_API_URL || ''}`,
     prepareHeaders: (headers, {getState}) => {
+      const realm = (getState() as RootState).realm;
       const auth = (getState() as RootState).auth;
 
-      if (auth.realm && auth.realm !== '') {
-        headers.set('x-realm', auth.realm);
+      if (realm.name && realm.name !== '') {
+        headers.set('x-realm', realm.name);
       }
 
       if (auth.token && auth.token !== '') {

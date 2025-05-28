@@ -5,9 +5,32 @@ SPDX-License-Identifier: CC-BY-4.0
 
 # ESID Changelog
 
-## v0.3.1-beta
+## v0.4.0-beta
 
 **Release Date:** TBD
+
+### New Features
+
+- Users can now create new scenarios with a limited range of NPIs.
+- The color of the scenarios is now selectable in the scenario creation dialog.
+
+### Improvements
+
+- Scenario cards added from the library or created via the "Create a new Scenario" dialog are now immediately activated and displayed face up on the dashboard.
+- Inactive scenario cards can now be activated (flipped face up) by clicking anywhere on the card, not only on the checkbox.
+- Instead of hard-coded organizations, now organization dropdown options are populated by fetching the actual realms.
+- There is more robust validation for the application state. If anything goes wrong during validation, a waring is shown in the bottom-left corner.
+- The case data and baseline scenarios are now always shown and the first two scenarios.
+
+### Bug fixes
+
+- More robust validation of the application state should eliminate a wide variety of bugs.
+
+---
+
+## v0.3.1-beta
+
+**Release Date:** 20.06.2024
 
 ### New Features
 
@@ -19,9 +42,6 @@ SPDX-License-Identifier: CC-BY-4.0
 ### Improvements
 
 - Added translations for additional scenarios.
-- Scenario cards added from the library or created via the "Create a new Scenario" dialog are now immediately activated and displayed face up on the dashboard.
-- Inactive scenario cards can now be activated (flipped face up) by clicking anywhere on the card, not only on the checkbox.
-- Instead of hard-coded organizations, now organization dropdown options are populated by fetching the actual realms.
 
 ### Bug fixes
 

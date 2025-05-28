@@ -13,7 +13,7 @@ import Box from '@mui/material/Box';
 import {useLazyGetRealmsQuery} from 'store/services/idpApi';
 import CircularProgress from '@mui/material/CircularProgress';
 
-function RealmSelect() {
+export function RealmSelect() {
   const {t} = useTranslation();
   const dispatch = useAppDispatch();
 
@@ -24,7 +24,7 @@ function RealmSelect() {
   const [realmListLoading, setRealmListLoading] = React.useState(false);
 
   // a list of available organizations/realms
-  const realmList = useAppSelector((state) => state.realm.avalableRealms);
+  const realmList = useAppSelector((state) => state.realm.availableRealms);
 
   // user selected organization/realm
   const realm = useAppSelector((state) => state.realm.name);

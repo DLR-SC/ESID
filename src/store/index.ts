@@ -8,6 +8,7 @@ import UserPreferenceReducer from './UserPreferenceSlice';
 import {WebStorage, persistReducer, persistStore} from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import LayoutReducer from './LayoutSlice';
+import RealmReducer from './RealmSlice';
 import AuthReducer from './AuthSlice';
 import UserOnboardingReducer from './UserOnboardingSlice';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
@@ -25,6 +26,7 @@ const rootReducer = combineReducers({
   userPreference: UserPreferenceReducer,
   layoutSlice: LayoutReducer,
   userOnboarding: UserOnboardingReducer,
+  realm: RealmReducer,
   auth: AuthReducer,
   [scenarioApi.reducerPath]: scenarioApi.reducer,
   [idpApi.reducerPath]: idpApi.reducer,
