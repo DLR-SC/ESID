@@ -21,7 +21,7 @@ import {useBoundingclientrectRef} from 'rooks';
 import {setReferenceDayTop} from 'store/LayoutSlice';
 
 import CardContainer from './CardsComponents/CardContainer';
-import CompartmentsRows from './CompartmentsComponents/CompartmentsRows';
+import CompartmentList from './CompartmentsComponents/CompartmentList';
 import FilterDialogContainer from './FilterComponents/FilterDialogContainer';
 import GeneralButton from './ExpandedButtonComponents/ExpandedButton';
 import ReferenceDatePicker from './ReferenceDatePickerComponents.tsx/ReferenceDatePicker';
@@ -221,7 +221,7 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
                   width: '272px',
                 }}
               >
-                <CompartmentsRows
+                <CompartmentList
                   compartmentsExpanded={compartmentsExpanded ?? false}
                   compartments={compartmentNames}
                   selectedCompartment={selectedCompartment ?? ''}

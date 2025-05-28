@@ -4,7 +4,7 @@
 import List from '@mui/material/List';
 import {ScrollSyncPane} from 'react-scroll-sync';
 import React, {Dispatch} from 'react';
-import CompartmentsRow from './CompartmentsRow';
+import CompartmentRow from './CompartmentRow';
 
 import {Localization} from 'types/localization';
 import {useTranslation} from 'react-i18next';
@@ -39,7 +39,7 @@ interface CompartmentsRowsProps {
  * This component renders a list of compartments with synchronized scrolling,
  * expand/collapse functionality, and localization support.
  */
-export default function CompartmentsRows({
+export default function CompartmentList({
   compartmentsExpanded,
   compartments,
   selectedCompartment,
@@ -82,7 +82,7 @@ export default function CompartmentsRows({
             {compartments.map(({id, name}, index) => {
               const selected = id === selectedCompartment;
               return (
-                <CompartmentsRow
+                <CompartmentRow
                   key={id}
                   index={index}
                   selected={selected}

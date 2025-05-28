@@ -41,7 +41,7 @@ interface CompartmentsRowProps {
 /**
  * This component renders a single row from the compartment List offering also localization support.
  */
-export default function CompartmentsRow({
+export default function CompartmentRow({
   index,
   selected,
   compartment,
