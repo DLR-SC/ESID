@@ -397,16 +397,16 @@ export default function LineChart({
       const id = serie.seriesId;
       if (typeof id === 'string' && id.startsWith('group-filter-')) {
         serie.values.forEach((entry) => {
-          dataMap.set(entry.day, {...dataMap.get(entry.day), [serie.name!]: entry.value as number});
+          dataMap.set(entry.day, {...dataMap.get(entry.day), [serie.name!]: entry.value});
         });
       } else if (serie.openValueYField) {
         serie.values.forEach((entry) => {
-          dataMap.set(entry.day, {...dataMap.get(entry.day), [serie.valueYField]: entry.value as number});
-          dataMap.set(entry.day, {...dataMap.get(entry.day), [serie.openValueYField!]: entry.openValue as number});
+          dataMap.set(entry.day, {...dataMap.get(entry.day), [serie.valueYField]: entry.value});
+          dataMap.set(entry.day, {...dataMap.get(entry.day), [serie.openValueYField!]: entry.openValue!});
         });
       } else {
         serie.values.forEach((entry) => {
-          dataMap.set(entry.day, {...dataMap.get(entry.day), [serie.valueYField]: entry.value as number});
+          dataMap.set(entry.day, {...dataMap.get(entry.day), [serie.valueYField]: entry.value});
         });
       }
     });
