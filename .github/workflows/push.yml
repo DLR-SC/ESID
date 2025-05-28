@@ -3,14 +3,11 @@
 
 name: Push
 
-on: ["push"]
+on: ['push']
 
 jobs:
   frontend:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: frontend
     env:
       VITE_API_URL: http://localhost:8000
 
@@ -41,7 +38,7 @@ jobs:
         uses: EnricoMi/publish-unit-test-result-action@v2
         if: always()
         with:
-          files: frontend/reports/vitest-junit.xml
+          files: reports/vitest-junit.xml
 
       - name: Coverage
         run: npm run coverage
@@ -49,21 +46,20 @@ jobs:
         uses: coverallsapp/github-action@v2.2.3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          files: frontend/reports/clover.xml
+          files: reports/clover.xml
           format: clover
-          base-path: frontend
-          
+
   lighthouseci:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 16
+          node-version: 20
       - run: |
-          cd frontend && npm install && npm install -g @lhci/cli@0.12.x
+          npm install && npm install -g @lhci/cli@0.14.x
           npm run build
-      - run: cd frontend && lhci autorun --collect.psiStrategy=desktop --upload.target=temporary-public-storage
+      - run: lhci autorun --collect.psiStrategy=desktop --upload.target=temporary-public-storage
     env:
       LHCI_GITHUB_APP_TOKEN: ${{ secrets.LIGHTHOUSE_CI }}
 
