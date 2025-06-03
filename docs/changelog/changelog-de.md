@@ -21,6 +21,7 @@ SPDX-License-Identifier: CC-BY-4.0
 - Anstelle von fest programmierten Organisationen werden die Auswahlmöglichkeiten im Organisationen-Dropdown nun durch einen API-Aufruf befüllt.
 - Die Validierung des Anwendungszustands ist jetzt robuster. Wenn während der Validierung etwas schiefgeht, wird eine Warnung in der unteren linken Ecke angezeigt.
 - Die Falldaten und das Basis-Szenario werden jetzt immer als erste zwei Szenarien angezeigt.
+- Nur eingeloggte Nutzer haben Zugriff auf den "Szenario Erstellen" Button.
 
 ### Fehlerbehebungen
 

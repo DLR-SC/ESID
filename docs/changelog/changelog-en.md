@@ -21,6 +21,7 @@ SPDX-License-Identifier: CC-BY-4.0
 - Instead of hard-coded organizations, now organization dropdown options are populated by fetching the actual realms.
 - There is more robust validation for the application state. If anything goes wrong during validation, a waring is shown in the bottom-left corner.
 - The case data and baseline scenarios are now always shown and the first two scenarios.
+- Only logged in users now have access to the "Create Scenario" button.
 
 ### Bug fixes
 
