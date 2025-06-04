@@ -2,9 +2,7 @@
 // SPDX-License-Identifier: CC0-1.0
 
 import React from 'react';
-import {Dictionary} from 'util/util';
 import type {District} from 'types/district';
-import type {Localization} from 'types/localization';
 import type {HorizontalThreshold} from 'types/horizontalThreshold';
 import HorizontalThresholdList from './HorizontalThresholdList';
 
@@ -16,29 +14,29 @@ export interface HorizontalThresholdSettingsProps {
   selectedCompartment: string;
 
   /** The horizontal thresholds for the y-axis. */
-  horizontalThresholds: Dictionary<HorizontalThreshold>;
+  horizontalThresholds: Record<string, HorizontalThreshold>;
 
-  /** A function that sets the horizontal thresholds for the y-axis. */
-  setHorizontalThresholds: React.Dispatch<React.SetStateAction<Dictionary<HorizontalThreshold>>>;
+  /** The function to remove a horizontal threshold. */
+  removeHorizontalThreshold: (id: string) => void;
 
-  /** An object containing localization information (translation & number formattation). */
-  localization?: Localization;
+  /** The function to update a horizontal threshold. */
+  updateHorizontalThreshold: (newThreshold: HorizontalThreshold) => void;
 }
 
 export default function HorizontalThresholdSettings({
   selectedDistrict,
   selectedCompartment,
   horizontalThresholds,
-  setHorizontalThresholds,
-  localization,
+  removeHorizontalThreshold,
+  updateHorizontalThreshold,
 }: HorizontalThresholdSettingsProps) {
   return (
     <HorizontalThresholdList
       horizontalThresholds={horizontalThresholds}
-      setHorizontalThresholds={setHorizontalThresholds}
+      removeHorizontalThreshold={removeHorizontalThreshold}
+      updateHorizontalThreshold={updateHorizontalThreshold}
       selectedDistrict={selectedDistrict}
       selectedCompartment={selectedCompartment}
-      localization={localization}
     />
   );
 }

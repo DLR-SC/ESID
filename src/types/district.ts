@@ -14,7 +14,8 @@ export type AGS = string;
  * district.
  */
 export interface District {
-  ags: AGS;
+  id: string;
+  nuts: AGS;
   name: string;
   type: string;
 }

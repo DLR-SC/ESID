@@ -379,13 +379,10 @@ export default function LineChart({
     const perSeriesOpacity = totalScenarios > 0 ? 1 - Math.pow(1 - maxOpacity, 1 / totalScenarios) : 0;
 
     return lineChartData.map((line) => {
-      const lineColor = line.stroke.color ?? color(theme.palette.error.main);
-      const fillColor = line.fill ?? color(theme.palette.error.main);
-
       return {
         threshold: horizontalYAxisThreshold,
         fills: {
-          fill: fillColor, // change the fill of the range above threshold
+          fill: line.fill ? color(line.fill) : color(theme.palette.error.main), // change the fill of the range above threshold
           visible: true, // visibility of the fill
           fillOpacity: perSeriesOpacity,
         },
@@ -396,7 +393,7 @@ export default function LineChart({
           visible: line.stroke.visible ?? true, // use the one from the lineChartData if it is defined
         },
         alternatingStrokes: {
-          stroke: lineColor,
+          stroke: line.stroke.color ? color(line.stroke.color) : undefined,
           strokeWidth: 2.5,
 
           // somehow the layer needs to be set to a high number to be drawn on top of the other stroke, using values between 1-5 will not work and not refresh if we select another scenario
@@ -419,19 +416,16 @@ export default function LineChart({
     useCallback(
       (series: LineSeries) => {
         if (!lineChartData) return;
-
-        const seriesSettings = lineChartData.find((line) => line.serieId === series.get('id')?.split('_')[1]);
-
-        // set stroke settings from original line chart data below the threshold
+        const seriesSettings = lineChartData.find((line) => line.seriesId === series.get('id')?.split('_')[1]);
         series.strokes.template.setAll({
-          strokeWidth: seriesSettings?.stroke.strokeWidth ?? 2.5,
+          strokeWidth: seriesSettings?.stroke.strokeWidth ?? 2,
           strokeDasharray: seriesSettings?.stroke.strokeDasharray ?? undefined,
         });
 
         // set fill settings from original line chart data below the threshold
         if (seriesSettings?.fill) {
           series.fills.template.setAll({
-            fill: seriesSettings.fill,
+            fill: color(seriesSettings.fill),
             fillOpacity: seriesSettings.fillOpacity ?? 1,
             visible: true,
           });

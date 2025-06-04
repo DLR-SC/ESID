@@ -2,16 +2,15 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {HeatmapLegend} from 'types/heatmapLegend';
 import {HorizontalThreshold} from 'types/horizontalThreshold';
-import {Dictionary} from 'util/util';
+import {HeatmapLegend} from 'types/heatmapLegend';
 
 export interface UserPreference {
   selectedHeatmap: HeatmapLegend;
   selectedTab?: string;
   isInitialVisit: boolean;
+  horizontalYAxisThresholds?: Record<string, HorizontalThreshold>;
   scenarioColors: Record<string, string[]>;
-  horizontalYAxisThresholds: Dictionary<HorizontalThreshold>;
 }
 
 const initialState: UserPreference = {
@@ -26,8 +25,8 @@ const initialState: UserPreference = {
   },
   selectedTab: '1',
   isInitialVisit: true,
-  scenarioColors: {},
   horizontalYAxisThresholds: {},
+  scenarioColors: {},
 };
 
 /**
@@ -48,6 +47,7 @@ export const UserPreferenceSlice = createSlice({
     setInitialVisit(state, action: PayloadAction<boolean>) {
       state.isInitialVisit = action.payload;
     },
+
     /** Set colors for a specific scenario */
     setScenarioColors(state, action: PayloadAction<{scenarioId: string; colors: string[]}>) {
       if (!state.scenarioColors) {
@@ -56,17 +56,33 @@ export const UserPreferenceSlice = createSlice({
       state.scenarioColors[action.payload.scenarioId] = action.payload.colors;
     },
 
-    setHorizontalYAxisThresholds(state, action: PayloadAction<Dictionary<HorizontalThreshold>>) {
-      state.horizontalYAxisThresholds = action.payload;
+    /** Add a horizontal Y-Axis Threshold for a specific district and compartment */
+    addHorizontalYAxisThreshold(state, action: PayloadAction<{key: string; threshold: HorizontalThreshold}>) {
+      if (!state.horizontalYAxisThresholds) {
+        state.horizontalYAxisThresholds = {};
+      }
+      state.horizontalYAxisThresholds[action.payload.key] = action.payload.threshold;
     },
-
-    /** Set the horizontal Y-Axis Threshold for a specific district and compartment */
-    setHorizontalYAxisThreshold(state, action: PayloadAction<HorizontalThreshold>) {
+    /** Edit a horizontal Y-Axis Threshold for a specific district and compartment */
+    updateHorizontalYAxisThreshold(
+      state,
+      action: PayloadAction<{key: string; threshold: Partial<HorizontalThreshold>}>
+    ) {
       if (!state.horizontalYAxisThresholds) {
         state.horizontalYAxisThresholds = {};
       }
 
-      state.horizontalYAxisThresholds[`${action.payload.district.ags}-${action.payload.compartment}`] = action.payload;
+      state.horizontalYAxisThresholds[action.payload.key] = {
+        ...state.horizontalYAxisThresholds[action.payload.key],
+        ...action.payload.threshold,
+      };
+    },
+    /** Remove a horizontal Y-Axis Threshold for a specific district and compartment */
+    removeHorizontalYAxisThreshold(state, action: PayloadAction<string>) {
+      if (!state.horizontalYAxisThresholds) {
+        state.horizontalYAxisThresholds = {};
+      }
+      delete state.horizontalYAxisThresholds[action.payload];
     },
   },
 });
@@ -74,8 +90,11 @@ export const UserPreferenceSlice = createSlice({
 export const {
   selectHeatmapLegend,
   selectTab,
-  setInitialVisit, setScenarioColors,
-  setHorizontalYAxisThresholds,
-  setHorizontalYAxisThreshold,
+  setInitialVisit,
+  addHorizontalYAxisThreshold,
+  updateHorizontalYAxisThreshold,
+  removeHorizontalYAxisThreshold,
+  setScenarioColors,
 } = UserPreferenceSlice.actions;
+
 export default UserPreferenceSlice.reducer;

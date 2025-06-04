@@ -21,29 +21,27 @@ import styled from '@mui/material/styles/styled';
 import {useAppDispatch} from 'store/hooks';
 import {selectDistrict, selectCompartment} from 'store/DataSelectionSlice';
 import {tableCellClasses} from '@mui/material/TableCell';
-import {Dictionary} from 'util/util';
 import {HorizontalThreshold} from 'types/horizontalThreshold';
 import type {District} from 'types/district';
-import type {Localization} from 'types/localization';
 import HorizontalThresholdItem from './HorizontalThresholdItem';
 import ThresholdInput from './ThresholdInput';
 import {useTranslation} from 'react-i18next';
 
 export interface HorizontalThresholdListProps {
   /** The list of horizontal thresholds to display */
-  horizontalThresholds: Dictionary<HorizontalThreshold>;
+  horizontalThresholds: Record<string, HorizontalThreshold>;
 
-  /** A function that sets the horizontal thresholds for the y-axis. */
-  setHorizontalThresholds: React.Dispatch<React.SetStateAction<Dictionary<HorizontalThreshold>>>;
+  /** The function to remove a horizontal threshold. */
+  removeHorizontalThreshold: (id: string) => void;
+
+  /** The function to update a horizontal threshold. */
+  updateHorizontalThreshold: (newThreshold: HorizontalThreshold) => void;
 
   /** The selected District */
   selectedDistrict: District;
 
   /** The selected compartment */
   selectedCompartment: string;
-
-  /** An object containing localization information (translation & number formattation). */
-  localization?: Localization;
 }
 
 const StyledTableCell = styled(TableCell)(({theme}) => ({
@@ -56,10 +54,10 @@ const StyledTableCell = styled(TableCell)(({theme}) => ({
 
 export default function HorizontalThresholdList({
   horizontalThresholds,
-  setHorizontalThresholds,
+  removeHorizontalThreshold,
+  updateHorizontalThreshold,
   selectedDistrict,
   selectedCompartment,
-  localization,
 }: HorizontalThresholdListProps) {
   const {t: tSettings} = useTranslation('settings');
   const theme = useTheme();
@@ -68,7 +66,7 @@ export default function HorizontalThresholdList({
   const [ableToAddThreshold, setAbleToAddThreshold] = useState<boolean>(false);
   const [localThreshold, setLocalThreshold] = useState<number | null>(null);
   const [selectedThresholdKey, setSelectedThresholdKey] = useState<string>(
-    `${selectedDistrict.ags}-${selectedCompartment}`
+    `${selectedDistrict.nuts}-${selectedCompartment}`
   );
   const [isAddingThreshold, setIsAddingThreshold] = useState<boolean>(false);
   const [editingThresholdKey, setEditingThresholdKey] = useState<string | null>(null);
@@ -76,7 +74,7 @@ export default function HorizontalThresholdList({
 
   // Checks if the user is able to add a threshold
   useEffect(() => {
-    const key = `${selectedDistrict.ags}-${selectedCompartment}`;
+    const key = `${selectedDistrict.nuts}-${selectedCompartment}`;
     const existingThreshold = horizontalThresholds[key];
     if (existingThreshold) {
       setAbleToAddThreshold(false);
@@ -88,7 +86,7 @@ export default function HorizontalThresholdList({
   // function to handle adding a new threshold
   const handleAddThreshold = () => {
     if (localThreshold === null || localThreshold < 0) return;
-    const thresholdKey = `${selectedDistrict.ags}-${selectedCompartment}`;
+    const thresholdKey = `${selectedDistrict.nuts}-${selectedCompartment}`;
     const existingThreshold = horizontalThresholds[thresholdKey];
 
     if (existingThreshold) {
@@ -101,45 +99,19 @@ export default function HorizontalThresholdList({
       threshold: localThreshold,
     };
 
-    const newThresholds = {...horizontalThresholds, [thresholdKey]: newThreshold};
-    setHorizontalThresholds(newThresholds);
+    updateHorizontalThreshold(newThreshold);
     setSelectedThresholdKey(thresholdKey);
     setLocalThreshold(null);
     setIsAddingThreshold(false);
-  };
-
-  // function to handle deleting a threshold
-  const handleDeleteThreshold = (district: District, compartment: string) => {
-    const newThresholds = {...horizontalThresholds};
-    delete newThresholds[`${district.ags}-${compartment}`];
-
-    setHorizontalThresholds(newThresholds);
   };
 
   const handleSelectThreshold = (threshold: HorizontalThreshold) => {
     if (isAddingThreshold || editingThresholdKey !== null) {
       return;
     }
-    setSelectedThresholdKey(threshold.district.ags + '-' + threshold.compartment);
+    setSelectedThresholdKey(threshold.district.nuts + '-' + threshold.compartment);
     dispatch(selectDistrict(threshold.district));
     dispatch(selectCompartment(threshold.compartment));
-  };
-
-  const handleUpdateThreshold = (key: string, value: number) => {
-    const existingThreshold = horizontalThresholds[key];
-
-    if (existingThreshold) {
-      if (value < 0) return;
-      const updatedThreshold: HorizontalThreshold = {
-        ...existingThreshold,
-        threshold: value,
-      };
-
-      const newThresholds = {...horizontalThresholds, [key]: updatedThreshold};
-
-      setHorizontalThresholds(newThresholds);
-      setLocalThreshold(null);
-    }
   };
 
   return (
@@ -184,8 +156,8 @@ export default function HorizontalThresholdList({
                   key={key}
                   threshold={threshold}
                   thresholdKey={key}
-                  handleDeleteThreshold={handleDeleteThreshold}
-                  handleUpdateThreshold={handleUpdateThreshold}
+                  removeHorizontalThreshold={removeHorizontalThreshold}
+                  updateHorizontalThreshold={updateHorizontalThreshold}
                   handleSelectThreshold={handleSelectThreshold}
                   editingThresholdKey={editingThresholdKey}
                   setEditingThresholdKey={setEditingThresholdKey}
@@ -193,7 +165,6 @@ export default function HorizontalThresholdList({
                   isEditingThreshold={editingThresholdKey !== null}
                   isAddingThreshold={isAddingThreshold}
                   testId={`threshold-item-${key}`}
-                  localization={localization}
                 />
               );
             })}
@@ -252,7 +223,7 @@ export default function HorizontalThresholdList({
                 },
               }}
               onClick={() => {
-                const key = `${selectedDistrict.ags}-${selectedCompartment}`;
+                const key = `${selectedDistrict.nuts}-${selectedCompartment}`;
                 const existingThreshold = horizontalThresholds[key];
 
                 if (existingThreshold) {

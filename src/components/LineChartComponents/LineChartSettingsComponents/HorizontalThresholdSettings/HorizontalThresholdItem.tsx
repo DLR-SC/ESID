@@ -8,9 +8,6 @@ import EditIcon from '@mui/icons-material/Edit';
 import {useTheme} from '@mui/material/styles';
 import {HorizontalThreshold} from 'types/horizontalThreshold';
 import ThresholdInput from './ThresholdInput';
-import type {District} from 'types/district';
-import type {Localization} from 'types/localization';
-import {useTranslation} from 'react-i18next';
 
 export interface HorizontalThresholdItemProps {
   /** The threshold item to display */
@@ -19,11 +16,11 @@ export interface HorizontalThresholdItemProps {
   /** The key for the threshold (used for editing and updates) */
   thresholdKey: string;
 
-  /** Callback to handle the deletion of a threshold */
-  handleDeleteThreshold: (district: District, compartment: string) => void;
+  /** The function to remove a horizontal threshold. */
+  removeHorizontalThreshold: (id: string) => void;
 
-  /** Callback to handle updating the threshold value */
-  handleUpdateThreshold: (key: string, value: number) => void;
+  /** The function to update a horizontal threshold. */
+  updateHorizontalThreshold: (newThreshold: HorizontalThreshold) => void;
 
   /** Callback to handle selection of a threshold */
   handleSelectThreshold: (threshold: HorizontalThreshold) => void;
@@ -45,16 +42,13 @@ export interface HorizontalThresholdItemProps {
 
   /** testId for testing */
   testId?: string;
-
-  /** An object containing localization information (translation & number formattation). */
-  localization?: Localization;
 }
 
 export default function HorizontalThresholdItem({
   threshold,
   thresholdKey,
-  handleDeleteThreshold,
-  handleUpdateThreshold,
+  removeHorizontalThreshold,
+  updateHorizontalThreshold,
   handleSelectThreshold,
   editingThresholdKey,
   setEditingThresholdKey,
@@ -62,22 +56,8 @@ export default function HorizontalThresholdItem({
   isEditingThreshold,
   isAddingThreshold,
   testId,
-  localization = {formatNumber: (value: number) => value.toString(), customLang: 'global', overrides: {}},
 }: HorizontalThresholdItemProps) {
   const theme = useTheme();
-  const {t: defaultT} = useTranslation();
-  const {t: customT} = useTranslation(localization.customLang);
-
-  // Get the translated compartment name
-  const getTranslatedCompartmentName = (compartment: string): string => {
-    const overrideKey = `compartments.${compartment}`;
-    // Check if the translation exists in the overrides
-    if (localization.overrides?.[overrideKey]) {
-      return customT(localization.overrides[overrideKey]); // Translate using the custom namespace
-    } else {
-      return defaultT(compartment); // Fallback to the default compartment name if no translation is found
-    }
-  };
 
   const [localThreshold, setLocalThreshold] = useState<number | null>(threshold.threshold);
 
@@ -85,7 +65,7 @@ export default function HorizontalThresholdItem({
 
   const updateThreshold = () => {
     if (localThreshold === null || localThreshold < 0) return;
-    handleUpdateThreshold(thresholdKey, localThreshold);
+    updateHorizontalThreshold({...threshold, threshold: localThreshold});
     setEditingThresholdKey(null);
   };
 
@@ -133,7 +113,7 @@ export default function HorizontalThresholdItem({
             color: isDisabled ? theme.palette.text.disabled : theme.palette.text.primary,
           }}
         >
-          {getTranslatedCompartmentName(threshold.compartment)}
+          {threshold.compartment}
         </Typography>
       </TableCell>
 
@@ -199,7 +179,7 @@ export default function HorizontalThresholdItem({
                 <IconButton
                   aria-label='delete Horizontal Y-threshold'
                   data-testid={`delete-threshold-button-${thresholdKey}`}
-                  onClick={() => handleDeleteThreshold(threshold.district, threshold.compartment)}
+                  onClick={() => removeHorizontalThreshold(thresholdKey)}
                 >
                   <DeleteForeverIcon />
                 </IconButton>

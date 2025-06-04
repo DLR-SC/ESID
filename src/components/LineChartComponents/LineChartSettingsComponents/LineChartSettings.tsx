@@ -9,10 +9,8 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
-import {Dictionary} from 'util/util';
 import type {HorizontalThreshold} from 'types/horizontalThreshold';
 import type {District} from 'types/district';
-import type {Localization} from 'types/localization';
 import {useTranslation} from 'react-i18next';
 import HorizontalThresholdSettings from './HorizontalThresholdSettings/HorizontalThresholdSettings';
 
@@ -37,13 +35,13 @@ export interface LineChartSettingsProps {
   selectedCompartment: string;
 
   /** The horizontal thresholds for the y-axis. */
-  horizontalThresholds: Dictionary<HorizontalThreshold>;
+  horizontalThresholds: Record<string, HorizontalThreshold>;
 
-  /** A function that sets the horizontal thresholds for the y-axis. */
-  setHorizontalThresholds: React.Dispatch<React.SetStateAction<Dictionary<HorizontalThreshold>>>;
+  /** The function to remove a horizontal threshold. */
+  removeHorizontalThreshold: (id: string) => void;
 
-  /** An object containing localization information (translation & number formattation). */
-  localization?: Localization;
+  /** The function to update a horizontal threshold. */
+  updateHorizontalThreshold: (newThreshold: HorizontalThreshold) => void;
 }
 
 /**
@@ -51,12 +49,12 @@ export interface LineChartSettingsProps {
  * The settings include the ability to set horizontal thresholds for the y-axis.
  * The settings is also expandable to include more settings in the future.
  */
-export function LineChartSettings({
+export default function LineChartSettings({
   selectedDistrict,
   selectedCompartment,
   horizontalThresholds,
-  setHorizontalThresholds,
-  localization,
+  removeHorizontalThreshold,
+  updateHorizontalThreshold,
 }: LineChartSettingsProps) {
   const {t: tSettings} = useTranslation('settings');
 
@@ -184,8 +182,8 @@ export function LineChartSettings({
               selectedDistrict={selectedDistrict}
               selectedCompartment={selectedCompartment}
               horizontalThresholds={horizontalThresholds}
-              setHorizontalThresholds={setHorizontalThresholds}
-              localization={localization}
+              removeHorizontalThreshold={removeHorizontalThreshold}
+              updateHorizontalThreshold={updateHorizontalThreshold}
             />
           </Box>
         )}

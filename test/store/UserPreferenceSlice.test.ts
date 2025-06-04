@@ -50,6 +50,7 @@ describe('DataSelectionSlice', () => {
       isInitialVisit: true,
       scenarioColors: {},
       horizontalYAxisThresholds: {},
+      scenarioColors: {},
     });
   });
 
@@ -67,6 +68,7 @@ describe('DataSelectionSlice', () => {
       isInitialVisit: true,
       scenarioColors: {},
       horizontalYAxisThresholds: {},
+      scenarioColors: {},
     });
   });
 
@@ -84,6 +86,7 @@ describe('DataSelectionSlice', () => {
       isInitialVisit: true,
       scenarioColors: {},
       horizontalYAxisThresholds: {},
+      scenarioColors: {},
     });
   });
 
@@ -169,6 +172,7 @@ describe('DataSelectionSlice', () => {
       horizontalYAxisThresholds: {
         '11111-compartment1': newThreshold,
       },
+      scenarioColors: {},
     });
   });
 });
