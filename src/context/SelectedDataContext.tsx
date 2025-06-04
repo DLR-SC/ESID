@@ -168,7 +168,7 @@ export default function SelectedDataContext(props: {baseData: BaseData; children
   );
 
   // Fetch line chart data
-  const {data: lineChartData} = useGetMultiScenarioInfectionDataQuery(
+  const {currentData: lineChartData} = useGetMultiScenarioInfectionDataQuery(
     {
       pathIds: faceUpScenarios,
       query: {
@@ -178,12 +178,12 @@ export default function SelectedDataContext(props: {baseData: BaseData; children
       },
     },
     {
-      skip: !totalGroup || faceUpScenarios.length === 0,
+      skip: !totalGroup,
     }
   );
 
   // Fetch map data
-  const {data: mapData} = useGetScenarioInfectionDataQuery(
+  const {currentData: mapData} = useGetScenarioInfectionDataQuery(
     {
       path: {scenarioId: selectedScenario!},
       query: {
@@ -193,7 +193,7 @@ export default function SelectedDataContext(props: {baseData: BaseData; children
         groups: totalGroup ? [totalGroup.id] : [],
       },
     },
-    {skip: !totalGroup}
+    {skip: !totalGroup || !selectedScenario}
   );
 
   const contextValue: DataContextType = useMemo(

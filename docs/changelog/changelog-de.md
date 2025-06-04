@@ -26,6 +26,7 @@ SPDX-License-Identifier: CC-BY-4.0
 ### Fehlerbehebungen
 
 - Die robustere Validierung eliminiert einen Großteil der Fehler.
+- Ein Fehler wurde behoben, wo Daten angezeigt wurden, obwohl kein Szenario aufgedeckt war.
 
 ---
 
