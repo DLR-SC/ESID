@@ -152,7 +152,7 @@ export default function CardContainer({
       setSelected={setSelectedScenario}
       setActive={setActiveScenario}
       draggable={index !== 0 && index !== 1}
-      hide={hide}
+      remove={removeScenario}
       minCompartmentsRows={minCompartmentsRows}
       maxCompartmentsRows={maxCompartmentsRows}
       localization={localization}
