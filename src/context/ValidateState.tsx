@@ -1,14 +1,17 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, {ReactNode, useEffect, useMemo} from 'react';
-
+import React, {ReactNode, useEffect, useMemo, useState} from 'react';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
 import {BaseData} from 'context/BaseDataContext';
 import {useAppDispatch, useAppSelector} from 'store/hooks';
 import {
   addScenario,
   orderScenarios,
   removeScenario,
+  ScenarioVisibility,
   selectCompartment,
   selectDate,
   selectDistrict,
@@ -21,12 +24,16 @@ import {Compartments, Nodes, ScenarioPreview, Scenarios} from 'store/services/AP
 import {useTranslation} from 'react-i18next';
 import theme from 'util/Theme';
 import SelectedDataContext from 'context/SelectedDataContext';
+import {dateToISOString} from 'util/util';
 
 /**
  * Validates the application state based on the provided data and renders appropriate content, either the children
  * within a valid context or an error message indicating invalid state details.
  */
 export default function ValidateState(props: {baseData: BaseData; children: ReactNode}) {
+  const {t} = useTranslation();
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+
   // 1. Select a default district.
   const validatedDistrictSelection = useValidateDistrictSelection(props.baseData.nodes);
 
@@ -54,47 +61,70 @@ export default function ValidateState(props: {baseData: BaseData; children: Reac
   // 3. Select a default scenario.
   const validatedSelectedScenario = useValidateSelectedScenario(validatedSpecialScenarios && scenariosOrdered);
 
-  const validState = useMemo(
-    () =>
-      validatedDistrictSelection &&
-      validatedCompartmentSelection &&
-      scenariosSynced &&
-      validatedSpecialScenarios &&
-      scenariosOrdered &&
-      validatedReferenceDate &&
-      validatedDateRange &&
-      validatedSelectedDate &&
-      validatedSelectedScenario,
-    [
-      scenariosOrdered,
-      scenariosSynced,
-      validatedCompartmentSelection,
-      validatedDateRange,
-      validatedDistrictSelection,
-      validatedReferenceDate,
-      validatedSelectedDate,
-      validatedSelectedScenario,
-      validatedSpecialScenarios,
-    ]
-  );
+  // Collect all validation errors
+  const validationErrors = useMemo(() => {
+    const errors: Array<string> = [];
 
-  if (validState) {
-    return <SelectedDataContext baseData={props.baseData}>{props.children}</SelectedDataContext>;
-  }
+    if (!validatedDistrictSelection) errors.push(t('warnings.no-district-selected'));
+    if (!validatedCompartmentSelection) errors.push(t('warnings.no-compartment-selected'));
+    if (!scenariosSynced) errors.push(t('warnings.scenarios-desynchronized'));
+    if (!validatedSpecialScenarios) errors.push(t('warnings.special-scenarios-invalid'));
+    if (!scenariosOrdered) errors.push(t('warnings.scenarios-not-ordered'));
+    if (!validatedReferenceDate) errors.push(t('warnings.no-reference-data'));
+    if (!validatedDateRange) errors.push(t('warnings.no-date-range'));
+    if (!validatedSelectedDate) errors.push(t('warnings.no-selected-date'));
+    if (!validatedSelectedScenario) errors.push(t('warnings.no-scenario-selected'));
+
+    return errors;
+  }, [
+    validatedDistrictSelection,
+    t,
+    validatedCompartmentSelection,
+    scenariosSynced,
+    validatedSpecialScenarios,
+    scenariosOrdered,
+    validatedReferenceDate,
+    validatedDateRange,
+    validatedSelectedDate,
+    validatedSelectedScenario,
+  ]);
+
+  // Show snackbar when there are validation errors
+  useEffect(() => {
+    if (validationErrors.length > 0) {
+      setSnackbarOpen(true);
+    } else {
+      setSnackbarOpen(false);
+    }
+  }, [validationErrors]);
+
+  const handleSnackbarClose = (_: unknown, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackbarOpen(false);
+  };
 
   return (
-    <div>
-      <h1>Invalid state</h1>
-      {!validatedDistrictSelection && <p>No district selected</p>}
-      {!validatedCompartmentSelection && <p>No compartment selected</p>}
-      {!scenariosSynced && <p>Scenarios not synchronized</p>}
-      {!validatedSpecialScenarios && <p>Special scenarios not properly configured</p>}
-      {!scenariosOrdered && <p>Scenarios not properly ordered</p>}
-      {!validatedReferenceDate && <p>Reference date not set</p>}
-      {!validatedDateRange && <p>Date range not properly set</p>}
-      {!validatedSelectedDate && <p>Selected date not valid</p>}
-      {!validatedSelectedScenario && <p>No valid scenario selected</p>}
-    </div>
+    <>
+      <SelectedDataContext baseData={props.baseData}>{props.children}</SelectedDataContext>
+
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={5000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{vertical: 'bottom', horizontal: 'left'}}
+      >
+        <Alert onClose={handleSnackbarClose} severity='warning' variant='standard' sx={{width: '100%'}}>
+          <Stack spacing={1}>
+            <strong>{t('warnings.warning-header')}</strong>
+            {validationErrors.map((error, index) => (
+              <div key={index}>{error}</div>
+            ))}
+          </Stack>
+        </Alert>
+      </Snackbar>
+    </>
   );
 }
 
@@ -137,7 +167,7 @@ function useSyncScenarios(apiScenarios: Scenarios): boolean {
                 ? t(`scenario-names.${scenario.name}`)
                 : scenario.name,
               description: scenario.description,
-              visibility: 'hidden',
+              visibility: ScenarioVisibility.Hidden,
               colors: [],
             },
           })
@@ -164,10 +194,12 @@ function useValidateSpecialScenarios(apiScenarios: Scenarios, scenariosSynced: b
     () =>
       scenariosSynced &&
       (caseData
-        ? scenariosState[caseData.id].visibility === 'faceUp' || scenariosState[caseData.id].visibility === 'faceDown'
+        ? scenariosState[caseData.id].visibility === ScenarioVisibility.FaceUp ||
+          scenariosState[caseData.id].visibility === ScenarioVisibility.FaceDown
         : true) &&
       (baseLine
-        ? scenariosState[baseLine.id].visibility === 'faceUp' || scenariosState[baseLine.id].visibility === 'faceDown'
+        ? scenariosState[baseLine.id].visibility === ScenarioVisibility.FaceUp ||
+          scenariosState[baseLine.id].visibility === ScenarioVisibility.FaceDown
         : true),
     [baseLine, caseData, scenariosState, scenariosSynced]
   );
@@ -177,16 +209,28 @@ function useValidateSpecialScenarios(apiScenarios: Scenarios, scenariosSynced: b
 
     if (
       caseData &&
-      (scenariosState[caseData.id].visibility === 'hidden' || scenariosState[caseData.id].visibility === 'inLibrary')
+      (scenariosState[caseData.id].visibility === ScenarioVisibility.Hidden ||
+        scenariosState[caseData.id].visibility === ScenarioVisibility.InLibrary)
     ) {
-      dispatch(updateScenario({id: caseData.id, state: {visibility: 'faceUp', colors: theme.custom.scenarios[0]}}));
+      dispatch(
+        updateScenario({
+          id: caseData.id,
+          state: {visibility: ScenarioVisibility.FaceUp, colors: theme.custom.scenarios[0]},
+        })
+      );
     }
 
     if (
       baseLine &&
-      (scenariosState[baseLine.id].visibility === 'hidden' || scenariosState[baseLine.id].visibility === 'inLibrary')
+      (scenariosState[baseLine.id].visibility === ScenarioVisibility.Hidden ||
+        scenariosState[baseLine.id].visibility === ScenarioVisibility.InLibrary)
     ) {
-      dispatch(updateScenario({id: baseLine.id, state: {visibility: 'faceUp', colors: theme.custom.scenarios[1]}}));
+      dispatch(
+        updateScenario({
+          id: baseLine.id,
+          state: {visibility: ScenarioVisibility.FaceUp, colors: theme.custom.scenarios[1]},
+        })
+      );
     }
   }, [baseLine, caseData, dispatch, scenariosState, scenariosSynced, valid]);
 
@@ -247,17 +291,17 @@ function useValidateSelectedScenario(scenariosValidated: boolean): boolean {
       (scenariosValidated && Object.keys(scenariosState).length === 0) ||
       (selectedScenario !== null &&
         scenariosState[selectedScenario] &&
-        (Object.values(scenariosState).every((scenario) => scenario.visibility !== 'faceUp') ||
-          scenariosState[selectedScenario].visibility === 'faceUp')),
+        (Object.values(scenariosState).every((scenario) => scenario.visibility !== ScenarioVisibility.FaceUp) ||
+          scenariosState[selectedScenario].visibility === ScenarioVisibility.FaceUp)),
     [scenariosState, scenariosValidated, selectedScenario]
   );
 
   useEffect(() => {
     if (!scenariosValidated || valid) return;
 
-    if (!selectedScenario || scenariosState[selectedScenario]?.visibility !== 'faceUp') {
+    if (!selectedScenario || scenariosState[selectedScenario]?.visibility !== ScenarioVisibility.FaceUp) {
       const faceUpScenarios = Object.entries(scenariosState)
-        .filter(([_, scenario]) => scenario.visibility === 'faceUp')
+        .filter(([_, scenario]) => scenario.visibility === ScenarioVisibility.FaceUp)
         .map(([id, _]) => id);
 
       dispatch(selectScenario(faceUpScenarios.length > 0 ? faceUpScenarios[faceUpScenarios.length - 1] : null));
@@ -323,6 +367,8 @@ function useValidateReferenceDate(scenarios: Scenarios, scenariosValidated: bool
 
     if (caseData) {
       dispatch(setStartDate(caseData.endDate));
+    } else {
+      dispatch(setStartDate(dateToISOString(new Date())));
     }
   }, [dispatch, referenceDate, scenariosValidated, scenarios]);
 
@@ -340,7 +386,7 @@ function useValidateDateRange(scenarios: Scenarios, scenariosValidated: boolean)
     if (!scenariosValidated || !scenariosState) return;
 
     const active = Object.entries(scenariosState)
-      .filter(([_, scenario]) => scenario.visibility === 'faceUp')
+      .filter(([_, scenario]) => scenario.visibility === ScenarioVisibility.FaceUp)
       .map(([id, _]) => scenarios.find((scenario) => scenario.id === id))
       .filter((scenario) => scenario !== undefined) as Array<ScenarioPreview>;
 
@@ -382,22 +428,22 @@ function useValidateDate(validatedDateRange: boolean): boolean {
     () =>
       validatedDateRange &&
       selectedDate !== null &&
-      min !== null &&
-      max !== null &&
-      selectedDate.localeCompare(min) >= 0 &&
-      selectedDate.localeCompare(max) <= 0,
+      (!min || selectedDate.localeCompare(min) >= 0) &&
+      (!max || selectedDate.localeCompare(max) <= 0),
     [max, min, selectedDate, validatedDateRange]
   );
 
   useEffect(() => {
-    if (!validatedDateRange || !min || !max || valid) return;
+    if (!validatedDateRange || valid) return;
 
-    if (!selectedDate) {
+    if (!selectedDate && max !== null) {
       dispatch(selectDate(max));
-    } else if (selectedDate.localeCompare(min) < 0) {
+    } else if (selectedDate && min !== null && selectedDate.localeCompare(min) < 0) {
       dispatch(selectDate(min));
-    } else if (selectedDate.localeCompare(max) > 0) {
+    } else if (selectedDate && max !== null && selectedDate.localeCompare(max) > 0) {
       dispatch(selectDate(max));
+    } else {
+      dispatch(selectDate(dateToISOString(new Date())));
     }
   }, [dispatch, selectedDate, min, max, validatedDateRange, valid]);
 

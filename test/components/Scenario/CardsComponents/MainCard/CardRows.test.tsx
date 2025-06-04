@@ -52,7 +52,6 @@ describe('CardRows Component', () => {
     render(
       <ThemeProvider theme={Theme}>
         <CardRows
-          index={0}
           compartments={compartments}
           compartmentValues={compartmentValues}
           referenceValues={startValues}
@@ -72,7 +71,6 @@ describe('CardRows Component', () => {
     render(
       <ThemeProvider theme={Theme}>
         <CardRows
-          index={0}
           compartments={compartments}
           compartmentValues={compartmentValues}
           referenceValues={startValues}

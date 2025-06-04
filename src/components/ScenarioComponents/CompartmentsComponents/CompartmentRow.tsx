@@ -1,7 +1,12 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import {ListItemButton, ListItemText, ListItemIcon, ClickAwayListener, Tooltip, useTheme} from '@mui/material';
+import useTheme from '@mui/material/styles/useTheme';
+import Tooltip from '@mui/material/Tooltip';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemButton from '@mui/material/ListItemButton';
 import InfoOutlined from '@mui/icons-material/InfoOutlined';
 import React, {Dispatch, useState} from 'react';
 import {useTranslation} from 'react-i18next';
@@ -36,7 +41,7 @@ interface CompartmentsRowProps {
 /**
  * This component renders a single row from the compartment List offering also localization support.
  */
-export default function CompartmentsRow({
+export default function CompartmentRow({
   index,
   selected,
   compartment,

@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import CompartmentsRows from '@/components/ScenarioComponents/CompartmentsComponents/CompartmentsRows';
+import CompartmentList from 'components/ScenarioComponents/CompartmentsComponents/CompartmentList';
 import React, {useState} from 'react';
 import {describe, test, expect} from 'vitest';
 import {ThemeProvider} from '@emotion/react';
@@ -10,7 +10,7 @@ import Theme from '@/util/Theme';
 import {I18nextProvider} from 'react-i18next';
 import i18n from 'util/i18nForTests';
 
-const CompartmentsRowsTest = () => {
+const CompartmentListTest = () => {
   const compartmentsExpanded = true;
   const compartments = ['Compartment 1', 'Compartment 2', 'Compartment 3'];
   const [selectedCompartment, setSelectedCompartment] = useState('Compartment 1');
@@ -26,7 +26,7 @@ const CompartmentsRowsTest = () => {
     <div data-testid='compartments-rows'>
       <ThemeProvider theme={Theme}>
         <I18nextProvider i18n={i18n}>
-          <CompartmentsRows
+          <CompartmentList
             compartmentsExpanded={compartmentsExpanded}
             compartments={compartments.map((compartment) => ({id: compartment, name: compartment}))}
             selectedCompartment={selectedCompartment}
@@ -41,9 +41,9 @@ const CompartmentsRowsTest = () => {
   );
 };
 
-describe('CompartmentsRows', () => {
+describe('CompartmentList', () => {
   test('renders the correct number of compartments', async () => {
-    render(<CompartmentsRowsTest />);
+    render(<CompartmentListTest />);
     await waitFor(() => {
       const compartmentsList = screen.getByTestId('compartments-rows');
       expect(compartmentsList).toBeInTheDocument();
@@ -52,7 +52,7 @@ describe('CompartmentsRows', () => {
   });
 
   test('renders the correct compartment names', async () => {
-    render(<CompartmentsRowsTest />);
+    render(<CompartmentListTest />);
     expect(await screen.findByText('Compartment 1')).toBeInTheDocument();
     expect(await screen.findByText('Compartment 2')).toBeInTheDocument();
     expect(await screen.findByText('Compartment 3')).toBeInTheDocument();

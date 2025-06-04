@@ -10,7 +10,7 @@ interface AuthProviderProps {
 }
 
 function AuthProvider({children}: AuthProviderProps) {
-  const realm = useAppSelector((state) => state.auth.realm);
+  const realm = useAppSelector((state) => state.realm.name);
   let authConfig: TAuthConfig;
 
   if (!import.meta.env.VITE_OAUTH_CLIENT_ID || !import.meta.env.VITE_OAUTH_API_URL) {

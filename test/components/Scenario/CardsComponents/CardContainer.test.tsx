@@ -91,7 +91,7 @@ const CardContainerTest = () => {
             groupFilters={groupFilters}
             selectedScenario={selectedScenario}
             referenceValues={undefined}
-            hide={() => {}}
+            removeScenario={() => {}}
           />
         </I18nextProvider>
       </ThemeProvider>

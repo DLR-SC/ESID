@@ -6,12 +6,12 @@ import {describe, test, expect} from 'vitest';
 import {ThemeProvider} from '@emotion/react';
 import {render, screen} from '@testing-library/react';
 import Theme from '@/util/Theme';
-import CompartmentsRow from '@/components/ScenarioComponents/CompartmentsComponents/CompartmentsRow';
+import CompartmentRow from 'components/ScenarioComponents/CompartmentsComponents/CompartmentRow';
 import userEvent from '@testing-library/user-event';
 import {I18nextProvider} from 'react-i18next';
 import i18n from 'util/i18nForTests';
 
-const CompartmentsRowTest = () => {
+const CompartmentRowTest = () => {
   const compartmentsExpanded = true;
   const compartments = ['Compartment 1', 'Compartment 2', 'Compartment 3'];
   const [selectedCompartment, setSelectedCompartment] = useState('Compartment 1');
@@ -27,7 +27,7 @@ const CompartmentsRowTest = () => {
       <ThemeProvider theme={Theme}>
         <I18nextProvider i18n={i18n}>
           {compartments.map((compartment, index) => (
-            <CompartmentsRow
+            <CompartmentRow
               index={index}
               key={index}
               selected={compartment === selectedCompartment}
@@ -44,9 +44,9 @@ const CompartmentsRowTest = () => {
   );
 };
 
-describe('CompartmentsRows', () => {
+describe('CompartmentList', () => {
   test('renders the correct compartment names', async () => {
-    render(<CompartmentsRowTest />);
+    render(<CompartmentRowTest />);
 
     expect(await screen.findByText((content) => content.includes('Compartment 1'))).toBeInTheDocument();
     expect(await screen.findByText((content) => content.includes('Compartment 2'))).toBeInTheDocument();
@@ -54,7 +54,7 @@ describe('CompartmentsRows', () => {
   });
 
   test('renders the correct compartment values', async () => {
-    render(<CompartmentsRowTest />);
+    render(<CompartmentRowTest />);
 
     expect(await screen.findByText('10')).toBeInTheDocument();
     expect(await screen.findByText('20')).toBeInTheDocument();
@@ -62,7 +62,7 @@ describe('CompartmentsRows', () => {
   });
 
   test('selects the correct compartment on click', async () => {
-    render(<CompartmentsRowTest />);
+    render(<CompartmentRowTest />);
 
     const compartment1 = screen.getByText('Compartment 1').closest('div[role="button"]');
     const compartment2 = screen.getByText('Compartment 2').closest('div[role="button"]');

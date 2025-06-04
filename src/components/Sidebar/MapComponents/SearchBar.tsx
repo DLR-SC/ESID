@@ -2,7 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import Container from '@mui/material/Container';
-import {Box, Autocomplete, useTheme} from '@mui/material';
+import Box from '@mui/material/Box';
+import Autocomplete from '@mui/material/Autocomplete';
+import useTheme from '@mui/material/styles/useTheme';
 import SearchIcon from '@mui/icons-material/Search';
 import React, {SyntheticEvent} from 'react';
 import {GeoJsonProperties} from 'geojson';

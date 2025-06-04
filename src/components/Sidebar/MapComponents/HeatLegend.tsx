@@ -3,9 +3,9 @@
 
 import React, {useCallback, useLayoutEffect, useMemo} from 'react';
 import * as am5 from '@amcharts/amcharts5';
-import {Box} from '@mui/material';
+import Box from '@mui/material/Box';
 import {HeatmapLegend} from 'types/heatmapLegend';
-import {useTheme} from '@mui/material/styles';
+import useTheme from '@mui/material/styles/useTheme';
 import {Localization} from 'types/localization';
 import useRoot from 'components/shared/Root';
 import useHeatLegend from 'components/shared/HeatMap/Legend';

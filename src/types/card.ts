@@ -5,7 +5,7 @@
  * Represents the value of a card.
  */
 export interface CardValues {
-  /** A dictionary of compartment values associated with the card.*/
+  /** A dictionary of compartment values associated with the card. */
   compartmentValues: Record<string, number>;
 
   /** A dictionary of start values */

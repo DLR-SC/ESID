@@ -42,8 +42,8 @@ describe('DataSelectionSlice', () => {
   });
 
   test('Select Scenario', () => {
-    const scenario = 1;
-    expect(reducer(initialState, selectScenario(scenario))).toEqual(Object.assign(initialState, {scenario: scenario}));
+    const scenario = 'test';
+    expect(reducer(initialState, selectScenario('test'))).toEqual(Object.assign(initialState, {scenario: scenario}));
   });
 
   test('Select Compartment', () => {

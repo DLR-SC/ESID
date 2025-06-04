@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import Typography from '@mui/material/Typography';
-import {useTheme} from '@mui/material/styles';
+import useTheme from '@mui/material/styles/useTheme';
 import React from 'react';
 
 import {useTranslation} from 'react-i18next';

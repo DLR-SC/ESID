@@ -92,7 +92,7 @@ const DataCardTest = () => {
           setSelected={(value) => setSelected(value.state)}
           setActive={(value) => setActive(value.state)}
           groupFilters={groupFilters}
-          hide={() => {}}
+          remove={() => {}}
         />
       </I18nextProvider>
     </ThemeProvider>

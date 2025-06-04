@@ -1,7 +1,9 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import {Box, Collapse, useTheme} from '@mui/material';
+import Box from '@mui/material/Box';
+import Collapse from '@mui/material/Collapse';
+import useTheme from '@mui/material/styles/useTheme';
 import FilterButton from './FilterButton';
 import FilterCard from './FilterCard';
 import React from 'react';
@@ -11,6 +13,7 @@ interface FiltersContainerProps {
   /** Id of the filter container */
   id: string;
 
+  /** Color of the filter container (should match respective scenario) */
   color: string;
 
   /** Array of filtered titles */
@@ -28,7 +31,7 @@ interface FiltersContainerProps {
   /** Selected compartment */
   selectedCompartmentId: string | null;
 
-  /** Array of filtered values */
+  /** Array of filtered values (Items: {Compartment Name: Value}) */
   filteredValues: Array<Record<string, number>>;
 
   /** Minimum number of compartment rows */

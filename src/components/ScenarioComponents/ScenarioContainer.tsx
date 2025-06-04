@@ -2,11 +2,13 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import Box from '@mui/material/Box';
-import {darken, useTheme} from '@mui/material/';
+import useTheme from '@mui/material/styles/useTheme';
+import {darken} from '@mui/system/colorManipulator';
 import React, {useContext, useEffect, useMemo} from 'react';
 import {NumberFormatter} from 'util/hooks';
 import {useTranslation} from 'react-i18next';
 import {
+  ScenarioVisibility,
   selectCompartment,
   selectScenario,
   setGroupFilters,
@@ -20,7 +22,7 @@ import {useBoundingclientrectRef} from 'rooks';
 import {setReferenceDayTop} from 'store/LayoutSlice';
 
 import CardContainer from './CardsComponents/CardContainer';
-import CompartmentsRows from './CompartmentsComponents/CompartmentsRows';
+import CompartmentList from './CompartmentsComponents/CompartmentList';
 import FilterDialogContainer from './FilterComponents/FilterDialogContainer';
 import GeneralButton from './ExpandedButtonComponents/ExpandedButton';
 import ReferenceDatePicker from './ReferenceDatePickerComponents.tsx/ReferenceDatePicker';
@@ -72,13 +74,16 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
     }
     return (
       Object.entries(scenariosState)
-        .filter(([_, scenario]) => scenario.visibility === 'faceUp' || scenario.visibility === 'faceDown')
+        .filter(
+          ([_, scenario]) =>
+            scenario.visibility === ScenarioVisibility.FaceUp || scenario.visibility === ScenarioVisibility.FaceDown
+        )
         .map(([id, scenario]) => {
           return {
             id: id,
             name: scenario.name,
             color: scenario.colors[0],
-            active: scenario.visibility == 'faceUp',
+            active: scenario.visibility == ScenarioVisibility.FaceUp,
           };
         }) ?? []
     );
@@ -217,7 +222,7 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
                   width: '272px',
                 }}
               >
-                <CompartmentsRows
+                <CompartmentList
                   compartmentsExpanded={compartmentsExpanded ?? false}
                   compartments={compartmentNames}
                   selectedCompartment={selectedCompartment ?? ''}
@@ -260,15 +265,17 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
                 dispatch(
                   updateScenario({
                     id: newActiveScenarios.id,
-                    state: {visibility: newActiveScenarios.state ? 'faceUp' : 'faceDown'},
+                    state: {
+                      visibility: newActiveScenarios.state ? ScenarioVisibility.FaceUp : ScenarioVisibility.FaceDown,
+                    },
                   })
                 )
               }
-              hide={(scenarioId) =>
+              removeScenario={(scenarioId) =>
                 dispatch(
                   updateScenario({
                     id: scenarioId,
-                    state: {visibility: 'inLibrary'},
+                    state: {visibility: ScenarioVisibility.InLibrary},
                   })
                 )
               }

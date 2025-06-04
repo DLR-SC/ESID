@@ -14,7 +14,8 @@ import {AxisRendererY} from '@amcharts/amcharts5/.internal/charts/xy/axes/AxisRe
 import {XYCursor} from '@amcharts/amcharts5/.internal/charts/xy/XYCursor';
 import am5locales_en_US from '@amcharts/amcharts5/locales/en_US';
 import am5locales_de_DE from '@amcharts/amcharts5/locales/de_DE';
-import {darken, useTheme} from '@mui/material/styles';
+import useTheme from '@mui/material/styles/useTheme';
+import {darken} from '@mui/system/colorManipulator';
 import Box from '@mui/material/Box';
 import {useTranslation} from 'react-i18next';
 import {Localization} from 'types/localization';
@@ -396,16 +397,16 @@ export default function LineChart({
       const id = serie.seriesId;
       if (typeof id === 'string' && id.startsWith('group-filter-')) {
         serie.values.forEach((entry) => {
-          dataMap.set(entry.day, {...dataMap.get(entry.day), [serie.name!]: entry.value as number});
+          dataMap.set(entry.day, {...dataMap.get(entry.day), [serie.name!]: entry.value});
         });
       } else if (serie.openValueYField) {
         serie.values.forEach((entry) => {
-          dataMap.set(entry.day, {...dataMap.get(entry.day), [serie.valueYField]: entry.value as number});
-          dataMap.set(entry.day, {...dataMap.get(entry.day), [serie.openValueYField!]: entry.openValue as number});
+          dataMap.set(entry.day, {...dataMap.get(entry.day), [serie.valueYField]: entry.value});
+          dataMap.set(entry.day, {...dataMap.get(entry.day), [serie.openValueYField!]: entry.openValue!});
         });
       } else {
         serie.values.forEach((entry) => {
-          dataMap.set(entry.day, {...dataMap.get(entry.day), [serie.valueYField]: entry.value as number});
+          dataMap.set(entry.day, {...dataMap.get(entry.day), [serie.valueYField]: entry.value});
         });
       }
     });

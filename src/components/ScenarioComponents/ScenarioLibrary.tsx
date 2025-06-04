@@ -6,7 +6,7 @@ import Paper from '@mui/material/Paper';
 import Popper from '@mui/material/Popper';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import {useTheme} from '@mui/material/styles';
+import useTheme from '@mui/material/styles/useTheme';
 import {useTranslation} from 'react-i18next';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
@@ -21,13 +21,33 @@ import Dialog from '@mui/material/Dialog';
 import NewScenarioDialog, {NewScenarioData} from './NewScenarioDialog';
 import {InterventionTemplates, Models, NodeLists, Scenario} from 'store/services/APITypes';
 import {useGetMultiScenariosQuery} from 'store/services/scenarioApi';
-import {updateScenario} from 'store/DataSelectionSlice';
+import {ScenarioVisibility, updateScenario} from 'store/DataSelectionSlice';
 import {setScenarioColors} from 'store/UserPreferenceSlice';
 import {DataContext} from 'context/SelectedDataContext';
+import {AuthContext, IAuthContext} from 'react-oauth2-code-pkce';
+
+type ResourceAccess = {
+  [clientId: string]: {
+    roles: string[];
+  };
+};
+
 export default function ScenarioLibrary(): JSX.Element {
   const dispatch = useAppDispatch();
   const {t} = useTranslation();
   const theme = useTheme();
+
+  const {tokenData} = useContext<IAuthContext>(AuthContext);
+
+  // *Warning, brute force cast, should be replaced with a more type-safe solution
+  /* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access*/
+  const roles: string[] =
+    (tokenData &&
+      tokenData.resource_access &&
+      (tokenData.resource_access as ResourceAccess)[import.meta.env.VITE_OAUTH_CLIENT_ID]?.roles) ??
+    [];
+  /* eslint-enable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access*/
+  const canCreateScenarios = roles.includes('lha-user');
 
   const {scenarios, simulationModels, npis, nodeLists} = useContext(DataContext)!;
   const scenariosState = useAppSelector((state) => state.dataSelection.scenarios);
@@ -55,7 +75,7 @@ export default function ScenarioLibrary(): JSX.Element {
             state: {
               name: data.name,
               description: data.description,
-              visibility: 'faceUp',
+              visibility: ScenarioVisibility.FaceUp,
               colors: data.colors,
             },
           })
@@ -73,7 +93,7 @@ export default function ScenarioLibrary(): JSX.Element {
 
   const hiddenScenarios = useMemo(() => {
     return Object.entries(scenariosState)
-      .filter(([_, value]) => value.visibility === 'inLibrary')
+      .filter(([_, value]) => value.visibility === ScenarioVisibility.InLibrary)
       .map(([key, scenario]) => ({
         id: key,
         name: scenario.name,
@@ -172,12 +192,14 @@ export default function ScenarioLibrary(): JSX.Element {
                   overflowY: 'auto',
                 }}
               >
-                <NewScenarioCard
-                  models={simulationModels ?? []}
-                  npis={npis ?? []}
-                  nodeLists={nodeLists ?? []}
-                  scenarioCreated={scenarioCreated}
-                />
+                {canCreateScenarios && (
+                  <NewScenarioCard
+                    models={simulationModels ?? []}
+                    npis={npis ?? []}
+                    nodeLists={nodeLists ?? []}
+                    scenarioCreated={scenarioCreated}
+                  />
+                )}
                 {hiddenScenarios.length > 0 ? (
                   hiddenScenarios.map((scenario) => <LibraryCard key={scenario.id} {...scenario} />)
                 ) : (
@@ -215,7 +237,7 @@ function LibraryCard(props: Readonly<{id: string; name: string}>): JSX.Element {
       updateScenario({
         id: props.id,
         state: {
-          visibility: 'faceUp',
+          visibility: ScenarioVisibility.FaceUp,
           colors: savedColors,
         },
       })

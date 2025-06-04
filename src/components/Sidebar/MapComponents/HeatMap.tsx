@@ -7,8 +7,8 @@ import React, {useCallback, useEffect, useLayoutEffect, useMemo, useRef, useStat
 // Third-party
 import * as am5 from '@amcharts/amcharts5';
 import * as am5map from '@amcharts/amcharts5/map';
-import {Box} from '@mui/material';
-import {useTheme} from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import useTheme from '@mui/material/styles/useTheme';
 import {Feature, GeoJSON, GeoJsonProperties} from 'geojson';
 
 // Local components

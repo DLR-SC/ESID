@@ -3,7 +3,7 @@
 
 // add List Element typography using module augmentation
 import React from 'react';
-import {createTheme} from '@mui/material/styles';
+import createTheme from '@mui/material/styles/createTheme';
 
 declare module '@mui/material/styles' {
   interface TypographyVariants {

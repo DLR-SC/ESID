@@ -5,7 +5,7 @@ import React, {useState, useEffect, useMemo, useRef, useContext} from 'react';
 import Joyride, {CallBackProps, Step, STATUS, ACTIONS, EVENTS} from 'react-joyride';
 import {useAppDispatch, useAppSelector} from 'store/hooks';
 import {useTranslation} from 'react-i18next';
-import {useTheme} from '@mui/material/styles';
+import useTheme from '@mui/material/styles/useTheme';
 import {setShowPopover, setTourCompleted, setActiveTour} from 'store/UserOnboardingSlice';
 import {selectTab} from 'store/UserPreferenceSlice';
 import {DataSelection, selectDate, selectScenario} from 'store/DataSelectionSlice';
@@ -76,7 +76,7 @@ export default function TourSteps(): JSX.Element {
         savedUserDataSelection.current = dataSelection; // Save the current data selection of the user so we can override it with different values during the tour
 
         const maxDate = dataSelection.maxDate ?? '2024-07-08'; // Get the maximum date from the data selection
-        dispatch(selectDate(maxDate)); // Set the simulation start date (purple line) to the maximum date
+        dispatch(selectDate(maxDate)); // Set the selected date (purple line) to the maximum date
 
         const firstScenarioId = scenarioList[0].id; // We get the first scenario id (base scenario) from scenarioList
         dispatch(selectScenario(firstScenarioId)); // Dispatch the selectScenario action with the base scenario

@@ -11,11 +11,11 @@ import Box from '@mui/material/Box';
 import ShowChart from '@mui/icons-material/ShowChart';
 import Coronavirus from '@mui/icons-material/Coronavirus';
 import Typography from '@mui/material/Typography';
-import {buttonBaseClasses} from '@mui/material/ButtonBase';
+import buttonBaseClasses from '@mui/material/ButtonBase/buttonBaseClasses';
 import {useTranslation} from 'react-i18next';
 import {useAppDispatch, useAppSelector} from 'store/hooks';
 import {selectTab} from 'store/UserPreferenceSlice';
-import {useTheme} from '@mui/material/styles';
+import useTheme from '@mui/material/styles/useTheme';
 import LineChartContainer from 'components/LineChartContainer';
 import ParameterEditor from 'components/ParameterEditor';
 

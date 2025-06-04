@@ -35,7 +35,7 @@ const LineChartTest = () => {
       seriesId: 0,
       valueYField: 0,
       stroke: {
-        color: color('#000'),
+        color: '#000',
         strokeWidth: 2,
       },
     };

@@ -1,7 +1,11 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import {Box, List, ListItem, ListItemText, useTheme} from '@mui/material';
+import Box from '@mui/material/Box';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import useTheme from '@mui/material/styles/useTheme';
 import TrendArrow from './TrendArrow';
 import {ScrollSyncPane} from 'react-scroll-sync';
 import {useTranslation} from 'react-i18next';
@@ -13,7 +17,7 @@ interface CardRowsProps {
   /** Dictionary of compartment values */
   compartmentValues: Record<string, number | null> | null;
 
-  /** Dictionary of start values */
+  /** Dictionary of reference day values */
   referenceValues: Record<string, number> | null;
 
   /** Boolean to determine if the card is flipped */

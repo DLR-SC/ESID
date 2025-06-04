@@ -1,13 +1,14 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import {Tooltip, IconButton} from '@mui/material';
+import Tooltip from '@mui/material/Tooltip';
 import LockOpen from '@mui/icons-material/LockOpen';
 import Lock from '@mui/icons-material/Lock';
-import {useTheme} from '@mui/material';
+import useTheme from '@mui/material/styles/useTheme';
 import React, {useMemo} from 'react';
 import {Localization} from 'types/localization';
 import {useTranslation} from 'react-i18next';
+import IconButton from '@mui/material/IconButton';
 
 interface LockMaxValueProps {
   /**

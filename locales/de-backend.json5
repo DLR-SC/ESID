@@ -356,7 +356,7 @@
     'Face masks & social distancing School': 'Maskenpflicht & Abstandsregeln Schule',
     'Face masks & social distancing Work': 'Maskenpflicht & Abstandsregeln Arbeit',
     'Face masks & social distancing Other': 'Maskenpflicht & Abstandsregeln Sonstiges',
-    'Remote work': 'Einführung von Homeoffice-Regelungen',
+    'Remote work': 'Homeoffice-Regelungen',
   },
   models: {
     secirvvs: 'SECIRVVS',

@@ -13,7 +13,22 @@ import {GroupFilter} from 'types/group';
  */
 export type AGS = string;
 
-export type ScenarioVisibility = 'faceUp' | 'faceDown' | 'inLibrary' | 'hidden';
+export enum ScenarioVisibility {
+  /** The scenario is on the front page and active. */
+  FaceUp,
+
+  /** The scenario is on the front page and not active. */
+  FaceDown,
+
+  /** The scenario is in the library. */
+  InLibrary,
+
+  /**
+   * The scenario is not visible in the application anywhere. This is currently only used as a workaround for scenario
+   * creation, as all scenarios are precomputed.
+   */
+  Hidden,
+}
 
 export interface ScenarioState {
   name: string;

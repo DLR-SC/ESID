@@ -4,7 +4,7 @@
 import React, {useContext, useEffect, useMemo, useState} from 'react';
 import LineChart from './LineChartComponents/LineChart';
 import LoadingContainer from './shared/LoadingContainer';
-import {useTheme} from '@mui/material';
+import useTheme from '@mui/material/styles/useTheme';
 import {useAppDispatch, useAppSelector} from 'store/hooks';
 import {selectDate} from 'store/DataSelectionSlice';
 import {setReferenceDayBottom} from 'store/LayoutSlice';

@@ -26,7 +26,7 @@ const AttributionDialog = React.lazy(() => import('./PopUps/AttributionDialog'))
 export default function ApplicationMenu(): JSX.Element {
   const {t} = useTranslation();
 
-  const realm = useAppSelector((state) => state.auth.realm);
+  const realm = useAppSelector((state) => state.realm.name);
   const {login, token, logOut, idToken} = useContext<IAuthContext>(AuthContext);
 
   // user cannot login when realm is not selected
