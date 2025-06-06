@@ -7,6 +7,15 @@ import Box from '@mui/material/Box/Box';
 import {FilterValues} from 'types/card';
 import {GroupFilter} from 'types/group';
 import {Localization} from 'types/localization';
+import {DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  horizontalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import {restrictToHorizontalAxis, restrictToParentElement} from '@dnd-kit/modifiers';
+import type {DragEndEvent} from '@dnd-kit/core';
 
 interface CardContainerProps {
   /** A boolean indicating whether the compartments are expanded. */
@@ -52,6 +61,9 @@ interface CardContainerProps {
   /** A dictionary of group filters. */
   groupFilters: Record<string, GroupFilter> | undefined;
 
+  /** A function to order the scenarios. */
+  orderScenarios: Dispatch<string[]>;
+
   /** Boolean to determine if the arrow is displayed */
   arrow?: boolean;
 }
@@ -80,7 +92,32 @@ export default function CardContainer({
   setSelectedScenario,
   groupFilters,
   arrow = true,
+  orderScenarios,
 }: CardContainerProps) {
+  // DnD sensors for initiating DnD events
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  // Handle drag end
+  const handleDragEnd = (event: DragEndEvent) => {
+    const {active, over} = event;
+    if (active.id !== over?.id && over) {
+      const oldIndex = scenarios.findIndex((s) => s.id === active.id);
+      const newIndex = scenarios.findIndex((s) => s.id === over.id);
+
+      // Start with the current order
+      let ids = scenarios.map((s) => s.id);
+      // Move the dragged item
+      ids = arrayMove(ids, oldIndex, newIndex);
+
+      orderScenarios(ids);
+    }
+  };
+
   const minHeight = useMemo(() => {
     let height;
     if (compartmentsExpanded) {
@@ -99,48 +136,57 @@ export default function CardContainer({
     return `${height}px`;
   }, [compartmentsExpanded, maxCompartmentsRows, minCompartmentsRows]);
 
-  const dataCards = scenarios.map((scenario) => {
-    return (
-      <DataCard
-        key={scenario.id}
-        id={scenario.id}
-        color={scenario.color}
-        title={scenario.name}
-        compartmentsExpanded={compartmentsExpanded}
-        compartmentValues={cardValues ? cardValues[scenario.id] : null}
-        referenceValues={referenceValues ?? null}
-        selectedCompartmentId={selectedCompartmentId}
-        filterValues={filterValues}
-        isSelected={selectedScenario === scenario.id}
-        isActive={scenario.active}
-        setSelected={setSelectedScenario}
-        setActive={setActiveScenario}
-        remove={removeScenario}
-        minCompartmentsRows={minCompartmentsRows}
-        maxCompartmentsRows={maxCompartmentsRows}
-        localization={localization}
-        groupFilters={groupFilters}
-        arrow={arrow}
-      />
-    );
-  });
+  const dataCards = scenarios.map((scenario, index) => (
+    <DataCard
+      key={scenario.id}
+      id={scenario.id}
+      color={scenario.color}
+      title={scenario.name}
+      compartmentsExpanded={compartmentsExpanded}
+      compartmentValues={cardValues ? cardValues[scenario.id] : null}
+      referenceValues={referenceValues ?? null}
+      selectedCompartmentId={selectedCompartmentId}
+      filterValues={filterValues}
+      isSelected={selectedScenario === scenario.id}
+      isActive={scenario.active}
+      setSelected={setSelectedScenario}
+      setActive={setActiveScenario}
+      draggable={index !== 0 && index !== 1}
+      remove={removeScenario}
+      minCompartmentsRows={minCompartmentsRows}
+      maxCompartmentsRows={maxCompartmentsRows}
+      localization={localization}
+      groupFilters={groupFilters}
+      arrow={arrow}
+    />
+  ));
 
   return (
-    <Box
-      id='card-container'
-      sx={{
-        display: 'flex',
-        flexDirection: 'row',
-        gap: 4,
-        minHeight: minHeight,
-        overflowX: 'auto',
-        minWidth: 400,
-        paddingLeft: 4,
-        paddingRight: 4,
-        paddingTop: 2,
-      }}
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      onDragEnd={handleDragEnd}
+      modifiers={[restrictToHorizontalAxis, restrictToParentElement]}
     >
-      {dataCards}
-    </Box>
+      <SortableContext items={scenarios.map((s) => s.id)} strategy={horizontalListSortingStrategy}>
+        <Box
+          id='card-container'
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            flexGrow: 1,
+            gap: 4,
+            minHeight: minHeight,
+            overflowX: 'auto',
+            minWidth: 400,
+            paddingLeft: 4,
+            paddingRight: 4,
+            paddingTop: 2,
+          }}
+        >
+          {dataCards}
+        </Box>
+      </SortableContext>
+    </DndContext>
   );
 }

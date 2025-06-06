@@ -8,6 +8,8 @@ import FiltersContainer from './GroupFilter/FiltersContainer';
 import {FilterValues} from 'types/card';
 import {GroupFilter} from 'types/group';
 import {Localization} from 'types/localization';
+import {useSortable} from '@dnd-kit/sortable';
+import {CSS} from '@dnd-kit/utilities';
 
 interface DataCardProps {
   /** A unique identifier for the card.*/
@@ -62,6 +64,9 @@ interface DataCardProps {
   /** A dictionary of group filters.*/
   groupFilters: Record<string, GroupFilter> | undefined;
 
+  /** Boolean to determine if the card is draggable */
+  draggable: boolean;
+
   /** Boolean to determine if the arrow is displayed */
   arrow?: boolean;
 }
@@ -93,11 +98,21 @@ export default function DataCard({
     overrides: {},
   },
   groupFilters,
+  draggable,
   arrow = true,
 }: DataCardProps) {
   const [hover, setHover] = useState<boolean>(false);
   const [folded, setFolded] = useState<boolean>(false);
   const [visibility, setVisibility] = useState<boolean>(true);
+
+  // drag and drop
+  const {attributes, listeners, setNodeRef, setActivatorNodeRef, transform, isDragging, transition} = useSortable({
+    id,
+    disabled: {
+      draggable: !draggable,
+      droppable: !draggable,
+    },
+  });
 
   const filteredTitles: string[] = useMemo(() => {
     if (isActive && filterValues?.[id.toString()]) {
@@ -137,7 +152,10 @@ export default function DataCard({
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'flex-start',
+        transform: CSS.Transform.toString(transform),
+        transition,
       }}
+      ref={setNodeRef}
     >
       <MainCard
         id={id}
@@ -158,6 +176,11 @@ export default function DataCard({
         maxCompartmentsRows={maxCompartmentsRows}
         localization={localization}
         arrow={arrow}
+        dragListeners={listeners}
+        dragAttributes={attributes}
+        draggable={draggable}
+        setActivatorNodeRef={setActivatorNodeRef}
+        isDragging={isDragging}
       />
       {isActive && filterValues?.[id.toString()] && Object.keys(groupFilters || {}).length !== 0 && visibility && (
         <FiltersContainer

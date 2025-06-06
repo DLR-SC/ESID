@@ -9,6 +9,8 @@ import CardTooltip from './CardTooltip';
 import CardRows from './CardRows';
 import {Localization} from 'types/localization';
 import {hexToRGB} from 'util/util';
+import type {SyntheticListenerMap} from '@dnd-kit/core/dist/hooks/utilities';
+import type {DraggableAttributes} from '@dnd-kit/core';
 
 interface MainCardProps {
   /** A unique identifier for the card. */
@@ -59,6 +61,21 @@ interface MainCardProps {
   /** The maximum number of compartment rows. */
   maxCompartmentsRows: number;
 
+  /** The drag attributes of the card. */
+  dragAttributes: DraggableAttributes;
+
+  /** The drag listeners of the card. */
+  dragListeners: SyntheticListenerMap | undefined;
+
+  /** A boolean indicating whether the card is being dragged. */
+  isDragging: boolean;
+
+  /** Boolean to determine if the card is draggable. */
+  draggable: boolean;
+
+  /** The activator node ref of the card. */
+  setActivatorNodeRef: (element: HTMLElement | null) => void;
+
   /** An object containing localization information (translation & number formattation).*/
   localization?: Localization;
 
@@ -88,6 +105,11 @@ function MainCard({
   setActive,
   hide,
   maxCompartmentsRows,
+  dragAttributes,
+  dragListeners,
+  isDragging,
+  draggable,
+  setActivatorNodeRef,
   localization = {
     formatNumber: (value: number) => value.toString(),
     customLang: 'global',
@@ -178,6 +200,11 @@ function MainCard({
         hide={hide}
         setSelected={setSelected}
         localization={localization}
+        dragAttributes={dragAttributes}
+        dragListeners={dragListeners}
+        isDragging={isDragging}
+        draggable={draggable}
+        setActivatorNodeRef={setActivatorNodeRef}
       />
     </Box>
   );

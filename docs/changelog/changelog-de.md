@@ -13,6 +13,7 @@ SPDX-License-Identifier: CC-BY-4.0
 
 - Nutzer können nun Szenarien mit einer limitierten Auswahl an Interventionen erstellen.
 - Die Farbe der Szenarien können nun von Nutzern bei der Szenarienerstellung ausgewählt werden.
+- Neu erstellte Szenariokarten können jetzt per Drag-and-Drop umsortiert werden.
 
 ### Verbesserungen
 

@@ -13,6 +13,7 @@ SPDX-License-Identifier: CC-BY-4.0
 
 - Users can now create new scenarios with a limited range of NPIs.
 - The color of the scenarios is now selectable in the scenario creation dialog.
+- Created scenario cards can now be reordered via drag-and-drop handle.
 
 ### Improvements
 
