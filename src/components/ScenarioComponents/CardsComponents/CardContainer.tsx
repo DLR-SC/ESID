@@ -14,7 +14,7 @@ import {
   sortableKeyboardCoordinates,
   horizontalListSortingStrategy,
 } from '@dnd-kit/sortable';
-import {restrictToHorizontalAxis} from '@dnd-kit/modifiers';
+import {restrictToHorizontalAxis, restrictToParentElement} from '@dnd-kit/modifiers';
 import type {DragEndEvent} from '@dnd-kit/core';
 
 interface CardContainerProps {
@@ -166,7 +166,7 @@ export default function CardContainer({
       sensors={sensors}
       collisionDetection={closestCenter}
       onDragEnd={handleDragEnd}
-      modifiers={[restrictToHorizontalAxis]}
+      modifiers={[restrictToHorizontalAxis, restrictToParentElement]}
     >
       <SortableContext items={scenarios.map((s) => s.id)} strategy={horizontalListSortingStrategy}>
         <Box
@@ -174,6 +174,7 @@ export default function CardContainer({
           sx={{
             display: 'flex',
             flexDirection: 'row',
+            flexGrow: 1,
             gap: 4,
             minHeight: minHeight,
             overflowX: 'auto',

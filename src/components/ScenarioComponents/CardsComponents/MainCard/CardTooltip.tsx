@@ -151,7 +151,7 @@ export default function CardTooltip({
         color={'primary'}
         {...(draggable ? dragListeners : {})}
         {...(draggable ? dragAttributes : {})}
-        style={{
+        sx={{
           display: draggable ? 'flex' : 'none',
           cursor: isDragging ? 'grabbing' : 'grab',
         }}

@@ -113,10 +113,6 @@ export default function DataCard({
       droppable: !draggable,
     },
   });
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-  };
 
   const filteredTitles: string[] = useMemo(() => {
     if (isActive && filterValues?.[id.toString()]) {
@@ -156,9 +152,10 @@ export default function DataCard({
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'flex-start',
+        transform: CSS.Transform.toString(transform),
+        transition,
       }}
       ref={setNodeRef}
-      style={style}
     >
       <MainCard
         id={id}
