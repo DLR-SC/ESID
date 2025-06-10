@@ -37,6 +37,15 @@ export interface HorizontalThresholdItemProps {
   /** Boolean to determine if the threshold is being edited */
   isEditingThreshold: boolean;
 
+  /** The value of the threshold */
+  thresholdValue: number;
+
+  /** The name of the district */
+  districtName: string;
+
+  /** The name of the compartment */
+  compartmentName: string | undefined;
+
   /** Boolean to determine if the threshold is being added */
   isAddingThreshold: boolean;
 
@@ -55,6 +64,9 @@ export default function HorizontalThresholdItem({
   selected,
   isEditingThreshold,
   isAddingThreshold,
+  districtName,
+  compartmentName,
+  thresholdValue,
   testId,
 }: HorizontalThresholdItemProps) {
   const theme = useTheme();
@@ -102,7 +114,7 @@ export default function HorizontalThresholdItem({
             color: isDisabled ? theme.palette.text.disabled : theme.palette.text.primary,
           }}
         >
-          {threshold.district.name}
+          {districtName}
         </Typography>
       </TableCell>
       <TableCell align='left'>
@@ -113,7 +125,7 @@ export default function HorizontalThresholdItem({
             color: isDisabled ? theme.palette.text.disabled : theme.palette.text.primary,
           }}
         >
-          {threshold.compartment}
+          {compartmentName}
         </Typography>
       </TableCell>
 
@@ -156,7 +168,7 @@ export default function HorizontalThresholdItem({
                   color: isDisabled ? theme.palette.text.disabled : theme.palette.text.primary,
                 }}
               >
-                {threshold.threshold}
+                {thresholdValue}
               </Typography>
               <Box
                 sx={{

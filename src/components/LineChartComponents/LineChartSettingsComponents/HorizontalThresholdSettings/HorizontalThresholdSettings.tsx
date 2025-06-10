@@ -13,6 +13,9 @@ export interface HorizontalThresholdSettingsProps {
   /** The compartment to which the settings apply. */
   selectedCompartment: string;
 
+  /** Array of compartment names */
+  compartments: Array<{id: string; name: string}>;
+
   /** The horizontal thresholds for the y-axis. */
   horizontalThresholds: Record<string, HorizontalThreshold>;
 
@@ -26,6 +29,7 @@ export interface HorizontalThresholdSettingsProps {
 export default function HorizontalThresholdSettings({
   selectedDistrict,
   selectedCompartment,
+  compartments,
   horizontalThresholds,
   removeHorizontalThreshold,
   updateHorizontalThreshold,
@@ -34,6 +38,7 @@ export default function HorizontalThresholdSettings({
     <HorizontalThresholdList
       horizontalThresholds={horizontalThresholds}
       removeHorizontalThreshold={removeHorizontalThreshold}
+      compartments={compartments}
       updateHorizontalThreshold={updateHorizontalThreshold}
       selectedDistrict={selectedDistrict}
       selectedCompartment={selectedCompartment}

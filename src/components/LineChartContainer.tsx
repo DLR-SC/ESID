@@ -15,7 +15,7 @@ import {InfectionData} from 'store/services/APITypes';
 import {DataContext} from 'context/SelectedDataContext';
 import {updateHorizontalYAxisThreshold, removeHorizontalYAxisThreshold} from 'store/UserPreferenceSlice';
 export default function LineChartContainer() {
-  const {t} = useTranslation('backend');
+  const {t: tBackend, i18n: i18nBackend} = useTranslation('backend');
   const theme = useTheme();
   const dispatch = useAppDispatch();
 
@@ -34,8 +34,19 @@ export default function LineChartContainer() {
   const [referenceDayBottomPosition, setReferenceDayBottomPosition] = useState<number>(0);
 
   const yAxisLabel = useMemo(() => {
-    return t(`infection-states.${compartments?.find((c) => c.id === selectedCompartment)?.name}`);
-  }, [compartments, selectedCompartment, t]);
+    return tBackend(`infection-states.${compartments?.find((c) => c.id === selectedCompartment)?.name}`);
+  }, [compartments, selectedCompartment, tBackend]);
+
+  const compartmentNames = useMemo(() => {
+    return (
+      compartments?.map((compartment) => {
+        const name = i18nBackend.exists(`infection-states.${compartment.name}`, {ns: 'backend'})
+          ? tBackend(`infection-states.${compartment.name}`)
+          : compartment.name;
+        return {id: compartment.id, name};
+      }) ?? []
+    );
+  }, [compartments, i18nBackend, tBackend]);
 
   const mappedLineChartData = useMemo(() => {
     return Object.entries(lineChartData ?? {}).flatMap(([id, data]) => {
@@ -108,6 +119,7 @@ export default function LineChartContainer() {
       <LineChartSettings
         selectedDistrict={selectedDistrict}
         selectedCompartment={selectedCompartment ?? ''}
+        compartments={compartmentNames}
         horizontalThresholds={horizontalThresholds}
         removeHorizontalThreshold={(id: string) => dispatch(removeHorizontalYAxisThreshold(id))}
         updateHorizontalThreshold={(newThreshold) =>

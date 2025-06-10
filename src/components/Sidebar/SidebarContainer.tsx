@@ -95,11 +95,12 @@ export default function MapContainer() {
   // Set selected area in state when it changes in store
   useEffect(() => {
     // Only update `selectedArea` if `storeSelectedArea` has changed meaningfully
-    if (storeSelectedArea.name !== '' && selectedAreaRef.current?.RS !== storeSelectedArea.nuts) {
+    if (storeSelectedArea.name !== '' && storeSelectedArea.id !== selectedAreaRef.current?.id) {
       setSelectedArea({
         RS: storeSelectedArea.nuts,
         GEN: storeSelectedArea.name,
         BEZ: storeSelectedArea.type,
+        id: storeSelectedArea.id,
       });
 
       // update the ref with the new selectedArea
@@ -107,6 +108,7 @@ export default function MapContainer() {
         RS: storeSelectedArea.nuts,
         GEN: storeSelectedArea.name,
         BEZ: storeSelectedArea.type,
+        id: storeSelectedArea.id,
       };
     }
   }, [storeSelectedArea]);

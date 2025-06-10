@@ -42,6 +42,9 @@ export interface HorizontalThresholdListProps {
 
   /** The selected compartment */
   selectedCompartment: string;
+
+  /** Array of compartment names */
+  compartments: Array<{id: string; name: string}>;
 }
 
 const StyledTableCell = styled(TableCell)(({theme}) => ({
@@ -58,7 +61,9 @@ export default function HorizontalThresholdList({
   updateHorizontalThreshold,
   selectedDistrict,
   selectedCompartment,
+  compartments,
 }: HorizontalThresholdListProps) {
+  const {t} = useTranslation();
   const {t: tSettings} = useTranslation('settings');
   const theme = useTheme();
   const dispatch = useAppDispatch();
@@ -93,8 +98,13 @@ export default function HorizontalThresholdList({
       return;
     }
 
+    const districtToAdd = {
+      ...selectedDistrict,
+      name: selectedDistrict.nuts === '00000' ? 'germany' : selectedDistrict.name,
+    };
+
     const newThreshold: HorizontalThreshold = {
-      district: selectedDistrict,
+      district: districtToAdd,
       compartment: selectedCompartment ?? '',
       threshold: localThreshold,
     };
@@ -158,6 +168,9 @@ export default function HorizontalThresholdList({
                   thresholdKey={key}
                   removeHorizontalThreshold={removeHorizontalThreshold}
                   updateHorizontalThreshold={updateHorizontalThreshold}
+                  districtName={t(`${threshold.district.name}`)}
+                  compartmentName={compartments.find((c) => c.id === threshold.compartment)?.name}
+                  thresholdValue={threshold.threshold}
                   handleSelectThreshold={handleSelectThreshold}
                   editingThresholdKey={editingThresholdKey}
                   setEditingThresholdKey={setEditingThresholdKey}
@@ -195,7 +208,7 @@ export default function HorizontalThresholdList({
                     fontSize: theme.typography.listElement.fontSize,
                   }}
                 >
-                  {selectedCompartment}
+                  {compartments.find((c) => c.id === selectedCompartment)?.name}
                 </Typography>
               </StyledTableCell>
 

@@ -3,12 +3,15 @@
 
 import React, {useState} from 'react';
 import SettingsIcon from '@mui/icons-material/Settings';
-import {Button, Divider, Popover, Typography} from '@mui/material';
+import Popover from '@mui/material/Popover';
+import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
+import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
+import DataThresholdingIcon from '@mui/icons-material/DataThresholdingRounded';
 import type {HorizontalThreshold} from 'types/horizontalThreshold';
 import type {District} from 'types/district';
 import {useTranslation} from 'react-i18next';
@@ -23,6 +26,7 @@ type SettingsView = 'settingsMenu' | 'horizontalThresholdSettings' | 'filters';
 type SettingsMenu = {
   [key: string]: {
     label: string;
+    description: string;
     view: string;
     icon: JSX.Element;
   };
@@ -33,6 +37,9 @@ export interface LineChartSettingsProps {
 
   /** The compartment to which the settings apply. */
   selectedCompartment: string;
+
+  /** Array of compartment names */
+  compartments: Array<{id: string; name: string}>;
 
   /** The horizontal thresholds for the y-axis. */
   horizontalThresholds: Record<string, HorizontalThreshold>;
@@ -52,6 +59,7 @@ export interface LineChartSettingsProps {
 export default function LineChartSettings({
   selectedDistrict,
   selectedCompartment,
+  compartments,
   horizontalThresholds,
   removeHorizontalThreshold,
   updateHorizontalThreshold,
@@ -65,8 +73,13 @@ export default function LineChartSettings({
   const settingsMenu: SettingsMenu = {
     horizontalThreshold: {
       label: tSettings('manageThreshold'),
+      description: tSettings('manageThresholdDescription'),
       view: 'horizontalThresholdSettings',
-      icon: <HorizontalRuleIcon />,
+      icon: (
+        <DataThresholdingIcon
+          sx={{backgroundColor: 'primary.main', color: 'white', padding: '4px', borderRadius: '10%'}}
+        />
+      ),
     },
     // filters: {
     //   label: tSettings('manageGroups'),
@@ -136,9 +149,13 @@ export default function LineChartSettings({
           vertical: 'top',
           horizontal: 'right',
         }}
+        transformOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
         slotProps={{
           paper: {
-            sx: {minWidth: '30%'},
+            sx: {minWidth: '30%', minHeight: '50%'},
           },
         }}
       >
@@ -146,31 +163,36 @@ export default function LineChartSettings({
           <Box p={4} data-testid='main-settings-menu'>
             {renderHeader(tSettings('title'))}
             {Object.entries(settingsMenu).map(([key, item]) => (
-              <>
-                <Divider sx={{marginY: 2}} />
-                <Box>
-                  <Button
-                    key={key}
-                    data-testid={`settings-menu-item-${key}`}
-                    onClick={() => handleNavigate(item.view as SettingsView)}
+              <Box key={key}>
+                <Divider sx={{marginY: 2}} variant='middle' />
+                <Button
+                  data-testid={`settings-menu-item-${key}`}
+                  onClick={() => handleNavigate(item.view as SettingsView)}
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    width: '100%',
+                    justifyContent: 'flex-start',
+                    alignContent: 'center',
+                  }}
+                >
+                  {item.icon}
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'flex-start',
+                      justifyContent: 'center',
+                      marginLeft: 4,
+                    }}
                   >
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        padding: 2,
-                        borderRadius: 1,
-                        gap: 2,
-                      }}
-                    >
-                      {item.icon}
-
-                      <Typography variant='h2'>{item.label}</Typography>
-                    </Box>
-                  </Button>
-                </Box>
-              </>
+                    <Typography variant='h2'>{item.label}</Typography>
+                    <Typography variant='body1' sx={{textTransform: 'none', color: 'gray'}}>
+                      {item.description}
+                    </Typography>
+                  </Box>
+                </Button>
+              </Box>
             ))}
           </Box>
         )}
@@ -181,6 +203,7 @@ export default function LineChartSettings({
             <HorizontalThresholdSettings
               selectedDistrict={selectedDistrict}
               selectedCompartment={selectedCompartment}
+              compartments={compartments}
               horizontalThresholds={horizontalThresholds}
               removeHorizontalThreshold={removeHorizontalThreshold}
               updateHorizontalThreshold={updateHorizontalThreshold}
