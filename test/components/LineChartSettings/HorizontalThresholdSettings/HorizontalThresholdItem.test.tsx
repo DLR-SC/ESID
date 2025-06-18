@@ -9,8 +9,6 @@ import {ThemeProvider} from '@mui/system';
 import Theme from 'util/Theme';
 import {Provider} from 'react-redux';
 import {Store} from 'store';
-import {Dictionary} from 'util/util';
-import {District} from 'types/district';
 import {HorizontalThreshold} from 'types/horizontalThreshold';
 import HorizontalThresholdItem from 'components/LineChartComponents/LineChartSettingsComponents/HorizontalThresholdSettings/HorizontalThresholdItem';
 
@@ -19,100 +17,95 @@ type HorizontalThresholdItemTestProps = {
 };
 
 const HorizontalThresholdItemTest: React.FC<HorizontalThresholdItemTestProps> = ({isAddingThreshold = false}) => {
-  const currentHorizontalThresholds: Dictionary<HorizontalThreshold> = {
+  const [currentHorizontalThresholds, setCurrentHorizontalThresholds] = useState<Record<string, HorizontalThreshold>>({
     '00000-Compartment 1': {
       threshold: 10,
-      district: {ags: '00000', name: 'district1', type: 'type1'},
+      district: {id: '1', nuts: '00000', name: 'district1', type: 'type1'},
       compartment: 'Compartment 1',
     },
     '00000-Compartment 2': {
       threshold: 20,
-      district: {ags: '00000', name: 'district1', type: 'type1'},
+      district: {id: '1', nuts: '00000', name: 'district1', type: 'type1'},
       compartment: 'Compartment 2',
     },
     '01001-Compartment 1': {
       threshold: 40,
-      district: {ags: '01001', name: 'district2', type: 'type2'},
+      district: {id: '2', nuts: '01001', name: 'district2', type: 'type2'},
       compartment: 'Compartment 1',
     },
     '01001-Compartment 3': {
       threshold: 60,
-      district: {ags: '01001', name: 'district2', type: 'type2'},
+      district: {id: '2', nuts: '01001', name: 'district2', type: 'type2'},
       compartment: 'Compartment 3',
     },
     '01059-Compartment 2': {
       threshold: 80,
-      district: {ags: '01059', name: 'district3', type: 'type3'},
+      district: {id: '3', nuts: '01059', name: 'district3', type: 'type3'},
       compartment: 'Compartment 2',
     },
     '01059-Compartment 3': {
       threshold: 90,
-      district: {ags: '01059', name: 'district3', type: 'type3'},
+      district: {id: '3', nuts: '01059', name: 'district3', type: 'type3'},
       compartment: 'Compartment 3',
     },
-  };
+  });
 
   const [editingThresholdKey, setEditingThresholdKey] = useState<string | null>(null);
   const [selectedThresholdKey, setSelectedThresholdKey] = useState<string>('00000-Compartment 1');
-  const [horizontalThresholds, setHorizontalThresholds] =
-    useState<Dictionary<HorizontalThreshold>>(currentHorizontalThresholds);
 
   const handleSelectThreshold = (threshold: HorizontalThreshold) => {
     if (isAddingThreshold || editingThresholdKey !== null) {
       return;
     }
-    setSelectedThresholdKey(threshold.district.ags + '-' + threshold.compartment);
+    setSelectedThresholdKey(threshold.district.nuts + '-' + threshold.compartment);
   };
 
-  // function to handle deleting a threshold
-  const handleDeleteThreshold = (district: District, compartment: string) => {
-    const newThresholds = {...horizontalThresholds};
-    delete newThresholds[`${district.ags}-${compartment}`];
-
-    setHorizontalThresholds(newThresholds);
+  const removeHorizontalThreshold = (id: string) => {
+    setCurrentHorizontalThresholds((prev) => {
+      const newThresholds = {...prev};
+      delete newThresholds[id];
+      return newThresholds;
+    });
   };
 
-  const handleUpdateThreshold = (key: string, value: number) => {
-    const existingThreshold = horizontalThresholds[key];
-
-    if (existingThreshold) {
-      if (value < 0) return;
-      const updatedThreshold: HorizontalThreshold = {
-        ...existingThreshold,
-        threshold: value,
-      };
-
-      const newThresholds = {...horizontalThresholds, [key]: updatedThreshold};
-
-      setHorizontalThresholds(newThresholds);
-    }
+  const updateHorizontalThreshold = (newThreshold: HorizontalThreshold) => {
+    const key = `${newThreshold.district.nuts}-${newThreshold.compartment}`;
+    setCurrentHorizontalThresholds((prev) => ({
+      ...prev,
+      [key]: newThreshold,
+    }));
   };
 
   return (
-    <div>
-      <Provider store={Store}>
-        <ThemeProvider theme={Theme}>
-          {Object.entries(horizontalThresholds ?? {}).map(([key, threshold]) => {
-            return (
-              <HorizontalThresholdItem
-                key={key}
-                threshold={threshold}
-                thresholdKey={key}
-                handleDeleteThreshold={handleDeleteThreshold}
-                handleUpdateThreshold={handleUpdateThreshold}
-                handleSelectThreshold={handleSelectThreshold}
-                editingThresholdKey={editingThresholdKey}
-                setEditingThresholdKey={setEditingThresholdKey}
-                selected={selectedThresholdKey === key}
-                isEditingThreshold={editingThresholdKey !== null}
-                isAddingThreshold={isAddingThreshold}
-                testId={`threshold-item-${key}`}
-              />
-            );
-          })}
-        </ThemeProvider>
-      </Provider>
-    </div>
+    <Provider store={Store}>
+      <ThemeProvider theme={Theme}>
+        <table>
+          <tbody>
+            {Object.entries(currentHorizontalThresholds ?? {}).map(([key, threshold]) => {
+              return (
+                <HorizontalThresholdItem
+                  key={key}
+                  threshold={threshold}
+                  thresholdKey={key}
+                  thresholdValue={threshold.threshold}
+                  districtName={threshold.district.name}
+                  compartmentName={threshold.compartment}
+                  removeHorizontalThreshold={removeHorizontalThreshold}
+                  updateHorizontalThreshold={updateHorizontalThreshold}
+                  handleSelectThreshold={handleSelectThreshold}
+                  editingThresholdKey={editingThresholdKey}
+                  setEditingThresholdKey={setEditingThresholdKey}
+                  selected={selectedThresholdKey === key}
+                  isEditingThreshold={editingThresholdKey !== null}
+                  isAddingThreshold={isAddingThreshold}
+                  testId={`threshold-item-${key}`}
+                />
+              );
+            })}
+          </tbody>
+        </table>
+      </ThemeProvider>
+    </Provider>
   );
 };
 
@@ -205,6 +198,8 @@ describe('HorizontalThresholdItem Component', () => {
 
   test('should delete a threshold', async () => {
     render(<HorizontalThresholdItemTest />);
+
+    // Verify the threshold exists initially
     const thresholdItem = screen.getByTestId('threshold-item-01001-Compartment 3');
     expect(thresholdItem).toBeInTheDocument();
     await userEvent.click(thresholdItem);
@@ -214,8 +209,77 @@ describe('HorizontalThresholdItem Component', () => {
     expect(deleteThresholdButton).toBeInTheDocument();
     await userEvent.click(deleteThresholdButton);
 
+    // Verify the threshold is removed from the DOM
     await waitFor(() => {
       expect(screen.queryByTestId('threshold-item-01001-Compartment 3')).not.toBeInTheDocument();
+    });
+
+    // Verify other thresholds are still present
+    expect(screen.getByTestId('threshold-item-00000-Compartment 1')).toBeInTheDocument();
+    expect(screen.getByTestId('threshold-item-00000-Compartment 2')).toBeInTheDocument();
+    expect(screen.getByTestId('threshold-item-01001-Compartment 1')).toBeInTheDocument();
+    expect(screen.getByTestId('threshold-item-01059-Compartment 2')).toBeInTheDocument();
+    expect(screen.getByTestId('threshold-item-01059-Compartment 3')).toBeInTheDocument();
+  });
+
+  test('should delete multiple thresholds', async () => {
+    render(<HorizontalThresholdItemTest />);
+
+    // Delete first threshold
+    const firstThresholdItem = screen.getByTestId('threshold-item-00000-Compartment 1');
+    expect(firstThresholdItem).toBeInTheDocument();
+    await userEvent.click(firstThresholdItem);
+
+    const firstDeleteButton = screen.getByTestId('delete-threshold-button-00000-Compartment 1');
+    await userEvent.click(firstDeleteButton);
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('threshold-item-00000-Compartment 1')).not.toBeInTheDocument();
+    });
+
+    // Delete second threshold
+    const secondThresholdItem = screen.getByTestId('threshold-item-01001-Compartment 3');
+    expect(secondThresholdItem).toBeInTheDocument();
+    await userEvent.click(secondThresholdItem);
+
+    const secondDeleteButton = screen.getByTestId('delete-threshold-button-01001-Compartment 3');
+    await userEvent.click(secondDeleteButton);
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('threshold-item-01001-Compartment 3')).not.toBeInTheDocument();
+    });
+
+    // Verify remaining thresholds
+    expect(screen.getByTestId('threshold-item-00000-Compartment 2')).toBeInTheDocument();
+    expect(screen.getByTestId('threshold-item-01001-Compartment 1')).toBeInTheDocument();
+    expect(screen.getByTestId('threshold-item-01059-Compartment 2')).toBeInTheDocument();
+    expect(screen.getByTestId('threshold-item-01059-Compartment 3')).toBeInTheDocument();
+  });
+
+  test('should not be able to delete when editing another threshold', async () => {
+    render(<HorizontalThresholdItemTest />);
+
+    // Start editing one threshold
+    const editThresholdButton = screen.getByTestId('edit-threshold-button-00000-Compartment 1');
+    await userEvent.click(editThresholdButton);
+
+    // Try to delete another threshold - it should be disabled
+    const deleteThresholdButton = screen.getByTestId('delete-threshold-button-01001-Compartment 3');
+    expect(deleteThresholdButton).toBeInTheDocument();
+
+    // The delete button should be disabled when editing
+    const deleteButton = deleteThresholdButton.closest('button');
+    expect(deleteButton).toBeDisabled();
+  });
+
+  test('should not be able to delete when adding a new threshold', () => {
+    render(<HorizontalThresholdItemTest isAddingThreshold={true} />);
+
+    // All delete buttons should be disabled when adding a threshold
+    const deleteButtons = screen.getAllByTestId(/delete-threshold-button-/);
+    deleteButtons.forEach((button) => {
+      const buttonElement = button.closest('button');
+      expect(buttonElement).toBeDisabled();
     });
   });
 });

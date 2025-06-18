@@ -3,21 +3,20 @@
 
 import {render, screen, waitFor} from '@testing-library/react';
 import {describe, test, expect} from 'vitest';
-import React, {useState} from 'react';
+import React from 'react';
 import {ThemeProvider} from '@mui/system';
 import Theme from 'util/Theme';
-import {LineChartSettings} from 'components/LineChartComponents/LineChartSettingsComponents/LineChartSettings';
+import LineChartSettings from 'components/LineChartComponents/LineChartSettingsComponents/LineChartSettings';
 import {Provider} from 'react-redux';
-import {Store} from '../../../store';
-import {Dictionary} from 'util/util';
+import {Store} from '@/store';
 import {District} from 'types/district';
 import {HorizontalThreshold} from 'types/horizontalThreshold';
 import {userEvent} from '@testing-library/user-event';
 
 const LineChartSettingsTest: React.FC = () => {
-  const selectedDistrict: District = {ags: '00000', name: 'district1', type: 'type1'};
+  const selectedDistrict: District = {id: '1', nuts: '00000', name: 'district1', type: 'type1'};
   const selectedCompartment = 'Compartment 1';
-  const [horizontalThresholds, setHorizontalThresholds] = useState<Dictionary<HorizontalThreshold>>({});
+  const horizontalThresholds: Record<string, HorizontalThreshold> = {};
 
   return (
     <div data-testid='line-chart-settings'>
@@ -27,7 +26,9 @@ const LineChartSettingsTest: React.FC = () => {
             selectedDistrict={selectedDistrict}
             selectedCompartment={selectedCompartment}
             horizontalThresholds={horizontalThresholds}
-            setHorizontalThresholds={setHorizontalThresholds}
+            removeHorizontalThreshold={() => {}}
+            updateHorizontalThreshold={() => {}}
+            compartments={[]}
           />
         </Provider>
       </ThemeProvider>

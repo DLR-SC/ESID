@@ -9,7 +9,6 @@ import {ThemeProvider} from '@mui/system';
 import Theme from 'util/Theme';
 import {Provider} from 'react-redux';
 import {Store} from 'store';
-import {Dictionary} from 'util/util';
 import {District} from 'types/district';
 import {HorizontalThreshold} from 'types/horizontalThreshold';
 import HorizontalThresholdList from 'components/LineChartComponents/LineChartSettingsComponents/HorizontalThresholdSettings/HorizontalThresholdList';
@@ -20,44 +19,57 @@ type HorizontalThresholdListTestProps = {
 };
 
 const HorizontalThresholdListTest: React.FC<HorizontalThresholdListTestProps> = ({
-  selectedDistrict = {ags: '02000', name: 'district4', type: 'type4'},
+  selectedDistrict = {id: '1', nuts: '02000', name: 'district4', type: 'type4'},
   selectedCompartment = 'Compartment 4',
 }) => {
-  const currentHorizontalThresholds: Dictionary<HorizontalThreshold> = {
+  const [horizontalThresholds, setHorizontalThresholds] = useState<Record<string, HorizontalThreshold>>({
     '00000-Compartment 1': {
       threshold: 10,
-      district: {ags: '00000', name: 'district1', type: 'type1'},
+      district: {id: '1', nuts: '00000', name: 'district1', type: 'type1'},
       compartment: 'Compartment 1',
     },
     '00000-Compartment 2': {
       threshold: 20,
-      district: {ags: '00000', name: 'district1', type: 'type1'},
+      district: {id: '1', nuts: '00000', name: 'district1', type: 'type1'},
       compartment: 'Compartment 2',
     },
-    '01001-Compartment 2': {
-      threshold: 50,
-      district: {ags: '01001', name: 'district2', type: 'type2'},
-      compartment: 'Compartment 2',
+    '01001-Compartment 1': {
+      threshold: 40,
+      district: {id: '2', nuts: '01001', name: 'district2', type: 'type2'},
+      compartment: 'Compartment 1',
     },
     '01001-Compartment 3': {
       threshold: 60,
-      district: {ags: '01001', name: 'district2', type: 'type2'},
+      district: {id: '2', nuts: '01001', name: 'district2', type: 'type2'},
       compartment: 'Compartment 3',
     },
-    '01059-Compartment 1': {
-      threshold: 70,
-      district: {ags: '01059', name: 'district3', type: 'type3'},
-      compartment: 'Compartment 1',
+    '01059-Compartment 2': {
+      threshold: 80,
+      district: {id: '3', nuts: '01059', name: 'district3', type: 'type3'},
+      compartment: 'Compartment 2',
     },
     '01059-Compartment 3': {
       threshold: 90,
-      district: {ags: '01059', name: 'district3', type: 'type3'},
+      district: {id: '3', nuts: '01059', name: 'district3', type: 'type3'},
       compartment: 'Compartment 3',
     },
+  });
+
+  const removeHorizontalThreshold = (id: string) => {
+    setHorizontalThresholds((prev) => {
+      const newThresholds = {...prev};
+      delete newThresholds[id];
+      return newThresholds;
+    });
   };
 
-  const [horizontalThresholds, setHorizontalThresholds] =
-    useState<Dictionary<HorizontalThreshold>>(currentHorizontalThresholds);
+  const updateHorizontalThreshold = (newThreshold: HorizontalThreshold) => {
+    const key = `${newThreshold.district.nuts}-${newThreshold.compartment}`;
+    setHorizontalThresholds((prev) => ({
+      ...prev,
+      [key]: newThreshold,
+    }));
+  };
 
   return (
     <div data-testid='horizontal-threshold-list'>
@@ -65,7 +77,14 @@ const HorizontalThresholdListTest: React.FC<HorizontalThresholdListTestProps> = 
         <ThemeProvider theme={Theme}>
           <HorizontalThresholdList
             horizontalThresholds={horizontalThresholds}
-            setHorizontalThresholds={setHorizontalThresholds}
+            removeHorizontalThreshold={removeHorizontalThreshold}
+            updateHorizontalThreshold={updateHorizontalThreshold}
+            compartments={[
+              {id: 'Compartment 1', name: 'Compartment 1'},
+              {id: 'Compartment 2', name: 'Compartment 2'},
+              {id: 'Compartment 3', name: 'Compartment 3'},
+              {id: 'Compartment 4', name: 'Compartment 4'},
+            ]}
             selectedDistrict={selectedDistrict}
             selectedCompartment={selectedCompartment}
           />
@@ -82,35 +101,35 @@ describe('HorizontalThresholdSettingsList Component', () => {
     expect(horizontalThresholdList).toBeInTheDocument();
   });
 
-  const horizontalThresholds: Dictionary<HorizontalThreshold> = {
+  const initialHorizontalThresholds: Record<string, HorizontalThreshold> = {
     '00000-Compartment 1': {
       threshold: 10,
-      district: {ags: '00000', name: 'district1', type: 'type1'},
+      district: {id: '1', nuts: '00000', name: 'district1', type: 'type1'},
       compartment: 'Compartment 1',
     },
     '00000-Compartment 2': {
       threshold: 20,
-      district: {ags: '00000', name: 'district1', type: 'type1'},
+      district: {id: '1', nuts: '00000', name: 'district1', type: 'type1'},
       compartment: 'Compartment 2',
     },
-    '01001-Compartment 2': {
-      threshold: 50,
-      district: {ags: '01001', name: 'district2', type: 'type2'},
-      compartment: 'Compartment 2',
+    '01001-Compartment 1': {
+      threshold: 40,
+      district: {id: '2', nuts: '01001', name: 'district2', type: 'type2'},
+      compartment: 'Compartment 1',
     },
     '01001-Compartment 3': {
       threshold: 60,
-      district: {ags: '01001', name: 'district2', type: 'type2'},
+      district: {id: '2', nuts: '01001', name: 'district2', type: 'type2'},
       compartment: 'Compartment 3',
     },
-    '01059-Compartment 1': {
-      threshold: 70,
-      district: {ags: '01059', name: 'district3', type: 'type3'},
-      compartment: 'Compartment 1',
+    '01059-Compartment 2': {
+      threshold: 80,
+      district: {id: '3', nuts: '01059', name: 'district3', type: 'type3'},
+      compartment: 'Compartment 2',
     },
     '01059-Compartment 3': {
       threshold: 90,
-      district: {ags: '01059', name: 'district3', type: 'type3'},
+      district: {id: '3', nuts: '01059', name: 'district3', type: 'type3'},
       compartment: 'Compartment 3',
     },
   };
@@ -120,7 +139,7 @@ describe('HorizontalThresholdSettingsList Component', () => {
     expect(screen.getByTestId('horizontal-threshold-list')).toBeInTheDocument();
 
     await waitFor(() => {
-      const tableLength = Object.entries(horizontalThresholds).length;
+      const tableLength = Object.entries(initialHorizontalThresholds).length;
       const horizontalThresholdTable = screen.getByTestId('horizontal-table-body-testid');
       expect(horizontalThresholdTable.querySelectorAll('.MuiTableRow-root').length).toBe(tableLength);
     });
@@ -130,7 +149,7 @@ describe('HorizontalThresholdSettingsList Component', () => {
     render(<HorizontalThresholdListTest />);
 
     await waitFor(() => {
-      Object.entries(horizontalThresholds).forEach(([key, {district, compartment, threshold}]) => {
+      Object.entries(initialHorizontalThresholds).forEach(([key, {district, compartment, threshold}]) => {
         // Get the row by the test id
         const thresholdRow = screen.getByTestId(`threshold-item-${key}`);
 
@@ -150,7 +169,7 @@ describe('HorizontalThresholdSettingsList Component', () => {
     render(<HorizontalThresholdListTest />);
 
     await waitFor(() => {
-      const totalLength = Object.entries(horizontalThresholds).length + 2;
+      const totalLength = Object.entries(initialHorizontalThresholds).length + 2;
       const horizontalThresholdList = screen.getByTestId('horizontal-threshold-list');
       expect(horizontalThresholdList).toBeInTheDocument();
       expect(horizontalThresholdList.querySelectorAll('.MuiTableRow-root').length).toBe(totalLength);
@@ -175,7 +194,7 @@ describe('HorizontalThresholdSettingsList Component', () => {
     render(
       <HorizontalThresholdListTest
         selectedCompartment='Compartment 1'
-        selectedDistrict={{ags: '00000', name: 'district1', type: 'type1'}}
+        selectedDistrict={{id: '1', nuts: '00000', name: 'district1', type: 'type1'}}
       />
     );
     expect(screen.getByTestId('horizontal-threshold-list')).toBeInTheDocument();
@@ -183,8 +202,6 @@ describe('HorizontalThresholdSettingsList Component', () => {
     const addThresholdButton = screen.getByTestId('add-threshold-button-testid');
     expect(addThresholdButton).toBeDisabled();
   });
-
-  // similar to selectedThresholdKey
 
   test('should add threshold row and render it', async () => {
     render(<HorizontalThresholdListTest />);
@@ -214,7 +231,7 @@ describe('HorizontalThresholdSettingsList Component', () => {
     await waitFor(() => {
       const horizontalThresholdTable = screen.getByTestId('horizontal-table-body-testid');
       expect(horizontalThresholdTable.querySelectorAll('.MuiTableRow-root').length).toBe(
-        Object.entries(horizontalThresholds).length + 1
+        Object.entries(initialHorizontalThresholds).length + 1
       );
     });
 
@@ -227,7 +244,7 @@ describe('HorizontalThresholdSettingsList Component', () => {
     // Render the component with an existing threshold for the selected district and compartment
     render(
       <HorizontalThresholdListTest
-        selectedDistrict={{ags: '00000', name: 'district1', type: 'type1'}}
+        selectedDistrict={{id: '1', nuts: '00000', name: 'district1', type: 'type1'}}
         selectedCompartment='Compartment 1'
       />
     );
@@ -238,5 +255,142 @@ describe('HorizontalThresholdSettingsList Component', () => {
 
     // setIsAddingThreshold(true) is not called
     expect(screen.queryByTestId('add-threshold-table-row-testid')).not.toBeInTheDocument();
+  });
+
+  test('should delete a threshold from the list', async () => {
+    render(<HorizontalThresholdListTest />);
+
+    // Verify the threshold exists initially
+    const thresholdItem = screen.getByTestId('threshold-item-01001-Compartment 3');
+    expect(thresholdItem).toBeInTheDocument();
+    await userEvent.click(thresholdItem);
+
+    // Click on the delete button
+    const deleteThresholdButton = screen.getByTestId('delete-threshold-button-01001-Compartment 3');
+    expect(deleteThresholdButton).toBeInTheDocument();
+    await userEvent.click(deleteThresholdButton);
+
+    // Verify the threshold is removed from the DOM
+    await waitFor(() => {
+      expect(screen.queryByTestId('threshold-item-01001-Compartment 3')).not.toBeInTheDocument();
+    });
+
+    // Verify the table has one less row
+    const horizontalThresholdTable = screen.getByTestId('horizontal-table-body-testid');
+    expect(horizontalThresholdTable.querySelectorAll('.MuiTableRow-root').length).toBe(
+      Object.entries(initialHorizontalThresholds).length - 1
+    );
+
+    // Verify other thresholds are still present
+    expect(screen.getByTestId('threshold-item-00000-Compartment 1')).toBeInTheDocument();
+    expect(screen.getByTestId('threshold-item-00000-Compartment 2')).toBeInTheDocument();
+    expect(screen.getByTestId('threshold-item-01001-Compartment 1')).toBeInTheDocument();
+    expect(screen.getByTestId('threshold-item-01059-Compartment 2')).toBeInTheDocument();
+    expect(screen.getByTestId('threshold-item-01059-Compartment 3')).toBeInTheDocument();
+  });
+
+  test('should delete multiple thresholds from the list', async () => {
+    render(<HorizontalThresholdListTest />);
+
+    // Delete first threshold
+    const firstThresholdItem = screen.getByTestId('threshold-item-00000-Compartment 1');
+    expect(firstThresholdItem).toBeInTheDocument();
+    await userEvent.click(firstThresholdItem);
+
+    const firstDeleteButton = screen.getByTestId('delete-threshold-button-00000-Compartment 1');
+    await userEvent.click(firstDeleteButton);
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('threshold-item-00000-Compartment 1')).not.toBeInTheDocument();
+    });
+
+    // Delete second threshold
+    const secondThresholdItem = screen.getByTestId('threshold-item-01001-Compartment 3');
+    expect(secondThresholdItem).toBeInTheDocument();
+    await userEvent.click(secondThresholdItem);
+
+    const secondDeleteButton = screen.getByTestId('delete-threshold-button-01001-Compartment 3');
+    await userEvent.click(secondDeleteButton);
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('threshold-item-01001-Compartment 3')).not.toBeInTheDocument();
+    });
+
+    // Verify the table has two less rows
+    const horizontalThresholdTable = screen.getByTestId('horizontal-table-body-testid');
+    expect(horizontalThresholdTable.querySelectorAll('.MuiTableRow-root').length).toBe(
+      Object.entries(initialHorizontalThresholds).length - 2
+    );
+
+    // Verify remaining thresholds are still present
+    expect(screen.getByTestId('threshold-item-00000-Compartment 2')).toBeInTheDocument();
+    expect(screen.getByTestId('threshold-item-01001-Compartment 1')).toBeInTheDocument();
+    expect(screen.getByTestId('threshold-item-01059-Compartment 2')).toBeInTheDocument();
+    expect(screen.getByTestId('threshold-item-01059-Compartment 3')).toBeInTheDocument();
+  });
+
+  test('should update a threshold in the list', async () => {
+    render(<HorizontalThresholdListTest />);
+
+    // Click on the threshold item to select it
+    const thresholdItem = screen.getByTestId('threshold-item-01001-Compartment 3');
+    expect(thresholdItem).toBeInTheDocument();
+    await userEvent.click(thresholdItem);
+
+    // Click on the edit button
+    const editThresholdButton = screen.getByTestId('edit-threshold-button-01001-Compartment 3');
+    expect(editThresholdButton).toBeInTheDocument();
+    await userEvent.click(editThresholdButton);
+
+    // Edit the threshold value
+    const thresholdInput = await screen.findByLabelText('Horizontal Threshold');
+    expect(thresholdInput).toBeInTheDocument();
+    await userEvent.clear(thresholdInput);
+    await userEvent.type(thresholdInput, '999');
+    expect(screen.getByDisplayValue('999')).toBeInTheDocument();
+
+    // Save the changes
+    const saveButton = screen.getByTestId('save-threshold');
+    expect(saveButton).toBeInTheDocument();
+    await userEvent.click(saveButton);
+
+    // Verify the updated value is displayed
+    await waitFor(() => {
+      expect(screen.queryByText('999')).toBeInTheDocument();
+    });
+
+    // Verify the threshold item still exists
+    expect(screen.getByTestId('threshold-item-01001-Compartment 3')).toBeInTheDocument();
+  });
+
+  test('should not be able to delete when editing a threshold', async () => {
+    render(<HorizontalThresholdListTest />);
+
+    // Start editing one threshold
+    const editThresholdButton = screen.getByTestId('edit-threshold-button-00000-Compartment 1');
+    await userEvent.click(editThresholdButton);
+
+    // Try to delete another threshold - it should be disabled
+    const deleteThresholdButton = screen.getByTestId('delete-threshold-button-01001-Compartment 3');
+    expect(deleteThresholdButton).toBeInTheDocument();
+
+    // The delete button should be disabled when editing
+    const deleteButton = deleteThresholdButton.closest('button');
+    expect(deleteButton).toBeDisabled();
+  });
+
+  test('should not be able to delete when adding a new threshold', async () => {
+    render(<HorizontalThresholdListTest />);
+
+    // Start adding a new threshold
+    const addThresholdButton = screen.getByTestId('add-threshold-testid');
+    await userEvent.click(addThresholdButton);
+
+    // All delete buttons should be disabled when adding a threshold
+    const deleteButtons = screen.getAllByTestId(/delete-threshold-button-/);
+    deleteButtons.forEach((button) => {
+      const buttonElement = button.closest('button');
+      expect(buttonElement).toBeDisabled();
+    });
   });
 });

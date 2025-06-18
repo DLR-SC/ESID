@@ -181,19 +181,30 @@ export default function HorizontalThresholdItem({
                   aria-label='edit horizontal threshold for given district and compartment'
                   data-testid={`edit-threshold-button-${thresholdKey}`}
                   onClick={() => handleEditThreshold(thresholdKey, threshold.threshold)}
+                  disabled={isDisabled}
                 >
                   <EditIcon
                     sx={{
-                      color: theme.palette.primary.main,
+                      color: isDisabled ? theme.palette.action.disabled : theme.palette.primary.main,
                     }}
                   />
                 </IconButton>
                 <IconButton
                   aria-label='delete Horizontal Y-threshold'
                   data-testid={`delete-threshold-button-${thresholdKey}`}
-                  onClick={() => removeHorizontalThreshold(thresholdKey)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (!isDisabled) {
+                      removeHorizontalThreshold(thresholdKey);
+                    }
+                  }}
+                  disabled={isDisabled}
                 >
-                  <DeleteForeverIcon />
+                  <DeleteForeverIcon
+                    sx={{
+                      color: isDisabled ? theme.palette.action.disabled : theme.palette.error.main,
+                    }}
+                  />
                 </IconButton>
               </Box>
             </Box>
