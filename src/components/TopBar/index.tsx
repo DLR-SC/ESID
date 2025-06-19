@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import useTheme from '@mui/material/styles/useTheme';
-import React from 'react';
+import React, {useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import ApplicationMenu from './ApplicationMenu';
 import Box from '@mui/material/Box';
@@ -10,6 +10,8 @@ import LanguagePicker from './LanguagePicker';
 import RealmSelect from './RealmSelect';
 import esidLogo from '../../../assets/logo/logo-200x66.svg';
 import InfoButton from '../../components/OnboardingComponents/InfoButton';
+import ArticleSearchBar from '@/components/TopBar/ArticleSearchBar';
+import {Article} from 'store/ArticleSlice';
 
 /**
  * This is the top navigation bar of the application. It contains the logo and a burger menu to access settings and
@@ -18,6 +20,7 @@ import InfoButton from '../../components/OnboardingComponents/InfoButton';
 export default function TopBar(): JSX.Element {
   const {t} = useTranslation();
   const theme = useTheme();
+  const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
 
   return (
     <Box
@@ -43,7 +46,7 @@ export default function TopBar(): JSX.Element {
           alt={t('topBar.icon-alt')}
         />
       </Box>
-      <Box sx={{flexGrow: 1}} />
+      <ArticleSearchBar selectedArticle={selectedArticle} onChange={(_event, value) => setSelectedArticle(value)} />
       <LanguagePicker />
       <RealmSelect />
       <Box sx={{alignItems: 'center'}}>

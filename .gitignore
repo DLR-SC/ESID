@@ -14,5 +14,8 @@ dist
 reports
 coverage
 
-.env
+# .env
 .eslintcache
+.env
+.venv
+__pycache__/

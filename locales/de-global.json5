@@ -119,7 +119,12 @@
   today: 'Heute',
   more: 'Mehr',
   less: 'Weniger',
-  search: 'Suche',
+  search: {
+    articles: {
+      placeholder: 'Artikel suchen...',
+      ariaLabel: 'Artikel suchen',
+    },
+  },
   germany: 'Deutschland',
   WIP: 'Diese Funktionalität befindet sich noch in der Entwicklung.',
   'no-data': 'Keine Daten',

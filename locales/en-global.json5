@@ -128,7 +128,12 @@
   today: 'Today',
   more: 'More',
   less: 'Less',
-  search: 'Search',
+  search: {
+    articles: {
+      placeholder: 'Search articles...',
+      ariaLabel: 'Search articles',
+    },
+  },
   germany: 'Germany',
   'no-data': 'No Data',
   'loki-logo': 'LOKI logo',
@@ -141,4 +146,7 @@
   WIP: 'This functionality is still work in progress.',
   okay: 'Okay',
   yAxisLabel: 'Value',
+  values: 'Values',
+  name: 'Name',
+  date: 'Date',
 }
