@@ -10,6 +10,9 @@ export const articleApi = createApi({
   // The '/api' prefix will be handled by the Vite proxy in development.
   baseQuery: fetchBaseQuery({baseUrl: '/api'}),
   endpoints: (build) => ({
+    getArticles: build.query<Article[], void>({
+      query: () => 'articles',
+    }),
     searchArticles: build.query<Article[], string>({
       // The query parameter is now 'search', matching our FastAPI endpoint.
       query: (searchQuery) => `articles?search=${searchQuery}`,
@@ -19,4 +22,4 @@ export const articleApi = createApi({
   }),
 });
 
-export const {useLazySearchArticlesQuery} = articleApi;
+export const {useGetArticlesQuery, useLazySearchArticlesQuery} = articleApi;

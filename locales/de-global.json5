@@ -19,6 +19,18 @@
       attribution: 'Attribution',
       changelog: 'Versionshistorie',
     },
+    applicationMenu: {
+      about: 'Über ESID',
+      accessibility: 'Barrierefreiheit',
+      changelog: 'Änderungsprotokoll',
+      imprint: 'Impressum',
+      privacyPolicy: 'Datenschutzerklärung',
+      termsOfUse: 'Nutzungsbedingungen',
+    },
+    scenarioSelector: {
+      label: 'Szenario',
+    },
+    tour: 'Tour',
   },
   'icon-bar': {
     'previous-day-tooltip': 'Vorheriger Tag',
@@ -28,6 +40,7 @@
   },
   history: {
     placeholder: 'history',
+    title: 'Verlauf',
   },
   BEZ: {
     K: 'Kreis',
@@ -122,7 +135,7 @@
   search: {
     articles: {
       placeholder: 'Artikel suchen...',
-      ariaLabel: 'Artikel suchen',
+      ariaLabel: 'Suchen Sie nach Artikeln und Dokumentationen',
     },
   },
   germany: 'Deutschland',
@@ -131,4 +144,120 @@
   'loki-logo': 'LOKI-Logo',
   okay: 'Okay',
   yAxisLabel: 'Wert',
+  semanticSearch: {
+    title: 'Semantische Suche',
+    description: 'Stellen Sie Fragen zu den Daten, Modellen oder Funktionen, um relevante Dokumentationen und Artikel zu finden.',
+    placeholder: 'Geben Sie eine Frage für die Suche ein...',
+    suggestions: {
+      title: 'Oder versuchen Sie eine dieser Optionen:',
+      flood: 'Welche Regionen sind am stärksten von den Überschwemmungen 2021 betroffen?',
+      calibration: 'Wie wird das Modell kalibriert?',
+      heatwave: 'Was ist das Szenario für eine intensive Hitzewelle?',
+    },
+    results: {
+      initialPrompt: 'Geben Sie eine Frage ein, um nach relevanten Artikeln und Dokumentationen zu suchen.',
+      noResults: 'Keine Ergebnisse gefunden. Versuchen Sie, Ihre Frage umzuformulieren oder andere Schlüsselwörter zu verwenden.',
+      resultsFound_one: '1 Ergebnis gefunden für',
+      resultsFound_other: '{{count}} Ergebnisse gefunden für',
+    },
+    classification: {
+      direct: 'Direkte Antwort',
+      high: 'Hohe Relevanz',
+      related: 'Verwandt',
+    },
+  },
+  language: 'Sprache',
+  legal: {
+    attributions: 'Namensnennung',
+  },
+  scenarios: {
+    cards: {
+      cases: 'Fälle',
+      hospitalization: 'Krankenhausaufnahme',
+      intensiveCare: 'Intensivpflege',
+      death: 'Todesfälle',
+      rValue: 'R-Wert',
+      doublingTime: 'Verdopplungszeit',
+      attackRate: 'Befallsrate',
+    },
+  },
+  groups: {
+    title: 'Filter',
+    addGroup: 'Gruppe hinzufügen',
+    manageGroups: 'Gruppen verwalten',
+    noGroups: 'Keine Gruppen definiert.',
+    groupName: {
+      label: 'Gruppenname',
+      alreadyExists: 'Eine Gruppe mit diesem Namen existiert bereits.',
+      cannotBeEmpty: 'Der Gruppenname darf nicht leer sein.',
+    },
+    options: {
+      delete: 'Löschen',
+      edit: 'Bearbeiten',
+    },
+  },
+  compartments: {
+    title: 'Kompartimente',
+    S: 'Suszeptible',
+    E: 'Exponiert',
+    I: 'Infiziert',
+    R: 'Genesen',
+    H: 'Hospitalisiert',
+    U: 'Intensivpflege',
+    D: 'Verstorben',
+    X: 'Geimpft',
+    V: 'Geimpft (geschützt)',
+    W: 'Geimpft (nachlassend)',
+  },
+  lineChart: {
+    title: 'Liniendiagramm',
+    showConfidence: 'Konfidenzintervalle anzeigen',
+    logScale: 'Logarithmische Skala',
+    sum: 'Summe',
+    yAxis: 'Wert',
+  },
+  map: {
+    title: 'Karte',
+    legendTitle: 'Fälle pro 100k',
+    incidences: {
+      total: 'Gesamt',
+      per100k: 'pro 100k',
+      per100kIn7Days: '7-Tage-Inzidenz pro 100k',
+    },
+  },
+  parameter: {
+    title: 'Parameter',
+    compartment: 'Kompartiment',
+    reset: 'Auf Standardwert zurücksetzen',
+    r0: 'Basisreproduktionszahl (R0)',
+  },
+  history: {
+    title: 'Verlauf',
+  },
+  semanticSearch: {
+    title: 'Semantische Suche',
+    description: 'Stellen Sie Fragen zu den Daten, Modellen oder Funktionen, um relevante Dokumentationen und Artikel zu finden.',
+    placeholder: 'Geben Sie eine Frage für die Suche ein...',
+    suggestions: {
+      title: 'Oder versuchen Sie eine dieser Optionen:',
+      flood: 'Welche Regionen sind am stärksten von den Überschwemmungen 2021 betroffen?',
+      calibration: 'Wie wird das Modell kalibriert?',
+      heatwave: 'Was ist das Szenario für eine intensive Hitzewelle?',
+    },
+    results: {
+      initialPrompt: 'Geben Sie eine Frage ein, um nach relevanten Artikeln und Dokumentationen zu suchen.',
+      noResults: 'Keine Ergebnisse gefunden. Versuchen Sie, Ihre Frage umzuformulieren oder andere Schlüsselwörter zu verwenden.',
+      resultsFound_one: '1 Ergebnis gefunden für',
+      resultsFound_other: '{{count}} Ergebnisse gefunden für',
+    },
+    classification: {
+      direct: 'Direkte Antwort',
+      high: 'Hohe Relevanz',
+      related: 'Verwandt',
+    },
+  },
+  language: 'Sprache',
+  legal: {
+    attributions: 'Namensnennung',
+  },
 }
