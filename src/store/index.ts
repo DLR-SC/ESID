@@ -20,7 +20,7 @@ import SemanticSearchReducer from './SemanticSearchSlice';
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['dataSelection', 'userPreference', 'userOnboarding', 'auth'],
+  whitelist: ['dataSelection', 'userPreference', 'userOnboarding', 'auth', 'realm'],
   stateReconciler: autoMergeLevel2,
 };
 

@@ -24,11 +24,30 @@ import {useGetMultiScenariosQuery} from 'store/services/scenarioApi';
 import {ScenarioVisibility, updateScenario} from 'store/DataSelectionSlice';
 import {setScenarioColors} from 'store/UserPreferenceSlice';
 import {DataContext} from 'context/SelectedDataContext';
+import {AuthContext, IAuthContext} from 'react-oauth2-code-pkce';
+
+type ResourceAccess = {
+  [clientId: string]: {
+    roles: string[];
+  };
+};
 
 export default function ScenarioLibrary(): JSX.Element {
   const dispatch = useAppDispatch();
   const {t} = useTranslation();
   const theme = useTheme();
+
+  const {tokenData} = useContext<IAuthContext>(AuthContext);
+
+  // *Warning, brute force cast, should be replaced with a more type-safe solution
+  /* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access*/
+  const roles: string[] =
+    (tokenData &&
+      tokenData.resource_access &&
+      (tokenData.resource_access as ResourceAccess)[import.meta.env.VITE_OAUTH_CLIENT_ID]?.roles) ??
+    [];
+  /* eslint-enable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access*/
+  const canCreateScenarios = roles.includes('lha-user');
 
   const {scenarios, simulationModels, npis, nodeLists} = useContext(DataContext)!;
   const scenariosState = useAppSelector((state) => state.dataSelection.scenarios);
@@ -173,12 +192,14 @@ export default function ScenarioLibrary(): JSX.Element {
                   overflowY: 'auto',
                 }}
               >
-                <NewScenarioCard
-                  models={simulationModels ?? []}
-                  npis={npis ?? []}
-                  nodeLists={nodeLists ?? []}
-                  scenarioCreated={scenarioCreated}
-                />
+                {canCreateScenarios && (
+                  <NewScenarioCard
+                    models={simulationModels ?? []}
+                    npis={npis ?? []}
+                    nodeLists={nodeLists ?? []}
+                    scenarioCreated={scenarioCreated}
+                  />
+                )}
                 {hiddenScenarios.length > 0 ? (
                   hiddenScenarios.map((scenario) => <LibraryCard key={scenario.id} {...scenario} />)
                 ) : (

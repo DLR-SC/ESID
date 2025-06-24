@@ -154,7 +154,7 @@ export default function MapContainer() {
   }, []);
 
   const legends = useMemo(() => {
-    if (selectedScenario) {
+    if (selectedScenario && scenariosState[selectedScenario]) {
       const colors = scenariosState[selectedScenario]?.colors;
       const stepCount = colors.length - 1;
       const steps = [];

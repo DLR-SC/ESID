@@ -13,6 +13,7 @@ SPDX-License-Identifier: CC-BY-4.0
 
 - Users can now create new scenarios with a limited range of NPIs.
 - The color of the scenarios is now selectable in the scenario creation dialog.
+- Created scenario cards can now be reordered via drag-and-drop handle.
 
 ### Improvements
 
@@ -21,10 +22,12 @@ SPDX-License-Identifier: CC-BY-4.0
 - Instead of hard-coded organizations, now organization dropdown options are populated by fetching the actual realms.
 - There is more robust validation for the application state. If anything goes wrong during validation, a waring is shown in the bottom-left corner.
 - The case data and baseline scenarios are now always shown and the first two scenarios.
+- Only logged in users now have access to the "Create Scenario" button.
 
 ### Bug fixes
 
 - More robust validation of the application state should eliminate a wide variety of bugs.
+- A bug was fixed where data was shown while no scenario was active.
 
 ---
 
