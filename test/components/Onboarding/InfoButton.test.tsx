@@ -12,6 +12,7 @@ import {ThemeProvider} from '@mui/system';
 import Theme from '@/util/Theme';
 import {I18nextProvider} from 'react-i18next';
 import i18n from 'util/i18nForTests';
+import {ArticleDataProvider} from '../../../src/context/ArticleDataContext';
 
 describe('InfoButton', () => {
   const renderComponent = () => {
@@ -19,7 +20,9 @@ describe('InfoButton', () => {
       <ThemeProvider theme={Theme}>
         <Provider store={Store}>
           <I18nextProvider i18n={i18n}>
-            <InfoButton />
+            <ArticleDataProvider>
+              <InfoButton />
+            </ArticleDataProvider>
           </I18nextProvider>
         </Provider>
       </ThemeProvider>

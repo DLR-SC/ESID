@@ -80,7 +80,7 @@ export default function TopBarPopover(props: TopBarPopoverProps): JSX.Element {
             top: 8,
           }}
         >
-          <CloseIcon data-testid='close-info-button' />
+          <CloseIcon />
         </IconButton>
         <Box mt={4}>
           <TourChipsList />
