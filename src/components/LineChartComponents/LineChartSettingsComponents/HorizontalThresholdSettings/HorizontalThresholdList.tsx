@@ -198,7 +198,7 @@ export default function HorizontalThresholdList({
                     fontSize: theme.typography.listElement.fontSize,
                   }}
                 >
-                  {selectedDistrict.name}
+                  {t(selectedDistrict.nuts === '00000' ? 'germany' : selectedDistrict.name)}
                 </Typography>
               </StyledTableCell>
               <StyledTableCell align='left'>
