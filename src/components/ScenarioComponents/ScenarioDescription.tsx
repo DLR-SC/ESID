@@ -1,6 +1,5 @@
 import React from 'react';
 import Typography from '@mui/material/Typography';
-import useTheme from '@mui/material/styles/useTheme';
 import Box from '@mui/material/Box';
 import {useTranslation} from 'react-i18next';
 
@@ -21,14 +20,12 @@ export default function ScenarioDescription({
   model,
   nodeList,
 }: ScenarioDescriptionProps): JSX.Element {
-  const theme = useTheme();
   const {t} = useTranslation();
 
   return (
     <Box
       sx={{
         width: 'full',
-        bgcolor: theme.palette.background.paper,
         overflowX: 'auto',
         overflowY: 'auto',
         height: (264 / 6) * 4,
