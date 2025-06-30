@@ -2,17 +2,27 @@ import React from 'react';
 import Typography from '@mui/material/Typography';
 import useTheme from '@mui/material/styles/useTheme';
 import Box from '@mui/material/Box';
+import {useTranslation} from 'react-i18next';
 
-export default function ScenarioDescription(): JSX.Element {
+interface ScenarioDescriptionProps {
+  description: string;
+  startDate: string;
+  endDate: string;
+  linkedInterventions: string[];
+  model: string;
+  nodeList: string;
+}
+
+export default function ScenarioDescription({
+  description,
+  startDate,
+  endDate,
+  linkedInterventions,
+  model,
+  nodeList,
+}: ScenarioDescriptionProps): JSX.Element {
   const theme = useTheme();
-  const scenario = {
-    description: 'In this scenarios we close schools and mandate remote work where possible. ',
-    startDate: '2021-11-18',
-    endDate: '2021-12-18',
-    linkedInterventions: ['Home Office', 'Schools Closed'],
-    model: 'SECIRVVS',
-    nodeList: 'All Counties',
-  };
+  const {t} = useTranslation();
 
   return (
     <Box
@@ -21,7 +31,7 @@ export default function ScenarioDescription(): JSX.Element {
         bgcolor: theme.palette.background.paper,
         overflowX: 'auto',
         overflowY: 'auto',
-        height: (248 / 6) * 4,
+        height: (264 / 6) * 4,
       }}
     >
       <Box
@@ -29,28 +39,27 @@ export default function ScenarioDescription(): JSX.Element {
           padding: 3,
         }}
       >
-        <DescriptionSection title='Description' content={scenario.description} />
+        <DescriptionSection title={t('scenario.description')} content={description} />
+        <br />
+        <DescriptionSection title={t('scenario.dates')} content={startDate + '-' + endDate} />
         <br />
         <DescriptionSection
-          title='Dates'
+          title={t('scenario.active-npis')}
           content={
-            new Date(scenario.startDate).toLocaleDateString() + '-' + new Date(scenario.endDate).toLocaleDateString()
+            linkedInterventions.length > 0
+              ? linkedInterventions.map((i) => (
+                  <React.Fragment key={i}>
+                    • {i}
+                    <br />
+                  </React.Fragment>
+                ))
+              : '-'
           }
         />
         <br />
-        <DescriptionSection
-          title='Active Interventions'
-          content={scenario.linkedInterventions.map((i) => (
-            <React.Fragment key={i}>
-              • {i}
-              <br />
-            </React.Fragment>
-          ))}
-        />
+        <DescriptionSection title={t('scenario.model')} content={model} />
         <br />
-        <DescriptionSection title='Model' content={scenario.model} />
-        <br />
-        <DescriptionSection title='Node List' content={scenario.nodeList} />
+        <DescriptionSection title={t('scenario.regions')} content={nodeList} />
       </Box>
     </Box>
   );
@@ -65,7 +74,7 @@ function DescriptionSection(props: {title: string; content: string | JSX.Element
         {props.title}
       </Typography>
       <div style={{height: '6px'}} />
-      <Typography variant='body2' fontSize={fontSize} textAlign='justify'>
+      <Typography variant='body2' fontSize={fontSize}>
         {props.content}
       </Typography>
     </>

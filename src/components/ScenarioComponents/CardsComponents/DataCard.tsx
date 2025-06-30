@@ -25,7 +25,7 @@ interface DataCardProps {
   title: string;
 
   /** A description of the card's contents. */
-  description?: string;
+  description?: JSX.Element;
 
   /** A boolean indicating whether the compartments are expanded.*/
   compartmentsExpanded: boolean;

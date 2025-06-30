@@ -11,7 +11,6 @@ import {Localization} from 'types/localization';
 import {hexToRGB} from 'util/util';
 import type {SyntheticListenerMap} from '@dnd-kit/core/dist/hooks/utilities';
 import type {DraggableAttributes} from '@dnd-kit/core';
-import ScenarioDescription from 'components/ScenarioComponents/ScenarioDescription';
 
 interface MainCardProps {
   /** A unique identifier for the card. */
@@ -21,7 +20,7 @@ interface MainCardProps {
   label: string;
 
   /** A description of the card's contents. */
-  description?: string;
+  description?: JSX.Element;
 
   /** The color of the card. */
   color: string;
@@ -116,7 +115,7 @@ export default function MainCard({
 }: MainCardProps) {
   const theme = useTheme();
   const [hover, setHover] = useState<boolean>(false);
-  const [showDescription, setShowDescription] = useState<boolean>(true);
+  const [showDescription, setShowDescription] = useState<boolean>(false);
 
   return (
     <Box
@@ -178,8 +177,8 @@ export default function MainCard({
         >
           <CardTitle label={label} color={color} />
         </Box>
-        {showDescription ? (
-          <ScenarioDescription />
+        {description && showDescription && isActive ? (
+          description
         ) : (
           <CardRows
             compartmentValues={compartmentValues}
@@ -199,7 +198,6 @@ export default function MainCard({
         hover={hover}
         color={color}
         id={id}
-        description={description}
         isActive={isActive}
         setActive={setActive}
         hide={hide}
@@ -209,6 +207,8 @@ export default function MainCard({
         dragListeners={dragListeners}
         isDragging={isDragging}
         draggable={draggable}
+        setShowDescription={setShowDescription}
+        showDescription={showDescription}
         setActivatorNodeRef={setActivatorNodeRef}
       />
     </Box>
