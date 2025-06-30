@@ -3,6 +3,7 @@
 
 import React, {useContext, useEffect, useMemo, useState} from 'react';
 import LineChart from './LineChartComponents/LineChart';
+import LineChartSettings from './LineChartComponents/LineChartSettingsComponents/LineChartSettings';
 import LoadingContainer from './shared/LoadingContainer';
 import useTheme from '@mui/material/styles/useTheme';
 import {useAppDispatch, useAppSelector} from 'store/hooks';
@@ -12,9 +13,9 @@ import {useTranslation} from 'react-i18next';
 import {LineChartData} from 'types/lineChart';
 import {InfectionData} from 'store/services/APITypes';
 import {DataContext} from 'context/SelectedDataContext';
-
+import {updateHorizontalYAxisThreshold, removeHorizontalYAxisThreshold} from 'store/UserPreferenceSlice';
 export default function LineChartContainer() {
-  const {t} = useTranslation('backend');
+  const {t: tBackend, i18n: i18nBackend} = useTranslation('backend');
   const theme = useTheme();
   const dispatch = useAppDispatch();
 
@@ -23,7 +24,9 @@ export default function LineChartContainer() {
   const scenariosState = useAppSelector((state) => state.dataSelection.scenarios);
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
+  const selectedDistrict = useAppSelector((state) => state.dataSelection.district);
   const selectedDate = useAppSelector((state) => state.dataSelection.date);
+  const horizontalThresholds = useAppSelector((state) => state.userPreference.horizontalYAxisThresholds ?? {});
   const referenceDay = useAppSelector((state) => state.dataSelection.simulationStart);
   const minDate = useAppSelector((state) => state.dataSelection.minDate);
   const maxDate = useAppSelector((state) => state.dataSelection.maxDate);
@@ -31,8 +34,19 @@ export default function LineChartContainer() {
   const [referenceDayBottomPosition, setReferenceDayBottomPosition] = useState<number>(0);
 
   const yAxisLabel = useMemo(() => {
-    return t(`infection-states.${compartments?.find((c) => c.id === selectedCompartment)?.name}`);
-  }, [compartments, selectedCompartment, t]);
+    return tBackend(`infection-states.${compartments?.find((c) => c.id === selectedCompartment)?.name}`);
+  }, [compartments, selectedCompartment, tBackend]);
+
+  const compartmentNames = useMemo(() => {
+    return (
+      compartments?.map((compartment) => {
+        const name = i18nBackend.exists(`infection-states.${compartment.name}`, {ns: 'backend'})
+          ? tBackend(`infection-states.${compartment.name}`)
+          : compartment.name;
+        return {id: compartment.id, name};
+      }) ?? []
+    );
+  }, [compartments, i18nBackend, tBackend]);
 
   const mappedLineChartData = useMemo(() => {
     return Object.entries(lineChartData ?? {}).flatMap(([id, data]) => {
@@ -69,7 +83,7 @@ export default function LineChartContainer() {
             fillOpacity: 0.2 + 0.6 * (index / percentiles.length),
             valueYField: id + percentile.lower,
             openValueYField: id + percentile.upper,
-            stroke: {strokeWidth: 0},
+            stroke: {strokeWidth: 0, visible: false},
             values: percentileDataToLineChartData(data, percentile.lower, percentile.upper),
           });
         });
@@ -100,6 +114,22 @@ export default function LineChartContainer() {
         maxDate={maxDate}
         referenceDay={referenceDay}
         yAxisLabel={yAxisLabel}
+        horizontalYAxisThreshold={horizontalThresholds[`${selectedDistrict.nuts}-${selectedCompartment}`]?.threshold}
+      />
+      <LineChartSettings
+        selectedDistrict={selectedDistrict}
+        selectedCompartment={selectedCompartment ?? ''}
+        compartments={compartmentNames}
+        horizontalThresholds={horizontalThresholds}
+        removeHorizontalThreshold={(id: string) => dispatch(removeHorizontalYAxisThreshold(id))}
+        updateHorizontalThreshold={(newThreshold) =>
+          dispatch(
+            updateHorizontalYAxisThreshold({
+              key: `${newThreshold.district.nuts}-${newThreshold.compartment}`,
+              threshold: newThreshold,
+            })
+          )
+        }
       />
     </LoadingContainer>
   );
