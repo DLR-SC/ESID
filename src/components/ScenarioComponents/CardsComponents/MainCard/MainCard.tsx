@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, {Dispatch} from 'react';
+import React, {Dispatch, useState} from 'react';
 import Box from '@mui/material/Box';
 import useTheme from '@mui/material/styles/useTheme';
 import CardTitle from './CardTitle';
@@ -11,6 +11,7 @@ import {Localization} from 'types/localization';
 import {hexToRGB} from 'util/util';
 import type {SyntheticListenerMap} from '@dnd-kit/core/dist/hooks/utilities';
 import type {DraggableAttributes} from '@dnd-kit/core';
+import ScenarioDescription from 'components/ScenarioComponents/ScenarioDescription';
 
 interface MainCardProps {
   /** A unique identifier for the card. */
@@ -18,6 +19,9 @@ interface MainCardProps {
 
   /** The title of the card. */
   label: string;
+
+  /** A description of the card's contents. */
+  description?: string;
 
   /** The color of the card. */
   color: string;
@@ -33,12 +37,6 @@ interface MainCardProps {
 
   /** The compartment that is currently selected. */
   selectedCompartmentId: string | null;
-
-  /** A boolean indicating whether the user is hovering over the card. */
-  hover: boolean;
-
-  /** A function to set the hover state of the card. */
-  setHover: Dispatch<boolean>;
 
   /** A boolean indicating whether the scenario is selected. */
   isSelected: boolean;
@@ -88,13 +86,12 @@ interface MainCardProps {
  * a list of compartment values, and change rates relative to the simulation start. Additionally, a tooltip is used to set whether the card is active or not.
  * Furthermore, the card is clickable, and if clicked, it will become the selected scenario.
  */
-function MainCard({
+export default function MainCard({
   id,
   label,
-  hover,
+  description,
   compartmentValues,
   referenceValues,
-  setHover,
   compartmentsExpanded,
   selectedCompartmentId,
   color,
@@ -118,6 +115,9 @@ function MainCard({
   arrow = true,
 }: MainCardProps) {
   const theme = useTheme();
+  const [hover, setHover] = useState<boolean>(false);
+  const [showDescription, setShowDescription] = useState<boolean>(true);
+
   return (
     <Box
       id={`main-card-external-container-${id}`}
@@ -178,23 +178,28 @@ function MainCard({
         >
           <CardTitle label={label} color={color} />
         </Box>
-        <CardRows
-          compartmentValues={compartmentValues}
-          referenceValues={referenceValues}
-          isFlipped={isActive}
-          compartmentExpanded={compartmentsExpanded}
-          selectedCompartmentId={selectedCompartmentId}
-          color={color}
-          minCompartmentsRows={minCompartmentsRows}
-          maxCompartmentsRows={maxCompartmentsRows}
-          localization={localization}
-          arrow={arrow}
-        />
+        {showDescription ? (
+          <ScenarioDescription />
+        ) : (
+          <CardRows
+            compartmentValues={compartmentValues}
+            referenceValues={referenceValues}
+            isFlipped={isActive}
+            compartmentExpanded={compartmentsExpanded}
+            selectedCompartmentId={selectedCompartmentId}
+            color={color}
+            minCompartmentsRows={minCompartmentsRows}
+            maxCompartmentsRows={maxCompartmentsRows}
+            localization={localization}
+            arrow={arrow}
+          />
+        )}
       </Box>
       <CardTooltip
         hover={hover}
         color={color}
         id={id}
+        description={description}
         isActive={isActive}
         setActive={setActive}
         hide={hide}
@@ -209,5 +214,3 @@ function MainCard({
     </Box>
   );
 }
-
-export default MainCard;

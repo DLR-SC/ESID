@@ -7,13 +7,16 @@ import IconButton from '@mui/material/IconButton';
 import CheckBox from '@mui/icons-material/CheckBox';
 import CheckBoxOutlineBlank from '@mui/icons-material/CheckBoxOutlineBlank';
 import {useTranslation} from 'react-i18next';
-import React, {Dispatch} from 'react';
+import React, {Dispatch, useState} from 'react';
 import {Localization} from 'types/localization';
 import {hexToRGB} from 'util/util';
 import Close from '@mui/icons-material/Close';
 import type {SyntheticListenerMap} from '@dnd-kit/core/dist/hooks/utilities';
 import type {DraggableAttributes} from '@dnd-kit/core';
 import DragIndicator from '@mui/icons-material/DragIndicator';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import Popover from '@mui/material/Popover';
+import Typography from '@mui/material/Typography';
 
 interface CardTooltipProps {
   /** A boolean indicating whether the user is hovering over the card. */
@@ -24,6 +27,9 @@ interface CardTooltipProps {
 
   /** The title of the card. */
   id: string;
+
+  /** A description of the card's contents. */
+  description?: string;
 
   /** A function to set the selected scenario. */
   setSelected: Dispatch<{id: string; state: boolean}>;
@@ -61,6 +67,7 @@ interface CardTooltipProps {
  */
 export default function CardTooltip({
   id,
+  description = 'Test 123',
   hover,
   color,
   setSelected,
@@ -80,6 +87,22 @@ export default function CardTooltip({
 }: CardTooltipProps) {
   const {t: defaultT} = useTranslation();
   const {t: customT} = useTranslation(localization.customLang);
+
+  // State for managing the info popover
+  const [infoAnchorEl, setInfoAnchorEl] = useState<HTMLButtonElement | null>(null);
+
+  // Handlers for opening and closing the info popover
+  const handleInfoClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    setInfoAnchorEl(event.currentTarget);
+  };
+
+  const handleInfoClose = () => {
+    setInfoAnchorEl(null);
+  };
+
+  const infoOpen = Boolean(infoAnchorEl);
+  const infoPopoverId = infoOpen ? `info-popover-${id}` : undefined;
 
   return hover || isDragging ? (
     <Box
@@ -144,6 +167,32 @@ export default function CardTooltip({
             <Close />
           </IconButton>
         </Tooltip>
+        <IconButton
+          color={'primary'}
+          onClick={handleInfoClick}
+          aria-describedby={infoPopoverId}
+          sx={{
+            cursor: 'help',
+          }}
+        >
+          <InfoOutlinedIcon />
+        </IconButton>
+        <Popover
+          id={infoPopoverId}
+          open={infoOpen}
+          anchorEl={infoAnchorEl}
+          onClose={handleInfoClose}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'center',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+        >
+          <Typography sx={{p: 2, maxWidth: '300px'}}>{description}</Typography>
+        </Popover>
       </Box>
 
       <IconButton
