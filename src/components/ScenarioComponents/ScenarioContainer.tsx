@@ -191,6 +191,11 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
     dispatch(setReferenceDayTop(x + w));
   }, [dispatch, resizeBoundingRect]);
 
+  // updates the selected compartment in the state when the compartment in the store changes for use with LineChartSettings
+  useEffect(() => {
+    selectCompartment(selectedCompartment ?? 'MildInfections'); // Sync the local state with the store's selected compartment
+  }, [selectedCompartment]);
+
   return (
     <ScrollSync>
       <div style={{height: '100%'}} id='scenario-container'>
