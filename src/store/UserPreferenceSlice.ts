@@ -64,10 +64,7 @@ export const UserPreferenceSlice = createSlice({
       state.horizontalYAxisThresholds[action.payload.key] = action.payload.threshold;
     },
     /** Edit a horizontal Y-Axis Threshold for a specific district and compartment */
-    updateHorizontalYAxisThreshold(
-      state,
-      action: PayloadAction<{key: string; threshold: Partial<Threshold>}>
-    ) {
+    updateHorizontalYAxisThreshold(state, action: PayloadAction<{key: string; threshold: Partial<Threshold>}>) {
       if (!state.horizontalYAxisThresholds) {
         state.horizontalYAxisThresholds = {};
       }

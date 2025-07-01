@@ -57,11 +57,11 @@
     'hide-description': 'Hide description',
     'manage-groups': 'Filters',
     'reference-day': 'Reference Day',
-    'description': 'Description',
-    'dates': 'Date Range',
+    description: 'Description',
+    dates: 'Date Range',
     'active-npis': 'Active Interventions',
-    'model': 'Model',
-    'regions': 'Regions'
+    model: 'Model',
+    regions: 'Regions',
   },
   'group-filters': {
     title: 'Manage Groups',

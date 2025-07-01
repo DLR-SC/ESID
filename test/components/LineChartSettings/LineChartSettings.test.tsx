@@ -16,7 +16,7 @@ import {userEvent} from '@testing-library/user-event';
 const LineChartSettingsTest: React.FC = () => {
   const selectedDistrict: District = {id: '1', nuts: '00000', name: 'district1', type: 'type1'};
   const selectedCompartment = 'Compartment 1';
-  const thresholds: Record<string, HorizontalThreshold> = {};
+  const thresholds: Record<string, Threshold> = {};
 
   return (
     <div data-testid='line-chart-settings'>
@@ -25,9 +25,9 @@ const LineChartSettingsTest: React.FC = () => {
           <LineChartSettings
             selectedDistrict={selectedDistrict}
             selectedCompartment={selectedCompartment}
-            horizontalThresholds={horizontalThresholds}
-            removeHorizontalThreshold={() => {}}
-            updateHorizontalThreshold={() => {}}
+            thresholds={thresholds}
+            removeThreshold={() => {}}
+            updateThreshold={() => {}}
             compartments={[]}
           />
         </Provider>
@@ -58,7 +58,7 @@ describe('LineChartSettings', () => {
     const settingsButton = screen.getByTestId('settings-popover-button-testid');
     await userEvent.click(settingsButton);
 
-    expect(screen.getByTestId('settings-menu-item-horizontalThreshold')).toBeInTheDocument();
+    expect(screen.getByTestId('settings-menu-item-threshold')).toBeInTheDocument();
   });
 
   test('Navigates to all menu item in popover', async () => {
@@ -69,8 +69,8 @@ describe('LineChartSettings', () => {
     // add more menus here
     const menuItemsTestId = [
       {
-        settingsMenu: 'settings-menu-item-horizontalThreshold',
-        menuContainer: 'horizontalThresholdSettings-setting-container',
+        settingsMenu: 'settings-menu-item-threshold',
+        menuContainer: 'thresholdSettings-setting-container',
       },
       // add more menus here
     ];
