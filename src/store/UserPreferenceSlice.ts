@@ -2,14 +2,14 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {HorizontalThreshold} from 'types/horizontalThreshold';
+import {Threshold} from 'types/threshold';
 import {HeatmapLegend} from 'types/heatmapLegend';
 
 export interface UserPreference {
   selectedHeatmap: HeatmapLegend;
   selectedTab?: string;
   isInitialVisit: boolean;
-  horizontalYAxisThresholds?: Record<string, HorizontalThreshold>;
+  horizontalYAxisThresholds?: Record<string, Threshold>;
   scenarioColors: Record<string, string[]>;
 }
 
@@ -57,7 +57,7 @@ export const UserPreferenceSlice = createSlice({
     },
 
     /** Add a horizontal Y-Axis Threshold for a specific district and compartment */
-    addHorizontalYAxisThreshold(state, action: PayloadAction<{key: string; threshold: HorizontalThreshold}>) {
+    addHorizontalYAxisThreshold(state, action: PayloadAction<{key: string; threshold: Threshold}>) {
       if (!state.horizontalYAxisThresholds) {
         state.horizontalYAxisThresholds = {};
       }
@@ -66,7 +66,7 @@ export const UserPreferenceSlice = createSlice({
     /** Edit a horizontal Y-Axis Threshold for a specific district and compartment */
     updateHorizontalYAxisThreshold(
       state,
-      action: PayloadAction<{key: string; threshold: Partial<HorizontalThreshold>}>
+      action: PayloadAction<{key: string; threshold: Partial<Threshold>}>
     ) {
       if (!state.horizontalYAxisThresholds) {
         state.horizontalYAxisThresholds = {};

@@ -6,24 +6,24 @@ import {IconButton, Typography, Box, TableCell, TableRow} from '@mui/material';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
 import {useTheme} from '@mui/material/styles';
-import {HorizontalThreshold} from 'types/horizontalThreshold';
+import {Threshold} from 'types/threshold';
 import ThresholdInput from './ThresholdInput';
 
-export interface HorizontalThresholdItemProps {
+export interface ThresholdItemProps {
   /** The threshold item to display */
-  threshold: HorizontalThreshold;
+  threshold: Threshold;
 
   /** The key for the threshold (used for editing and updates) */
   thresholdKey: string;
 
   /** The function to remove a horizontal threshold. */
-  removeHorizontalThreshold: (id: string) => void;
+  removeThreshold: (id: string) => void;
 
   /** The function to update a horizontal threshold. */
-  updateHorizontalThreshold: (newThreshold: HorizontalThreshold) => void;
+  updateThreshold: (newThreshold: Threshold) => void;
 
   /** Callback to handle selection of a threshold */
-  handleSelectThreshold: (threshold: HorizontalThreshold) => void;
+  handleSelectThreshold: (threshold: Threshold) => void;
 
   /** The current edited key of the threshold */
   editingThresholdKey: string | null;
@@ -53,11 +53,11 @@ export interface HorizontalThresholdItemProps {
   testId?: string;
 }
 
-export default function HorizontalThresholdItem({
+export default function ThresholdItem({
   threshold,
   thresholdKey,
-  removeHorizontalThreshold,
-  updateHorizontalThreshold,
+  removeThreshold,
+  updateThreshold,
   handleSelectThreshold,
   editingThresholdKey,
   setEditingThresholdKey,
@@ -68,16 +68,16 @@ export default function HorizontalThresholdItem({
   compartmentName,
   thresholdValue,
   testId,
-}: HorizontalThresholdItemProps) {
+}: ThresholdItemProps) {
   const theme = useTheme();
 
   const [localThreshold, setLocalThreshold] = useState<number | null>(threshold.threshold);
 
   const isValid = localThreshold !== null && localThreshold > 0;
 
-  const updateThreshold = () => {
+  const updateThresholdLocal = () => {
     if (localThreshold === null || localThreshold < 0) return;
-    updateHorizontalThreshold({...threshold, threshold: localThreshold});
+    updateThreshold({...threshold, threshold: localThreshold});
     setEditingThresholdKey(null);
   };
 
@@ -139,7 +139,7 @@ export default function HorizontalThresholdItem({
               const value = e.target.value === '' ? null : Number(e.target.value);
               setLocalThreshold(value);
             }}
-            onSave={updateThreshold}
+            onSave={updateThresholdLocal}
             onCancel={() => setEditingThresholdKey(null)}
             isSaveDisabled={!isValid}
           />
@@ -195,7 +195,7 @@ export default function HorizontalThresholdItem({
                   onClick={(e) => {
                     e.stopPropagation();
                     if (!isDisabled) {
-                      removeHorizontalThreshold(thresholdKey);
+                      removeThreshold(thresholdKey);
                     }
                   }}
                   disabled={isDisabled}

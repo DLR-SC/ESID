@@ -21,21 +21,21 @@ import styled from '@mui/material/styles/styled';
 import {useAppDispatch} from 'store/hooks';
 import {selectDistrict, selectCompartment} from 'store/DataSelectionSlice';
 import {tableCellClasses} from '@mui/material/TableCell';
-import {HorizontalThreshold} from 'types/horizontalThreshold';
+import {Threshold} from 'types/threshold';
 import type {District} from 'types/district';
-import HorizontalThresholdItem from './HorizontalThresholdItem';
+import ThresholdItem from './ThresholdItem';
 import ThresholdInput from './ThresholdInput';
 import {useTranslation} from 'react-i18next';
 
-export interface HorizontalThresholdListProps {
+export interface ThresholdListProps {
   /** The list of horizontal thresholds to display */
-  horizontalThresholds: Record<string, HorizontalThreshold>;
+  thresholds: Record<string, Threshold>;
 
   /** The function to remove a horizontal threshold. */
-  removeHorizontalThreshold: (id: string) => void;
+  removeThreshold: (id: string) => void;
 
   /** The function to update a horizontal threshold. */
-  updateHorizontalThreshold: (newThreshold: HorizontalThreshold) => void;
+  updateThreshold: (newThreshold: Threshold) => void;
 
   /** The selected District */
   selectedDistrict: District;
@@ -55,14 +55,14 @@ const StyledTableCell = styled(TableCell)(({theme}) => ({
   },
 }));
 
-export default function HorizontalThresholdList({
-  horizontalThresholds,
-  removeHorizontalThreshold,
-  updateHorizontalThreshold,
+export default function ThresholdList({
+  thresholds,
+  removeThreshold,
+  updateThreshold,
   selectedDistrict,
   selectedCompartment,
   compartments,
-}: HorizontalThresholdListProps) {
+}: ThresholdListProps) {
   const {t} = useTranslation();
   const {t: tSettings} = useTranslation('settings');
   const theme = useTheme();
@@ -80,19 +80,19 @@ export default function HorizontalThresholdList({
   // Checks if the user is able to add a threshold
   useEffect(() => {
     const key = `${selectedDistrict.nuts}-${selectedCompartment}`;
-    const existingThreshold = horizontalThresholds[key];
+    const existingThreshold = thresholds[key];
     if (existingThreshold) {
       setAbleToAddThreshold(false);
       return;
     }
     setAbleToAddThreshold(true);
-  }, [selectedDistrict, selectedCompartment, horizontalThresholds]);
+  }, [selectedDistrict, selectedCompartment, thresholds]);
 
   // function to handle adding a new threshold
   const handleAddThreshold = () => {
     if (localThreshold === null || localThreshold < 0) return;
     const thresholdKey = `${selectedDistrict.nuts}-${selectedCompartment}`;
-    const existingThreshold = horizontalThresholds[thresholdKey];
+    const existingThreshold = thresholds[thresholdKey];
 
     if (existingThreshold) {
       return;
@@ -103,19 +103,19 @@ export default function HorizontalThresholdList({
       name: selectedDistrict.nuts === '00000' ? 'germany' : selectedDistrict.name,
     };
 
-    const newThreshold: HorizontalThreshold = {
+    const newThreshold: Threshold = {
       district: districtToAdd,
       compartment: selectedCompartment ?? '',
       threshold: localThreshold,
     };
 
-    updateHorizontalThreshold(newThreshold);
+    updateThreshold(newThreshold);
     setSelectedThresholdKey(thresholdKey);
     setLocalThreshold(null);
     setIsAddingThreshold(false);
   };
 
-  const handleSelectThreshold = (threshold: HorizontalThreshold) => {
+  const handleSelectThreshold = (threshold: Threshold) => {
     if (isAddingThreshold || editingThresholdKey !== null) {
       return;
     }
@@ -130,7 +130,7 @@ export default function HorizontalThresholdList({
         <TableHead>
           <TableRow>
             <StyledTableCell align='left'>
-              <Typography variant='h2'>{tSettings('horizontalThresholds.district')}</Typography>
+              <Typography variant='h2'>{tSettings('thresholds.district')}</Typography>
             </StyledTableCell>
             <StyledTableCell
               sx={{
@@ -138,7 +138,7 @@ export default function HorizontalThresholdList({
               }}
               align='left'
             >
-              <Typography variant='h2'>{tSettings('horizontalThresholds.compartment')}</Typography>
+              <Typography variant='h2'>{tSettings('thresholds.compartment')}</Typography>
             </StyledTableCell>
             <StyledTableCell
               sx={{
@@ -146,28 +146,28 @@ export default function HorizontalThresholdList({
               }}
               align='left'
             >
-              <Typography variant='h2'>{tSettings('horizontalThresholds.threshold')}</Typography>
+              <Typography variant='h2'>{tSettings('thresholds.threshold')}</Typography>
             </StyledTableCell>
           </TableRow>
         </TableHead>
-        {Object.entries(horizontalThresholds ?? {}).length === 0 && !isAddingThreshold ? (
+        {Object.entries(thresholds ?? {}).length === 0 && !isAddingThreshold ? (
           <TableBody>
             <TableRow>
               <StyledTableCell colSpan={3} align='center'>
-                <Typography variant='h2'>{tSettings('horizontalThresholds.noThresholds')}</Typography>
+                <Typography variant='h2'>{tSettings('thresholds.noThresholds')}</Typography>
               </StyledTableCell>
             </TableRow>
           </TableBody>
         ) : (
           <TableBody data-testid='horizontal-table-body-testid'>
-            {Object.entries(horizontalThresholds ?? {}).map(([key, threshold]) => {
+            {Object.entries(thresholds ?? {}).map(([key, threshold]) => {
               return (
-                <HorizontalThresholdItem
+                <ThresholdItem
                   key={key}
                   threshold={threshold}
                   thresholdKey={key}
-                  removeHorizontalThreshold={removeHorizontalThreshold}
-                  updateHorizontalThreshold={updateHorizontalThreshold}
+                  removeThreshold={removeThreshold}
+                  updateThreshold={updateThreshold}
                   districtName={t(`${threshold.district.name}`)}
                   compartmentName={compartments.find((c) => c.id === threshold.compartment)?.name}
                   thresholdValue={threshold.threshold}
@@ -237,7 +237,7 @@ export default function HorizontalThresholdList({
               }}
               onClick={() => {
                 const key = `${selectedDistrict.nuts}-${selectedCompartment}`;
-                const existingThreshold = horizontalThresholds[key];
+                const existingThreshold = thresholds[key];
 
                 if (existingThreshold) {
                   // handle error here, maybe show modal

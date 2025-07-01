@@ -26,7 +26,7 @@ export default function LineChartContainer() {
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
   const selectedDistrict = useAppSelector((state) => state.dataSelection.district);
   const selectedDate = useAppSelector((state) => state.dataSelection.date);
-  const horizontalThresholds = useAppSelector((state) => state.userPreference.horizontalYAxisThresholds ?? {});
+  const thresholds = useAppSelector((state) => state.userPreference.horizontalYAxisThresholds ?? {});
   const referenceDay = useAppSelector((state) => state.dataSelection.simulationStart);
   const minDate = useAppSelector((state) => state.dataSelection.minDate);
   const maxDate = useAppSelector((state) => state.dataSelection.maxDate);
@@ -114,15 +114,15 @@ export default function LineChartContainer() {
         maxDate={maxDate}
         referenceDay={referenceDay}
         yAxisLabel={yAxisLabel}
-        horizontalYAxisThreshold={horizontalThresholds[`${selectedDistrict.nuts}-${selectedCompartment}`]?.threshold}
+        horizontalYAxisThreshold={thresholds[`${selectedDistrict.nuts}-${selectedCompartment}`]?.threshold}
       />
       <LineChartSettings
         selectedDistrict={selectedDistrict}
         selectedCompartment={selectedCompartment ?? ''}
         compartments={compartmentNames}
-        horizontalThresholds={horizontalThresholds}
-        removeHorizontalThreshold={(id: string) => dispatch(removeHorizontalYAxisThreshold(id))}
-        updateHorizontalThreshold={(newThreshold) =>
+        thresholds={thresholds}
+        removeThreshold={(id: string) => dispatch(removeHorizontalYAxisThreshold(id))}
+        updateThreshold={(newThreshold) =>
           dispatch(
             updateHorizontalYAxisThreshold({
               key: `${newThreshold.district.nuts}-${newThreshold.compartment}`,

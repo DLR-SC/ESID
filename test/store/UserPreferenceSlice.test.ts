@@ -14,7 +14,7 @@ import reducer, {
 } from '@/store/UserPreferenceSlice';
 import {HeatmapLegend} from '@/types/heatmapLegend';
 import {District} from 'types/district';
-import {HorizontalThreshold} from 'types/horizontalThreshold';
+import {Threshold} from 'types/threshold';
 
 describe('DataSelectionSlice', () => {
   const initialState: UserPreference = {

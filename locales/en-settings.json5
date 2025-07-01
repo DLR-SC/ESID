@@ -7,7 +7,7 @@
   manageGroupsDescription: 'Set the group filters for each scenario',
   manageThreshold: 'Thresholds',
   manageThresholdDescription: 'Set threshold for the currently selected District and Compartment',
-  horizontalThresholds: {
+  thresholds: {
     title: 'Manage Threshold',
     district: 'District',
     compartment: 'Compartment',

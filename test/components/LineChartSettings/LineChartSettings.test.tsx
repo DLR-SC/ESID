@@ -10,13 +10,13 @@ import LineChartSettings from 'components/LineChartComponents/LineChartSettingsC
 import {Provider} from 'react-redux';
 import {Store} from '@/store';
 import {District} from 'types/district';
-import {HorizontalThreshold} from 'types/horizontalThreshold';
+import {Threshold} from 'types/threshold';
 import {userEvent} from '@testing-library/user-event';
 
 const LineChartSettingsTest: React.FC = () => {
   const selectedDistrict: District = {id: '1', nuts: '00000', name: 'district1', type: 'type1'};
   const selectedCompartment = 'Compartment 1';
-  const horizontalThresholds: Record<string, HorizontalThreshold> = {};
+  const thresholds: Record<string, HorizontalThreshold> = {};
 
   return (
     <div data-testid='line-chart-settings'>

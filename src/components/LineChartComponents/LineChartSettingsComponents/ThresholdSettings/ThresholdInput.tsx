@@ -6,6 +6,7 @@ import {Box, TextField, IconButton} from '@mui/material';
 import {useTheme} from '@mui/material/styles';
 import CheckIcon from '@mui/icons-material/Check';
 import CancelIcon from '@mui/icons-material/Cancel';
+import {useTranslation} from 'react-i18next';
 
 interface ThresholdInputProps {
   id: string;
@@ -27,6 +28,7 @@ export default function ThresholdInput({
   isSaveDisabled,
 }: ThresholdInputProps) {
   const theme = useTheme();
+  const {t} = useTranslation('settings');
   return (
     <Box
       sx={{
@@ -38,7 +40,7 @@ export default function ThresholdInput({
     >
       <TextField
         id={id}
-        label='Horizontal Threshold'
+        label={t('thresholds.threshold')}
         data-testid='threshold-input-testid'
         type='number'
         variant='outlined'
@@ -56,7 +58,7 @@ export default function ThresholdInput({
         }}
       >
         <IconButton
-          aria-label='add or edit Horizontal Threshold onto selected compartment and district'
+          aria-label='add or edit Threshold onto selected compartment and district'
           data-testid='save-threshold'
           onClick={onSave}
           disabled={isSaveDisabled}

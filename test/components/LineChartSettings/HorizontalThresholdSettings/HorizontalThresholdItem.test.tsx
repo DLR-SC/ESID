@@ -9,10 +9,10 @@ import {ThemeProvider} from '@mui/system';
 import Theme from 'util/Theme';
 import {Provider} from 'react-redux';
 import {Store} from 'store';
-import {HorizontalThreshold} from 'types/horizontalThreshold';
-import HorizontalThresholdItem from 'components/LineChartComponents/LineChartSettingsComponents/HorizontalThresholdSettings/HorizontalThresholdItem';
+import {Threshold} from 'types/threshold';
+import ThresholdItem from 'components/LineChartComponents/LineChartSettingsComponents/ThresholdSettings/ThresholdItem';
 
-type HorizontalThresholdItemTestProps = {
+type ThresholdItemTestProps = {
   isAddingThreshold?: boolean;
 };
 

@@ -10,19 +10,19 @@ import Theme from 'util/Theme';
 import {Provider} from 'react-redux';
 import {Store} from 'store';
 import {District} from 'types/district';
-import {HorizontalThreshold} from 'types/horizontalThreshold';
-import HorizontalThresholdList from 'components/LineChartComponents/LineChartSettingsComponents/HorizontalThresholdSettings/HorizontalThresholdList';
+import {Threshold} from 'types/threshold';
+import ThresholdList from 'components/LineChartComponents/LineChartSettingsComponents/ThresholdSettings/ThresholdList';
 
-type HorizontalThresholdListTestProps = {
+type ThresholdListTestProps = {
   selectedDistrict?: District;
   selectedCompartment?: string;
 };
 
-const HorizontalThresholdListTest: React.FC<HorizontalThresholdListTestProps> = ({
+const ThresholdListTest: React.FC<ThresholdListTestProps> = ({
   selectedDistrict = {id: '1', nuts: '02000', name: 'district4', type: 'type4'},
   selectedCompartment = 'Compartment 4',
 }) => {
-  const [horizontalThresholds, setHorizontalThresholds] = useState<Record<string, HorizontalThreshold>>({
+  const [thresholds, setThresholds] = useState<Record<string, Threshold>>({
     '00000-Compartment 1': {
       threshold: 10,
       district: {id: '1', nuts: '00000', name: 'district1', type: 'type1'},
@@ -55,7 +55,7 @@ const HorizontalThresholdListTest: React.FC<HorizontalThresholdListTestProps> = 
     },
   });
 
-  const removeHorizontalThreshold = (id: string) => {
+  const removeThreshold = (id: string) => {
     setHorizontalThresholds((prev) => {
       const newThresholds = {...prev};
       delete newThresholds[id];
