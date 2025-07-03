@@ -153,6 +153,31 @@ export default function LineChartContainer() {
     });
   }, [groupFilterLineChartData, groupFilters, lineChartData, scenarios, scenariosState, selectedScenario]);
 
+  // Calculate maximum value from chart data
+  const maxDataValue = useMemo(() => {
+    if (!mappedLineChartData || mappedLineChartData.length === 0) {
+      return 0;
+    }
+
+    let maxValue = 0;
+
+    mappedLineChartData.forEach((serie) => {
+      serie.values.forEach((entry) => {
+        // Check main value
+        if (entry.value > maxValue) {
+          maxValue = entry.value;
+        }
+
+        // Check openValue if it exists (for percentile bands)
+        if (entry.openValue && entry.openValue > maxValue) {
+          maxValue = entry.openValue;
+        }
+      });
+    });
+
+    return maxValue;
+  }, [mappedLineChartData]);
+
   // Set reference day in store
   useEffect(() => {
     dispatch(setReferenceDayBottom(referenceDayBottomPosition));
@@ -175,6 +200,7 @@ export default function LineChartContainer() {
         referenceDay={referenceDay}
         yAxisLabel={yAxisLabel}
         horizontalYAxisThreshold={thresholds[`${selectedDistrict.nuts}-${selectedCompartment}`]?.threshold}
+        maxDataValue={maxDataValue}
       />
       <LineChartSettings
         selectedDistrict={selectedDistrict}
