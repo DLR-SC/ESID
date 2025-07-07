@@ -1,24 +1,23 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR) and CISPA Helmholtz Center for Information Security
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { useContext } from 'react';
+import React, {useContext} from 'react';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import { useAppDispatch, useAppSelector } from 'store/hooks';
-import { setAvailableRealms, setRealm } from 'store/RealmSlice';
-import { useTranslation } from 'react-i18next';
+import {useAppDispatch, useAppSelector} from 'store/hooks';
+import {setAvailableRealms, setRealm} from 'store/RealmSlice';
+import {useTranslation} from 'react-i18next';
 import Box from '@mui/material/Box';
-import { useLazyGetRealmsQuery } from 'store/services/idpApi';
+import {useLazyGetRealmsQuery} from 'store/services/idpApi';
 import CircularProgress from '@mui/material/CircularProgress';
-import { AuthContext, IAuthContext } from 'react-oauth2-code-pkce';
+import {AuthContext, IAuthContext} from 'react-oauth2-code-pkce';
 
 export function RealmSelect() {
-  const { t } = useTranslation();
+  const {t} = useTranslation();
   const dispatch = useAppDispatch();
-  const { token } = useContext<IAuthContext>(AuthContext);
-
+  const {token} = useContext<IAuthContext>(AuthContext);
 
   // use triggerGetRealms to explicitly fetch realms
   const [triggerGetRealms] = useLazyGetRealmsQuery();
@@ -58,8 +57,8 @@ export function RealmSelect() {
   };
 
   return (
-    <Box sx={{ my: 2 }}>
-      <FormControl size='small' sx={{ minWidth: 120 }}>
+    <Box sx={{my: 2}}>
+      <FormControl size='small' sx={{minWidth: 120}}>
         <InputLabel id='login-dialog-realm-select-label'>{t('topBar.org')}</InputLabel>
         <Select
           labelId='login-dialog-realm-select-label'

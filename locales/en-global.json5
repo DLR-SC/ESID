@@ -18,6 +18,7 @@
       accessibility: 'Accessibility',
       attribution: 'Attribution',
       changelog: 'Changelog',
+      admin: 'Admin',
     },
   },
   'icon-bar': {
