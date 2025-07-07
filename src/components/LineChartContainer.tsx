@@ -13,8 +13,11 @@ import {useTranslation} from 'react-i18next';
 import {LineChartData} from 'types/lineChart';
 import {InfectionData} from 'store/services/APITypes';
 import {DataContext} from 'context/SelectedDataContext';
-import {updateHorizontalYAxisThreshold, removeHorizontalYAxisThreshold} from 'store/UserPreferenceSlice';
-
+import {
+  updateHorizontalYAxisThreshold,
+  removeHorizontalYAxisThreshold,
+  setYAxisMaxValue,
+} from 'store/UserPreferenceSlice';
 export default function LineChartContainer() {
   const {t: tBackend, i18n: i18nBackend} = useTranslation('backend');
   const theme = useTheme();
@@ -28,6 +31,7 @@ export default function LineChartContainer() {
   const selectedDistrict = useAppSelector((state) => state.dataSelection.district);
   const selectedDate = useAppSelector((state) => state.dataSelection.date);
   const thresholds = useAppSelector((state) => state.userPreference.horizontalYAxisThresholds ?? {});
+  const yAxisMaxValue = useAppSelector((state) => state.userPreference.yAxisMaxValue ?? {});
   const referenceDay = useAppSelector((state) => state.dataSelection.simulationStart);
   const minDate = useAppSelector((state) => state.dataSelection.minDate);
   const maxDate = useAppSelector((state) => state.dataSelection.maxDate);
@@ -200,7 +204,7 @@ export default function LineChartContainer() {
         referenceDay={referenceDay}
         yAxisLabel={yAxisLabel}
         horizontalYAxisThreshold={thresholds[`${selectedDistrict.nuts}-${selectedCompartment}`]?.threshold}
-        maxDataValue={maxDataValue}
+        maxDataValue={yAxisMaxValue[`${selectedDistrict.nuts}-${selectedCompartment}`] ?? undefined}
       />
       <LineChartSettings
         selectedDistrict={selectedDistrict}
@@ -213,6 +217,15 @@ export default function LineChartContainer() {
             updateHorizontalYAxisThreshold({
               key: `${newThreshold.district.nuts}-${newThreshold.compartment}`,
               threshold: newThreshold,
+            })
+          )
+        }
+        yAxisMaxValue={yAxisMaxValue[`${selectedDistrict.nuts}-${selectedCompartment}`]}
+        updateYAxisMaxValue={(newYAxisMaxValue: number) =>
+          dispatch(
+            setYAxisMaxValue({
+              key: `${selectedDistrict.nuts}-${selectedCompartment}`,
+              value: newYAxisMaxValue,
             })
           )
         }

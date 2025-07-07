@@ -169,17 +169,18 @@ export default function LineChart({
   );
 
   const yAxisSettings = useMemo(() => {
-    if (!root || !chart) {
+    if (!root || !chart || chart.isDisposed() || root.isDisposed()) {
       return null;
     }
     return {
       renderer: AxisRendererY.new(root, {}),
+
+      strictMinMax: true,
       // Fix lower end to 0
       min: 0,
       // Add tooltip instance so cursor can display value
 
-      //here we can set the max value of the y-axis, if we want to limit the y-axis to a certain value
-      max: maxDataValue,
+      max: maxDataValue ?? undefined,
 
       tooltip: Tooltip.new(root, {}),
     };

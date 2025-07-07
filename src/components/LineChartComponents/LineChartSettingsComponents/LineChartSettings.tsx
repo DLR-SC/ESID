@@ -12,16 +12,18 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import DataThresholdingIcon from '@mui/icons-material/DataThresholdingRounded';
+import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
 import type {Threshold} from 'types/threshold';
 import type {District} from 'types/district';
 import {useTranslation} from 'react-i18next';
 import ThresholdSettings from './ThresholdSettings/ThresholdSettings';
+import YAxisValueSettings from './yAxisValueSettings/yAxisValueSettings';
 
 /**
  * The different views that can be displayed in the settings popover.
  * You can add more views here if you want to add more settings.
  */
-type SettingsView = 'settingsMenu' | 'thresholdSettings' | 'filters';
+type SettingsView = 'settingsMenu' | 'thresholdSettings' | 'yAxisMaxValueSettings';
 
 type SettingsMenu = {
   [key: string]: {
@@ -49,6 +51,12 @@ export interface LineChartSettingsProps {
 
   /** The function to update a horizontal threshold. */
   updateThreshold: (newThreshold: Threshold) => void;
+
+  /** The maximum value for the y-axis. */
+  yAxisMaxValue: number;
+
+  /** The function to update the maximum value for the y-axis. */
+  updateYAxisMaxValue: (newYAxisMaxValue: number) => void;
 }
 
 /**
@@ -63,6 +71,8 @@ export default function LineChartSettings({
   thresholds,
   removeThreshold,
   updateThreshold,
+  yAxisMaxValue,
+  updateYAxisMaxValue,
 }: LineChartSettingsProps) {
   const {t: tSettings} = useTranslation('settings');
 
@@ -81,11 +91,12 @@ export default function LineChartSettings({
         />
       ),
     },
-    // filters: {
-    //   label: tSettings('manageGroups'),
-    //   view: 'filters',
-    //   icon: <HorizontalRuleIcon />,
-    // },
+    yAxisMaxValue: {
+      label: tSettings('yAxisMaxValue'),
+      description: tSettings('yAxisMaxValueDescription'),
+      view: 'yAxisMaxValueSettings',
+      icon: <HorizontalRuleIcon />,
+    },
   };
 
   const [currentView, setCurrentView] = useState<SettingsView>('settingsMenu');
@@ -207,6 +218,17 @@ export default function LineChartSettings({
               thresholds={thresholds}
               removeThreshold={removeThreshold}
               updateThreshold={updateThreshold}
+            />
+          </Box>
+        )}
+        {currentView === 'yAxisMaxValueSettings' && (
+          <Box p={4}>
+            {renderHeader(tSettings('yAxisMaxValue'))}
+            <YAxisValueSettings
+              selectedDistrict={selectedDistrict}
+              selectedCompartment={selectedCompartment}
+              yAxisMaxValue={yAxisMaxValue}
+              updateYAxisMaxValue={updateYAxisMaxValue}
             />
           </Box>
         )}
