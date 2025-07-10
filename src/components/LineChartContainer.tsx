@@ -93,23 +93,18 @@ export default function LineChartContainer() {
         const STROKE_PATTERNS = [
           [2, 2], // Dotted
           [8, 4], // Dashed
-          [4, 2, 2, 2], // Dash dot
           [8, 4, 2, 4], // Long dash dot
           [2, 2, 8, 2], // Dot dash dash
           [16, 4], // Extra long dash
           [8, 4, 2, 4, 2, 4], // Long dash dot dot
         ];
 
-        const generateHTMLBorder = (pattern: Array<number>, color: string, width: number = 40): string => {
+        const generateHTMLBorder = (pattern: Array<number>, color: string, width: number = 30): string => {
           let html = `<div style="display: flex; align-items: center; width: ${width}px">`;
           const sum = pattern.reduce((acc, curr) => acc + curr, 0);
           for (let x = 0; x <= width; x += sum) {
             for (let i = 0; i < pattern.length; i++) {
-              if (i % 2 === 0) {
-                html += `<div style="height: 2px; width: ${pattern[i]}px; background: ${color}"></div>`;
-              } else {
-                html += `<div style="height: 1px; width: ${pattern[i]}px; background: transparent"></div>`;
-              }
+              html += `<div style="height: 2px; width: ${pattern[i]}px; background: ${i % 2 === 0 ? color : 'transparent'}"></div>`;
             }
           }
           return html + '</div>';
