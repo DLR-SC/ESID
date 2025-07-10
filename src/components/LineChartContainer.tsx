@@ -19,7 +19,7 @@ export default function LineChartContainer() {
   const theme = useTheme();
   const dispatch = useAppDispatch();
 
-  const {lineChartData, scenarios, compartments} = useContext(DataContext)!;
+  const {lineChartData, scenarios, compartments, groupFilterData} = useContext(DataContext)!;
 
   const scenariosState = useAppSelector((state) => state.dataSelection.scenarios);
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
@@ -30,6 +30,7 @@ export default function LineChartContainer() {
   const referenceDay = useAppSelector((state) => state.dataSelection.simulationStart);
   const minDate = useAppSelector((state) => state.dataSelection.minDate);
   const maxDate = useAppSelector((state) => state.dataSelection.maxDate);
+  const groups = useAppSelector((state) => state.dataSelection.groupFilters);
 
   const [referenceDayBottomPosition, setReferenceDayBottomPosition] = useState<number>(0);
 

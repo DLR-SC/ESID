@@ -30,6 +30,7 @@ import {useAppDispatch, useAppSelector} from 'store/hooks';
 import ScenarioLibrary from './ScenarioLibrary';
 import {dateToISOString} from 'util/util';
 import {DataContext} from 'context/SelectedDataContext';
+import {FilterValues} from 'types/card';
 
 interface ScenarioContainerProps {
   /** The minimum number of compartment rows.*/
@@ -57,6 +58,7 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
     referenceDateValues,
     groups,
     groupCategories,
+    groupFilterData,
   } = useContext(DataContext)!;
 
   const groupFilters = useAppSelector((state) => state.dataSelection.groupFilters);
@@ -147,8 +149,43 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
   }, [compartmentNames, scenarioCardData, scenariosState]);
 
   const filterValues = useMemo(() => {
-    return {}; // TODO
-  }, []);
+    const result: Record<string, FilterValues[]> = {};
+
+    Object.keys(scenariosState).forEach((id) => {
+      const scenarioFilterData = groupFilterData[id];
+      const values: Array<FilterValues> = [];
+
+      Object.entries(groupFilters)
+        .filter(([_, filter]) => filter.isVisible)
+        .forEach(([_, filter]) => {
+          const title = filter.name;
+          const valueMap: Record<string, number> = {};
+
+          compartmentNames.forEach((compartment) => {
+            valueMap[compartment.id] = 0;
+          });
+
+          if (filter.groups['age']) {
+            filter.groups['age'].forEach((group) => {
+              scenarioFilterData?.forEach((entry) => {
+                if (entry.group === group && entry.compartment) {
+                  valueMap[entry.compartment] += entry.value;
+                }
+              });
+            });
+          }
+
+          values.push({
+            filteredTitle: title,
+            filteredValues: valueMap,
+          });
+        });
+
+      result[id] = values;
+    });
+
+    return result;
+  }, [compartmentNames, groupFilterData, groupFilters, scenariosState]);
 
   const localization = useMemo(() => {
     return {
