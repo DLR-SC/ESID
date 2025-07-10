@@ -58,7 +58,7 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
     referenceDateValues,
     groups,
     groupCategories,
-    groupFilterData,
+    groupFilterCardData,
   } = useContext(DataContext)!;
 
   const groupFilters = useAppSelector((state) => state.dataSelection.groupFilters);
@@ -149,43 +149,47 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
   }, [compartmentNames, scenarioCardData, scenariosState]);
 
   const filterValues = useMemo(() => {
-    const result: Record<string, FilterValues[]> = {};
+    // Create a result map for all scenarios
+    return Object.keys(scenariosState).reduce(
+      (result, id) => {
+        const scenarioFilterData = groupFilterCardData[id];
 
-    Object.keys(scenariosState).forEach((id) => {
-      const scenarioFilterData = groupFilterData[id];
-      const values: Array<FilterValues> = [];
+        // Process only visible filters
+        result[id] = Object.values(groupFilters)
+          .filter((filter) => filter.isVisible)
+          .map((filter) => {
+            // Initialize compartment values to 0
+            const valueMap = compartmentNames.reduce(
+              (map, compartment) => {
+                map[compartment.id] = 0;
+                return map;
+              },
+              {} as Record<string, number>
+            );
 
-      Object.entries(groupFilters)
-        .filter(([_, filter]) => filter.isVisible)
-        .forEach(([_, filter]) => {
-          const title = filter.name;
-          const valueMap: Record<string, number> = {};
-
-          compartmentNames.forEach((compartment) => {
-            valueMap[compartment.id] = 0;
-          });
-
-          if (filter.groups['age']) {
-            filter.groups['age'].forEach((group) => {
-              scenarioFilterData?.forEach((entry) => {
-                if (entry.group === group && entry.compartment) {
-                  valueMap[entry.compartment] += entry.value;
-                }
+            // Process age groups if they exist
+            if (filter.groups['age']) {
+              // Sum values for each group and compartment
+              filter.groups['age'].forEach((group) => {
+                scenarioFilterData?.forEach((entry) => {
+                  if (entry.group === group && entry.compartment) {
+                    valueMap[entry.compartment] += entry.value;
+                  }
+                });
               });
-            });
-          }
+            }
 
-          values.push({
-            filteredTitle: title,
-            filteredValues: valueMap,
+            return {
+              filteredTitle: filter.name,
+              filteredValues: valueMap,
+            };
           });
-        });
 
-      result[id] = values;
-    });
-
-    return result;
-  }, [compartmentNames, groupFilterData, groupFilters, scenariosState]);
+        return result;
+      },
+      {} as Record<string, FilterValues[]>
+    );
+  }, [compartmentNames, groupFilterCardData, groupFilters, scenariosState]);
 
   const localization = useMemo(() => {
     return {
