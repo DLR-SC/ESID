@@ -27,6 +27,9 @@ SPDX-License-Identifier: CC-BY-4.0
 - Die Validierung des Anwendungszustands ist jetzt robuster. Wenn während der Validierung etwas schiefgeht, wird eine Warnung in der unteren linken Ecke angezeigt.
 - Die Falldaten und das Basis-Szenario werden jetzt immer als erste zwei Szenarien angezeigt.
 - Nur eingeloggte Nutzer haben Zugriff auf den "Szenario Erstellen" Button.
+- Informationen zu Szenariokarten können nun angesehen werden:
+  - In der Bibliothek, wenn die Maus über eine Karte hovered.
+  - Auf der Hauptseite über den Infobutton unter der Karte.
 
 ### Fehlerbehebungen
 
