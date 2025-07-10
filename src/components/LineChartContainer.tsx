@@ -99,7 +99,8 @@ export default function LineChartContainer() {
           [8, 4, 2, 4, 2, 4], // Long dash dot dot
         ];
 
-        const generateHTMLBorder = (pattern: Array<number>, color: string, width: number = 30): string => {
+        // This generates a stroke pattern out of HTML divs to display in the tooltip.
+        const generateHTMLStrokePattern = (pattern: Array<number>, color: string, width: number = 36): string => {
           let html = `<div style="display: flex; align-items: center; width: ${width}px">`;
           const sum = pattern.reduce((acc, curr) => acc + curr, 0);
           for (let x = 0; x <= width; x += sum) {
@@ -110,13 +111,17 @@ export default function LineChartContainer() {
           return html + '</div>';
         };
 
+        // Go over all group filters that are visible in the age group.
         Object.values(groupFilters)
           .filter((filter) => filter.isVisible)
           .filter((filter) => filter.groups['age'])
           .forEach((filter, index) => {
+            // Get the entries that belong to this group.
             const filterData = groupFilterLineChartData.filter((entry) =>
               filter.groups['age'].includes(entry?.group ?? '')
             );
+
+            // Sum by day.
             const dailySums = filterData.reduce((acc: Record<string, number>, curr) => {
               if (!curr?.date || curr?.value === undefined) return acc;
               acc[curr.date] = (acc[curr.date] || 0) + curr.value;
@@ -127,8 +132,8 @@ export default function LineChartContainer() {
               seriesId: `${id}-${filter.id}`,
               name: `
                 <div style="display: flex; align-items: center; gap: 5px">
-                  ${generateHTMLBorder(STROKE_PATTERNS[index % STROKE_PATTERNS.length], scenariosState[id]?.colors[0] ?? 'transparent')}
-                  ${scenariosState[id].name} - ${filter.name}
+                  ${generateHTMLStrokePattern(STROKE_PATTERNS[index % STROKE_PATTERNS.length], scenariosState[id]?.colors[0] ?? 'transparent')}
+                  ${filter.name}
                 </div>`,
               visible: true,
               stroke: {
