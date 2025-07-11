@@ -123,11 +123,13 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
 
   const translatedGroups = useMemo(
     () =>
-      groups?.map((group) => ({
-        id: group.id,
-        name: tBackend(`group-filters.groups.${group.name}`),
-        category: group.category,
-      })) ?? [],
+      groups
+        ?.filter((group) => group.name !== 'Total')
+        .map((group) => ({
+          id: group.id,
+          name: tBackend(`group-filters.groups.${group.name}`),
+          category: group.category,
+        })) ?? [],
     [groups, tBackend]
   );
 
@@ -169,13 +171,17 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
 
             // Process age groups if they exist
             if (filter.groups['age']) {
-              // Sum values for each group and compartment
-              filter.groups['age'].forEach((group) => {
-                scenarioFilterData?.forEach((entry) => {
-                  if (entry.group === group && entry.compartment) {
-                    valueMap[entry.compartment] += entry.value;
-                  }
-                });
+              // Sum values by aggregating data based on filter criteria
+              const filterData =
+                scenarioFilterData?.filter(
+                  (entry) => filter.groups['age'].includes(entry.group || '') && entry.compartment
+                ) || [];
+
+              // Aggregate values by compartment
+              filterData.forEach((entry) => {
+                if (entry.compartment) {
+                  valueMap[entry.compartment] += entry.value;
+                }
               });
             }
 
