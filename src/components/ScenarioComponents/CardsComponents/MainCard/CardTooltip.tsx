@@ -168,7 +168,9 @@ export default function CardTooltip({
                 event.stopPropagation();
                 setShowDescription(!showDescription);
               }}
-              aria-label={showDescription ? defaultT('scenario.hide-description') : defaultT('scenario.show-description')}
+              aria-label={
+                showDescription ? defaultT('scenario.hide-description') : defaultT('scenario.show-description')
+              }
             >
               {showDescription ? <TableRowsIcon /> : <InfoIcon />}
             </IconButton>
