@@ -50,7 +50,7 @@
     'reference-day': 'Referenztag',
     description: 'Beschreibung',
     dates: 'Zeitspanne',
-    'active-npis': 'Active Interventionen',
+    'active-npis': 'Aktive Interventionen',
     model: 'Modell',
     regions: 'Regionen',
   },
