@@ -178,6 +178,7 @@ export default function LineChart({
       strictMinMax: true,
       // Fix lower end to 0
       min: 0,
+
       // Add tooltip instance so cursor can display value
 
       max: maxDataValue ?? undefined,
@@ -187,6 +188,17 @@ export default function LineChart({
   }, [root, chart, maxDataValue]);
 
   const yAxis = useValueAxis(root, chart, yAxisSettings);
+
+  // max value y-axis change so that its not recreated everytime max value changes
+  useLayoutEffect(() => {
+    if (!yAxis || !root || !chart || chart.isDisposed() || root.isDisposed()) return;
+
+    if (maxDataValue != null) {
+      yAxis.set('max', maxDataValue);
+    } else {
+      yAxis.set('max', undefined);
+    }
+  }, [yAxis, maxDataValue, root, chart]);
 
   // Effect to add cursor to chart
   useLayoutEffect(() => {
