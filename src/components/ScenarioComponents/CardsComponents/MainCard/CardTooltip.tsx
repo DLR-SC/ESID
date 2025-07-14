@@ -159,7 +159,7 @@ export default function CardTooltip({
         </Tooltip>
         {isActive && (
           <Tooltip
-            title={showDescription ? defaultT('scenario.hideDescription') : defaultT('scenario.showDescription')}
+            title={showDescription ? defaultT('scenario.hide-description') : defaultT('scenario.show-description')}
             arrow={true}
           >
             <IconButton
