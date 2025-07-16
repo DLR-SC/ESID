@@ -37,6 +37,7 @@ export default function ScenarioDescription({
       <Box
         sx={{
           padding: 3,
+          hyphens: 'auto',
         }}
       >
         <DescriptionSection title={t('scenario.description')} content={description} />
