@@ -109,12 +109,6 @@ export default function ApplicationMenu(): JSX.Element {
     setChangelogOpen(true);
   };
 
-  /** This method gets called, when the admin menu entry was clicked. */
-  const adminClicked = () => {
-    // redirect to the keycloak admin console
-    window.location.assign(`${import.meta.env.VITE_OAUTH_API_URL}/admin/${realm}/console`);
-  };
-
   return (
     <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'flex-end'}}>
       <Button
@@ -134,7 +128,11 @@ export default function ApplicationMenu(): JSX.Element {
             {t('topBar.menu.login')}
           </MenuItem>
         )}
-        {isAdmin && <MenuItem onClick={adminClicked}>{t('topBar.menu.admin')}</MenuItem>}
+        {isAdmin && (
+          <MenuItem component='a' target='_blank' href={`${import.meta.env.VITE_OAUTH_API_URL}/admin/${realm}/console`}>
+            {t('topBar.menu.admin')}
+          </MenuItem>
+        )}
         <Divider />
         <MenuItem onClick={imprintClicked}>{t('topBar.menu.imprint')}</MenuItem>
         <MenuItem onClick={privacyPolicyClicked}>{t('topBar.menu.privacy-policy')}</MenuItem>
