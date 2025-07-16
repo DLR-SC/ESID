@@ -18,7 +18,7 @@
       accessibility: 'Barrierefreiheit',
       attribution: 'Attribution',
       changelog: 'Versionshistorie',
-      admin: 'admin',
+      admin: 'Admin',
     },
   },
   'icon-bar': {
