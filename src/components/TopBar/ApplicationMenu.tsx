@@ -19,6 +19,12 @@ const PrivacyPolicyDialog = React.lazy(() => import('./PopUps/PrivacyPolicyDialo
 const AccessibilityDialog = React.lazy(() => import('./PopUps/AccessibilityDialog'));
 const AttributionDialog = React.lazy(() => import('./PopUps/AttributionDialog'));
 
+type TokenData = {
+  realm_access?: {
+    roles?: string[];
+  };
+};
+
 /**
  * This menu is found at the top right of the application and is reachable from everywhere. It contains ways to access
  * advanced functionality and all legal texts.
@@ -27,12 +33,15 @@ export default function ApplicationMenu(): JSX.Element {
   const {t} = useTranslation();
 
   const realm = useAppSelector((state) => state.realm.name);
-  const {login, token, logOut, idToken} = useContext<IAuthContext>(AuthContext);
+  const {login, token, logOut, idToken, tokenData} = useContext<IAuthContext>(AuthContext);
 
   // user cannot login when realm is not selected
   const loginDisabled = realm === '';
   // user is authenticated when token is not empty
   const isAuthenticated = token !== '';
+
+  // user is admin (can manage users)
+  const isAdmin = tokenData && ((tokenData as TokenData).realm_access?.roles ?? []).includes('lha-user-admin');
 
   const [anchorElement, setAnchorElement] = React.useState<Element | null>(null);
   const [imprintOpen, setImprintOpen] = React.useState(false);
@@ -117,6 +126,11 @@ export default function ApplicationMenu(): JSX.Element {
         ) : (
           <MenuItem onClick={loginClicked} disabled={loginDisabled}>
             {t('topBar.menu.login')}
+          </MenuItem>
+        )}
+        {isAdmin && (
+          <MenuItem component='a' target='_blank' href={`${import.meta.env.VITE_OAUTH_API_URL}/admin/${realm}/console`}>
+            {t('topBar.menu.admin')}
           </MenuItem>
         )}
         <Divider />
