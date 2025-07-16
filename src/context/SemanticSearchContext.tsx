@@ -4,7 +4,6 @@
 import React, {createContext, useContext, useState, useMemo, useCallback} from 'react';
 import {useLazySearchArticlesQuery} from 'store/services/articleApi';
 import {SearchResult, SemanticSearchContextType} from 'types/semanticSearch';
-import {Article} from 'store/ArticleSlice';
 import {useAppDispatch, useAppSelector} from 'store/hooks';
 import {setSemanticSearchStatus, resetSemanticSearch} from 'store/SemanticSearchSlice';
 
@@ -14,11 +13,6 @@ interface SemanticSearchProviderProps {
   children: React.ReactNode;
 }
 
-/**
- * Provides a "Data Socket" for the semantic search feature.
- * It uses the existing lazy query to fetch articles on-demand and then
- * simulates the semantic search results on the client-side.
- */
 export function SemanticSearchProvider({children}: SemanticSearchProviderProps) {
   const [triggerSearch, {isLoading}] = useLazySearchArticlesQuery();
   const [augmentedResults, setAugmentedResults] = useState<SearchResult[]>([]);
@@ -35,45 +29,42 @@ export function SemanticSearchProvider({children}: SemanticSearchProviderProps) 
       }
 
       dispatch(setSemanticSearchStatus('loading'));
-      setTimeout(() => {
-        triggerSearch(query)
-          .unwrap()
-          .then((fetchedArticles) => {
-            const lowerCaseQuery = query.toLowerCase();
-            const queryTerms = lowerCaseQuery.split(' ').filter((term) => term.length > 2);
+      triggerSearch(query)
+        .unwrap()
+        .then((apiResponse) => {
+          const lowerCaseQuery = query.toLowerCase();
+          const queryTerms = lowerCaseQuery.split(' ').filter((term) => term.length > 2);
 
-            const newResults: SearchResult[] = fetchedArticles.map((article: Article) => {
-              let relevanceScore = Math.floor(Math.random() * 40) + 60;
-              if (article.title.toLowerCase().includes(lowerCaseQuery)) {
-                relevanceScore = Math.min(99, relevanceScore + 15);
-              }
+          const newResults: SearchResult[] = apiResponse.results.map((item) => {
+            const relevanceScore = Math.round(item.similarity * 100);
 
-              let classification: 'direct' | 'high' | 'related';
-              if (relevanceScore >= 90) {
-                classification = 'direct';
-              } else if (relevanceScore >= 80) {
-                classification = 'high';
-              } else {
-                classification = 'related';
-              }
+            let classification: 'direct' | 'high' | 'related';
+            if (relevanceScore >= 90) {
+              classification = 'direct';
+            } else if (relevanceScore >= 80) {
+              classification = 'high';
+            } else {
+              classification = 'related';
+            }
 
-              return {
-                ...article,
-                relevanceScore,
-                classification,
-                highlightTerms: queryTerms,
-              };
-            });
-
-            newResults.sort((a, b) => b.relevanceScore - a.relevanceScore);
-            setAugmentedResults(newResults);
-            dispatch(setSemanticSearchStatus('succeeded'));
-          })
-          .catch((err) => {
-            console.error('Semantic search failed:', err);
-            dispatch(setSemanticSearchStatus('idle'));
+            return {
+              id: item.id.toString(),
+              title: `${item.filename} (p. ${item.page_num})`,
+              content: item.text_content,
+              relevanceScore,
+              classification,
+              highlightTerms: queryTerms,
+            };
           });
-      }, 0);
+
+          newResults.sort((a, b) => b.relevanceScore - a.relevanceScore);
+          setAugmentedResults(newResults);
+          dispatch(setSemanticSearchStatus('succeeded'));
+        })
+        .catch((err) => {
+          console.error('Semantic search failed:', err);
+          dispatch(setSemanticSearchStatus('idle'));
+        });
     },
     [dispatch, triggerSearch]
   );

@@ -1,12 +1,13 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import {Article} from 'store/ArticleSlice';
-
 /**
- * Extends the base Article type with additional fields for semantic search results.
+ * Defines the structure of a processed search result object used by the UI.
  */
-export interface SearchResult extends Article {
+export interface SearchResult {
+  id: string;
+  title: string;
+  content: string;
   relevanceScore: number;
   classification: 'direct' | 'high' | 'related';
   highlightTerms: string[];
