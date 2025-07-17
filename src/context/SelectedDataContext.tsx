@@ -40,7 +40,8 @@ interface DataContextType {
   referenceDateValues: InfectionData;
   scenarioCardData: Record<string, InfectionData>;
   scenarioCardMetaData: Record<string, Scenario>;
-  groupFilterData: Record<string, InfectionData>;
+  groupFilterCardData: Record<string, InfectionData>;
+  groupFilterLineChartData: InfectionData;
   groupCategories: GroupCategories;
   groups: Groups;
   scenarios: Scenarios;
@@ -150,7 +151,7 @@ export default function SelectedDataContext(props: {baseData: BaseData; children
       .flatMap((groupFilter) => Object.values(groupFilter.groups).flat());
   }, [groupFilters]);
 
-  const {data: groupFilterData} = useGetMultiScenarioInfectionDataQuery(
+  const {data: groupFilterCardData} = useGetMultiScenarioInfectionDataQuery(
     {
       pathIds: activeScenarios,
       query: {
@@ -163,6 +164,21 @@ export default function SelectedDataContext(props: {baseData: BaseData; children
     },
     {
       skip: activeScenarios.length === 0 || visibleGroups.length === 0,
+    }
+  );
+
+  const {data: groupFilterLineChartData} = useGetScenarioInfectionDataQuery(
+    {
+      path: {scenarioId: selectedScenario!},
+      query: {
+        compartments: [selectedCompartment!],
+        nodes: [selectedDistrict],
+        percentiles: ['50'],
+        groups: visibleGroups,
+      },
+    },
+    {
+      skip: !selectedScenario || visibleGroups.length === 0 || !selectedCompartment || !selectedDistrict,
     }
   );
 
@@ -208,7 +224,8 @@ export default function SelectedDataContext(props: {baseData: BaseData; children
       referenceDateValues: referenceDateValues ?? [],
       scenarioCardData: scenarioCardData ?? {},
       scenarioCardMetaData: scenarioCardMetaData ?? {},
-      groupFilterData: groupFilterData ?? {},
+      groupFilterCardData: groupFilterCardData ?? {},
+      groupFilterLineChartData: groupFilterLineChartData ?? [],
       selectedScenarioData: selectedScenarioData!,
       selectedSimulationModel: selectedSimulationModel!,
       parameterDefinitions: parameterDefinitions ?? {},
@@ -220,7 +237,8 @@ export default function SelectedDataContext(props: {baseData: BaseData; children
       referenceDateValues,
       scenarioCardData,
       scenarioCardMetaData,
-      groupFilterData,
+      groupFilterCardData,
+      groupFilterLineChartData,
       selectedScenarioData,
       selectedSimulationModel,
       parameterDefinitions,
