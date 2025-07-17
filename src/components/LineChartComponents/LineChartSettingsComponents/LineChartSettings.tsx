@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, {useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import SettingsIcon from '@mui/icons-material/Settings';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
@@ -18,6 +18,7 @@ import type {District} from 'types/district';
 import {useTranslation} from 'react-i18next';
 import ThresholdSettings from './ThresholdSettings/ThresholdSettings';
 import YAxisValueSettings from './yAxisValueSettings/yAxisValueSettings';
+import {NumberFormatter} from 'util/hooks';
 
 /**
  * The different views that can be displayed in the settings popover.
@@ -75,6 +76,7 @@ export default function LineChartSettings({
   updateYAxisMaxValue,
 }: LineChartSettingsProps) {
   const {t: tSettings} = useTranslation('settings');
+  const {i18n} = useTranslation();
 
   /**
    * The settings menu for the line chart. Each item in the menu has a label, a view, and an icon.
@@ -102,6 +104,14 @@ export default function LineChartSettings({
   const [currentView, setCurrentView] = useState<SettingsView>('settingsMenu');
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [showPopover, setShowPopover] = useState<boolean>(false);
+  const {formatNumber} = NumberFormatter(i18n.language, 1, 0);
+
+  const localization = useMemo(() => {
+    return {
+      formatNumber: formatNumber,
+      customLang: 'backend',
+    };
+  }, [formatNumber]);
 
   const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -229,6 +239,7 @@ export default function LineChartSettings({
               selectedCompartment={selectedCompartment}
               yAxisMaxValue={yAxisMaxValue}
               updateYAxisMaxValue={updateYAxisMaxValue}
+              localization={localization}
             />
           </Box>
         )}

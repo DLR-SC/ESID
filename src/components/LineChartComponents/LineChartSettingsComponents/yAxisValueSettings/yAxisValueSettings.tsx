@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import Box from '@mui/material/Box';
+import {Localization} from 'types/localization';
 import {District} from 'types/district';
 import {TextField, useTheme} from '@mui/material';
 import IconButton from '@mui/material/IconButton';
@@ -11,13 +12,26 @@ interface YAxisValueSettingsProps {
   selectedCompartment: string;
   yAxisMaxValue: number;
   updateYAxisMaxValue: (newYAxisMaxValue: number) => void;
+  localization: Localization;
 }
 
-export default function YAxisValueSettings({yAxisMaxValue, updateYAxisMaxValue}: YAxisValueSettingsProps) {
+export default function YAxisValueSettings({
+  yAxisMaxValue,
+  updateYAxisMaxValue,
+  localization = {
+    formatNumber: (value: number) => value.toString(),
+    customLang: 'global',
+    overrides: {},
+  },
+}: YAxisValueSettingsProps) {
   const theme = useTheme();
   const [localYAxisMaxValue, setLocalYAxisMaxValue] = useState<number | null>(yAxisMaxValue);
   const [, setEditingYAxisMaxValue] = useState<boolean>(false);
   const isValid = localYAxisMaxValue !== null && localYAxisMaxValue > 0;
+
+  function GetFormattedAndTranslatedValues(filteredValues: number): string {
+    return localization.formatNumber ? localization.formatNumber(filteredValues) : filteredValues.toString();
+  }
 
   return (
     <Box>
@@ -25,6 +39,7 @@ export default function YAxisValueSettings({yAxisMaxValue, updateYAxisMaxValue}:
         label='Y-Axis Max Value'
         id='y-axis-max-value'
         value={localYAxisMaxValue}
+        placeholder={GetFormattedAndTranslatedValues(yAxisMaxValue)}
         error={!isValid}
         onChange={(e) => {
           const value = e.target.value === '' ? null : Number(e.target.value);
