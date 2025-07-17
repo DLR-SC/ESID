@@ -30,6 +30,7 @@ SPDX-License-Identifier: CC-BY-4.0
 - Scenario card information can now be viewed:
   - In the library when hovering over a card with the mouse.
   - On the main page via the info button below the card.
+- Logged in admin users can now click on the Admin button in the application menu and access the user management.
 
 ### Bug fixes
 

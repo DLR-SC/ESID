@@ -30,6 +30,8 @@ SPDX-License-Identifier: CC-BY-4.0
 - Informationen zu Szenariokarten können nun angesehen werden:
   - In der Bibliothek, wenn die Maus über eine Karte hovered.
   - Auf der Hauptseite über den Infobutton unter der Karte.
+- Angemeldete Admin-Benutzer können jetzt auf die Schaltfläche Admin im Anwendungsmenü klicken und auf die Benutzerverwaltung zugreifen.
+
 
 ### Fehlerbehebungen
 
