@@ -179,13 +179,9 @@ export default function LineChart({
       // Fix lower end to 0
       min: 0,
 
-      // Add tooltip instance so cursor can display value
-
-      max: maxDataValue ?? undefined,
-
       tooltip: Tooltip.new(root, {}),
     };
-  }, [root, chart, maxDataValue]);
+  }, [root, chart]);
 
   const yAxis = useValueAxis(root, chart, yAxisSettings);
 

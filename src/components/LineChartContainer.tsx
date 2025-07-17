@@ -179,7 +179,7 @@ export default function LineChartContainer() {
       });
     });
 
-    return maxValue;
+    return Math.ceil(maxValue);
   }, [mappedLineChartData]);
 
   // Set reference day in store
@@ -220,7 +220,7 @@ export default function LineChartContainer() {
             })
           )
         }
-        yAxisMaxValue={yAxisMaxValue[`${selectedDistrict.nuts}-${selectedCompartment}`]}
+        yAxisMaxValue={yAxisMaxValue[`${selectedDistrict.nuts}-${selectedCompartment}`] ?? maxDataValue}
         updateYAxisMaxValue={(newYAxisMaxValue: number) =>
           dispatch(
             setYAxisMaxValue({
