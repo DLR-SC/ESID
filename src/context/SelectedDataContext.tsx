@@ -8,6 +8,7 @@ import {
   useGetModelQuery,
   useGetMultiParameterDefinitionsQuery,
   useGetMultiScenarioInfectionDataQuery,
+  useGetMultiScenariosQuery,
   useGetScenarioInfectionDataQuery,
   useGetScenarioQuery,
 } from 'store/services/scenarioApi';
@@ -38,6 +39,7 @@ interface DataContextType {
   lineChartData: Record<string, InfectionData>;
   referenceDateValues: InfectionData;
   scenarioCardData: Record<string, InfectionData>;
+  scenarioCardMetaData: Record<string, Scenario>;
   groupFilterData: Record<string, InfectionData>;
   groupCategories: GroupCategories;
   groups: Groups;
@@ -139,6 +141,8 @@ export default function SelectedDataContext(props: {baseData: BaseData; children
     }
   );
 
+  const {data: scenarioCardMetaData} = useGetMultiScenariosQuery(activeScenarios, {skip: activeScenarios.length === 0});
+
   // Fetch group filter data
   const visibleGroups = useMemo(() => {
     return Object.values(groupFilters)
@@ -203,6 +207,7 @@ export default function SelectedDataContext(props: {baseData: BaseData; children
       lineChartData: lineChartData ?? {},
       referenceDateValues: referenceDateValues ?? [],
       scenarioCardData: scenarioCardData ?? {},
+      scenarioCardMetaData: scenarioCardMetaData ?? {},
       groupFilterData: groupFilterData ?? {},
       selectedScenarioData: selectedScenarioData!,
       selectedSimulationModel: selectedSimulationModel!,
@@ -214,6 +219,7 @@ export default function SelectedDataContext(props: {baseData: BaseData; children
       lineChartData,
       referenceDateValues,
       scenarioCardData,
+      scenarioCardMetaData,
       groupFilterData,
       selectedScenarioData,
       selectedSimulationModel,
