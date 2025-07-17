@@ -1,9 +1,16 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, {createContext, useContext, useState, useMemo, useEffect} from 'react';
+import React, {createContext, useContext, useState, useMemo, useEffect, useCallback} from 'react';
 import {useLazySearchArticlesQuery} from 'store/services/articleApi';
-import {Article} from 'store/ArticleSlice';
+
+export interface Article {
+  id: string;
+  title: string;
+  content: string;
+  filename: string;
+  file_path: string;
+}
 
 interface ArticleDataContextType {
   articles: Article[];
@@ -32,24 +39,28 @@ export function ArticleDataProvider({children}: ArticleDataProviderProps) {
   useEffect(() => {
     if (searchResults) {
       const newArticles: Article[] = searchResults.results.map((item) => ({
-        id: item.id, // Keep as a number
+        id: item.id.toString(),
         title: `${item.filename} (p. ${item.page_num})`,
         content: item.text_content,
         filename: item.filename,
         file_path: '', // Not available in new API
-        // other fields are optional
       }));
       setArticles(newArticles);
     }
   }, [searchResults]);
 
-  const searchArticles = (query: string) => {
-    triggerSearch(query);
-  };
+  const searchArticles = useCallback(
+    (query: string) => {
+      triggerSearch(query).catch((error) => {
+        console.error('Failed to search articles:', error);
+      });
+    },
+    [triggerSearch]
+  );
 
-  const clearSearch = () => {
+  const clearSearch = useCallback(() => {
     setArticles([]);
-  };
+  }, []);
 
   const value = useMemo(
     () => ({
@@ -60,7 +71,7 @@ export function ArticleDataProvider({children}: ArticleDataProviderProps) {
       searchArticles,
       clearSearch,
     }),
-    [articles, isLoading, selectedArticle]
+    [articles, isLoading, selectedArticle, searchArticles, clearSearch]
   );
 
   return <ArticleDataContext.Provider value={value}>{children}</ArticleDataContext.Provider>;
