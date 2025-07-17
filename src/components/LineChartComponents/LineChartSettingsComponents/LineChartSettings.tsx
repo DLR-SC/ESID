@@ -12,16 +12,16 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import DataThresholdingIcon from '@mui/icons-material/DataThresholdingRounded';
-import type {HorizontalThreshold} from 'types/horizontalThreshold';
+import type {Threshold} from 'types/threshold';
 import type {District} from 'types/district';
 import {useTranslation} from 'react-i18next';
-import HorizontalThresholdSettings from './HorizontalThresholdSettings/HorizontalThresholdSettings';
+import ThresholdSettings from './ThresholdSettings/ThresholdSettings';
 
 /**
  * The different views that can be displayed in the settings popover.
  * You can add more views here if you want to add more settings.
  */
-type SettingsView = 'settingsMenu' | 'horizontalThresholdSettings' | 'filters';
+type SettingsView = 'settingsMenu' | 'thresholdSettings' | 'filters';
 
 type SettingsMenu = {
   [key: string]: {
@@ -42,13 +42,13 @@ export interface LineChartSettingsProps {
   compartments: Array<{id: string; name: string}>;
 
   /** The horizontal thresholds for the y-axis. */
-  horizontalThresholds: Record<string, HorizontalThreshold>;
+  thresholds: Record<string, Threshold>;
 
   /** The function to remove a horizontal threshold. */
-  removeHorizontalThreshold: (id: string) => void;
+  removeThreshold: (id: string) => void;
 
   /** The function to update a horizontal threshold. */
-  updateHorizontalThreshold: (newThreshold: HorizontalThreshold) => void;
+  updateThreshold: (newThreshold: Threshold) => void;
 }
 
 /**
@@ -60,9 +60,9 @@ export default function LineChartSettings({
   selectedDistrict,
   selectedCompartment,
   compartments,
-  horizontalThresholds,
-  removeHorizontalThreshold,
-  updateHorizontalThreshold,
+  thresholds,
+  removeThreshold,
+  updateThreshold,
 }: LineChartSettingsProps) {
   const {t: tSettings} = useTranslation('settings');
 
@@ -71,10 +71,10 @@ export default function LineChartSettings({
    */
 
   const settingsMenu: SettingsMenu = {
-    horizontalThreshold: {
+    threshold: {
       label: tSettings('manageThreshold'),
       description: tSettings('manageThresholdDescription'),
-      view: 'horizontalThresholdSettings',
+      view: 'thresholdSettings',
       icon: (
         <DataThresholdingIcon
           sx={{backgroundColor: 'primary.main', color: 'white', padding: '4px', borderRadius: '10%'}}
@@ -196,17 +196,17 @@ export default function LineChartSettings({
             ))}
           </Box>
         )}
-        {currentView === 'horizontalThresholdSettings' && (
+        {currentView === 'thresholdSettings' && (
           <Box p={4}>
-            {renderHeader(tSettings('horizontalThresholds.title'))}
+            {renderHeader(tSettings('thresholds.title'))}
 
-            <HorizontalThresholdSettings
+            <ThresholdSettings
               selectedDistrict={selectedDistrict}
               selectedCompartment={selectedCompartment}
               compartments={compartments}
-              horizontalThresholds={horizontalThresholds}
-              removeHorizontalThreshold={removeHorizontalThreshold}
-              updateHorizontalThreshold={updateHorizontalThreshold}
+              thresholds={thresholds}
+              removeThreshold={removeThreshold}
+              updateThreshold={updateThreshold}
             />
           </Box>
         )}

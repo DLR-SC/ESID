@@ -9,15 +9,15 @@ import {ThemeProvider} from '@mui/system';
 import Theme from 'util/Theme';
 import {Provider} from 'react-redux';
 import {Store} from 'store';
-import {HorizontalThreshold} from 'types/horizontalThreshold';
-import HorizontalThresholdItem from 'components/LineChartComponents/LineChartSettingsComponents/HorizontalThresholdSettings/HorizontalThresholdItem';
+import {Threshold} from 'types/threshold';
+import ThresholdItem from 'components/LineChartComponents/LineChartSettingsComponents/ThresholdSettings/ThresholdItem';
 
-type HorizontalThresholdItemTestProps = {
+type ThresholdItemTestProps = {
   isAddingThreshold?: boolean;
 };
 
-const HorizontalThresholdItemTest: React.FC<HorizontalThresholdItemTestProps> = ({isAddingThreshold = false}) => {
-  const [currentHorizontalThresholds, setCurrentHorizontalThresholds] = useState<Record<string, HorizontalThreshold>>({
+const ThresholdItemTest: React.FC<ThresholdItemTestProps> = ({isAddingThreshold = false}) => {
+  const [currentThresholds, setCurrentThresholds] = useState<Record<string, Threshold>>({
     '00000-Compartment 1': {
       threshold: 10,
       district: {id: '1', nuts: '00000', name: 'district1', type: 'type1'},
@@ -53,24 +53,24 @@ const HorizontalThresholdItemTest: React.FC<HorizontalThresholdItemTestProps> = 
   const [editingThresholdKey, setEditingThresholdKey] = useState<string | null>(null);
   const [selectedThresholdKey, setSelectedThresholdKey] = useState<string>('00000-Compartment 1');
 
-  const handleSelectThreshold = (threshold: HorizontalThreshold) => {
+  const handleSelectThreshold = (threshold: Threshold) => {
     if (isAddingThreshold || editingThresholdKey !== null) {
       return;
     }
     setSelectedThresholdKey(threshold.district.nuts + '-' + threshold.compartment);
   };
 
-  const removeHorizontalThreshold = (id: string) => {
-    setCurrentHorizontalThresholds((prev) => {
+  const removeThreshold = (id: string) => {
+    setCurrentThresholds((prev) => {
       const newThresholds = {...prev};
       delete newThresholds[id];
       return newThresholds;
     });
   };
 
-  const updateHorizontalThreshold = (newThreshold: HorizontalThreshold) => {
+  const updateThreshold = (newThreshold: Threshold) => {
     const key = `${newThreshold.district.nuts}-${newThreshold.compartment}`;
-    setCurrentHorizontalThresholds((prev) => ({
+    setCurrentThresholds((prev) => ({
       ...prev,
       [key]: newThreshold,
     }));
@@ -81,17 +81,17 @@ const HorizontalThresholdItemTest: React.FC<HorizontalThresholdItemTestProps> = 
       <ThemeProvider theme={Theme}>
         <table>
           <tbody>
-            {Object.entries(currentHorizontalThresholds ?? {}).map(([key, threshold]) => {
+            {Object.entries(currentThresholds ?? {}).map(([key, threshold]) => {
               return (
-                <HorizontalThresholdItem
+                <ThresholdItem
                   key={key}
                   threshold={threshold}
                   thresholdKey={key}
                   thresholdValue={threshold.threshold}
                   districtName={threshold.district.name}
                   compartmentName={threshold.compartment}
-                  removeHorizontalThreshold={removeHorizontalThreshold}
-                  updateHorizontalThreshold={updateHorizontalThreshold}
+                  removeThreshold={removeThreshold}
+                  updateThreshold={updateThreshold}
                   handleSelectThreshold={handleSelectThreshold}
                   editingThresholdKey={editingThresholdKey}
                   setEditingThresholdKey={setEditingThresholdKey}
@@ -109,9 +109,9 @@ const HorizontalThresholdItemTest: React.FC<HorizontalThresholdItemTestProps> = 
   );
 };
 
-describe('HorizontalThresholdItem Component', () => {
+describe('ThresholdItem Component', () => {
   test('correctly selects threshold item', async () => {
-    render(<HorizontalThresholdItemTest />);
+    render(<ThresholdItemTest />);
 
     // initial selected threshold item
     const initialThresholdItem = screen.getByTestId('threshold-item-00000-Compartment 1');
@@ -128,7 +128,7 @@ describe('HorizontalThresholdItem Component', () => {
   });
 
   test('clicking on the edit button should show the textfield input', async () => {
-    render(<HorizontalThresholdItemTest />);
+    render(<ThresholdItemTest />);
     const editThresholdButton = screen.getByTestId('edit-threshold-button-01001-Compartment 3');
     expect(editThresholdButton).toBeInTheDocument();
     await userEvent.click(editThresholdButton);
@@ -136,7 +136,7 @@ describe('HorizontalThresholdItem Component', () => {
   });
 
   test('should edit a threshold', async () => {
-    render(<HorizontalThresholdItemTest />);
+    render(<ThresholdItemTest />);
 
     // Click on the threshold item
     const thresholdItem = screen.getByTestId('threshold-item-01001-Compartment 3');
@@ -149,7 +149,7 @@ describe('HorizontalThresholdItem Component', () => {
     expect(await screen.findByText('60')).toBeInTheDocument();
     await userEvent.click(editThresholdButton);
 
-    const thresholdInput = await screen.findByLabelText('Horizontal Threshold');
+    const thresholdInput = await screen.findByLabelText('thresholds.threshold');
     const saveButton = screen.getByTestId('save-threshold');
     expect(saveButton).toBeInTheDocument();
     expect(thresholdInput).toBeInTheDocument();
@@ -166,7 +166,7 @@ describe('HorizontalThresholdItem Component', () => {
   });
 
   test('edit a threshold with negative number input', async () => {
-    render(<HorizontalThresholdItemTest />);
+    render(<ThresholdItemTest />);
 
     // Click on the threshold item
     const thresholdItem = screen.getByTestId('threshold-item-01001-Compartment 3');
@@ -180,7 +180,7 @@ describe('HorizontalThresholdItem Component', () => {
     await userEvent.click(editThresholdButton);
 
     // Edit the threshold with a negative number
-    const thresholdInput = await screen.findByLabelText('Horizontal Threshold');
+    const thresholdInput = await screen.findByLabelText('thresholds.threshold');
     const saveButton = screen.getByTestId('save-threshold');
     expect(saveButton).toBeInTheDocument();
     expect(thresholdInput).toBeInTheDocument();
@@ -197,7 +197,7 @@ describe('HorizontalThresholdItem Component', () => {
   });
 
   test('should delete a threshold', async () => {
-    render(<HorizontalThresholdItemTest />);
+    render(<ThresholdItemTest />);
 
     // Verify the threshold exists initially
     const thresholdItem = screen.getByTestId('threshold-item-01001-Compartment 3');
@@ -223,7 +223,7 @@ describe('HorizontalThresholdItem Component', () => {
   });
 
   test('should delete multiple thresholds', async () => {
-    render(<HorizontalThresholdItemTest />);
+    render(<ThresholdItemTest />);
 
     // Delete first threshold
     const firstThresholdItem = screen.getByTestId('threshold-item-00000-Compartment 1');
@@ -257,7 +257,7 @@ describe('HorizontalThresholdItem Component', () => {
   });
 
   test('should not be able to delete when editing another threshold', async () => {
-    render(<HorizontalThresholdItemTest />);
+    render(<ThresholdItemTest />);
 
     // Start editing one threshold
     const editThresholdButton = screen.getByTestId('edit-threshold-button-00000-Compartment 1');
@@ -273,7 +273,7 @@ describe('HorizontalThresholdItem Component', () => {
   });
 
   test('should not be able to delete when adding a new threshold', () => {
-    render(<HorizontalThresholdItemTest isAddingThreshold={true} />);
+    render(<ThresholdItemTest isAddingThreshold={true} />);
 
     // All delete buttons should be disabled when adding a threshold
     const deleteButtons = screen.getAllByTestId(/delete-threshold-button-/);

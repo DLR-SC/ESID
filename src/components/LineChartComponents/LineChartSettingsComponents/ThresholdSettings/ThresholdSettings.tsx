@@ -3,10 +3,10 @@
 
 import React from 'react';
 import type {District} from 'types/district';
-import type {HorizontalThreshold} from 'types/horizontalThreshold';
-import HorizontalThresholdList from './HorizontalThresholdList';
+import type {Threshold} from 'types/threshold';
+import ThresholdList from './ThresholdList';
 
-export interface HorizontalThresholdSettingsProps {
+export interface ThresholdSettingsProps {
   /** The district to which the settings apply. */
   selectedDistrict: District;
 
@@ -17,29 +17,29 @@ export interface HorizontalThresholdSettingsProps {
   compartments: Array<{id: string; name: string}>;
 
   /** The horizontal thresholds for the y-axis. */
-  horizontalThresholds: Record<string, HorizontalThreshold>;
+  thresholds: Record<string, Threshold>;
 
   /** The function to remove a horizontal threshold. */
-  removeHorizontalThreshold: (id: string) => void;
+  removeThreshold: (id: string) => void;
 
   /** The function to update a horizontal threshold. */
-  updateHorizontalThreshold: (newThreshold: HorizontalThreshold) => void;
+  updateThreshold: (newThreshold: Threshold) => void;
 }
 
-export default function HorizontalThresholdSettings({
+export default function ThresholdSettings({
   selectedDistrict,
   selectedCompartment,
   compartments,
-  horizontalThresholds,
-  removeHorizontalThreshold,
-  updateHorizontalThreshold,
-}: HorizontalThresholdSettingsProps) {
+  thresholds,
+  removeThreshold,
+  updateThreshold,
+}: ThresholdSettingsProps) {
   return (
-    <HorizontalThresholdList
-      horizontalThresholds={horizontalThresholds}
-      removeHorizontalThreshold={removeHorizontalThreshold}
+    <ThresholdList
+      thresholds={thresholds}
+      removeThreshold={removeThreshold}
       compartments={compartments}
-      updateHorizontalThreshold={updateHorizontalThreshold}
+      updateThreshold={updateThreshold}
       selectedDistrict={selectedDistrict}
       selectedCompartment={selectedCompartment}
     />

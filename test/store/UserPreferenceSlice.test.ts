@@ -14,7 +14,7 @@ import reducer, {
 } from '@/store/UserPreferenceSlice';
 import {HeatmapLegend} from '@/types/heatmapLegend';
 import {District} from 'types/district';
-import {HorizontalThreshold} from 'types/horizontalThreshold';
+import {Threshold} from 'types/threshold';
 
 describe('DataSelectionSlice', () => {
   const initialState: UserPreference = {
@@ -110,7 +110,7 @@ describe('DataSelectionSlice', () => {
       district: {id: '1', nuts: '11111', name: 'district1', type: 'type1'} as District,
       compartment: 'compartment1',
       threshold: 10,
-    } as HorizontalThreshold;
+    } as Threshold;
     expect(
       reducer(initialState, addHorizontalYAxisThreshold({key: '1-compartment1', threshold: newThreshold}))
     ).toEqual({
@@ -131,7 +131,7 @@ describe('DataSelectionSlice', () => {
       district: {id: '1', nuts: '11111', name: 'district1', type: 'type1'} as District,
       compartment: 'compartment1',
       threshold: 10,
-    } as HorizontalThreshold;
+    } as Threshold;
 
     expect(
       reducer(
@@ -151,7 +151,7 @@ describe('DataSelectionSlice', () => {
       district: {id: '1', nuts: '11111', name: 'district1', type: 'type1'} as District,
       compartment: 'compartment2',
       threshold: 20,
-    } as HorizontalThreshold;
+    } as Threshold;
 
     const initialStateWithThreshold = {
       ...initialState,
@@ -160,7 +160,7 @@ describe('DataSelectionSlice', () => {
           district: {id: '1', nuts: '11111', name: 'district1', type: 'type1'} as District,
           compartment: 'compartment1',
           threshold: 10,
-        } as HorizontalThreshold,
+        } as Threshold,
       },
     };
     expect(
@@ -175,7 +175,7 @@ describe('DataSelectionSlice', () => {
           district: {id: '1', nuts: '11111', name: 'district1', type: 'type1'} as District,
           compartment: 'compartment2',
           threshold: 20,
-        } as HorizontalThreshold,
+        } as Threshold,
       },
     });
   });
@@ -188,7 +188,7 @@ describe('DataSelectionSlice', () => {
           district: {id: '1', nuts: '11111', name: 'district1', type: 'type1'} as District,
           compartment: 'compartment1',
           threshold: 10,
-        } as HorizontalThreshold,
+        } as Threshold,
       },
     };
     expect(reducer(initialStateWithThreshold, removeHorizontalYAxisThreshold('11111-compartment1'))).toEqual({

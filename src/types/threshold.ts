@@ -6,7 +6,7 @@ import {District} from './district';
 /**
  * Represents the horizontal threshold for a specific district and compartment.
  */
-export interface HorizontalThreshold {
+export interface Threshold {
   /** The district for which the threshold applies (AGS). */
   district: District;
 
