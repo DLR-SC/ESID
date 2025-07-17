@@ -32,7 +32,6 @@ SPDX-License-Identifier: CC-BY-4.0
   - Auf der Hauptseite über den Infobutton unter der Karte.
 - Angemeldete Admin-Benutzer können jetzt auf die Schaltfläche Admin im Anwendungsmenü klicken und auf die Benutzerverwaltung zugreifen.
 
-
 ### Fehlerbehebungen
 
 - Die robustere Validierung eliminiert einen Großteil der Fehler.
