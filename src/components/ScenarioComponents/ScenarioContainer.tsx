@@ -31,6 +31,8 @@ import ScenarioLibrary from './ScenarioLibrary';
 import {dateToISOString} from 'util/util';
 import {DataContext} from 'context/SelectedDataContext';
 import {FilterValues} from 'types/card';
+import ScenarioDescription from 'components/ScenarioComponents/ScenarioDescription';
+import {Scenario} from 'store/services/APITypes';
 
 interface ScenarioContainerProps {
   /** The minimum number of compartment rows.*/
@@ -52,8 +54,11 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
   const theme = useTheme();
 
   const {
-    scenarios: scenarioData,
     scenarioCardData,
+    scenarioCardMetaData,
+    simulationModels,
+    nodeLists,
+    npis,
     compartments,
     referenceDateValues,
     groups,
@@ -71,7 +76,7 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
   const [resizeRef, resizeBoundingRect] = useBoundingclientrectRef();
 
   const scenarios = useMemo(() => {
-    if (!scenarioData) {
+    if (!scenarioCardMetaData) {
       return [];
     }
     return (
@@ -81,15 +86,34 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
             scenario.visibility === ScenarioVisibility.FaceUp || scenario.visibility === ScenarioVisibility.FaceDown
         )
         .map(([id, scenario]) => {
+          const backendScenario: Scenario | undefined = scenarioCardMetaData[id];
+          const model = simulationModels.find((model) => model.id === backendScenario?.modelId);
+          const nodeList = nodeLists.find((nodeList) => nodeList.id === backendScenario?.nodeListId);
+          const npiList = npis
+            .filter((npi) =>
+              backendScenario?.linkedInterventions.find((intervention) => intervention.interventionId === npi.id)
+            )
+            .map((npi) => tBackend(`interventions.${npi.name}`));
+
           return {
             id: id,
             name: scenario.name,
             color: scenario.colors[0],
             active: scenario.visibility == ScenarioVisibility.FaceUp,
+            description: backendScenario ? (
+              <ScenarioDescription
+                description={scenario.description}
+                startDate={new Date(backendScenario.startDate).toLocaleDateString(i18n.language)}
+                endDate={new Date(backendScenario.endDate).toLocaleDateString(i18n.language)}
+                model={tBackend(`models.${model?.name}`)}
+                nodeList={tBackend(`regions.${nodeList?.name}`)}
+                linkedInterventions={npiList}
+              />
+            ) : undefined,
           };
         }) ?? []
     );
-  }, [scenarioData, scenariosState]);
+  }, [i18n.language, nodeLists, npis, scenarioCardMetaData, scenariosState, simulationModels, tBackend]);
 
   const compartmentNames = useMemo(() => {
     return (

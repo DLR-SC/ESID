@@ -18,6 +18,7 @@
       accessibility: 'Barrierefreiheit',
       attribution: 'Attribution',
       changelog: 'Versionshistorie',
+      admin: 'Admin',
     },
   },
   'icon-bar': {
@@ -44,8 +45,15 @@
     activate: 'Scenario aktivieren',
     deactivate: 'Scenario deaktivieren',
     hide: 'In die Bibliothek verschieben',
+    'show-description': 'Beschreibung anzeigen',
+    'hide-description': 'Beschreibung verbergen',
     'manage-groups': 'Filter',
     'reference-day': 'Referenztag',
+    description: 'Beschreibung',
+    dates: 'Zeitspanne',
+    'active-npis': 'Aktive Interventionen',
+    model: 'Modell',
+    regions: 'Regionen',
   },
   'group-filters': {
     title: 'Gruppen Verwalten',

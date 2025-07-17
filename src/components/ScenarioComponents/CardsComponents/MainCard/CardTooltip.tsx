@@ -14,6 +14,8 @@ import Close from '@mui/icons-material/Close';
 import type {SyntheticListenerMap} from '@dnd-kit/core/dist/hooks/utilities';
 import type {DraggableAttributes} from '@dnd-kit/core';
 import DragIndicator from '@mui/icons-material/DragIndicator';
+import InfoIcon from '@mui/icons-material/Info';
+import TableRowsIcon from '@mui/icons-material/TableRows';
 
 interface CardTooltipProps {
   /** A boolean indicating whether the user is hovering over the card. */
@@ -24,6 +26,9 @@ interface CardTooltipProps {
 
   /** The title of the card. */
   id: string;
+
+  /** A description of the card's contents. */
+  description?: string;
 
   /** A function to set the selected scenario. */
   setSelected: Dispatch<{id: string; state: boolean}>;
@@ -54,6 +59,12 @@ interface CardTooltipProps {
 
   /** An object containing localization information (translation & number formatting).*/
   localization?: Localization;
+
+  /** A boolean indicating whether the description is visible */
+  showDescription: boolean;
+
+  /** A function to toggle the description visibility */
+  setShowDescription: Dispatch<boolean>;
 }
 
 /**
@@ -72,6 +83,8 @@ export default function CardTooltip({
   isDragging,
   draggable,
   setActivatorNodeRef,
+  showDescription,
+  setShowDescription,
   localization = {
     formatNumber: (value: number) => value.toString(),
     customLang: 'global',
@@ -144,6 +157,25 @@ export default function CardTooltip({
             <Close />
           </IconButton>
         </Tooltip>
+        {isActive && (
+          <Tooltip
+            title={showDescription ? defaultT('scenario.hide-description') : defaultT('scenario.show-description')}
+            arrow={true}
+          >
+            <IconButton
+              color={'primary'}
+              onClick={(event) => {
+                event.stopPropagation();
+                setShowDescription(!showDescription);
+              }}
+              aria-label={
+                showDescription ? defaultT('scenario.hide-description') : defaultT('scenario.show-description')
+              }
+            >
+              {showDescription ? <TableRowsIcon /> : <InfoIcon />}
+            </IconButton>
+          </Tooltip>
+        )}
       </Box>
 
       <IconButton

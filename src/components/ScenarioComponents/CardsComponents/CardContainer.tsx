@@ -28,14 +28,14 @@ interface CardContainerProps {
   referenceValues: Record<string, number> | undefined;
 
   /** A dictionary of filter values. This is an array of objects, each containing a title and a dictionary of numbers representing
-   * the filtered information to be displayed, it's used a dictionary because each card has to have the same amount of filter. */
+   * the filtered information to be displayed; it's used a dictionary because each card has to have the same amount of filter. */
   filterValues?: Record<string, FilterValues[]> | null;
 
   /** The compartment that is currently selected. */
   selectedCompartmentId: string | null;
 
   /** An array of scenarios. */
-  scenarios: Array<{id: string; name: string; color: string; active: boolean}>;
+  scenarios: Array<{id: string; name: string; color: string; active: boolean; description?: JSX.Element}>;
 
   /** A function to set the active scenarios. */
   setActiveScenario: Dispatch<{id: string; state: boolean}>;
@@ -142,6 +142,7 @@ export default function CardContainer({
       id={scenario.id}
       color={scenario.color}
       title={scenario.name}
+      description={scenario.description}
       compartmentsExpanded={compartmentsExpanded}
       compartmentValues={cardValues ? cardValues[scenario.id] : null}
       referenceValues={referenceValues ?? null}
