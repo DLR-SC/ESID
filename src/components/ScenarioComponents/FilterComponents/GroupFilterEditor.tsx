@@ -105,6 +105,35 @@ export default function GroupFilterEditor({
     [groupSelection, setGroupSelection]
   );
 
+  const toggleCategory = useCallback(
+    (categoryId: string) => {
+      const categoryGroups = groups.filter((group) => group.category === categoryId);
+      const allChecked = categoryGroups.length === groupSelection[categoryId].length;
+      setGroupSelection({
+        ...groupSelection,
+        [categoryId]: allChecked ? [] : categoryGroups.map((group) => group.id),
+      });
+      setUnsavedChanges(true);
+    },
+    [groupSelection, groups]
+  );
+
+  const isCategoryFullyChecked = useCallback(
+    (categoryId: string) => {
+      const totalGroups = groups.filter((group) => group.category === categoryId).length;
+      return totalGroups === groupSelection[categoryId].length;
+    },
+    [groupSelection, groups]
+  );
+
+  const isCategoryPartiallyChecked = useCallback(
+    (categoryId: string) => {
+      const totalGroups = groups.filter((group) => group.category === categoryId).length;
+      return groupSelection[categoryId].length > 0 && groupSelection[categoryId].length < totalGroups;
+    },
+    [groupSelection, groups]
+  );
+
   return (
     <Box
       sx={{
@@ -147,13 +176,24 @@ export default function GroupFilterEditor({
               flexDirection: 'column',
             }}
           >
-            <Typography
-              color={groupSelection[category.id].length > 0 ? theme.palette.text.primary : theme.palette.error.main}
-              variant='h2'
-            >
-              {category.name}
-            </Typography>
-            <FormGroup>
+            <FormControlLabel
+              label={
+                <Typography
+                  color={groupSelection[category.id].length > 0 ? theme.palette.text.primary : theme.palette.error.main}
+                  variant='h2'
+                >
+                  {category.name}
+                </Typography>
+              }
+              control={
+                <Checkbox
+                  checked={isCategoryFullyChecked(category.id)}
+                  indeterminate={isCategoryPartiallyChecked(category.id)}
+                  onClick={() => toggleCategory(category.id)}
+                />
+              }
+            />
+            <FormGroup sx={{paddingLeft: theme.spacing(3)}}>
               {groups
                 .filter((group) => group.category === category.id)
                 .map((group) => (

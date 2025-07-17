@@ -97,8 +97,7 @@ export default function GroupFilterCard({
           icon={<VisibilityOffOutlined color='disabled' />}
           checked={item.isVisible}
           onClick={() => {
-            item.isVisible = !item.isVisible;
-            toggleGroupFilter(item);
+            toggleGroupFilter({...item, isVisible: !item.isVisible});
           }}
         />
         <ConfirmDialog
