@@ -7,8 +7,8 @@
 export interface SearchResult {
   id: string;
   title: string;
+  hyperlink: string;
   content: string;
-  keywords: string;
   relevanceScore: number;
   classification: 'direct' | 'high' | 'related';
   highlightTerms: string[];

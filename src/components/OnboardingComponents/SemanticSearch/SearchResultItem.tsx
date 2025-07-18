@@ -43,6 +43,14 @@ export default function SearchResultItem({result, onResultClick}: SearchResultIt
     related: t('semanticSearch.classification.related'),
   };
 
+  const truncateText = (text: string, wordLimit: number) => {
+    const words = text.split(' ');
+    if (words.length > wordLimit) {
+      return words.slice(0, wordLimit).join(' ') + '...';
+    }
+    return text;
+  };
+
   return (
     <Paper
       onClick={() => onResultClick(result)}
@@ -77,26 +85,11 @@ export default function SearchResultItem({result, onResultClick}: SearchResultIt
       </Box>
 
       <Typography variant='body2' sx={{color: 'GrayText', mb: 1.5}}>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-        magna aliqua.
+        {truncateText(result.content, 50)}
       </Typography>
 
       <Box display='flex' justifyContent='space-between' alignItems='center'>
-        <Box display='flex' gap={1}>
-          {result.keywords?.split(',').map((tag) => (
-            <Chip
-              key={tag}
-              label={tag.trim()}
-              size='small'
-              sx={{
-                backgroundColor: 'primary.main_10',
-                color: 'primary.main',
-                fontSize: '10px',
-                fontWeight: 500,
-              }}
-            />
-          ))}
-        </Box>
+        <Box />
         <Chip
           label={classificationText[result.classification]}
           size='small'

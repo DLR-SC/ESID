@@ -17,6 +17,7 @@ export function SemanticSearchProvider({children}: SemanticSearchProviderProps) 
   const [triggerSearch, {isLoading}] = useLazySearchArticlesQuery();
   const [augmentedResults, setAugmentedResults] = useState<SearchResult[]>([]);
   const dispatch = useAppDispatch();
+  const token = useAppSelector((state) => state.auth.token);
 
   const searchStatus = useAppSelector((state) => state.semanticSearch.searchStatus);
 
@@ -29,7 +30,7 @@ export function SemanticSearchProvider({children}: SemanticSearchProviderProps) 
       }
 
       dispatch(setSemanticSearchStatus('loading'));
-      triggerSearch(query)
+      triggerSearch({searchQuery: query, token})
         .unwrap()
         .then((apiResponse) => {
           const lowerCaseQuery = query.toLowerCase();
@@ -49,7 +50,8 @@ export function SemanticSearchProvider({children}: SemanticSearchProviderProps) 
 
             return {
               id: item.id.toString(),
-              title: `${item.filename} (p. ${item.page_num})`,
+              title: item.article_title,
+              hyperlink: item.hyperlink,
               content: item.text_content,
               relevanceScore,
               classification,
@@ -66,7 +68,7 @@ export function SemanticSearchProvider({children}: SemanticSearchProviderProps) 
           dispatch(setSemanticSearchStatus('idle'));
         });
     },
-    [dispatch, triggerSearch]
+    [dispatch, triggerSearch, token]
   );
 
   const clearSearch = useCallback(() => {
