@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
-import {RootState} from '..';
 
 // Define types for the new API response
 export interface ApiSearchResult {

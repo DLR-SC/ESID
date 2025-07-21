@@ -23,7 +23,10 @@ import {MUILocalization} from 'components/shared/MUILocalization';
 
 import AuthProvider from './components/AuthProvider';
 import BaseDataContext from 'context/BaseDataContext';
-import {ArticleDataProvider} from 'context/ArticleDataContext';
+import {LocalizationProvider} from '@mui/x-date-pickers';
+import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
+import {SemanticSearchProvider} from 'context/SemanticSearchContext';
+
 /**
  * This is the root element of the React application. It divides the main screen area into the three main components.
  * The top bar, the sidebar and the main content area.
@@ -38,26 +41,28 @@ export default function App(): JSX.Element {
               <I18nextProvider i18n={i18n}>
                 <MUILocalization>
                   <BaseDataContext>
-                    <ArticleDataProvider>
-                      <Initializer />
-                      <WelcomeDialogWrapper />
-                      <Box id='app' display='flex' flexDirection='column' sx={{height: '100%', width: '100%'}}>
-                        <TopBar />
-                        <Box
-                          id='app-content'
-                          sx={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            flexGrow: 1,
-                            alignItems: 'stretch',
-                            width: '100%',
-                          }}
-                        >
-                          <SidebarContainer />
-                          <MainContent />
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <SemanticSearchProvider>
+                        <Initializer />
+                        <WelcomeDialogWrapper />
+                        <Box id='app' display='flex' flexDirection='column' sx={{height: '100%', width: '100%'}}>
+                          <TopBar />
+                          <Box
+                            id='app-content'
+                            sx={{
+                              display: 'flex',
+                              flexDirection: 'row',
+                              flexGrow: 1,
+                              alignItems: 'stretch',
+                              width: '100%',
+                            }}
+                          >
+                            <SidebarContainer />
+                            <MainContent />
+                          </Box>
                         </Box>
-                      </Box>
-                    </ArticleDataProvider>
+                      </SemanticSearchProvider>
+                    </LocalizationProvider>
                   </BaseDataContext>
                 </MUILocalization>
               </I18nextProvider>
