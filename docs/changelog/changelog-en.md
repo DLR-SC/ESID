@@ -37,6 +37,7 @@ SPDX-License-Identifier: CC-BY-4.0
 - More robust validation of the application state should eliminate a wide variety of bugs.
 - A bug was fixed where data was shown while no scenario was active.
 - The group filters are working again.
+- The menu items Imprint, Privacy Policy, Accessibility, Attribution, and Changelog are available again without crashing the page.
 
 ---
 
