@@ -31,7 +31,7 @@ export default function LineChartContainer() {
   const selectedDistrict = useAppSelector((state) => state.dataSelection.district);
   const selectedDate = useAppSelector((state) => state.dataSelection.date);
   const thresholds = useAppSelector((state) => state.userPreference.horizontalYAxisThresholds ?? {});
-  const yAxisMaxValue = useAppSelector((state) => state.userPreference.yAxisMaxValue ?? {});
+  const yAxisMaxValue = useAppSelector((state) => state.userPreference.yAxisMaxValue ?? undefined);
   const referenceDay = useAppSelector((state) => state.dataSelection.simulationStart);
   const minDate = useAppSelector((state) => state.dataSelection.minDate);
   const maxDate = useAppSelector((state) => state.dataSelection.maxDate);
@@ -204,8 +204,9 @@ export default function LineChartContainer() {
         referenceDay={referenceDay}
         yAxisLabel={yAxisLabel}
         horizontalYAxisThreshold={thresholds[`${selectedDistrict.nuts}-${selectedCompartment}`]?.threshold}
-        maxDataValue={yAxisMaxValue[`${selectedDistrict.nuts}-${selectedCompartment}`] ?? undefined}
+        yAxisMaxValue={yAxisMaxValue ?? maxDataValue}
       />
+
       <LineChartSettings
         selectedDistrict={selectedDistrict}
         selectedCompartment={selectedCompartment ?? ''}
@@ -220,15 +221,9 @@ export default function LineChartContainer() {
             })
           )
         }
-        yAxisMaxValue={yAxisMaxValue[`${selectedDistrict.nuts}-${selectedCompartment}`] ?? maxDataValue}
-        updateYAxisMaxValue={(newYAxisMaxValue: number) =>
-          dispatch(
-            setYAxisMaxValue({
-              key: `${selectedDistrict.nuts}-${selectedCompartment}`,
-              value: newYAxisMaxValue,
-            })
-          )
-        }
+        yAxisMaxValue={yAxisMaxValue}
+        maxDataValue={maxDataValue}
+        updateYAxisMaxValue={(newYAxisMaxValue: number) => dispatch(setYAxisMaxValue(newYAxisMaxValue))}
       />
     </LoadingContainer>
   );

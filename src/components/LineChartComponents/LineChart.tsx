@@ -72,7 +72,7 @@ interface LineChartProps {
   horizontalYAxisThreshold?: number;
 
   /** Optional maximum value from the chart data. Can be used to set custom Y-axis limits. */
-  maxDataValue?: number;
+  yAxisMaxValue?: number;
 }
 /**
  * React Component to render the Linechart Section
@@ -91,7 +91,7 @@ export default function LineChart({
   yAxisLabel,
   localization,
   horizontalYAxisThreshold = undefined,
-  maxDataValue,
+  yAxisMaxValue,
 }: LineChartProps): JSX.Element {
   const {t: defaultT, i18n} = useTranslation();
 
@@ -174,8 +174,8 @@ export default function LineChart({
     }
     return {
       renderer: AxisRendererY.new(root, {}),
-
       strictMinMax: true,
+
       // Fix lower end to 0
       min: 0,
 
@@ -189,12 +189,12 @@ export default function LineChart({
   useLayoutEffect(() => {
     if (!yAxis || !root || !chart || chart.isDisposed() || root.isDisposed()) return;
 
-    if (maxDataValue != null) {
-      yAxis.set('max', maxDataValue);
+    if (yAxisMaxValue != null) {
+      yAxis.set('max', yAxisMaxValue);
     } else {
       yAxis.set('max', undefined);
     }
-  }, [yAxis, maxDataValue, root, chart]);
+  }, [yAxis, yAxisMaxValue, root, chart]);
 
   // Effect to add cursor to chart
   useLayoutEffect(() => {
