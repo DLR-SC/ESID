@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, {MouseEvent, useContext} from 'react';
+import React, {MouseEvent, Suspense, useContext} from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
 import {useTranslation} from 'react-i18next';
 import Button from '@mui/material/Button';
@@ -12,6 +12,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Box from '@mui/system/Box';
 import {useAppSelector} from 'store/hooks';
 import {AuthContext, IAuthContext} from 'react-oauth2-code-pkce';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const ChangelogDialog = React.lazy(() => import('./PopUps/ChangelogDialog'));
 const ImprintDialog = React.lazy(() => import('./PopUps/ImprintDialog'));
@@ -142,23 +143,63 @@ export default function ApplicationMenu(): JSX.Element {
       </Menu>
 
       <Dialog maxWidth='lg' fullWidth={true} open={imprintOpen} onClose={() => setImprintOpen(false)}>
-        <ImprintDialog />
+        <Suspense
+          fallback={
+            <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%'}}>
+              <CircularProgress sx={{padding: '10rem'}} disableShrink />
+            </Box>
+          }
+        >
+          <ImprintDialog />
+        </Suspense>
       </Dialog>
 
       <Dialog maxWidth='lg' fullWidth={true} open={privacyPolicyOpen} onClose={() => setPrivacyPolicyOpen(false)}>
-        <PrivacyPolicyDialog />
+        <Suspense
+          fallback={
+            <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%'}}>
+              <CircularProgress sx={{padding: '10rem'}} disableShrink />
+            </Box>
+          }
+        >
+          <PrivacyPolicyDialog />
+        </Suspense>
       </Dialog>
 
       <Dialog maxWidth='lg' fullWidth={true} open={accessibilityOpen} onClose={() => setAccessibilityOpen(false)}>
-        <AccessibilityDialog />
+        <Suspense
+          fallback={
+            <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%'}}>
+              <CircularProgress sx={{padding: '10rem'}} disableShrink />
+            </Box>
+          }
+        >
+          <AccessibilityDialog />
+        </Suspense>
       </Dialog>
 
       <Dialog maxWidth='lg' fullWidth={true} open={attributionsOpen} onClose={() => setAttributionsOpen(false)}>
-        <AttributionDialog />
+        <Suspense
+          fallback={
+            <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%'}}>
+              <CircularProgress sx={{padding: '10rem'}} disableShrink />
+            </Box>
+          }
+        >
+          <AttributionDialog />
+        </Suspense>
       </Dialog>
 
       <Dialog maxWidth='lg' fullWidth={true} open={changelogOpen} onClose={() => setChangelogOpen(false)}>
-        <ChangelogDialog />
+        <Suspense
+          fallback={
+            <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%'}}>
+              <CircularProgress sx={{padding: '10rem'}} disableShrink />
+            </Box>
+          }
+        >
+          <ChangelogDialog />
+        </Suspense>
       </Dialog>
     </Box>
   );
