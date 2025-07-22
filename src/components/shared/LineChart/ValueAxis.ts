@@ -19,7 +19,7 @@ export default function useValueAxis(
   const [axis, setAxis] = useState<ValueAxis<AxisRenderer>>();
 
   useLayoutEffect(() => {
-    if (!root || !chart || !settings || root.isDisposed() || chart.isDisposed()) return;
+    if (!root || !chart || !settings || root.isDisposed()) return;
 
     const newAxis = ValueAxis.new(root, settings);
     setAxis(newAxis);

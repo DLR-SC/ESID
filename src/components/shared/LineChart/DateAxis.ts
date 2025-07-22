@@ -18,7 +18,7 @@ export default function useDateAxis(
   const [axis, setAxis] = useState<DateAxis<AxisRenderer>>();
 
   useLayoutEffect(() => {
-    if (!root || !chart || !settings || root.isDisposed() || chart.isDisposed()) return;
+    if (!root || !chart || !settings || root.isDisposed()) return;
 
     const newAxis = DateAxis.new(root, settings);
     setAxis(newAxis);
