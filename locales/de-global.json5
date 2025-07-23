@@ -165,6 +165,11 @@
       high: 'Hohe Relevanz',
       related: 'Verwandt',
     },
+    pagination: {
+      previous: 'Zurück',
+      next: 'Weiter',
+      pageOf: 'Seite {{current}} von {{total}}',
+    },
   },
   language: 'Sprache',
   legal: {

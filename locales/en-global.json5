@@ -183,6 +183,11 @@
       high: 'High Relevance',
       related: 'Related',
     },
+    pagination: {
+      previous: 'Previous',
+      next: 'Next',
+      pageOf: 'Page {{current}} of {{total}}',
+    },
   },
   language: 'Language',
   legal: {

@@ -27,10 +27,10 @@ export const articleApi = createApi({
     baseUrl: `${import.meta.env.VITE_ARTICLE_API_URL || ''}`,
   }),
   endpoints: (build) => ({
-    searchArticles: build.query<ApiSearchResponse, {searchQuery: string; token?: string}>({
-      query: ({searchQuery, token}) => ({
+    searchArticles: build.query<ApiSearchResponse, {searchQuery: string; lang: string; token?: string}>({
+      query: ({searchQuery, lang, token}) => ({
         url: 'search',
-        params: {query: searchQuery},
+        params: {query: searchQuery, lang: lang},
         headers: token ? {Authorization: `Bearer ${token}`} : {},
       }),
     }),

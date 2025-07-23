@@ -2,8 +2,10 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React, {useState} from 'react';
-import {Dialog, DialogTitle, DialogContent, IconButton, Typography, Box, Button, CircularProgress} from '@mui/material';
+import {Dialog, DialogTitle, DialogContent, IconButton, Typography, Box, CircularProgress} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import {SearchResult} from 'types/semanticSearch';
 import {Document, Page, pdfjs} from 'react-pdf';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
@@ -30,6 +32,7 @@ export default function ArticleDialog({open, onClose, article}: ArticleDialogPro
 
   function onDocumentLoadSuccess({numPages: nextNumPages}: {numPages: number}) {
     setNumPages(nextNumPages);
+    setPageNumber(1); // Reset to first page on new document load
   }
 
   function goToNextPage() {
@@ -70,15 +73,15 @@ export default function ArticleDialog({open, onClose, article}: ArticleDialogPro
         </Document>
       </DialogContent>
       <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', p: 1, gap: 2}}>
-        <Button onClick={goToPreviousPage} disabled={pageNumber <= 1}>
-          Previous
-        </Button>
+        <IconButton onClick={goToPreviousPage} disabled={pageNumber <= 1} aria-label='previous page'>
+          <ArrowBackIosNewIcon />
+        </IconButton>
         <Typography>
-          Page {pageNumber} of {numPages}
+          {pageNumber} / {numPages}
         </Typography>
-        <Button onClick={goToNextPage} disabled={pageNumber >= numPages}>
-          Next
-        </Button>
+        <IconButton onClick={goToNextPage} disabled={pageNumber >= numPages} aria-label='next page'>
+          <ArrowForwardIosIcon />
+        </IconButton>
       </Box>
     </Dialog>
   );

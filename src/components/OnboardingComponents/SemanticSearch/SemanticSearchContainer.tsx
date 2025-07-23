@@ -32,7 +32,10 @@ export default function SemanticSearchContainer(): JSX.Element {
   ];
 
   const handleSearch = () => {
-    performSearch(query);
+    // performSearch is now required and will not be undefined.
+    if (performSearch) {
+      performSearch(query);
+    }
   };
 
   const handleClear = () => {
@@ -42,7 +45,9 @@ export default function SemanticSearchContainer(): JSX.Element {
 
   const handleSuggestionClick = (suggestion: string) => {
     dispatch(setSemanticSearchQuery(suggestion));
-    performSearch(suggestion);
+    if (performSearch) {
+      performSearch(suggestion);
+    }
   };
 
   const handleResultClick = (article: SearchResult) => {
@@ -89,7 +94,7 @@ export default function SemanticSearchContainer(): JSX.Element {
                 sx={{
                   width: '32px',
                   height: '32px',
-                  borderRadius: '4px', // Standard border radius
+                  borderRadius: '4px',
                   backgroundColor: 'primary.main',
                   color: 'primary.contrastText',
                   '&:hover': {

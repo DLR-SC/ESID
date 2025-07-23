@@ -6,6 +6,7 @@ import {useLazySearchArticlesQuery} from 'store/services/articleApi';
 import {SearchResult, SemanticSearchContextType} from 'types/semanticSearch';
 import {useAppDispatch, useAppSelector} from 'store/hooks';
 import {setSemanticSearchStatus, resetSemanticSearch} from 'store/SemanticSearchSlice';
+import i18n from 'util/i18n';
 
 const SemanticSearchContext = createContext<SemanticSearchContextType | undefined>(undefined);
 
@@ -30,7 +31,7 @@ export function SemanticSearchProvider({children}: SemanticSearchProviderProps) 
       }
 
       dispatch(setSemanticSearchStatus('loading'));
-      triggerSearch({searchQuery: query, token})
+      triggerSearch({searchQuery: query, lang: i18n.language, token})
         .unwrap()
         .then((apiResponse) => {
           const lowerCaseQuery = query.toLowerCase();
