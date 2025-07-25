@@ -72,25 +72,6 @@ export default function SearchResultItem({result, onResultClick}: SearchResultIt
           {result.title}
         </Typography>
         <Chip
-          label={`${result.relevanceScore}% match`}
-          size='small'
-          sx={{
-            background: `linear-gradient(135deg, ${theme.palette.info.main}, ${theme.palette.info.dark})`,
-            color: 'white',
-            fontWeight: 600,
-            fontSize: '10px',
-            ml: 1.5,
-          }}
-        />
-      </Box>
-
-      <Typography variant='body2' sx={{color: 'GrayText', mb: 1.5}}>
-        {truncateText(result.content, 50)}
-      </Typography>
-
-      <Box display='flex' justifyContent='space-between' alignItems='center'>
-        <Box />
-        <Chip
           label={classificationText[result.classification]}
           size='small'
           variant='outlined'
@@ -99,9 +80,14 @@ export default function SearchResultItem({result, onResultClick}: SearchResultIt
             fontWeight: 600,
             fontSize: '10px',
             height: '24px',
+            ml: 3,
           }}
         />
       </Box>
+
+      <Typography variant='body2' sx={{color: 'GrayText'}}>
+        {truncateText(result.content, 50)}
+      </Typography>
     </Paper>
   );
 }
