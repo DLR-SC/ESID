@@ -3,6 +3,8 @@
 
 {
   title: 'Liniendiagramm Einstellungen',
+  yAxisMaxValue: 'Y-Achse Maximum',
+  yAxisMaxValueDescription: 'Setzen Sie den Maximalwert für die Y-Achse',
   manageGroups: 'Filter',
   manageGroupsDescription: 'Verwalten Sie Filtergruppen, um spezifische Daten im Diagramm anzuzeigen oder auszublenden.',
   manageThreshold: 'Schwellwerte',
@@ -13,6 +15,18 @@
     compartment: 'Infektionsstatus',
     threshold: 'Schwellwert',
     noThresholds: 'Keine Schwellwerte festgelegt.',
+  },
+  'y-axis-settings': {
+    title: 'Y-Achse Maximum',
+    editTooltip: 'Y-Achse Maximum bearbeiten',
+    resetTooltip: 'Y-Achse Maximum auf aktuellen Daten-Maximalwert zurücksetzen',
+    messages: {
+      success: 'Y-Achse Maximum erfolgreich aktualisiert.',
+      error: 'Ungültige Eingabe. Bitte überprüfen Sie den Wert.',
+    },
+    validation: {
+      positiveNumber: 'Wert muss eine positive Zahl sein',
+    },
   },
   'group-filters': {
     title: 'Gruppen verwalten',

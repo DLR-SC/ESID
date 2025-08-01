@@ -93,7 +93,6 @@ export default function LineChartSettings({
   const {i18n} = useTranslation();
   const {formatNumber} = NumberFormatter(i18n.language, 1, 0);
 
-
   const [currentView, setCurrentView] = useState<SettingsView>('settingsMenu');
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [showPopover, setShowPopover] = useState<boolean>(false);
@@ -107,8 +106,9 @@ export default function LineChartSettings({
 
   /**
    * The settings menu for the line chart. Each item in the menu has a label, a view, and an icon.
+   * kind: 'inline' - the item is displayed inline
+   * kind: 'navigate' - the item is displayed as a button that navigates to a new view
    */
-
   const settingsMenu: SettingsItem[] = [
     {
       kind: 'inline',
