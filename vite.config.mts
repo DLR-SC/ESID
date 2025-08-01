@@ -6,7 +6,6 @@ import react from '@vitejs/plugin-react';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import preload from 'unplugin-inject-preload/vite';
 import eslintPlugin from '@nabla/vite-plugin-eslint';
-import {viteStaticCopy} from 'vite-plugin-static-copy';
 
 export default defineConfig(({mode}) => {
   const env = loadEnv(mode, process.cwd(), '');
@@ -17,14 +16,7 @@ export default defineConfig(({mode}) => {
       react(),
       eslintPlugin(),
       tsconfigPaths(),
-      viteStaticCopy({
-        targets: [
-          {
-            src: 'node_modules/pdfjs-dist/build/pdf.worker.min.mjs',
-            dest: '.',
-          },
-        ],
-      }),
+
       preload({
         files: [
           {

@@ -174,11 +174,9 @@ would be difficult to handle with React's `props` alone.
   ![](images/ThemeGuidelines.svg 'ESID Design Guidelines')
 
   **The alternative text color for lighter and darker variants where the contrast is not high enough is always either `#F2F2F2` (light text), or `#0C0B0D` (dark text).**
-
   - The Spacing is done in 5 steps: `0 px`, `4 px`, `8 px`, `12 px`, and `26 px`
 
   </details>
-
   - The theme is provided using the [MUI Theme Provider](https://mui.com/customization/theming 'mui.com')
   - <details>
     <summary>It can be accessed in components like this: <i>(-- Click to expand --)</i></summary>

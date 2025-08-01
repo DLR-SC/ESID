@@ -22,7 +22,7 @@ import {Document, Page, pdfjs} from 'react-pdf';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 
-pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
 interface ArticleDialogProps {
   open: boolean;
@@ -41,8 +41,8 @@ export default function ArticleDialog({open, onClose, article}: ArticleDialogPro
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const observer = new ResizeObserver((entries) => {
-      const entry = entries.at(0);
+    const observer = new ResizeObserver((entries: ResizeObserverEntry[]) => {
+      const entry = entries[0];
       if (entry) {
         setContainerWidth(entry.contentRect.width);
       }
