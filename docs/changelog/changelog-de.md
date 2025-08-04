@@ -38,6 +38,8 @@ SPDX-License-Identifier: CC-BY-4.0
 - Ein Fehler wurde behoben, wo Daten angezeigt wurden, obwohl kein Szenario aufgedeckt war.
 - Die Gruppenfilter funktionieren wieder.
 - Die Menüpunkte Impressum, Datenschutzerklärung, Barrierefreiheit, Attribution und Versionshistorie sind wieder erreichbar ohne die Seite zum Absturz zu bringen.
+- Ein Anzeigeproblem bei langen Filternamen wurde behoben, bei dem die Aktionsschaltflächen bei sehr langen Filternamen nicht zugänglich waren.
+
 ---
 
 ## v0.3.1-beta
