@@ -181,34 +181,34 @@ would be difficult to handle with React's `props` alone.
   - <details>
     <summary>It can be accessed in components like this: <i>(-- Click to expand --)</i></summary>
 
-    ```tsx
-    import {useTheme} from '@mui/material/styles';
+  ```tsx
+  import {useTheme} from '@mui/material/styles';
 
-    export default function MyComponent(): JSX.Element {
-      const theme = useTheme();
+  export default function MyComponent(): JSX.Element {
+    const theme = useTheme();
 
-      return (
-        <Box
-          sx={{
-            /*
-             * Available theme properties can be found at their declaration inside the App.tsx.
-             */
-            // accessing theme variables
-            background: theme.palette.background.default,
-            border: `1px solid ${theme.palette.divider}`,
+    return (
+      <Box
+        sx={{
+          /*
+           * Available theme properties can be found at their declaration inside the App.tsx.
+           */
+          // accessing theme variables
+          background: theme.palette.background.default,
+          border: `1px solid ${theme.palette.divider}`,
 
-            // accessing theme typography
-            typography: theme.typography.h1,
-            // or
-            typography: 'h1',
+          // accessing theme typography
+          typography: theme.typography.h1,
+          // or
+          typography: 'h1',
 
-            // accessing theme spacing via index [0, 4, 8, 12, 26]
-            margin: theme.spacing(3), // 12 px margin
-          }}
-        ></Box>
-      );
-    }
-    ```
+          // accessing theme spacing via index [0, 4, 8, 12, 26]
+          margin: theme.spacing(3), // 12 px margin
+        }}
+      ></Box>
+    );
+  }
+  ```
 
     </details>
 

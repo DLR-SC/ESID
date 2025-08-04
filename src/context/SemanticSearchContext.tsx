@@ -57,6 +57,7 @@ export function SemanticSearchProvider({children}: SemanticSearchProviderProps) 
               relevanceScore,
               classification,
               highlightTerms: queryTerms,
+              language: item.language,
             };
           });
 

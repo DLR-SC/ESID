@@ -25,11 +25,7 @@ export default function SemanticSearchContainer(): JSX.Element {
   const {t} = useTranslation('global');
   const [selectedArticle, setSelectedArticle] = useState<SearchResult | null>(null);
 
-  const suggestions = [
-    t('semanticSearch.suggestions.flood'),
-    t('semanticSearch.suggestions.calibration'),
-    t('semanticSearch.suggestions.heatwave'),
-  ];
+  const suggestions = [t('semanticSearch.suggestions.scenarioForecasting'), t('semanticSearch.suggestions.purpose')];
 
   const handleSearch = () => {
     // performSearch is now required and will not be undefined.

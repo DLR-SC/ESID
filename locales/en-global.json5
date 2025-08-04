@@ -168,9 +168,8 @@
     placeholder: 'Enter a question to search...',
     suggestions: {
       title: 'Or try one of these:',
-      flood: 'What are the most affected regions by the 2021 floods?',
-      calibration: 'How is the model calibrated?',
-      heatwave: 'What is the scenario for an intense heatwave?',
+      scenarioForecasting: 'How does the ESID platform support scenario-based forecasting for infectious disease outbreaks?',
+      purpose: 'What is ESID purpose?',
     },
     results: {
       initialPrompt: 'Enter a question to search for relevant articles and documentation.',
@@ -253,28 +252,6 @@
     compartment: 'Compartment',
     reset: 'Reset to default value',
     r0: 'Basic Reproduction Number (R0)',
-  },
-  semanticSearch: {
-    title: 'Semantic Search',
-    description: 'Ask questions about the data, models, or functionality to find relevant documentation and articles.',
-    placeholder: 'Enter a question to search...',
-    suggestions: {
-      title: 'Or try one of these:',
-      flood: 'What are the most affected regions by the 2021 floods?',
-      calibration: 'How is the model calibrated?',
-      heatwave: 'What is the scenario for an intense heatwave?',
-    },
-    results: {
-      initialPrompt: 'Enter a question to search for relevant articles and documentation.',
-      noResults: 'No results found. Try rephrasing your question or using different keywords.',
-      resultsFound_one: 'Found 1 result for',
-      resultsFound_other: 'Found {{count}} results for',
-    },
-    classification: {
-      direct: 'Direct Answer',
-      high: 'High Relevance',
-      related: 'Related',
-    },
   },
   language: 'Language',
   legal: {

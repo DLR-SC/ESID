@@ -12,6 +12,7 @@ export interface SearchResult {
   relevanceScore: number;
   classification: 'direct' | 'high' | 'related';
   highlightTerms: string[];
+  language: 'en' | 'de';
 }
 
 /**

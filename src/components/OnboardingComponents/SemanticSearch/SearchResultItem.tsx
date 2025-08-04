@@ -71,18 +71,33 @@ export default function SearchResultItem({result, onResultClick}: SearchResultIt
         <Typography variant='h3' gutterBottom sx={{mb: 0}}>
           {result.title}
         </Typography>
-        <Chip
-          label={classificationText[result.classification]}
-          size='small'
-          variant='outlined'
-          sx={{
-            ...classificationStyles[result.classification],
-            fontWeight: 600,
-            fontSize: '10px',
-            height: '24px',
-            ml: 3,
-          }}
-        />
+        <Box display='flex' gap={1}>
+          <Chip
+            label={(result.language as string).toUpperCase()}
+            size='small'
+            variant='outlined'
+            sx={{
+              backgroundColor: 'rgba(158, 158, 158, 0.1)',
+              color: theme.palette.text.secondary,
+              borderColor: 'rgba(158, 158, 158, 0.3)',
+              fontWeight: 600,
+              fontSize: '10px',
+              height: '24px',
+              ml: 2,
+            }}
+          />
+          <Chip
+            label={classificationText[result.classification]}
+            size='small'
+            variant='outlined'
+            sx={{
+              ...classificationStyles[result.classification],
+              fontWeight: 600,
+              fontSize: '10px',
+              height: '24px',
+            }}
+          />
+        </Box>
       </Box>
 
       <Typography variant='body2' sx={{color: 'GrayText'}}>

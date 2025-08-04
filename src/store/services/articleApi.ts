@@ -12,6 +12,7 @@ export interface ApiSearchResult {
   content_type: 'text' | 'image';
   text_content: string;
   similarity: number;
+  language: 'en' | 'de';
 }
 
 export interface ApiSearchResponse {

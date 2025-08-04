@@ -150,9 +150,8 @@
     placeholder: 'Geben Sie eine Frage für die Suche ein...',
     suggestions: {
       title: 'Oder versuchen Sie eine dieser Optionen:',
-      flood: 'Welche Regionen sind am stärksten von den Überschwemmungen 2021 betroffen?',
-      calibration: 'Wie wird das Modell kalibriert?',
-      heatwave: 'Was ist das Szenario für eine intensive Hitzewelle?',
+      scenarioForecasting: 'Wie unterstützt die ESID-Plattform szenariobasierte Prognosen für Ausbrüche von Infektionskrankheiten?',
+      purpose: 'Was ist der Zweck von ESID?',
     },
     results: {
       initialPrompt: 'Geben Sie eine Frage ein, um nach relevanten Artikeln und Dokumentationen zu suchen.',
@@ -238,28 +237,6 @@
   },
   history: {
     title: 'Verlauf',
-  },
-  semanticSearch: {
-    title: 'Semantische Suche',
-    description: 'Stellen Sie Fragen zu den Daten, Modellen oder Funktionen, um relevante Dokumentationen und Artikel zu finden.',
-    placeholder: 'Geben Sie eine Frage für die Suche ein...',
-    suggestions: {
-      title: 'Oder versuchen Sie eine dieser Optionen:',
-      flood: 'Welche Regionen sind am stärksten von den Überschwemmungen 2021 betroffen?',
-      calibration: 'Wie wird das Modell kalibriert?',
-      heatwave: 'Was ist das Szenario für eine intensive Hitzewelle?',
-    },
-    results: {
-      initialPrompt: 'Geben Sie eine Frage ein, um nach relevanten Artikeln und Dokumentationen zu suchen.',
-      noResults: 'Keine Ergebnisse gefunden. Versuchen Sie, Ihre Frage umzuformulieren oder andere Schlüsselwörter zu verwenden.',
-      resultsFound_one: '1 Ergebnis gefunden für',
-      resultsFound_other: '{{count}} Ergebnisse gefunden für',
-    },
-    classification: {
-      direct: 'Direkte Antwort',
-      high: 'Hohe Relevanz',
-      related: 'Verwandt',
-    },
   },
   language: 'Sprache',
   legal: {
