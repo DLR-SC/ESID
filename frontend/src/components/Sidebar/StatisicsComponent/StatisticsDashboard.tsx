@@ -59,7 +59,7 @@ export default function StatisticsDashboard(): JSX.Element {
 
       // Override the `all` method to filter out the `key: 0` entry
       const filteredInfectionStateGroup = {
-        all: () => infectionGroup.all().filter((d) => d.key !== 0),
+        all: () => infectionGroup.all().filter((d) => d.key !== 0 && d.key !== 7),
       };
 
       if (!infectionDimension || !infectionGroup) {
@@ -72,16 +72,22 @@ export default function StatisticsDashboard(): JSX.Element {
       chartRefs.current['infection'] = infectionChart;
 
       infectionChart
-        .width(400)
+        .width(386)
         .height(170)
+        .margins({top: 10, right: 10, bottom: 30, left: 10})
         .dimension(infectionDimension)
         .group(filteredInfectionStateGroup)
-        .label((d: any) => KeyInfo.infection_state[d.key].icon)
+        .label((d: any) => KeyInfo.infection_state[d.key].fullName)
+        .renderLabel(false)
+        .renderTitleLabel(true)
+        .on('renderlet', (o: any, filter: any) => {
+          o.selectAll('text.titlerow').style('color', 'black').style('fill', 'black').style('font-size', '12px');
+        })
         .title((d: any) => {
           return KeyInfo.infection_state[d.key].fullName + ': ' + d.value;
         })
         .keyAccessor((d: any) => d.key)
-        .colors(d3.scaleOrdinal(d3.schemeBlues[9].slice().reverse()))
+        .colors(d3.scaleOrdinal(d3.schemeBlues[7].slice().reverse()))
         .on('filtered', function (_chart: any) {
           const selectedFilters = _chart.filters();
           dispatch(
@@ -116,12 +122,17 @@ export default function StatisticsDashboard(): JSX.Element {
       chartRefs.current['odInfection'] = odInfectionChart;
 
       odInfectionChart
-        .width(400)
+        .width(386)
         .height(200)
+        .margins({top: 10, right: 10, bottom: 30, left: 70})
         .dimension(odInfectionDimension)
         .group(odInfectionGroup)
-        .keyAccessor((d: any) => (d.key && d.key[0] !== undefined ? KeyInfo.location_type[d.key[0]].icon : 'Unknown'))
-        .valueAccessor((d: any) => (d.key && d.key[1] !== undefined ? KeyInfo.location_type[d.key[1]].icon : 'Unknown'))
+        .keyAccessor((d: any) =>
+          d.key && d.key[0] !== undefined ? KeyInfo.location_type[d.key[0]].fullName : 'Unknown'
+        )
+        .valueAccessor((d: any) =>
+          d.key && d.key[1] !== undefined ? KeyInfo.location_type[d.key[1]].fullName : 'Unknown'
+        )
         .colorAccessor((d: any) => +d.value)
         .colors((d: d3.NumberValue) => colorScale(d))
         //.colors(d3.scaleOrdinal(d3.schemeBlues[8]))
@@ -172,7 +183,7 @@ export default function StatisticsDashboard(): JSX.Element {
         .group(transportModeGroup)
         .colors(d3.scaleOrdinal(d3.schemeBlues[9].slice().reverse()))
         .label((d: any) => {
-          return KeyInfo.transport_mode[d.key].icon;
+          return KeyInfo.transport_mode[d.key].fullName;
         })
         .title((d: any) => {
           return KeyInfo.transport_mode[d.key].fullName + ': ' + d.value;
@@ -186,6 +197,11 @@ export default function StatisticsDashboard(): JSX.Element {
             })
           );
         });
+
+      transportModeChart.on('renderlet', (d: any) => {
+        d.selectAll('text.pie-slice').style('fill', 'white'); // Change color based on the color scheme of the pie chart so that text is visible
+        d.selectAll('text.pie-slice').style('font-size', '11px');
+      });
 
       // ************************************************************************************//
 
@@ -290,6 +306,9 @@ export default function StatisticsDashboard(): JSX.Element {
         .barPadding(0.1)
         .keyAccessor((d: any) => d.key)
         .label((d: any) => KeyInfo.age_group[d.data.key].icon)
+        .on('renderlet', (o: any) => {
+          o.selectAll('text.barLabel').style('fill', 'black'), o.selectAll('text.barLabel').style('font-size', '11px');
+        })
         .on('filtered', function (_chart: any) {
           // Get all selected filters
           const selectedFilters = _chart.filters();
@@ -299,8 +318,6 @@ export default function StatisticsDashboard(): JSX.Element {
             })
           );
         });
-
-      console.log(ageChart);
 
       dc.renderAll(chartGroup); // Render the dc chart group
 
@@ -330,7 +347,11 @@ export default function StatisticsDashboard(): JSX.Element {
           Reset
         </Button>
         {/* Infection Chart */}
-        <Grid item xs={12} sx={{border: '2px solid #ddd', borderRadius: '4px', padding: 2}}>
+        <Grid
+          item
+          xs={12}
+          sx={{border: '2px solid #ddd', borderRadius: '8px', padding: 2, marginBottom: '8px', marginLeft: '8px'}}
+        >
           <Box sx={{display: 'flex', flexDirection: 'column'}}>
             <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
               <Typography variant='h5'>Infection Chart</Typography>
@@ -350,7 +371,7 @@ export default function StatisticsDashboard(): JSX.Element {
         </Grid>
 
         {/* OD Infection Heatmap */}
-        <Grid item xs={12} sx={{border: '2px solid #ddd', borderRadius: '4px', padding: 2}}>
+        <Grid item xs={12} sx={{border: '2px solid #ddd', borderRadius: '8px', padding: 2, marginLeft: '8px'}}>
           <Box sx={{display: 'flex', flexDirection: 'column'}}>
             <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
               <Typography variant='h5'>Origin-Destination Infection</Typography>

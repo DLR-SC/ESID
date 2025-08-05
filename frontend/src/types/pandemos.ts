@@ -10,28 +10,29 @@ export namespace KeyInfo {
   };
   /** Locations */
   export const location_type: Record<number, KeyInfoItem> = {
-    /**          Any */ 99: anyOption,
-    /**         Home */ 0: {icon: '🏡', fullName: 'Home'},
-    /**       School */ 1: {icon: '🏫', fullName: 'School'},
-    /**         Work */ 2: {icon: '🏭/🏢', fullName: 'Workplace'},
-    /** Social Event */ 3: {icon: '🏟', fullName: 'Social Event'},
-    /**     Shopping */ 4: {icon: '🏪', fullName: 'Shopping'},
-    /**     Hospital */ 5: {icon: '🏥❗', fullName: 'Hospital'},
-    /**          ICU */ 6: {icon: '🏥‼', fullName: 'Intensive Care'},
-    /**          Car */ 7: {icon: '🚘', fullName: 'Car'},
-    /**       Public */ 8: {icon: '⛲', fullName: 'Public Space'},
-    /**    Transport */ 9: {icon: '🚍', fullName: 'Public Transport'},
-    /**     Cemetery */ 10: {icon: '⚰', fullName: 'Cemetery'},
+    /**            Any */ 99: anyOption,
+    /**           Home */ 0: {icon: '🏡', fullName: 'Home'},
+    /**         School */ 1: {icon: '🏫', fullName: 'School'},
+    /**           Work */ 2: {icon: '🏭/🏢', fullName: 'Work'},
+    /**   Social Event */ 3: {icon: '🥂', fullName: 'Social Event'},
+    /**       Shopping */ 4: {icon: '🏪', fullName: 'Shop'},
+    /**       Hospital */ 5: {icon: '🏥❗', fullName: 'Hospital'},
+    /**            ICU */ 6: {icon: '🏥‼', fullName: 'ICU'},
+    /**            Car */ 7: {icon: '🚘', fullName: 'Car'},
+    /**         Public */ 8: {icon: '⛲', fullName: 'Public Space'},
+    /**      Transport */ 9: {icon: '🚍', fullName: 'Public Transport'},
+    /** Event Location */ 10: {icon: '🏟️', fullName: 'Event Location'},
+    /**       Cemetery */ 11: {icon: '🪦', fullName: 'Cemetery'},
   };
 
   export const transport_mode: Record<number, KeyInfoItem> = {
-    /**            Bike */ 0: {icon: '🚴‍♀️', fullName: 'Bicycle'},
-    /**    Car (Driver) */ 1: {icon: '🚘👤', fullName: 'Car as Driver'},
-    /** Car (Passenger) */ 2: {icon: '🚘👥', fullName: 'Car as Passenger'},
-    /**             Bus */ 3: {icon: '🚍', fullName: 'Bus'},
-    /**         Walking */ 4: {icon: '🚶‍♀️', fullName: 'Walking'},
-    /**           Other */ 5: {icon: '🛸', fullName: 'Other'},
-    /**         Unknown */ 6: {icon: '❓', fullName: 'Unknown'},
+    /**         Unknown */ 0: {icon: '❓', fullName: 'Unknown'},
+    /**            Bike */ 1: {icon: '🚴‍♀️', fullName: 'Bicycle'},
+    /**    Car (Driver) */ 2: {icon: '🚘👤', fullName: 'Car Driver'},
+    /** Car (Passenger) */ 3: {icon: '🚘👥', fullName: 'Car Passenger'},
+    /**             Bus */ 4: {icon: '🚍', fullName: 'Bus'},
+    /**         Walking */ 5: {icon: '🚶‍♀️', fullName: 'Walking'},
+    /**           Other */ 6: {icon: '🛸', fullName: 'Other'},
   };
 
   export const activity: Record<number, string> = {
@@ -47,13 +48,13 @@ export namespace KeyInfo {
   export const infection_state: Record<number, KeyInfoItem> = {
     /**                             Any */ 99: anyOption,
     /**                     Susceptible */ 0: {icon: '🙂', fullName: 'Susceptible to Infection'},
-    /**       Infected with no symptoms */ 1: {icon: '🤔', fullName: 'Asymptomatic Infection'},
-    /**          Infected with symptoms */ 2: {icon: '🤧', fullName: 'Symptomatic Infection'},
-    /**   Infected with severe symptoms */ 3: {icon: '🤒', fullName: 'Severely Symptomatic'},
-    /** Infected with critical symptoms */ 4: {icon: '🤮', fullName: 'Critically Symptomatic'},
-    /**                       Recovered */ 5: {icon: '😀', fullName: 'Recovered from Infection'},
-    /**                            Dead */ 6: {icon: '💀', fullName: 'Deceased'},
-    /**                         Unknown */ 7: {icon: '❓', fullName: 'Unknown'},
+    /**       Infected with no symptoms */ 1: {icon: '🤔', fullName: 'Asymptomatic Infection, not infectious'},
+    /**       Infected with no symptoms */ 2: {icon: '😷', fullName: 'Asymptomatic Infection, infectious'},
+    /**          Infected with symptoms */ 3: {icon: '🤧', fullName: 'Symptomatic Infection'},
+    /**   Infected with severe symptoms */ 4: {icon: '🤒', fullName: 'Severely Symptomatic'},
+    /** Infected with critical symptoms */ 5: {icon: '🤮', fullName: 'Critically Symptomatic'},
+    /**                       Recovered */ 6: {icon: '😀', fullName: 'Recovered from Infection'},
+    /**                            Dead */ 7: {icon: '💀', fullName: 'Deceased'},
   };
 
   export const age_group: Record<number, KeyInfoItem> = {

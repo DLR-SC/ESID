@@ -109,7 +109,7 @@ export const PandemosProvider = ({children}: {children: React.ReactNode}) => {
       let start = 0;
       tripChain.forEach((trip, index) => {
         if (getLocation(trip.start_location)?.location_type === 0) start = index;
-        if (getLocation(trip.end_location)?.location_type === 0 || getLocation(trip.end_location)?.location_type === 10)
+        if (getLocation(trip.end_location)?.location_type === 0 || getLocation(trip.end_location)?.location_type === 11)
           tripChains.set(tripId++, tripChain.slice(start, index + 1));
       });
     }
@@ -161,24 +161,25 @@ export const locationNames: Record<number, string> = {
   0: '🏡', // Home
   1: '🏫', // School
   2: '🏭/🏢', // Work
-  3: '🏟', // Social Event
+  3: '🥂', // Social Event
   4: '🏪', // Shopping
   5: '🏥❗', // Hospital
   6: '🏥‼', // ICU
   7: '🚘', // Car
   8: '⛲', // Public
   9: '🚍', // Transport
-  10: '⚰', // Cemetery
+  11: '🏟️', // Event Location
+  10: '🪦', // Cemetery
 };
 
 export const transportNames: Record<number, string> = {
-  0: '🚴‍♀️', // Bike
-  1: '🚘👤', // Car (Driver)
-  2: '🚘👥', // Car (Passenger)
-  3: '🚍', // Bus
-  4: '🚶‍♀️', // Walking
-  5: '🛸', // Other
-  6: '❓', // Unknown
+  0: '❓', // Unknown
+  1: '🚴‍♀️', // Bike
+  2: '🚘👤', // Car (Driver)
+  3: '🚘👥', // Car (Passenger)
+  4: '🚍', // Bus
+  5: '🚶‍♀️', // Walking
+  6: '🛸', // Other
 };
 
 export const activityNames: Record<number, string> = {
@@ -194,11 +195,11 @@ export const activityNames: Record<number, string> = {
 
 export const infectionStateNames: Record<number, string> = {
   0: '🙂', // Susceptible
-  1: '🤔', // Infected with no symptoms
-  2: '🤧', // Infected with symptoms
-  3: '🤒', // Infected with severe symptoms
-  4: '🤮', // Infected with critical symptoms
-  5: '😀', // Recovered
-  6: '💀', // Dead
-  7: '❓', // Unknown
+  1: '🤔', // Asymptomatic Infection, not infectious
+  2: '😷', // Asymptomatic Infection, infectious
+  3: '🤧', // Infected with symptoms
+  4: '🤒', // Infected with severe symptoms
+  5: '🤮', // Infected with critical symptoms
+  6: '😀', // Recovered
+  7: '💀', // Dead
 };
