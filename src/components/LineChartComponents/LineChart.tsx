@@ -727,6 +727,8 @@ export default function LineChart({
   ]);
 
   const {register} = useExportingRegistry();
+
+  // https://www.amcharts.com/docs/v5/reference/exporting/ docs for export settings from amcharts
   const exportSettings = useMemo(() => {
     return {
       filePrefix: exportedFileName,

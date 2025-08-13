@@ -41,6 +41,9 @@ export default function ExportDialog(): JSX.Element {
       const lineDataUrl = toDataUrl(lineImg);
       const mapDataUrl = toDataUrl(mapImg);
 
+      /**
+       * More information how to work with pdfmake to create a pdf: https://pdfmake.github.io/docs/0.1/document-definition-object/
+       */
       const doc: TDocumentDefinitions = {
         pageSize: 'A4',
         pageOrientation: 'portrait',
