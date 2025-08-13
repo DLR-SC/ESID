@@ -13,12 +13,14 @@ import Box from '@mui/system/Box';
 import {useAppSelector} from 'store/hooks';
 import {AuthContext, IAuthContext} from 'react-oauth2-code-pkce';
 import CircularProgress from '@mui/material/CircularProgress';
+import Download from '@mui/icons-material/Download';
 
 const ChangelogDialog = React.lazy(() => import('./PopUps/ChangelogDialog'));
 const ImprintDialog = React.lazy(() => import('./PopUps/ImprintDialog'));
 const PrivacyPolicyDialog = React.lazy(() => import('./PopUps/PrivacyPolicyDialog'));
 const AccessibilityDialog = React.lazy(() => import('./PopUps/AccessibilityDialog'));
 const AttributionDialog = React.lazy(() => import('./PopUps/AttributionDialog'));
+const ExportDialog = React.lazy(() => import('./PopUps/ExportDialog'));
 
 type TokenData = {
   realm_access?: {
@@ -50,6 +52,7 @@ export default function ApplicationMenu(): JSX.Element {
   const [accessibilityOpen, setAccessibilityOpen] = React.useState(false);
   const [attributionsOpen, setAttributionsOpen] = React.useState(false);
   const [changelogOpen, setChangelogOpen] = React.useState(false);
+  const [exportOpen, setExportOpen] = React.useState(false);
 
   const keycloakLogout = () => {
     window.location.assign(
@@ -110,6 +113,11 @@ export default function ApplicationMenu(): JSX.Element {
     setChangelogOpen(true);
   };
 
+  const exportClicked = () => {
+    closeMenu();
+    setExportOpen(true);
+  };
+
   return (
     <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'flex-end'}}>
       <Button
@@ -140,6 +148,14 @@ export default function ApplicationMenu(): JSX.Element {
         <MenuItem onClick={accessibilityClicked}>{t('topBar.menu.accessibility')}</MenuItem>
         <MenuItem onClick={attributionClicked}>{t('topBar.menu.attribution')}</MenuItem>
         <MenuItem onClick={changelogClicked}>{t('topBar.menu.changelog')}</MenuItem>
+        <Divider />
+        <MenuItem
+          onClick={exportClicked}
+          sx={{display: 'flex', alignItems: 'center', gap: 1, justifyContent: 'space-between'}}
+        >
+          <Box>Export</Box>
+          <Download />
+        </MenuItem>
       </Menu>
 
       <Dialog maxWidth='lg' fullWidth={true} open={imprintOpen} onClose={() => setImprintOpen(false)}>
@@ -199,6 +215,18 @@ export default function ApplicationMenu(): JSX.Element {
           }
         >
           <ChangelogDialog />
+        </Suspense>
+      </Dialog>
+
+      <Dialog maxWidth='lg' fullWidth={true} open={exportOpen} onClose={() => setExportOpen(false)}>
+        <Suspense
+          fallback={
+            <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%'}}>
+              <CircularProgress sx={{padding: '10rem'}} disableShrink />
+            </Box>
+          }
+        >
+          <ExportDialog />
         </Suspense>
       </Dialog>
     </Box>

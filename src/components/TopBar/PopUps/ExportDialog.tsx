@@ -1,0 +1,31 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
+
+import React from 'react';
+import Box from '@mui/material/Box';
+import useTheme from '@mui/material/styles/useTheme';
+import {useTranslation} from 'react-i18next';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+
+export default function ExportDialog(): JSX.Element {
+  const {t} = useTranslation();
+  const theme = useTheme();
+
+  return (
+    <Box
+      sx={{
+        padding: theme.spacing(4),
+        background: theme.palette.background.paper,
+      }}
+    >
+      <Typography variant='h3'>{t('export.header')}</Typography>
+      <br />
+      <Typography>{t('export.description')}</Typography>
+      <br />
+      <Button variant='contained' color='primary'>
+        {t('export.button')}
+      </Button>
+    </Box>
+  );
+}
