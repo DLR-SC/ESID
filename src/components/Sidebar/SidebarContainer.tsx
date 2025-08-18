@@ -1,0 +1,294 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: Apache-2.0
+
+import React, {useState, useEffect, useRef, useCallback, useMemo, useContext} from 'react';
+import {useTranslation} from 'react-i18next';
+import Grid from '@mui/material/Grid';
+import Stack from '@mui/material/Stack';
+import useTheme from '@mui/material/styles/useTheme';
+import * as am5 from '@amcharts/amcharts5';
+import {useAppDispatch, useAppSelector} from 'store/hooks';
+import {HeatmapLegend} from 'types/heatmapLegend';
+import i18n from 'util/i18n';
+import LockMaxValue from './MapComponents/LockMaxValue';
+import HeatLegendEdit from './MapComponents/HeatLegendEdit';
+import SearchBar from './MapComponents/SearchBar';
+import LoadingContainer from '../shared/LoadingContainer';
+import {NumberFormatter} from 'util/hooks';
+import HeatMap from './MapComponents/HeatMap';
+import HeatLegend from './MapComponents/HeatLegend';
+import SidebarTabs from './SidebarTabs';
+import Container from '@mui/material/Container';
+import Box from '@mui/material/Box';
+import {selectDistrict} from 'store/DataSelectionSlice';
+import legendPresets from '../../../assets/heatmap_legend_presets.json?raw';
+import {selectHeatmapLegend} from 'store/UserPreferenceSlice';
+import {GeoJsonProperties} from 'geojson';
+import {DataContext} from 'context/SelectedDataContext';
+
+export default function MapContainer() {
+  const {t} = useTranslation();
+  const {formatNumber} = NumberFormatter(i18n.language, 1, 0);
+  const {t: tBackend} = useTranslation('backend');
+  const theme = useTheme();
+  const dispatch = useAppDispatch();
+
+  const {geoData, mapData, searchBarData, nodes, compartments} = useContext(DataContext)!;
+
+  const storeSelectedArea = useAppSelector((state) => state.dataSelection.district);
+  const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
+  const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
+  const scenariosState = useAppSelector((state) => state.dataSelection.scenarios);
+  const storeHeatLegend = useAppSelector((state) => state.userPreference.selectedHeatmap);
+
+  const germanyNode = useMemo(() => {
+    return nodes?.find((node) => node.name === '00000');
+  }, [nodes]);
+
+  const defaultValue = useMemo(() => {
+    return {
+      RS: '00000',
+      GEN: t('germany'),
+      BEZ: '',
+      id: -1,
+    };
+  }, [t]);
+
+  const [selectedArea, setSelectedArea] = useState<GeoJsonProperties>(
+    storeSelectedArea.name != ''
+      ? {RS: storeSelectedArea.nuts, GEN: storeSelectedArea.name, BEZ: storeSelectedArea.type}
+      : defaultValue
+  );
+  const [aggregatedMax, setAggregatedMax] = useState<number>(1);
+  const [legend, setLegend] = useState<HeatmapLegend>(storeHeatLegend);
+  const [longLoad, setLongLoad] = useState(false);
+  const [fixedLegendMaxValue, setFixedLegendMaxValue] = useState<number | null>(null);
+
+  const legendRef = useRef<am5.HeatLegend | null>(null);
+  const selectedAreaRef = useRef<GeoJsonProperties | null>(null);
+
+  // Set selected area on first load. If language change and selected area is germany, set default value again to update the name
+  useEffect(() => {
+    if (selectedArea?.RS === '00000') {
+      setSelectedArea(defaultValue);
+    }
+    // This effect should only run when the language changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [i18n.language]);
+
+  // Set selected area in store
+  useEffect(() => {
+    const id = nodes?.find((node) => node.name === selectedArea?.['RS']);
+    if (id) {
+      dispatch(
+        selectDistrict({
+          id: String(id.id),
+          nuts: String(selectedArea?.['RS']),
+          name: String(selectedArea?.['GEN']),
+          type: String(selectedArea?.['BEZ']),
+        })
+      );
+    }
+    // This effect should only run when the selectedArea changes
+  }, [selectedArea, dispatch, nodes]);
+
+  // Set selected area in state when it changes in store
+  useEffect(() => {
+    // Only update `selectedArea` if `storeSelectedArea` has changed meaningfully
+    // and the name is not germany 00000
+    if (
+      storeSelectedArea.name !== '' &&
+      storeSelectedArea.id !== selectedAreaRef.current?.id &&
+      storeSelectedArea.name !== '00000'
+    ) {
+      setSelectedArea({
+        RS: storeSelectedArea.nuts,
+        GEN: storeSelectedArea.name,
+        BEZ: storeSelectedArea.type,
+        id: storeSelectedArea.id,
+      });
+
+      // update the ref with the new selectedArea
+      selectedAreaRef.current = {
+        RS: storeSelectedArea.nuts,
+        GEN: storeSelectedArea.name,
+        BEZ: storeSelectedArea.type,
+        id: storeSelectedArea.id,
+      };
+    }
+  }, [storeSelectedArea]);
+
+  // Set legend in store
+  useEffect(() => {
+    dispatch(selectHeatmapLegend({legend: legend}));
+    // This effect should only run when the legend changes
+  }, [legend, dispatch]);
+
+  const calculateToolTip = useCallback(
+    (regionData: GeoJsonProperties) => {
+      const bez = t(`BEZ.${regionData?.BEZ}`);
+      const compartmentName = tBackend(
+        `infection-states.${compartments?.find((c) => c.id === selectedCompartment)?.name}`
+      );
+      return selectedScenario !== null && selectedCompartment
+        ? `${bez} {GEN}\n${compartmentName}: ${formatNumber(Number(regionData?.value))}`
+        : `${bez} {GEN}`;
+    },
+    [compartments, formatNumber, selectedCompartment, selectedScenario, t, tBackend]
+  );
+
+  const calculateToolTipFetching = useCallback(
+    (regionData: GeoJsonProperties) => {
+      const bez = t(`BEZ.${regionData?.BEZ}`);
+      return `${bez} {GEN}`;
+    },
+    [t]
+  );
+
+  const localization = useMemo(() => {
+    return {
+      formatNumber: formatNumber,
+    };
+  }, [formatNumber]);
+
+  const optionLabel = useCallback(
+    (option: GeoJsonProperties) => {
+      return `${option?.GEN}${option?.BEZ ? ` (${t(`BEZ.${option?.BEZ}`)})` : ''}`;
+    },
+    [t]
+  );
+
+  const data = useMemo(() => {
+    return mapData
+      ?.filter((entry) => entry.node !== germanyNode?.id)
+      ?.map((entry) => ({
+        id: nodes?.find((n) => n.id === entry.node)?.name ?? '',
+        value: entry.value,
+      }));
+  }, [germanyNode?.id, mapData, nodes]);
+
+  const presets = useMemo(() => {
+    const presetList = JSON.parse(legendPresets) as unknown as Array<HeatmapLegend>;
+    presetList.forEach((legend) => {
+      if (legend.isNormalized) {
+        legend.steps.forEach((step) => {
+          //set step to normalized values
+          step.value = step.value / legend.steps[legend.steps.length - 1].value;
+        });
+      }
+    });
+    return presetList;
+  }, []);
+
+  const legends = useMemo(() => {
+    if (selectedScenario && scenariosState[selectedScenario]) {
+      const colors = scenariosState[selectedScenario]?.colors;
+      const stepCount = colors.length - 1;
+      const steps = [];
+      for (let j = 0; j < stepCount; j++) {
+        steps.push({
+          color: colors[stepCount - 1 - j],
+          value: j / (stepCount - 1),
+        });
+      }
+      const defaultLegend: HeatmapLegend = {name: 'Default', isNormalized: true, steps};
+      const result = [defaultLegend];
+      result.push(...presets);
+      return result;
+    } else {
+      return presets;
+    }
+  }, [presets, scenariosState, selectedScenario]);
+
+  return (
+    <Stack
+      id='sidebar-root'
+      direction='column'
+      alignItems='stretch'
+      justifyContent='flex-start'
+      sx={{
+        width: '422px',
+        borderRight: `1px solid ${theme.palette.divider}`,
+        background: theme.palette.background.default,
+      }}
+    >
+      <Box id='sidebar-map-search-bar-wrapper'>
+        <SearchBar
+          data={searchBarData}
+          sortProperty={'GEN'}
+          optionLabel={optionLabel}
+          autoCompleteValue={{
+            RS: selectedArea?.RS as string,
+            GEN: selectedArea?.GEN as string,
+            BEZ: selectedArea?.BEZ as string,
+            id: selectedArea?.id as number,
+          }}
+          onChange={(_event, option) => {
+            if (option) {
+              if (option.RS && option.GEN && option.BEZ) setSelectedArea(option);
+              else setSelectedArea(defaultValue);
+            }
+          }}
+          placeholder={`${selectedArea?.GEN}${selectedArea?.BEZ ? ` (${t(`BEZ.${selectedArea?.BEZ}`)})` : ''}`}
+          optionEqualProperty='RS'
+          valueEqualProperty='RS'
+        />
+      </Box>
+      <Box id='sidebar-map-wrapper'>
+        <LoadingContainer show={mapData === undefined || longLoad} overlayColor={theme.palette.background.default}>
+          <HeatMap
+            selectedArea={selectedArea}
+            setSelectedArea={setSelectedArea}
+            aggregatedMax={aggregatedMax}
+            setAggregatedMax={setAggregatedMax}
+            legend={legend}
+            legendRef={legendRef}
+            fixedLegendMaxValue={fixedLegendMaxValue}
+            mapData={geoData}
+            tooltipText={calculateToolTip}
+            tooltipTextWhileFetching={calculateToolTipFetching}
+            defaultSelectedValue={defaultValue}
+            values={data}
+            isDataFetching={mapData === undefined}
+            longLoad={longLoad}
+            setLongLoad={setLongLoad}
+            areaId={'RS'}
+            localization={localization}
+            maxZoomLevel={32}
+          />
+          <Grid container px={1} id='side-bar-heat-legend'>
+            <Grid item container xs={11} alignItems='flex-end'>
+              <HeatLegend
+                legend={legend}
+                exposeLegend={useCallback((legend: am5.HeatLegend | null) => {
+                  // move exposed legend item (or null if disposed) into ref
+                  legendRef.current = legend;
+                }, [])}
+                min={0}
+                // use math.round to convert the numbers to integers
+                max={
+                  legend.isNormalized
+                    ? Math.round(aggregatedMax)
+                    : Math.round(legend.steps[legend.steps.length - 1].value)
+                }
+                displayText={true}
+                localization={localization}
+              />
+            </Grid>
+            <Grid item container justifyContent='center' direction={'column'} xs={1}>
+              <LockMaxValue
+                fixedLegendMaxValue={fixedLegendMaxValue}
+                setFixedLegendMaxValue={setFixedLegendMaxValue}
+                aggregatedMax={aggregatedMax}
+              />
+              <HeatLegendEdit selectedLegend={legend} setSelectedLegend={setLegend} legends={legends} />
+            </Grid>
+          </Grid>
+        </LoadingContainer>
+      </Box>
+      <Container disableGutters sx={{flexGrow: 1}}>
+        <SidebarTabs />
+      </Container>
+    </Stack>
+  );
+}

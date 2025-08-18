@@ -1,0 +1,365 @@
+// SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+// SPDX-License-Identifier: CC0-1.0
+
+{
+  'infection-states': {
+    Infected: 'Infected',
+    MildInfections: 'Mild Infection',
+    Hospitalized: 'Hospitalized',
+    ICU: 'Intensive Care',
+    Dead: 'Dead',
+    DeadV1: 'Dead (💉)',
+    DeadV2: 'Dead (💉💉)',
+    Exposed: 'Exposed',
+    Recovered: 'Recovered',
+    Carrier: 'Carrier',
+    Susceptible: 'Susceptible',
+    InfectedT: 'Infected (🧪)',
+    InfectedTV1: 'Infected (🧪 + 💉)',
+    InfectedTV2: 'Infected (🧪 + 💉💉)',
+    InfectedV1: 'Infected (💉)',
+    InfectedV2: 'Infected (💉💉)',
+    HospitalizedV1: 'Hospitalized (💉)',
+    HospitalizedV2: 'Hospitalized (💉💉)',
+    ICUV1: 'Intensive Care (💉)',
+    ICUV2: 'Intensive Care (💉💉)',
+    ExposedV1: 'Exposed (💉)',
+    ExposedV2: 'Exposed (💉💉)',
+    CarrierT: 'Carrier (🧪)',
+    CarrierTV1: 'Carrier (🧪 + 💉)',
+    CarrierTV2: 'Carrier (🧪 + 💉💉)',
+    CarrierV1: 'Carrier (💉)',
+    CarrierV2: 'Carrier (💉💉)',
+    SusceptibleV1: 'Susceptible (💉)',
+    SusceptibleV2: 'Susceptible (💉💉)',
+    tooltip: 'The numbers of infected and hospitalised shown here are based on assumptions about immunity, duration and\
+              severity of infection with Sars-CoV-2. They are calculated via a complex multi-step process from the\
+              reported case numbers and a simple formula cannot be given. An increase/decrease in the number of cases\
+              means an increase/decrease in the number of infected persons, so that it is possible to assess whether\
+              the situation is improving or worsening in relation to the values of the previous days. If available, the\
+              figures on intensive care patients come from the DIVI Intensive Care Register.',
+  },
+  parameters: {
+    // Old Parameter Names
+    AsymptoticCasesPerInfectious: {
+      symbol: '\\mu_C^R',
+      description: 'Share of nonsymptomatic cases',
+      unit: '%',
+    },
+    DeathsPerHospitalized: {
+      symbol: '\\mu_U^D',
+      description: 'Share of persons that die during ICU treatment',
+      unit: '%',
+    },
+    HomeToHospitalizedTime: {
+      symbol: 'T_I',
+      description: 'Average time span for persons with mild symptoms',
+      unit: 'days',
+    },
+    HospitalizedCasesPerInfectious: {
+      symbol: '\\mu_I^H',
+      description: 'Share of symptomatic individuals that later need hospitalization',
+      unit: '%',
+    },
+    HospitalizedToHomeTime: {
+      symbol: 'T_H',
+      description: 'Time span of necessary hospitalization (without ICU)',
+      unit: 'days',
+    },
+    HospitalizedToICUTime: {
+      symbol: 'Deprecated',
+      description: 'HospitalizedToICUTime',
+      unit: 'days',
+    },
+    ICUCasesPerHospitalized: {
+      symbol: '\\mu_H^U',
+      description: 'Share of hospitalized patients that later need ICU treatment',
+      unit: '%',
+    },
+    ICUToDeathTime: {
+      symbol: 'T_U',
+      description: 'Time span of necessary ICU treatment',
+      unit: 'days',
+    },
+    ICUToHomeTime: {
+      symbol: 'Deprecated',
+      description: 'ICUToHomeTime',
+      unit: 'days',
+    },
+    InfectionProbabilityFromContact: {
+      symbol: 'p^{(0)}',
+      description: 'Basic Transmission risk (without seasonality factor)',
+      unit: '%',
+    },
+    InfectiousTimeMild: {
+      symbol: 'Deprecated',
+      description: 'InfectiousTimeMild',
+      unit: 'days',
+    },
+    MaxRiskOfInfectionFromSympomatic: {
+      symbol: '\\xi_{I_{Sy}}',
+      description: 'Maximum relative risk of infection from nonisolated symptomatic individuals (with test capacity limitations)',
+      unit: '%',
+    },
+    ReducExpInf: {
+      symbol: 'p_{I_{Sy,PI}}',
+      description: 'Relative reduction against symptomatic CODs for individuals with partial immunity',
+      unit: '%',
+    },
+    ReducImmuneExp: {
+      symbol: 'p_{E_{II}}',
+      description: 'Relative reduction against any infection for individuals with improved immunity',
+      unit: '%',
+    },
+    ReducImmuneExpInf: {
+      symbol: 'p_{I_{Sy,II}}',
+      description: 'Relative reduction against symptomatic CODs for individuals with improved immunity',
+      unit: '%',
+    },
+    ReducImmuneInfHosp: {
+      symbol: 'p_{I_{Sev,II}}',
+      description: 'Relative reduction against severe and critical CODs for individuals with improved immunity',
+      unit: '%',
+    },
+    ReducInfHosp: {
+      symbol: 'p_{I_{Sev,PI}}',
+      description: 'Relative reduction against severe and critical CODs for individuals with partial immunity',
+      unit: '%',
+    },
+    ReducTime: {
+      symbol: '\\kappa',
+      description: 'Relative reduction of time span of mild infections for individuals with partial and improved immunity',
+      unit: 'days',
+    },
+    ReducVaccExp: {
+      symbol: 'p_{E_{PI}}',
+      description: 'Relative reduction against any infection for individuals with partial immunity',
+      unit: '%',
+    },
+    RelativeCarrierInfectability: {
+      symbol: '\\xi_{I_{NS}}',
+      description: 'Relative risk of infection from nonisolated nonsymptomatic individuals',
+      unit: '%',
+    },
+    RiskOfInfectionFromSympomatic: {
+      symbol: '\\xi_{I_{Sy},max}',
+      description: 'Relative risk of infection from nonisolated symptomatic individuals',
+      unit: '%',
+    },
+    // New Parameter Names
+    RecoveredPerInfectedNoSymptoms: {
+      symbol: '\\mu_C^R',
+      description: 'Share of nonsymptomatic cases',
+      unit: '%',
+    },
+    DeathsPerCritical: {
+      symbol: '\\mu_U^D',
+      description: 'Share of persons that die during ICU treatment',
+      unit: '%',
+    },
+    TimeInfectedSymptoms: {
+      symbol: 'T_I',
+      description: 'Average time span for persons with mild symptoms',
+      unit: 'days',
+    },
+    SeverePerInfectedSymptoms: {
+      symbol: '\\mu_I^H',
+      description: 'Share of symptomatic individuals that later need hospitalization',
+      unit: '%',
+    },
+    TimeInfectedSevere: {
+      symbol: 'T_H',
+      description: 'Time span of necessary hospitalization (without ICU)',
+      unit: 'days',
+    },
+    CriticalPerSevere: {
+      symbol: '\\mu_H^U',
+      description: 'Share of hospitalized patients that later need ICU treatment',
+      unit: '%',
+    },
+    TimeInfectedCritical: {
+      symbol: 'T_U',
+      description: 'Time span of necessary ICU treatment',
+      unit: 'days',
+    },
+    IncubationTime: {
+      symbol: 'IT',
+      description: 'Incubation period',
+      unit: 'days',
+    },
+    TransmissionProbabilityOnContact: {
+      symbol: 'p^{(0)}',
+      description: 'Basic Transmission risk (without seasonality factor)',
+      unit: '%',
+    },
+    MaxRiskOfInfectionFromSymptomatic: {
+      symbol: '\\xi_{I_{Sy}}',
+      description: 'Maximum relative risk of infection from nonisolated symptomatic individuals (with test capacity limitations)',
+      unit: '%',
+    },
+    ReducInfectedSymptomsPartialImmunity: {
+      symbol: 'p_{I_{Sy,PI}}',
+      description: 'Relative reduction against symptomatic CODs for individuals with partial immunity',
+      unit: '%',
+    },
+    ReducedInfectedSymptomsPartialImmunity: {
+      symbol: 'p_{I_{Sy,PI}}',
+      description: 'Relative reduction against symptomatic CODs for individuals with partial immunity',
+      unit: '%',
+    },
+    ReducExposedImprovedImmunity: {
+      symbol: 'p_{E_{II}}',
+      description: 'Relative reduction against any infection for individuals with improved immunity',
+      unit: '%',
+    },
+    ReducedExposedImprovedImmunity: {
+      symbol: 'p_{E_{II}}',
+      description: 'Relative reduction against any infection for individuals with improved immunity',
+      unit: '%',
+    },
+    ReducInfectedSymptomsImprovedImmunity: {
+      symbol: 'p_{I_{Sy,II}}',
+      description: 'Relative reduction against symptomatic CODs for individuals with improved immunity',
+      unit: '%',
+    },
+    ReducedInfectedSymptomsImprovedImmunity: {
+      symbol: 'p_{I_{Sy,II}}',
+      description: 'Relative reduction against symptomatic CODs for individuals with improved immunity',
+      unit: '%',
+    },
+    ReducInfectedSevereCriticalDeadImprovedImmunity: {
+      symbol: 'p_{I_{Sev,II}}',
+      description: 'Relative reduction against severe and critical CODs for individuals with improved immunity',
+      unit: '%',
+    },
+    ReducedInfectedSevereCriticalDeadImprovedImmunity: {
+      symbol: 'p_{I_{Sev,II}}',
+      description: 'Relative reduction against severe and critical CODs for individuals with improved immunity',
+      unit: '%',
+    },
+    ReducInfectedSevereCriticalDeadPartialImmunity: {
+      symbol: 'p_{I_{Sev,PI}}',
+      description: 'Relative reduction against severe and critical CODs for individuals with partial immunity',
+      unit: '%',
+    },
+    ReducedInfectedSevereCriticalDeadPartialImmunity: {
+      symbol: 'p_{I_{Sev,PI}}',
+      description: 'Relative reduction against severe and critical CODs for individuals with partial immunity',
+      unit: '%',
+    },
+    ReducTimeInfectedMild: {
+      symbol: '\\kappa',
+      description: 'Relative reduction of time span of mild infections for individuals with partial and improved immunity',
+      unit: 'days',
+    },
+    ReducedTimeInfectedMild: {
+      symbol: '\\kappa',
+      description: 'Relative reduction of time span of mild infections for individuals with partial and improved immunity',
+      unit: 'days',
+    },
+    ReducExposedPartialImmunity: {
+      symbol: 'p_{E_{PI}}',
+      description: 'Relative reduction against any infection for individuals with partial immunity',
+      unit: '%',
+    },
+    ReducedExposedPartialImmunity: {
+      symbol: 'p_{E_{PI}}',
+      description: 'Relative reduction against any infection for individuals with partial immunity',
+      unit: '%',
+    },
+    RelativeTransmissionNoSymptoms: {
+      symbol: '\\xi_{I_{NS}}',
+      description: 'Relative risk of infection from nonisolated nonsymptomatic individuals',
+      unit: '%',
+    },
+    RiskOfInfectionFromSymptomatic: {
+      symbol: '\\xi_{I_{Sy},max}',
+      description: 'Relative risk of infection from nonisolated symptomatic individuals',
+      unit: '%',
+    },
+    Seasonality: {
+      symbol: 'k',
+      description: 'Contribution of relative seasonal factor',
+      unit: '%',
+    },
+    SerialInterval: {
+      symbol: 'SI',
+      description: 'Serial interval between two consecutive infections',
+      unit: 'days',
+    },
+    VaccinationGap: {
+      symbol: '-',
+      description: 'Time in days between first and second vaccine shot',
+      unit: 'days',
+    },
+    ContactScaling: {
+      symbol: '-',
+      description: 'Scaling of contacts due to e.g. NPIs',
+      unit: '%',
+    },
+    TimeExposed: {
+      symbol: 'T_E',
+      description: 'Average time span before exposed individuals become infectious',
+      unit: 'days',
+    },
+    TimeInfectedNoSymptom: {
+      symbol: 'T_C',
+      description: 'Average time span of infectiousness without symptoms',
+      unit: 'days',
+    },
+    TimeInfectedNoSymptoms: {
+      symbol: 'T_C',
+      description: 'Average time span of infectiousness without symptoms',
+      unit: 'days',
+    },
+  },
+  'scenario-names': {
+    caseData: 'Estimated Cases',
+    casedata: 'Estimated Cases',
+    baseline: 'Baseline Scenario',
+    closed_schools: 'Schools Closed',
+    remote_work: 'Home Office',
+    '10p_reduced_contacts': '10% Reduced Contacts',
+    'Summer 2021 Simulation 1': 'Scenario without Interventions',
+    'Summer 2021 Simulation 2': 'Scenario with Interventions',
+  },
+  'group-filters': {
+    categories: {
+      age: 'Age',
+      gender: 'Gender',
+    },
+    groups: {
+      age_0: '0 - 4 Years',
+      age_1: '5 - 14 Years',
+      age_2: '15 - 34 Years',
+      age_3: '35 - 59 Years',
+      age_4: '60 - 79 Years',
+      age_5: 'Above 80 Years',
+      total: 'Total',
+      female: 'Female',
+      male: 'Male',
+      nonbinary: 'Non-Binary',
+
+      Group1: '0 - 4 Years',
+      Group2: '5 - 14 Years',
+      Group3: '15 - 34 Years',
+      Group4: '35 - 59 Years',
+      Group5: '60 - 79 Years',
+      Group6: 'Above 80 Years',
+      Total: 'Total',
+    },
+  },
+  interventions: {
+    'School closure': 'School closures',
+    'Face masks & social distancing School': 'Face masks & social distancing School',
+    'Face masks & social distancing Work': 'Face masks & social distancing Work',
+    'Face masks & social distancing Other': 'Face masks & social distancing Other',
+    'Remote work': 'Remote work policies',
+  },
+  models: {
+    secirvvs: 'SECIRVVS',
+  },
+  regions: {
+    all_counties: 'All Districts',
+  },
+}
