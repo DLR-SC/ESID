@@ -38,15 +38,17 @@ export function SemanticSearchProvider({children}: SemanticSearchProviderProps) 
           const queryTerms = lowerCaseQuery.split(' ').filter((term) => term.length > 2);
 
           const newResults: SearchResult[] = apiResponse.results.map((item) => {
-            const relevanceScore = Math.round(item.similarity * 100);
+            const relevanceScore = item.similarity;
 
-            let classification: 'direct' | 'high' | 'related';
-            if (relevanceScore >= 90) {
+            let classification: 'direct' | 'high' | 'related' | 'unrelated';
+            if (relevanceScore >= 0.9) {
               classification = 'direct';
-            } else if (relevanceScore >= 80) {
+            } else if (relevanceScore >= 0.8) {
               classification = 'high';
-            } else {
+            } else if (relevanceScore < 0.8 && relevanceScore > 0.0) {
               classification = 'related';
+            } else {
+              classification = 'unrelated';
             }
 
             return {

@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, {useState, useMemo, useCallback} from 'react';
+import React, {useState, useMemo, useCallback, useEffect} from 'react';
 import {Box, Typography, Divider, TextField, IconButton, InputAdornment, CircularProgress} from '@mui/material';
 import {useSemanticSearch} from 'context/SemanticSearchContext';
 import QuerySuggestions from './QuerySuggestions';
@@ -25,6 +25,13 @@ export default function SemanticSearchContainer({localization}: {localization?: 
   const searchStatus = useAppSelector((state) => state.semanticSearch.searchStatus);
   const {t: defaultT, i18n} = useTranslation();
   const [selectedArticle, setSelectedArticle] = useState<SearchResult | null>(null);
+
+  useEffect(() => {
+    return () => {
+      dispatch(setSemanticSearchQuery(''));
+      clearSearch();
+    };
+  }, [dispatch, clearSearch]);
 
   const memoizedLocalization = useMemo(
     () =>
@@ -119,6 +126,9 @@ export default function SemanticSearchContainer({localization}: {localization?: 
                   borderRadius: '4px',
                   backgroundColor: 'primary.main',
                   color: 'primary.contrastText',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                   '&:hover': {
                     backgroundColor: 'primary.dark',
                   },
