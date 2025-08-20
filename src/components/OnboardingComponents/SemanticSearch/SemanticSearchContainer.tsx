@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, {useState} from 'react';
+import React, {useState, useMemo, useCallback} from 'react';
 import {Box, Typography, Divider, TextField, IconButton, InputAdornment, CircularProgress} from '@mui/material';
 import {useSemanticSearch} from 'context/SemanticSearchContext';
 import QuerySuggestions from './QuerySuggestions';
@@ -12,20 +12,46 @@ import {setSemanticSearchQuery} from 'store/SemanticSearchSlice';
 import SearchResultsList from './SearchResultsList';
 import ArticleDialog from './ArticleDialog';
 import {SearchResult} from 'types/semanticSearch';
+import {Localization} from 'types/localization';
 
 /**
  * Main container for the Semantic Search feature.
  * It will manage the search state and orchestrate the child components.
  */
-export default function SemanticSearchContainer(): JSX.Element {
+export default function SemanticSearchContainer({localization}: {localization?: Localization}): JSX.Element {
   const {searchResults, isLoading, performSearch, clearSearch} = useSemanticSearch();
   const dispatch = useAppDispatch();
   const query = useAppSelector((state) => state.semanticSearch.searchQuery);
   const searchStatus = useAppSelector((state) => state.semanticSearch.searchStatus);
-  const {t} = useTranslation('global');
+  const {t: defaultT, i18n} = useTranslation();
   const [selectedArticle, setSelectedArticle] = useState<SearchResult | null>(null);
 
-  const suggestions = [t('semanticSearch.suggestions.scenarioForecasting'), t('semanticSearch.suggestions.purpose')];
+  const memoizedLocalization = useMemo(
+    () =>
+      localization ?? {
+        formatNumber: (v: number) => v.toLocaleString(i18n.language),
+        customLang: 'global',
+        overrides: {},
+      },
+    [localization, i18n.language]
+  );
+
+  const {t: customT} = useTranslation(memoizedLocalization.customLang);
+
+  const tOverride = useCallback(
+    (key: string, options?: {[key: string]: string | number}) =>
+      memoizedLocalization.overrides?.[key]
+        ? customT(memoizedLocalization.overrides[key], options)
+        : defaultT(key, options),
+    [customT, defaultT, memoizedLocalization.overrides]
+  );
+
+  const fmtNum = memoizedLocalization.formatNumber ?? ((v: number) => v.toLocaleString(i18n.language));
+
+  const suggestions = [
+    tOverride('semanticSearch.suggestions.scenarioForecasting'),
+    tOverride('semanticSearch.suggestions.purpose'),
+  ];
 
   const handleSearch = () => {
     // performSearch is now required and will not be undefined.
@@ -58,17 +84,17 @@ export default function SemanticSearchContainer(): JSX.Element {
     <Box mt={4}>
       <Divider sx={{mb: 3}} />
       <Typography variant='h2' gutterBottom>
-        {t('semanticSearch.title')}
+        {tOverride('semanticSearch.title')}
       </Typography>
       <Typography variant='body1' paragraph sx={{color: 'GrayText'}}>
-        {t('semanticSearch.description')}
+        {tOverride('semanticSearch.description')}
       </Typography>
 
       <TextField
         fullWidth
         size='small'
         variant='outlined'
-        placeholder={t('semanticSearch.placeholder')}
+        placeholder={tOverride('semanticSearch.placeholder')}
         value={query}
         onChange={(e) => dispatch(setSemanticSearchQuery(e.target.value))}
         onKeyDown={(e) => {
@@ -108,7 +134,11 @@ export default function SemanticSearchContainer(): JSX.Element {
         }}
       />
 
-      <QuerySuggestions suggestions={suggestions} onSuggestionClick={handleSuggestionClick} />
+      <QuerySuggestions
+        suggestions={suggestions}
+        onSuggestionClick={handleSuggestionClick}
+        localization={memoizedLocalization}
+      />
 
       <Box
         mt={3}
@@ -120,11 +150,11 @@ export default function SemanticSearchContainer(): JSX.Element {
       >
         {searchResults.length > 0 && (
           <Typography variant='body2' sx={{color: 'GrayText', mb: 1.5, px: 1}}>
-            {t(
+            {tOverride(
               searchResults.length === 1
                 ? 'semanticSearch.results.resultsFound_one'
                 : 'semanticSearch.results.resultsFound_other',
-              {count: searchResults.length}
+              {count: fmtNum(searchResults.length)}
             )}{' '}
             &quot;
             <Box component='span' sx={{fontStyle: 'italic', color: 'primary.main'}}>
@@ -138,10 +168,14 @@ export default function SemanticSearchContainer(): JSX.Element {
             <CircularProgress />
           </Box>
         ) : searchResults.length > 0 ? (
-          <SearchResultsList results={searchResults} onResultClick={handleResultClick} />
+          <SearchResultsList
+            results={searchResults}
+            onResultClick={handleResultClick}
+            localization={memoizedLocalization}
+          />
         ) : searchStatus === 'succeeded' ? (
           <Box display='flex' justifyContent='center' alignItems='center' sx={{py: 4}}>
-            <Typography sx={{color: 'GrayText'}}>{t('semanticSearch.results.noResults')}</Typography>
+            <Typography sx={{color: 'GrayText'}}>{tOverride('semanticSearch.results.noResults')}</Typography>
           </Box>
         ) : null}
       </Box>

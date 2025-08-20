@@ -1,23 +1,45 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {Box, Chip, Paper, Typography, useTheme} from '@mui/material';
 import {SearchResult} from 'types/semanticSearch';
 import {useTranslation} from 'react-i18next';
+import {Localization} from 'types/localization';
 
 interface SearchResultItemProps {
   result: SearchResult;
   onResultClick: (result: SearchResult) => void;
+  localization?: Localization;
 }
 
 /**
  * A component that displays a single, styled search result item,
  * including title, snippet, relevance score, and classification tags.
  */
-export default function SearchResultItem({result, onResultClick}: SearchResultItemProps): JSX.Element {
+export default function SearchResultItem({result, onResultClick, localization}: SearchResultItemProps): JSX.Element {
   const theme = useTheme();
-  const {t} = useTranslation('global');
+  const {t: defaultT, i18n} = useTranslation();
+
+  const memoizedLocalization = useMemo(
+    () =>
+      localization ?? {
+        formatNumber: (v: number) => v.toLocaleString(i18n.language),
+        customLang: 'global',
+        overrides: {},
+      },
+    [localization, i18n.language]
+  );
+
+  const {t: customT} = useTranslation(memoizedLocalization.customLang);
+
+  const tOverride = useCallback(
+    (key: string) =>
+      memoizedLocalization.overrides?.[key]
+        ? customT(memoizedLocalization.overrides[key])
+        : defaultT(key, {count: result.score}),
+    [customT, defaultT, memoizedLocalization.overrides, result.score]
+  );
 
   const classificationStyles = {
     direct: {
@@ -38,9 +60,9 @@ export default function SearchResultItem({result, onResultClick}: SearchResultIt
   };
 
   const classificationText = {
-    direct: t('semanticSearch.classification.direct'),
-    high: t('semanticSearch.classification.high'),
-    related: t('semanticSearch.classification.related'),
+    direct: tOverride('semanticSearch.classification.direct'),
+    high: tOverride('semanticSearch.classification.high'),
+    related: tOverride('semanticSearch.classification.related'),
   };
 
   const truncateText = (text: string, wordLimit: number) => {
