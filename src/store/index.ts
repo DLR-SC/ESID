@@ -14,7 +14,6 @@ import UserOnboardingReducer from './UserOnboardingSlice';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import {idpApi} from './services/idpApi';
 import {articleApi} from './services/articleApi';
-import SemanticSearchReducer from './SemanticSearchSlice';
 
 const persistConfig = {
   key: 'root',
@@ -30,7 +29,6 @@ const rootReducer = combineReducers({
   userOnboarding: UserOnboardingReducer,
   realm: RealmReducer,
   auth: AuthReducer,
-  semanticSearch: SemanticSearchReducer,
   [scenarioApi.reducerPath]: scenarioApi.reducer,
   [idpApi.reducerPath]: idpApi.reducer,
   [articleApi.reducerPath]: articleApi.reducer,

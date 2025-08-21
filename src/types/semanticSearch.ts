@@ -10,7 +10,7 @@ export interface SearchResult {
   hyperlink: string;
   content: string;
   relevanceScore: number;
-  classification: 'direct' | 'high' | 'related';
+  classification: 'direct' | 'high' | 'related' | 'unrelated';
   highlightTerms: string[];
   language: 'en' | 'de';
 }
@@ -21,6 +21,7 @@ export interface SearchResult {
 export interface SemanticSearchContextType {
   searchResults: SearchResult[];
   isLoading: boolean;
+  searchStatus: 'idle' | 'loading' | 'succeeded';
   performSearch: (query: string) => void;
   clearSearch: () => void;
 }

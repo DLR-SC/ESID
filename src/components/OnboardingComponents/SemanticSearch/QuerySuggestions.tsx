@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React, {useCallback, useMemo} from 'react';
-import {Box, Chip, Typography} from '@mui/material';
+import {Box, Chip, Typography, alpha, useTheme} from '@mui/material';
 import {useTranslation} from 'react-i18next';
 import {Localization} from 'types/localization';
 
@@ -23,6 +23,7 @@ export default function QuerySuggestions({
   onSuggestionClick,
   localization,
 }: QuerySuggestionsProps): JSX.Element {
+  const theme = useTheme();
   const {t: defaultT, i18n} = useTranslation();
 
   const memoizedLocalization = useMemo(
@@ -44,11 +45,28 @@ export default function QuerySuggestions({
   );
 
   return (
-    <Box mb={2}>
-      <Typography variant='caption' sx={{color: 'GrayText', mb: 1, display: 'block'}}>
+    <Box
+      sx={{
+        marginBottom: 2,
+      }}
+    >
+      <Typography
+        variant='caption'
+        sx={{
+          color: 'GrayText',
+          marginBottom: 1,
+          display: 'block',
+        }}
+      >
         {tOverride('semanticSearch.suggestions.title')}
       </Typography>
-      <Box display='flex' flexWrap='wrap' gap={1}>
+      <Box
+        sx={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: 1,
+        }}
+      >
         {suggestions.map((suggestion) => (
           <Chip
             key={suggestion}
@@ -61,7 +79,8 @@ export default function QuerySuggestions({
               borderColor: 'primary.light',
               color: 'primary.main',
               '&:hover': {
-                backgroundColor: 'primary.main_10', // Assuming a 10% opacity color from your theme
+                // Applying the primary color at 10% opacity from the theme.
+                backgroundColor: alpha(theme.palette.primary.main, 0.1),
                 borderColor: 'primary.main',
               },
             }}

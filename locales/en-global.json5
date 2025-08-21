@@ -19,18 +19,6 @@
       attribution: 'Attribution',
       changelog: 'Changelog',
     },
-    applicationMenu: {
-      about: 'About ESID',
-      accessibility: 'Accessibility',
-      changelog: 'Changelog',
-      imprint: 'Imprint',
-      privacyPolicy: 'Privacy Policy',
-      termsOfUse: 'Terms of Use',
-    },
-    scenarioSelector: {
-      label: 'Scenario',
-    },
-    tour: 'Tour',
   },
   'icon-bar': {
     'previous-day-tooltip': 'Previous Day',
@@ -45,7 +33,6 @@
     placeholder: 'Main Content',
   },
   history: {
-    Tabtitle: 'history',
     title: 'History',
   },
   details: {
@@ -141,12 +128,6 @@
   today: 'Today',
   more: 'More',
   less: 'Less',
-  search: {
-    articles: {
-      placeholder: 'Search articles...',
-      ariaLabel: 'Search for articles and documentation',
-    },
-  },
   germany: 'Germany',
   'no-data': 'No Data',
   'loki-logo': 'LOKI logo',
@@ -172,7 +153,6 @@
       purpose: 'What is ESID purpose?',
     },
     results: {
-      initialPrompt: 'Enter a question to search for relevant articles and documentation.',
       noResults: 'No results found. Try rephrasing your question or using different keywords.',
       resultsFound_one: 'Found 1 result for',
       resultsFound_other: 'Found {{count}} results for',
@@ -181,11 +161,6 @@
       direct: 'Direct Answer',
       high: 'High Relevance',
       related: 'Related',
-    },
-    pagination: {
-      previous: 'Previous',
-      next: 'Next',
-      pageOf: 'Page {{current}} of {{total}}',
     },
   },
   language: 'Language',
@@ -252,9 +227,5 @@
     compartment: 'Compartment',
     reset: 'Reset to default value',
     r0: 'Basic Reproduction Number (R0)',
-  },
-  language: 'Language',
-  legal: {
-    attributions: 'Attributions',
   },
 }

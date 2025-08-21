@@ -40,6 +40,7 @@ export default function ArticleDialog({open, onClose, article}: ArticleDialogPro
   const [zoom, setZoom] = useState(1);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // Effect to register ResizeObserver to adjust Dialog to window resizes.
   useEffect(() => {
     const observer = new ResizeObserver((entries: ResizeObserverEntry[]) => {
       const entry = entries[0];
@@ -55,6 +56,7 @@ export default function ArticleDialog({open, onClose, article}: ArticleDialogPro
     return () => {
       observer.disconnect();
     };
+    // Runs once to initialize the observer.
   }, []);
 
   const goToNextPage = useCallback(() => {
@@ -77,12 +79,14 @@ export default function ArticleDialog({open, onClose, article}: ArticleDialogPro
     setZoom(1);
   }, []);
 
-  // Keyboard shortcuts for zoom and navigation
+  // Effect to handle keyboard shortcuts for zoom and navigation.
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (!open) return;
 
       switch (event.key) {
+        // Listen for both '+' and '=' for zooming in. On many keyboards (like the US QWERTY),
+        // '+' is the shifted version of the '=' key, so this makes the shortcut more reliable.
         case '+':
         case '=':
           if (event.ctrlKey || event.metaKey) {
@@ -129,7 +133,8 @@ export default function ArticleDialog({open, onClose, article}: ArticleDialogPro
 
   function onDocumentLoadSuccess({numPages: nextNumPages}: {numPages: number}) {
     setNumPages(nextNumPages);
-    setPageNumber(1); // Reset to first page on new document load
+     // Reset to first page on new document load
+    setPageNumber(1);
   }
 
   return (
@@ -141,8 +146,14 @@ export default function ArticleDialog({open, onClose, article}: ArticleDialogPro
       scroll='paper'
       sx={{'& .MuiDialog-paper': {height: '90vh'}}}
     >
-      <DialogTitle sx={{m: 0, p: 6, pb: 5}}>
-        <Typography variant='h2' sx={{pr: '2rem'}}>
+      <DialogTitle
+        sx={{
+          margin: 0,
+          padding: 6,
+          paddingBottom: 5,
+        }}
+      >
+        <Typography variant='h2' sx={{paddingRight: '2rem'}}>
           {article.title}
         </Typography>
         <IconButton
@@ -161,7 +172,12 @@ export default function ArticleDialog({open, onClose, article}: ArticleDialogPro
       <DialogContent
         ref={containerRef}
         dividers
-        sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', p: 1}}
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          padding: 1,
+        }}
       >
         <Document
           file={article.hyperlink}
@@ -172,7 +188,15 @@ export default function ArticleDialog({open, onClose, article}: ArticleDialogPro
           <Page pageNumber={pageNumber} width={containerWidth > 0 ? containerWidth : undefined} scale={zoom} />
         </Document>
       </DialogContent>
-      <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', p: 1, gap: 2}}>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          padding: 1,
+          gap: 2,
+        }}
+      >
         <IconButton onClick={goToPreviousPage} disabled={pageNumber <= 1} aria-label='previous page'>
           <ArrowBackIosNewIcon />
         </IconButton>
@@ -182,7 +206,7 @@ export default function ArticleDialog({open, onClose, article}: ArticleDialogPro
         <IconButton onClick={goToNextPage} disabled={pageNumber >= numPages} aria-label='next page'>
           <ArrowForwardIosIcon />
         </IconButton>
-        <Box sx={{display: 'flex', alignItems: 'center', gap: 1, ml: 2}}>
+        <Box sx={{display: 'flex', alignItems: 'center', gap: 1, marginLeft: 2}}>
           <Tooltip title='Zoom Out (Ctrl/Cmd + -)'>
             <IconButton onClick={handleZoomOut} disabled={zoom <= 0.25} aria-label='zoom out'>
               <ZoomOutIcon />

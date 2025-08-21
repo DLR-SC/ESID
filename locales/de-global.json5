@@ -19,28 +19,12 @@
       attribution: 'Attribution',
       changelog: 'Versionshistorie',
     },
-    applicationMenu: {
-      about: 'Über ESID',
-      accessibility: 'Barrierefreiheit',
-      changelog: 'Änderungsprotokoll',
-      imprint: 'Impressum',
-      privacyPolicy: 'Datenschutzerklärung',
-      termsOfUse: 'Nutzungsbedingungen',
-    },
-    scenarioSelector: {
-      label: 'Szenario',
-    },
-    tour: 'Tour',
   },
   'icon-bar': {
     'previous-day-tooltip': 'Vorheriger Tag',
     'next-day-tooltip': 'Nächster Tag',
     'play-pause-tooltip': 'Start/Pause',
     'fullscreen-tooltip': 'Vollbild',
-  },
-  history: {
-    placeholder: 'history',
-    title: 'Verlauf',
   },
   BEZ: {
     K: 'Kreis',
@@ -132,12 +116,6 @@
   today: 'Heute',
   more: 'Mehr',
   less: 'Weniger',
-  search: {
-    articles: {
-      placeholder: 'Artikel suchen...',
-      ariaLabel: 'Suchen Sie nach Artikeln und Dokumentationen',
-    },
-  },
   germany: 'Deutschland',
   WIP: 'Diese Funktionalität befindet sich noch in der Entwicklung.',
   'no-data': 'Keine Daten',
@@ -154,7 +132,6 @@
       purpose: 'Was ist der Zweck von ESID?',
     },
     results: {
-      initialPrompt: 'Geben Sie eine Frage ein, um nach relevanten Artikeln und Dokumentationen zu suchen.',
       noResults: 'Keine Ergebnisse gefunden. Versuchen Sie, Ihre Frage umzuformulieren oder andere Schlüsselwörter zu verwenden.',
       resultsFound_one: '1 Ergebnis gefunden für',
       resultsFound_other: '{{count}} Ergebnisse gefunden für',
@@ -163,11 +140,6 @@
       direct: 'Direkte Antwort',
       high: 'Hohe Relevanz',
       related: 'Verwandt',
-    },
-    pagination: {
-      previous: 'Zurück',
-      next: 'Weiter',
-      pageOf: 'Seite {{current}} von {{total}}',
     },
   },
   language: 'Sprache',
@@ -234,12 +206,5 @@
     compartment: 'Kompartiment',
     reset: 'Auf Standardwert zurücksetzen',
     r0: 'Basisreproduktionszahl (R0)',
-  },
-  history: {
-    title: 'Verlauf',
-  },
-  language: 'Sprache',
-  legal: {
-    attributions: 'Namensnennung',
   },
 }

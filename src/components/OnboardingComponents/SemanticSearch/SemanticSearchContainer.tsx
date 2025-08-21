@@ -7,8 +7,6 @@ import {useSemanticSearch} from 'context/SemanticSearchContext';
 import QuerySuggestions from './QuerySuggestions';
 import {useTranslation} from 'react-i18next';
 import SearchIcon from '@mui/icons-material/Search';
-import {useAppDispatch, useAppSelector} from 'store/hooks';
-import {setSemanticSearchQuery} from 'store/SemanticSearchSlice';
 import SearchResultsList from './SearchResultsList';
 import ArticleDialog from './ArticleDialog';
 import {SearchResult} from 'types/semanticSearch';
@@ -19,19 +17,16 @@ import {Localization} from 'types/localization';
  * It will manage the search state and orchestrate the child components.
  */
 export default function SemanticSearchContainer({localization}: {localization?: Localization}): JSX.Element {
-  const {searchResults, isLoading, performSearch, clearSearch} = useSemanticSearch();
-  const dispatch = useAppDispatch();
-  const query = useAppSelector((state) => state.semanticSearch.searchQuery);
-  const searchStatus = useAppSelector((state) => state.semanticSearch.searchStatus);
+  const {searchResults, isLoading, performSearch, clearSearch, searchStatus} = useSemanticSearch();
+  const [query, setQuery] = useState('');
   const {t: defaultT, i18n} = useTranslation();
   const [selectedArticle, setSelectedArticle] = useState<SearchResult | null>(null);
 
   useEffect(() => {
     return () => {
-      dispatch(setSemanticSearchQuery(''));
       clearSearch();
     };
-  }, [dispatch, clearSearch]);
+  }, [clearSearch]);
 
   const memoizedLocalization = useMemo(
     () =>
@@ -68,12 +63,12 @@ export default function SemanticSearchContainer({localization}: {localization?: 
   };
 
   const handleClear = () => {
-    dispatch(setSemanticSearchQuery(''));
+    setQuery('');
     clearSearch();
   };
 
   const handleSuggestionClick = (suggestion: string) => {
-    dispatch(setSemanticSearchQuery(suggestion));
+    setQuery(suggestion);
     if (performSearch) {
       performSearch(suggestion);
     }
@@ -103,7 +98,7 @@ export default function SemanticSearchContainer({localization}: {localization?: 
         variant='outlined'
         placeholder={tOverride('semanticSearch.placeholder')}
         value={query}
-        onChange={(e) => dispatch(setSemanticSearchQuery(e.target.value))}
+        onChange={(e) => setQuery(e.target.value)}
         onKeyDown={(e) => {
           if (e.key === 'Enter') {
             handleSearch();
