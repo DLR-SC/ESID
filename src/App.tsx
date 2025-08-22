@@ -23,8 +23,6 @@ import {MUILocalization} from 'components/shared/MUILocalization';
 
 import AuthProvider from './components/AuthProvider';
 import BaseDataContext from 'context/BaseDataContext';
-import {LocalizationProvider} from '@mui/x-date-pickers';
-import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
 import {SemanticSearchProvider} from 'context/SemanticSearchContext';
 
 /**
@@ -41,28 +39,26 @@ export default function App(): JSX.Element {
               <I18nextProvider i18n={i18n}>
                 <MUILocalization>
                   <BaseDataContext>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <SemanticSearchProvider>
-                        <Initializer />
-                        <WelcomeDialogWrapper />
-                        <Box id='app' display='flex' flexDirection='column' sx={{height: '100%', width: '100%'}}>
-                          <TopBar />
-                          <Box
-                            id='app-content'
-                            sx={{
-                              display: 'flex',
-                              flexDirection: 'row',
-                              flexGrow: 1,
-                              alignItems: 'stretch',
-                              width: '100%',
-                            }}
-                          >
-                            <SidebarContainer />
-                            <MainContent />
-                          </Box>
+                    <SemanticSearchProvider>
+                      <Initializer />
+                      <WelcomeDialogWrapper />
+                      <Box id='app' display='flex' flexDirection='column' sx={{height: '100%', width: '100%'}}>
+                        <TopBar />
+                        <Box
+                          id='app-content'
+                          sx={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            flexGrow: 1,
+                            alignItems: 'stretch',
+                            width: '100%',
+                          }}
+                        >
+                          <SidebarContainer />
+                          <MainContent />
                         </Box>
-                      </SemanticSearchProvider>
-                    </LocalizationProvider>
+                      </Box>
+                    </SemanticSearchProvider>
                   </BaseDataContext>
                 </MUILocalization>
               </I18nextProvider>

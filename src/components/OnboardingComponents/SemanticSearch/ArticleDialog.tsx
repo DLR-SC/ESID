@@ -133,7 +133,7 @@ export default function ArticleDialog({open, onClose, article}: ArticleDialogPro
 
   function onDocumentLoadSuccess({numPages: nextNumPages}: {numPages: number}) {
     setNumPages(nextNumPages);
-     // Reset to first page on new document load
+    // Reset to first page on new document load
     setPageNumber(1);
   }
 

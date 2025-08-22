@@ -35,10 +35,10 @@ export default function SearchResultItem({result, onResultClick, localization}: 
 
   const tOverride = useCallback(
     (key: string) =>
-      memoizedLocalization.overrides?.[key]
+      (memoizedLocalization.overrides?.[key]
         ? customT(memoizedLocalization.overrides[key])
-        : defaultT(key, {count: result.score}),
-    [customT, defaultT, memoizedLocalization.overrides, result.score]
+        : defaultT(key, {count: result.relevanceScore})) ?? '',
+    [customT, defaultT, memoizedLocalization.overrides, result.relevanceScore]
   );
 
   const classificationStyles = {
@@ -57,12 +57,18 @@ export default function SearchResultItem({result, onResultClick, localization}: 
       color: theme.palette.text.secondary,
       borderColor: 'rgba(158, 158, 158, 0.3)',
     },
+    unrelated: {
+      backgroundColor: 'rgba(255, 82, 82, 0.1)',
+      color: theme.palette.error.dark,
+      borderColor: 'rgba(255, 82, 82, 0.3)',
+    },
   };
 
   const classificationText = {
     direct: tOverride('semanticSearch.classification.direct'),
     high: tOverride('semanticSearch.classification.high'),
     related: tOverride('semanticSearch.classification.related'),
+    unrelated: tOverride('semanticSearch.classification.unrelated'),
   };
 
   const truncateText = (text: string, wordLimit: number) => {
@@ -122,7 +128,12 @@ export default function SearchResultItem({result, onResultClick, localization}: 
         </Box>
       </Box>
 
-      <Typography variant='body2' sx={{color: 'GrayText'}}>
+      <Typography
+        variant='body2'
+        sx={{
+          color: 'GrayText',
+        }}
+      >
         {truncateText(result.content, 50)}
       </Typography>
     </Paper>

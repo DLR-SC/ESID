@@ -18,7 +18,11 @@ interface SearchResultsListProps {
  */
 export default function SearchResultsList({results, onResultClick, localization}: SearchResultsListProps): JSX.Element {
   return (
-    <Box mt={2}>
+    <Box
+      sx={{
+        marginTop: 2,
+      }}
+    >
       {results.map((result, index) => (
         <SearchResultItem
           key={result.id + index}

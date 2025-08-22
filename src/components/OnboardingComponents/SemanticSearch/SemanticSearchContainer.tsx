@@ -83,8 +83,12 @@ export default function SemanticSearchContainer({localization}: {localization?: 
   };
 
   return (
-    <Box mt={4}>
-      <Divider sx={{mb: 3}} />
+    <Box
+      sx={{
+        marginTop: 4,
+      }}
+    >
+      <Divider sx={{marginBottom: 3}} />
       <Typography variant='h2' gutterBottom>
         {tOverride('semanticSearch.title')}
       </Typography>
@@ -146,15 +150,22 @@ export default function SemanticSearchContainer({localization}: {localization?: 
       />
 
       <Box
-        mt={3}
         sx={{
+          marginTop: 3,
           maxHeight: '450px',
           overflowY: 'auto',
-          p: '2px',
+          padding: '2px',
         }}
       >
         {searchResults.length > 0 && (
-          <Typography variant='body2' sx={{color: 'GrayText', mb: 1.5, px: 1}}>
+          <Typography
+            variant='body2'
+            sx={{
+              color: 'GrayText',
+              marginBottom: 1.5,
+              paddingX: 1,
+            }}
+          >
             {tOverride(
               searchResults.length === 1
                 ? 'semanticSearch.results.resultsFound_one'
@@ -162,14 +173,27 @@ export default function SemanticSearchContainer({localization}: {localization?: 
               {count: fmtNum(searchResults.length)}
             )}{' '}
             &quot;
-            <Box component='span' sx={{fontStyle: 'italic', color: 'primary.main'}}>
+            <Box
+              component='span'
+              sx={{
+                fontStyle: 'italic',
+                color: 'primary.main',
+              }}
+            >
               {query}
             </Box>
             &quot;
           </Typography>
         )}
         {isLoading ? (
-          <Box display='flex' justifyContent='center' alignItems='center' sx={{py: 4}}>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              paddingY: 4,
+            }}
+          >
             <CircularProgress />
           </Box>
         ) : searchResults.length > 0 ? (
@@ -179,7 +203,14 @@ export default function SemanticSearchContainer({localization}: {localization?: 
             localization={memoizedLocalization}
           />
         ) : searchStatus === 'succeeded' ? (
-          <Box display='flex' justifyContent='center' alignItems='center' sx={{py: 4}}>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              paddingY: 4,
+            }}
+          >
             <Typography sx={{color: 'GrayText'}}>{tOverride('semanticSearch.results.noResults')}</Typography>
           </Box>
         ) : null}

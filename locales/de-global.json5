@@ -140,6 +140,7 @@
       direct: 'Direkte Antwort',
       high: 'Hohe Relevanz',
       related: 'Verwandt',
+      unrelated: 'Nicht Verwandt',
     },
   },
   language: 'Sprache',

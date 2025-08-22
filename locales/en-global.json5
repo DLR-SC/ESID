@@ -161,6 +161,7 @@
       direct: 'Direct Answer',
       high: 'High Relevance',
       related: 'Related',
+      unrelated: 'Unrelated',
     },
   },
   language: 'Language',
