@@ -7,8 +7,8 @@ import {render, screen} from '@testing-library/react';
 import {describe, test, expect, vi} from 'vitest';
 import {I18nextProvider} from 'react-i18next';
 import i18n from 'util/i18nForTests';
-import {color} from '@amcharts/amcharts5/.internal/core/util/Color';
 import {ResizeObserverMock} from 'mocks/resize';
+import ExportingRegistry from '@/context/ExportContext';
 
 const LineChartTest = () => {
   const localization = useMemo(() => {
@@ -58,9 +58,11 @@ describe('LineChart', () => {
   vi.stubGlobal('ResizeObserver', ResizeObserverMock);
   test('renders LineChart', () => {
     render(
-      <I18nextProvider i18n={i18n}>
-        <LineChartTest />
-      </I18nextProvider>
+      <ExportingRegistry>
+        <I18nextProvider i18n={i18n}>
+          <LineChartTest />
+        </I18nextProvider>
+      </ExportingRegistry>
     );
 
     expect(screen.getByTestId('chartdiv')).toBeInTheDocument();

@@ -9,6 +9,7 @@ import HeatMap from '@/components/Sidebar/MapComponents/HeatMap';
 import {ThemeProvider} from '@mui/system';
 import Theme from '@/util/Theme';
 import {FeatureCollection, GeoJsonProperties} from 'geojson';
+import ExportingRegistry from '@/context/ExportContext';
 
 const HeatMapTest = () => {
   const geoData = useMemo(() => {
@@ -111,9 +112,11 @@ const HeatMapTest = () => {
 describe('HeatMap', () => {
   test('renders HeatMap component', () => {
     render(
-      <ThemeProvider theme={Theme}>
-        <HeatMapTest />
-      </ThemeProvider>
+      <ExportingRegistry>
+        <ThemeProvider theme={Theme}>
+          <HeatMapTest />
+        </ThemeProvider>
+      </ExportingRegistry>
     );
 
     expect(screen.getByTestId('map')).toBeInTheDocument();
