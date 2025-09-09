@@ -8,7 +8,7 @@ import {useTranslation} from 'react-i18next';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import {useExportingRegistry} from 'context/ExportContext';
-import type {Content, TDocumentDefinitions, ContentImage, Column, ContentTable} from 'pdfmake/interfaces';
+import type {Content, TDocumentDefinitions, ContentImage, ContentTable, TableLayout} from 'pdfmake/interfaces';
 import {DataContext} from 'context/SelectedDataContext';
 import {useAppSelector} from 'store/hooks';
 
@@ -84,6 +84,8 @@ export default function ExportDialog(): JSX.Element {
     return result;
   }, [compartmentNames, scenarioCardData, scenariosState]);
 
+  //TODO: add a error handler in case the card values doesn't have any data for the selected scenario
+
   const handleExport = useCallback(() => {
     void (async () => {
       const lineExp = get('lineChart');
@@ -103,109 +105,133 @@ export default function ExportDialog(): JSX.Element {
       /**
        * More information how to work with pdfmake to create a pdf: https://pdfmake.github.io/docs/0.1/document-definition-object/
        */
+      const nowStr = new Date().toLocaleString();
       const doc: TDocumentDefinitions = {
         pageSize: 'A4',
         pageOrientation: 'portrait',
-        pageMargins: [10, 10, 10, 10],
+        pageMargins: [30, 30, 30, 40],
         content: [],
-        styles: {header: {fontSize: 18, bold: true, margin: [0, 0, 0, 10]}},
+        styles: {
+          header: {fontSize: 20, bold: true, margin: [0, 0, 0, 8]},
+          subheader: {fontSize: 12, color: '#666', margin: [0, 0, 0, 12]},
+          tableHeader: {bold: true, fontSize: 10, color: '#333'},
+          tableCell: {fontSize: 10, color: '#333'},
+          small: {fontSize: 8, color: '#666'},
+        },
+        footer: (currentPage: number, pageCount: number) => ({
+          text: `${currentPage} / ${pageCount}`,
+          alignment: 'right',
+          margin: [30, 0, 30, 20],
+          fontSize: 8,
+          color: '#666',
+        }),
+        defaultStyle: {fontSize: 11},
+        info: {title: 'ESID Export', subject: 'Exported report', creator: 'ESID'},
       };
 
       (doc.content as Content[]).push({text: t('export.header'), style: 'header'});
-
-      const columns: Column[] = [
-        [
-          {
-            text: 'Selected District',
-            fontSize: 14,
-          },
-          {
-            text: selectedDistrictName,
-            fontSize: 10,
-          },
-        ],
-        [
-          {
-            text: 'Selected Scenario',
-            fontSize: 14,
-          },
-          {
-            text: selectedScenarioName ?? '',
-            fontSize: 10,
-          },
-        ],
-      ];
-
       (doc.content as Content[]).push({
-        columns: columns,
-        columnGap: 10,
-        margin: [0, 0, 0, 10],
+        text: `${selectedDistrictName} — ${selectedScenarioName ?? ''} • ${nowStr}`,
+        style: 'subheader',
       });
+
+      const infoTable: ContentTable = {
+        table: {
+          widths: ['*', '*', '*', '*'],
+          body: [
+            [
+              {text: 'Selected District', style: 'tableHeader'},
+              {text: selectedDistrictName, style: 'tableCell'},
+              {text: 'Selected Scenario', style: 'tableHeader'},
+              {text: selectedScenarioName ?? '', style: 'tableCell'},
+            ],
+            [
+              {text: 'Reference Date', style: 'tableHeader'},
+              {text: referenceDay ?? '', style: 'tableCell'},
+              {text: 'Selected Date', style: 'tableHeader'},
+              {text: selectedDate ?? '', style: 'tableCell'},
+            ],
+          ],
+        },
+        layout: {
+          fillColor: (rowIndex: number) => (rowIndex === 0 ? '#f5f5f5' : null),
+          hLineColor: '#e0e0e0',
+          vLineColor: '#e0e0e0',
+        } as TableLayout,
+        margin: [0, 0, 0, 12],
+      };
+
+      (doc.content as Content[]).push(infoTable);
 
       if (lineDataUrl) {
         (doc.content as ContentImage[]).push({
           image: lineDataUrl,
-          width: 500,
+          fit: [540, 320],
+          alignment: 'center',
+          margin: [0, 0, 0, 8],
+        });
+        (doc.content as Content[]).push({
+          text: 'Line chart',
+          style: 'small',
+          alignment: 'center',
+          margin: [0, 0, 0, 12],
         });
       }
 
       if (mapDataUrl) {
         (doc.content as ContentImage[]).push({
           image: mapDataUrl,
-          fit: [300, 300],
+          fit: [540, 320],
+          alignment: 'center',
+          margin: [0, 0, 0, 8],
+        });
+        (doc.content as Content[]).push({
+          text: 'Map',
+          style: 'small',
+          alignment: 'center',
+          margin: [0, 0, 0, 12],
         });
       }
 
       // add each compartment name to the table
       const tableBody = [
         [
-          {
-            text: ' ',
-            fontSize: 14,
-          },
-          {
-            text: 'Reference Date',
-            fontSize: 12,
-          },
-          {
-            text: 'Selected Date',
-            fontSize: 12,
-          },
-        ],
-        [
-          {
-            text: ' ',
-            fontSize: 10,
-          },
-          {
-            text: referenceDay ?? '',
-            fontSize: 10,
-          },
-          {
-            text: selectedDate ?? '',
-            fontSize: 10,
-          },
-        ],
-        [
-          {text: 'Compartment', bold: true, fontSize: 10},
-          {text: 'Value', bold: true, fontSize: 10, colSpan: 2},
+          {text: 'Compartment', style: 'tableHeader'},
+          {text: 'Reference Value', style: 'tableHeader', alignment: 'right'},
+          {text: 'Selected Value', style: 'tableHeader', alignment: 'right'},
         ],
       ];
 
       for (const compartment of compartmentNames) {
         tableBody.push([
-          {text: compartment.name, fontSize: 10},
-          {text: compartmentValues[compartment.id].toString(), fontSize: 10},
-          {text: cardValues[selectedScenario ?? '']?.[compartment.id]?.toString() ?? '', fontSize: 10},
+          {text: compartment.name, style: 'tableCell'},
+          {
+            text: (compartmentValues[compartment.id] ?? '').toString(),
+            style: 'tableCell',
+            alignment: 'right',
+          },
+          {
+            text: (cardValues[selectedScenario ?? '']?.[compartment.id] ?? '').toString(),
+            style: 'tableCell',
+            alignment: 'right',
+          },
         ]);
       }
 
+      const zebraLayout: TableLayout = {
+        fillColor: (rowIndex: number) => (rowIndex === 0 ? '#f5f5f5' : rowIndex % 2 === 0 ? '#fafafa' : null),
+        hLineColor: '#e0e0e0',
+        vLineColor: '#e0e0e0',
+      };
+
       (doc.content as ContentTable[]).push({
-        layout: 'lightHorizontalLines', // optional
+        layout: zebraLayout,
         table: {
-          headerRows: 3,
+          headerRows: 1,
+          widths: ['*', 'auto', 'auto'],
           body: tableBody,
         },
+        margin: [0, 0, 0, 4],
       });
 
       const pdfmake = pdfMake as {createPdf?: (doc: unknown) => {download: (name: string) => void}};

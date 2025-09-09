@@ -134,4 +134,24 @@
   'loki-logo': 'LOKI-Logo',
   okay: 'Okay',
   yAxisLabel: 'Wert',
+  export: {
+    header: 'ESID',
+    description: 'Aktuelle Auswahl als PDF-Bericht exportieren.',
+    button: 'PDF exportieren',
+    info: {
+      selectedDistrict: 'Ausgewählter Landkreis',
+      selectedScenario: 'Ausgewähltes Szenario',
+      referenceDate: 'Referenzdatum',
+      selectedDate: 'Ausgewähltes Datum',
+    },
+    images: {
+      lineChartLabel: 'Liniendiagramm',
+      mapLabel: 'Karte',
+    },
+    table: {
+      compartment: 'Zustand',
+      referenceValue: 'Referenzwert',
+      selectedValue: 'Ausgewählter Wert',
+    },
+  },
 }
