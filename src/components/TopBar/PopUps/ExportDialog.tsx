@@ -8,7 +8,17 @@ import {useTranslation} from 'react-i18next';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import {useExportingRegistry} from 'context/ExportContext';
-import type {Content, TDocumentDefinitions, ContentImage, ContentTable, TableLayout} from 'pdfmake/interfaces';
+import {NumberFormatter} from 'util/hooks';
+import i18n from 'util/i18n';
+import {
+  Content,
+  TDocumentDefinitions,
+  ContentImage,
+  ContentTable,
+  TableLayout,
+  ContentText,
+  ContentColumns,
+} from 'pdfmake/interfaces';
 import {DataContext} from 'context/SelectedDataContext';
 import {useAppSelector} from 'store/hooks';
 
@@ -24,7 +34,9 @@ const toDataUrl = (img: unknown): string | undefined => {
 
 export default function ExportDialog(): JSX.Element {
   const {t} = useTranslation();
+  const {formatNumber} = NumberFormatter(i18n.language, 1, 0);
   const {t: tBackend, i18n: i18nBackend} = useTranslation('backend');
+  const {t: tGlobal} = useTranslation('global');
   const theme = useTheme();
   const {get} = useExportingRegistry();
   const {compartments, referenceDateValues, scenarioCardData} = useContext(DataContext)!;
@@ -35,6 +47,7 @@ export default function ExportDialog(): JSX.Element {
   const selectedDate = useAppSelector((state) => state.dataSelection.date);
   const referenceDay = useAppSelector((state) => state.dataSelection.simulationStart);
 
+  const languageSuffix = i18nBackend.language === 'de' ? '-de' : '-en';
   const compartmentNames = useMemo(() => {
     return (
       compartments?.map((compartment) => {
@@ -90,29 +103,41 @@ export default function ExportDialog(): JSX.Element {
     void (async () => {
       const lineExp = get('lineChart');
       const mapExp = get('map');
+      const legendExp = get('legend');
 
       const pdfMake =
         (await (lineExp as unknown as {getPDFMake?: () => Promise<unknown>})?.getPDFMake?.()) ||
         (await (lineExp as unknown as {getPdfmake?: () => Promise<unknown>})?.getPdfmake?.()) ||
         (await (mapExp as unknown as {getPDFMake?: () => Promise<unknown>})?.getPDFMake?.()) ||
-        (await (mapExp as unknown as {getPdfmake?: () => Promise<unknown>})?.getPdfmake?.());
+        (await (mapExp as unknown as {getPdfmake?: () => Promise<unknown>})?.getPdfmake?.()) ||
+        (await (legendExp as unknown as {getPDFMake?: () => Promise<unknown>})?.getPDFMake?.()) ||
+        (await (legendExp as unknown as {getPdfmake?: () => Promise<unknown>})?.getPdfmake?.());
 
-      const [lineImg, mapImg] = await Promise.all([lineExp?.export?.('png'), mapExp?.export?.('png')]);
+      const [lineImg, mapImg, legendImg] = await Promise.all([
+        lineExp?.export?.('png'),
+        mapExp?.export?.('png'),
+        legendExp?.export?.('png'),
+      ]);
 
       const lineDataUrl = toDataUrl(lineImg);
       const mapDataUrl = toDataUrl(mapImg);
+      const legendDataUrl = toDataUrl(legendImg);
+
+      if (!lineDataUrl || !mapDataUrl || !legendDataUrl) {
+        return;
+      }
 
       /**
        * More information how to work with pdfmake to create a pdf: https://pdfmake.github.io/docs/0.1/document-definition-object/
        */
       const nowStr = new Date().toLocaleString();
       const doc: TDocumentDefinitions = {
-        pageSize: 'A4',
-        pageOrientation: 'portrait',
-        pageMargins: [30, 30, 30, 40],
+        pageSize: 'A4', // customizable
+        pageOrientation: 'portrait', // customizable
+        pageMargins: [20, 20, 20, 20], // customizable
         content: [],
         styles: {
-          header: {fontSize: 20, bold: true, margin: [0, 0, 0, 8]},
+          header: {fontSize: 18, bold: true, margin: [0, 0, 0, 0]},
           subheader: {fontSize: 12, color: '#666', margin: [0, 0, 0, 12]},
           tableHeader: {bold: true, fontSize: 10, color: '#333'},
           tableCell: {fontSize: 10, color: '#333'},
@@ -126,29 +151,73 @@ export default function ExportDialog(): JSX.Element {
           color: '#666',
         }),
         defaultStyle: {fontSize: 11},
-        info: {title: 'ESID Export', subject: 'Exported report', creator: 'ESID'},
+        info: {title: 'ESID Export', subject: 'Exported report', creator: 'DLR'},
       };
 
-      (doc.content as Content[]).push({text: t('export.header'), style: 'header'});
-      (doc.content as Content[]).push({
-        text: `${selectedDistrictName} — ${selectedScenarioName ?? ''} • ${nowStr}`,
-        style: 'subheader',
-      });
+      const docContents = doc.content as Content[];
 
+      // Header and subheader
+      const header = {text: t('export.header'), style: 'header'} as ContentText;
+      const subheader = {
+        text: `${t(selectedDistrictName)} — ${selectedScenarioName ?? ''}`,
+        style: 'subheader',
+      } as ContentText;
+
+      const dateSubheader = {
+        text: `${nowStr}`,
+        style: 'subheader',
+      } as ContentText;
+
+      const subheaderColumn: ContentColumns = {
+        columns: [
+          {
+            width: '50%',
+            text: subheader,
+            alignment: 'left',
+          },
+          {
+            width: '50%',
+            text: dateSubheader,
+            alignment: 'right',
+          },
+        ],
+        margin: [0, 4, 0, 12],
+      };
+
+      docContents.push(header, subheaderColumn);
+
+      const lineChart = {
+        image: lineDataUrl,
+        width: 550,
+        alignment: 'left',
+        margin: [0, 0, 0, 0],
+      } as ContentImage;
+
+      const lineChartText = {
+        text: t('export.images.line-chart-label'),
+        style: 'small',
+        alignment: 'left',
+        margin: [0, 6, 0, 12],
+      } as ContentText;
+
+      docContents.push(lineChart);
+      docContents.push(lineChartText);
+
+      // Info table
       const infoTable: ContentTable = {
         table: {
           widths: ['*', '*', '*', '*'],
           body: [
             [
-              {text: 'Selected District', style: 'tableHeader'},
+              {text: tGlobal('export.info.selected-district'), style: 'tableHeader'},
               {text: selectedDistrictName, style: 'tableCell'},
-              {text: 'Selected Scenario', style: 'tableHeader'},
+              {text: tGlobal('export.info.selected-scenario'), style: 'tableHeader'},
               {text: selectedScenarioName ?? '', style: 'tableCell'},
             ],
             [
-              {text: 'Reference Date', style: 'tableHeader'},
+              {text: tGlobal('export.info.reference-date'), style: 'tableHeader'},
               {text: referenceDay ?? '', style: 'tableCell'},
-              {text: 'Selected Date', style: 'tableHeader'},
+              {text: tGlobal('export.info.selected-date'), style: 'tableHeader'},
               {text: selectedDate ?? '', style: 'tableCell'},
             ],
           ],
@@ -161,44 +230,35 @@ export default function ExportDialog(): JSX.Element {
         margin: [0, 0, 0, 12],
       };
 
-      (doc.content as Content[]).push(infoTable);
+      const mapWidth = 200;
 
-      if (lineDataUrl) {
-        (doc.content as ContentImage[]).push({
-          image: lineDataUrl,
-          fit: [540, 320],
-          alignment: 'center',
-          margin: [0, 0, 0, 8],
-        });
-        (doc.content as Content[]).push({
-          text: 'Line chart',
-          style: 'small',
-          alignment: 'center',
-          margin: [0, 0, 0, 12],
-        });
-      }
+      const map = {
+        image: mapDataUrl,
+        width: mapWidth,
+        alignment: 'left' as const,
+        margin: [0, 0, 0, 0],
+      } as ContentImage;
 
-      if (mapDataUrl) {
-        (doc.content as ContentImage[]).push({
-          image: mapDataUrl,
-          fit: [540, 320],
-          alignment: 'center',
-          margin: [0, 0, 0, 8],
-        });
-        (doc.content as Content[]).push({
-          text: 'Map',
-          style: 'small',
-          alignment: 'center',
-          margin: [0, 0, 0, 12],
-        });
-      }
+      const mapLegend = {
+        image: legendDataUrl,
+        width: mapWidth,
+        alignment: 'left' as const,
+        margin: [0, 0, 0, 0],
+      } as ContentImage;
 
-      // add each compartment name to the table
+      const mapText = {
+        text: t('export.images.map-label'),
+        style: 'small',
+        alignment: 'left',
+        margin: [0, 6, 0, 0],
+      } as ContentText;
+
+      // Compartment table
       const tableBody = [
         [
-          {text: 'Compartment', style: 'tableHeader'},
-          {text: 'Reference Value', style: 'tableHeader', alignment: 'right'},
-          {text: 'Selected Value', style: 'tableHeader', alignment: 'right'},
+          {text: tGlobal('export.table.compartment'), style: 'tableHeader'},
+          {text: tGlobal('export.table.reference-value'), style: 'tableHeader', alignment: 'right'},
+          {text: tGlobal('export.table.selected-value'), style: 'tableHeader', alignment: 'right'},
         ],
       ];
 
@@ -206,25 +266,26 @@ export default function ExportDialog(): JSX.Element {
         tableBody.push([
           {text: compartment.name, style: 'tableCell'},
           {
-            text: (compartmentValues[compartment.id] ?? '').toString(),
+            text: formatNumber(compartmentValues[compartment.id] ?? 0),
             style: 'tableCell',
             alignment: 'right',
           },
           {
-            text: (cardValues[selectedScenario ?? '']?.[compartment.id] ?? '').toString(),
+            text: formatNumber(cardValues[selectedScenario ?? '']?.[compartment.id] ?? 0),
             style: 'tableCell',
             alignment: 'right',
           },
         ]);
       }
 
+      // Compartment table layout
       const zebraLayout: TableLayout = {
         fillColor: (rowIndex: number) => (rowIndex === 0 ? '#f5f5f5' : rowIndex % 2 === 0 ? '#fafafa' : null),
         hLineColor: '#e0e0e0',
         vLineColor: '#e0e0e0',
       };
 
-      (doc.content as ContentTable[]).push({
+      const numbersTable: ContentTable = {
         layout: zebraLayout,
         table: {
           headerRows: 1,
@@ -232,10 +293,27 @@ export default function ExportDialog(): JSX.Element {
           body: tableBody,
         },
         margin: [0, 0, 0, 4],
-      });
+      };
 
+      const mapInfoColumn: ContentColumns = {
+        alignment: 'left',
+        columns: [
+          {
+            width: '40%',
+            stack: [map, mapLegend, mapText],
+          },
+          {
+            width: '60%',
+            stack: [infoTable, numbersTable],
+          },
+        ],
+      };
+
+      docContents.push(mapInfoColumn);
+
+      // Download the pdf
       const pdfmake = pdfMake as {createPdf?: (doc: unknown) => {download: (name: string) => void}};
-      pdfmake?.createPdf?.(doc)?.download('ESID-export.pdf');
+      pdfmake?.createPdf?.(doc)?.download(`ESID-export${languageSuffix}.pdf`);
     })();
   }, [
     get,
@@ -248,6 +326,9 @@ export default function ExportDialog(): JSX.Element {
     cardValues,
     selectedScenario,
     selectedDate,
+    languageSuffix,
+    formatNumber,
+    tGlobal,
   ]);
 
   return (

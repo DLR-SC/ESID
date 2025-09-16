@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, {useCallback, useLayoutEffect, useMemo} from 'react';
+import React, {useCallback, useEffect, useLayoutEffect, useMemo} from 'react';
 import * as am5 from '@amcharts/amcharts5';
 import Box from '@mui/material/Box';
 import {HeatmapLegend} from 'types/heatmapLegend';
@@ -10,6 +10,9 @@ import {Localization} from 'types/localization';
 import useRoot from 'components/shared/Root';
 import useHeatLegend from 'components/shared/HeatMap/Legend';
 
+// export
+import {useExportingRegistry} from 'context/ExportContext';
+import useExporting from '@/components/shared/Exporting';
 interface HeatProps {
   /**
    * Object defining the legend for the heatmap.
@@ -76,6 +79,8 @@ export default function HeatLegend({
   const unique_id = useMemo(() => id + String(Date.now() + Math.random()), [id]);
   const theme = useTheme();
 
+  const {register} = useExportingRegistry();
+
   const root = useRoot(unique_id);
 
   const memoizedLocalization = useMemo(() => {
@@ -136,6 +141,20 @@ export default function HeatLegend({
     };
     // This effect should only run when the legend object changes
   }, [heatLegend, legend, min, max, exposeLegend]);
+
+  const exportSettings = useMemo(() => {
+    return {
+      filePrefix: 'map',
+    };
+  }, []);
+
+  const exporting = useExporting(root, exportSettings);
+
+  useEffect(() => {
+    if (exporting) {
+      register('legend', exporting);
+    }
+  }, [exporting, register]);
 
   return <Box id={unique_id} sx={style} />;
 }

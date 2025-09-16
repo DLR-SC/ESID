@@ -139,19 +139,19 @@
     description: 'Aktuelle Auswahl als PDF-Bericht exportieren.',
     button: 'PDF exportieren',
     info: {
-      selectedDistrict: 'Ausgewählter Landkreis',
-      selectedScenario: 'Ausgewähltes Szenario',
-      referenceDate: 'Referenzdatum',
-      selectedDate: 'Ausgewähltes Datum',
+      'selected-district': 'Ausgewählter Landkreis',
+      'selected-scenario': 'Ausgewähltes Szenario',
+      'reference-date': 'Referenzdatum',
+      'selected-date': 'Ausgewähltes Datum',
     },
     images: {
-      lineChartLabel: 'Liniendiagramm',
-      mapLabel: 'Karte',
+      'line-chart-label': 'Liniendiagramm',
+      'map-label': 'Karte',
     },
     table: {
       compartment: 'Zustand',
-      referenceValue: 'Referenzwert',
-      selectedValue: 'Ausgewählter Wert',
+      'reference-value': 'Referenzwert',
+      'selected-value': 'Ausgewählter Wert',
     },
   },
 }

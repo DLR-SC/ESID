@@ -154,19 +154,19 @@
     description: 'Export the current selection as a PDF report.',
     button: 'Export PDF',
     info: {
-      selectedDistrict: 'Selected District',
-      selectedScenario: 'Selected Scenario',
-      referenceDate: 'Reference Date',
-      selectedDate: 'Selected Date',
+      'selected-district': 'Selected District',
+      'selected-scenario': 'Selected Scenario',
+      'reference-date': 'Reference Date',
+      'selected-date': 'Selected Date',
     },
     images: {
-      lineChartLabel: 'Line chart',
-      mapLabel: 'Map',
+      'line-chart-label': 'Line chart',
+      'map-label': 'Map',
     },
     table: {
       compartment: 'Compartment',
-      referenceValue: 'Reference Value',
-      selectedValue: 'Selected Value',
+      'reference-value': 'Reference Value',
+      'selected-value': 'Selected Value',
     },
   },
 }
