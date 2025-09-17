@@ -2,11 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React, {useCallback, useContext, useMemo} from 'react';
-import Box from '@mui/material/Box';
-import useTheme from '@mui/material/styles/useTheme';
 import {useTranslation} from 'react-i18next';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
+import MenuItem from '@mui/material/MenuItem';
 import {useExportingRegistry} from 'context/ExportContext';
 import {NumberFormatter} from 'util/hooks';
 import i18n from 'util/i18n';
@@ -41,12 +38,13 @@ const toDataUrl = (img: unknown): string | undefined => {
   return undefined;
 };
 
-export default function ExportDialog(): JSX.Element {
+type ExportMenuProps = {onDone?: () => void};
+
+export default function ExportMenu({onDone}: ExportMenuProps): JSX.Element {
   const {t} = useTranslation();
   const {formatNumber} = NumberFormatter(i18n.language, 1, 0);
   const {t: tBackend, i18n: i18nBackend} = useTranslation('backend');
   const {t: tGlobal} = useTranslation('global');
-  const theme = useTheme();
   const {get} = useExportingRegistry();
   const {compartments, referenceDateValues, scenarioCardData} = useContext(DataContext)!;
 
@@ -106,9 +104,8 @@ export default function ExportDialog(): JSX.Element {
     return result;
   }, [compartmentNames, scenarioCardData, scenariosState]);
 
-  //TODO: add a error handler in case the card values doesn't have any data for the selected scenario
-
-  const handleExport = useCallback(() => {
+  const handleExportPdf = useCallback(() => {
+    onDone?.();
     void (async () => {
       const lineExp = get('lineChart');
       const mapExp = get('map');
@@ -128,11 +125,11 @@ export default function ExportDialog(): JSX.Element {
         legendExp?.export?.('png'),
       ]);
 
-      const lineDataUrl = toDataUrl(lineImg);
+      const lineChartDataUrl = toDataUrl(lineImg);
       const mapDataUrl = toDataUrl(mapImg);
-      const legendDataUrl = toDataUrl(legendImg);
+      const mapLegendDataUrl = toDataUrl(legendImg);
 
-      if (!lineDataUrl || !mapDataUrl || !legendDataUrl) {
+      if (!lineChartDataUrl || !mapDataUrl || !mapLegendDataUrl) {
         return;
       }
 
@@ -226,7 +223,7 @@ export default function ExportDialog(): JSX.Element {
 
       // Line chart
       const lineChart = {
-        image: lineDataUrl,
+        image: lineChartDataUrl,
         width: 550,
         alignment: 'left',
         margin: [0, 0, 0, 0],
@@ -278,7 +275,7 @@ export default function ExportDialog(): JSX.Element {
       } as ContentImage;
 
       const mapLegend = {
-        image: legendDataUrl,
+        image: mapLegendDataUrl,
         width: mapWidth,
         alignment: 'left' as const,
         margin: [0, 0, 0, 0],
@@ -367,22 +364,17 @@ export default function ExportDialog(): JSX.Element {
     languageSuffix,
     formatNumber,
     tGlobal,
+    onDone,
   ]);
 
+  const handleExportCsv = useCallback(() => {
+    onDone?.();
+  }, [onDone]);
+
   return (
-    <Box
-      sx={{
-        padding: theme.spacing(4),
-        background: theme.palette.background.paper,
-      }}
-    >
-      <Typography variant='h3'>{t('export.header')}</Typography>
-      <br />
-      <Typography>{t('export.description')}</Typography>
-      <br />
-      <Button variant='contained' color='primary' onClick={handleExport}>
-        {t('export.button')}
-      </Button>
-    </Box>
+    <>
+      <MenuItem onClick={handleExportPdf}>PDF</MenuItem>
+      <MenuItem onClick={handleExportCsv}>CSV (WIP)</MenuItem>
+    </>
   );
 }

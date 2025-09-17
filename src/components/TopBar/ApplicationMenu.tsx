@@ -13,14 +13,13 @@ import Box from '@mui/system/Box';
 import {useAppSelector} from 'store/hooks';
 import {AuthContext, IAuthContext} from 'react-oauth2-code-pkce';
 import CircularProgress from '@mui/material/CircularProgress';
-import Download from '@mui/icons-material/Download';
 
 const ChangelogDialog = React.lazy(() => import('./PopUps/ChangelogDialog'));
 const ImprintDialog = React.lazy(() => import('./PopUps/ImprintDialog'));
 const PrivacyPolicyDialog = React.lazy(() => import('./PopUps/PrivacyPolicyDialog'));
 const AccessibilityDialog = React.lazy(() => import('./PopUps/AccessibilityDialog'));
 const AttributionDialog = React.lazy(() => import('./PopUps/AttributionDialog'));
-const ExportDialog = React.lazy(() => import('./PopUps/ExportDialog'));
+const ExportMenu = React.lazy(() => import('./ExportMenu'));
 
 type TokenData = {
   realm_access?: {
@@ -53,6 +52,7 @@ export default function ApplicationMenu(): JSX.Element {
   const [attributionsOpen, setAttributionsOpen] = React.useState(false);
   const [changelogOpen, setChangelogOpen] = React.useState(false);
   const [exportOpen, setExportOpen] = React.useState(false);
+  const [exportAnchorElement, setExportAnchorElement] = React.useState<Element | null>(null);
 
   const keycloakLogout = () => {
     window.location.assign(
@@ -68,6 +68,16 @@ export default function ApplicationMenu(): JSX.Element {
   /** Calling this method closes the application menu. */
   const closeMenu = () => {
     setAnchorElement(null);
+  };
+
+  const openExportMenu = (event: MouseEvent) => {
+    setExportAnchorElement(event.currentTarget);
+    setExportOpen(true);
+  };
+
+  const closeExportMenu = () => {
+    setExportAnchorElement(null);
+    setExportOpen(false);
   };
 
   /** This method gets called, when the login menu entry was clicked. */
@@ -113,11 +123,6 @@ export default function ApplicationMenu(): JSX.Element {
     setChangelogOpen(true);
   };
 
-  const exportClicked = () => {
-    closeMenu();
-    setExportOpen(true);
-  };
-
   return (
     <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'flex-end'}}>
       <Button
@@ -150,11 +155,13 @@ export default function ApplicationMenu(): JSX.Element {
         <MenuItem onClick={changelogClicked}>{t('topBar.menu.changelog')}</MenuItem>
         <Divider />
         <MenuItem
-          onClick={exportClicked}
-          sx={{display: 'flex', alignItems: 'center', gap: 1, justifyContent: 'space-between'}}
+          onClick={openExportMenu}
+          sx={{display: 'flex', alignItems: 'center', gap: 1, justifyContent: 'flex-start'}}
         >
           <Box>Export</Box>
-          <Download />
+          <Box component='span' sx={{ml: 'auto', opacity: 0.6}} aria-hidden>
+            ›
+          </Box>
         </MenuItem>
       </Menu>
 
@@ -218,17 +225,23 @@ export default function ApplicationMenu(): JSX.Element {
         </Suspense>
       </Dialog>
 
-      <Dialog maxWidth='lg' fullWidth={true} open={exportOpen} onClose={() => setExportOpen(false)}>
-        <Suspense
-          fallback={
-            <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%'}}>
-              <CircularProgress sx={{padding: '10rem'}} disableShrink />
-            </Box>
-          }
-        >
-          <ExportDialog />
+      <Menu
+        id='export-menu'
+        anchorEl={exportAnchorElement}
+        open={exportOpen}
+        onClose={closeExportMenu}
+        anchorOrigin={{vertical: 'top', horizontal: 'left'}}
+        transformOrigin={{vertical: 'top', horizontal: 'right'}}
+      >
+        <Suspense fallback={null}>
+          <ExportMenu
+            onDone={() => {
+              closeExportMenu();
+              closeMenu();
+            }}
+          />
         </Suspense>
-      </Dialog>
+      </Menu>
     </Box>
   );
 }
