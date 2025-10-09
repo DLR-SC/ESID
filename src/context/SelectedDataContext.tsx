@@ -67,6 +67,7 @@ export default function SelectedDataContext(props: {baseData: BaseData; children
   const selectedDate = useAppSelector((state) => state.dataSelection.date);
   const referenceDate = useAppSelector((state) => state.dataSelection.simulationStart);
   const groupFilters = useAppSelector((state) => state.dataSelection.groupFilters);
+  const relativeNumbers = useAppSelector((state) => state.dataSelection.relativeNumbers);
 
   const {token} = useContext(AuthContext);
 
@@ -216,16 +217,48 @@ export default function SelectedDataContext(props: {baseData: BaseData; children
     {skip: !totalGroup || !selectedScenario}
   );
 
+  const nodeIdToNuts = useMemo(() => {
+    const map: Record<string, string> = {};
+    (props.baseData.nodes ?? []).forEach((n) => {
+      if (n?.id && n?.nuts) map[n.id] = n.nuts;
+    });
+    return map;
+  }, [props.baseData.nodes]);
+
+  const normalizeInfectionData = useMemo(() => {
+    return (data: InfectionData | undefined): InfectionData => {
+      if (!data || !relativeNumbers) return data ?? [];
+      return data.map((entry) => {
+        const nuts = entry.node ? nodeIdToNuts[entry.node] : undefined;
+        const pop = nuts ? props.baseData.populationByNuts[nuts] : undefined;
+        const validPop = typeof pop === 'number' && isFinite(pop) && pop > 0 ? pop : undefined;
+        const value = validPop ? (entry.value / validPop) * 100000 : entry.value;
+        return {...entry, value};
+      });
+    };
+  }, [nodeIdToNuts, props.baseData.populationByNuts, relativeNumbers]);
+
+  const normalizeMultiInfectionData = useMemo(() => {
+    return (multi: Record<string, InfectionData> | undefined): Record<string, InfectionData> => {
+      if (!multi || !relativeNumbers) return multi ?? {};
+      const result: Record<string, InfectionData> = {};
+      Object.entries(multi).forEach(([k, v]) => {
+        result[k] = normalizeInfectionData(v);
+      });
+      return result;
+    };
+  }, [normalizeInfectionData, relativeNumbers]);
+
   const contextValue: DataContextType = useMemo(
     () => ({
       ...props.baseData,
-      mapData: mapData ?? [],
-      lineChartData: lineChartData ?? {},
-      referenceDateValues: referenceDateValues ?? [],
-      scenarioCardData: scenarioCardData ?? {},
+      mapData: normalizeInfectionData(mapData) ?? [],
+      lineChartData: normalizeMultiInfectionData(lineChartData) ?? {},
+      referenceDateValues: normalizeInfectionData(referenceDateValues) ?? [],
+      scenarioCardData: normalizeMultiInfectionData(scenarioCardData) ?? {},
       scenarioCardMetaData: scenarioCardMetaData ?? {},
-      groupFilterCardData: groupFilterCardData ?? {},
-      groupFilterLineChartData: groupFilterLineChartData ?? [],
+      groupFilterCardData: normalizeMultiInfectionData(groupFilterCardData) ?? {},
+      groupFilterLineChartData: normalizeInfectionData(groupFilterLineChartData) ?? [],
       selectedScenarioData: selectedScenarioData!,
       selectedSimulationModel: selectedSimulationModel!,
       parameterDefinitions: parameterDefinitions ?? {},
@@ -242,6 +275,8 @@ export default function SelectedDataContext(props: {baseData: BaseData; children
       selectedScenarioData,
       selectedSimulationModel,
       parameterDefinitions,
+      normalizeInfectionData,
+      normalizeMultiInfectionData,
     ]
   );
 

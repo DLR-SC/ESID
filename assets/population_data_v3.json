@@ -1,0 +1,2442 @@
+[
+    {
+        "id":"00000",
+        "name":"Deutschland",
+        "total_population":84669326.0
+    },
+    {
+        "id":"01000",
+        "name":"  Schleswig-Holstein",
+        "total_population":2965691.0
+    },
+    {
+        "id":"01001",
+        "name":"      Flensburg, kreisfreie Stadt",
+        "total_population":92667.0
+    },
+    {
+        "id":"01002",
+        "name":"      Kiel, kreisfreie Stadt",
+        "total_population":248873.0
+    },
+    {
+        "id":"01003",
+        "name":"      Lübeck, kreisfreie Stadt, Hansestadt",
+        "total_population":219044.0
+    },
+    {
+        "id":"01004",
+        "name":"      Neumünster, kreisfreie Stadt",
+        "total_population":80185.0
+    },
+    {
+        "id":"01051",
+        "name":"      Dithmarschen, Kreis",
+        "total_population":135653.0
+    },
+    {
+        "id":"01053",
+        "name":"      Herzogtum Lauenburg, Kreis",
+        "total_population":204836.0
+    },
+    {
+        "id":"01054",
+        "name":"      Nordfriesland, Kreis",
+        "total_population":170007.0
+    },
+    {
+        "id":"01055",
+        "name":"      Ostholstein, Kreis",
+        "total_population":204275.0
+    },
+    {
+        "id":"01056",
+        "name":"      Pinneberg, Kreis",
+        "total_population":324018.0
+    },
+    {
+        "id":"01057",
+        "name":"      Plön, Kreis",
+        "total_population":131370.0
+    },
+    {
+        "id":"01058",
+        "name":"      Rendsburg-Eckernförde, Kreis",
+        "total_population":279864.0
+    },
+    {
+        "id":"01059",
+        "name":"      Schleswig-Flensburg, Kreis",
+        "total_population":206385.0
+    },
+    {
+        "id":"01060",
+        "name":"      Segeberg, Kreis",
+        "total_population":287175.0
+    },
+    {
+        "id":"01061",
+        "name":"      Steinburg, Kreis",
+        "total_population":133072.0
+    },
+    {
+        "id":"01062",
+        "name":"      Stormarn, Kreis",
+        "total_population":248267.0
+    },
+    {
+        "id":"02000",
+        "name":"  Hamburg",
+        "total_population":1910160.0
+    },
+    {
+        "id":"03000",
+        "name":"  Niedersachsen",
+        "total_population":8161981.0
+    },
+    {
+        "id":"03101",
+        "name":"      Braunschweig, kreisfreie Stadt",
+        "total_population":252066.0
+    },
+    {
+        "id":"03102",
+        "name":"      Salzgitter, kreisfreie Stadt",
+        "total_population":105039.0
+    },
+    {
+        "id":"03103",
+        "name":"      Wolfsburg, kreisfreie Stadt",
+        "total_population":127256.0
+    },
+    {
+        "id":"03151",
+        "name":"      Gifhorn, Landkreis",
+        "total_population":180679.0
+    },
+    {
+        "id":"03152",
+        "name":"      Göttingen, Landkreis",
+        "total_population":"-"
+    },
+    {
+        "id":"03153",
+        "name":"      Goslar, Landkreis",
+        "total_population":134485.0
+    },
+    {
+        "id":"03154",
+        "name":"      Helmstedt, Landkreis",
+        "total_population":92123.0
+    },
+    {
+        "id":"03155",
+        "name":"      Northeim, Landkreis",
+        "total_population":132939.0
+    },
+    {
+        "id":"03156",
+        "name":"      Osterode am Harz, Landkreis",
+        "total_population":"-"
+    },
+    {
+        "id":"03157",
+        "name":"      Peine, Landkreis",
+        "total_population":139170.0
+    },
+    {
+        "id":"03158",
+        "name":"      Wolfenbüttel, Landkreis",
+        "total_population":120755.0
+    },
+    {
+        "id":"03159",
+        "name":"      Göttingen, Landkreis",
+        "total_population":328952.0
+    },
+    {
+        "id":"03241",
+        "name":"      Region Hannover, Landkreis",
+        "total_population":1177676.0
+    },
+    {
+        "id":"03251",
+        "name":"      Diepholz, Landkreis",
+        "total_population":223832.0
+    },
+    {
+        "id":"03252",
+        "name":"      Hameln-Pyrmont, Landkreis",
+        "total_population":150377.0
+    },
+    {
+        "id":"03254",
+        "name":"      Hildesheim, Landkreis",
+        "total_population":278571.0
+    },
+    {
+        "id":"03255",
+        "name":"      Holzminden, Landkreis",
+        "total_population":70706.0
+    },
+    {
+        "id":"03256",
+        "name":"      Nienburg (Weser), Landkreis",
+        "total_population":123888.0
+    },
+    {
+        "id":"03257",
+        "name":"      Schaumburg, Landkreis",
+        "total_population":160236.0
+    },
+    {
+        "id":"03351",
+        "name":"      Celle, Landkreis",
+        "total_population":182352.0
+    },
+    {
+        "id":"03352",
+        "name":"      Cuxhaven, Landkreis",
+        "total_population":201838.0
+    },
+    {
+        "id":"03353",
+        "name":"      Harburg, Landkreis",
+        "total_population":263616.0
+    },
+    {
+        "id":"03354",
+        "name":"      Lüchow-Dannenberg, Landkreis",
+        "total_population":49209.0
+    },
+    {
+        "id":"03355",
+        "name":"      Lüneburg, Landkreis",
+        "total_population":188859.0
+    },
+    {
+        "id":"03356",
+        "name":"      Osterholz, Landkreis",
+        "total_population":116487.0
+    },
+    {
+        "id":"03357",
+        "name":"      Rotenburg (Wümme), Landkreis",
+        "total_population":168454.0
+    },
+    {
+        "id":"03358",
+        "name":"      Heidekreis",
+        "total_population":143220.0
+    },
+    {
+        "id":"03359",
+        "name":"      Stade, Landkreis",
+        "total_population":211467.0
+    },
+    {
+        "id":"03360",
+        "name":"      Uelzen, Landkreis",
+        "total_population":95088.0
+    },
+    {
+        "id":"03361",
+        "name":"      Verden, Landkreis",
+        "total_population":141349.0
+    },
+    {
+        "id":"03401",
+        "name":"      Delmenhorst, kreisfreie Stadt",
+        "total_population":78979.0
+    },
+    {
+        "id":"03402",
+        "name":"      Emden, kreisfreie Stadt",
+        "total_population":50659.0
+    },
+    {
+        "id":"03403",
+        "name":"      Oldenburg (Oldenburg), kreisfreie Stadt",
+        "total_population":174629.0
+    },
+    {
+        "id":"03404",
+        "name":"      Osnabrück, kreisfreie Stadt",
+        "total_population":166960.0
+    },
+    {
+        "id":"03405",
+        "name":"      Wilhelmshaven, kreisfreie Stadt",
+        "total_population":76247.0
+    },
+    {
+        "id":"03451",
+        "name":"      Ammerland, Landkreis",
+        "total_population":129108.0
+    },
+    {
+        "id":"03452",
+        "name":"      Aurich, Landkreis",
+        "total_population":192608.0
+    },
+    {
+        "id":"03453",
+        "name":"      Cloppenburg, Landkreis",
+        "total_population":178564.0
+    },
+    {
+        "id":"03454",
+        "name":"      Emsland, Landkreis",
+        "total_population":340280.0
+    },
+    {
+        "id":"03455",
+        "name":"      Friesland, Landkreis",
+        "total_population":100630.0
+    },
+    {
+        "id":"03456",
+        "name":"      Grafschaft Bentheim, Landkreis",
+        "total_population":141946.0
+    },
+    {
+        "id":"03457",
+        "name":"      Leer, Landkreis",
+        "total_population":173924.0
+    },
+    {
+        "id":"03458",
+        "name":"      Oldenburg, Landkreis",
+        "total_population":134621.0
+    },
+    {
+        "id":"03459",
+        "name":"      Osnabrück, Landkreis",
+        "total_population":366229.0
+    },
+    {
+        "id":"03460",
+        "name":"      Vechta, Landkreis",
+        "total_population":147751.0
+    },
+    {
+        "id":"03461",
+        "name":"      Wesermarsch, Landkreis",
+        "total_population":89761.0
+    },
+    {
+        "id":"03462",
+        "name":"      Wittmund, Landkreis",
+        "total_population":58396.0
+    },
+    {
+        "id":"04000",
+        "name":"  Bremen",
+        "total_population":691703.0
+    },
+    {
+        "id":"04011",
+        "name":"      Bremen, kreisfreie Stadt",
+        "total_population":577026.0
+    },
+    {
+        "id":"04012",
+        "name":"      Bremerhaven, kreisfreie Stadt",
+        "total_population":114677.0
+    },
+    {
+        "id":"05000",
+        "name":"  Nordrhein-Westfalen",
+        "total_population":18190422.0
+    },
+    {
+        "id":"05111",
+        "name":"      Düsseldorf, kreisfreie Stadt",
+        "total_population":631217.0
+    },
+    {
+        "id":"05112",
+        "name":"      Duisburg, kreisfreie Stadt",
+        "total_population":503707.0
+    },
+    {
+        "id":"05113",
+        "name":"      Essen, kreisfreie Stadt",
+        "total_population":586608.0
+    },
+    {
+        "id":"05114",
+        "name":"      Krefeld, kreisfreie Stadt",
+        "total_population":228550.0
+    },
+    {
+        "id":"05116",
+        "name":"      Mönchengladbach, kreisfreie Stadt",
+        "total_population":268943.0
+    },
+    {
+        "id":"05117",
+        "name":"      Mülheim an der Ruhr, kreisfreie Stadt",
+        "total_population":173255.0
+    },
+    {
+        "id":"05119",
+        "name":"      Oberhausen, kreisfreie Stadt",
+        "total_population":211099.0
+    },
+    {
+        "id":"05120",
+        "name":"      Remscheid, kreisfreie Stadt",
+        "total_population":112970.0
+    },
+    {
+        "id":"05122",
+        "name":"      Solingen, kreisfreie Stadt",
+        "total_population":161545.0
+    },
+    {
+        "id":"05124",
+        "name":"      Wuppertal, kreisfreie Stadt",
+        "total_population":358938.0
+    },
+    {
+        "id":"05154",
+        "name":"      Kleve, Kreis",
+        "total_population":321491.0
+    },
+    {
+        "id":"05158",
+        "name":"      Mettmann, Kreis",
+        "total_population":490251.0
+    },
+    {
+        "id":"05162",
+        "name":"      Rhein-Kreis Neuss",
+        "total_population":458722.0
+    },
+    {
+        "id":"05166",
+        "name":"      Viersen, Kreis",
+        "total_population":302885.0
+    },
+    {
+        "id":"05170",
+        "name":"      Wesel, Kreis",
+        "total_population":467511.0
+    },
+    {
+        "id":"05314",
+        "name":"      Bonn, kreisfreie Stadt",
+        "total_population":335789.0
+    },
+    {
+        "id":"05315",
+        "name":"      Köln, kreisfreie Stadt",
+        "total_population":1087353.0
+    },
+    {
+        "id":"05316",
+        "name":"      Leverkusen, kreisfreie Stadt",
+        "total_population":166414.0
+    },
+    {
+        "id":"05334",
+        "name":"      Städteregion Aachen, Kreis",
+        "total_population":564444.0
+    },
+    {
+        "id":"05354",
+        "name":"      Aachen, Kreis",
+        "total_population":"-"
+    },
+    {
+        "id":"05358",
+        "name":"      Düren, Kreis",
+        "total_population":272666.0
+    },
+    {
+        "id":"05362",
+        "name":"      Rhein-Erft-Kreis",
+        "total_population":480989.0
+    },
+    {
+        "id":"05366",
+        "name":"      Euskirchen, Kreis",
+        "total_population":199828.0
+    },
+    {
+        "id":"05370",
+        "name":"      Heinsberg, Kreis",
+        "total_population":262656.0
+    },
+    {
+        "id":"05374",
+        "name":"      Oberbergischer Kreis",
+        "total_population":275735.0
+    },
+    {
+        "id":"05378",
+        "name":"      Rheinisch-Bergischer Kreis",
+        "total_population":286778.0
+    },
+    {
+        "id":"05382",
+        "name":"      Rhein-Sieg-Kreis",
+        "total_population":610537.0
+    },
+    {
+        "id":"05512",
+        "name":"      Bottrop, kreisfreie Stadt",
+        "total_population":118705.0
+    },
+    {
+        "id":"05513",
+        "name":"      Gelsenkirchen, kreisfreie Stadt",
+        "total_population":265885.0
+    },
+    {
+        "id":"05515",
+        "name":"      Münster, kreisfreie Stadt",
+        "total_population":322904.0
+    },
+    {
+        "id":"05554",
+        "name":"      Borken, Kreis",
+        "total_population":381627.0
+    },
+    {
+        "id":"05558",
+        "name":"      Coesfeld, Kreis",
+        "total_population":226160.0
+    },
+    {
+        "id":"05562",
+        "name":"      Recklinghausen, Kreis",
+        "total_population":620646.0
+    },
+    {
+        "id":"05566",
+        "name":"      Steinfurt, Kreis",
+        "total_population":459195.0
+    },
+    {
+        "id":"05570",
+        "name":"      Warendorf, Kreis",
+        "total_population":283295.0
+    },
+    {
+        "id":"05711",
+        "name":"      Bielefeld, kreisfreie Stadt",
+        "total_population":338410.0
+    },
+    {
+        "id":"05754",
+        "name":"      Gütersloh, Kreis",
+        "total_population":372938.0
+    },
+    {
+        "id":"05758",
+        "name":"      Herford, Kreis",
+        "total_population":253136.0
+    },
+    {
+        "id":"05762",
+        "name":"      Höxter, Kreis",
+        "total_population":141883.0
+    },
+    {
+        "id":"05766",
+        "name":"      Lippe, Kreis",
+        "total_population":349781.0
+    },
+    {
+        "id":"05770",
+        "name":"      Minden-Lübbecke, Kreis",
+        "total_population":316196.0
+    },
+    {
+        "id":"05774",
+        "name":"      Paderborn, Kreis",
+        "total_population":315400.0
+    },
+    {
+        "id":"05911",
+        "name":"      Bochum, kreisfreie Stadt",
+        "total_population":366385.0
+    },
+    {
+        "id":"05913",
+        "name":"      Dortmund, kreisfreie Stadt",
+        "total_population":595471.0
+    },
+    {
+        "id":"05914",
+        "name":"      Hagen, kreisfreie Stadt",
+        "total_population":190490.0
+    },
+    {
+        "id":"05915",
+        "name":"      Hamm, kreisfreie Stadt",
+        "total_population":180761.0
+    },
+    {
+        "id":"05916",
+        "name":"      Herne, kreisfreie Stadt",
+        "total_population":157896.0
+    },
+    {
+        "id":"05954",
+        "name":"      Ennepe-Ruhr-Kreis",
+        "total_population":324946.0
+    },
+    {
+        "id":"05958",
+        "name":"      Hochsauerlandkreis",
+        "total_population":261774.0
+    },
+    {
+        "id":"05962",
+        "name":"      Märkischer Kreis",
+        "total_population":408579.0
+    },
+    {
+        "id":"05966",
+        "name":"      Olpe, Kreis",
+        "total_population":134332.0
+    },
+    {
+        "id":"05970",
+        "name":"      Siegen-Wittgenstein, Kreis",
+        "total_population":276625.0
+    },
+    {
+        "id":"05974",
+        "name":"      Soest, Kreis",
+        "total_population":306674.0
+    },
+    {
+        "id":"05978",
+        "name":"      Unna, Kreis",
+        "total_population":399447.0
+    },
+    {
+        "id":"06000",
+        "name":"  Hessen",
+        "total_population":6420729.0
+    },
+    {
+        "id":"06411",
+        "name":"      Darmstadt, kreisfreie Stadt, Wissenschaftsstadt",
+        "total_population":164792.0
+    },
+    {
+        "id":"06412",
+        "name":"      Frankfurt am Main, kreisfreie Stadt",
+        "total_population":775790.0
+    },
+    {
+        "id":"06413",
+        "name":"      Offenbach am Main, kreisfreie Stadt",
+        "total_population":135490.0
+    },
+    {
+        "id":"06414",
+        "name":"      Wiesbaden, kreisfreie Stadt, Landeshauptstadt",
+        "total_population":285522.0
+    },
+    {
+        "id":"06431",
+        "name":"      Bergstraße, Landkreis",
+        "total_population":276295.0
+    },
+    {
+        "id":"06432",
+        "name":"      Darmstadt-Dieburg, Landkreis",
+        "total_population":301827.0
+    },
+    {
+        "id":"06433",
+        "name":"      Groß-Gerau, Landkreis",
+        "total_population":281712.0
+    },
+    {
+        "id":"06434",
+        "name":"      Hochtaunuskreis",
+        "total_population":241449.0
+    },
+    {
+        "id":"06435",
+        "name":"      Main-Kinzig-Kreis",
+        "total_population":434002.0
+    },
+    {
+        "id":"06436",
+        "name":"      Main-Taunus-Kreis",
+        "total_population":243307.0
+    },
+    {
+        "id":"06437",
+        "name":"      Odenwaldkreis",
+        "total_population":97182.0
+    },
+    {
+        "id":"06438",
+        "name":"      Offenbach, Landkreis",
+        "total_population":364457.0
+    },
+    {
+        "id":"06439",
+        "name":"      Rheingau-Taunus-Kreis",
+        "total_population":189918.0
+    },
+    {
+        "id":"06440",
+        "name":"      Wetteraukreis",
+        "total_population":318559.0
+    },
+    {
+        "id":"06531",
+        "name":"      Gießen, Landkreis",
+        "total_population":280268.0
+    },
+    {
+        "id":"06532",
+        "name":"      Lahn-Dill-Kreis",
+        "total_population":258488.0
+    },
+    {
+        "id":"06533",
+        "name":"      Limburg-Weilburg, Landkreis",
+        "total_population":175690.0
+    },
+    {
+        "id":"06534",
+        "name":"      Marburg-Biedenkopf, Landkreis",
+        "total_population":250441.0
+    },
+    {
+        "id":"06535",
+        "name":"      Vogelsbergkreis",
+        "total_population":106792.0
+    },
+    {
+        "id":"06611",
+        "name":"      Kassel, kreisfreie Stadt, documenta-Stadt",
+        "total_population":204687.0
+    },
+    {
+        "id":"06631",
+        "name":"      Fulda, Landkreis",
+        "total_population":228713.0
+    },
+    {
+        "id":"06632",
+        "name":"      Hersfeld-Rotenburg, Landkreis",
+        "total_population":121348.0
+    },
+    {
+        "id":"06633",
+        "name":"      Kassel, Landkreis",
+        "total_population":241095.0
+    },
+    {
+        "id":"06634",
+        "name":"      Schwalm-Eder-Kreis",
+        "total_population":183501.0
+    },
+    {
+        "id":"06635",
+        "name":"      Waldeck-Frankenberg, Landkreis",
+        "total_population":159189.0
+    },
+    {
+        "id":"06636",
+        "name":"      Werra-Meißner-Kreis",
+        "total_population":100215.0
+    },
+    {
+        "id":"07000",
+        "name":"  Rheinland-Pfalz",
+        "total_population":4174311.0
+    },
+    {
+        "id":"07111",
+        "name":"      Koblenz, kreisfreie Stadt",
+        "total_population":115298.0
+    },
+    {
+        "id":"07131",
+        "name":"      Ahrweiler, Landkreis",
+        "total_population":128741.0
+    },
+    {
+        "id":"07132",
+        "name":"      Altenkirchen (Westerwald), Landkreis",
+        "total_population":131907.0
+    },
+    {
+        "id":"07133",
+        "name":"      Bad Kreuznach, Landkreis",
+        "total_population":161852.0
+    },
+    {
+        "id":"07134",
+        "name":"      Birkenfeld, Landkreis",
+        "total_population":81918.0
+    },
+    {
+        "id":"07135",
+        "name":"      Cochem-Zell, Landkreis",
+        "total_population":62669.0
+    },
+    {
+        "id":"07137",
+        "name":"      Mayen-Koblenz, Landkreis",
+        "total_population":219001.0
+    },
+    {
+        "id":"07138",
+        "name":"      Neuwied, Landkreis",
+        "total_population":188139.0
+    },
+    {
+        "id":"07140",
+        "name":"      Rhein-Hunsrück-Kreis",
+        "total_population":106227.0
+    },
+    {
+        "id":"07141",
+        "name":"      Rhein-Lahn-Kreis",
+        "total_population":124796.0
+    },
+    {
+        "id":"07143",
+        "name":"      Westerwaldkreis",
+        "total_population":206709.0
+    },
+    {
+        "id":"07211",
+        "name":"      Trier, kreisfreie Stadt",
+        "total_population":112737.0
+    },
+    {
+        "id":"07231",
+        "name":"      Bernkastel-Wittlich, Landkreis",
+        "total_population":115083.0
+    },
+    {
+        "id":"07232",
+        "name":"      Eifelkreis Bitburg-Prüm",
+        "total_population":104435.0
+    },
+    {
+        "id":"07233",
+        "name":"      Vulkaneifel, Landkreis",
+        "total_population":61912.0
+    },
+    {
+        "id":"07235",
+        "name":"      Trier-Saarburg, Landkreis",
+        "total_population":153814.0
+    },
+    {
+        "id":"07311",
+        "name":"      Frankenthal (Pfalz), kreisfreie Stadt",
+        "total_population":49122.0
+    },
+    {
+        "id":"07312",
+        "name":"      Kaiserslautern, kreisfreie Stadt",
+        "total_population":101486.0
+    },
+    {
+        "id":"07313",
+        "name":"      Landau in der Pfalz, kreisfreie Stadt",
+        "total_population":48341.0
+    },
+    {
+        "id":"07314",
+        "name":"      Ludwigshafen am Rhein, kreisfreie Stadt",
+        "total_population":176110.0
+    },
+    {
+        "id":"07315",
+        "name":"      Mainz, kreisfreie Stadt",
+        "total_population":222889.0
+    },
+    {
+        "id":"07316",
+        "name":"      Neustadt an der Weinstraße, kreisfreie Stadt",
+        "total_population":53920.0
+    },
+    {
+        "id":"07317",
+        "name":"      Pirmasens, kreisfreie Stadt",
+        "total_population":40941.0
+    },
+    {
+        "id":"07318",
+        "name":"      Speyer, kreisfreie Stadt",
+        "total_population":51203.0
+    },
+    {
+        "id":"07319",
+        "name":"      Worms, kreisfreie Stadt",
+        "total_population":85609.0
+    },
+    {
+        "id":"07320",
+        "name":"      Zweibrücken, kreisfreie Stadt",
+        "total_population":34613.0
+    },
+    {
+        "id":"07331",
+        "name":"      Alzey-Worms, Landkreis",
+        "total_population":133430.0
+    },
+    {
+        "id":"07332",
+        "name":"      Bad Dürkheim, Landkreis",
+        "total_population":134711.0
+    },
+    {
+        "id":"07333",
+        "name":"      Donnersbergkreis",
+        "total_population":76088.0
+    },
+    {
+        "id":"07334",
+        "name":"      Germersheim, Landkreis",
+        "total_population":131492.0
+    },
+    {
+        "id":"07335",
+        "name":"      Kaiserslautern, Landkreis",
+        "total_population":108540.0
+    },
+    {
+        "id":"07336",
+        "name":"      Kusel, Landkreis",
+        "total_population":71140.0
+    },
+    {
+        "id":"07337",
+        "name":"      Südliche Weinstraße, Landkreis",
+        "total_population":112894.0
+    },
+    {
+        "id":"07338",
+        "name":"      Rhein-Pfalz-Kreis",
+        "total_population":156346.0
+    },
+    {
+        "id":"07339",
+        "name":"      Mainz-Bingen, Landkreis",
+        "total_population":215286.0
+    },
+    {
+        "id":"07340",
+        "name":"      Südwestpfalz, Landkreis",
+        "total_population":94912.0
+    },
+    {
+        "id":"08000",
+        "name":"  Baden-Württemberg",
+        "total_population":11339260.0
+    },
+    {
+        "id":"08111",
+        "name":"      Stuttgart, Stadtkreis",
+        "total_population":633484.0
+    },
+    {
+        "id":"08115",
+        "name":"      Böblingen, Landkreis",
+        "total_population":401318.0
+    },
+    {
+        "id":"08116",
+        "name":"      Esslingen, Landkreis",
+        "total_population":542582.0
+    },
+    {
+        "id":"08117",
+        "name":"      Göppingen, Landkreis",
+        "total_population":263706.0
+    },
+    {
+        "id":"08118",
+        "name":"      Ludwigsburg, Landkreis",
+        "total_population":553689.0
+    },
+    {
+        "id":"08119",
+        "name":"      Rems-Murr-Kreis, Landkreis",
+        "total_population":434369.0
+    },
+    {
+        "id":"08121",
+        "name":"      Heilbronn, Stadtkreis",
+        "total_population":130093.0
+    },
+    {
+        "id":"08125",
+        "name":"      Heilbronn, Landkreis",
+        "total_population":355359.0
+    },
+    {
+        "id":"08126",
+        "name":"      Hohenlohekreis, Landkreis",
+        "total_population":115796.0
+    },
+    {
+        "id":"08127",
+        "name":"      Schwäbisch Hall, Landkreis",
+        "total_population":204721.0
+    },
+    {
+        "id":"08128",
+        "name":"      Main-Tauber-Kreis, Landkreis",
+        "total_population":135371.0
+    },
+    {
+        "id":"08135",
+        "name":"      Heidenheim, Landkreis",
+        "total_population":135470.0
+    },
+    {
+        "id":"08136",
+        "name":"      Ostalbkreis, Landkreis",
+        "total_population":320436.0
+    },
+    {
+        "id":"08211",
+        "name":"      Baden-Baden, Stadtkreis",
+        "total_population":57420.0
+    },
+    {
+        "id":"08212",
+        "name":"      Karlsruhe, Stadtkreis",
+        "total_population":309964.0
+    },
+    {
+        "id":"08215",
+        "name":"      Karlsruhe, Landkreis",
+        "total_population":456392.0
+    },
+    {
+        "id":"08216",
+        "name":"      Rastatt, Landkreis",
+        "total_population":235542.0
+    },
+    {
+        "id":"08221",
+        "name":"      Heidelberg, Stadtkreis",
+        "total_population":162960.0
+    },
+    {
+        "id":"08222",
+        "name":"      Mannheim, Stadtkreis",
+        "total_population":316877.0
+    },
+    {
+        "id":"08225",
+        "name":"      Neckar-Odenwald-Kreis, Landkreis",
+        "total_population":146070.0
+    },
+    {
+        "id":"08226",
+        "name":"      Rhein-Neckar-Kreis, Landkreis",
+        "total_population":556645.0
+    },
+    {
+        "id":"08231",
+        "name":"      Pforzheim, Stadtkreis",
+        "total_population":128992.0
+    },
+    {
+        "id":"08235",
+        "name":"      Calw, Landkreis",
+        "total_population":163838.0
+    },
+    {
+        "id":"08236",
+        "name":"      Enzkreis, Landkreis",
+        "total_population":203409.0
+    },
+    {
+        "id":"08237",
+        "name":"      Freudenstadt, Landkreis",
+        "total_population":121584.0
+    },
+    {
+        "id":"08311",
+        "name":"      Freiburg im Breisgau, Stadtkreis",
+        "total_population":237244.0
+    },
+    {
+        "id":"08315",
+        "name":"      Breisgau-Hochschwarzwald, Landkreis",
+        "total_population":272194.0
+    },
+    {
+        "id":"08316",
+        "name":"      Emmendingen, Landkreis",
+        "total_population":172392.0
+    },
+    {
+        "id":"08317",
+        "name":"      Ortenaukreis, Landkreis",
+        "total_population":444390.0
+    },
+    {
+        "id":"08325",
+        "name":"      Rottweil, Landkreis",
+        "total_population":142963.0
+    },
+    {
+        "id":"08326",
+        "name":"      Schwarzwald-Baar-Kreis, Landkreis",
+        "total_population":218780.0
+    },
+    {
+        "id":"08327",
+        "name":"      Tuttlingen, Landkreis",
+        "total_population":146124.0
+    },
+    {
+        "id":"08335",
+        "name":"      Konstanz, Landkreis",
+        "total_population":294176.0
+    },
+    {
+        "id":"08336",
+        "name":"      Lörrach, Landkreis",
+        "total_population":234909.0
+    },
+    {
+        "id":"08337",
+        "name":"      Waldshut, Landkreis",
+        "total_population":174391.0
+    },
+    {
+        "id":"08415",
+        "name":"      Reutlingen, Landkreis",
+        "total_population":293624.0
+    },
+    {
+        "id":"08416",
+        "name":"      Tübingen, Landkreis",
+        "total_population":234649.0
+    },
+    {
+        "id":"08417",
+        "name":"      Zollernalbkreis, Landkreis",
+        "total_population":193712.0
+    },
+    {
+        "id":"08421",
+        "name":"      Ulm, Stadtkreis",
+        "total_population":129942.0
+    },
+    {
+        "id":"08425",
+        "name":"      Alb-Donau-Kreis, Landkreis",
+        "total_population":203873.0
+    },
+    {
+        "id":"08426",
+        "name":"      Biberach, Landkreis",
+        "total_population":208203.0
+    },
+    {
+        "id":"08435",
+        "name":"      Bodenseekreis, Landkreis",
+        "total_population":224200.0
+    },
+    {
+        "id":"08436",
+        "name":"      Ravensburg, Landkreis",
+        "total_population":293148.0
+    },
+    {
+        "id":"08437",
+        "name":"      Sigmaringen, Landkreis",
+        "total_population":134259.0
+    },
+    {
+        "id":"09000",
+        "name":"  Bayern",
+        "total_population":13435062.0
+    },
+    {
+        "id":"09161",
+        "name":"      Ingolstadt, kreisfreie Stadt",
+        "total_population":142308.0
+    },
+    {
+        "id":"09162",
+        "name":"      München, kreisfreie Stadt",
+        "total_population":1510378.0
+    },
+    {
+        "id":"09163",
+        "name":"      Rosenheim, kreisfreie Stadt",
+        "total_population":65192.0
+    },
+    {
+        "id":"09171",
+        "name":"      Altötting, Landkreis",
+        "total_population":114459.0
+    },
+    {
+        "id":"09172",
+        "name":"      Berchtesgadener Land, Landkreis",
+        "total_population":108315.0
+    },
+    {
+        "id":"09173",
+        "name":"      Bad Tölz-Wolfratshausen, Landkreis",
+        "total_population":130182.0
+    },
+    {
+        "id":"09174",
+        "name":"      Dachau, Landkreis",
+        "total_population":157813.0
+    },
+    {
+        "id":"09175",
+        "name":"      Ebersberg, Landkreis",
+        "total_population":147559.0
+    },
+    {
+        "id":"09176",
+        "name":"      Eichstätt, Landkreis",
+        "total_population":136565.0
+    },
+    {
+        "id":"09177",
+        "name":"      Erding, Landkreis",
+        "total_population":142540.0
+    },
+    {
+        "id":"09178",
+        "name":"      Freising, Landkreis",
+        "total_population":186276.0
+    },
+    {
+        "id":"09179",
+        "name":"      Fürstenfeldbruck, Landkreis",
+        "total_population":222932.0
+    },
+    {
+        "id":"09180",
+        "name":"      Garmisch-Partenkirchen, Landkreis",
+        "total_population":88748.0
+    },
+    {
+        "id":"09181",
+        "name":"      Landsberg am Lech, Landkreis",
+        "total_population":124311.0
+    },
+    {
+        "id":"09182",
+        "name":"      Miesbach, Landkreis",
+        "total_population":101451.0
+    },
+    {
+        "id":"09183",
+        "name":"      Mühldorf a.Inn, Landkreis",
+        "total_population":120732.0
+    },
+    {
+        "id":"09184",
+        "name":"      München, Landkreis",
+        "total_population":358480.0
+    },
+    {
+        "id":"09185",
+        "name":"      Neuburg-Schrobenhausen, Landkreis",
+        "total_population":101109.0
+    },
+    {
+        "id":"09186",
+        "name":"      Pfaffenhofen a.d.Ilm, Landkreis",
+        "total_population":132966.0
+    },
+    {
+        "id":"09187",
+        "name":"      Rosenheim, Landkreis",
+        "total_population":268391.0
+    },
+    {
+        "id":"09188",
+        "name":"      Starnberg, Landkreis",
+        "total_population":139067.0
+    },
+    {
+        "id":"09189",
+        "name":"      Traunstein, Landkreis",
+        "total_population":181763.0
+    },
+    {
+        "id":"09190",
+        "name":"      Weilheim-Schongau, Landkreis",
+        "total_population":139401.0
+    },
+    {
+        "id":"09261",
+        "name":"      Landshut, kreisfreie Stadt",
+        "total_population":75272.0
+    },
+    {
+        "id":"09262",
+        "name":"      Passau, kreisfreie Stadt",
+        "total_population":54401.0
+    },
+    {
+        "id":"09263",
+        "name":"      Straubing, kreisfreie Stadt",
+        "total_population":49775.0
+    },
+    {
+        "id":"09271",
+        "name":"      Deggendorf, Landkreis",
+        "total_population":123129.0
+    },
+    {
+        "id":"09272",
+        "name":"      Freyung-Grafenau, Landkreis",
+        "total_population":79603.0
+    },
+    {
+        "id":"09273",
+        "name":"      Kelheim, Landkreis",
+        "total_population":126539.0
+    },
+    {
+        "id":"09274",
+        "name":"      Landshut, Landkreis",
+        "total_population":165608.0
+    },
+    {
+        "id":"09275",
+        "name":"      Passau, Landkreis",
+        "total_population":197863.0
+    },
+    {
+        "id":"09276",
+        "name":"      Regen, Landkreis",
+        "total_population":77940.0
+    },
+    {
+        "id":"09277",
+        "name":"      Rottal-Inn, Landkreis",
+        "total_population":124911.0
+    },
+    {
+        "id":"09278",
+        "name":"      Straubing-Bogen, Landkreis",
+        "total_population":104167.0
+    },
+    {
+        "id":"09279",
+        "name":"      Dingolfing-Landau, Landkreis",
+        "total_population":101477.0
+    },
+    {
+        "id":"09361",
+        "name":"      Amberg, kreisfreie Stadt",
+        "total_population":42676.0
+    },
+    {
+        "id":"09362",
+        "name":"      Regensburg, kreisfreie Stadt",
+        "total_population":159465.0
+    },
+    {
+        "id":"09363",
+        "name":"      Weiden i.d.OPf., kreisfreie Stadt",
+        "total_population":43188.0
+    },
+    {
+        "id":"09371",
+        "name":"      Amberg-Sulzbach, Landkreis",
+        "total_population":104914.0
+    },
+    {
+        "id":"09372",
+        "name":"      Cham, Landkreis",
+        "total_population":130946.0
+    },
+    {
+        "id":"09373",
+        "name":"      Neumarkt i.d.OPf., Landkreis",
+        "total_population":139277.0
+    },
+    {
+        "id":"09374",
+        "name":"      Neustadt a.d.Waldnaab, Landkreis",
+        "total_population":96400.0
+    },
+    {
+        "id":"09375",
+        "name":"      Regensburg, Landkreis",
+        "total_population":200264.0
+    },
+    {
+        "id":"09376",
+        "name":"      Schwandorf, Landkreis",
+        "total_population":152284.0
+    },
+    {
+        "id":"09377",
+        "name":"      Tirschenreuth, Landkreis",
+        "total_population":72147.0
+    },
+    {
+        "id":"09461",
+        "name":"      Bamberg, kreisfreie Stadt",
+        "total_population":80580.0
+    },
+    {
+        "id":"09462",
+        "name":"      Bayreuth, kreisfreie Stadt",
+        "total_population":74907.0
+    },
+    {
+        "id":"09463",
+        "name":"      Coburg, kreisfreie Stadt",
+        "total_population":42139.0
+    },
+    {
+        "id":"09464",
+        "name":"      Hof, kreisfreie Stadt",
+        "total_population":46963.0
+    },
+    {
+        "id":"09471",
+        "name":"      Bamberg, Landkreis",
+        "total_population":149823.0
+    },
+    {
+        "id":"09472",
+        "name":"      Bayreuth, Landkreis",
+        "total_population":104843.0
+    },
+    {
+        "id":"09473",
+        "name":"      Coburg, Landkreis",
+        "total_population":87259.0
+    },
+    {
+        "id":"09474",
+        "name":"      Forchheim, Landkreis",
+        "total_population":118725.0
+    },
+    {
+        "id":"09475",
+        "name":"      Hof, Landkreis",
+        "total_population":94333.0
+    },
+    {
+        "id":"09476",
+        "name":"      Kronach, Landkreis",
+        "total_population":66294.0
+    },
+    {
+        "id":"09477",
+        "name":"      Kulmbach, Landkreis",
+        "total_population":71956.0
+    },
+    {
+        "id":"09478",
+        "name":"      Lichtenfels, Landkreis",
+        "total_population":67555.0
+    },
+    {
+        "id":"09479",
+        "name":"      Wunsiedel i.Fichtelgebirge, Landkreis",
+        "total_population":71972.0
+    },
+    {
+        "id":"09561",
+        "name":"      Ansbach, kreisfreie Stadt",
+        "total_population":42311.0
+    },
+    {
+        "id":"09562",
+        "name":"      Erlangen, kreisfreie Stadt",
+        "total_population":117806.0
+    },
+    {
+        "id":"09563",
+        "name":"      Fürth, kreisfreie Stadt",
+        "total_population":132032.0
+    },
+    {
+        "id":"09564",
+        "name":"      Nürnberg, kreisfreie Stadt",
+        "total_population":526091.0
+    },
+    {
+        "id":"09565",
+        "name":"      Schwabach, kreisfreie Stadt",
+        "total_population":41380.0
+    },
+    {
+        "id":"09571",
+        "name":"      Ansbach, Landkreis",
+        "total_population":189517.0
+    },
+    {
+        "id":"09572",
+        "name":"      Erlangen-Höchstadt, Landkreis",
+        "total_population":141517.0
+    },
+    {
+        "id":"09573",
+        "name":"      Fürth, Landkreis",
+        "total_population":119826.0
+    },
+    {
+        "id":"09574",
+        "name":"      Nürnberger Land, Landkreis",
+        "total_population":172941.0
+    },
+    {
+        "id":"09575",
+        "name":"      Neustadt a.d.Aisch-Bad Windsheim, Landkreis",
+        "total_population":103654.0
+    },
+    {
+        "id":"09576",
+        "name":"      Roth, Landkreis",
+        "total_population":129595.0
+    },
+    {
+        "id":"09577",
+        "name":"      Weißenburg-Gunzenhausen, Landkreis",
+        "total_population":97276.0
+    },
+    {
+        "id":"09661",
+        "name":"      Aschaffenburg, kreisfreie Stadt",
+        "total_population":72918.0
+    },
+    {
+        "id":"09662",
+        "name":"      Schweinfurt, kreisfreie Stadt",
+        "total_population":55067.0
+    },
+    {
+        "id":"09663",
+        "name":"      Würzburg, kreisfreie Stadt",
+        "total_population":128246.0
+    },
+    {
+        "id":"09671",
+        "name":"      Aschaffenburg, Landkreis",
+        "total_population":177056.0
+    },
+    {
+        "id":"09672",
+        "name":"      Bad Kissingen, Landkreis",
+        "total_population":104898.0
+    },
+    {
+        "id":"09673",
+        "name":"      Rhön-Grabfeld, Landkreis",
+        "total_population":80544.0
+    },
+    {
+        "id":"09674",
+        "name":"      Haßberge, Landkreis",
+        "total_population":85371.0
+    },
+    {
+        "id":"09675",
+        "name":"      Kitzingen, Landkreis",
+        "total_population":93818.0
+    },
+    {
+        "id":"09676",
+        "name":"      Miltenberg, Landkreis",
+        "total_population":130363.0
+    },
+    {
+        "id":"09677",
+        "name":"      Main-Spessart, Landkreis",
+        "total_population":127642.0
+    },
+    {
+        "id":"09678",
+        "name":"      Schweinfurt, Landkreis",
+        "total_population":116653.0
+    },
+    {
+        "id":"09679",
+        "name":"      Würzburg, Landkreis",
+        "total_population":165921.0
+    },
+    {
+        "id":"09761",
+        "name":"      Augsburg, kreisfreie Stadt",
+        "total_population":303150.0
+    },
+    {
+        "id":"09762",
+        "name":"      Kaufbeuren, kreisfreie Stadt",
+        "total_population":46386.0
+    },
+    {
+        "id":"09763",
+        "name":"      Kempten (Allgäu), kreisfreie Stadt",
+        "total_population":70713.0
+    },
+    {
+        "id":"09764",
+        "name":"      Memmingen, kreisfreie Stadt",
+        "total_population":46178.0
+    },
+    {
+        "id":"09771",
+        "name":"      Aichach-Friedberg, Landkreis",
+        "total_population":138607.0
+    },
+    {
+        "id":"09772",
+        "name":"      Augsburg, Landkreis",
+        "total_population":263578.0
+    },
+    {
+        "id":"09773",
+        "name":"      Dillingen a.d.Donau, Landkreis",
+        "total_population":100141.0
+    },
+    {
+        "id":"09774",
+        "name":"      Günzburg, Landkreis",
+        "total_population":131375.0
+    },
+    {
+        "id":"09775",
+        "name":"      Neu-Ulm, Landkreis",
+        "total_population":182600.0
+    },
+    {
+        "id":"09776",
+        "name":"      Lindau (Bodensee), Landkreis",
+        "total_population":83671.0
+    },
+    {
+        "id":"09777",
+        "name":"      Ostallgäu, Landkreis",
+        "total_population":146302.0
+    },
+    {
+        "id":"09778",
+        "name":"      Unterallgäu, Landkreis",
+        "total_population":151838.0
+    },
+    {
+        "id":"09779",
+        "name":"      Donau-Ries, Landkreis",
+        "total_population":137971.0
+    },
+    {
+        "id":"09780",
+        "name":"      Oberallgäu, Landkreis",
+        "total_population":159576.0
+    },
+    {
+        "id":"10000",
+        "name":"  Saarland",
+        "total_population":994424.0
+    },
+    {
+        "id":"10041",
+        "name":"      Saarbrücken, Regionalverband",
+        "total_population":332427.0
+    },
+    {
+        "id":"10042",
+        "name":"      Merzig-Wadern, Landkreis",
+        "total_population":104327.0
+    },
+    {
+        "id":"10043",
+        "name":"      Neunkirchen, Landkreis",
+        "total_population":132393.0
+    },
+    {
+        "id":"10044",
+        "name":"      Saarlouis, Landkreis",
+        "total_population":195945.0
+    },
+    {
+        "id":"10045",
+        "name":"      Saarpfalz-Kreis",
+        "total_population":142344.0
+    },
+    {
+        "id":"10046",
+        "name":"      St. Wendel, Landkreis",
+        "total_population":86988.0
+    },
+    {
+        "id":"11000",
+        "name":"  Berlin",
+        "total_population":3782202.0
+    },
+    {
+        "id":"12000",
+        "name":"  Brandenburg",
+        "total_population":2581667.0
+    },
+    {
+        "id":"12051",
+        "name":"      Brandenburg an der Havel, kreisfreie Stadt",
+        "total_population":73921.0
+    },
+    {
+        "id":"12052",
+        "name":"      Cottbus, kreisfreie Stadt",
+        "total_population":100010.0
+    },
+    {
+        "id":"12053",
+        "name":"      Frankfurt (Oder), kreisfreie Stadt",
+        "total_population":58818.0
+    },
+    {
+        "id":"12054",
+        "name":"      Potsdam, kreisfreie Stadt",
+        "total_population":187119.0
+    },
+    {
+        "id":"12060",
+        "name":"      Barnim, Landkreis",
+        "total_population":193050.0
+    },
+    {
+        "id":"12061",
+        "name":"      Dahme-Spreewald, Landkreis",
+        "total_population":180242.0
+    },
+    {
+        "id":"12062",
+        "name":"      Elbe-Elster, Landkreis",
+        "total_population":99931.0
+    },
+    {
+        "id":"12063",
+        "name":"      Havelland, Landkreis",
+        "total_population":170556.0
+    },
+    {
+        "id":"12064",
+        "name":"      Märkisch-Oderland, Landkreis",
+        "total_population":201111.0
+    },
+    {
+        "id":"12065",
+        "name":"      Oberhavel, Landkreis",
+        "total_population":218855.0
+    },
+    {
+        "id":"12066",
+        "name":"      Oberspreewald-Lausitz, Landkreis",
+        "total_population":107547.0
+    },
+    {
+        "id":"12067",
+        "name":"      Oder-Spree, Landkreis",
+        "total_population":182960.0
+    },
+    {
+        "id":"12068",
+        "name":"      Ostprignitz-Ruppin, Landkreis",
+        "total_population":99929.0
+    },
+    {
+        "id":"12069",
+        "name":"      Potsdam-Mittelmark, Landkreis",
+        "total_population":223531.0
+    },
+    {
+        "id":"12070",
+        "name":"      Prignitz, Landkreis",
+        "total_population":75836.0
+    },
+    {
+        "id":"12071",
+        "name":"      Spree-Neiße, Landkreis",
+        "total_population":111966.0
+    },
+    {
+        "id":"12072",
+        "name":"      Teltow-Fläming, Landkreis",
+        "total_population":178482.0
+    },
+    {
+        "id":"12073",
+        "name":"      Uckermark, Landkreis",
+        "total_population":117803.0
+    },
+    {
+        "id":"13000",
+        "name":"  Mecklenburg-Vorpommern",
+        "total_population":1629464.0
+    },
+    {
+        "id":"13001",
+        "name":"      Greifswald, Hansestadt, kreisfreie Stadt",
+        "total_population":"-"
+    },
+    {
+        "id":"13002",
+        "name":"      Neubrandenburg, Stadt,  kreisfreie Stadt",
+        "total_population":"-"
+    },
+    {
+        "id":"13003",
+        "name":"      Rostock, kreisfreie Stadt",
+        "total_population":210795.0
+    },
+    {
+        "id":"13004",
+        "name":"      Schwerin, kreisfreie Stadt",
+        "total_population":98733.0
+    },
+    {
+        "id":"13005",
+        "name":"      Stralsund, Hansestadt,  kreisfreie Stadt",
+        "total_population":"-"
+    },
+    {
+        "id":"13006",
+        "name":"      Wismar, Hansestadt,  kreisfreie Stadt",
+        "total_population":"-"
+    },
+    {
+        "id":"13051",
+        "name":"      Bad Doberan, Landkreis",
+        "total_population":"-"
+    },
+    {
+        "id":"13052",
+        "name":"      Landkreis Demmin",
+        "total_population":"-"
+    },
+    {
+        "id":"13053",
+        "name":"      Güstrow, Landkreis",
+        "total_population":"-"
+    },
+    {
+        "id":"13054",
+        "name":"      Landkreis Ludwigslust",
+        "total_population":"-"
+    },
+    {
+        "id":"13055",
+        "name":"      Mecklenburg-Strelitz, Landkreis",
+        "total_population":"-"
+    },
+    {
+        "id":"13056",
+        "name":"      Landkreis Müritz",
+        "total_population":"-"
+    },
+    {
+        "id":"13057",
+        "name":"      Nordvorpommern, Landkreis",
+        "total_population":"-"
+    },
+    {
+        "id":"13058",
+        "name":"      Landkreis Nordwestmecklenburg",
+        "total_population":"-"
+    },
+    {
+        "id":"13059",
+        "name":"      Ostvorpommern, Landkreis",
+        "total_population":"-"
+    },
+    {
+        "id":"13060",
+        "name":"      Landkreis Parchim",
+        "total_population":"-"
+    },
+    {
+        "id":"13061",
+        "name":"      Rügen, Landkreis",
+        "total_population":"-"
+    },
+    {
+        "id":"13062",
+        "name":"      Landkreis Uecker-Randow",
+        "total_population":"-"
+    },
+    {
+        "id":"13071",
+        "name":"      Mecklenburgische Seenplatte, Landkreis",
+        "total_population":259312.0
+    },
+    {
+        "id":"13072",
+        "name":"      Landkreis Rostock",
+        "total_population":221431.0
+    },
+    {
+        "id":"13073",
+        "name":"      Vorpommern-Rügen, Landkreis",
+        "total_population":227746.0
+    },
+    {
+        "id":"13074",
+        "name":"      Nordwestmecklenburg, Landkreis",
+        "total_population":160206.0
+    },
+    {
+        "id":"13075",
+        "name":"      Vorpommern-Greifswald, Landkreis",
+        "total_population":237184.0
+    },
+    {
+        "id":"13076",
+        "name":"      Ludwigslust-Parchim, Landkreis",
+        "total_population":214057.0
+    },
+    {
+        "id":"14000",
+        "name":"  Sachsen",
+        "total_population":4089467.0
+    },
+    {
+        "id":"14161",
+        "name":"      Chemnitz, kreisfreie Stadt",
+        "total_population":"-"
+    },
+    {
+        "id":"14166",
+        "name":"      Plauen, kreisfreie Stadt",
+        "total_population":"-"
+    },
+    {
+        "id":"14167",
+        "name":"      Zwickau, kreisfreie Stadt",
+        "total_population":"-"
+    },
+    {
+        "id":"14171",
+        "name":"      Annaberg, Landkreis",
+        "total_population":"-"
+    },
+    {
+        "id":"14173",
+        "name":"      Chemnitzer Land, Landkreis",
+        "total_population":"-"
+    },
+    {
+        "id":"14177",
+        "name":"      Freiberg, Landkreis",
+        "total_population":"-"
+    },
+    {
+        "id":"14178",
+        "name":"      Vogtlandkreis",
+        "total_population":"-"
+    },
+    {
+        "id":"14181",
+        "name":"      Mittlerer Erzgebirgskreis",
+        "total_population":"-"
+    },
+    {
+        "id":"14182",
+        "name":"      Mittweida, Landkreis",
+        "total_population":"-"
+    },
+    {
+        "id":"14188",
+        "name":"      Stollberg, Landkreis",
+        "total_population":"-"
+    },
+    {
+        "id":"14191",
+        "name":"      Aue-Schwarzenberg, Landkreis",
+        "total_population":"-"
+    },
+    {
+        "id":"14193",
+        "name":"      Zwickauer Land, Landkreis",
+        "total_population":"-"
+    },
+    {
+        "id":"14262",
+        "name":"      Dresden, kreisfreie Stadt",
+        "total_population":"-"
+    },
+    {
+        "id":"14263",
+        "name":"      Görlitz, kreisfreie Stadt",
+        "total_population":"-"
+    },
+    {
+        "id":"14264",
+        "name":"      Hoyerswerda, kreisfreie Stadt",
+        "total_population":"-"
+    },
+    {
+        "id":"14272",
+        "name":"      Bautzen, Landkreis",
+        "total_population":"-"
+    },
+    {
+        "id":"14280",
+        "name":"      Meißen, Landkreis",
+        "total_population":"-"
+    },
+    {
+        "id":"14284",
+        "name":"      Niederschlesischer Oberlausitzkreis",
+        "total_population":"-"
+    },
+    {
+        "id":"14285",
+        "name":"      Riesa-Großenhain, Landkreis",
+        "total_population":"-"
+    },
+    {
+        "id":"14286",
+        "name":"      Löbau-Zittau, Landkreis",
+        "total_population":"-"
+    },
+    {
+        "id":"14287",
+        "name":"      Sächsische Schweiz, Landkreis",
+        "total_population":"-"
+    },
+    {
+        "id":"14290",
+        "name":"      Weißeritzkreis",
+        "total_population":"-"
+    },
+    {
+        "id":"14292",
+        "name":"      Kamenz, Landkreis",
+        "total_population":"-"
+    },
+    {
+        "id":"14365",
+        "name":"      Leipzig, kreisfreie Stadt",
+        "total_population":"-"
+    },
+    {
+        "id":"14374",
+        "name":"      Delitzsch, Landkreis",
+        "total_population":"-"
+    },
+    {
+        "id":"14375",
+        "name":"      Döbeln, Landkreis",
+        "total_population":"-"
+    },
+    {
+        "id":"14379",
+        "name":"      Leipziger Land, Landkreis",
+        "total_population":"-"
+    },
+    {
+        "id":"14383",
+        "name":"      Muldentalkreis",
+        "total_population":"-"
+    },
+    {
+        "id":"14389",
+        "name":"      Torgau-Oschatz, Landkreis",
+        "total_population":"-"
+    },
+    {
+        "id":"14511",
+        "name":"      Chemnitz, kreisfreie Stadt",
+        "total_population":250681.0
+    },
+    {
+        "id":"14521",
+        "name":"      Erzgebirgskreis",
+        "total_population":326896.0
+    },
+    {
+        "id":"14522",
+        "name":"      Mittelsachsen, Landkreis",
+        "total_population":300308.0
+    },
+    {
+        "id":"14523",
+        "name":"      Vogtlandkreis",
+        "total_population":221953.0
+    },
+    {
+        "id":"14524",
+        "name":"      Zwickau, Landkreis",
+        "total_population":310111.0
+    },
+    {
+        "id":"14612",
+        "name":"      Dresden, kreisfreie Stadt",
+        "total_population":566222.0
+    },
+    {
+        "id":"14625",
+        "name":"      Bautzen, Landkreis",
+        "total_population":296506.0
+    },
+    {
+        "id":"14626",
+        "name":"      Görlitz, Landkreis",
+        "total_population":248479.0
+    },
+    {
+        "id":"14627",
+        "name":"      Meißen, Landkreis",
+        "total_population":241160.0
+    },
+    {
+        "id":"14628",
+        "name":"      Sächsische Schweiz-Osterzgebirge, Landkreis",
+        "total_population":246011.0
+    },
+    {
+        "id":"14713",
+        "name":"      Leipzig, kreisfreie Stadt",
+        "total_population":619879.0
+    },
+    {
+        "id":"14729",
+        "name":"      Leipzig, Landkreis",
+        "total_population":261573.0
+    },
+    {
+        "id":"14730",
+        "name":"      Nordsachsen, Landkreis",
+        "total_population":199688.0
+    },
+    {
+        "id":"15000",
+        "name":"  Sachsen-Anhalt",
+        "total_population":2180448.0
+    },
+    {
+        "id":"15001",
+        "name":"      Dessau-Roßlau, kreisfreie Stadt",
+        "total_population":79686.0
+    },
+    {
+        "id":"15002",
+        "name":"      Halle (Saale), kreisfreie Stadt",
+        "total_population":242172.0
+    },
+    {
+        "id":"15003",
+        "name":"      Magdeburg, kreisfreie Stadt, Landeshauptstadt",
+        "total_population":240114.0
+    },
+    {
+        "id":"15081",
+        "name":"      Altmarkkreis Salzwedel",
+        "total_population":81851.0
+    },
+    {
+        "id":"15082",
+        "name":"      Anhalt-Bitterfeld, Landkreis",
+        "total_population":156642.0
+    },
+    {
+        "id":"15083",
+        "name":"      Börde, Landkreis",
+        "total_population":170984.0
+    },
+    {
+        "id":"15084",
+        "name":"      Burgenlandkreis",
+        "total_population":177174.0
+    },
+    {
+        "id":"15085",
+        "name":"      Harz, Landkreis",
+        "total_population":208804.0
+    },
+    {
+        "id":"15086",
+        "name":"      Jerichower Land, Landkreis",
+        "total_population":89914.0
+    },
+    {
+        "id":"15087",
+        "name":"      Mansfeld-Südharz, Landkreis",
+        "total_population":131071.0
+    },
+    {
+        "id":"15088",
+        "name":"      Saalekreis",
+        "total_population":184255.0
+    },
+    {
+        "id":"15089",
+        "name":"      Salzlandkreis",
+        "total_population":184943.0
+    },
+    {
+        "id":"15090",
+        "name":"      Stendal, Landkreis",
+        "total_population":109592.0
+    },
+    {
+        "id":"15091",
+        "name":"      Wittenberg, Landkreis",
+        "total_population":123246.0
+    },
+    {
+        "id":"15101",
+        "name":"      Dessau, kreisfreie Stadt",
+        "total_population":"-"
+    },
+    {
+        "id":"15151",
+        "name":"      Anhalt-Zerbst, Kreis",
+        "total_population":"-"
+    },
+    {
+        "id":"15153",
+        "name":"      Bernburg, Kreis",
+        "total_population":"-"
+    },
+    {
+        "id":"15154",
+        "name":"      Bitterfeld, Kreis",
+        "total_population":"-"
+    },
+    {
+        "id":"15159",
+        "name":"      Köthen, Kreis",
+        "total_population":"-"
+    },
+    {
+        "id":"15171",
+        "name":"      Wittenberg, Kreis",
+        "total_population":"-"
+    },
+    {
+        "id":"15202",
+        "name":"      Halle (Saale), kreisfreie Stadt",
+        "total_population":"-"
+    },
+    {
+        "id":"15256",
+        "name":"      Burgenlandkreis",
+        "total_population":"-"
+    },
+    {
+        "id":"15260",
+        "name":"      Mansfelder Land, Kreis",
+        "total_population":"-"
+    },
+    {
+        "id":"15261",
+        "name":"      Merseburg-Querfurt, Kreis",
+        "total_population":"-"
+    },
+    {
+        "id":"15265",
+        "name":"      Saalkreis",
+        "total_population":"-"
+    },
+    {
+        "id":"15266",
+        "name":"      Sangerhausen, Kreis",
+        "total_population":"-"
+    },
+    {
+        "id":"15268",
+        "name":"      Weißenfels, Kreis",
+        "total_population":"-"
+    },
+    {
+        "id":"15303",
+        "name":"      Magdeburg, kreisfreie Stadt",
+        "total_population":"-"
+    },
+    {
+        "id":"15352",
+        "name":"      Aschersleben-Staßfurt, Kreis",
+        "total_population":"-"
+    },
+    {
+        "id":"15355",
+        "name":"      Bördekreis",
+        "total_population":"-"
+    },
+    {
+        "id":"15357",
+        "name":"      Halberstadt, Kreis",
+        "total_population":"-"
+    },
+    {
+        "id":"15358",
+        "name":"      Jerichower Land, Kreis",
+        "total_population":"-"
+    },
+    {
+        "id":"15362",
+        "name":"      Ohrekreis",
+        "total_population":"-"
+    },
+    {
+        "id":"15363",
+        "name":"      Stendal, Kreis",
+        "total_population":"-"
+    },
+    {
+        "id":"15364",
+        "name":"      Quedlinburg, Kreis",
+        "total_population":"-"
+    },
+    {
+        "id":"15367",
+        "name":"      Schönebeck, Kreis",
+        "total_population":"-"
+    },
+    {
+        "id":"15369",
+        "name":"      Wernigerode, Kreis",
+        "total_population":"-"
+    },
+    {
+        "id":"15370",
+        "name":"      Altmarkkreis Salzwedel, Kreis",
+        "total_population":"-"
+    },
+    {
+        "id":"16000",
+        "name":"  Thüringen",
+        "total_population":2122335.0
+    },
+    {
+        "id":"16051",
+        "name":"      Erfurt, kreisfreie Stadt",
+        "total_population":215675.0
+    },
+    {
+        "id":"16052",
+        "name":"      Gera, kreisfreie Stadt",
+        "total_population":94847.0
+    },
+    {
+        "id":"16053",
+        "name":"      Jena, kreisfreie Stadt",
+        "total_population":110791.0
+    },
+    {
+        "id":"16054",
+        "name":"      Suhl, kreisfreie Stadt",
+        "total_population":36986.0
+    },
+    {
+        "id":"16055",
+        "name":"      Weimar, kreisfreie Stadt",
+        "total_population":65611.0
+    },
+    {
+        "id":"16056",
+        "name":"      Eisenach, kreisfreie Stadt",
+        "total_population":"-"
+    },
+    {
+        "id":"16061",
+        "name":"      Eichsfeld, Landkreis",
+        "total_population":103441.0
+    },
+    {
+        "id":"16062",
+        "name":"      Nordhausen, Landkreis",
+        "total_population":82179.0
+    },
+    {
+        "id":"16063",
+        "name":"      Wartburgkreis",
+        "total_population":159201.0
+    },
+    {
+        "id":"16064",
+        "name":"      Unstrut-Hainich-Kreis",
+        "total_population":98233.0
+    },
+    {
+        "id":"16065",
+        "name":"      Kyffhäuserkreis",
+        "total_population":73216.0
+    },
+    {
+        "id":"16066",
+        "name":"      Schmalkalden-Meiningen, Landkreis",
+        "total_population":123274.0
+    },
+    {
+        "id":"16067",
+        "name":"      Gotha, Landkreis",
+        "total_population":134472.0
+    },
+    {
+        "id":"16068",
+        "name":"      Sömmerda, Landkreis",
+        "total_population":69418.0
+    },
+    {
+        "id":"16069",
+        "name":"      Hildburghausen, Landkreis",
+        "total_population":61329.0
+    },
+    {
+        "id":"16070",
+        "name":"      Ilm-Kreis",
+        "total_population":106775.0
+    },
+    {
+        "id":"16071",
+        "name":"      Weimarer Land, Landkreis",
+        "total_population":82892.0
+    },
+    {
+        "id":"16072",
+        "name":"      Sonneberg, Landkreis",
+        "total_population":56434.0
+    },
+    {
+        "id":"16073",
+        "name":"      Saalfeld-Rudolstadt, Landkreis",
+        "total_population":101044.0
+    },
+    {
+        "id":"16074",
+        "name":"      Saale-Holzland-Kreis",
+        "total_population":83643.0
+    },
+    {
+        "id":"16075",
+        "name":"      Saale-Orla-Kreis",
+        "total_population":78619.0
+    },
+    {
+        "id":"16076",
+        "name":"      Greiz, Landkreis",
+        "total_population":95563.0
+    },
+    {
+        "id":"16077",
+        "name":"      Altenburger Land, Landkreis",
+        "total_population":88692.0
+    }
+]

@@ -16,6 +16,7 @@ import type {Threshold} from 'types/threshold';
 import type {District} from 'types/district';
 import {useTranslation} from 'react-i18next';
 import ThresholdSettings from './ThresholdSettings/ThresholdSettings';
+import RelativeNumberToggle from './RelativeNumberToggle';
 
 /**
  * The different views that can be displayed in the settings popover.
@@ -44,6 +45,9 @@ export interface LineChartSettingsProps {
   /** The horizontal thresholds for the y-axis. */
   thresholds: Record<string, Threshold>;
 
+  /** The relative numbers for the whole app. */
+  relativeNumbers: boolean;
+
   /** The function to remove a horizontal threshold. */
   removeThreshold: (id: string) => void;
 
@@ -61,6 +65,7 @@ export default function LineChartSettings({
   selectedCompartment,
   compartments,
   thresholds,
+  relativeNumbers,
   removeThreshold,
   updateThreshold,
 }: LineChartSettingsProps) {
@@ -162,6 +167,7 @@ export default function LineChartSettings({
         {currentView === 'settingsMenu' && (
           <Box p={4} data-testid='main-settings-menu'>
             {renderHeader(tSettings('title'))}
+            <RelativeNumberToggle relativeNumbers={relativeNumbers} />
             {Object.entries(settingsMenu).map(([key, item]) => (
               <Box key={key}>
                 <Divider sx={{marginY: 2}} variant='middle' />

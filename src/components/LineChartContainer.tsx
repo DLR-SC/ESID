@@ -32,6 +32,7 @@ export default function LineChartContainer() {
   const minDate = useAppSelector((state) => state.dataSelection.minDate);
   const maxDate = useAppSelector((state) => state.dataSelection.maxDate);
   const groupFilters = useAppSelector((state) => state.dataSelection.groupFilters);
+  const relativeNumbers = useAppSelector((state) => state.dataSelection.relativeNumbers ?? false);
 
   const [referenceDayBottomPosition, setReferenceDayBottomPosition] = useState<number>(0);
 
@@ -190,6 +191,7 @@ export default function LineChartContainer() {
             })
           )
         }
+        relativeNumbers={relativeNumbers}
       />
     </LoadingContainer>
   );
