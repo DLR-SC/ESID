@@ -47,7 +47,7 @@ export interface DataSelection {
   minDate: string | null;
   maxDate: string | null;
   groupFilters: Record<string, GroupFilter>;
-  relativeNumbers: boolean;
+  relativeNumbers: boolean | null;
 }
 
 const initialState: DataSelection = {
@@ -61,7 +61,7 @@ const initialState: DataSelection = {
   minDate: null,
   maxDate: null,
   groupFilters: {},
-  relativeNumbers: false,
+  relativeNumbers: null,
 };
 
 /**
@@ -179,8 +179,8 @@ export const DataSelectionSlice = createSlice({
         state.groupFilters[action.payload].isVisible = !state.groupFilters[action.payload].isVisible;
       }
     },
-    setRelativeNumbers(state, action: PayloadAction<boolean>) {
-      state.relativeNumbers = action.payload;
+    toggleRelativeNumbers(state) {
+      state.relativeNumbers = !state.relativeNumbers;
     },
   },
 });
@@ -203,7 +203,7 @@ export const {
   setGroupFilter,
   deleteGroupFilter,
   toggleGroupFilter,
-  setRelativeNumbers,
+  toggleRelativeNumbers,
 } = DataSelectionSlice.actions;
 
 export default DataSelectionSlice.reducer;
