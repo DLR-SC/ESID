@@ -11,8 +11,11 @@ import PauseRounded from '@mui/icons-material/PauseRounded';
 import PlayArrowRounded from '@mui/icons-material/PlayArrowRounded';
 import SkipNextRounded from '@mui/icons-material/SkipNextRounded';
 import SkipPreviousRounded from '@mui/icons-material/SkipPreviousRounded';
+import ToggleButton from '@mui/material/ToggleButton';
+import PercentIcon from '@mui/icons-material/Percent';
+import ButtonGroup from '@mui/material/ButtonGroup';
 import {useAppDispatch, useAppSelector} from 'store/hooks';
-import {nextDay, previousDay, selectDate} from 'store/DataSelectionSlice';
+import {nextDay, previousDay, selectDate, toggleRelativeNumbers} from 'store/DataSelectionSlice';
 import {useTranslation} from 'react-i18next';
 
 export default function IconBar(): JSX.Element {
@@ -26,6 +29,7 @@ export default function IconBar(): JSX.Element {
   const selectedDay = useAppSelector((state) => state.dataSelection.date);
   const minDate = useAppSelector((state) => state.dataSelection.minDate);
   const maxDate = useAppSelector((state) => state.dataSelection.maxDate);
+  const relativeNumbers = useAppSelector((state) => state.dataSelection.relativeNumbers ?? false);
 
   const toggleFullscreen = () => {
     if (fsApi.isFullscreenEnabled) {
@@ -69,6 +73,25 @@ export default function IconBar(): JSX.Element {
         height: '60px',
       }}
     >
+      <Box
+        style={{
+          paddingLeft: '10px',
+          paddingRight: '10px',
+        }}
+      >
+        <Tooltip title={t('icon-bar.number-toggle')}>
+          <ToggleButton
+            style={{
+              maxHeight: '40px',
+            }}
+            value='absolute'
+            selected={relativeNumbers}
+            onChange={() => dispatch(toggleRelativeNumbers())}
+          >
+            <PercentIcon />
+          </ToggleButton>
+        </Tooltip>
+      </Box>
       <Tooltip title={t('icon-bar.previous-day-tooltip')}>
         <span>
           <Button
@@ -100,6 +123,13 @@ export default function IconBar(): JSX.Element {
         <Button onClick={toggleFullscreen}>
           <FullscreenIcon />
         </Button>
+      </Tooltip>
+      <Tooltip title='Aggregation window'>
+        <ButtonGroup aria-label='Basic button group'>
+          <Button>1d</Button>
+          <Button>7d</Button>
+          <Button>Total</Button>
+        </ButtonGroup>
       </Tooltip>
     </Box>
   );

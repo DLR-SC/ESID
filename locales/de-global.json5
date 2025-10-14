@@ -26,6 +26,7 @@
     'next-day-tooltip': 'Nächster Tag',
     'play-pause-tooltip': 'Start/Pause',
     'fullscreen-tooltip': 'Vollbild',
+    'number-toggle': 'Toggle',
   },
   history: {
     placeholder: 'history',

@@ -26,6 +26,7 @@
     'next-day-tooltip': 'Next Day',
     'play-pause-tooltip': 'Play/Pause',
     'fullscreen-tooltip': 'Fullscreen',
+    'number-toggle': 'Toggle between Absolute / Relative value',
   },
   sideBar: {
     placeholder: 'Sidebar Content',

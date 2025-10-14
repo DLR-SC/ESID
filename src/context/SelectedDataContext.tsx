@@ -228,6 +228,7 @@ export default function SelectedDataContext(props: {baseData: BaseData; children
   const normalizeInfectionData = useMemo(() => {
     return (data: InfectionData | undefined): InfectionData => {
       if (!data || !relativeNumbers) return data ?? [];
+
       return data.map((entry) => {
         const nuts = entry.node ? nodeIdToNuts[entry.node] : undefined;
         const pop = nuts ? props.baseData.populationByNuts[nuts] : undefined;
@@ -241,6 +242,7 @@ export default function SelectedDataContext(props: {baseData: BaseData; children
   const normalizeMultiInfectionData = useMemo(() => {
     return (multi: Record<string, InfectionData> | undefined): Record<string, InfectionData> => {
       if (!multi || !relativeNumbers) return multi ?? {};
+
       const result: Record<string, InfectionData> = {};
       Object.entries(multi).forEach(([k, v]) => {
         result[k] = normalizeInfectionData(v);
