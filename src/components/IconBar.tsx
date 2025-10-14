@@ -13,10 +13,18 @@ import SkipNextRounded from '@mui/icons-material/SkipNextRounded';
 import SkipPreviousRounded from '@mui/icons-material/SkipPreviousRounded';
 import ToggleButton from '@mui/material/ToggleButton';
 import PercentIcon from '@mui/icons-material/Percent';
-import ButtonGroup from '@mui/material/ButtonGroup';
+import Chip from '@mui/material/Chip';
 import {useAppDispatch, useAppSelector} from 'store/hooks';
-import {nextDay, previousDay, selectDate, toggleRelativeNumbers} from 'store/DataSelectionSlice';
+import {
+  AggregationWindow,
+  nextDay,
+  previousDay,
+  selectDate,
+  setAggregationWindow,
+  toggleRelativeNumbers,
+} from 'store/DataSelectionSlice';
 import {useTranslation} from 'react-i18next';
+import {ToggleButtonGroup} from '@mui/material';
 
 export default function IconBar(): JSX.Element {
   const fsApi = useFullscreen();
@@ -30,6 +38,13 @@ export default function IconBar(): JSX.Element {
   const minDate = useAppSelector((state) => state.dataSelection.minDate);
   const maxDate = useAppSelector((state) => state.dataSelection.maxDate);
   const relativeNumbers = useAppSelector((state) => state.dataSelection.relativeNumbers ?? false);
+  const aggregationWindow = useAppSelector((state) => state.dataSelection.aggregationWindow ?? AggregationWindow.Total);
+  const windowLabel =
+    aggregationWindow === AggregationWindow.SevenDays
+      ? '7d'
+      : aggregationWindow === AggregationWindow.OneDay
+        ? '1d'
+        : 'Total';
 
   const toggleFullscreen = () => {
     if (fsApi.isFullscreenEnabled) {
@@ -125,12 +140,47 @@ export default function IconBar(): JSX.Element {
         </Button>
       </Tooltip>
       <Tooltip title='Aggregation window'>
-        <ButtonGroup aria-label='Basic button group'>
-          <Button>1d</Button>
-          <Button>7d</Button>
-          <Button>Total</Button>
-        </ButtonGroup>
+        <ToggleButtonGroup aria-label='Basic button group'>
+          <ToggleButton
+            value={AggregationWindow.Total}
+            selected={aggregationWindow === AggregationWindow.Total}
+            onClick={() => dispatch(setAggregationWindow(AggregationWindow.Total))}
+          >
+            Total
+          </ToggleButton>
+          <ToggleButton
+            value={AggregationWindow.OneDay}
+            selected={aggregationWindow === AggregationWindow.OneDay}
+            onClick={() => dispatch(setAggregationWindow(AggregationWindow.OneDay))}
+          >
+            1d
+          </ToggleButton>
+          <ToggleButton
+            value={AggregationWindow.SevenDays}
+            selected={aggregationWindow === AggregationWindow.SevenDays}
+            onClick={() => dispatch(setAggregationWindow(AggregationWindow.SevenDays))}
+          >
+            7d
+          </ToggleButton>
+        </ToggleButtonGroup>
       </Tooltip>
+
+      {/* Status chips: window and scale */}
+      <Box sx={{display: 'flex', alignItems: 'center', gap: 1, marginLeft: 1}}>
+        <Chip
+          size='small'
+          variant='outlined'
+          label={`Window: ${windowLabel}`}
+          aria-label={`Aggregation window ${windowLabel}`}
+        />
+        <Chip
+          size='small'
+          color={relativeNumbers ? 'primary' : 'default'}
+          variant={relativeNumbers ? 'filled' : 'outlined'}
+          label={relativeNumbers ? 'per 100k' : 'absolute'}
+          aria-label={relativeNumbers ? 'Scale per 100k' : 'Scale absolute'}
+        />
+      </Box>
     </Box>
   );
 }
