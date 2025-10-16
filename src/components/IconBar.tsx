@@ -11,9 +11,9 @@ import PauseRounded from '@mui/icons-material/PauseRounded';
 import PlayArrowRounded from '@mui/icons-material/PlayArrowRounded';
 import SkipNextRounded from '@mui/icons-material/SkipNextRounded';
 import SkipPreviousRounded from '@mui/icons-material/SkipPreviousRounded';
-import ToggleButton from '@mui/material/ToggleButton';
-import PercentIcon from '@mui/icons-material/Percent';
-import Chip from '@mui/material/Chip';
+import ToggleButton, {toggleButtonClasses} from '@mui/material/ToggleButton';
+import Popover from '@mui/material/Popover';
+import SettingsIcon from '@mui/icons-material/Settings';
 import {useAppDispatch, useAppSelector} from 'store/hooks';
 import {
   AggregationWindow,
@@ -24,13 +24,32 @@ import {
   toggleRelativeNumbers,
 } from 'store/DataSelectionSlice';
 import {useTranslation} from 'react-i18next';
-import {ToggleButtonGroup} from '@mui/material';
+import {styled, ToggleButtonGroup, toggleButtonGroupClasses, Typography} from '@mui/material';
+import InfoOutlined from '@mui/icons-material/InfoOutlined';
+import useTheme from '@mui/material/styles/useTheme';
+
+const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({theme}) => ({
+  gap: '1rem',
+  [`& .${toggleButtonGroupClasses.firstButton}, & .${toggleButtonGroupClasses.middleButton}`]: {
+    borderTopRightRadius: theme.shape.borderRadius,
+    borderBottomRightRadius: theme.shape.borderRadius,
+  },
+  [`& .${toggleButtonGroupClasses.lastButton}, & .${toggleButtonGroupClasses.middleButton}`]: {
+    borderTopLeftRadius: theme.shape.borderRadius,
+    borderBottomLeftRadius: theme.shape.borderRadius,
+    borderLeft: `1px solid ${theme.palette.divider}`,
+  },
+  [`& .${toggleButtonGroupClasses.lastButton}.${toggleButtonClasses.disabled}, & .${toggleButtonGroupClasses.middleButton}.${toggleButtonClasses.disabled}`]:
+    {
+      borderLeft: `1px solid ${theme.palette.action.disabledBackground}`,
+    },
+}));
 
 export default function IconBar(): JSX.Element {
   const fsApi = useFullscreen();
   const dispatch = useAppDispatch();
   const {t} = useTranslation();
-
+  const theme = useTheme();
   const [isPlaying, setIsPlaying] = useState(false);
   const [justStarted, setJustStarted] = useState(false);
 
@@ -39,12 +58,12 @@ export default function IconBar(): JSX.Element {
   const maxDate = useAppSelector((state) => state.dataSelection.maxDate);
   const relativeNumbers = useAppSelector((state) => state.dataSelection.relativeNumbers ?? false);
   const aggregationWindow = useAppSelector((state) => state.dataSelection.aggregationWindow ?? AggregationWindow.Total);
-  const windowLabel =
-    aggregationWindow === AggregationWindow.SevenDays
-      ? '7d'
-      : aggregationWindow === AggregationWindow.OneDay
-        ? '1d'
-        : 'Total';
+
+  // Settings popover state
+  const [settingsAnchorEl, setSettingsAnchorEl] = useState<HTMLElement | null>(null);
+  const settingsOpen = Boolean(settingsAnchorEl);
+  const openSettings = (event: React.MouseEvent<HTMLElement>) => setSettingsAnchorEl(event.currentTarget);
+  const closeSettings = () => setSettingsAnchorEl(null);
 
   const toggleFullscreen = () => {
     if (fsApi.isFullscreenEnabled) {
@@ -88,25 +107,13 @@ export default function IconBar(): JSX.Element {
         height: '60px',
       }}
     >
-      <Box
-        style={{
-          paddingLeft: '10px',
-          paddingRight: '10px',
-        }}
-      >
-        <Tooltip title={t('icon-bar.number-toggle')}>
-          <ToggleButton
-            style={{
-              maxHeight: '40px',
-            }}
-            value='absolute'
-            selected={relativeNumbers}
-            onChange={() => dispatch(toggleRelativeNumbers())}
-          >
-            <PercentIcon />
-          </ToggleButton>
-        </Tooltip>
-      </Box>
+      {/* Settings popover trigger */}
+      <Tooltip title={t('icon-bar.display-settings.tooltip')}>
+        <Button aria-label='display-settings' onClick={openSettings}>
+          <SettingsIcon />
+        </Button>
+      </Tooltip>
+
       <Tooltip title={t('icon-bar.previous-day-tooltip')}>
         <span>
           <Button
@@ -139,48 +146,112 @@ export default function IconBar(): JSX.Element {
           <FullscreenIcon />
         </Button>
       </Tooltip>
-      <Tooltip title='Aggregation window'>
-        <ToggleButtonGroup aria-label='Basic button group'>
-          <ToggleButton
-            value={AggregationWindow.Total}
-            selected={aggregationWindow === AggregationWindow.Total}
-            onClick={() => dispatch(setAggregationWindow(AggregationWindow.Total))}
-          >
-            Total
-          </ToggleButton>
-          <ToggleButton
-            value={AggregationWindow.OneDay}
-            selected={aggregationWindow === AggregationWindow.OneDay}
-            onClick={() => dispatch(setAggregationWindow(AggregationWindow.OneDay))}
-          >
-            1d
-          </ToggleButton>
-          <ToggleButton
-            value={AggregationWindow.SevenDays}
-            selected={aggregationWindow === AggregationWindow.SevenDays}
-            onClick={() => dispatch(setAggregationWindow(AggregationWindow.SevenDays))}
-          >
-            7d
-          </ToggleButton>
-        </ToggleButtonGroup>
-      </Tooltip>
 
-      {/* Status chips: window and scale */}
-      <Box sx={{display: 'flex', alignItems: 'center', gap: 1, marginLeft: 1}}>
-        <Chip
-          size='small'
-          variant='outlined'
-          label={`Window: ${windowLabel}`}
-          aria-label={`Aggregation window ${windowLabel}`}
-        />
-        <Chip
-          size='small'
-          color={relativeNumbers ? 'primary' : 'default'}
-          variant={relativeNumbers ? 'filled' : 'outlined'}
-          label={relativeNumbers ? 'per 100k' : 'absolute'}
-          aria-label={relativeNumbers ? 'Scale per 100k' : 'Scale absolute'}
-        />
-      </Box>
+      {/* Settings Popover */}
+      <Popover
+        open={settingsOpen}
+        anchorEl={settingsAnchorEl}
+        onClose={closeSettings}
+        anchorOrigin={{vertical: 'bottom', horizontal: 'left'}}
+        transformOrigin={{vertical: 'top', horizontal: 'left'}}
+        slotProps={{paper: {sx: {p: 2, minWidth: 280}}}}
+      >
+        <Box sx={{display: 'flex', flexDirection: 'column', gap: 4, padding: 2}}>
+          {/* Window row */}
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 3,
+              width: '100%',
+            }}
+          >
+            <Box sx={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 2}}>
+              <Typography variant='h3'>{t('icon-bar.display-settings.time-period')}</Typography>
+              <Tooltip arrow placement='right-start' title={t('icon-bar.display-settings.time-period-tooltip')}>
+                <InfoOutlined
+                  sx={{
+                    color: theme.palette.info.light,
+                    fontSize: '1rem',
+                  }}
+                />
+              </Tooltip>
+            </Box>
+
+            <StyledToggleButtonGroup
+              size='small'
+              color='primary'
+              exclusive
+              aria-label='Aggregation window'
+              sx={{width: '100%', gap: 3}}
+            >
+              <ToggleButton
+                value={AggregationWindow.Total}
+                selected={aggregationWindow === AggregationWindow.Total}
+                onClick={() => dispatch(setAggregationWindow(AggregationWindow.Total))}
+                sx={{width: '100%'}}
+              >
+                {t('icon-bar.display-settings.total')}
+              </ToggleButton>
+              <ToggleButton
+                value={AggregationWindow.OneDay}
+                selected={aggregationWindow === AggregationWindow.OneDay}
+                onClick={() => dispatch(setAggregationWindow(AggregationWindow.OneDay))}
+                sx={{width: '100%'}}
+              >
+                {t('icon-bar.display-settings.one-day')}
+              </ToggleButton>
+              <ToggleButton
+                value={AggregationWindow.SevenDays}
+                selected={aggregationWindow === AggregationWindow.SevenDays}
+                onClick={() => dispatch(setAggregationWindow(AggregationWindow.SevenDays))}
+                sx={{width: '100%'}}
+              >
+                {t('icon-bar.display-settings.seven-days')}
+              </ToggleButton>
+            </StyledToggleButtonGroup>
+          </Box>
+
+          {/* Number type row */}
+          <Box sx={{display: 'flex', flexDirection: 'column', gap: 3}}>
+            <Box sx={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 2}}>
+              <Typography variant='h3'>{t('icon-bar.display-settings.number-type')}</Typography>
+              <Tooltip arrow placement='right-start' title={t('icon-bar.display-settings.number-type-tooltip')}>
+                <InfoOutlined
+                  sx={{
+                    color: theme.palette.info.light,
+                    fontSize: '1rem',
+                  }}
+                />
+              </Tooltip>
+            </Box>
+            <StyledToggleButtonGroup
+              size='small'
+              color='primary'
+              exclusive
+              aria-label='Aggregation window'
+              sx={{width: '100%', gap: 3}}
+            >
+              <ToggleButton
+                value='relative-numbers'
+                selected={relativeNumbers}
+                onClick={() => dispatch(toggleRelativeNumbers())}
+                sx={{width: '100%'}}
+              >
+                {t('icon-bar.display-settings.relative')}
+              </ToggleButton>
+              <ToggleButton
+                value='absolute-numbers'
+                selected={!relativeNumbers}
+                onClick={() => dispatch(toggleRelativeNumbers())}
+                sx={{width: '100%'}}
+              >
+                {t('icon-bar.display-settings.absolute')}
+              </ToggleButton>
+            </StyledToggleButtonGroup>
+          </Box>
+        </Box>
+      </Popover>
     </Box>
   );
 }

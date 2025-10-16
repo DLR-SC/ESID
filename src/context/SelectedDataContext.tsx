@@ -249,61 +249,63 @@ export default function SelectedDataContext(props: {baseData: BaseData; children
     return map;
   }, [props.baseData.nodes]);
 
-  // Derive windowed series (total/new1d/new7d) per node/group/compartment/percentile
+  // Derive windowed series (Total/1d/7d-sum) per node/group/compartment/percentile
   const deriveWindowedSeries = useMemo(() => {
-    return (data: InfectionData, window: AggregationWindow | null): InfectionData => {
-      if (!data || !Array.isArray(data) || window === null || window === AggregationWindow.Total) {
-        console.log('deriveWindowedSeries', data, window);
-        return data ?? [];
+    return (infectionData: InfectionData, aggregation: AggregationWindow | null): InfectionData => {
+      if (!infectionData || !Array.isArray(infectionData) || aggregation === null) return infectionData ?? [];
+      // Base series assumed to be daily-new values:
+      // - Total: pass-through
+      // - 1d:    pass-through
+      // - 7d:    rolling sum over last 7 days (t-6..t)
+      if (aggregation === AggregationWindow.Total || aggregation === AggregationWindow.OneDay)
+        return infectionData ?? [];
+
+      const keyToEntries = new Map<string, InfectionData>();
+      const buildGroupingKey = (entry: (typeof infectionData)[number]) =>
+        `${entry.node ?? ''}|${entry.group ?? ''}|${entry.compartment ?? ''}|${entry.aggregation ?? ''}|${entry.percentile}`;
+
+      for (const entry of infectionData) {
+        const key = buildGroupingKey(entry);
+        if (!keyToEntries.has(key)) keyToEntries.set(key, []);
+        keyToEntries.get(key)!.push(entry);
       }
 
-      const groups = new Map<string, InfectionData>();
-      const makeKey = (e: (typeof data)[number]) =>
-        `${e.node ?? ''}|${e.group ?? ''}|${e.compartment ?? ''}|${e.aggregation ?? ''}|${e.percentile}`;
-
-      for (const e of data) {
-        const k = makeKey(e);
-        if (!groups.has(k)) groups.set(k, []);
-        groups.get(k)!.push(e);
-      }
-
-      const out: InfectionData = [];
-      for (const entries of groups.values()) {
-        const sorted = [...entries].sort((a, b) => (a.date ?? '').localeCompare(b.date ?? ''));
-        const offset = window === AggregationWindow.OneDay ? 1 : 7;
-        for (let i = 0; i < sorted.length; i++) {
-          const curr = sorted[i];
-          const j = i - offset;
-
-          // skip if previous date < start of data
-          if (j < 0) continue;
-          const prev = sorted[j];
-          const diff = curr.value - prev.value;
-          out.push({...curr, value: diff});
+      const derivedSeries: InfectionData = [];
+      for (const groupedEntries of keyToEntries.values()) {
+        const entriesSortedByDate = [...groupedEntries].sort((a, b) => (a.date ?? '').localeCompare(b.date ?? ''));
+        // Rolling 7d sum: require at least 7 points (index >= 6)
+        for (let i = 0; i < entriesSortedByDate.length; i++) {
+          if (i < 6) continue;
+          let rollingSum = 0;
+          for (let windowIndex = i - 6; windowIndex <= i; windowIndex++) {
+            rollingSum += entriesSortedByDate[windowIndex].value;
+          }
+          const currentEntry = entriesSortedByDate[i];
+          derivedSeries.push({...currentEntry, value: rollingSum});
         }
       }
 
-      return out;
+      return derivedSeries;
     };
   }, []);
 
   // Transform utility: apply window derivation (optionally) then relative normalization
   const transformInfectionData = useMemo(() => {
-    return (data: InfectionData | undefined): InfectionData => {
-      if (!data) return [];
-      console.log('transformInfectionData', data, aggregationWindow);
+    return (infectionData: InfectionData | undefined): InfectionData => {
+      if (!infectionData) return [];
+      console.log('transformInfectionData', infectionData, aggregationWindow);
 
-      const windowed = deriveWindowedSeries(data, aggregationWindow);
+      const derivedSeries = deriveWindowedSeries(infectionData, aggregationWindow);
 
-      if (!relativeNumbers) return windowed ?? [];
-      console.log('transformInfectionData window', windowed);
+      if (!relativeNumbers) return derivedSeries ?? [];
+      console.log('transformInfectionData window', derivedSeries);
 
-      return windowed.map((entry) => {
-        const nuts = entry.node ? nodeIdToNuts[entry.node] : undefined;
-        const pop = nuts ? props.baseData.populationByNuts[nuts] : undefined;
-        const validPop = typeof pop === 'number' && isFinite(pop) && pop > 0 ? pop : undefined;
-        const value = validPop ? (entry.value / validPop) * 100000 : entry.value;
-        return {...entry, value};
+      return derivedSeries.map((entry) => {
+        const nutsCode = entry.node ? nodeIdToNuts[entry.node] : undefined;
+        const population = nutsCode ? props.baseData.populationByNuts[nutsCode] : undefined;
+        const isValidPopulation = typeof population === 'number' && isFinite(population) && population > 0;
+        const normalizedValue = isValidPopulation ? (entry.value / population) * 100000 : entry.value;
+        return {...entry, value: normalizedValue};
       });
     };
   }, [aggregationWindow, deriveWindowedSeries, nodeIdToNuts, props.baseData.populationByNuts, relativeNumbers]);
