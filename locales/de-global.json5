@@ -29,15 +29,18 @@
     'display-settings': {
       tooltip: 'Anzeigeeinstellungen für Daten',
       title: 'Anzeigeeinstellungen',
-      'time-period': 'Zeitraum',
-      'time-period-tooltip': 'Wert für den ausgewählten Zeitraum anzeigen',
+      'time-period': 'Aggregation',
+      'time-period-tooltip': 'Wählen Sie aus, wie Werte am ausgewählten Datum aggregiert werden',
       total: 'Gesamt',
-      'one-day': '1 Tag',
-      'seven-days': '7-Tage',
+      'one-day': '1T-neu',
+      'seven-days': '7T-neu',
       'number-type': 'Zahlenanzeige',
       'number-type-tooltip': 'Fallzahl pro 100.000 Einwohner',
       relative: 'Relativ',
       absolute: 'Absolut',
+    },
+    'selection-chip': {
+      'per-100k': 'pro 100.000 Einwohner',
     },
   },
   history: {

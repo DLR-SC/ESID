@@ -28,15 +28,18 @@
     'fullscreen-tooltip': 'Fullscreen',
     'display-settings': {
       tooltip: 'Data display settings',
-      'time-period': 'Time Period',
-      'time-period-tooltip': 'Show the value for the selected time period',
+      'time-period': 'Aggregation Window',
+      'time-period-tooltip': 'Choose how to aggregate values at the selected date',
       total: 'Total',
-      'one-day': '1 Day',
-      'seven-days': '7 Days',
+      'one-day': '1D-new',
+      'seven-days': '7D-new',
       'number-type': 'Number Display',
       'number-type-tooltip': 'Number of cases per 100k population',
       relative: 'Relative',
       absolute: 'Absolute',
+    },
+    'selection-chip': {
+      'per-100k': 'per 100k Population',
     },
   },
   sideBar: {

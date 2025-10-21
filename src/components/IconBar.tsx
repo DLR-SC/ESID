@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext, useMemo} from 'react';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import {useFullscreen} from 'rooks';
 import Box from '@mui/material/Box';
@@ -27,6 +27,9 @@ import {useTranslation} from 'react-i18next';
 import {styled, ToggleButtonGroup, toggleButtonGroupClasses, Typography} from '@mui/material';
 import InfoOutlined from '@mui/icons-material/InfoOutlined';
 import useTheme from '@mui/material/styles/useTheme';
+import SelectionChip from './SelectionChip';
+import Divider from '@mui/material/Divider';
+import {DataContext} from 'context/SelectedDataContext';
 
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({theme}) => ({
   gap: '1rem',
@@ -53,11 +56,14 @@ export default function IconBar(): JSX.Element {
   const [isPlaying, setIsPlaying] = useState(false);
   const [justStarted, setJustStarted] = useState(false);
 
+  const {compartments} = useContext(DataContext)!;
+  const {t: tBackend, i18n: i18nBackend} = useTranslation('backend');
   const selectedDay = useAppSelector((state) => state.dataSelection.date);
   const minDate = useAppSelector((state) => state.dataSelection.minDate);
   const maxDate = useAppSelector((state) => state.dataSelection.maxDate);
   const relativeNumbers = useAppSelector((state) => state.dataSelection.relativeNumbers ?? false);
   const aggregationWindow = useAppSelector((state) => state.dataSelection.aggregationWindow ?? AggregationWindow.Total);
+  const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment ?? '');
 
   // Settings popover state
   const [settingsAnchorEl, setSettingsAnchorEl] = useState<HTMLElement | null>(null);
@@ -72,6 +78,22 @@ export default function IconBar(): JSX.Element {
       void fsApi.enableFullscreen();
     }
   };
+
+  const compartmentNames = useMemo(() => {
+    return (
+      compartments?.map((compartment) => {
+        const name = i18nBackend.exists(`infection-states.${compartment.name}`, {ns: 'backend'})
+          ? tBackend(`infection-states.${compartment.name}`)
+          : compartment.name;
+
+        return {id: compartment.id, name};
+      }) ?? []
+    );
+  }, [compartments, i18nBackend, tBackend]);
+
+  const selectedCompartmentName = useMemo(() => {
+    return compartmentNames.find((compartment) => compartment.id === selectedCompartment)?.name ?? '';
+  }, [compartmentNames, selectedCompartment]);
 
   useEffect(() => {
     if (isPlaying) {
@@ -102,51 +124,57 @@ export default function IconBar(): JSX.Element {
       sx={{
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         alignItems: 'center',
         height: '60px',
       }}
     >
       {/* Settings popover trigger */}
-      <Tooltip title={t('icon-bar.display-settings.tooltip')}>
-        <Button aria-label='display-settings' onClick={openSettings}>
-          <SettingsIcon />
-        </Button>
-      </Tooltip>
-
-      <Tooltip title={t('icon-bar.previous-day-tooltip')}>
-        <span>
-          <Button
-            aria-label='previous-day-button'
-            disabled={selectedDay === minDate || isPlaying}
-            onClick={() => dispatch(previousDay())}
-          >
-            <SkipPreviousRounded />
+      <Box>
+        <Tooltip title={t('icon-bar.display-settings.tooltip')}>
+          <Button aria-label='display-settings' onClick={openSettings}>
+            <SettingsIcon />
           </Button>
-        </span>
-      </Tooltip>
-      <Tooltip title={t('icon-bar.play-pause-tooltip')}>
-        <Button aria-label='play-pause-button' onClick={() => setIsPlaying(!isPlaying)}>
-          {isPlaying ? <PauseRounded /> : <PlayArrowRounded />}
-        </Button>
-      </Tooltip>
-      <Tooltip title={t('icon-bar.next-day-tooltip')}>
-        <span>
-          <Button
-            aria-label='next-day-button'
-            disabled={selectedDay === maxDate || isPlaying}
-            onClick={() => dispatch(nextDay())}
-          >
-            <SkipNextRounded />
+        </Tooltip>
+        <Tooltip title={t('icon-bar.previous-day-tooltip')}>
+          <span>
+            <Button
+              aria-label='previous-day-button'
+              disabled={selectedDay === minDate || isPlaying}
+              onClick={() => dispatch(previousDay())}
+            >
+              <SkipPreviousRounded />
+            </Button>
+          </span>
+        </Tooltip>
+        <Tooltip title={t('icon-bar.play-pause-tooltip')}>
+          <Button aria-label='play-pause-button' onClick={() => setIsPlaying(!isPlaying)}>
+            {isPlaying ? <PauseRounded /> : <PlayArrowRounded />}
           </Button>
-        </span>
-      </Tooltip>
-      <Tooltip title={t('icon-bar.fullscreen-tooltip')}>
-        <Button onClick={toggleFullscreen}>
-          <FullscreenIcon />
-        </Button>
-      </Tooltip>
+        </Tooltip>
+        <Tooltip title={t('icon-bar.next-day-tooltip')}>
+          <span>
+            <Button
+              aria-label='next-day-button'
+              disabled={selectedDay === maxDate || isPlaying}
+              onClick={() => dispatch(nextDay())}
+            >
+              <SkipNextRounded />
+            </Button>
+          </span>
+        </Tooltip>
+        <Tooltip title={t('icon-bar.fullscreen-tooltip')}>
+          <Button onClick={toggleFullscreen}>
+            <FullscreenIcon />
+          </Button>
+        </Tooltip>
+      </Box>
 
+      <SelectionChip
+        relativeNumbers={relativeNumbers}
+        aggregationWindow={aggregationWindow}
+        selectedCompartment={selectedCompartmentName}
+      />
       {/* Settings Popover */}
       <Popover
         open={settingsOpen}
@@ -193,6 +221,7 @@ export default function IconBar(): JSX.Element {
               >
                 {t('icon-bar.display-settings.total')}
               </ToggleButton>
+              <Divider orientation='vertical' flexItem />
               <ToggleButton
                 value={AggregationWindow.OneDay}
                 selected={aggregationWindow === AggregationWindow.OneDay}
