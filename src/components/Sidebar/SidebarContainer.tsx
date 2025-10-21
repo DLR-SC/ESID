@@ -33,7 +33,7 @@ export default function MapContainer() {
   const theme = useTheme();
   const dispatch = useAppDispatch();
 
-  const {geoData, mapData, searchBarData, nodes, compartments} = useContext(DataContext)!;
+  const {geoData, mapData, searchBarData, nodes, compartments, edgeData} = useContext(DataContext)!;
 
   const storeSelectedArea = useAppSelector((state) => state.dataSelection.district);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
@@ -249,6 +249,7 @@ export default function MapContainer() {
             tooltipTextWhileFetching={calculateToolTipFetching}
             defaultSelectedValue={defaultValue}
             values={data}
+            edgeData={edgeData}
             isDataFetching={mapData === undefined}
             longLoad={longLoad}
             setLongLoad={setLongLoad}
