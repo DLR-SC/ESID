@@ -103,6 +103,7 @@
     edit: 'Edit heatmap colors',
     lock: 'Lock maximum value',
     select: 'Select heatmap preset',
+    population: 'Population',
   },
   bottomTabs: {
     timeSeries: 'Time Series',

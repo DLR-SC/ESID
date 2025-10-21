@@ -53,6 +53,7 @@ interface DataContextType {
   npis: InterventionTemplates;
   nodeLists: NodeLists;
   nodes: Nodes;
+  populationByNuts: Record<string, number>;
 }
 
 export const DataContext = createContext<DataContextType | null>(null);
@@ -334,6 +335,7 @@ export default function SelectedDataContext(props: {baseData: BaseData; children
       selectedScenarioData: selectedScenarioData!,
       selectedSimulationModel: selectedSimulationModel!,
       parameterDefinitions: parameterDefinitions ?? {},
+      populationByNuts: props.baseData.populationByNuts,
     }),
     [
       props.baseData,
