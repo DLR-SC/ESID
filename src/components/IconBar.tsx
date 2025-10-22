@@ -213,31 +213,45 @@ export default function IconBar(): JSX.Element {
               aria-label='Aggregation window'
               sx={{width: '100%', gap: 3}}
             >
-              <ToggleButton
-                value={AggregationWindow.Total}
-                selected={aggregationWindow === AggregationWindow.Total}
-                onClick={() => dispatch(setAggregationWindow(AggregationWindow.Total))}
-                sx={{width: '100%'}}
-              >
-                {t('icon-bar.display-settings.total')}
-              </ToggleButton>
+              <Tooltip title={t('icon-bar.display-settings.time-period-total-tooltip')} arrow placement='bottom-start'>
+                <ToggleButton
+                  value={AggregationWindow.Total}
+                  selected={aggregationWindow === AggregationWindow.Total}
+                  onClick={() => dispatch(setAggregationWindow(AggregationWindow.Total))}
+                  sx={{width: '100%'}}
+                >
+                  {t('icon-bar.display-settings.total')}
+                </ToggleButton>
+              </Tooltip>
               <Divider orientation='vertical' flexItem />
-              <ToggleButton
-                value={AggregationWindow.OneDay}
-                selected={aggregationWindow === AggregationWindow.OneDay}
-                onClick={() => dispatch(setAggregationWindow(AggregationWindow.OneDay))}
-                sx={{width: '100%'}}
+              <Tooltip
+                title={t('icon-bar.display-settings.time-period-one-day-tooltip')}
+                arrow
+                placement='bottom-start'
               >
-                {t('icon-bar.display-settings.one-day')}
-              </ToggleButton>
-              <ToggleButton
-                value={AggregationWindow.SevenDays}
-                selected={aggregationWindow === AggregationWindow.SevenDays}
-                onClick={() => dispatch(setAggregationWindow(AggregationWindow.SevenDays))}
-                sx={{width: '100%'}}
+                <ToggleButton
+                  value={AggregationWindow.OneDay}
+                  selected={aggregationWindow === AggregationWindow.OneDay}
+                  onClick={() => dispatch(setAggregationWindow(AggregationWindow.OneDay))}
+                  sx={{width: '100%'}}
+                >
+                  {t('icon-bar.display-settings.one-day')}
+                </ToggleButton>
+              </Tooltip>
+              <Tooltip
+                title={t('icon-bar.display-settings.time-period-seven-days-tooltip')}
+                arrow
+                placement='bottom-start'
               >
-                {t('icon-bar.display-settings.seven-days')}
-              </ToggleButton>
+                <ToggleButton
+                  value={AggregationWindow.SevenDays}
+                  selected={aggregationWindow === AggregationWindow.SevenDays}
+                  onClick={() => dispatch(setAggregationWindow(AggregationWindow.SevenDays))}
+                  sx={{width: '100%'}}
+                >
+                  {t('icon-bar.display-settings.seven-days')}
+                </ToggleButton>
+              </Tooltip>
             </StyledToggleButtonGroup>
           </Box>
 
@@ -261,22 +275,26 @@ export default function IconBar(): JSX.Element {
               aria-label='Aggregation window'
               sx={{width: '100%', gap: 3}}
             >
-              <ToggleButton
-                value='relative-numbers'
-                selected={relativeNumbers}
-                onClick={() => dispatch(toggleRelativeNumbers())}
-                sx={{width: '100%'}}
-              >
-                {t('icon-bar.display-settings.relative')}
-              </ToggleButton>
-              <ToggleButton
-                value='absolute-numbers'
-                selected={!relativeNumbers}
-                onClick={() => dispatch(toggleRelativeNumbers())}
-                sx={{width: '100%'}}
-              >
-                {t('icon-bar.display-settings.absolute')}
-              </ToggleButton>
+              <Tooltip title={t('icon-bar.display-settings.relative-tooltip')} arrow placement='bottom-start'>
+                <ToggleButton
+                  value='relative-numbers'
+                  selected={relativeNumbers}
+                  onClick={() => dispatch(toggleRelativeNumbers())}
+                  sx={{width: '100%'}}
+                >
+                  {t('icon-bar.display-settings.relative')}
+                </ToggleButton>
+              </Tooltip>
+              <Tooltip title={t('icon-bar.display-settings.absolute-tooltip')} arrow placement='bottom-start'>
+                <ToggleButton
+                  value='absolute-numbers'
+                  selected={!relativeNumbers}
+                  onClick={() => dispatch(toggleRelativeNumbers())}
+                  sx={{width: '100%'}}
+                >
+                  {t('icon-bar.display-settings.absolute')}
+                </ToggleButton>
+              </Tooltip>
             </StyledToggleButtonGroup>
           </Box>
         </Box>
