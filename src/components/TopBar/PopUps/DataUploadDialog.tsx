@@ -9,6 +9,7 @@ import {useTranslation} from 'react-i18next';
 import {Button, List, ListItem, ListItemText} from '@mui/material';
 import {Clear, CloudUpload, Done} from '@mui/icons-material';
 import {helix} from 'ldrs';
+import {useSendCasedataFileQuery} from 'store/services/utilsApi';
 
 /**
  * This component displays the accessibility legal text.
@@ -18,50 +19,39 @@ export default function DataUploadDialog(): JSX.Element {
   const theme = useTheme();
   const [dragActive, setDragActive] = React.useState(false);
 
-  enum UploadStatus {
-    Started,
-    Error,
-    Done,
-  }
-
   // Register throbber for later use.
   useEffect(() => {
     helix.register();
   }, []);
 
-  const [uploadStat, setUploadStat] = React.useState<{filename: string; status: UploadStatus}[]>([]);
+  const [uploadList, setUploadList] = React.useState<{fileinfo: string; file: File}[]>([]);
 
   const fileTypes: string[] = [];
 
   // Function to handle data upload.
-  const handleFiles = useCallback(
-    (filelist: FileList) => {
-      // Function to increase readability of file size appended behind filename.
-      const fileSizeToString = (size: number) => {
-        if (size < 1024) {
-          return `${size} B`;
-        } else if (size >= 1024 && size < 1048576) {
-          return `${(size / 1024).toFixed(1)} KB`;
-        } else {
-          return `${(size / 1048576).toFixed(1)} MB`;
-        }
-      };
-      // Update file display with new files.
-      const displaylist: {filename: string; status: UploadStatus}[] = [];
-      for (let i = 0; i < filelist.length; i++) {
-        const file = filelist[i];
-
-        displaylist.push({
-          filename: `${file.name} (${fileSizeToString(file.size)})`,
-          status: UploadStatus.Started,
-        });
+  const handleFiles = useCallback((filelist: FileList) => {
+    // Function to increase readability of file size appended behind filename.
+    const fileSizeToString = (size: number) => {
+      if (size < 1024) {
+        return `${size} B`;
+      } else if (size >= 1024 && size < 1048576) {
+        return `${(size / 1024).toFixed(1)} KB`;
+      } else {
+        return `${(size / 1048576).toFixed(1)} MB`;
       }
-      setUploadStat(displaylist);
+    };
+    // Update file display with new files.
+    const displaylist: {fileinfo: string; file: File}[] = [];
+    for (let i = 0; i < filelist.length; i++) {
+      const file = filelist[i];
 
-      // TODO: init file upload, adjust UploadStat as needed
-    },
-    [UploadStatus]
-  );
+      displaylist.push({
+        fileinfo: `${file.name} (${fileSizeToString(file.size)})`,
+        file: file,
+      });
+    }
+    setUploadList(displaylist);
+  }, []);
 
   // Callback for drag event (to modify styling).
   const handleDrag = useCallback((e: React.DragEvent) => {
@@ -116,25 +106,11 @@ export default function DataUploadDialog(): JSX.Element {
       >
         <Typography variant='h1'>{t('upload.header')}</Typography>
         <div>{t('upload.dragNotice')}</div>
-        {uploadStat.length > 0 && (
+        {uploadList.length > 0 && (
           <List>
-            {uploadStat.map((file) => (
+            {uploadList.map((item) => (
               // Create a list item for each file.
-              <ListItem
-                key={file.filename}
-                disableGutters
-                secondaryAction={
-                  file.status === UploadStatus.Done ? (
-                    <Done sx={{color: theme.palette.primary.main, fontSize: 45}} />
-                  ) : file.status === UploadStatus.Error ? (
-                    <Clear sx={{color: theme.palette.error.main, fontSize: 45}} />
-                  ) : (
-                    <l-helix size={45} speed={2.5} color={theme.palette.divider}></l-helix>
-                  )
-                }
-              >
-                <ListItemText primary={file.filename} />
-              </ListItem>
+              <FileItem key={item.fileinfo} fileinfo={item.fileinfo} file={item.file} />
             ))}
           </List>
         )}
@@ -180,5 +156,27 @@ export default function DataUploadDialog(): JSX.Element {
         </div>
       )}
     </form>
+  );
+}
+
+function FileItem({fileinfo, file}: {fileinfo: string; file: File}): JSX.Element {
+  const theme = useTheme();
+  const {isSuccess, isError} = useSendCasedataFileQuery(file);
+
+  return (
+    <ListItem
+      disableGutters
+      secondaryAction={
+        isSuccess ? (
+          <Done sx={{color: theme.palette.primary.main, fontSize: 45}} />
+        ) : isError ? (
+          <Clear sx={{color: theme.palette.error.main, fontSize: 45}} />
+        ) : (
+          <l-helix size={45} speed={2.5} color={theme.palette.divider}></l-helix>
+        )
+      }
+    >
+      <ListItemText primary={fileinfo} />
+    </ListItem>
   );
 }
