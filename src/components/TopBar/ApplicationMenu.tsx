@@ -53,7 +53,6 @@ export default function ApplicationMenu(): JSX.Element {
   const [attributionsOpen, setAttributionsOpen] = React.useState(false);
   const [changelogOpen, setChangelogOpen] = React.useState(false);
   const [uploadOpen, setUploadOpen] = React.useState(false);
-  const [snackbarOpen, setSnackbarOpen] = React.useState(false);
 
   const keycloakLogout = () => {
     window.location.assign(
