@@ -29,7 +29,7 @@ export default function DataUploadDialog(): JSX.Element {
   const fileTypes: string[] = [];
 
   // Function to handle data upload.
-  const handleFiles = useCallback((filelist: FileList) => {
+  const handleFiles = useCallback((fileList: FileList) => {
     // Function to increase readability of file size appended behind filename.
     const fileSizeToString = (size: number) => {
       if (size < 1024) {
@@ -41,16 +41,16 @@ export default function DataUploadDialog(): JSX.Element {
       }
     };
     // Update file display with new files.
-    const displaylist: {fileinfo: string; file: File}[] = [];
-    for (let i = 0; i < filelist.length; i++) {
-      const file = filelist[i];
+    const displayList: {fileInfo: string; file: File}[] = [];
+    for (let i = 0; i < fileList.length; i++) {
+      const file = fileList[i];
 
-      displaylist.push({
-        fileinfo: `${file.name} (${fileSizeToString(file.size)})`,
+      displayList.push({
+        fileInfo: `${file.name} (${fileSizeToString(file.size)})`,
         file: file,
       });
     }
-    setUploadList(displaylist);
+    setUploadList(displayList);
   }, []);
 
   // Callback for drag event (to modify styling).
@@ -159,7 +159,7 @@ export default function DataUploadDialog(): JSX.Element {
   );
 }
 
-function FileItem({fileinfo, file}: {fileinfo: string; file: File}): JSX.Element {
+function FileItem({fileInfo, file}: {fileInfo: string; file: File}): JSX.Element {
   const theme = useTheme();
   const {isSuccess, isError} = useSendCasedataFileQuery(file);
 
@@ -176,7 +176,7 @@ function FileItem({fileinfo, file}: {fileinfo: string; file: File}): JSX.Element
         )
       }
     >
-      <ListItemText primary={fileinfo} />
+      <ListItemText primary={fileInfo} />
     </ListItem>
   );
 }
