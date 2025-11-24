@@ -6,8 +6,13 @@ import {useTheme} from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import {useTranslation} from 'react-i18next';
-import {Button, List, ListItem, ListItemText} from '@mui/material';
-import {Clear, CloudUpload, Done} from '@mui/icons-material';
+import Button from '@mui/material/Button';
+import List from '@mui/material';
+import ListItem from '@mui/material';
+import ListItemText from '@mui/material';
+import Clear from '@mui/icons-material/Clear';
+import CloudUpload from '@mui/icons-material/CloudUpload';
+import Done from '@mui/icons-material/Done';
 import {helix} from 'ldrs';
 import {useSendCasedataFileQuery} from 'store/services/utilsApi';
 
