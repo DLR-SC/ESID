@@ -18,6 +18,7 @@ SPDX-License-Identifier: CC-BY-4.0
   - Users can set custom threshold values for currently selected district and compartment accessible via the settings button on the lower left corner of the line chart
   - The horizontal threshold is displayed as a red horizontal line on the chart and values above the threshold are displayed in red
   - Users can select thresholds to navigate to the corresponding district and compartment
+- Users can now change the scaling of the Y-Axis by setting a maximum value.
 
 ### Improvements
 
@@ -31,7 +32,6 @@ SPDX-License-Identifier: CC-BY-4.0
   - In the library when hovering over a card with the mouse.
   - On the main page via the info button below the card.
 - Logged in admin users can now click on the Admin button in the application menu and access the user management.
-- Users can now change the scaling of the Y-Axis by setting a maximum value.
 
 ### Bug fixes
 
