@@ -31,6 +31,7 @@ SPDX-License-Identifier: CC-BY-4.0
   - In der Bibliothek, wenn die Maus über eine Karte hovered.
   - Auf der Hauptseite über den Infobutton unter der Karte.
 - Angemeldete Admin-Benutzer können jetzt auf die Schaltfläche Admin im Anwendungsmenü klicken und auf die Benutzerverwaltung zugreifen.
+- Nutzer können die Skalierung der Y-Achse manuell verändern (Maximalwert einstellen).
 
 ### Fehlerbehebungen
 
