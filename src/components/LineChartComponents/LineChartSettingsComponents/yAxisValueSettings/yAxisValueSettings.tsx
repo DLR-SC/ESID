@@ -26,7 +26,7 @@ interface YAxisValueSettingsProps {
   maxDataValue: number;
 
   /** The function to update the Y-axis maximum value */
-  updateYAxisMaxValue: (newYAxisMaxValue: number) => void;
+  updateYAxisMaxValue: (newYAxisMaxValue: number | undefined) => void;
 
   /** The localization object */
   localization: Localization;
@@ -98,7 +98,7 @@ export default function YAxisValueSettings({
   };
 
   const handleReset = () => {
-    updateYAxisMaxValue(maxDataValue);
+    updateYAxisMaxValue(undefined);
     setLocalYAxisMaxValue(maxDataValue);
   };
 

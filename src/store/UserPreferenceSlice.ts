@@ -10,7 +10,7 @@ export interface UserPreference {
   selectedTab?: string;
   isInitialVisit: boolean;
   horizontalYAxisThresholds?: Record<string, Threshold>;
-  yAxisMaxValue?: number;
+  yAxisMaxValue?: number | undefined;
   scenarioColors: Record<string, string[]>;
 }
 
@@ -84,7 +84,7 @@ export const UserPreferenceSlice = createSlice({
       delete state.horizontalYAxisThresholds[action.payload];
     },
     /** Set the maximum value for the Y-axis */
-    setYAxisMaxValue(state, action: PayloadAction<number>) {
+    setYAxisMaxValue(state, action: PayloadAction<number | undefined>) {
       state.yAxisMaxValue = action.payload;
     },
   },

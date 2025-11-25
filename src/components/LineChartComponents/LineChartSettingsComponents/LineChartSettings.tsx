@@ -70,7 +70,7 @@ export interface LineChartSettingsProps {
   maxDataValue: number;
 
   /** The function to update the maximum value for the y-axis. */
-  updateYAxisMaxValue: (newYAxisMaxValue: number) => void;
+  updateYAxisMaxValue: (newYAxisMaxValue: number | undefined) => void;
 }
 
 /**

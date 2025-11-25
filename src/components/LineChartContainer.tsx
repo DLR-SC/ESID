@@ -223,7 +223,7 @@ export default function LineChartContainer() {
         }
         yAxisMaxValue={yAxisMaxValue}
         maxDataValue={maxDataValue}
-        updateYAxisMaxValue={(newYAxisMaxValue: number) => dispatch(setYAxisMaxValue(newYAxisMaxValue))}
+        updateYAxisMaxValue={(newYAxisMaxValue: number | undefined) => dispatch(setYAxisMaxValue(newYAxisMaxValue))}
       />
     </LoadingContainer>
   );
