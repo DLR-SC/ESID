@@ -69,7 +69,6 @@
     "rooks": "7.14.1"
   },
   "devDependencies": {
-    "@types/geojson": "7946.0.13",
     "@babel/eslint-parser": "7.23.10",
     "@babel/preset-react": "7.23.3",
     "@nabla/vite-plugin-eslint": "2.0.5",
