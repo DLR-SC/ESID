@@ -149,9 +149,9 @@
       'map-label': 'Karte',
     },
     table: {
-      compartment: 'Zustand',
-      'reference-value': 'Referenzwert',
-      'selected-value': 'Ausgewählter Wert',
+      compartment: 'Infektionszustand',
+      'reference-value': 'Wert Referenzdatum',
+      'selected-value': 'Wert Ausgewähltes Datum',
     },
   },
 }

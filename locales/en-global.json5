@@ -164,9 +164,9 @@
       'map-label': 'Map',
     },
     table: {
-      compartment: 'Compartment',
-      'reference-value': 'Reference Value',
-      'selected-value': 'Selected Value',
+      compartment: 'Infection state',
+      'reference-value': 'Value Reference Date',
+      'selected-value': 'Value Selected Date',
     },
   },
 }

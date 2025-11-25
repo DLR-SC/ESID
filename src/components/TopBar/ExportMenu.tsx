@@ -53,8 +53,7 @@ export default function ExportMenu({onDone}: ExportMenuProps): JSX.Element {
   const selectedDistrict = useAppSelector((state) => state.dataSelection.district);
   const selectedDate = useAppSelector((state) => state.dataSelection.date);
   const referenceDay = useAppSelector((state) => state.dataSelection.simulationStart);
-
-  const languageSuffix = i18nBackend.language === 'de' ? '-de' : '-en';
+  const languageSuffix = `-${i18nBackend.language}`;
   const compartmentNames = useMemo(() => {
     return (
       compartments?.map((compartment) => {
@@ -374,7 +373,9 @@ export default function ExportMenu({onDone}: ExportMenuProps): JSX.Element {
   return (
     <>
       <MenuItem onClick={handleExportPdf}>PDF</MenuItem>
-      <MenuItem onClick={handleExportCsv}>CSV (WIP)</MenuItem>
+      <MenuItem onClick={handleExportCsv} disabled>
+        CSV
+      </MenuItem>
     </>
   );
 }
