@@ -25,7 +25,7 @@
       error: 'Ungültige Eingabe. Bitte überprüfen Sie den Wert.',
     },
     validation: {
-      positiveNumber: 'Wert muss eine positive Zahl sein',
+      positiveNumber: 'Der Wert muss eine positive Zahl sein',
     },
   },
   'group-filters': {

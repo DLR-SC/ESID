@@ -178,7 +178,7 @@ export default function LineChart({
 
       // Fix lower end to 0
       min: 0,
-
+      // Add tooltip instance so cursor can display value
       tooltip: Tooltip.new(root, {}),
     };
   }, [root, chart]);
