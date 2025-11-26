@@ -44,6 +44,11 @@ export default function ParameterEditor() {
         if (contextData?.parameterDefinitions) {
           const paramDefinition = contextData.parameterDefinitions[paramValues.parameterId];
 
+          // check, to prevent crash after creating a group filter and refreshing
+          if (!paramDefinition) {
+            return [];
+          }
+
           const data = paramValues.values.flatMap((group) => ({
             span: 1,
             min: group.valueMin,
