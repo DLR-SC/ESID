@@ -38,6 +38,7 @@ export interface BaseData {
   simulationModels: Models;
   geoData: GeoJSON;
   searchBarData: GeoJsonProperties[];
+  populationByNuts: Record<string, number>;
 }
 
 /**
@@ -56,6 +57,7 @@ export default function BaseDataContext(props: {children: ReactNode}): JSX.Eleme
 
   const geoData = useGeoData();
   const searchBarData = useSearchBarData();
+  const populationByNuts = usePopulationData();
 
   const dataLoadingCompleted = useMemo(() => {
     return (
@@ -68,7 +70,8 @@ export default function BaseDataContext(props: {children: ReactNode}): JSX.Eleme
       !groupCategoriesResult.isLoading &&
       !simulationModelsResult.isLoading &&
       geoData &&
-      searchBarData
+      searchBarData &&
+      populationByNuts
     );
   }, [
     compartmentsResult.isLoading,
@@ -81,6 +84,7 @@ export default function BaseDataContext(props: {children: ReactNode}): JSX.Eleme
     scenariosResult.isLoading,
     searchBarData,
     simulationModelsResult.isLoading,
+    populationByNuts,
   ]);
 
   const baseData: BaseData = useMemo(
@@ -95,8 +99,21 @@ export default function BaseDataContext(props: {children: ReactNode}): JSX.Eleme
       simulationModels: simulationModels ?? [],
       geoData: geoData ?? {type: 'FeatureCollection', features: []},
       searchBarData: searchBarData ?? [],
+      populationByNuts: populationByNuts ?? {},
     }),
-    [scenarios, compartments, npis, nodeLists, nodes, groups, groupCategories, simulationModels, geoData, searchBarData]
+    [
+      scenarios,
+      compartments,
+      npis,
+      nodeLists,
+      nodes,
+      groups,
+      groupCategories,
+      simulationModels,
+      geoData,
+      searchBarData,
+      populationByNuts,
+    ]
   );
 
   if (dataLoadingCompleted) {
@@ -149,4 +166,39 @@ function useSearchBarData() {
   }, [t]);
 
   return searchBarData;
+}
+
+import populationDataUrl from '../../assets/population_data_v3.json?url';
+
+interface PopulationData {
+  id: string;
+  name: string;
+  total_population: number | string;
+}
+
+function usePopulationData() {
+  const [populationByNuts, setPopulationByNuts] = useState<Record<string, number>>();
+
+  useEffect(() => {
+    void fetch(populationDataUrl, {
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+    })
+      .then((response) => response.json())
+      .then((jsonlist: PopulationData[]) => {
+        const map: Record<string, number> = {};
+        jsonlist.forEach((entry) => {
+          const id = String(entry?.id || '').trim();
+          const pop = typeof entry?.total_population === 'number' ? entry.total_population : undefined;
+          if (id && typeof pop === 'number' && isFinite(pop) && pop > 0) {
+            map[id] = pop;
+          }
+        });
+        setPopulationByNuts(map);
+      });
+  }, []);
+
+  return populationByNuts;
 }
