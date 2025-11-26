@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, {useEffect, useState, useContext, useMemo} from 'react';
+import React, {useEffect, useState, useContext, useMemo, useRef} from 'react';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import {useFullscreen} from 'rooks';
 import Box from '@mui/material/Box';
@@ -66,9 +66,14 @@ export default function IconBar(): JSX.Element {
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment ?? '');
 
   // Settings popover state
+  const settingsButtonRef = useRef<HTMLButtonElement | null>(null);
   const [settingsAnchorEl, setSettingsAnchorEl] = useState<HTMLElement | null>(null);
   const settingsOpen = Boolean(settingsAnchorEl);
-  const openSettings = (event: React.MouseEvent<HTMLElement>) => setSettingsAnchorEl(event.currentTarget);
+  const openSettings = () => {
+    if (settingsButtonRef.current) {
+      setSettingsAnchorEl(settingsButtonRef.current);
+    }
+  };
   const closeSettings = () => setSettingsAnchorEl(null);
 
   const toggleFullscreen = () => {
@@ -124,15 +129,21 @@ export default function IconBar(): JSX.Element {
       sx={{
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'space-between',
         alignItems: 'center',
         height: '60px',
+        gap: 2,
       }}
     >
       {/* Settings popover trigger */}
+      <SelectionChip
+        relativeNumbers={relativeNumbers}
+        aggregationWindow={aggregationWindow}
+        selectedCompartment={selectedCompartmentName}
+        onClick={openSettings}
+      />
       <Box>
         <Tooltip title={t('icon-bar.display-settings.tooltip')}>
-          <Button aria-label='display-settings' onClick={openSettings}>
+          <Button aria-label='display-settings' ref={settingsButtonRef} onClick={openSettings}>
             <SettingsIcon />
           </Button>
         </Tooltip>
@@ -170,11 +181,6 @@ export default function IconBar(): JSX.Element {
         </Tooltip>
       </Box>
 
-      <SelectionChip
-        relativeNumbers={relativeNumbers}
-        aggregationWindow={aggregationWindow}
-        selectedCompartment={selectedCompartmentName}
-      />
       {/* Settings Popover */}
       <Popover
         open={settingsOpen}

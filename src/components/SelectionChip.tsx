@@ -10,12 +10,14 @@ export interface SelectionChipProps {
   relativeNumbers: boolean;
   aggregationWindow: AggregationWindow;
   selectedCompartment: string;
+  onClick: (event: React.MouseEvent<HTMLElement>) => void;
 }
 
 export default function SelectionChip({
   relativeNumbers,
   aggregationWindow,
   selectedCompartment,
+  onClick,
 }: SelectionChipProps): JSX.Element {
   const {t} = useTranslation();
   const aggregationWindowLabel = useMemo(() => {
@@ -38,6 +40,7 @@ export default function SelectionChip({
       color='primary'
       label={`${aggregationWindowLabel} ${selectedCompartment} ${numberTypeLabel}`}
       variant='filled'
+      onClick={onClick}
     />
   );
 }
