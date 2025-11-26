@@ -6,6 +6,7 @@ import {describe, test, expect} from 'vitest';
 import {render} from '@testing-library/react';
 import {ThemeProvider} from '@mui/system';
 import Theme from '@/util/Theme';
+import ExportingRegistry from '@/context/ExportContext';
 import HeatLegend from '@/components/Sidebar/MapComponents/HeatLegend';
 
 const HeatLegendTest = () => {
@@ -26,9 +27,11 @@ const HeatLegendTest = () => {
 describe('HeatLegend', () => {
   test('renders HeatLegend component', () => {
     render(
-      <ThemeProvider theme={Theme}>
-        <HeatLegendTest />
-      </ThemeProvider>
+      <ExportingRegistry>
+        <ThemeProvider theme={Theme}>
+          <HeatLegendTest />
+        </ThemeProvider>
+      </ExportingRegistry>
     );
 
     const canvasElement = document.querySelector('canvas');
