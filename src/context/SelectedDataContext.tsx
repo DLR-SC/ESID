@@ -31,6 +31,7 @@ import {GeoJSON, GeoJsonProperties} from 'geojson';
 import {AuthContext} from 'react-oauth2-code-pkce';
 import {setToken} from 'store/AuthSlice';
 import {AggregationWindow, ScenarioVisibility} from 'store/DataSelectionSlice';
+import useGetEdges, {Edge} from 'store/services/EdgeApi';
 
 interface DataContextType {
   geoData: GeoJSON;
@@ -54,6 +55,7 @@ interface DataContextType {
   nodeLists: NodeLists;
   nodes: Nodes;
   populationByNuts: Record<string, number>;
+  edgeData: Array<Edge>;
 }
 
 export const DataContext = createContext<DataContextType | null>(null);
@@ -61,7 +63,7 @@ export const DataContext = createContext<DataContextType | null>(null);
 export default function SelectedDataContext(props: {baseData: BaseData; children: React.ReactNode}) {
   const dispatch = useAppDispatch();
 
-  const selectedDistrict = useAppSelector((state) => state.dataSelection.district.id);
+  const selectedDistrict = useAppSelector((state) => state.dataSelection.district);
   const scenariosState = useAppSelector((state) => state.dataSelection.scenarios);
   const selectedScenario = useAppSelector((state) => state.dataSelection.scenario);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
@@ -117,7 +119,7 @@ export default function SelectedDataContext(props: {baseData: BaseData; children
             : referenceDate
           : undefined,
         endDate: referenceDate!,
-        nodes: [selectedDistrict],
+        nodes: [selectedDistrict.id],
         percentiles: ['50'],
         groups: totalGroup ? [totalGroup.id] : [],
       },
@@ -156,7 +158,7 @@ export default function SelectedDataContext(props: {baseData: BaseData; children
         startDate:
           selectedDate && aggregationOffset > 0 ? subtractDays(selectedDate, aggregationOffset) : selectedDate!,
         endDate: selectedDate!,
-        nodes: [selectedDistrict],
+        nodes: [selectedDistrict.id],
         percentiles: ['50'],
         groups: totalGroup ? [totalGroup.id] : [],
       },
@@ -182,7 +184,7 @@ export default function SelectedDataContext(props: {baseData: BaseData; children
         startDate:
           selectedDate && aggregationOffset > 0 ? subtractDays(selectedDate, aggregationOffset) : selectedDate!,
         endDate: selectedDate!,
-        nodes: [selectedDistrict],
+        nodes: [selectedDistrict.id],
         percentiles: ['50'],
         groups: visibleGroups,
       },
@@ -197,7 +199,7 @@ export default function SelectedDataContext(props: {baseData: BaseData; children
       path: {scenarioId: selectedScenario!},
       query: {
         compartments: [selectedCompartment!],
-        nodes: [selectedDistrict],
+        nodes: [selectedDistrict.id],
         percentiles: ['50'],
         groups: visibleGroups,
       },
@@ -217,7 +219,7 @@ export default function SelectedDataContext(props: {baseData: BaseData; children
     {
       pathIds: faceUpScenarios,
       query: {
-        nodes: [selectedDistrict],
+        nodes: [selectedDistrict.id],
         compartments: [selectedCompartment!],
         groups: totalGroup ? [totalGroup.id] : [],
       },
@@ -241,6 +243,8 @@ export default function SelectedDataContext(props: {baseData: BaseData; children
     },
     {skip: !totalGroup || !selectedScenario}
   );
+
+  const edgeData = useGetEdges(selectedDate ?? '', selectedDistrict.nuts);
 
   const nodeIdToNuts = useMemo(() => {
     const map: Record<string, string> = {};
@@ -338,6 +342,7 @@ export default function SelectedDataContext(props: {baseData: BaseData; children
       selectedSimulationModel: selectedSimulationModel!,
       parameterDefinitions: parameterDefinitions ?? {},
       populationByNuts: props.baseData.populationByNuts,
+      edgeData,
     }),
     [
       props.baseData,
@@ -353,6 +358,7 @@ export default function SelectedDataContext(props: {baseData: BaseData; children
       parameterDefinitions,
       transformInfectionData,
       transformMultiInfectionData,
+      edgeData,
     ]
   );
 
