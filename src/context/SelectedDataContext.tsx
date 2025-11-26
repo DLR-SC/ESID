@@ -263,7 +263,9 @@ export default function SelectedDataContext(props: {baseData: BaseData; children
 
       const keyToEntries = new Map<string, InfectionData>();
       const buildGroupingKey = (entry: (typeof infectionData)[number]) =>
-        `${entry.node ?? ''}|${entry.group ?? ''}|${entry.compartment ?? ''}|${entry.aggregation ?? ''}|${entry.percentile}`;
+        `${entry.node ?? ''}|${entry.group ?? ''}|${entry.compartment ?? ''}|${entry.aggregation ?? ''}|${
+          entry.percentile
+        }`;
 
       for (const entry of infectionData) {
         const key = buildGroupingKey(entry);

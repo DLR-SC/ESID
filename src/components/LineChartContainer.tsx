@@ -109,7 +109,9 @@ export default function LineChartContainer() {
           const sum = pattern.reduce((acc, curr) => acc + curr, 0);
           for (let x = 0; x <= width; x += sum) {
             for (let i = 0; i < pattern.length; i++) {
-              html += `<div style="height: 2px; width: ${pattern[i]}px; background: ${i % 2 === 0 ? color : 'transparent'}"></div>`;
+              html += `<div style="height: 2px; width: ${pattern[i]}px; background: ${
+                i % 2 === 0 ? color : 'transparent'
+              }"></div>`;
             }
           }
           return html + '</div>';
@@ -136,7 +138,10 @@ export default function LineChartContainer() {
               seriesId: `${id}-${filter.id}`,
               name: `
                 <div style="display: flex; align-items: center; gap: 5px">
-                  ${generateHTMLStrokePattern(STROKE_PATTERNS[index % STROKE_PATTERNS.length], scenariosState[id]?.colors[0] ?? 'transparent')}
+                  ${generateHTMLStrokePattern(
+                    STROKE_PATTERNS[index % STROKE_PATTERNS.length],
+                    scenariosState[id]?.colors[0] ?? 'transparent'
+                  )}
                   ${filter.name}
                 </div>`,
               visible: true,
