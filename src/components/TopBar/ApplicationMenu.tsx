@@ -14,6 +14,8 @@ import {useAppSelector} from 'store/hooks';
 import {AuthContext, IAuthContext} from 'react-oauth2-code-pkce';
 import CircularProgress from '@mui/material/CircularProgress';
 
+// Let's import pop-ups only once they are opened.
+const DataUploadDialog = React.lazy(() => import('./PopUps/DataUploadDialog'));
 const ChangelogDialog = React.lazy(() => import('./PopUps/ChangelogDialog'));
 const ImprintDialog = React.lazy(() => import('./PopUps/ImprintDialog'));
 const PrivacyPolicyDialog = React.lazy(() => import('./PopUps/PrivacyPolicyDialog'));
@@ -53,6 +55,7 @@ export default function ApplicationMenu(): JSX.Element {
   const [changelogOpen, setChangelogOpen] = React.useState(false);
   const [exportOpen, setExportOpen] = React.useState(false);
   const [exportAnchorElement, setExportAnchorElement] = React.useState<Element | null>(null);
+  const [uploadOpen, setUploadOpen] = React.useState(false);
 
   const keycloakLogout = () => {
     window.location.assign(
@@ -91,6 +94,12 @@ export default function ApplicationMenu(): JSX.Element {
     closeMenu();
     logOut();
     keycloakLogout();
+  };
+
+  /** This method gets called, when the login menu entry was clicked. */
+  const uploadClicked = () => {
+    closeMenu();
+    setUploadOpen(true);
   };
 
   /** This method gets called, when the imprint menu entry was clicked. It opens a dialog showing the legal text. */
@@ -148,6 +157,9 @@ export default function ApplicationMenu(): JSX.Element {
           </MenuItem>
         )}
         <Divider />
+        <MenuItem onClick={uploadClicked} disabled={!isAuthenticated}>
+          {t('topBar.menu.upload')}
+        </MenuItem>
         <MenuItem onClick={imprintClicked}>{t('topBar.menu.imprint')}</MenuItem>
         <MenuItem onClick={privacyPolicyClicked}>{t('topBar.menu.privacy-policy')}</MenuItem>
         <MenuItem onClick={accessibilityClicked}>{t('topBar.menu.accessibility')}</MenuItem>
@@ -164,6 +176,10 @@ export default function ApplicationMenu(): JSX.Element {
           </Box>
         </MenuItem>
       </Menu>
+
+      <Dialog maxWidth='lg' fullWidth={true} open={uploadOpen} onClose={() => setUploadOpen(false)}>
+        <DataUploadDialog />
+      </Dialog>
 
       <Dialog maxWidth='lg' fullWidth={true} open={imprintOpen} onClose={() => setImprintOpen(false)}>
         <Suspense

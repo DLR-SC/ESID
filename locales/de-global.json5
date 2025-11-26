@@ -13,6 +13,7 @@
       label: 'Anwendungsmenü',
       login: 'Anmelden',
       logout: 'Abmelden',
+      upload: 'Daten Hochladen',
       imprint: 'Impressum',
       'privacy-policy': 'Datenschutzerklärung',
       accessibility: 'Barrierefreiheit',
@@ -153,5 +154,11 @@
       'reference-value': 'Wert Referenzdatum',
       'selected-value': 'Wert Ausgewähltes Datum',
     },
+  },
+  upload: {
+    header: 'Falldaten Hochladen',
+    dragNotice: 'Ziehen sie Ihre Datei(en) in diesen Bereich oder nutzen Sie den Knopf unten, um Ihre Falldaten an ESID zu senden.',
+    button: 'Daten hochladen',
+    dropNotice: 'Hier ablegen um die Datei(en) hochzuladen.',
   },
 }

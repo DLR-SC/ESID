@@ -1,15 +1,24 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React from 'react';
+import React, {useEffect} from 'react';
 import Box from '@mui/material/Box';
-import CircularProgress from '@mui/material/CircularProgress';
+import {helix} from 'ldrs';
 
 /**
  * Overlays a loading indicator over the previously declared components. It is recommended to use the LoadingContainer
  * component instead, since it ensures correct ordering and layouting.
  */
-export default function LoadingOverlay(props: {show: boolean; overlayColor: string}): JSX.Element {
+export default function LoadingOverlay(props: {
+  show: boolean;
+  overlayColor: string;
+  throbberColor: string;
+}): JSX.Element {
+  // register helix throbber
+  useEffect(() => {
+    helix.register();
+  }, []);
+
   return props.show ? (
     <Box
       sx={{
@@ -19,18 +28,13 @@ export default function LoadingOverlay(props: {show: boolean; overlayColor: stri
         width: '100%',
         height: '100%',
         backgroundColor: props.overlayColor + 'E0',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-around',
+        alignItems: 'center',
       }}
     >
-      <CircularProgress
-        size={96}
-        sx={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          marginTop: '-48px',
-          marginLeft: '-48px',
-        }}
-      />
+      <l-helix size={100} speed={2.5} color={props.throbberColor}></l-helix>
     </Box>
   ) : (
     <></>
