@@ -282,8 +282,8 @@ function LibraryCard(
   const model = props.simulationModels.find((model) => model.id === backendScenario?.modelId);
   const nodeList = props.nodeLists.find((nodeList) => nodeList.id === backendScenario?.nodeListId);
   const npiList = props.npis
-    .filter((npi) =>
-      backendScenario?.linkedInterventions.find((intervention) => intervention.interventionId === npi.id)
+    .filter(
+      (npi) => backendScenario?.linkedInterventions.find((intervention) => intervention.interventionId === npi.id)
     )
     .map((npi) => tBackend(`interventions.${npi.name}`));
 

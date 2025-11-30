@@ -61,7 +61,11 @@ const SearchBarTest = () => {
           setSelectedArea(option);
         }
       }}
-      placeholder={`${selectedArea!['GEN' as keyof GeoJsonProperties]}${selectedArea!['BEZ' as keyof GeoJsonProperties] ? ` (BEZ.${selectedArea!['BEZ' as keyof GeoJsonProperties]})` : ''}`}
+      placeholder={`${selectedArea!['GEN' as keyof GeoJsonProperties]}${
+        selectedArea!['BEZ' as keyof GeoJsonProperties]
+          ? ` (BEZ.${selectedArea!['BEZ' as keyof GeoJsonProperties]})`
+          : ''
+      }`}
       optionEqualProperty='RS'
       valueEqualProperty='RS'
     />
