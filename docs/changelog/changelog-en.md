@@ -14,6 +14,10 @@ SPDX-License-Identifier: CC-BY-4.0
 - Users can now create new scenarios with a limited range of NPIs.
 - The color of the scenarios is now selectable in the scenario creation dialog.
 - Created scenario cards can now be reordered via drag-and-drop handle.
+- Horizontal line thresholds can now be added to the line chart:
+  - Users can set custom threshold values for currently selected district and compartment accessible via the settings button on the lower left corner of the line chart
+  - The horizontal threshold is displayed as a red horizontal line on the chart and values above the threshold are displayed in red
+  - Users can select thresholds to navigate to the corresponding district and compartment
 
 ### Improvements
 
@@ -23,11 +27,18 @@ SPDX-License-Identifier: CC-BY-4.0
 - There is more robust validation for the application state. If anything goes wrong during validation, a waring is shown in the bottom-left corner.
 - The case data and baseline scenarios are now always shown and the first two scenarios.
 - Only logged in users now have access to the "Create Scenario" button.
+- Scenario card information can now be viewed:
+  - In the library when hovering over a card with the mouse.
+  - On the main page via the info button below the card.
+- Logged in admin users can now click on the Admin button in the application menu and access the user management.
 
 ### Bug fixes
 
 - More robust validation of the application state should eliminate a wide variety of bugs.
 - A bug was fixed where data was shown while no scenario was active.
+- The group filters are working again.
+- The menu items Imprint, Privacy Policy, Accessibility, Attribution, and Changelog are available again without crashing the page.
+- Fixed a long filter name display issues where the action button is not accessible when using long filter names.
 
 ---
 

@@ -228,6 +228,7 @@ export default function ManageGroupDialog({
               flexDirection: 'column',
               justifyContent: 'center',
               alignItems: 'center',
+              padding: 4,
             }}
           >
             <Typography variant='body1'>

@@ -14,6 +14,10 @@ SPDX-License-Identifier: CC-BY-4.0
 - Nutzer können nun Szenarien mit einer limitierten Auswahl an Interventionen erstellen.
 - Die Farbe der Szenarien können nun von Nutzern bei der Szenarienerstellung ausgewählt werden.
 - Neu erstellte Szenariokarten können jetzt per Drag-and-Drop umsortiert werden.
+- Horizontale Linien-Schwellenwerte können nun zum Liniendiagramm hinzugefügt werden:
+  - Nutzer können benutzerdefinierte Schwellenwerte für aktuell ausgewählte Bezirk und Kompartiment festlegen, die über den Einstellungsbutton in der unteren linken Ecke des Liniendiagramms erreicht werden
+  - Die horizontale Schwellenlinie wird als rote Linie im Diagramm angezeigt und Werte über der Schwellenlinie werden in rot angezeigt
+  - Nutzer können Schwellenwerte auswählen, um zu den entsprechenden Bezirk und Kompartiment zu navigieren
 
 ### Verbesserungen
 
@@ -23,11 +27,18 @@ SPDX-License-Identifier: CC-BY-4.0
 - Die Validierung des Anwendungszustands ist jetzt robuster. Wenn während der Validierung etwas schiefgeht, wird eine Warnung in der unteren linken Ecke angezeigt.
 - Die Falldaten und das Basis-Szenario werden jetzt immer als erste zwei Szenarien angezeigt.
 - Nur eingeloggte Nutzer haben Zugriff auf den "Szenario Erstellen" Button.
+- Informationen zu Szenariokarten können nun angesehen werden:
+  - In der Bibliothek, wenn die Maus über eine Karte hovered.
+  - Auf der Hauptseite über den Infobutton unter der Karte.
+- Angemeldete Admin-Benutzer können jetzt auf die Schaltfläche Admin im Anwendungsmenü klicken und auf die Benutzerverwaltung zugreifen.
 
 ### Fehlerbehebungen
 
 - Die robustere Validierung eliminiert einen Großteil der Fehler.
 - Ein Fehler wurde behoben, wo Daten angezeigt wurden, obwohl kein Szenario aufgedeckt war.
+- Die Gruppenfilter funktionieren wieder.
+- Die Menüpunkte Impressum, Datenschutzerklärung, Barrierefreiheit, Attribution und Versionshistorie sind wieder erreichbar ohne die Seite zum Absturz zu bringen.
+- Ein Anzeigeproblem bei langen Filternamen wurde behoben, bei dem die Aktionsschaltflächen bei sehr langen Filternamen nicht zugänglich waren.
 
 ---
 

@@ -24,6 +24,9 @@ interface DataCardProps {
   /** The title of the card.*/
   title: string;
 
+  /** A description of the card's contents. */
+  description?: JSX.Element;
+
   /** A boolean indicating whether the compartments are expanded.*/
   compartmentsExpanded: boolean;
 
@@ -81,6 +84,7 @@ export default function DataCard({
   compartmentValues,
   referenceValues,
   title,
+  description,
   compartmentsExpanded,
   selectedCompartmentId,
   filterValues,
@@ -101,7 +105,6 @@ export default function DataCard({
   draggable,
   arrow = true,
 }: DataCardProps) {
-  const [hover, setHover] = useState<boolean>(false);
   const [folded, setFolded] = useState<boolean>(false);
   const [visibility, setVisibility] = useState<boolean>(true);
 
@@ -159,12 +162,11 @@ export default function DataCard({
     >
       <MainCard
         id={id}
+        description={description}
         label={title}
-        hover={hover}
         color={color}
         referenceValues={referenceValues}
         compartmentValues={compartmentValues}
-        setHover={setHover}
         compartmentsExpanded={compartmentsExpanded}
         selectedCompartmentId={selectedCompartmentId}
         isSelected={isSelected}

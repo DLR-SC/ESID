@@ -25,6 +25,7 @@ import {ScenarioVisibility, updateScenario} from 'store/DataSelectionSlice';
 import {setScenarioColors} from 'store/UserPreferenceSlice';
 import {DataContext} from 'context/SelectedDataContext';
 import {AuthContext, IAuthContext} from 'react-oauth2-code-pkce';
+import ScenarioDescription from 'components/ScenarioComponents/ScenarioDescription';
 
 type ResourceAccess = {
   [clientId: string]: {
@@ -97,6 +98,7 @@ export default function ScenarioLibrary(): JSX.Element {
       .map(([key, scenario]) => ({
         id: key,
         name: scenario.name,
+        description: scenario.description,
       }));
   }, [scenariosState]);
 
@@ -201,7 +203,18 @@ export default function ScenarioLibrary(): JSX.Element {
                   />
                 )}
                 {hiddenScenarios.length > 0 ? (
-                  hiddenScenarios.map((scenario) => <LibraryCard key={scenario.id} {...scenario} />)
+                  hiddenScenarios.map((scenario) => (
+                    <LibraryCard
+                      key={scenario.id}
+                      id={scenario.id}
+                      name={scenario.name}
+                      description={scenario.description}
+                      completeScenarios={completeScenarios}
+                      simulationModels={simulationModels}
+                      nodeLists={nodeLists}
+                      npis={npis}
+                    />
+                  ))
                 ) : (
                   <Box
                     sx={{
@@ -225,11 +238,31 @@ export default function ScenarioLibrary(): JSX.Element {
   );
 }
 
-function LibraryCard(props: Readonly<{id: string; name: string}>): JSX.Element {
+function LibraryCard(
+  props: Readonly<{
+    id: string;
+    name: string;
+    description: string;
+    completeScenarios: Record<string, Scenario> | undefined;
+    simulationModels: Models;
+    nodeLists: NodeLists;
+    npis: InterventionTemplates;
+  }>
+): JSX.Element {
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const {t: tBackend, i18n} = useTranslation('backend');
   const scenarioColors = useAppSelector((state) => state.userPreference.scenarioColors);
+  const [hover, setHover] = useState(false);
+
+  // Add mouse event handlers to track hover state
+  const handleMouseEnter = () => {
+    setHover(true);
+  };
+
+  const handleMouseLeave = () => {
+    setHover(false);
+  };
 
   const handleRestore = () => {
     const savedColors = scenarioColors[props.id];
@@ -244,6 +277,16 @@ function LibraryCard(props: Readonly<{id: string; name: string}>): JSX.Element {
     );
   };
 
+  // Get the complete scenario data from backend
+  const backendScenario = props.completeScenarios?.[props.id];
+  const model = props.simulationModels.find((model) => model.id === backendScenario?.modelId);
+  const nodeList = props.nodeLists.find((nodeList) => nodeList.id === backendScenario?.nodeListId);
+  const npiList = props.npis
+    .filter((npi) =>
+      backendScenario?.linkedInterventions.find((intervention) => intervention.interventionId === npi.id)
+    )
+    .map((npi) => tBackend(`interventions.${npi.name}`));
+
   return (
     <Box
       id={`card-root-${props.id}`}
@@ -253,6 +296,8 @@ function LibraryCard(props: Readonly<{id: string; name: string}>): JSX.Element {
         color: theme.palette.divider,
         width: 'min-content',
       }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       <Box
         id='card-container'
@@ -309,18 +354,38 @@ function LibraryCard(props: Readonly<{id: string; name: string}>): JSX.Element {
             />
             <Box
               sx={{
-                fontWeight: 'bolder',
-                fontSize: '4rem',
-                color: theme.palette.secondary.light,
-                textAlign: 'center',
                 flexGrow: 1,
                 display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
+                overflow: 'hidden',
               }}
-              aria-label={'+'}
             >
-              +
+              {backendScenario && hover ? (
+                <Box sx={{color: theme.palette.text.primary}}>
+                  <ScenarioDescription
+                    description={props.description}
+                    startDate={new Date(backendScenario.startDate).toLocaleDateString(i18n.language)}
+                    endDate={new Date(backendScenario.endDate).toLocaleDateString(i18n.language)}
+                    model={tBackend(`models.${model?.name}`)}
+                    nodeList={tBackend(`regions.${nodeList?.name}`)}
+                    linkedInterventions={npiList}
+                  />
+                </Box>
+              ) : (
+                <Box
+                  sx={{
+                    fontWeight: 'bolder',
+                    fontSize: '4rem',
+                    color: theme.palette.secondary.light,
+                    flexGrow: 1,
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                  aria-label='+'
+                >
+                  +
+                </Box>
+              )}
             </Box>
           </Box>
         </Box>

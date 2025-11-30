@@ -80,25 +80,39 @@ export default function GroupFilterCard({
         onClick={() => {
           selectFilterCallback(selected ? null : item);
         }}
+        sx={{
+          flex: 1,
+          minWidth: 0,
+        }}
       >
-        <CardContent sx={{backgroundColor: selected ? theme.palette.info.main : theme.palette.background.paper}}>
+        <CardContent
+          sx={{
+            backgroundColor: selected ? theme.palette.info.main : theme.palette.background.paper,
+          }}
+        >
           <Typography
             variant='body1'
-            sx={{color: selected ? theme.palette.primary.contrastText : theme.palette.text.primary}}
+            sx={{
+              color: selected ? theme.palette.primary.contrastText : theme.palette.text.primary,
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+              maxWidth: '100%',
+            }}
+            title={item.name} // Show full name on hover
           >
             {item.name}
           </Typography>
         </CardContent>
       </CardActionArea>
       <Divider orientation='vertical' variant='middle' flexItem />
-      <CardActions>
+      <CardActions sx={{flexShrink: 0}}>
         <Checkbox
           checkedIcon={<Visibility />}
           icon={<VisibilityOffOutlined color='disabled' />}
           checked={item.isVisible}
           onClick={() => {
-            item.isVisible = !item.isVisible;
-            toggleGroupFilter(item);
+            toggleGroupFilter({...item, isVisible: !item.isVisible});
           }}
         />
         <ConfirmDialog

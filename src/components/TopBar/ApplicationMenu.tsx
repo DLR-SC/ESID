@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: Apache-2.0
 
-import React, {MouseEvent, useContext} from 'react';
+import React, {MouseEvent, Suspense, useContext} from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
 import {useTranslation} from 'react-i18next';
 import Button from '@mui/material/Button';
@@ -12,12 +12,19 @@ import MenuItem from '@mui/material/MenuItem';
 import Box from '@mui/system/Box';
 import {useAppSelector} from 'store/hooks';
 import {AuthContext, IAuthContext} from 'react-oauth2-code-pkce';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const ChangelogDialog = React.lazy(() => import('./PopUps/ChangelogDialog'));
 const ImprintDialog = React.lazy(() => import('./PopUps/ImprintDialog'));
 const PrivacyPolicyDialog = React.lazy(() => import('./PopUps/PrivacyPolicyDialog'));
 const AccessibilityDialog = React.lazy(() => import('./PopUps/AccessibilityDialog'));
 const AttributionDialog = React.lazy(() => import('./PopUps/AttributionDialog'));
+
+type TokenData = {
+  realm_access?: {
+    roles?: string[];
+  };
+};
 
 /**
  * This menu is found at the top right of the application and is reachable from everywhere. It contains ways to access
@@ -27,12 +34,15 @@ export default function ApplicationMenu(): JSX.Element {
   const {t} = useTranslation();
 
   const realm = useAppSelector((state) => state.realm.name);
-  const {login, token, logOut, idToken} = useContext<IAuthContext>(AuthContext);
+  const {login, token, logOut, idToken, tokenData} = useContext<IAuthContext>(AuthContext);
 
   // user cannot login when realm is not selected
   const loginDisabled = realm === '';
   // user is authenticated when token is not empty
   const isAuthenticated = token !== '';
+
+  // user is admin (can manage users)
+  const isAdmin = tokenData && ((tokenData as TokenData).realm_access?.roles ?? []).includes('lha-user-admin');
 
   const [anchorElement, setAnchorElement] = React.useState<Element | null>(null);
   const [imprintOpen, setImprintOpen] = React.useState(false);
@@ -119,6 +129,11 @@ export default function ApplicationMenu(): JSX.Element {
             {t('topBar.menu.login')}
           </MenuItem>
         )}
+        {isAdmin && (
+          <MenuItem component='a' target='_blank' href={`${import.meta.env.VITE_OAUTH_API_URL}/admin/${realm}/console`}>
+            {t('topBar.menu.admin')}
+          </MenuItem>
+        )}
         <Divider />
         <MenuItem onClick={imprintClicked}>{t('topBar.menu.imprint')}</MenuItem>
         <MenuItem onClick={privacyPolicyClicked}>{t('topBar.menu.privacy-policy')}</MenuItem>
@@ -128,23 +143,63 @@ export default function ApplicationMenu(): JSX.Element {
       </Menu>
 
       <Dialog maxWidth='lg' fullWidth={true} open={imprintOpen} onClose={() => setImprintOpen(false)}>
-        <ImprintDialog />
+        <Suspense
+          fallback={
+            <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%'}}>
+              <CircularProgress sx={{padding: '10rem'}} disableShrink />
+            </Box>
+          }
+        >
+          <ImprintDialog />
+        </Suspense>
       </Dialog>
 
       <Dialog maxWidth='lg' fullWidth={true} open={privacyPolicyOpen} onClose={() => setPrivacyPolicyOpen(false)}>
-        <PrivacyPolicyDialog />
+        <Suspense
+          fallback={
+            <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%'}}>
+              <CircularProgress sx={{padding: '10rem'}} disableShrink />
+            </Box>
+          }
+        >
+          <PrivacyPolicyDialog />
+        </Suspense>
       </Dialog>
 
       <Dialog maxWidth='lg' fullWidth={true} open={accessibilityOpen} onClose={() => setAccessibilityOpen(false)}>
-        <AccessibilityDialog />
+        <Suspense
+          fallback={
+            <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%'}}>
+              <CircularProgress sx={{padding: '10rem'}} disableShrink />
+            </Box>
+          }
+        >
+          <AccessibilityDialog />
+        </Suspense>
       </Dialog>
 
       <Dialog maxWidth='lg' fullWidth={true} open={attributionsOpen} onClose={() => setAttributionsOpen(false)}>
-        <AttributionDialog />
+        <Suspense
+          fallback={
+            <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%'}}>
+              <CircularProgress sx={{padding: '10rem'}} disableShrink />
+            </Box>
+          }
+        >
+          <AttributionDialog />
+        </Suspense>
       </Dialog>
 
       <Dialog maxWidth='lg' fullWidth={true} open={changelogOpen} onClose={() => setChangelogOpen(false)}>
-        <ChangelogDialog />
+        <Suspense
+          fallback={
+            <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%'}}>
+              <CircularProgress sx={{padding: '10rem'}} disableShrink />
+            </Box>
+          }
+        >
+          <ChangelogDialog />
+        </Suspense>
       </Dialog>
     </Box>
   );

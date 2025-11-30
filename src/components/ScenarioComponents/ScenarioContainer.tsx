@@ -30,6 +30,9 @@ import {useAppDispatch, useAppSelector} from 'store/hooks';
 import ScenarioLibrary from './ScenarioLibrary';
 import {dateToISOString} from 'util/util';
 import {DataContext} from 'context/SelectedDataContext';
+import {FilterValues} from 'types/card';
+import ScenarioDescription from 'components/ScenarioComponents/ScenarioDescription';
+import {Scenario} from 'store/services/APITypes';
 
 interface ScenarioContainerProps {
   /** The minimum number of compartment rows.*/
@@ -51,12 +54,16 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
   const theme = useTheme();
 
   const {
-    scenarios: scenarioData,
     scenarioCardData,
+    scenarioCardMetaData,
+    simulationModels,
+    nodeLists,
+    npis,
     compartments,
     referenceDateValues,
     groups,
     groupCategories,
+    groupFilterCardData,
   } = useContext(DataContext)!;
 
   const groupFilters = useAppSelector((state) => state.dataSelection.groupFilters);
@@ -69,7 +76,7 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
   const [resizeRef, resizeBoundingRect] = useBoundingclientrectRef();
 
   const scenarios = useMemo(() => {
-    if (!scenarioData) {
+    if (!scenarioCardMetaData) {
       return [];
     }
     return (
@@ -79,15 +86,34 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
             scenario.visibility === ScenarioVisibility.FaceUp || scenario.visibility === ScenarioVisibility.FaceDown
         )
         .map(([id, scenario]) => {
+          const backendScenario: Scenario | undefined = scenarioCardMetaData[id];
+          const model = simulationModels.find((model) => model.id === backendScenario?.modelId);
+          const nodeList = nodeLists.find((nodeList) => nodeList.id === backendScenario?.nodeListId);
+          const npiList = npis
+            .filter((npi) =>
+              backendScenario?.linkedInterventions.find((intervention) => intervention.interventionId === npi.id)
+            )
+            .map((npi) => tBackend(`interventions.${npi.name}`));
+
           return {
             id: id,
             name: scenario.name,
             color: scenario.colors[0],
             active: scenario.visibility == ScenarioVisibility.FaceUp,
+            description: backendScenario ? (
+              <ScenarioDescription
+                description={scenario.description}
+                startDate={new Date(backendScenario.startDate).toLocaleDateString(i18n.language)}
+                endDate={new Date(backendScenario.endDate).toLocaleDateString(i18n.language)}
+                model={tBackend(`models.${model?.name}`)}
+                nodeList={tBackend(`regions.${nodeList?.name}`)}
+                linkedInterventions={npiList}
+              />
+            ) : undefined,
           };
         }) ?? []
     );
-  }, [scenarioData, scenariosState]);
+  }, [i18n.language, nodeLists, npis, scenarioCardMetaData, scenariosState, simulationModels, tBackend]);
 
   const compartmentNames = useMemo(() => {
     return (
@@ -121,11 +147,13 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
 
   const translatedGroups = useMemo(
     () =>
-      groups?.map((group) => ({
-        id: group.id,
-        name: tBackend(`group-filters.groups.${group.name}`),
-        category: group.category,
-      })) ?? [],
+      groups
+        ?.filter((group) => group.name !== 'Total')
+        .map((group) => ({
+          id: group.id,
+          name: tBackend(`group-filters.groups.${group.name}`),
+          category: group.category,
+        })) ?? [],
     [groups, tBackend]
   );
 
@@ -147,8 +175,51 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
   }, [compartmentNames, scenarioCardData, scenariosState]);
 
   const filterValues = useMemo(() => {
-    return {}; // TODO
-  }, []);
+    // Create a result map for all scenarios
+    return Object.keys(scenariosState).reduce(
+      (result, id) => {
+        const scenarioFilterData = groupFilterCardData[id];
+
+        // Process only visible filters
+        result[id] = Object.values(groupFilters)
+          .filter((filter) => filter.isVisible)
+          .map((filter) => {
+            // Initialize compartment values to 0
+            const valueMap = compartmentNames.reduce(
+              (map, compartment) => {
+                map[compartment.id] = 0;
+                return map;
+              },
+              {} as Record<string, number>
+            );
+
+            // Process age groups if they exist
+            if (filter.groups['age']) {
+              // Sum values by aggregating data based on filter criteria
+              const filterData =
+                scenarioFilterData?.filter(
+                  (entry) => filter.groups['age'].includes(entry.group || '') && entry.compartment
+                ) || [];
+
+              // Aggregate values by compartment
+              filterData.forEach((entry) => {
+                if (entry.compartment) {
+                  valueMap[entry.compartment] += entry.value;
+                }
+              });
+            }
+
+            return {
+              filteredTitle: filter.name,
+              filteredValues: valueMap,
+            };
+          });
+
+        return result;
+      },
+      {} as Record<string, FilterValues[]>
+    );
+  }, [compartmentNames, groupFilterCardData, groupFilters, scenariosState]);
 
   const localization = useMemo(() => {
     return {
@@ -166,6 +237,11 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
     const w = resizeBoundingRect?.width ?? 0;
     dispatch(setReferenceDayTop(x + w));
   }, [dispatch, resizeBoundingRect]);
+
+  // updates the selected compartment in the state when the compartment in the store changes for use with LineChartSettings
+  useEffect(() => {
+    selectCompartment(selectedCompartment ?? 'MildInfections'); // Sync the local state with the store's selected compartment
+  }, [selectedCompartment]);
 
   return (
     <ScrollSync>
