@@ -45,7 +45,7 @@ export default function App(): JSX.Element {
                   <ExportingRegistry>
                     <BaseDataContext>
                       <SemanticSearchProvider>
-                      <Initializer />
+                        <Initializer />
                         <WelcomeDialogWrapper />
                         <Box id='app' display='flex' flexDirection='column' sx={{height: '100%', width: '100%'}}>
                           <TopBar />

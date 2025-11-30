@@ -355,13 +355,13 @@ export default function HeatMap({
 
     // Compute centroids from the underlying GeoJSON features on the polygon series
     try {
-      const source = (polygonSeries.get('geoJSON') || mapData) as GeoJSON | undefined;
+      const source = polygonSeries.get('geoJSON') || mapData;
       if (source && 'type' in source && source.type === 'FeatureCollection') {
         const fc = source as GeoJSON & {features: Array<Feature>};
         fc.features.forEach((f) => {
-          const props = f.properties as GeoJsonProperties | null;
+          const props = f.properties;
           if (!props) return;
-          const key = props[areaId as string] as string | number;
+          const key = props[areaId] as string | number;
           const centroid = computeCentroid(f);
           if (key !== undefined && centroid) {
             idToCentroid.set(key, centroid);
@@ -556,7 +556,6 @@ function getColorFromLegend(
     );
   }
 }
-
 
 // Compute a simple centroid [lon, lat] for Polygon or MultiPolygon features
 function computeCentroid(feature: Feature): [number, number] | null {
