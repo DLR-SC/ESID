@@ -7,6 +7,15 @@ import '@testing-library/jest-dom/vitest';
 import 'vitest-canvas-mock';
 import server from 'mocks/server';
 
+// ResizeObserver polyfill for jsdom
+class ResizeObserverMock {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
+
+global.ResizeObserver = ResizeObserverMock;
+
 beforeAll(() => {
   server.listen();
 });

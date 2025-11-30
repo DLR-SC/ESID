@@ -14,6 +14,7 @@ import AuthReducer from './AuthSlice';
 import UserOnboardingReducer from './UserOnboardingSlice';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import {idpApi} from './services/idpApi';
+import {articleApi} from './services/articleApi';
 
 const persistConfig = {
   key: 'root',
@@ -32,6 +33,7 @@ const rootReducer = combineReducers({
   [scenarioApi.reducerPath]: scenarioApi.reducer,
   [utilsApi.reducerPath]: utilsApi.reducer,
   [idpApi.reducerPath]: idpApi.reducer,
+  [articleApi.reducerPath]: articleApi.reducer,
 });
 
 const persistedReducer = persistReducer(
@@ -46,7 +48,7 @@ export const Store = configureStore({
       serializableCheck: {
         ignoredActions: ['persist/PERSIST'],
       },
-    }).concat(scenarioApi.middleware, utilsApi.middleware, idpApi.middleware),
+    }).concat(scenarioApi.middleware, utilsApi.middleware, idpApi.middleware, articleApi.middleware),
 });
 
 export const Persistor = persistStore(Store);

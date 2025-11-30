@@ -24,6 +24,8 @@ import LoadingOverlay from './components/shared/LoadingOverlay';
 import AuthProvider from './components/AuthProvider';
 import BaseDataContext from 'context/BaseDataContext';
 import ExportingRegistry from 'context/ExportContext';
+import {SemanticSearchProvider} from 'context/SemanticSearchContext';
+
 /**
  * This is the root element of the React application. It divides the main screen area into the three main components.
  * The top bar, the sidebar and the main content area.
@@ -42,24 +44,26 @@ export default function App(): JSX.Element {
                 <MUILocalization>
                   <ExportingRegistry>
                     <BaseDataContext>
+                      <SemanticSearchProvider>
                       <Initializer />
-                      <WelcomeDialogWrapper />
-                      <Box id='app' display='flex' flexDirection='column' sx={{height: '100%', width: '100%'}}>
-                        <TopBar />
-                        <Box
-                          id='app-content'
-                          sx={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            flexGrow: 1,
-                            alignItems: 'stretch',
-                            width: '100%',
-                          }}
-                        >
-                          <SidebarContainer />
-                          <MainContent />
+                        <WelcomeDialogWrapper />
+                        <Box id='app' display='flex' flexDirection='column' sx={{height: '100%', width: '100%'}}>
+                          <TopBar />
+                          <Box
+                            id='app-content'
+                            sx={{
+                              display: 'flex',
+                              flexDirection: 'row',
+                              flexGrow: 1,
+                              alignItems: 'stretch',
+                              width: '100%',
+                            }}
+                          >
+                            <SidebarContainer />
+                            <MainContent />
+                          </Box>
                         </Box>
-                      </Box>
+                      </SemanticSearchProvider>
                     </BaseDataContext>
                   </ExportingRegistry>
                 </MUILocalization>

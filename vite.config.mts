@@ -1,13 +1,14 @@
 // SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
 // SPDX-License-Identifier: CC0-1.0
 
-import {defineConfig} from 'vite';
+import {defineConfig, loadEnv} from 'vite';
 import react from '@vitejs/plugin-react';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import preload from 'unplugin-inject-preload/vite';
 import eslintPlugin from '@nabla/vite-plugin-eslint';
 
-export default defineConfig(() => {
+export default defineConfig(({mode}) => {
+  const env = loadEnv(mode, process.cwd(), '');
   return {
     assetsInclude: ['**/*.md', '**/*.geojson', '**/*.json5'],
     base: './',
@@ -15,6 +16,7 @@ export default defineConfig(() => {
       react(),
       eslintPlugin(),
       tsconfigPaths(),
+
       preload({
         files: [
           {
@@ -76,6 +78,13 @@ export default defineConfig(() => {
           inline: ['vitest-canvas-mock'],
         },
       },
+    },
+    server: {
+      host: 'localhost',
+      port: 5173,
+    },
+    preview: {
+      port: 5173,
     },
   };
 });

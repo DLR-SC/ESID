@@ -18,6 +18,8 @@ import {
   ToggleButton,
 } from '@mui/material';
 import {DatePicker} from '@mui/x-date-pickers/DatePicker';
+import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
+import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
 import {dateToISOString} from 'util/util';
 import dayjs, {Dayjs} from 'dayjs';
 import {useTranslation} from 'react-i18next';
@@ -150,28 +152,30 @@ export default function NewScenarioDialog({
       />
 
       <Box sx={{display: 'flex', gap: '4px', my: 2}}>
-        <DatePicker<Dayjs>
-          label={t('scenario-library.new.start-date')}
-          value={dayjs(formData.startDate)}
-          disabled={true}
-          onChange={(date) =>
-            setFormData((prev) => ({
-              ...prev,
-              startDate: dateToISOString((date ?? dayjs().subtract(1, 'day')).toDate()),
-            }))
-          }
-        />
-        <DatePicker<Dayjs>
-          label={t('scenario-library.new.end-date')}
-          value={dayjs(formData.endDate)}
-          disabled={true}
-          onChange={(date) =>
-            setFormData((prev) => ({
-              ...prev,
-              endDate: dateToISOString(date?.toDate() ?? dayjs().add(4, 'week').add(1, 'day').toDate()),
-            }))
-          }
-        />
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DatePicker<Dayjs>
+            label={t('scenario-library.new.start-date')}
+            value={dayjs(formData.startDate)}
+            disabled={true}
+            onChange={(date) =>
+              setFormData((prev) => ({
+                ...prev,
+                startDate: dateToISOString((date ?? dayjs().subtract(1, 'day')).toDate()),
+              }))
+            }
+          />
+          <DatePicker<Dayjs>
+            label={t('scenario-library.new.end-date')}
+            value={dayjs(formData.endDate)}
+            disabled={true}
+            onChange={(date) =>
+              setFormData((prev) => ({
+                ...prev,
+                endDate: dateToISOString(date?.toDate() ?? dayjs().add(4, 'week').add(1, 'day').toDate()),
+              }))
+            }
+          />
+        </LocalizationProvider>
       </Box>
 
       <FormControl fullWidth margin='normal' error={!!errors.colors} required>
