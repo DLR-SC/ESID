@@ -7,9 +7,9 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import {useTranslation} from 'react-i18next';
 import Button from '@mui/material/Button';
-import List from '@mui/material';
-import ListItem from '@mui/material';
-import ListItemText from '@mui/material';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
 import Clear from '@mui/icons-material/Clear';
 import CloudUpload from '@mui/icons-material/CloudUpload';
 import Done from '@mui/icons-material/Done';
@@ -29,7 +29,7 @@ export default function DataUploadDialog(): JSX.Element {
     helix.register();
   }, []);
 
-  const [uploadList, setUploadList] = React.useState<{fileinfo: string; file: File}[]>([]);
+  const [uploadList, setUploadList] = React.useState<{fileInfo: string; file: File}[]>([]);
 
   const fileTypes: string[] = [];
 
@@ -115,7 +115,7 @@ export default function DataUploadDialog(): JSX.Element {
           <List>
             {uploadList.map((item) => (
               // Create a list item for each file.
-              <FileItem key={item.fileinfo} fileinfo={item.fileinfo} file={item.file} />
+              <FileItem key={item.fileInfo} fileInfo={item.fileInfo} file={item.file} />
             ))}
           </List>
         )}
