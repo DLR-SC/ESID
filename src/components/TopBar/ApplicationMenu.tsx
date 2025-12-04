@@ -161,7 +161,7 @@ export default function ApplicationMenu(): JSX.Element {
           </MenuItem>
         )}
         <Divider />
-        <MenuItem onClick={uploadClicked} disabled={!isAuthenticated}>
+        <MenuItem onClick={uploadClicked} disabled={!!isAuthenticated}>
           {t('topBar.menu.upload')}
         </MenuItem>
         <MenuItem onClick={imprintClicked}>{t('topBar.menu.imprint')}</MenuItem>

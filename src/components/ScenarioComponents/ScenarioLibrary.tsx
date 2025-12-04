@@ -194,7 +194,7 @@ export default function ScenarioLibrary(): JSX.Element {
                   overflowY: 'auto',
                 }}
               >
-                {canCreateScenarios && (
+                {!canCreateScenarios && (
                   <NewScenarioCard
                     models={simulationModels ?? []}
                     npis={npis ?? []}
