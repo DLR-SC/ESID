@@ -7,9 +7,9 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import {useTranslation} from 'react-i18next';
 import Button from '@mui/material/Button';
-import List from '@mui/material';
-import ListItem from '@mui/material';
-import ListItemText from '@mui/material';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
 import Clear from '@mui/icons-material/Clear';
 import CloudUpload from '@mui/icons-material/CloudUpload';
 import Done from '@mui/icons-material/Done';
@@ -46,12 +46,12 @@ export default function DataUploadDialog(): JSX.Element {
       }
     };
     // Update file display with new files.
-    const displayList: {fileInfo: string; file: File}[] = [];
+    const displayList: {fileinfo: string; file: File}[] = [];
     for (let i = 0; i < fileList.length; i++) {
       const file = fileList[i];
 
       displayList.push({
-        fileInfo: `${file.name} (${fileSizeToString(file.size)})`,
+        fileinfo: `${file.name} (${fileSizeToString(file.size)})`,
         file: file,
       });
     }
@@ -164,7 +164,7 @@ export default function DataUploadDialog(): JSX.Element {
   );
 }
 
-function FileItem({fileInfo, file}: {fileInfo: string; file: File}): JSX.Element {
+function FileItem({fileinfo, file}: {fileinfo: string; file: File}): JSX.Element {
   const theme = useTheme();
   const {isSuccess, isError} = useSendCasedataFileQuery(file);
 
@@ -181,7 +181,7 @@ function FileItem({fileInfo, file}: {fileInfo: string; file: File}): JSX.Element
         )
       }
     >
-      <ListItemText primary={fileInfo} />
+      <ListItemText primary={fileinfo} />
     </ListItem>
   );
 }
