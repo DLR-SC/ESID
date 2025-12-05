@@ -90,8 +90,9 @@ export default function ScenarioContainer({minCompartmentsRows = 4, maxCompartme
           const model = simulationModels.find((model) => model.id === backendScenario?.modelId);
           const nodeList = nodeLists.find((nodeList) => nodeList.id === backendScenario?.nodeListId);
           const npiList = npis
-            .filter((npi) =>
-              backendScenario?.linkedInterventions.find((intervention) => intervention.interventionId === npi.id)
+            .filter(
+              (npi) =>
+                backendScenario?.linkedInterventions.find((intervention) => intervention.interventionId === npi.id)
             )
             .map((npi) => tBackend(`interventions.${npi.name}`));
 
