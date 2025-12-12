@@ -17,10 +17,8 @@ export const utilsApi = createApi({
       }
 
       if (auth.token && auth.token !== '') {
-        // headers.set('Authorization', 'Bearer ' + auth.token);
+        headers.set('Authorization', 'Bearer ' + auth.token);
       }
-      headers.set('Authorization', 'Bearer ' + 'TODO');
-      //headers.set('Content-Type', 'multipart/form-data');
 
       return headers;
     },
