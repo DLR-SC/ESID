@@ -31,7 +31,7 @@ import {GeoJSON, GeoJsonProperties} from 'geojson';
 import {AuthContext} from 'react-oauth2-code-pkce';
 import {setToken} from 'store/AuthSlice';
 import {ScenarioVisibility} from 'store/DataSelectionSlice';
-import useGetEdges, {Edge} from 'store/services/EdgeApi';
+import useGetEdges, {EdgeData} from 'store/services/EdgeApi';
 
 interface DataContextType {
   geoData: GeoJSON;
@@ -54,7 +54,7 @@ interface DataContextType {
   npis: InterventionTemplates;
   nodeLists: NodeLists;
   nodes: Nodes;
-  edgeData: Array<Edge>;
+  edgeData: EdgeData;
 }
 
 export const DataContext = createContext<DataContextType | null>(null);

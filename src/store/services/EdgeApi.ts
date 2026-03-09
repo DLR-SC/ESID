@@ -12,13 +12,15 @@ export interface Edge {
   value: number;
 }
 
-const DAY1: Map<string, Array<Edge>> = new Map();
-const DAY2: Map<string, Array<Edge>> = new Map();
+export type EdgeData = Record<'in' | 'out', Array<Edge>>;
 
-export default function useGetEdges(date: string, district: string, amount: number = 5): Array<Edge> {
+const DAY1: Map<string, EdgeData> = new Map();
+const DAY2: Map<string, EdgeData> = new Map();
+
+export default function useGetEdges(date: string, district: string, amount: number = 5): EdgeData {
   useEffect(() => {
     // Function to process CSV data and populate the specified map
-    const processEdgeData = (data: string, targetMap: Map<string, Array<Edge>>) => {
+    const processEdgeData = (data: string, targetMap: Map<string, EdgeData>) => {
       data.split('\n').forEach((line, i) => {
         if (i !== 0) {
           const values = line.split(',');
@@ -32,16 +34,44 @@ export default function useGetEdges(date: string, district: string, amount: numb
             total: parseInt(values[5]),
           };
           if (dataEntry.percentile === 50) {
+            // add data to end_node in
+            targetMap.set(dataEntry.end_node, {
+              in: [
+                ...(targetMap.get(dataEntry.start_node)?.in || []),
+                {
+                  start: dataEntry.start_node,
+                  end: dataEntry.end_node,
+                  value: dataEntry.mild_infected,
+                },
+              ],
+              out: [...(targetMap.get(dataEntry.start_node)?.out || [])],
+            });
+            // add data to start_nodes's out
+            targetMap.set(dataEntry.start_node, {
+              in: [...(targetMap.get(dataEntry.start_node)?.in || [])],
+              out: [
+                ...(targetMap.get(dataEntry.start_node)?.out || []),
+                {
+                  start: dataEntry.start_node,
+                  end: dataEntry.end_node,
+                  value: dataEntry.mild_infected,
+                },
+              ],
+            });
+            /*
             targetMap.set(dataEntry.start_node, [
               ...(targetMap.get(dataEntry.start_node) || []),
               {start: dataEntry.start_node, end: dataEntry.end_node, value: dataEntry.mild_infected},
             ]);
+            */
           }
         }
       });
 
-      for (const edges of targetMap.values()) {
-        edges.sort((a, b) => a.value - b.value);
+      // Sort both lists by value
+      for (const edgeData of targetMap.values()) {
+        edgeData.in.sort((a, b) => a.value - b.value);
+        edgeData.out.sort((a, b) => a.value - b.value);
       }
     };
 
@@ -61,7 +91,11 @@ export default function useGetEdges(date: string, district: string, amount: numb
   }, []);
 
   return useMemo(() => {
-    return (parseInt(date.slice(-1)) % 2 === 0 ? DAY1 : DAY2).get(district)?.slice(0, amount) ?? [];
+    // returns data slice of top <amount> districts from Day1 on even <date> and Day2 on odd <date> for the requested <district>
+    return {
+      in: ((parseInt(date.slice(-1)) % 2 === 0 ? DAY1 : DAY2).get(district)?.in?.slice(0, amount) ?? []) as Edge[],
+      out: ((parseInt(date.slice(-1)) % 2 === 0 ? DAY1 : DAY2).get(district)?.out?.slice(0, amount) ?? []) as Edge[],
+    } as EdgeData;
   }, [date, district, amount]);
 }
 
