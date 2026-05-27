@@ -2,15 +2,15 @@
   {
     "_comment": "This is a reduced/dummy file. Please replace this file with the original one."
   },
-  {"location_id": 0, "location_type": 10, "lat": 52.2656, "lon": 10.5145},
-  {"location_id": 1, "location_type": 5, "lat": 52.2655, "lon": 10.5144},
-  {"location_id": 2, "location_type": 6, "lat": 52.2654, "lon": 10.5143},
-  {"location_id": 3, "location_type": 0, "lat": 52.2653, "lon": 10.5142},
-  {"location_id": 4, "location_type": 2, "lat": 52.2673, "lon": 10.5141},
-  {"location_id": 5, "location_type": 3, "lat": 52.2639, "lon": 10.5227},
-  {"location_id": 6, "location_type": 0, "lat": 52.265, "lon": 10.5146},
-  {"location_id": 7, "location_type": 2, "lat": 52.2662, "lon": 10.4992},
-  {"location_id": 8, "location_type": 4, "lat": 52.2638, "lon": 10.5236},
-  {"location_id": 9, "location_type": 0, "lat": 52.2655, "lon": 10.5157},
-  {"location_id": 10, "location_type": 1, "lat": 52.2707, "lon": 10.5211}
+  {"location_id": 0, "location_type": 10, "lat": 52.269546, "lon": 10.520317}, 
+  {"location_id": 1, "location_type": 5, "lat": 52.268871, "lon": 10.525590},
+  {"location_id": 2, "location_type": 6, "lat": 52.266511, "lon": 10.528227},
+  {"location_id": 3, "location_type": 0, "lat": 52.262079, "lon": 10.528030},
+  {"location_id": 4, "location_type": 2, "lat": 52.258755, "lon": 10.521655},
+  {"location_id": 5, "location_type": 3, "lat": 52.257840, "lon": 10.512131},
+  {"location_id": 6, "location_type": 0, "lat": 52.261622, "lon": 10.511541},
+  {"location_id": 7, "location_type": 2, "lat": 52.265355, "lon": 10.509770},
+  {"location_id": 8, "location_type": 4, "lat": 52.268751, "lon": 10.514926},
+  {"location_id": 9, "location_type": 0, "lat": 52.265186, "lon": 10.520750},
+  {"location_id": 10, "location_type": 1, "lat": 52.260971, "lon": 10.518585}
 ]
