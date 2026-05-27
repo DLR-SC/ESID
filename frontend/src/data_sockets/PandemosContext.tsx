@@ -78,9 +78,26 @@ export const PandemosProvider = ({children}: {children: React.ReactNode}) => {
       // handle data on promises accept
       ([agents, locations, trips]: [Array<Agent>, Array<Location>, Array<Trip>]) => {
         // setup crossfilter objects for each
-        setAgents(agents);
-        setLocations(locations);
-        setTrips(trips);
+        // fallback if dummy data wasn't replaced
+        if (
+          // @ts-expect-error cast as unknown to check for _comment property on first element
+          (agents[0] as unknown)._comment ??
+          // @ts-expect-error cast as unknown to check for _comment property on first element
+          (locations[0] as unknown)._comment ??
+          // @ts-expect-error cast as unknown to check for _comment property on first element
+          (trips[0] as unknown)._comment ??
+          false
+        ) {
+          window.alert('The data used is a reduced/dummy file. Please replace the agents, locations and trajectories JSON-files with proper data.')
+          setAgents(agents.slice(1));
+          setLocations(locations.slice(1));
+          setTrips(trips.slice(1));
+        }
+        else {
+          setAgents(agents);
+          setLocations(locations);
+          setTrips(trips);          
+        }
       },
       // on promises reject
       (reason) => console.error('Failed to parse Pandemos data.', reason)

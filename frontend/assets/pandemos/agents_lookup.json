@@ -1,6 +1,6 @@
 [
   {
-    "//comment": "This is a reduced/dummy file. Please replace this file with the original one."
+    "_comment": "This is a reduced/dummy file. Please replace this file with the original one."
   },
   {"agent_id": 0, "home_id": 3, "age_group": 2},
   {"agent_id": 1, "home_id": 6, "age_group": 3},
