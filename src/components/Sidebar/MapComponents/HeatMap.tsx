@@ -23,6 +23,7 @@ import {Localization} from 'types/localization';
 
 // Utils
 import {useConst} from 'util/hooks';
+import { EdgeData } from '@/store/services/EdgeApi';
 
 interface MapProps {
   /** The data to be displayed on the map, in GeoJSON format. */
@@ -58,7 +59,7 @@ interface MapProps {
   /** Array of values for the map regions, where each value includes an ID and a corresponding numeric value. */
   values: {id: string | number; value: number}[] | undefined;
 
-  edgeData: Array<{start: string | number; end: string | number; value: number}> | undefined;
+  edgeData: EdgeData;
 
   /** Callback function to update the selected region's data. */
   setSelectedArea: (area: GeoJsonProperties) => void;
@@ -344,7 +345,15 @@ export default function HeatMap({
 
   // Draw edges as arrows between polygons based on edgeData
   useEffect(() => {
-    if (!edgeData || !polygonSeries || !lineSeriesRef.current || !arrowSeriesRef.current) return;
+    if (
+      !edgeData ||
+      !edgeData.in ||
+      !edgeData.out ||
+      !polygonSeries ||
+      !lineSeriesRef.current ||
+      !arrowSeriesRef.current
+    )
+      return;
     if (polygonSeries.isDisposed() || lineSeriesRef.current.isDisposed() || arrowSeriesRef.current.isDisposed()) return;
 
     // Build a map from areaId to centroid [lon, lat]
@@ -365,14 +374,40 @@ export default function HeatMap({
           }
         });
       }
-    } catch (e) {
+    } catch (_) {
       // noop: if centroid computation fails, just skip drawing
     }
 
     const lineData: Array<any> = [];
     const arrowData: Array<any> = [];
 
-    edgeData.forEach((edge) => {
+    console.log('edgeData', edgeData);
+
+    edgeData.in.forEach((edge) => {
+      const start = idToCentroid.get(edge.start);
+      const end = idToCentroid.get(edge.end);
+      if (!start || !end) return;
+
+      // Line between centroids
+      lineData.push({
+        geometry: {
+          type: 'LineString',
+          coordinates: [start, end],
+        },
+      });
+
+      // Arrow head at end position, rotate towards direction
+      const angle = bearingDeg(start, end);
+      arrowData.push({
+        geometry: {
+          type: 'Point',
+          coordinates: end,
+        },
+        angle,
+      });
+    });
+
+    edgeData.out.forEach((edge) => {
       const start = idToCentroid.get(edge.start);
       const end = idToCentroid.get(edge.end);
       if (!start || !end) return;
@@ -539,7 +574,6 @@ function getColorFromLegend(
     );
   }
 }
-
 
 // Compute a simple centroid [lon, lat] for Polygon or MultiPolygon features
 function computeCentroid(feature: Feature): [number, number] | null {
