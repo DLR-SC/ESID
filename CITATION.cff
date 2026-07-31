@@ -1,0 +1,23 @@
+# SPDX-FileCopyrightText: 2024 German Aerospace Center (DLR)
+# SPDX-License-Identifier: CC0-1.0
+
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Gilg"
+  given-names: "Jonas"
+  orcid: "https://orcid.org/0000-0001-9130-0778"
+- family-names: "Zeumer"
+  given-names: "Moritz"
+  orcid: "https://orcid.org/0000-0001-5717-1554"
+- family-names: "Kaur Betz"
+  given-names: "Pawandeep"
+  orcid: "https://orcid.org/0000-0002-3073-326X"
+- family-names: "Karagappa"
+  given-names: "Apoorva"
+  orcid: "https://orcid.org/0009-0000-3270-8220"
+- family-names: "Gerndt"
+  given-names: "Andreas"
+  orcid: "https://orcid.org/0000-0002-0409-8573"
+title: "ESID"
+url: "https://github.com/DLR-SC/ESID"
