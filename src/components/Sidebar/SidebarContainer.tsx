@@ -33,7 +33,7 @@ export default function MapContainer() {
   const theme = useTheme();
   const dispatch = useAppDispatch();
 
-  const {geoData, mapData, searchBarData, nodes, compartments} = useContext(DataContext)!;
+  const {geoData, mapData, searchBarData, nodes, compartments, populationByNuts} = useContext(DataContext)!;
 
   const storeSelectedArea = useAppSelector((state) => state.dataSelection.district);
   const selectedCompartment = useAppSelector((state) => state.dataSelection.compartment);
@@ -130,11 +130,13 @@ export default function MapContainer() {
       const compartmentName = tBackend(
         `infection-states.${compartments?.find((c) => c.id === selectedCompartment)?.name}`
       );
+      const population = populationByNuts?.[String(regionData?.RS)] as number | undefined;
+      const populationLine = population ? `${t('heatlegend.population')}: ${formatNumber(population)}` : '';
       return selectedScenario !== null && selectedCompartment
-        ? `${bez} {GEN}\n${compartmentName}: ${formatNumber(Number(regionData?.value))}`
-        : `${bez} {GEN}`;
+        ? `${bez} {GEN}\n${populationLine}\n${compartmentName}: ${formatNumber(Number(regionData?.value))}`
+        : `${bez} {GEN}${populationLine}`;
     },
-    [compartments, formatNumber, selectedCompartment, selectedScenario, t, tBackend]
+    [compartments, formatNumber, populationByNuts, selectedCompartment, selectedScenario, t, tBackend]
   );
 
   const calculateToolTipFetching = useCallback(

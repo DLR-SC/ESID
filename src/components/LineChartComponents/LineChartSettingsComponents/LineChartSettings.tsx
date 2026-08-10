@@ -16,7 +16,6 @@ import type {Threshold} from 'types/threshold';
 import type {District} from 'types/district';
 import {useTranslation} from 'react-i18next';
 import ThresholdSettings from './ThresholdSettings/ThresholdSettings';
-
 /**
  * The different views that can be displayed in the settings popover.
  * You can add more views here if you want to add more settings.

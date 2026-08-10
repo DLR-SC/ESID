@@ -18,6 +18,7 @@ SPDX-License-Identifier: CC-BY-4.0
   - Users can set custom threshold values for currently selected district and compartment accessible via the settings button on the lower left corner of the line chart
   - The horizontal threshold is displayed as a red horizontal line on the chart and values above the threshold are displayed in red
   - Users can select thresholds to navigate to the corresponding district and compartment
+- Users can toggle between absolute and proportional values from the settings in the icon bar.
 
 ### Improvements
 

@@ -23,6 +23,17 @@ export enum ScenarioVisibility {
   Hidden,
 }
 
+export enum AggregationWindow {
+  /** The aggregation window is total. */
+  Total,
+
+  /** The aggregation window is 1 day. */
+  OneDay,
+
+  /** The aggregation window is 7 days. */
+  SevenDays,
+}
+
 export interface ScenarioState {
   name: string;
   description: string;
@@ -47,6 +58,8 @@ export interface DataSelection {
   minDate: string | null;
   maxDate: string | null;
   groupFilters: Record<string, GroupFilter>;
+  relativeNumbers: boolean | null;
+  aggregationWindow: AggregationWindow | null;
 }
 
 const initialState: DataSelection = {
@@ -60,6 +73,8 @@ const initialState: DataSelection = {
   minDate: null,
   maxDate: null,
   groupFilters: {},
+  relativeNumbers: null,
+  aggregationWindow: null,
 };
 
 /**
@@ -177,6 +192,12 @@ export const DataSelectionSlice = createSlice({
         state.groupFilters[action.payload].isVisible = !state.groupFilters[action.payload].isVisible;
       }
     },
+    toggleRelativeNumbers(state) {
+      state.relativeNumbers = !state.relativeNumbers;
+    },
+    setAggregationWindow(state, action: PayloadAction<AggregationWindow>) {
+      state.aggregationWindow = action.payload;
+    },
   },
 });
 
@@ -198,6 +219,8 @@ export const {
   setGroupFilter,
   deleteGroupFilter,
   toggleGroupFilter,
+  toggleRelativeNumbers,
+  setAggregationWindow,
 } = DataSelectionSlice.actions;
 
 export default DataSelectionSlice.reducer;

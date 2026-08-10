@@ -9,6 +9,9 @@ import reducer, {
   selectDate,
   selectDistrict,
   selectScenario,
+  toggleRelativeNumbers,
+  setAggregationWindow,
+  AggregationWindow,
 } from '@/store/DataSelectionSlice';
 
 describe('DataSelectionSlice', () => {
@@ -23,6 +26,8 @@ describe('DataSelectionSlice', () => {
     minDate: null,
     maxDate: null,
     groupFilters: {},
+    relativeNumbers: null,
+    aggregationWindow: null,
   };
 
   test('Initial State', () => {
@@ -62,6 +67,18 @@ describe('DataSelectionSlice', () => {
     };
     expect(reducer(initialState, setGroupFilter(newFilter))).toEqual(
       Object.assign(initialState, {groupFilters: {'c9c241fb-c0bd-4710-94b9-f4c9ad98072b': newFilter}})
+    );
+  });
+
+  test('Toggle Relative Numbers', () => {
+    expect(reducer(initialState, toggleRelativeNumbers())).toEqual(
+      Object.assign(initialState, {relativeNumbers: true})
+    );
+  });
+
+  test('Set Aggregation Window', () => {
+    expect(reducer(initialState, setAggregationWindow(AggregationWindow.OneDay))).toEqual(
+      Object.assign(initialState, {aggregationWindow: AggregationWindow.OneDay})
     );
   });
 });

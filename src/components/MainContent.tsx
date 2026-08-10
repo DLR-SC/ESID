@@ -29,6 +29,8 @@ export default function MainContent(): JSX.Element {
         sx={{
           marginLeft: 'auto',
           marginRight: 'auto',
+          maxWidth: '50%',
+          width: '50%',
         }}
       >
         <IconBar />
