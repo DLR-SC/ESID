@@ -18,6 +18,7 @@ SPDX-License-Identifier: CC-BY-4.0
   - Nutzer können benutzerdefinierte Schwellenwerte für aktuell ausgewählte Bezirk und Kompartiment festlegen, die über den Einstellungsbutton in der unteren linken Ecke des Liniendiagramms erreicht werden
   - Die horizontale Schwellenlinie wird als rote Linie im Diagramm angezeigt und Werte über der Schwellenlinie werden in rot angezeigt
   - Nutzer können Schwellenwerte auswählen, um zu den entsprechenden Bezirk und Kompartiment zu navigieren
+- Nutzer können die Skalierung der Y-Achse manuell verändern (Maximalwert einstellen).
 
 ### Verbesserungen
 

@@ -3,6 +3,8 @@
 
 {
   title: 'Line Chart Settings',
+  yAxisMaxValue: 'Y-Axis Maximum',
+  yAxisMaxValueDescription: 'Set the maximum value for the Y-axis',
   manageGroups: 'Filters',
   manageGroupsDescription: 'Set the group filters for each scenario',
   manageThreshold: 'Thresholds',
@@ -13,6 +15,18 @@
     compartment: 'Compartment',
     threshold: 'Threshold',
     noThresholds: 'No thresholds set.',
+  },
+  'y-axis-settings': {
+    title: 'Y-Axis Maximum',
+    editTooltip: 'Edit Y-Axis Maximum',
+    resetTooltip: 'Reset Y-Axis maximum value to current data maximum value',
+    messages: {
+      success: 'Y-Axis Maximum value updated successfully.',
+      error: 'Invalid input. Please check the value.',
+    },
+    validation: {
+      positiveNumber: 'Value must be a positive number',
+    },
   },
   'group-filters': {
     title: 'Manage Groups',

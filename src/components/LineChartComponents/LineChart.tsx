@@ -70,6 +70,9 @@ interface LineChartProps {
 
   /** Optional horizontal limit for the Y-axis. Defaults to 0. */
   horizontalYAxisThreshold?: number;
+
+  /** Optional maximum value from the chart data. Can be used to set custom Y-axis limits. */
+  yAxisMaxValue?: number;
 }
 /**
  * React Component to render the Linechart Section
@@ -88,6 +91,7 @@ export default function LineChart({
   yAxisLabel,
   localization,
   horizontalYAxisThreshold = undefined,
+  yAxisMaxValue,
 }: LineChartProps): JSX.Element {
   const {t: defaultT, i18n} = useTranslation();
 
@@ -165,11 +169,13 @@ export default function LineChart({
   );
 
   const yAxisSettings = useMemo(() => {
-    if (!root || !chart) {
+    if (!root || !chart || chart.isDisposed() || root.isDisposed()) {
       return null;
     }
     return {
       renderer: AxisRendererY.new(root, {}),
+      strictMinMax: true,
+
       // Fix lower end to 0
       min: 0,
       // Add tooltip instance so cursor can display value
@@ -178,6 +184,17 @@ export default function LineChart({
   }, [root, chart]);
 
   const yAxis = useValueAxis(root, chart, yAxisSettings);
+
+  // max value y-axis change so that its not recreated everytime max value changes
+  useLayoutEffect(() => {
+    if (!yAxis || !root || !chart || chart.isDisposed() || root.isDisposed()) return;
+
+    if (yAxisMaxValue != null) {
+      yAxis.set('max', yAxisMaxValue);
+    } else {
+      yAxis.set('max', undefined);
+    }
+  }, [yAxis, yAxisMaxValue, root, chart]);
 
   // Effect to add cursor to chart
   useLayoutEffect(() => {

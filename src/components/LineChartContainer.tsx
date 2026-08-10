@@ -13,8 +13,11 @@ import {useTranslation} from 'react-i18next';
 import {LineChartData} from 'types/lineChart';
 import {InfectionData} from 'store/services/APITypes';
 import {DataContext} from 'context/SelectedDataContext';
-import {updateHorizontalYAxisThreshold, removeHorizontalYAxisThreshold} from 'store/UserPreferenceSlice';
-
+import {
+  updateHorizontalYAxisThreshold,
+  removeHorizontalYAxisThreshold,
+  setYAxisMaxValue,
+} from 'store/UserPreferenceSlice';
 export default function LineChartContainer() {
   const {t: tBackend, i18n: i18nBackend} = useTranslation('backend');
   const theme = useTheme();
@@ -28,6 +31,7 @@ export default function LineChartContainer() {
   const selectedDistrict = useAppSelector((state) => state.dataSelection.district);
   const selectedDate = useAppSelector((state) => state.dataSelection.date);
   const thresholds = useAppSelector((state) => state.userPreference.horizontalYAxisThresholds ?? {});
+  const yAxisMaxValue = useAppSelector((state) => state.userPreference.yAxisMaxValue ?? undefined);
   const referenceDay = useAppSelector((state) => state.dataSelection.simulationStart);
   const minDate = useAppSelector((state) => state.dataSelection.minDate);
   const maxDate = useAppSelector((state) => state.dataSelection.maxDate);
@@ -153,6 +157,31 @@ export default function LineChartContainer() {
     });
   }, [groupFilterLineChartData, groupFilters, lineChartData, scenarios, scenariosState, selectedScenario]);
 
+  // Calculate maximum value from chart data
+  const maxDataValue = useMemo(() => {
+    if (!mappedLineChartData || mappedLineChartData.length === 0) {
+      return 0;
+    }
+
+    let maxValue = 0;
+
+    mappedLineChartData.forEach((serie) => {
+      serie.values.forEach((entry) => {
+        // Check main value
+        if (entry.value > maxValue) {
+          maxValue = entry.value;
+        }
+
+        // Check openValue if it exists (for percentile bands)
+        if (entry.openValue && entry.openValue > maxValue) {
+          maxValue = entry.openValue;
+        }
+      });
+    });
+
+    return Math.ceil(maxValue);
+  }, [mappedLineChartData]);
+
   // Set reference day in store
   useEffect(() => {
     dispatch(setReferenceDayBottom(referenceDayBottomPosition));
@@ -175,7 +204,9 @@ export default function LineChartContainer() {
         referenceDay={referenceDay}
         yAxisLabel={yAxisLabel}
         horizontalYAxisThreshold={thresholds[`${selectedDistrict.nuts}-${selectedCompartment}`]?.threshold}
+        yAxisMaxValue={yAxisMaxValue ?? maxDataValue}
       />
+
       <LineChartSettings
         selectedDistrict={selectedDistrict}
         selectedCompartment={selectedCompartment ?? ''}
@@ -190,6 +221,9 @@ export default function LineChartContainer() {
             })
           )
         }
+        yAxisMaxValue={yAxisMaxValue}
+        maxDataValue={maxDataValue}
+        updateYAxisMaxValue={(newYAxisMaxValue: number | undefined) => dispatch(setYAxisMaxValue(newYAxisMaxValue))}
       />
     </LoadingContainer>
   );
