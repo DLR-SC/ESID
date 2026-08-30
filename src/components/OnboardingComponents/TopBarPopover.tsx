@@ -10,6 +10,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import {useTranslation} from 'react-i18next';
 import TourChipsList from './TourComponents/TourChipsList';
 import LinearProgress from '@mui/material/LinearProgress';
+import SemanticSearchContainer from './SemanticSearch/SemanticSearchContainer';
+import {SemanticSearchProvider} from 'context/SemanticSearchContext';
 
 interface TopBarPopoverProps {
   /** The anchor element for the popover */
@@ -57,7 +59,7 @@ export default function TopBarPopover(props: TopBarPopoverProps): JSX.Element {
       }}
       sx={{
         '& .MuiPopover-paper': {
-          width: 600,
+          width: 700,
         },
       }}
     >
@@ -70,7 +72,7 @@ export default function TopBarPopover(props: TopBarPopoverProps): JSX.Element {
         </Typography>
         <IconButton
           aria-label='close'
-          test-id='close-info-button'
+          data-testid='close-info-button'
           onClick={props.onClose}
           sx={{
             position: 'absolute',
@@ -78,7 +80,7 @@ export default function TopBarPopover(props: TopBarPopoverProps): JSX.Element {
             top: 8,
           }}
         >
-          <CloseIcon data-testid='close-info-button' />
+          <CloseIcon />
         </IconButton>
         <Box mt={4}>
           <TourChipsList />
@@ -102,6 +104,9 @@ export default function TopBarPopover(props: TopBarPopoverProps): JSX.Element {
             {Math.round(completionPercentage)}% {tOnboarding('completed')}
           </Typography>
         </Box>
+        <SemanticSearchProvider>
+          <SemanticSearchContainer />
+        </SemanticSearchProvider>
       </Box>
     </Popover>
   );

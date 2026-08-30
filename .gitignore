@@ -14,5 +14,15 @@ dist
 reports
 coverage
 
-.env
+# .env
 .eslintcache
+.env
+.venv
+__pycache__/
+/public/assets
+/public/locales
+/public/node_modules
+/public/pdf.worker.min.mjs
+.eslintcache
+.env
+.DS_Store
