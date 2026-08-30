@@ -13,6 +13,7 @@
       label: 'Application menu',
       login: 'Login',
       logout: 'Logout',
+      upload: 'Upload Data',
       imprint: 'Imprint',
       'privacy-policy': 'Privacy Policy',
       accessibility: 'Accessibility',
@@ -149,4 +150,10 @@
   WIP: 'This functionality is still work in progress.',
   okay: 'Okay',
   yAxisLabel: 'Value',
+  upload: {
+    header: 'Upload Case Data',
+    dragNotice: 'Drag and drop your file(s) in here to or use the button below to uplad your case data to ESID.',
+    button: 'Upload Data',
+    dropNotice: 'Drop here to upload.',
+  },
 }

@@ -20,7 +20,7 @@ import {selectDistrict} from 'store/DataSelectionSlice';
 import {I18nextProvider, useTranslation} from 'react-i18next';
 import i18n from './util/i18n';
 import {MUILocalization} from 'components/shared/MUILocalization';
-
+import LoadingOverlay from './components/shared/LoadingOverlay';
 import AuthProvider from './components/AuthProvider';
 import BaseDataContext from 'context/BaseDataContext';
 /**
@@ -29,7 +29,10 @@ import BaseDataContext from 'context/BaseDataContext';
  */
 export default function App(): JSX.Element {
   return (
-    <Suspense fallback='loading'>
+    <Suspense
+      // Use Loading Overlay with default background and primary color (theme isn't loaded at this point)
+      fallback={<LoadingOverlay show={true} overlayColor={'#F0F0F2'} throbberColor={'#543CF0'}></LoadingOverlay>}
+    >
       <Provider store={Store}>
         <AuthProvider>
           <ThemeProvider theme={Theme}>

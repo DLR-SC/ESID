@@ -4,6 +4,7 @@
 import {combineReducers, configureStore} from '@reduxjs/toolkit';
 import DataSelectionReducer from './DataSelectionSlice';
 import {scenarioApi} from './services/scenarioApi';
+import {utilsApi} from './services/utilsApi';
 import UserPreferenceReducer from './UserPreferenceSlice';
 import {WebStorage, persistReducer, persistStore} from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
@@ -29,6 +30,7 @@ const rootReducer = combineReducers({
   realm: RealmReducer,
   auth: AuthReducer,
   [scenarioApi.reducerPath]: scenarioApi.reducer,
+  [utilsApi.reducerPath]: utilsApi.reducer,
   [idpApi.reducerPath]: idpApi.reducer,
 });
 
@@ -44,7 +46,7 @@ export const Store = configureStore({
       serializableCheck: {
         ignoredActions: ['persist/PERSIST'],
       },
-    }).concat(scenarioApi.middleware, idpApi.middleware),
+    }).concat(scenarioApi.middleware, utilsApi.middleware, idpApi.middleware),
 });
 
 export const Persistor = persistStore(Store);
