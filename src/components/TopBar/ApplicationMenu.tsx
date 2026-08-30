@@ -19,6 +19,7 @@ const ImprintDialog = React.lazy(() => import('./PopUps/ImprintDialog'));
 const PrivacyPolicyDialog = React.lazy(() => import('./PopUps/PrivacyPolicyDialog'));
 const AccessibilityDialog = React.lazy(() => import('./PopUps/AccessibilityDialog'));
 const AttributionDialog = React.lazy(() => import('./PopUps/AttributionDialog'));
+const ExportMenu = React.lazy(() => import('./ExportMenu'));
 
 type TokenData = {
   realm_access?: {
@@ -50,6 +51,8 @@ export default function ApplicationMenu(): JSX.Element {
   const [accessibilityOpen, setAccessibilityOpen] = React.useState(false);
   const [attributionsOpen, setAttributionsOpen] = React.useState(false);
   const [changelogOpen, setChangelogOpen] = React.useState(false);
+  const [exportOpen, setExportOpen] = React.useState(false);
+  const [exportAnchorElement, setExportAnchorElement] = React.useState<Element | null>(null);
 
   const keycloakLogout = () => {
     window.location.assign(
@@ -65,6 +68,16 @@ export default function ApplicationMenu(): JSX.Element {
   /** Calling this method closes the application menu. */
   const closeMenu = () => {
     setAnchorElement(null);
+  };
+
+  const openExportMenu = (event: MouseEvent) => {
+    setExportAnchorElement(event.currentTarget);
+    setExportOpen(true);
+  };
+
+  const closeExportMenu = () => {
+    setExportAnchorElement(null);
+    setExportOpen(false);
   };
 
   /** This method gets called, when the login menu entry was clicked. */
@@ -140,6 +153,16 @@ export default function ApplicationMenu(): JSX.Element {
         <MenuItem onClick={accessibilityClicked}>{t('topBar.menu.accessibility')}</MenuItem>
         <MenuItem onClick={attributionClicked}>{t('topBar.menu.attribution')}</MenuItem>
         <MenuItem onClick={changelogClicked}>{t('topBar.menu.changelog')}</MenuItem>
+        <Divider />
+        <MenuItem
+          onClick={openExportMenu}
+          sx={{display: 'flex', alignItems: 'center', gap: 1, justifyContent: 'flex-start'}}
+        >
+          <Box>Export</Box>
+          <Box component='span' sx={{ml: 'auto', opacity: 0.6}} aria-hidden>
+            ›
+          </Box>
+        </MenuItem>
       </Menu>
 
       <Dialog maxWidth='lg' fullWidth={true} open={imprintOpen} onClose={() => setImprintOpen(false)}>
@@ -201,6 +224,24 @@ export default function ApplicationMenu(): JSX.Element {
           <ChangelogDialog />
         </Suspense>
       </Dialog>
+
+      <Menu
+        id='export-menu'
+        anchorEl={exportAnchorElement}
+        open={exportOpen}
+        onClose={closeExportMenu}
+        anchorOrigin={{vertical: 'top', horizontal: 'left'}}
+        transformOrigin={{vertical: 'top', horizontal: 'right'}}
+      >
+        <Suspense fallback={null}>
+          <ExportMenu
+            onDone={() => {
+              closeExportMenu();
+              closeMenu();
+            }}
+          />
+        </Suspense>
+      </Menu>
     </Box>
   );
 }

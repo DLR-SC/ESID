@@ -23,6 +23,8 @@ import {Localization} from 'types/localization';
 
 // Utils
 import {useConst} from 'util/hooks';
+import useExporting from 'components/shared/Exporting';
+import {useExportingRegistry} from 'context/ExportContext';
 
 interface MapProps {
   /** The data to be displayed on the map, in GeoJSON format. */
@@ -123,6 +125,7 @@ export default function HeatMap({
   const lastSelectedPolygon = useRef<am5map.MapPolygon | null>(null);
   const [longLoadTimeout, setLongLoadTimeout] = useState<number>();
 
+  const {register} = useExportingRegistry();
   const root = useRoot(mapId);
 
   // MapControlBar.tsx
@@ -352,6 +355,20 @@ export default function HeatMap({
     areaId,
     isDataFetching,
   ]);
+
+  const exportSettings = useMemo(() => {
+    return {
+      filePrefix: 'map',
+    };
+  }, []);
+
+  const exporting = useExporting(root, exportSettings);
+
+  useEffect(() => {
+    if (exporting) {
+      register('map', exporting);
+    }
+  }, [exporting, register]);
 
   return (
     <Box

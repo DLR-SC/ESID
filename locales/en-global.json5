@@ -149,4 +149,24 @@
   WIP: 'This functionality is still work in progress.',
   okay: 'Okay',
   yAxisLabel: 'Value',
+  export: {
+    header: 'ESID',
+    description: 'Export the current selection as a PDF report.',
+    button: 'Export PDF',
+    info: {
+      'selected-district': 'Selected District',
+      'selected-scenario': 'Selected Scenario',
+      'reference-date': 'Reference Date',
+      'selected-date': 'Selected Date',
+    },
+    images: {
+      'line-chart-label': 'Line chart',
+      'map-label': 'Map',
+    },
+    table: {
+      compartment: 'Infection state',
+      'reference-value': 'Value Reference Date',
+      'selected-value': 'Value Selected Date',
+    },
+  },
 }

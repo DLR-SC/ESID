@@ -30,6 +30,8 @@ import useValueAxisRange from 'components/shared/LineChart/ValueAxisRange';
 import {LineChartData} from 'types/lineChart';
 import {LineSeries} from '@amcharts/amcharts5/xy';
 import {useSeriesRange} from 'components/shared/LineChart/SeriesRange';
+import {useExportingRegistry} from 'context/ExportContext';
+import useExporting from 'components/shared/Exporting';
 
 interface LineChartProps {
   /** Optional unique identifier for the chart. Defaults to 'chartdiv'. */
@@ -688,25 +690,25 @@ export default function LineChart({
       });
     }
 
-    // Let's import this lazily, since it contains a lot of code.
-    import('@amcharts/amcharts5/plugins/exporting')
-      .then((module) => {
-        // Update export menu
-        module.Exporting.new(root as Root, {
-          menu: module.ExportingMenu.new(root as Root, {}),
-          filePrefix: exportedFileName,
-          dataSource: data,
-          dateFields: ['date'],
-          dateFormat: `${
-            memoizedLocalization.overrides?.['dateFormat']
-              ? customT(memoizedLocalization.overrides['dateFormat'])
-              : defaultT('dateFormat')
-          }`,
-          dataFields: dataFields,
-          dataFieldsOrder: dataFieldsOrder,
-        });
-      })
-      .catch(() => console.warn("Couldn't load exporting functionality!"));
+    // // Let's import this lazily, since it contains a lot of code.
+    // import('@amcharts/amcharts5/plugins/exporting')
+    //   .then((module) => {
+    //     // Update export menu
+    //     const exporting = module.Exporting.new(root as Root, {
+    //       menu: module.ExportingMenu.new(root as Root, {}),
+    //       filePrefix: exportedFileName,
+    //       dataSource: data,
+    //       dateFields: ['date'],
+    //       dateFormat: `${
+    //         memoizedLocalization.overrides?.['dateFormat']
+    //           ? customT(memoizedLocalization.overrides['dateFormat'])
+    //           : defaultT('dateFormat')
+    //       }`,
+    //       dataFields: dataFields,
+    //       dataFieldsOrder: dataFieldsOrder,
+    //     });
+    //   })
+    //   .catch(() => console.warn("Couldn't load exporting functionality!"));
 
     setReferenceDayX();
     // Re-run this effect whenever the data itself changes (or any variable the effect uses)
@@ -723,6 +725,23 @@ export default function LineChart({
     lineChartData,
     yAxisLabel,
   ]);
+
+  const {register} = useExportingRegistry();
+
+  // https://www.amcharts.com/docs/v5/reference/exporting/ docs for export settings from amcharts
+  const exportSettings = useMemo(() => {
+    return {
+      filePrefix: exportedFileName,
+    };
+  }, [exportedFileName]);
+
+  const exporting = useExporting(root, exportSettings);
+
+  useEffect(() => {
+    if (exporting) {
+      register('lineChart', exporting);
+    }
+  }, [exporting, register]);
 
   return (
     <Box

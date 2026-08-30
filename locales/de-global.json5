@@ -134,4 +134,24 @@
   'loki-logo': 'LOKI-Logo',
   okay: 'Okay',
   yAxisLabel: 'Wert',
+  export: {
+    header: 'ESID',
+    description: 'Aktuelle Auswahl als PDF-Bericht exportieren.',
+    button: 'PDF exportieren',
+    info: {
+      'selected-district': 'Ausgewählter Landkreis',
+      'selected-scenario': 'Ausgewähltes Szenario',
+      'reference-date': 'Referenzdatum',
+      'selected-date': 'Ausgewähltes Datum',
+    },
+    images: {
+      'line-chart-label': 'Liniendiagramm',
+      'map-label': 'Karte',
+    },
+    table: {
+      compartment: 'Infektionszustand',
+      'reference-value': 'Wert Referenzdatum',
+      'selected-value': 'Wert Ausgewähltes Datum',
+    },
+  },
 }
